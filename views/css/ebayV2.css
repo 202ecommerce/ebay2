@@ -1,0 +1,128 @@
+/**
+ * Ebay specific styling
+ *
+ * Every rule should be incapsulated in the .totebay selector
+ * to prevent styling elements outside the module container.
+ */
+/* line 11, ../sass/admin.scss */
+.totebay {
+  /**
+   * General styling
+   */
+}
+/* line 17, ../sass/admin.scss */
+.totebay .sidebar.navigation i,
+.totebay .panel-heading i {
+  margin-right: 5px;
+}
+/* line 23, ../sass/admin.scss */
+.totebay .alert-no-icon {
+  padding-left: 15px !important;
+}
+/* line 25, ../sass/admin.scss */
+.totebay .alert-no-icon:before {
+  display: none !important;
+}
+/* line 31, ../sass/admin.scss */
+.totebay .form-horizontal > div:not(.pull-right),
+.totebay .form-horizontal > label,
+.totebay .form-horizontal > button {
+  margin-right: 10px;
+}
+/* line 38, ../sass/admin.scss */
+.totebay .popin > .panel {
+  margin-bottom: 0 !important;
+}
+/* line 42, ../sass/admin.scss */
+.totebay .popin.popin-lg > .panel {
+  max-width: 800px;
+}
+/* line 46, ../sass/admin.scss */
+.totebay .popin.popin-sm > .panel {
+  max-width: 500px;
+}
+/* line 52, ../sass/admin.scss */
+.totebay .item-list {
+  max-height: 66px;
+  margin-top: 15px;
+  margin-bottom: 0;
+  padding-left: 0;
+  line-height: 22px;
+  list-style: none;
+  overflow-y: auto;
+}
+/* line 60, ../sass/admin.scss */
+.totebay .item-list .item {
+  padding-left: 5px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-transition: all, 0.3s, linear;
+  -o-transition: all, 0.3s, linear;
+  -webkit-transition: all, 0.3s, linear;
+  transition: all, 0.3s, linear;
+}
+/* line 64, ../sass/admin.scss */
+.totebay .item-list .item button {
+  display: none;
+}
+/* line 67, ../sass/admin.scss */
+.totebay .item-list .item:hover {
+  background-color: #f4f8fb;
+}
+/* line 69, ../sass/admin.scss */
+.totebay .item-list .item:hover button {
+  display: initial;
+}
+/* line 73, ../sass/admin.scss */
+.totebay .item-list .item .badge {
+  line-height: 15px;
+  vertical-align: middle;
+}
+/* line 82, ../sass/admin.scss */
+.totebay .panel-heading .badge.badge-success {
+  border-color: #72C279 !important;
+  color: #fff !important;
+  background-color: #72C279 !important;
+}
+/* line 91, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu {
+  min-width: 360px;
+}
+/* line 93, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu li:nth-child(even) {
+  background-color: #FCFDFE;
+}
+/* line 96, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu li > a {
+  padding: 5px 0;
+}
+/* line 98, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu li > a span[class^='col-']:first-child {
+  padding-left: 20px;
+}
+/* line 102, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu li > a.selected span[class^='col-']:first-child {
+  position: relative;
+}
+/* line 104, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu li > a.selected span[class^='col-']:first-child:before {
+  position: absolute;
+  left: 4px;
+  content: '\f00c';
+  font-family: "fontAwesome";
+  color: #3c763d;
+}
+/* line 114, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu .head {
+  padding: 5px 0 10px 0;
+  font-weight: 600;
+}
+/* line 117, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu .head > span {
+  padding: 0 5px;
+}
+/* line 119, ../sass/admin.scss */
+.totebay .js-user-dropdown .dropdown-menu .head > span:first-child {
+  padding-left: 20px;
+}
