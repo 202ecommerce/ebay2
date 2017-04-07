@@ -55,6 +55,20 @@ $(document).ready(function () {
         return false;
     });
 
+
+
+    $('.js-popin').fancybox({
+        'modal': true,
+        'showCloseButton': false,
+        'padding': 0,
+        'parent': '#popin-container',
+    });
+
+    // Close modal on click on cancel button
+    $(document).on('click', '.js-close-popin', function() {
+        $.fancybox.close();
+    });
+
     function selectMainTab(menu_name) {
 
         $('.main-menu-a').removeClass('active');
@@ -103,5 +117,7 @@ $(document).ready(function () {
         $(".tabItem.active").removeClass("active");
         $("#menuTab" + id_tab + "Sheet").addClass("active");
     }
+
+
 
 });

@@ -247,4 +247,39 @@ class EbayCategoryConfiguration
             'impacts'         => Db::getInstance()->ExecuteS('SELECT percent FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent IS NOT NULL AND percent != "" AND id_ebay_profile = '.(int)$id_ebay_profile),
         );
     }
+
+    public static function getEbayCategoryById($id_ebay_profile,  $id_ebay_category)
+    {
+
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+        $ebay_site_id = $ebay_profile->ebay_site_id;
+
+        $sql = 'SELECT
+			DISTINCT(ec1.`id_category_ref`) as id,
+			CONCAT(
+				IFNULL(ec3.`name`, \'\'),
+				IF (ec3.`name` is not null, \' > \', \'\'),
+				IFNULL(ec2.`name`, \'\'),
+				IF (ec2.`name` is not null, \' > \', \'\'),
+				ec1.`name`
+			) as name
+			FROM `'._DB_PREFIX_.'ebay_category_configuration` e
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec1
+			ON e.`id_ebay_category` = ec1.`id_ebay_category`
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec2
+			ON ec1.`id_category_ref_parent` = ec2.`id_category_ref`
+			AND ec1.`id_category_ref_parent` <> \'1\'
+			AND ec1.level <> 1
+			AND ec2.`id_country` = '.(int)$ebay_site_id.'
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec3
+			ON ec2.`id_category_ref_parent` = ec3.`id_category_ref`
+			AND ec2.`id_category_ref_parent` <> \'1\'
+			AND ec2.level <> 1
+			AND ec3.`id_country` = '.(int)$ebay_site_id.'
+			WHERE e.`id_ebay_profile` = '.(int)$id_ebay_profile.' 
+			AND e.`id_ebay_category` = '. (int)$id_ebay_category ;
+
+        return Db::getInstance()->executeS($sql);
+    }
+
 }

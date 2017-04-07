@@ -25,7 +25,7 @@
 
 
 
-<style> 
+<style>
 	{literal}
 	#button_ebay_sync1{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
 			#button_ebay_sync2{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
@@ -58,7 +58,7 @@
 				type: "POST",
 				url: "{/literal}{$nb_products_sync_url|escape:'urlencode'}{literal}" + params,
 				success: function(data) {
-					
+
 					nbProducts = data;
 					nbProductsModeB = data;
 					$('#save_and_publish').val({/literal}"{l s='Save and list' mod='ebay'} "+data+" {l s='products' mod='ebay'}"{literal});
@@ -67,6 +67,7 @@
 			});
 		});
 	});
+
 
 	$(document).ready(function() {
 		$("#ebay_sync_products_mode1").click(function() {
@@ -78,8 +79,34 @@
 			nbProducts = nbProductsModeB;
 			$("#catSync").show("slow");
 			$('#nbproducttosync').html(nbProducts);
-			
+
 		});
+		$('.modifier_cat').on('click', function() {
+			console.log($(this).data('id'));
+			loadCategoriesConfig($(this).data('id'));
+		});
+		function loadCategoriesConfig(id_category) {
+			var url = module_dir + "ebay/ajax/loadConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&id_category_ps=' + id_category;
+
+			$.ajax({
+				type: "POST",
+				url: url,
+				success: function (data) {
+					var data = jQuery.parseJSON(data);
+					$('.category_ebay').html(data.categoryConfigList.var);
+					$.fancybox.open({
+						'modal': true,
+						'showCloseButton': false,
+						'padding': 0,
+						'parent': '#popin-container',
+					});
+				}
+			});
+
+		}
+
+
+
 	});
 
 	function eBaySync(option)
@@ -110,7 +137,7 @@
 		// Launch the KB
 		getKb();
 	}
-	
+
 	var counter = 0;
 	function eBaySyncProduct(option)
 	{
@@ -140,6 +167,7 @@
 
 <form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
 	<fieldset style="border: 0">
+		<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success"><span class="icon-plus"></span> Ajouter</a>
 		{if isset($img_alert) && !empty($img_alert)}
 			<div class="warning big">
                 {$img_alert['message']|escape:'htmlall':'UTF-8'}
@@ -153,7 +181,7 @@
                 {$category_alerts|escape:'htmlall':'UTF-8'}
             </div>
         {/if}
-		<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
+		{*<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 		<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
 		<div class="margin-form">
 			<input type="radio" size="20" name="ebay_sync_products_mode" id="ebay_sync_products_mode1" value="A" {if $is_sync_mode_b == false}checked="checked"{/if}/> <span data-inlinehelp="{l s='All items that have specified an eBay category will be listed.' mod='ebay'}">{l s='List all products on eBay' mod='ebay'}</span>
@@ -173,13 +201,21 @@
 		</div>
 		<div class="margin-form">
 			<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode_1" value="1" {if $ebay_sync_mode == 1}checked="checked"{/if}/> <span data-inlinehelp="{l s='This will only synchronisze products that are not yet listed on eBay.' mod='ebay'}">{l s='Only sync new products' mod='ebay'}</span>
-		</div>
-		<div style="display: none;" id="catSync">
+		</div>*}
+		<div style="display: block;" id="catSync">
 			<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 				<thead>
 					<tr class="nodrag nodrop">
-						<th>{l s='Select' mod='ebay'}</th>
-						<th>{l s='Category' mod='ebay'}</th>
+						<th>{l s='Catégorie PrestaShop' mod='ebay'}</th>
+						<th>{l s='Produits / variations' mod='ebay'}</th>
+						<th>{l s='Exclusions manuelles' mod='ebay'}</th>
+						<th>{l s='Impact prix' mod='ebay'}</th>
+						<th>{l s='Catégorie eBay' mod='ebay'}</th>
+						<th>{l s='Multi var' mod='ebay'}</th>
+						<th>{l s='Annonces' mod='ebay'}</th>
+						<th>{l s='Boutique' mod='ebay'}</th>
+						<th>{l s='Etat' mod='ebay'}</th>
+						<th>{l s='Action' mod='ebay'}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -187,7 +223,18 @@
 						<tr><td colspan="2">{l s='No category found.' mod='ebay'}</td></tr>
 					{else}
 						{foreach from=$categories item=category}
-							<tr class="{$category.row_class|escape:'htmlall':'UTF-8'}"><td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} /><td>{$category.name|escape:'htmlall':'UTF-8'}</td></tr>
+							<tr class="{$category.row_class|escape:'htmlall':'UTF-8'}">
+								<td>{$category.name|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.nb_products|escape:'htmlall':'UTF-8'}/{$category.nb_products_variations|escape:'htmlall':'UTF-8'} </td>
+								<td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.price|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.annonces|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.name|escape:'htmlall':'UTF-8'}</td>
+								<td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
+								<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span> Modifier</a></td>
+							</tr>
 						{/foreach}
 					{/if}
 				</tbody>
@@ -195,16 +242,16 @@
 			{if $sync_1}
 				<script>
 					$(document).ready(function() {ldelim}
-						eBaySync(1); 
+						eBaySync(1);
 					{rdelim});
-				</script>				
+				</script>
 			{/if}
 			{if $sync_2}
 				<script>
 					$(document).ready(function() {ldelim}
-						eBaySync(2); 
+						eBaySync(2);
 					{rdelim});
-				</script>				
+				</script>
 			{/if}
 			{if $is_sync_mode_b}
 				<script>
@@ -221,3 +268,148 @@
 		</div>
 	</fieldset>
 </form>
+
+<div id="popin-container">
+	{* Category add modal *}
+	<div id="popin-add-cat" class="popin popin-lg" style="display: none;">
+		<div class="panel">
+			<div class="panel-heading">
+				<i class="icon-plus"></i> Ajouter une annonce
+				<span class="badge badge-success">1 / 3</span>
+			</div>
+
+			<form action="" class="form-horizontal">
+				<div class="form-group">
+					<label for="" class="control-label col-md-6" data-toggle="tooltip" data-placement="bottom" title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
+						Choisissez une ou plusieurs catégories PrestaShop :
+					</label>
+
+					<div class="input-group col-md-6">
+						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+						<span class="input-group-addon"><i class="icon-search"></i></span>
+					</div>
+
+					<ul class="col-md-push-6 col-md-6 item-list">
+						<li class="item">Accueil/Vêtements/Femme/<b>Chaussures</b> <span class="badge badge-success">12</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+						<li class="item">... Vêtements/Femme/Chaussures/<b>Escarpins</b> <span class="badge badge-success">4</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+						<li class="item">... Femme/Chaussures/Escarpins/<b>Haut</b> <span class="badge badge-danger">0</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+						<li class="item">... Femme/Chaussures/Escarpins/<b>Bas</b> <span class="badge badge-success">8</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+					</ul>
+
+					<div class="col-md-6 col-md-offset-6">
+						<p class="checkbox">
+							<label for="include_subcat">
+								<input type="checkbox" id="include_subcat" name="include_subcat" class="" value="0">
+								Inclure les sous-catégories
+							</label>
+						</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon">
+						<span>produits : <span class="badge badge-info">12</span></span>
+						<span>variations : <span class="badge badge-info">23</span></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="" class="control-label col-md-6">
+						Choisissez une catégorie ebay :
+					</label>
+					<div class="input-group col-md-6 category_ebay">
+
+					</div>
+
+				</div>
+
+				<div class="form-group">
+					<label for="" class="control-label col-md-6">
+						Impact sur le prix :
+					</label>
+					<div class="input-group col-md-6">
+						<div class="row">
+
+							<div class="col-md-3">
+								<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+							</div>
+
+							<div class="col-md-9">
+                  <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    €
+                    <span class="caret"></span>
+                  </span>
+								<ul class="dropdown-menu">
+									<li><a tabindex="-1">€</a></li>
+									<li><a tabindex="-1">%</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="" class="control-label col-md-6">
+						Choisissez une catégorie de votre boutique eBay :
+					</label>
+					<div class="input-group col-md-6">
+						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+						<span class="input-group-addon"><i class="icon-search"></i></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="" class="control-label col-md-6">
+						Business Policies :
+					</label>
+					<div class="input-group col-md-6">
+						<select name="" id="">
+							<option value="bp1" selected="selected">business policy 1</option>
+							<option value="bp2">business policy 2</option>
+							<option value="bp3">business policy 3</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="" class="control-label col-md-6">
+						Exclure des produits :
+					</label>
+					<div class="input-group col-md-6">
+						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+						<span class="input-group-addon"><i class="icon-search"></i></span>
+					</div>
+					<ul class="col-md-push-6 col-md-6 item-list">
+						<li class="item">Sandales bleues <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+						<li class="item">Balerines à pois dorées <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+					</ul>
+				</div>
+			</form>
+
+			<div class="panel-footer">
+				<button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+				<button class="js-close-popin btn btn-primary pull-right"><i class="process-icon-next"></i>Suivant</button>
+			</div>
+
+		</div>
+	</div>
+
+	{* Profile removal modal *}
+	<div id="popin-remove-profile" class="popin popin-sm" style="display: none;">
+		<div class="panel">
+			<div class="panel-heading">
+				<i class="icon-trash"></i> Supprimer un profil
+			</div>
+
+			<p>Vous êtes sur le point de supprimer le profil <strong>UserName_eBayFrance_2_1</strong>.
+				Cette opération est irréversible en entraine la suppression des catégories et annonces synchronisées qui lui sont associées.</p>
+
+			<p>Êtes-vous sûr de vouloir supprimer ce profil ?</p>
+
+			<div class="panel-footer">
+				<button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+				<button class="js-close-popin btn btn-danger pull-right"><i class="process-icon-delete"></i>Supprimer</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1080,27 +1080,24 @@ class EbayRequest
         if (!$data) {
             return false;
         }
-        $return_policy = $this->_getReturnPolicy($data);
+        //$return_policy = $this->_getReturnPolicy($data);
 
-        if (!is_string($return_policy) && is_array($return_policy)) {
-            return $this->error = $return_policy['error'];
-        }
+
 
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
+            'price_update' => !isset($data['noPriceUpdate']),
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
-            'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
-            'return_policy' => $return_policy,
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
         );
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseStockFixedPriceItem', $vars);
+        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
         $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
 
         if ($response === false) {
@@ -1128,6 +1125,7 @@ class EbayRequest
             'country_currency' => $currency->iso_code,
             'condition_id' => (isset($data['condition']))?$data['condition']:null,
             'listing_type' => 'FixedPriceItem',
+            'price_update' => !isset($data['noPriceUpdate']),
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),

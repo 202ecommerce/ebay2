@@ -77,14 +77,9 @@ class EbayTaskManager
                 if ($products_ebay = Db::getInstance()->executeS($q)) {
 
                     foreach ($products_ebay as $product_ebay) {
-                        $id_tasks = array(10);
+
                         $ebay_profile = new EbayProfile($product_ebay['id_ebay_profile']);
-                        if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
-                            $id_tasks = array(13, 11);
-                            if ($type == 'stock') {
-                                $id_tasks = array(13);
-                            }
-                        }
+
                         $id_attributes = array();
                         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
                         $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
@@ -97,8 +92,15 @@ class EbayTaskManager
                             $id_attributes[] = 0;
                         }
 
-                        foreach ($id_tasks as $id_task) {
                             foreach ($id_attributes as $id_attribute) {
+                                $id_tasks = array(10);
+                                if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute)) {
+                                    $id_tasks = array(13, 11);
+                                    if ($type == 'stock') {
+                                        $id_tasks = array(13);
+                                    }
+                                }
+                                foreach ($id_tasks as $id_task) {
 
                                 self::insertTask($product_ebay['id_product'], $id_attribute, $id_task, $product_ebay['id_ebay_profile']);
 

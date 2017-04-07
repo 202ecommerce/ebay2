@@ -69,18 +69,62 @@ class EbayFormEbaySyncTab extends EbayTab
                 if (isset($category_config_list[$category['id_category']]['id_ebay_category'])
                     && $category_config_list[$category['id_category']]['id_ebay_category'] > 0
                 ) {
+
+                    $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
+            FROM `'._DB_PREFIX_.'product` p';
+
+                    $sql .= Shop::addSqlAssociation('product', 'p');
+                    $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+                ON (p.`id_product` = pl.`id_product`
+                AND pl.`id_lang` = '.(int) $this->ebay_profile->id_lang;
+                    $sql .= Shop::addSqlRestrictionOnLang('pl');
+                    $sql .= ')
+            LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$this->ebay_profile->id.'
+            LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+                ON p.`id_product` = sa.`id_product`
+                AND sa.`id_product_attribute` = 0
+            WHERE ';
+                    $sql .= ' product_shop.`id_category_default` = '.(int) $category['id_category'];
+                    $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+
+
+                    $nb_products_blocked = 0;
+                    $nb_products_man = Db::getInstance()->ExecuteS($sql);
+                    $nb_products_variations = 0;
+                    if ($nb_products) {
+                        foreach ($nb_products_man as $product_ps) {
+                            $product = new Product($product_ps['id']);
+                            $variation = $product->getWsCombinations();
+                            $nb_products_variations += count($variation);
+                            if ($product_ps['blacklisted']) {
+                                $nb_products_blocked += 1;
+                            }
+                        }
+                    }
+
+                    $category_ebay =  EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id,$category_config_list[$category['id_category']]['id_ebay_category']);
+                   // $is_multi = EbayCategory::getInheritedIsMultiSku($category_config_list[$category['id_category']]['id_ebay_category'], $this->ebay_profile->ebay_site_id);
+                    $ebay_category = EbaySynchronizer::__getEbayCategory($category['id_category'], $this->ebay_profile);
+
                     $categories[] = array(
                         'row_class' => $alt_row ? 'alt_row' : '',
                         'value'     => $category['id_category'],
                         'checked'   => ($category_config_list[$category['id_category']]['sync'] == 1 ? 'checked="checked"' : ''),
-                        'name'      => $category['name']
-                    );
+                        'name'      => $category['name'],
+                        'price' => $category_config_list[$category['id_category']]['percent']?$category_config_list[$category['id_category']]['percent']:0,
+                        'category_ebay' => $category_ebay[0]['name'],
+                        'category_multi' => $ebay_category->isMultiSku()?'yes' : 'non',
+                        'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category']),
+                        'nb_products' => count($nb_products_man),
+                        'nb_products_variations' => $nb_products_variations,
+                        'nb_products_blocked' => $nb_products_blocked
 
+                    );
                     $alt_row = !$alt_row;
                 }
             }
         }
-
         $nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
         $sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
 
@@ -105,6 +149,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'admin_path'              => basename(_PS_ADMIN_DIR_),
             'load_kb_path'            => _MODULE_DIR_ . 'ebay/ajax/loadKB.php',
             'img_alert'               => $ebay_alert->checkNumberPhoto(),
+
         );
 
         return $this->display('formEbaySync.tpl', $smarty_vars);
