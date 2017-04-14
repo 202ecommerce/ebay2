@@ -127,8 +127,15 @@ class EbayFormEbaySyncTab extends EbayTab
         }
         $nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
         $sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
-
+        $ebay_category_list = Db::getInstance()->executeS('SELECT *
+            FROM `'._DB_PREFIX_.'ebay_category`
+            WHERE `id_category_ref` = `id_category_ref_parent`
+            AND `id_country` = '.(int) $this->ebay_profile->ebay_site_id);
         $ebay_alert = new EbayAlert($this->ebay);
+        $root_category = Category::getRootCategory();
+        $categories_ps = Category::getCategories($this->ebay_profile->id_lang);
+        $category_list = $this->ebay->getChildCategories($categories_ps, $root_category->id_parent, array(), '');
+
         $smarty_vars = array(
             'category_alerts'         => $this->_getAlertCategories(),
             'path'                    => $this->path,
@@ -149,6 +156,11 @@ class EbayFormEbaySyncTab extends EbayTab
             'admin_path'              => basename(_PS_ADMIN_DIR_),
             'load_kb_path'            => _MODULE_DIR_ . 'ebay/ajax/loadKB.php',
             'img_alert'               => $ebay_alert->checkNumberPhoto(),
+            'PAYEMENTS' =>EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $this->ebay_profile->id),
+            'RETURN_POLICY' => EbayBussinesPolicies::getPoliciesbyType('RETURN_POLICY', $this->ebay_profile->id),
+            'storeCategories' =>  EbayStoreCategory::getCategoriesWithConfiguration($this->ebay_profile->id),
+            'ebayCategories' => $ebay_category_list,
+            'ps_categories' => $category_list,
 
         );
 
@@ -157,7 +169,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
     public function postProcess()
     {
-
+        var_dump($_POST);die;
         // Update Sync Option
         if ($this->ebay_profile == null) {
             return;

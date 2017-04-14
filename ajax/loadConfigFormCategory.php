@@ -70,6 +70,43 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
     return $var;
 }
 
+function getProductsSynchVariations($id_category, $ebay_profile) {
+    $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
+            FROM `'._DB_PREFIX_.'product` p';
+
+    $sql .= Shop::addSqlAssociation('product', 'p');
+    $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+                ON (p.`id_product` = pl.`id_product`
+                AND pl.`id_lang` = '.(int) $ebay_profile->id_lang;
+    $sql .= Shop::addSqlRestrictionOnLang('pl');
+    $sql .= ')
+            LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$ebay_profile->id.'
+            LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+                ON p.`id_product` = sa.`id_product`
+                AND sa.`id_product_attribute` = 0
+            WHERE ';
+    $sql .= ' product_shop.`id_category_default` = '.(int) $id_category;
+    $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+
+
+    $nb_products_blocked = 0;
+    $nb_products_man = Db::getInstance()->ExecuteS($sql);
+    $nb_products_variations = 0;
+    if ($nb_products_man) {
+        foreach ($nb_products_man as $product_ps) {
+            $product = new Product($product_ps['id']);
+            $variation = $product->getWsCombinations();
+            $nb_products_variations += count($variation);
+            if ($product_ps['blacklisted']) {
+                $nb_products_blocked += 1;
+            }
+        }
+    }
+
+    return $nb_products_variations;
+}
+
 if ($id_categori_ps = Tools::getValue('id_category_ps')) {
     if (Module::isInstalled('ebay')) {
         /** @var Ebay $ebay */
@@ -153,7 +190,8 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             }
         }
         foreach ($category_config_list as &$category) {
-            $category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).'<input type="hidden" name="category['.(int) $category['id_category'].']" value="'.(int) $category['id_ebay_category'].'" />';
+            $category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).'<input id="id_ebay_categories_real" type="hidden" name="category['.(int) $category['id_category'].']" value="'.(int) $category['id_ebay_category'].'" />';
+
             if ($category['percent']) {
                 preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category['percent'], $temp);
                 $category['percent'] = array('sign' => $temp[1], 'value' => $temp[2], 'type' => $temp[3]);
@@ -161,20 +199,33 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
                 $category['percent'] = array('sign' => '', 'value' => '', 'type' => '');
             }
         }
-
         $smarty = Context::getContext()->smarty;
         $currency = new Currency((int) $ebay_profile->getConfiguration('EBAY_CURRENCY'));
         /* Smarty datas */
+        $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
+
+        $bp_policies = EbayBussinesPolicies::getPoliciesConfigurationbyIdCategory($category_config_list[$id_categori_ps]['id_category_ref'], $ebay_profile->id);
+
+        $storeCategoryId =EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory( $ebay_profile->id, $id_categori_ps);
+        foreach ($category_list as $category) {
+            if($category['id_category'] == $id_categori_ps) {
+                $ps_category_real = $category;
+            }
+        }
         $vars = array(
             'tabHelp' => '&id_tab=7',
             '_path' => $ebay->getPath(),
-            'categoryList' => $category_list,
+            'categoryList' => $ps_category_real,
             'nbCategories' => $nb_categories,
             'eBayCategoryList' => $ebay_category_list,
             'getNbProducts' => $get_cat_nb_products,
             'getNbSyncProducts' => $get_cat_nb_sync_products,
+            'getNbSyncProductsVariations' => getProductsSynchVariations($id_categori_ps, $ebay_profile),
             'categoryConfigList' => $category_config_list[$id_categori_ps],
             'currencySign' => $currency->sign,
+            'percent' => $category_config_list[$id_categori_ps]['percent'],
+            'storeCategoryId' => $storeCategoryId?$storeCategoryId : 0,
+            'bp_policies' => ($bp_policies)?$bp_policies[0]:null,
         );
 
         echo Tools::jsonEncode($vars);

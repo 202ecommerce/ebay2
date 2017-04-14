@@ -44,30 +44,6 @@
 	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall':'UTF-8'};
 	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall':'UTF-8'};
 	{literal}
-	$(document).ready(function() {
-		$(".categorySync").click(function() {
-			var params = "";
-			if ($(this).attr("value") > 0)
-				params = "&id_category=" + $(this).attr("value");
-			if ($(this).attr("checked"))
-				params = params + "&action=1";
-			else
-				params = params + "&action=0";
-
-			$.ajax({
-				type: "POST",
-				url: "{/literal}{$nb_products_sync_url|escape:'urlencode'}{literal}" + params,
-				success: function(data) {
-
-					nbProducts = data;
-					nbProductsModeB = data;
-					$('#save_and_publish').val({/literal}"{l s='Save and list' mod='ebay'} "+data+" {l s='products' mod='ebay'}"{literal});
-					$('#nbproducttosync').html(data);
-				}
-			});
-		});
-	});
-
 
 	$(document).ready(function() {
 		$("#ebay_sync_products_mode1").click(function() {
@@ -82,19 +58,96 @@
 
 		});
 		$('.modifier_cat').on('click', function() {
-			console.log($(this).data('id'));
 			loadCategoriesConfig($(this).data('id'));
 		});
-		function loadCategoriesConfig(id_category) {
+
+		$('.js-next-popin').on('click', function() {
+
+			var courant_page = $('.page_config_category.selected');
+			courant_page.removeClass('selected').hide();
+			console.log(courant_page.attr('id'));
+			var new_id =  parseInt(courant_page.attr('id'))+1;
+			console.log(new_id);
+			courant_page.parent().find('#'+new_id).addClass('selected').show();
+			if (new_id == 2) {
+				$('.js-prev-popin').show();
+				$('#item_spec').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
+				loadCategoryItemsSpecifics($('#id_ebay_categories_real').val());
+			}
+			if (new_id == 3) {
+				$('.category_product_list_ebay').find('tbody').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
+				$('.category_ps_list').find('li').each(function( index ) {
+					showProducts($( this ).attr('id'));
+				});
+				$('.category_product_list_ebay').find('img').remove();
+			}
+			if (new_id == 4) {
+				$('#last_page_categorie_ps').html('').append($('.category_ps_list').children());
+				$('#last_page_categorie_ebay').html('').append($('.category_ebay').children().find('option:selected').last().text());
+				$('#last_page_categorie_boutique').html('').append($('select[name="store_category"]').find('option:selected').text());
+				$('#last_page_categorie_prix').html('').append($('#impact_prix').val());
+				$('#last_page_business_p').html('').append($('select[name="payement_policies"]').find('option:selected').text());
+				$('#last_page_business_r').html('').append($('select[name="return_policies"]').find('option:selected').text());
+				$('.js-next-popin').hide();
+				$('.js-save-popin').show();
+			}
+
+		});
+		$('.js-prev-popin').on('click', function() {
+			$('.js-next-popin').show();
+			var courant_page = $('.page_config_category.selected');
+			courant_page.removeClass('selected').hide();
+			console.log(courant_page.attr('id'));
+			var new_id =  parseInt(courant_page.attr('id'))-1;
+			console.log(new_id);
+			if(new_id == 1){
+				$('.js-prev-popin').hide();
+			}
+			$('.js-save-popin').hide();
+			courant_page.parent().find('#'+new_id).addClass('selected').show();
+
+		});
+		$('.js-save-popin').on('click', function() {
+			var data = $('#category_config').serialize();
+			event.preventDefault();
+			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + data;
+			$.ajax({
+				type: "POST",
+				url: url,
+				success: function (data) {
+
+				}
+			});
+		});
+
+
+
+		function loadCategoriesConfig(id_category)
+		{
 			var url = module_dir + "ebay/ajax/loadConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&id_category_ps=' + id_category;
 
 			$.ajax({
 				type: "POST",
 				url: url,
 				success: function (data) {
+
 					var data = jQuery.parseJSON(data);
+
+
+					$('#ps_category_list').hide();
+					$('.category_ps_list').html('<li class="item" id="'+ data.categoryList['id_category'] +'">'+data.categoryList['name']+'</b> </li>');
+					$('#form_product_to_sync').html(data.getNbSyncProducts);
+					$('#form_variations_to_sync').html(data.getNbSyncProductsVariations);
+					$('#impact_prix').val(data.percent.value);
 					$('.category_ebay').html(data.categoryConfigList.var);
-					$.fancybox.open({
+                    if(data.bp_policies != null){
+                        $('select[name="payement_policies"]').children('option[value="' + data.bp_policies["id_payment"] + '"]').attr('selected', 'selected');
+                        $('select[name="return_policies"]').children('option[value="' + data.bp_policies["id_return"] + '"]').attr('selected', 'selected');
+                    }
+
+					$('select[name="store_category"]').children('option[value="' + data.storeCategoryId + '"]').attr('selected', 'selected');
+
+					$('.modifier_cat').fancybox({
 						'modal': true,
 						'showCloseButton': false,
 						'padding': 0,
@@ -105,67 +158,223 @@
 
 		}
 
+		function loadCategoryItemsSpecifics(category_id)
+		{
+
+			$.ajax({
+				cache: false,
+				dataType: 'json',
+				type: "POST",
+				url: module_dir + "ebay/ajax/loadItemsSpecificsAndConditions.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + category_id + "&id_lang=" + id_lang,
+				success: function(data) {
+					$('#specifics-' + category_id + '-loader').hide();
+					insertCategoryRow(category_id, data);
+				}
+			});
+		}
+
+		function insertCategoryRow(category_id, data)
+		{
+			var has_optionals = false;
+			var trs = '';
+			var trs_optionals = '';
+
+			// specifics
+			var specifics = data.specifics;
+
+			for (var i in specifics)
+			{
+				var specific = specifics[i];
+				var tds = '<td>' + specific.name + '</td><td>';
+				tds += '<select name="specific[' + specific.id + ']">';
+
+				if (!parseInt(specific.required)) {
+					tds += '<option value=""></option>';
+				} else if (specific.name == 'K-type'){
+					tds += '<option value="">Do not synchronise</option>';
+				} else {
+					tds += '<option value="">' + l['-- You have to select a value --'] + '</option>';
+				}
+				if (specific.selection_mode == 0 && specific.name != 'K-type')
+				{
+					if (!data.is_multi_sku || specific.can_variation)
+					{
+						tds += '<optgroup label="' + l['Attributes'] + '">';
+						tds += writeOptions('attr', possible_attributes, specific.id_attribute_group);
+						tds += '</optgroup>';
+					}
+					tds += '<optgroup label="' + l['Product Attributes'] + '">';
+					tds += '<option value="brand-1" ' + (specific.is_brand == 1 ? 'selected' : '') + '>' + l['Brand'] + '</option>';
+					tds += '<option value="reference-1" ' + (specific.is_reference == 1 ? 'selected' : '') + '>' + l['Reference'] + '</option>';
+					tds += '<option value="ean-1" ' + (specific.is_ean == 1 ? 'selected' : '') + '>' + l['EAN'] + '</option>';
+					tds += '<option value="upc-1" ' + (specific.is_upc == 1 ? 'selected' : '') + '>' + l['UPC'] + '</option>';
+					tds += '</optgroup>';
+					tds += '<optgroup label="' + l['Features'] + '">';
+					tds += writeOptions('feat', possible_features, specific.id_feature);
+					tds += '</optgroup>';
+				} else if (specific.name == 'K-type') {
+					tds += '<optgroup label="' + l['Features'] + '">';
+					tds += writeOptions('feat', possible_features, specific.id_feature);
+					tds += '</optgroup>';
+				}
+				if (specific.name != 'K-type') {
+					tds += '<optgroup label="' + l['eBay Specifications'] + '">';
+					tds += writeOptions('spec', specific.values, specific.id_specific_value);
+					tds += '</optgroup>';
+				}
+				tds += '</select></td>';
+
+				if (parseInt(specific.required))
+					trs += '<tr ' + (i % 2 == 0 ? 'class="alt_row"' : '')+ 'category="'+ category_id + '">' + tds + '</tr>';
+				else
+				{
+					trs_optionals += '<tr class="optional" ' + (parseInt(specific.required) ? '' : 'style="display:none"') + ' ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="'+ category_id + '">' + tds + '</tr>';
+
+					if (!has_optionals)
+						has_optionals = true;
+				}
+			}
+
+			// Item Conditions
+			var ebay_conditions = data.conditions;
+			var alt_row = true;
+
+			for (var condition_type in conditions_data)
+			{
+				var condition_data = conditions_data[condition_type];
+				var tds = '<td><select name="condition[' + category_id + '][' + condition_type + ']">';
+
+				for (var id in ebay_conditions)
+					tds += '<option value="' + id + '" ' + ($.inArray(condition_type, ebay_conditions[id].types) >= 0 ? 'selected' : '') + '>' + ebay_conditions[id].name + '</option>';
+
+				tds += '</td><td>' + condition_data + '</td>';
+				trs += '<tr ' + (alt_row ? 'class="alt_row"' : '')+ 'category="'+ category_id + '">' + tds + '</tr>';
+
+				alt_row = !alt_row;
+			}
+
+			if (has_optionals)
+				trs += '<tr id="switch-optionals-' + category_id + '"><td><a href="#" onclick="return showOptionals(' + category_id + ')">See optional items</a></td><td></td></tr>';
+
+			var row = $('#item_spec');
+			row.children('td:nth-child(1)').attr('rowspan', $(trs).length + 1);
+
+			row.html('').append(trs + trs_optionals);
+
+		}
+
+		function writeOptions(value_prefix, options, selected_id)
+		{
+			var str = '';
+
+			for (var id in options)
+				str += '<option value="' + value_prefix + '-' + id + '" ' + (id == selected_id ? 'selected' : '') + '>' + options[id] + '</option>';
+
+			return str;
+		}
+
+		function showOptionals(category_id)
+		{
+			var nb_rows_to_add = $('tr.optional[category=' + category_id + ']').length;
+
+			var first_td = $('#specifics-' + category_id + ' td:nth-child(1)');
+			first_td.attr('rowspan', parseInt(first_td.attr('rowspan')) + nb_rows_to_add - 1);
+
+			$('tr[category=' + category_id + ']').show();
+			$('#switch-optionals-' + category_id).hide();
+
+			return false;
+		}
+
+		function showProducts(id_category)
+		{
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                url: module_dir + 'ebay/ajax/getProducts.php?category=' + id_category + '&token=' + ebay_token + '&id_ebay_profile=' + id_ebay_profile,
+                success: function (products) {
+
+                    var str = '';
+
+                    for (var i in products) {
+                        var product = products[i];
+
+                        str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
+							<td>' + product.id + '</td> \
+							<td>' + product.name + '</td> \
+							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
+							<td class="ebay_center"> \
+								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
+								<input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
+							</td> \
+						</tr>';
+                    }
+
+                    str += '</table></td></tr>';
+
+                    $('.category_product_list_ebay').find('tbody').append(str);
+                }
+            });
 
 
+}
+
+		$('#ps_category_autocomplete_input').keyup(function () {
+			loadPsCategories($(this).val());
+		});
+		$('#ps_category_autocomplete_input').focusout(function() {
+			$(this).val('');
+			$('#divPsCategories').html('');
+		})
 	});
 
-	function eBaySync(option)
+	function changeCategoryMatch(level, id_categoris)
 	{
-		$(".categorySync").attr("disabled", "true");
-		$("#ebay_sync_products_mode1").attr("disabled", "true");
-		$("#ebay_sync_products_mode2").attr("disabled", "true");
-		$("#ebay_sync_option_resync").attr("disabled", "true");
-		$("#ebay_sync_mode_1").attr("disabled", "true");
-		$("#ebay_sync_mode_2").attr("disabled", "true");
-		$("#button_ebay_sync1").attr("disabled", "true").css("background-color", "#D5D5D5");
-		$("#button_ebay_sync2").attr("disabled", "true").css("background-color", "#D5D5D5");
-		$("#resultSync").html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
-		eBaySyncProduct(option);
-	}
+		var id_category = 0;
+		var levelParams = "&level1=" + $("#categoryLevel1-" + id_category).val();
+		if (level > 1) levelParams += "&level2=" + $("#categoryLevel2-" + id_category).val();
+		if (level > 2) levelParams += "&level3=" + $("#categoryLevel3-" + id_category).val();
+		if (level > 3) levelParams += "&level4=" + $("#categoryLevel4-" + id_category).val();
+		if (level > 4) levelParams += "&level5=" + $("#categoryLevel5-" + id_category).val();
 
-	function reableSyncProduct()
-	{
-		$(".categorySync").removeAttr("disabled", "disabled");
-		$("#ebay_sync_products_mode1").removeAttr("disabled", "disabled");
-		$("#ebay_sync_products_mode2").removeAttr("disabled", "disabled");
-		$("#ebay_sync_option_resync").removeAttr("disabled", "disabled");
-		$("#ebay_sync_mode_1").removeAttr("disabled", "disabled");
-		$("#ebay_sync_mode_2").removeAttr("disabled", "disabled");
-		$("#button_ebay_sync1").removeAttr("disabled", "disabled").css("background-color", "#FFFAC6");
-		$("#button_ebay_sync2").removeAttr("disabled", "disabled").css("background-color", "#FFFAC6");
-
-		// Launch the KB
-		getKb();
-	}
-
-	var counter = 0;
-	function eBaySyncProduct(option)
-	{
-		alertOnExit(true, "{/literal}{$sync_message_exit|escape:'htmlall':'UTF-8'}{literal}");
-		counter++;
 		$.ajax({
 			type: "POST",
-			url: '{/literal}{$sync_products_url|escape:'urlencode'}{literal}' + counter,
-			success: function(data)
-			{
-				var tab = data.split("|");
-				$("#resultSync").html(tab[1]);
-				if (tab[0] != "OK")
-					eBaySyncProduct(option);
-				else {
-					reableSyncProduct();
-					alertOnExit(false, '');
-				}
+			url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=no category selected&profile=' + id_ebay_profile,
+			success: function (data) {
+				$(".category_ebay").html(data);
 			}
 		});
 	}
+
+	function loadPsCategories(search)
+	{
+
+		var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&admin_path=' + admin_path +'&s=' + search;
+
+		$.ajax({
+			type: "POST",
+			url: url,
+			success: function (data) {
+				var data = jQuery.parseJSON(data);
+				var str = '<ul>';
+				$.each(data.categoryList, function( index, value ) {
+					str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
+				});
+				str += '</ul>';
+				$('#divPsCategories').html('').append(str);
+			}
+		});
+
+	}
+
 	{/literal}
 </script>
 
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
 
-<form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
+
 	<fieldset style="border: 0">
 		<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success"><span class="icon-plus"></span> Ajouter</a>
 		{if isset($img_alert) && !empty($img_alert)}
@@ -262,12 +471,9 @@
 				</script>
 			{/if}
 		</div><br />
-		<div>
-			<input type="submit" name="btnSubmitSyncAndPublish" class="primary button" value="{l s='Save and list' mod='ebay'} {$nb_products|escape:'htmlall':'UTF-8'} {l s='products' mod='ebay'}" id="save_and_publish"/>
-			<input type="submit" name="btnSubmitSync" class="button" value="{l s='Save' mod='ebay'}" />
-		</div>
+
 	</fieldset>
-</form>
+
 
 <div id="popin-container">
 	{* Category add modal *}
@@ -278,117 +484,221 @@
 				<span class="badge badge-success">1 / 3</span>
 			</div>
 
-			<form action="" class="form-horizontal">
-				<div class="form-group">
-					<label for="" class="control-label col-md-6" data-toggle="tooltip" data-placement="bottom" title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
-						Choisissez une ou plusieurs catégories PrestaShop :
-					</label>
+			<form action="" class="form-horizontal" method="post" id="category_config">
+				<div id="1" class="page_config_category selected">
+					<div class="form-group page">
+						<label for="" class="control-label col-md-6" data-toggle="tooltip" data-placement="bottom" title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
+							Choisissez une ou plusieurs catégories PrestaShop :
+						</label>
 
-					<div class="input-group col-md-6">
-						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
-						<span class="input-group-addon"><i class="icon-search"></i></span>
-					</div>
-
-					<ul class="col-md-push-6 col-md-6 item-list">
-						<li class="item">Accueil/Vêtements/Femme/<b>Chaussures</b> <span class="badge badge-success">12</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-						<li class="item">... Vêtements/Femme/Chaussures/<b>Escarpins</b> <span class="badge badge-success">4</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-						<li class="item">... Femme/Chaussures/Escarpins/<b>Haut</b> <span class="badge badge-danger">0</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-						<li class="item">... Femme/Chaussures/Escarpins/<b>Bas</b> <span class="badge badge-success">8</span><button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-					</ul>
-
-					<div class="col-md-6 col-md-offset-6">
-						<p class="checkbox">
-							<label for="include_subcat">
-								<input type="checkbox" id="include_subcat" name="include_subcat" class="" value="0">
-								Inclure les sous-catégories
-							</label>
-						</p>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon">
-						<span>produits : <span class="badge badge-info">12</span></span>
-						<span>variations : <span class="badge badge-info">23</span></span>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Choisissez une catégorie ebay :
-					</label>
-					<div class="input-group col-md-6 category_ebay">
-
-					</div>
-
-				</div>
-
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Impact sur le prix :
-					</label>
-					<div class="input-group col-md-6">
-						<div class="row">
-
-							<div class="col-md-3">
-								<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+						<div class="input-group col-md-6" id="ps_category_list">
+							<div id="ajax_choose_category">
+								<div class="input-group">
+									<input type="text" id="ps_category_autocomplete_input" name="ps_category_autocomplete_input" autocomplete="off" class="ac_input">
+									<span class="input-group-addon"><i class="icon-search"></i></span>
+								</div>
 							</div>
+							<div id="divPsCategories">
+							</div>
+						</div>
 
-							<div class="col-md-9">
-                  <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    €
-                    <span class="caret"></span>
-                  </span>
-								<ul class="dropdown-menu">
-									<li><a tabindex="-1">€</a></li>
-									<li><a tabindex="-1">%</a></li>
-								</ul>
+						<ul class="col-md-push-6 col-md-6 item-list category_ps_list">
+
+						</ul>
+
+					</div>
+
+					<div class="form-group">
+						<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon">
+							<span>produits : <span class="badge badge-info" id="form_product_to_sync"></span></span>
+							<span>variations : <span class="badge badge-info" id="form_variations_to_sync"></span></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Choisissez une catégorie ebay :
+						</label>
+						<div class="input-group col-md-6 category_ebay">
+							<select name="category" id="categoryLevel1-0 default_list_category" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
+								{foreach from=$ebayCategories item=ebayCategory}
+									<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
+								{/foreach}
+							</select>
+							<input type="hidden" name="category[0]" value="0">
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Impact sur le prix :
+						</label>
+						<div class="input-group col-md-6">
+							<div class="row">
+
+								<div class="col-md-3">
+									<input type="text" id="impact_prix" name="impact_prix" >
+								</div>
+
+								<div class="col-md-9">
+					  <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						€
+						<span class="caret"></span>
+					  </span>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1">€</a></li>
+										<li><a tabindex="-1">%</a></li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Choisissez une catégorie de votre boutique eBay :
-					</label>
-					<div class="input-group col-md-6">
-						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
-						<span class="input-group-addon"><i class="icon-search"></i></span>
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Choisissez une catégorie de votre boutique eBay :
+						</label>
+						{if $storeCategories}
+						<div class="input-group col-md-6">
+							<select name="store_category" style="width: 200px;">
+								{if empty($storeCategories)}
+									<option disabled="disabled"  value="">{l s='Please create a return policy in the Sell section of My eBay' mod='ebay'}</option>
+								{else}
+									<option  value=""></option>
+								{/if}
+								{foreach from=$storeCategories item=storeCategory}
+									<option value="{$storeCategory.ebay_category_id}" >{$storeCategory.name}</option>
+								{/foreach}
+							</select>
+						</div>
+						{/if}
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Business Policies :
-					</label>
-					<div class="input-group col-md-6">
-						<select name="" id="">
-							<option value="bp1" selected="selected">business policy 1</option>
-							<option value="bp2">business policy 2</option>
-							<option value="bp3">business policy 3</option>
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Business Policies :
+						</label>
+						<select name="return_policies" style="width: 200px;">
+							{if empty($RETURN_POLICY)}
+								<option disabled="disabled"  value="">{l s='Please create a return policy in the Sell section of My eBay' mod='ebay'}</option>
+							{else}
+								<option  value=""></option>
+							{/if}
+							{foreach from=$RETURN_POLICY item=RETURN}
+								<option value="{$RETURN.id_bussines_Policie}" >{$RETURN.name}</option>
+							{/foreach}
+						</select>
+						<label for="" class="control-label col-md-6">
+							Business Policies :
+						</label>
+						<select name="payement_policies" style="width: 200px;">
+						{if empty($PAYEMENTS)}
+							<option disabled="disabled" value="">{l s='Please create a payment policy in the Sell section of My eBay' mod='ebay'}</option>
+						{else}
+							<option  value=""></option>
+						{/if}
+
+						{foreach from=$PAYEMENTS item=PAYEMENT}
+							<option  value="{$PAYEMENT.id_bussines_Policie}">{$PAYEMENT.name}</option>
+						{/foreach}
 						</select>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Exclure des produits :
-					</label>
-					<div class="input-group col-md-6">
-						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
-						<span class="input-group-addon"><i class="icon-search"></i></span>
+					<div class="form-group" style="display: none">
+						<label for="" class="control-label col-md-6">
+							Exclure des produits :
+						</label>
+						<div class="input-group col-md-6">
+							<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+							<span class="input-group-addon"><i class="icon-search"></i></span>
+						</div>
+						<ul class="col-md-push-6 col-md-6 item-list">
+							<li class="item">Sandales bleues <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+							<li class="item">Balerines à pois dorées <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+						</ul>
 					</div>
-					<ul class="col-md-push-6 col-md-6 item-list">
-						<li class="item">Sandales bleues <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-						<li class="item">Balerines à pois dorées <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-					</ul>
+				</div>
+				<div id="2" class="page_config_category" style="display: none">
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Faites correspondre les caractéristiques PrestaShop avec celle d'eBay:
+						</label>
+						<div class="input-group col-md-12 category_spec_ebay">
+							<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+								<thead>
+								<tr class="nodrag nodrop">
+									<th style="width:20%">
+										<span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">Caractéristiques d'objet</span><a class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
+									</th>
+									<th style="width:50%">
+										Caractéristiques Prestashop
+									</th>
+								</tr>
+								</thead>
+								<tbody id="item_spec">
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<div id="3" class="page_config_category" style="display: none">
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Faites correspondre les caractéristiques PrestaShop avec celle d'eBay:
+						</label>
+						<div class="input-group col-md-12 category_product_list_ebay">
+							<table class="table tableDnD" width="80%" style="margin: auto">
+								<thead>
+								<tr class="product-row" category="5">
+									<th class="">ID Produit</th>
+									<th class="">Name</th>
+									<th class="ebay_center ">Stock</th>
+									<th class="ebay_center ">Déselectionnez les produits que vous ne voulez pas mettre
+										en vente sur eBay
+									</th>
+								</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<div id="4" class="page_config_category" style="display: none">
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Config :
+						</label>
+					</div>
+					<div class="input-group col-md-12 total_config_list_ebay">
+						<div class="col-md-12">
+							<br>
+							 <b>Catégories PS : </b><span id="last_page_categorie_ps"> </span><br>
+							 <b>Catégory eBay : </b><span id="last_page_categorie_ebay"></span><br>
+							 <b>Impact prix : </b><span id="last_page_categorie_prix"> </span><br>
+							 <b>Catégorie de votre boutique eBay : </b><span id="last_page_categorie_boutique"></span><br>
+							<br>
+							<h4>Business Policies</h4>
+							 <b>Payement Policies : </b><span id="last_page_business_p"></span><br>
+							 <b>Return Policies : </b><span id="last_page_business_r"> </span><br><br><br>
+							L’ajout de ces produits se fait automatiquement dans les minutes qui viennent.
+							<br>
+							<br>
+							<button class="js-save-popin btn btn-primary pull-right" style="display: none">Save</button>
+						</div>
+					</div>
 				</div>
 			</form>
 
 			<div class="panel-footer">
 				<button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-				<button class="js-close-popin btn btn-primary pull-right"><i class="process-icon-next"></i>Suivant</button>
+				<button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>Suivant</button>
+
+				<button class="js-prev-popin btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>prev</button>
 			</div>
 
 		</div>

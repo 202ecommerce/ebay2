@@ -67,6 +67,21 @@ $(document).ready(function () {
     // Close modal on click on cancel button
     $(document).on('click', '.js-close-popin', function() {
         $.fancybox.close();
+        $('.js-next-popin').show();
+        $('.category_ps_list').html('');
+        $('#form_product_to_sync').html('');
+        $('#form_variations_to_sync').html('');
+        $('#impact_prix').val('');
+        var courant_page = $('.page_config_category.selected');
+        courant_page.removeClass('selected').hide();
+        $('.page_config_category#1').addClass('selected').show();
+        $('.js-prev-popin').hide();
+        $('#ps_category_list').show();
+        $('#item_spec').html('');
+        $('#item_spec').children().remove();
+        $('select[name="payement_policies"]').find('option:selected').removeAttr("selected");
+        $('select[name="return_policies"]').find('option:selected').removeAttr("selected");
+        $('select[name="store_category"]').find('option:selected').removeAttr("selected");
     });
 
     function selectMainTab(menu_name) {

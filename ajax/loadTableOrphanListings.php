@@ -122,12 +122,14 @@ foreach ($res as &$row) {
             }
         }
 
+
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
         $row['sync'] = (bool) $row['EbayCategoryExists']; // only true if category synced with an eBay category
     }
-
+    $ebayCategory = new EbayCategory($ebay_profile, $row['id_category_ref']);
+    $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
     // filtering
     if (!$row['exists']) {
         $final_res[] = $row;

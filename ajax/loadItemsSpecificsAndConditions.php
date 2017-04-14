@@ -46,8 +46,9 @@ function loadItemsMap($row)
 
 /* Fix for limit db sql request in time */
 sleep(1);
-
-$category = new EbayCategory($ebay_profile, (int) Tools::getValue('ebay_category'));
+$sql = 'SELECT `id_category_ref` FROM `'._DB_PREFIX_.'ebay_category` WHERE `id_ebay_category` = '.(int) Tools::getValue('ebay_category');
+$id_category = DB::getInstance()->getValue($sql);
+$category = new EbayCategory($ebay_profile, (int) $id_category);
 
 $last_upd = $ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE');
 
