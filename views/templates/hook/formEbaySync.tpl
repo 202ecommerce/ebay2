@@ -109,8 +109,12 @@
 		});
 		$('.js-save-popin').on('click', function() {
 			var data = $('#category_config').serialize();
+			var ps_categories = new Array();
+			$('#last_page_categorie_ps').find('li').each(function( index ) {
+				ps_categories.push($( this ).attr('id'));
+			});
 			event.preventDefault();
-			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + data;
+			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
 			$.ajax({
 				type: "POST",
 				url: url,
