@@ -52,7 +52,7 @@ function initProductsPagination() {
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: module_dir + "ebay/ajax/saveCategories.php?token=" + ebay_token + "&profile=" + id_ebay_profile,
+            url:  "ebay/ajax/saveCategories.php?token=" + ebay_token + "&profile=" + id_ebay_profile,
             data: $('#configForm2').serialize() + "&ajax=true",
             success: function (data) {
                 if (data.valid) {

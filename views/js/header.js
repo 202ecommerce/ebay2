@@ -56,12 +56,18 @@ $(document).ready(function () {
     });
 
 
+    $('.js-popin').live('click', function() {
 
-    $('.js-popin').fancybox({
-        'modal': true,
-        'showCloseButton': false,
-        'padding': 0,
-        'parent': '#popin-container',
+        $('.js-popin').fancybox({
+            'modal': true,
+            'showCloseButton': false,
+            'padding': 0,
+            'parent': '#popin-container',
+        });
+        $('.product_sync_info').hide();
+        if($('ul.category_ps_list li').length == 0) {
+            $('.js-next-popin').attr('disabled','disabled');
+        }
     });
 
     // Close modal on click on cancel button
@@ -82,6 +88,7 @@ $(document).ready(function () {
         $('select[name="payement_policies"]').find('option:selected').removeAttr("selected");
         $('select[name="return_policies"]').find('option:selected').removeAttr("selected");
         $('select[name="store_category"]').find('option:selected').removeAttr("selected");
+        $('.product_sync_info').show();
     });
 
     function selectMainTab(menu_name) {

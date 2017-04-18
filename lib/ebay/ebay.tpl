@@ -36,13 +36,7 @@
             <a href="http://my.ebay.fr/ws/eBayISAPI.dll?AcceptSavedSeller&sellerid={literal}{EBAY_IDENTIFIER}{/literal}&ssPageName=STRK:MEFS:ADDSTR">{l s='Add this shop to my favorites' mod='ebay'}
                 <img src="{$module_url|escape:'htmlall':'UTF-8'}views/img/favorite.png"
                      alt="{l s='Add this shop to my favorites' mod='ebay'}" border="0"/></a><br/><br/>
-            <form action="http://stores.ebay.fr/{literal}{EBAY_SHOP}{/literal}/_i.html" method="GET">
-                <input type="text" name="_nkw" class="headerSearchProductPrestashop" value=""/>
-                <input type="hidden" name="_armrs" value="1"/>
-                <input type="hidden" name="_from" value=""/>
-                <input type="hidden" name="_ipg" value=""/>
-                <input type="hidden" name="_sasi" value="1"/>
-            </form>
+
         </td>
     </tr>
     <tr>

@@ -222,4 +222,14 @@ class EbayStoreCategory extends ObjectModel
         return $final_categories;
 
     }
+    public static function getCategoryName($ebay_category_id)
+    {
+        $categoryName = Db::getInstance()->getValue('SELECT  `name` 
+FROM `'._DB_PREFIX_.'ebay_store_category` 
+			WHERE `ebay_category_id` = '.(int) $ebay_category_id);
+
+
+        return $categoryName;
+    }
+
 }

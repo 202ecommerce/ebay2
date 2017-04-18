@@ -94,5 +94,5 @@ for ($level = 0; $level <= 5; $level++) {
 }
 
 if (!isset($level_exists[Tools::getValue('level') + 1])) {
-    echo '<input id="id_ebay_categories_real" type="hidden" name="category['.(int) Tools::getValue('id_category').']" value="'.(int) Tools::getValue('level'.Tools::getValue('level')).'" />';
+    echo '<input id="id_ebay_categories_real" type="hidden" name="real_category_ebay" value="'.(int) Tools::getValue('level'.Tools::getValue('level')).'" />';
 }

@@ -43,6 +43,7 @@ class EbayPrestashopProductsTab extends EbayTab
 
         // Smarty
         $template_vars = array(
+            'module_dir' => _MODULE_DIR_,
             'id_ebay_profile'         => $this->ebay_profile->id,
             'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
             'show_products_url'       => $show_products_url,

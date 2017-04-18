@@ -40,10 +40,42 @@
 	{/literal}
 </style>
 <script>
+	var showOptionals;
 	var nbProducts = {$nb_products|escape:'htmlall':'UTF-8'};
 	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall':'UTF-8'};
 	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall':'UTF-8'};
+	var l = {ldelim}
+		'Attributes'						: "{l s='Attributes' mod='ebay'}",
+		'Features'							: "{l s='Features' mod='ebay'}",
+		'eBay Specifications'				: "{l s='eBay Specifications' mod='ebay'}",
+		'Brand'								: "{l s='Brand' mod='ebay'}",
+		'-- You have to select a value --'	: "{l s='-- You have to select a value --' mod='ebay'}",
+		'Product Attributes'				: "{l s='Product Attributes' mod='ebay'}",
+		'Reference'							: "{l s='Reference' mod='ebay'}",
+		'EAN'								: "{l s='EAN' mod='ebay'}",
+		'UPC'								: "{l s='UPC' mod='ebay'}",
+		{rdelim};
+
+
+	var conditions_data = new Array();
+	{foreach from=$conditions key=type item=condition}
+	conditions_data[{$type|escape:'htmlall':'UTF-8'}] = "{$condition|escape:'htmlall':'UTF-8'}";
+	{/foreach}
+
+	var possible_attributes = new Array();
+	{foreach from=$possible_attributes item=attribute}
+	possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
+	{/foreach}
+
+	var possible_features = new Array();
+	{foreach from=$possible_features item=feature}
+	{if isset($feature.id_feature) && $feature.id_feature != ""}
+	possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
+	{/if}
+	{/foreach}
+
 	{literal}
+
 
 	$(document).ready(function() {
 		$("#ebay_sync_products_mode1").click(function() {
@@ -65,10 +97,10 @@
 
 			var courant_page = $('.page_config_category.selected');
 			courant_page.removeClass('selected').hide();
-			console.log(courant_page.attr('id'));
+
 			var new_id =  parseInt(courant_page.attr('id'))+1;
-			console.log(new_id);
-			courant_page.parent().find('#'+new_id).addClass('selected').show();
+
+			courant_page.parent().find('div#'+new_id).addClass('selected').show();
 			if (new_id == 2) {
 				$('.js-prev-popin').show();
 				$('#item_spec').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
@@ -119,11 +151,26 @@
 				type: "POST",
 				url: url,
 				success: function (data) {
-
+					location.reload();
 				}
 			});
 		});
 
+		$('.js-remove-item').live('click', function() {
+			$(this).parent().remove();
+			if($('ul.category_ps_list li').length == 0) {
+				$('.js-next-popin').attr('disabled','disabled');
+			}
+		});
+
+
+
+		$('.add_categories_ps li').live('click', function() {
+			$('.category_ps_list').append($( this ));
+			$('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button>');
+			$('#divPsCategories').html('');
+			$('.js-next-popin').removeAttr('disabled');
+		});
 
 
 		function loadCategoriesConfig(id_category)
@@ -142,6 +189,8 @@
 					$('.category_ps_list').html('<li class="item" id="'+ data.categoryList['id_category'] +'">'+data.categoryList['name']+'</b> </li>');
 					$('#form_product_to_sync').html(data.getNbSyncProducts);
 					$('#form_variations_to_sync').html(data.getNbSyncProductsVariations);
+					$('select[name="impact_prix[sing]"]').children('option[value="' + data.percent.sign + '"]').attr('selected', 'selected');
+					$('select[name="impact_prix[type]"]').children('option[value="' + data.percent.type + '"]').attr('selected', 'selected');
 					$('#impact_prix').val(data.percent.value);
 					$('.category_ebay').html(data.categoryConfigList.var);
                     if(data.bp_policies != null){
@@ -177,6 +226,18 @@
 			});
 		}
 
+		showOptionals = function showOptionals(category_id)
+		{
+			var nb_rows_to_add = $('tr.optional[category=' + category_id + ']').length;
+
+			var first_td = $('#specifics-' + category_id + ' td:nth-child(1)');
+			first_td.attr('rowspan', parseInt(first_td.attr('rowspan')) + nb_rows_to_add - 1);
+
+			$('tr[category=' + category_id + ']').show();
+			$('#switch-optionals-' + category_id).hide();
+
+			return false;
+		}
 		function insertCategoryRow(category_id, data)
 		{
 			var has_optionals = false;
@@ -277,18 +338,7 @@
 			return str;
 		}
 
-		function showOptionals(category_id)
-		{
-			var nb_rows_to_add = $('tr.optional[category=' + category_id + ']').length;
 
-			var first_td = $('#specifics-' + category_id + ' td:nth-child(1)');
-			first_td.attr('rowspan', parseInt(first_td.attr('rowspan')) + nb_rows_to_add - 1);
-
-			$('tr[category=' + category_id + ']').show();
-			$('#switch-optionals-' + category_id).hide();
-
-			return false;
-		}
 
 		function showProducts(id_category)
 		{
@@ -300,11 +350,11 @@
                 success: function (products) {
 
                     var str = '';
+					if (products.length > 0) {
+						for (var i in products) {
+							var product = products[i];
 
-                    for (var i in products) {
-                        var product = products[i];
-
-                        str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
+							str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
 							<td>' + product.id + '</td> \
 							<td>' + product.name + '</td> \
 							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
@@ -313,9 +363,12 @@
 								<input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
 							</td> \
 						</tr>';
-                    }
-
-                    str += '</table></td></tr>';
+						}
+						if (str != '') {
+							str += '</table></td></tr>';
+						}
+					}
+					console.log(str);
 
                     $('.category_product_list_ebay').find('tbody').append(str);
                 }
@@ -327,10 +380,13 @@
 		$('#ps_category_autocomplete_input').keyup(function () {
 			loadPsCategories($(this).val());
 		});
-		$('#ps_category_autocomplete_input').focusout(function() {
-			$(this).val('');
-			$('#divPsCategories').html('');
-		})
+
+		$(document).on('click', '*:not(#ps_category_list)', function() {
+			if($('#ps_category_autocomplete_input').is(':visible')) {
+				$('#divPsCategories').html('');
+			}
+		});
+
 	});
 
 	function changeCategoryMatch(level, id_categoris)
@@ -354,14 +410,14 @@
 	function loadPsCategories(search)
 	{
 
-		var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&admin_path=' + admin_path +'&s=' + search;
+		var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop  +'&s=' + search;
 
 		$.ajax({
 			type: "POST",
 			url: url,
 			success: function (data) {
 				var data = jQuery.parseJSON(data);
-				var str = '<ul>';
+				var str = '<ul class="add_categories_ps">';
 				$.each(data.categoryList, function( index, value ) {
 					str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
 				});
@@ -444,7 +500,7 @@
 								<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.annonces|escape:'htmlall':'UTF-8'}</td>
-								<td>{$category.name|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.category_boutique|escape:'htmlall':'UTF-8'}</td>
 								<td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
 								<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span> Modifier</a></td>
 							</tr>
@@ -506,14 +562,14 @@
 							</div>
 						</div>
 
-						<ul class="col-md-push-6 col-md-6 item-list category_ps_list">
+						<ul class="col-md-6 col-md-6 item-list category_ps_list">
 
 						</ul>
 
 					</div>
 
 					<div class="form-group">
-						<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon">
+						<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon product_sync_info">
 							<span>produits : <span class="badge badge-info" id="form_product_to_sync"></span></span>
 							<span>variations : <span class="badge badge-info" id="form_variations_to_sync"></span></span>
 						</div>
@@ -541,20 +597,19 @@
 						<div class="input-group col-md-6">
 							<div class="row">
 
-								<div class="col-md-3">
-									<input type="text" id="impact_prix" name="impact_prix" >
-								</div>
 
-								<div class="col-md-9">
-					  <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-						€
-						<span class="caret"></span>
-					  </span>
-									<ul class="dropdown-menu">
-										<li><a tabindex="-1">€</a></li>
-										<li><a tabindex="-1">%</a></li>
-									</ul>
-								</div>
+									<select name="impact_prix[sign]" class="ebay_select">
+										<option value="+">+</option>
+										<option value="-">-</option>
+									</select>
+									<input type="text" id="impact_prix" name="impact_prix[value]" >
+									<select name="impact_prix[type]" class="ebay_select">
+										<option value="currency">€</option>
+										<option value="percent">%</option>
+									</select>
+
+
+
 							</div>
 						</div>
 					</div>

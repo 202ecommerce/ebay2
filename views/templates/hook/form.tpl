@@ -26,6 +26,9 @@
 <div class="totebay">
 <script type="text/javascript">
     regenerate_token_show = false;
+    var module_dir = "{$_module_dir_|escape:'htmlall':'UTF-8'}";
+    var id_lang = {$id_lang|escape:'htmlall':'UTF-8'};
+    var id_ebay_profile = {$id_ebay_profile|escape:'htmlall':'UTF-8'};
     {if $regenerate_token != false}
     regenerate_token_show = true;
     {/if}
@@ -289,7 +292,7 @@
     {* Main navigation *}
     <div class="sidebar navigation col-md-3 col-lg-2">
         <ul class="list-group nav">
-            <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#test1" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
+            <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashbord" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#test2" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-success">{$count_order_errors}</span>{/if}</a>
             <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#test3" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Annonces' mod='ebay'} {if $count_product_errors > 0}<span class="badge badge-danger">{$count_product_errors}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#test4" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>

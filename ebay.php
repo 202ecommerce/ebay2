@@ -67,22 +67,18 @@ $classes_to_load = array(
     'tabs/EbayTab',
     'tabs/EbayFormParametersTab',
     'tabs/EbayFormAdvancedParametersTab',
-    'tabs/EbayFormCategoryTab',
-    'tabs/EbayFormItemsSpecificsTab',
     'tabs/EbayFormShippingTab',
     'tabs/EbayFormTemplateManagerTab',
     'tabs/EbayFormEbaySyncTab',
     'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
     'tabs/EbayListingsTab',
-    'tabs/EbayFormStoreCategoryTab',
     'tabs/EbayApiLogsTab',
     'tabs/EbayOrderLogsTab',
     'tabs/EbayOrdersSyncTab',
     'tabs/EbayOrdersReturnsSyncTab',
     'tabs/EbayPrestashopProductsTab',
     'tabs/EbayOrphanListingsTab',
-    'tabs/EbayFormBusinessPoliciesTab',
     'tabs/EbayOrderReturnsTab',
     'tabs/EbayDashboardTab',
     'tabs/EbayOrdersTab',
@@ -1597,6 +1593,8 @@ class Ebay extends Module
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),
             'debug' => ($request->getDev())? 1:0,
+            'id_lang' => ($this->ebay_profile->id_lang?$this->ebay_profile->id_lang:Configuration::get('PS_LANG_DEFAULT')),
+            'id_ebay_profile' => $this->ebay_profile->id,
         ));
 
         // test if multishop Screen and all shops
@@ -1653,22 +1651,14 @@ class Ebay extends Module
 
         if (Tools::getValue('section') == 'parameters') {
             $tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
-        } elseif (Tools::getValue('section') == 'category') {
-            $tab = new EbayFormCategoryTab($this, $this->smarty, $this->context);
-        } elseif (Tools::getValue('section') == 'specifics') {
-            $tab = new EbayFormItemsSpecificsTab($this, $this->smarty, $this->context, $this->_path);
         } elseif (Tools::getValue('section') == 'shipping') {
             $tab = new EbayFormShippingTab($this, $this->smarty, $this->context);
         } elseif (Tools::getValue('section') == 'template') {
             $tab = new EbayFormTemplateManagerTab($this, $this->smarty, $this->context);
         } elseif (Tools::getValue('section') == 'sync') {
             $tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
-        } elseif (Tools::getValue('section') == 'store_category') {
-            $tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context);
-        } elseif (Tools::getValue('section') == 'advanced_parameters') {
+        }  elseif (Tools::getValue('section') == 'advanced_parameters') {
             $tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
-        } elseif (Tools::getValue('section') == 'bussinespolicies') {
-            $tab = new EbayFormBusinessPoliciesTab($this, $this->smarty, $this->context);
         }
 
         if (isset($tab)) {
@@ -1821,8 +1811,7 @@ class Ebay extends Module
     {
         $form_parameters_tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
         $form_advanced_parameters_tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
-        $form_category_tab = new EbayFormCategoryTab($this, $this->smarty, $this->context, $this->_path);
-        $form_items_specifics_tab = new EbayFormItemsSpecificsTab($this, $this->smarty, $this->context, $this->_path);
+
         $form_shipping_tab = new EbayFormShippingTab($this, $this->smarty, $this->context);
         $form_template_manager_tab = new EbayFormTemplateManagerTab($this, $this->smarty, $this->context);
         $form_ebay_sync_tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
@@ -1832,11 +1821,10 @@ class Ebay extends Module
         $orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
         $ps_products = new EbayPrestashopProductsTab($this, $this->smarty, $this->context);
         $orphan_listings = new EbayOrphanListingsTab($this, $this->smarty, $this->context);
-        $form_business_policies = new EbayFormBusinessPoliciesTab($this, $this->smarty, $this->context);
         $tableOrders = new EbayOrdersTab($this, $this->smarty, $this->context);
         $tableListErrorProduct = new EbayListErrorsProductsTab($this, $this->smarty, $this->context);
 
-        $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
+
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
         $api_logs = new EbayApiLogsTab($this, $this->smarty, $this->context, $this->_path);
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
@@ -1868,14 +1856,11 @@ class Ebay extends Module
             'class_general' => 'uncinq',
             'form_parameters' => $form_parameters_tab->getContent(),
             'form_advanced_parameters' => $form_advanced_parameters_tab->getContent(),
-            'form_category' => $form_category_tab->getContent(),
-            'form_items_specifics' => $form_items_specifics_tab->getContent(),
             'form_shipping' => $form_shipping_tab->getContent(),
             'form_template_manager' => $form_template_manager_tab->getContent(),
             'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
             'orders_history' => $form_ebay_order_history_tab->getContent(),
             'ebay_listings' => $listings_tab->getContent(),
-            'form_store_category' => $form_store_category_tab->getContent(),
             'orders_sync' => $orders_sync->getContent(),
             'ps_products' => $ps_products->getContent(),
             'orphan_listings' => $orphan_listings->getContent(),
@@ -1888,7 +1873,6 @@ class Ebay extends Module
             'admin_path' => basename(_PS_ADMIN_DIR_),
             'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
             'alert_exit_import_categories' => $this->l('Import of eBay category is running.'),
-            'form_business_policies' => $form_business_policies->getContent(),
             'order_returns' => $order_returns->getContent(),
             'orders_returns_sync' => $orders_returns_sync->getContent(),
             'dashboard' =>   $dashboard->getContent(),

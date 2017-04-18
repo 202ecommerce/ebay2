@@ -190,7 +190,7 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             }
         }
         foreach ($category_config_list as &$category) {
-            $category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).'<input id="id_ebay_categories_real" type="hidden" name="category['.(int) $category['id_category'].']" value="'.(int) $category['id_ebay_category'].'" />';
+            $category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).'<input id="id_ebay_categories_real" type="hidden" name="real_category_ebay" value="'.(int) $category['id_ebay_category'].'" />';
 
             if ($category['percent']) {
                 preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category['percent'], $temp);
@@ -203,14 +203,20 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
         $currency = new Currency((int) $ebay_profile->getConfiguration('EBAY_CURRENCY'));
         /* Smarty datas */
         $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
-
+        foreach ($category_list as $category_l) {
+            if($category_l['id_category'] == $id_categori_ps) {
+                $ps_category_real = $category_l;
+            }
+        }
         $bp_policies = EbayBussinesPolicies::getPoliciesConfigurationbyIdCategory($category_config_list[$id_categori_ps]['id_category_ref'], $ebay_profile->id);
 
         $storeCategoryId =EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory( $ebay_profile->id, $id_categori_ps);
-        foreach ($category_list as $category) {
-            if($category['id_category'] == $id_categori_ps) {
-                $ps_category_real = $category;
-            }
+
+        if ($category_config_list[$id_categori_ps]['percent']) {
+           $temp= $category_config_list[$id_categori_ps]['percent'];
+            $percent = array('sign' => $temp['sign'], 'value' => $temp['value'], 'type' => $temp['type']);
+        } else {
+            $percent = array('sign' => '', 'value' => '', 'type' => '');
         }
         $vars = array(
             'tabHelp' => '&id_tab=7',
@@ -223,7 +229,7 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             'getNbSyncProductsVariations' => getProductsSynchVariations($id_categori_ps, $ebay_profile),
             'categoryConfigList' => $category_config_list[$id_categori_ps],
             'currencySign' => $currency->sign,
-            'percent' => $category_config_list[$id_categori_ps]['percent'],
+            'percent' => $percent,
             'storeCategoryId' => $storeCategoryId?$storeCategoryId : 0,
             'bp_policies' => ($bp_policies)?$bp_policies[0]:null,
         );

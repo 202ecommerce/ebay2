@@ -209,7 +209,7 @@ class EbayFormParametersTab extends EbayTab
                 $link = new Link();
                 $url = $link->getAdminLink('AdminModules');
 
-            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2');
+            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2&section=category#dashbord');
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }

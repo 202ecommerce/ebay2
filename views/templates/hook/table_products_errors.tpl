@@ -90,7 +90,7 @@
                                 data-lang="{$task_error.lang_iso}"
                                 module_version="1.11.0"
                                 prestashop_version="{$task_error.ps_version}"></a></td>
-                        <td ><a class="btn btn-xs btn-block btn-warning" id="{$task_error.id_product}"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
+                        <td ><a class="btn btn-xs btn-block btn-warning" id="{$task_error.id_product}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
                             <a class="btn btn-xs btn-block btn-danger" id="{$task_error.id_product}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
                     </tr>
                 {/foreach}

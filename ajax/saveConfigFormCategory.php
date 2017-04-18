@@ -33,23 +33,25 @@ include dirname(__FILE__).'/../classes/EbayConfiguration.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
 }
-
+$id_ebay_profile = Tools::getValue('profile');
+$ebay_category = Tools::getValue('real_category_ebay');
 // Insert and update categories
-if ($ebay_categories = Tools::getValue('category')) {
+if ($ebay_category) {
 
-    $id_ebay_profile = Tools::getValue('profile');
+
 
     $ps_categories = explode(",",Tools::getValue('ps_categories'));
-
-    $percent_sign_type[0] = '+';
-    $percent['value'] = '';
-    $percent['type'] = 'percent';
+    $ebay_profile = new EbayProfile($id_ebay_profile);
+    $impact_prix = Tools::getValue('impact_prix');
+    $percent_sign_type = $impact_prix['sign'];
+    $percent['value'] = $impact_prix['value'];
+    $percent['type'] = $impact_prix['type'];
     foreach ($ps_categories as $id_category ) {
         $data = array();
         $date = date('Y-m-d H:i:s');
         if ($percent['value'] != '') {
             //$percent_sign_type = explode(':', $percent['sign']);
-            $percentValue = ($percent_sign_type[0] == '-' ? $percent_sign_type[0] : '').Tools::getValue('impact_prix').($percent['type'] == 'percent' ? '%' : '');
+            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '').$percent['value'].($percent['type'] == 'percent' ? '%' : '');
         } else {
             $percentValue = null;
         }
@@ -57,14 +59,14 @@ if ($ebay_categories = Tools::getValue('category')) {
         $data = array(
             'id_ebay_profile' => (int) $id_ebay_profile,
             'id_country' => 8,
-            'id_ebay_category' => (int) $ebay_categories[$id_category],
+            'id_ebay_category' => (int) $ebay_category,
             'id_category' => (int) $id_category,
             'percent' => pSQL($percentValue),
             'date_upd' => pSQL($date),
             'sync' => 0,
         );
-        var_dump($data);die;
-       /* if (EbayCategoryConfiguration::getIdByCategoryId($id_ebay_profile, $id_category)) {
+        var_dump($data);
+        if (EbayCategoryConfiguration::getIdByCategoryId($id_ebay_profile, $id_category)) {
             if ($data) {
                 EbayCategoryConfiguration::updateByIdProfileAndIdCategory($id_ebay_profile, $id_category, $data);
             } else {
@@ -74,21 +76,21 @@ if ($ebay_categories = Tools::getValue('category')) {
         } elseif ($data) {
             $data['date_add'] = $date;
             EbayCategoryConfiguration::add($data);
-        }*/
+        }
     }
 
     // make sur the ItemSpecifics and Condition data are refresh when we load the dedicated config screen the next time
-    $this->ebay_profile->deleteConfigurationByName('EBAY_SPECIFICS_LAST_UPDATE');
+    $ebay_profile->deleteConfigurationByName('EBAY_SPECIFICS_LAST_UPDATE');
 }
 
 // update extra_images for all products
 if (($all_nb_extra_images = Tools::getValue('all-extra-images-value', -1)) != -1) {
-    $product_ids = EbayCategoryConfiguration::getAllProductIds($this->ebay_profile->id);
+    $product_ids = EbayCategoryConfiguration::getAllProductIds($ebay_profile->id);
 
     foreach ($product_ids as $product_id) {
         EbayProductConfiguration::insertOrUpdate($product_id, array(
             'extra_images' => $all_nb_extra_images ? $all_nb_extra_images : 0,
-            'id_ebay_profile' => $this->ebay_profile->id,
+            'id_ebay_profile' => $ebay_profile->id,
         ));
     }
 
@@ -114,6 +116,81 @@ if (is_array(Tools::getValue('showed_products'))) {
             'extra_images' => 0,
         ));
     }
+
+}
+
+if (Tools::getValue('payement_policies') || Tools::getValue('return_policies')) {
+    $var = array();
+    $var[] = array(
+        'type' => 'EBAY_PAYMENT_POLICY',
+        'id_bussines_Policie' => Tools::getValue('payement_policies'),
+    );
+    $var[] = array(
+        'type' => 'EBAY_RETURN_POLICY',
+        'id_bussines_Policie' => Tools::getValue('return_policies'),
+    );
+
+    foreach ($var as $data) {
+        EbayBussinesPolicies::setBussinesPolicies($id_ebay_profile, $data);
+    }
+
+
+
+    $payment = Tools::getValue('payement_policies');
+    $return = Tools::getValue('return_policies');
+    $ebay_category_id_ref = EbayCategory::getIdCategoryRefById($ebay_category, $ebay_profile->ebay_site_id);
+    $data = array(
+        'id_ebay_profile' => $id_ebay_profile,
+        'id_category' => $ebay_category_id_ref,
+        'id_return' => $return,
+        'id_payment' => $payment,
+    );
+
+    EbayBussinesPolicies::deletePoliciesConfgbyidCategories($id_ebay_profile, $ebay_category_id_ref);
+
+    Db::getInstance()->insert('ebay_category_business_config', $data);
+
+
+
+
+    EbayConfiguration::set($id_ebay_profile, 'EBAY_BUSINESS_POLICIES_CONFIG', 1);
+
+}
+
+if (Tools::getValue('specific')) {
+    foreach (Tools::getValue('specific') as $specific_id => $data) {
+        if ($data) {
+            list($data_type, $value) = explode('-', $data);
+        } else {
+            $data_type = null;
+        }
+
+        $field_names = EbayCategorySpecific::getPrefixToFieldNames();
+        $data = array_combine(array_values($field_names), array(null, null, null, null, null, null, null));
+
+        if ($data_type) {
+            $data[$field_names[$data_type]] = pSQL($value);
+        }
+
+        Db::getInstance()->update('ebay_category_specific', $data, 'id_ebay_category_specific = '.(int) $specific_id);
+
+
+    }
+}
+
+// save conditions
+if (Tools::getValue('condition')) {
+    foreach (Tools::getValue('condition') as $category_id => $condition) {
+        foreach ($condition as $type => $condition_ref) {
+            EbayCategoryConditionConfiguration::replace(array('id_ebay_profile' => $id_ebay_profile, 'id_condition_ref' => $condition_ref, 'id_category_ref' => $category_id, 'condition_type' => $type));
+        }
+    }
+}
+
+// Insert and update categories
+if ($store_categories = Tools::getValue('store_category')) {
+    // insert rows
+    EbayStoreCategoryConfiguration::update($id_ebay_profile, $store_categories, Tools::getValue('ps_categories'));
 
 }
 

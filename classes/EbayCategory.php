@@ -311,6 +311,15 @@ class EbayCategory
         return $row['k_type'];
     }
 
+    public static function getIdCategoryRefById($id_category, $ebay_site_id)
+    {
+        $row = Db::getInstance()->getRow('SELECT `id_category_ref`
+			FROM `'._DB_PREFIX_.'ebay_category`
+			WHERE `id_ebay_category` = '.(int)$id_category.'
+			AND `id_country` = '.(int)$ebay_site_id);
+
+        return $row['id_category_ref'];
+    }
 
 
     public static function areCategoryLoaded($ebay_site_id)

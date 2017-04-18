@@ -79,16 +79,10 @@
 
 	<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='Account settings' mod='ebay'}</a></li>
 
-	<li role="presentation" id="menuTab2" class="menuTabButton"><a href="#">2. {l s='Categories and pricing' mod='ebay'}</a></li>
-
-	<li role="presentation" id="menuTab8" class="menuTabButton"><a href="#">3. {l s='Item specifics' mod='ebay'}</a></li>
-
-	<li role="presentation" id="menuTab10" class="menuTabButton"><a href="#">4. {l s='Store Categories' mod='ebay'}</a></li>
-
 	<li role="presentation" id="menuTab3" class="menuTabButton"><a href="#">5. {l s='Dispatch and Shipping' mod='ebay'}</a></li>
 
 	<li role="presentation" id="menuTab4" class="menuTabButton"><a href="#">6. {l s='Template manager' mod='ebay'}</a></li>
-	<li role="presentation" id="menuTab77" class="menuTabButton"><a href="#">7. {l s='Business Policies' mod='ebay'}</a></li>
+
 
 </ul>
 
@@ -105,16 +99,7 @@
 		{$form_advanced_parameters|ebayHtml}
 			</div>
 	</div>
-	<div id="menuTab2Sheet" class="tabItem tab-pane">
-		<div class="panel">
-		{$form_category|ebayHtml}
-			</div>
-	</div>
-	<div id="menuTab8Sheet" class="tabItem tab-pane">
-		<div class="panel">
-		{$form_items_specifics|ebayHtml}
-			</div>
-	</div>
+
 	<div id="menuTab3Sheet" class="tabItem tab-pane">
 		<div class="panel">
 		{$form_shipping|ebayHtml}
@@ -131,7 +116,6 @@
 			</div>
 	</div>
 	<div id="menuTab9Sheet" class="tabItem tab-pane"><div class="panel">{$ebay_listings}</div></div>
-    <div id="menuTab10Sheet" class="tabItem tab-pane"><div class="panel">{$form_store_category}</div></div>
 	<div id="menuTab11Sheet" class="tabItem tab-pane"><div class="panel">{$api_logs}</div></div>
 	<div id="menuTab12Sheet" class="tabItem tab-pane"><div class="panel">{$order_logs}</div></div>
 	<div id="menuTab6Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders}</div></div>
@@ -141,9 +125,7 @@
 	<div id="menuTab81Sheet" class="tabItem tab-pane">{$dashboard}</div>
     <div id="menuTab15Sheet" class="tabItem tab-pane"><div class="panel">{$ps_products}</div></div>
 	<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
-	<div id="menuTab77Sheet" class="tabItem tab-pane"><div class="panel">
-		{$form_business_policies|ebayHtml}</div>
-	</div>
+
 	<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
 </div>
 <br clear="left" />

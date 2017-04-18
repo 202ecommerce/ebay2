@@ -34,6 +34,8 @@ class EbayListErrorsProductsTab extends EbayTab
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $vars = array();
         $error = '';
+        $context = Context::getContext();
+        $link = $context->link;
         if (!empty($tasks)) {
         foreach ($tasks as $task){
             $context = Context::getContext();
@@ -70,6 +72,7 @@ class EbayListErrorsProductsTab extends EbayTab
                 'ps_version' => _PS_VERSION_,
                 'lang_iso' => $context->language->iso_code,
                 'desc_error' => $task['error_code'].' : '.$task['error'],
+                'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $product->id.'&updateproduct') : $link->getProductLink((int) $product->id)),
             );
         }
         }

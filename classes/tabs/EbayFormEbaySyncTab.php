@@ -106,6 +106,7 @@ class EbayFormEbaySyncTab extends EbayTab
                     $category_ebay =  EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id,$category_config_list[$category['id_category']]['id_ebay_category']);
                    // $is_multi = EbayCategory::getInheritedIsMultiSku($category_config_list[$category['id_category']]['id_ebay_category'], $this->ebay_profile->ebay_site_id);
                     $ebay_category = EbaySynchronizer::__getEbayCategory($category['id_category'], $this->ebay_profile);
+                    $id_category_boutique =EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($this->ebay_profile->id, $category['id_category']);
 
                     $categories[] = array(
                         'row_class' => $alt_row ? 'alt_row' : '',
@@ -118,8 +119,8 @@ class EbayFormEbaySyncTab extends EbayTab
                         'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category']),
                         'nb_products' => count($nb_products_man),
                         'nb_products_variations' => $nb_products_variations,
-                        'nb_products_blocked' => $nb_products_blocked
-
+                        'nb_products_blocked' => $nb_products_blocked,
+                        'category_boutique' => EbayStoreCategory::getCategoryName($id_category_boutique),
                     );
                     $alt_row = !$alt_row;
                 }
@@ -161,6 +162,10 @@ class EbayFormEbaySyncTab extends EbayTab
             'storeCategories' =>  EbayStoreCategory::getCategoriesWithConfiguration($this->ebay_profile->id),
             'ebayCategories' => $ebay_category_list,
             'ps_categories' => $category_list,
+            'conditions' => $this->_translatePSConditions(EbayCategoryConditionConfiguration::getPSConditions()),
+            'possible_attributes' => AttributeGroup::getAttributesGroups($this->context->cookie->id_lang),
+            'possible_features' => Feature::getFeatures($this->context->cookie->id_lang, true),
+            'id_lang' => $this->ebay_profile->id_lang,
 
         );
 
@@ -224,5 +229,23 @@ class EbayFormEbaySyncTab extends EbayTab
         }
 
         return $alert;
+    }
+    private function _translatePSConditions($ps_conditions)
+    {
+        foreach ($ps_conditions as &$condition) {
+            switch ($condition) {
+                case 'new':
+                    $condition = $this->ebay->l('new');
+                    break;
+                case 'used':
+                    $condition = $this->ebay->l('used');
+                    break;
+                case 'refurbished':
+                    $condition = $this->ebay->l('refurbished');
+                    break;
+            }
+        }
+
+        return $ps_conditions;
     }
 }
