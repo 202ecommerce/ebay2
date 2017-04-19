@@ -31,9 +31,8 @@ if (!in_array('Ebay', get_declared_classes())) {
 class EbayCountrySpec
 {
     public $country;
-    public $accepted_isos = array( 'es', 'fr', 'nl', 'pl', 'be');
+    public $accepted_isos = array( 'es', 'fr', 'nl', 'pl', 'be','it', 'gb', 'de');
     protected $ebay_iso;
-    public $accepted_isos_block = array('it', 'gb', 'de');
     private $dev;
     private static $multilang = array('be');
 
@@ -209,11 +208,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
 
         ),
-
-
-    );
-
-    private static $cuntry_block= array(
         'it' => array(
             'site_id' => 101,
             'documentation' => 'it',
@@ -275,7 +269,9 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'url_help_business_policies' => 'http://pages.ebay.co.uk/help/sell/business-policies.html',
         ),
 
+
     );
+
 
 
 
@@ -402,10 +398,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     {
         $iso_code = $this->ebay_iso;
 
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data = array_merge(self::$country_data, self::$cuntry_block);
-            $this->accepted_isos = array_merge($this->accepted_isos, $this->accepted_isos_block);
-        }
 
       
         if (isset(self::$country_data[$iso_code]) && isset(self::$country_data[$iso_code][$data])) {
@@ -425,10 +417,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
      **/
     public function checkCountry()
     {
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            $this->accepted_isos = array_merge($this->accepted_isos, $this->accepted_isos_block);
-
-        }
         if (in_array(Tools::strtolower($this->country->iso_code), $this->accepted_isos)) {
             return true;
         }
@@ -465,9 +453,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     {
         $countries = array();
 
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
 
         foreach (self::$country_data as $iso => $ctry) {
             if (isset($ctry['subdomain']) === false) {
@@ -495,9 +480,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
      */
     public static function getInstanceByKey($key, $dev = false)
     {
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
+
         if (isset(self::$country_data[$key])) {
             $iso_code = self::$country_data[$key]['iso_code'];
             $id_country = Country::getByIso($iso_code);
@@ -514,9 +497,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getInstanceByCountryAndLang($iso_country, $iso_lang)
     {
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
+
         if (isset(self::$country_data[$iso_country])) {
             return self::getInstanceByKey($iso_country);
         } else if (isset(self::$country_data[$iso_country.'-'.$iso_lang])) {
@@ -561,9 +542,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getSiteNameBySiteId($site_id = false)
     {
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
+
 
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
@@ -576,9 +555,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getSiteExtensionBySiteId($site_id = false)
     {
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
+
 
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
@@ -592,9 +569,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     public static function getIsoCodeBySiteId($site_id = false)
     {
 
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
+
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['iso_code'];
@@ -607,9 +582,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     public static function getProUrlBySiteId($site_id = false)
     {
 
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['pro_url'];
@@ -621,10 +593,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getSiteIdByIsoCode($iso_code = false)
     {
-
-        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
-            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
-        }
         foreach (self::$country_data as $country) {
             if ($country['iso_code'] == $iso_code) {
                 return $country['site_id'];

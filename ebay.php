@@ -1749,18 +1749,8 @@ class Ebay extends Module
                 'ebay_user_identifiers' => EbayProfile::getEbayUserIdentifiers(),
                 'ebay_profiles' => $ebay_profiles,
                 'languages' => Language::getLanguages(true, ($this->ebay_profile ? $this->ebay_profile->id_shop : $id_shop)),
+                'config_country_ok' => true,
             ));
-
-            if (Configuration::get('EBAY_COUNTRY_OK') == false) {
-                $smarty_vars = array_merge($smarty_vars, array(
-                    'config_country_ok' => in_array(Tools::strtolower(Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID'))), $this->ebay_country->accepted_isos_block),
-                ));
-            } else {
-                $smarty_vars = array_merge($smarty_vars, array(
-                    'config_country_ok' => false,
-                ));
-
-            }
         }
 
         $this->smarty->assign($smarty_vars);
