@@ -146,7 +146,7 @@ class EbayTaskManager
 
         if ($tasks) {
             while ($row = $tasks->fetch(PDO::FETCH_ASSOC)) {
-                $response = EbaySynchronizer::callFunction(self::getMethode($row['id_task'])['function'], array('id_product' => $row['id_product'], 'id_product_attribute' => $row['id_product_attribute'], 'id_ebay_profile' => $row['id_ebay_profile']));
+                $response = EbaySynchronizer::callFunction(self::getMethode($row['id_task']), array('id_product' => $row['id_product'], 'id_product_attribute' => $row['id_product_attribute'], 'id_ebay_profile' => $row['id_ebay_profile']));
                 self::checkError($response, $row);
             }
         }
@@ -164,7 +164,8 @@ class EbayTaskManager
     public static function getMethode($id_task)
     {
         $list_task = new EbayTaskManager();
-        return $list_task->taskDefinition[$id_task];
+        $task =$list_task->taskDefinition[$id_task];
+        return $task['function'];
     }
 
     public static function checkError($response, $row)
@@ -177,11 +178,13 @@ class EbayTaskManager
                     if (isset($e->ErrorParameters->Value)) {
                         $msg .= '(' . (string)$e->ErrorParameters->Value . ')';
                     }
+                    $date = date('Y-m-d H:i:s');
                     $vars = array(
                         'error_code' => $e->ErrorCode,
                         'error' => pSQL($msg),
                         'retry' => $row['retry'] + 1,
-                        'locked' => 0
+                        'locked' => 0,
+                        'date_upd' => pSQL($date),
                     );
 
                     DB::getInstance()->update('ebay_task_manager', $vars, '`id` = ' . $row['id']);

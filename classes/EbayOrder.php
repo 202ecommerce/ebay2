@@ -1059,8 +1059,9 @@ class EbayOrder
         $orders = array();
 
         $page_orders = array();
+
         foreach ($ebay->getOrders(false, false, 1, $ItemId) as $order_xml) {
-            $page_orders = new EbayOrder($order_xml);
+            $page_orders[] = new EbayOrder($order_xml);
         }
 
         $orders = array_merge($orders, $page_orders);
@@ -1085,5 +1086,12 @@ class EbayOrder
         return Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_order_order`
 			WHERE `id_order` = null');
+    }
+    public static function getOrderByOrderRef($id_order_ref) {
+        return Db::getInstance()->executeS('SELECT eoo.*
+			FROM `'._DB_PREFIX_.'ebay_order` eo
+			INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo
+			ON eo.`id_ebay_order` = eoo.`id_ebay_order`
+			WHERE eo.`id_order_ref` = '.(int) $id_order_ref);
     }
 }

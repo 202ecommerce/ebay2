@@ -30,13 +30,49 @@ if (!defined('TMP_DS')) {
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-
+include '../ebay.php';
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('INVALID TOKEN');
 }
+$ebay = new Ebay();
 
-if (Tools::getValue('action') == 'getOrder') {
 
-    $order =  EbayOrder::getEbayOrder(Tools::getValue('ItemId'));
-    var_dump($order);die;
-}
+    $order =  EbayOrder::getEbayOrder(Tools::getValue('id_order_ebay'));
+    if($order){
+        EbayOrderErrors::deleteByOrderRef(Tools::getValue('id_order_ebay'));
+    }
+    $ebay->importOrders($order);
+   $new_log = EbayOrderErrors::getErrorByOrderRef(Tools::getValue('id_order_ebay'));
+    if($new_log){
+        foreach ($new_log as $log) {
+            $vars = array(
+                'date_ebay' => $log['date_order'],
+                'reference_ebay' => $log['id_order_ebay'],
+                'referance_marchand' => $log['id_order_seller'],
+                'email' => $log['email'],
+                'total' => $log['total'],
+                'error' => $log['error'],
+                'date_import' => $log['date_add'],
+            );
+        }
+
+    } else {
+        $orders = EbayOrder::getOrderByOrderRef(Tools::getValue('id_order_ebay'));
+        foreach ($orders as $ord) {
+            $order = new Order($ord['id_order']);
+
+            $vars = array(
+                'date_ebay' => $order->date_add,
+                'reference_ebay'  => $ord['id_order_ref'],
+                'referance_marchand' => $order->payment,
+                'email' => $order->getCustomer()->email,
+                'total' => $order->total_paid,
+                'id_prestashop' => $order->id,
+                'reference_ps' => $order->reference,
+                'date_import' => $order->date_add,
+            );
+        }
+    }
+echo Tools::jsonEncode($vars);
+
+

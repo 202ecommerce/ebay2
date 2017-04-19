@@ -139,6 +139,7 @@ class EbayFormParametersTab extends EbayTab
                 'ps_version'     => _PS_VERSION_,
                 'error_code'     => 'HELP-SETTINGS-OUT-OF-STOCK',
             ),
+            'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
         );
 
         if (Tools::getValue('relogin')) {

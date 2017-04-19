@@ -375,10 +375,7 @@ class EbayRequest
             if ($data== 1) {
                 $this->importBusinessPolicies();
             }
-            EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $data);
         }
-
-
 
         return $userProfile;
     }
@@ -1383,10 +1380,7 @@ class EbayRequest
 
     public function getOrders($create_time_from, $create_time_to, $page, $ItemID = false)
     {
-        // Check data
-        if (!$create_time_from || !$create_time_to) {
-            return false;
-        }
+
 
         $vars = array(
             'create_time_from' => $create_time_from,

@@ -62,7 +62,7 @@ class EbayListErrorsProductsTab extends EbayTab
             }
             $id =  $task['id_product'].(($task['id_product_attribute'] != 0)?'_'.$task['id_product_attribute']:'');
             $vars['task_errors'][] =  array(
-                'date' => $task['date_updated'],
+                'date' => $task['date_upd'],
                 'name' => $product->name,
                 'id_product' => $id,
                 'declinason' => $name_attribute,
@@ -75,6 +75,8 @@ class EbayListErrorsProductsTab extends EbayTab
                 'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $product->id.'&updateproduct') : $link->getProductLink((int) $product->id)),
             );
         }
+            $vars['id_ebay_profile'] = $id_ebay_profile;
+            $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
         }
 
         return $this->display('table_products_errors.tpl', $vars);

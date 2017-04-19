@@ -1876,7 +1876,7 @@ class Ebay extends Module
             'order_returns' => $order_returns->getContent(),
             'orders_returns_sync' => $orders_returns_sync->getContent(),
             'dashboard' =>   $dashboard->getContent(),
-            'table_orders' => $tableOrders ->getContent(),
+            'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
             'count_order_errors' => count(EbayOrderErrors::getAll()),
             'count_product_errors' => count(EbayTaskManager::getErrors($this->ebay_profile->id)),

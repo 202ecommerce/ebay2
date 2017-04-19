@@ -91,11 +91,25 @@
                                 module_version="1.11.0"
                                 prestashop_version="{$task_error.ps_version}"></a></td>
                         <td ><a class="btn btn-xs btn-block btn-warning" id="{$task_error.id_product}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
-                            <a class="btn btn-xs btn-block btn-danger" id="{$task_error.id_product}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
+                            <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.id_product}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
                     </tr>
                 {/foreach}
             {/if}
             </tbody>
 
         </table>
-
+{literal}
+<script>
+    $('.exclure_product').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: module_dir + 'ebay/ajax/exclureProductAjax.php',
+            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_product="+$(this).attr('id'),
+            success: function (data) {
+                $(this).parent().parent().remove();
+            }
+        });
+    });
+    {/literal}
+</script>

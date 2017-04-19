@@ -91,7 +91,7 @@
                 <td>{$error.total|escape:'htmlall':'UTF-8'}</td>
                 <td colspan="2">{$error.error|escape:'htmlall':'UTF-8'}</td>
                 <td>{$error.date_import|escape:'htmlall':'UTF-8'}</td>
-                <td><a id="{$error.reference_ebay}">{l s='Réessayer' mod='ebay'}</a></td>
+                <td><a class="reSynchOrder" id="{$error.reference_ebay}">{l s='Réessayer' mod='ebay'}</a></td>
             </tr>
         {/foreach}
         {/if}
@@ -115,9 +115,27 @@
     </table>
 
 <script type="text/javascript">
-
-    var orphan_listings_ebay_l = {ldelim}
-        'Remove this ad?': "{l s='End this listing?' mod='ebay'}"
-        {rdelim};
+    {literal}
+   $('.reSynchOrder').live('click', function(e) {
+       e.preventDefault();
+       var tr = $(this).parent().parent();
+       $.ajax({
+           type: 'POST',
+           url: module_dir + 'ebay/ajax/reSynchOrder.php',
+           data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_order_ebay="+$(this).attr('id'),
+           success: function (data) {
+               var data = jQuery.parseJSON(data);
+               console.log(data);
+                var str = '<td>'+data.date_ebay+'</td><td>'+data.reference_ebay+'</td><td>'+data.referance_marchand+'</td><td>'+data.email+'</td><td>'+data.total+'</td>';
+                if (typeof data.id_prestashop !== 'undefined' ){
+                    str += '<td >'+data.id_prestashop+'</td><td >'+data.reference_ps+'</td><td >'+data.date_import+'</td><td ></td>';
+                } else {
+                    str += '<td colspan="2">'+data.error+'</td><td>'+data.date_import+'</td><td><a class="reSynchOrder" id="'+data.reference_ebay+'">Réessayer</a></td>';
+                }
+               console.log(str);
+               tr.html(str);
+           }
+       });
+   });
+    {/literal}
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/orphanListings.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

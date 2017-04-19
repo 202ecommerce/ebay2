@@ -356,7 +356,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_log` (
 	`success` tinyint(1) NOT NULL,
 	`data` text,
     `date_add` datetime NOT NULL,
-    `date_update` datetime,
+    `date_update` datetime ,
 	PRIMARY KEY  (`id_ebay_order_log`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
@@ -397,8 +397,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_task_manager` (
     `id_ebay_profile` INT(30),
     `error` text,
     `error_code` INT(30),
-    `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-    `date_updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `date_add` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+    `date_upd` datetime,
     `retry` INT(30),
     `locked` VARCHAR(125)
 )ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

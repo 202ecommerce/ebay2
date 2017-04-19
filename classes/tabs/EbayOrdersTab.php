@@ -27,7 +27,7 @@
 class EbayOrdersTab extends EbayTab
 {
 
-    public function getContent()
+    public function getContent($id_ebay_profile)
     {
 
         $orders_error = EbayOrderErrors::getAll();
@@ -48,21 +48,23 @@ class EbayOrdersTab extends EbayTab
             }
         }
         if (!empty($orders)){
-        foreach ($orders as $ord) {
-            $order = new Order($ord['id_order']);
+            foreach ($orders as $ord) {
+                $order = new Order($ord['id_order']);
 
-            $vars['orders_tab'][] = array(
-                'date_ebay' => $order->date_add,
-                'reference_ebay'  => $ord['id_order_ref'],
-                'referance_marchand' => $order->payment,
-                'email' => $order->getCustomer()->email,
-                'total' => $order->total_paid,
-                'id_prestashop' => $order->id,
-                'reference_ps' => $order->reference,
-                'date_import' => $order->date_add,
-            );
+                $vars['orders_tab'][] = array(
+                    'date_ebay' => $order->date_add,
+                    'reference_ebay'  => $ord['id_order_ref'],
+                    'referance_marchand' => $order->payment,
+                    'email' => $order->getCustomer()->email,
+                    'total' => $order->total_paid,
+                    'id_prestashop' => $order->id,
+                    'reference_ps' => $order->reference,
+                    'date_import' => $order->date_add,
+                );
+            }
         }
-        }
+        $vars['id_ebay_profile'] = $id_ebay_profile;
+        $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
         return $this->display('tableOrders.tpl', $vars);
     }
 }

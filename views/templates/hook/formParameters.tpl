@@ -37,7 +37,10 @@
 	var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
 	var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
 	var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
-
+	var regenerate_token_show = false;
+	{if $regenerate_token != false}
+	regenerate_token_show = true;
+	{/if}
 	$(document).ready(function(){ldelim}
 		if(regenerate_token_show)
 		{ldelim}

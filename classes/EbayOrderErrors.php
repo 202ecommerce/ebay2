@@ -127,4 +127,15 @@ class EbayOrderErrors extends ObjectModel
 
        return Db::getInstance()->ExecuteS($q);
     }
+
+    public static function deleteByOrderRef($id_order_ref) {
+        $q = 'DELETE FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `id_order_ebay` = "'.pSQL($id_order_ref).'"';
+
+        return Db::getInstance()->Execute($q);
+    }
+    public static function getErrorByOrderRef($id_order_ref) {
+        $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `id_order_ebay` = "'.pSQL($id_order_ref).'"';
+
+        return Db::getInstance()->ExecuteS($q);
+    }
 }

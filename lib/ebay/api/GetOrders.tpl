@@ -27,8 +27,12 @@
     <DetailLevel>ReturnAll</DetailLevel>
     <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
     <WarningLevel>High</WarningLevel>
+    {if $create_time_from}
     <CreateTimeFrom>{$create_time_from|escape:'htmlall':'UTF-8'}</CreateTimeFrom>
+    {/if}
+    {if $create_time_to}
     <CreateTimeTo>{$create_time_to|escape:'htmlall':'UTF-8'}</CreateTimeTo>
+    {/if}
     {if $ItemID}
         <OrderIDArray>
             <OrderID>{$ItemID}</OrderID>
