@@ -396,7 +396,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_task_manager` (
     `id_task` INT(30),
     `id_ebay_profile` INT(30),
     `error` text,
-    `error_code` INT(30),
+    `error_code` INT(30) NULL DEFAULT NULL,
     `date_add` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
     `date_upd` datetime,
     `retry` INT(30),

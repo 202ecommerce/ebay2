@@ -40,7 +40,9 @@
 	{/literal}
 </style>
 <script>
+	var module_time = "{$date|escape:'htmlall':'UTF-8'}";
 	var showOptionals;
+	var id_employee = {$id_employee|escape:'htmlall':'UTF-8'};
 	var nbProducts = {$nb_products|escape:'htmlall':'UTF-8'};
 	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall':'UTF-8'};
 	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall':'UTF-8'};
@@ -146,7 +148,7 @@
 				ps_categories.push($( this ).attr('id'));
 			});
 			event.preventDefault();
-			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
+			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
 			$.ajax({
 				type: "POST",
 				url: url,

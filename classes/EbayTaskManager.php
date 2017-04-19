@@ -46,12 +46,17 @@ class EbayTaskManager
 
     }
 
-    public static function addTask($type, $product)
+    public static function addTask($type, $product, $id_employee = null, $id_ebay_profile = null)
     {
 
         $ebay_profiles = EbayProfile::getProfilesByIdShop();
         $context = Context::getContext();
-
+        if(isset($id_ebay_profile)){
+            $ebay_profiles = EbayProfile::getProfilesById($id_ebay_profile);
+        }
+        if(!isset($context->employee) && isset($id_employee)){
+            $context->employee = new Employee($id_employee);
+        }
         if ($type == 'end') {
             foreach ($ebay_profiles as $profile) {
                 $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
@@ -63,6 +68,7 @@ class EbayTaskManager
         }
 
         if (isset($product->id)) {
+
             foreach ($ebay_profiles as $profile) {
                 $sql[] = 'SELECT `id_product`, ' . $profile['id_ebay_profile'] . ' AS `id_ebay_profile`, ' . $profile['id_lang'] . ' AS `id_lang`
             FROM `' . _DB_PREFIX_ . 'product`
@@ -81,6 +87,7 @@ class EbayTaskManager
                         $ebay_profile = new EbayProfile($product_ebay['id_ebay_profile']);
 
                         $id_attributes = array();
+
                         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
                         $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
 
@@ -124,6 +131,7 @@ class EbayTaskManager
             self::deleteTaskForPorduct($id_product);
         }
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)) {
+
             Db::getInstance()->insert('ebay_task_manager', $vars);
         }
     }

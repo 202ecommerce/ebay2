@@ -340,7 +340,7 @@ class EbayDbValidator
             'id_task' => array('type' => ' INT', 'length' => 30),
             'id_ebay_profile' => array('type' => ' INT', 'length' => 30),
             'error' => array('type' => ' text', 'length' => null),
-            'error_code' => array('type' => 'int', 'length' => 30),
+            'error_code' => array('type' => 'int', 'length' => 30, 'null' => true),
             'retry' => array('type' => 'int', 'length' => 30),
             'locked' => array('type' => ' VARCHAR', 'length' => 125)
         ),

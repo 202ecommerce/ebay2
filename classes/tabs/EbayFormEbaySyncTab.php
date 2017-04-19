@@ -166,6 +166,8 @@ class EbayFormEbaySyncTab extends EbayTab
             'possible_attributes' => AttributeGroup::getAttributesGroups($this->context->cookie->id_lang),
             'possible_features' => Feature::getFeatures($this->context->cookie->id_lang, true),
             'id_lang' => $this->ebay_profile->id_lang,
+            'id_employee' => $this->context->employee->id,
+            'date' => pSQL(date('Ymdhis')),
 
         );
 

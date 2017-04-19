@@ -61,6 +61,8 @@ class EbayListErrorsProductsTab extends EbayTab
                     break;
             }
             $id =  $task['id_product'].(($task['id_product_attribute'] != 0)?'_'.$task['id_product_attribute']:'');
+            $desc = $task['error_code'].' : '.$task['error'];
+
             $vars['task_errors'][] =  array(
                 'date' => $task['date_upd'],
                 'name' => $product->name,
@@ -71,7 +73,7 @@ class EbayListErrorsProductsTab extends EbayTab
                 'error_code' => $task['error_code'],
                 'ps_version' => _PS_VERSION_,
                 'lang_iso' => $context->language->iso_code,
-                'desc_error' => $task['error_code'].' : '.$task['error'],
+                'desc_error' => $desc,
                 'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $product->id.'&updateproduct') : $link->getProductLink((int) $product->id)),
             );
         }
