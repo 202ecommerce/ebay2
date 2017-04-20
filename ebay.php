@@ -1749,7 +1749,6 @@ class Ebay extends Module
                 'ebay_user_identifiers' => EbayProfile::getEbayUserIdentifiers(),
                 'ebay_profiles' => $ebay_profiles,
                 'languages' => Language::getLanguages(true, ($this->ebay_profile ? $this->ebay_profile->id_shop : $id_shop)),
-                'config_country_ok' => true,
             ));
         }
 
