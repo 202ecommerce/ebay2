@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayFormShippingTab extends EbayTab
+class EbayFormInterShippingTab extends EbayTab
 {
 
     public function getContent()
@@ -37,8 +37,7 @@ class EbayFormShippingTab extends EbayTab
         $configs = Configuration::getMultiple($configKeys);
 
         $profile_configs = $this->ebay_profile->getMultiple(array(
-            'EBAY_DELIVERY_TIME',
-            'EBAY_ZONE_NATIONAL',
+            'EBAY_ZONE_INTERNATIONAL',
         ));
 
         // Check if the module is configured
@@ -61,8 +60,8 @@ class EbayFormShippingTab extends EbayTab
         $psCarrierModule = $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT'], false, false, false, null, $module_filters);
 
         $url_vars = array(
-            'id_tab' => '3',
-            'section' => 'shipping',
+            'id_tab' => '103',
+            'section' => 'intershipping',
         );
 
         $url_vars['controller'] = Tools::getValue('controller');
@@ -89,13 +88,14 @@ class EbayFormShippingTab extends EbayTab
             'eBayCarrier' => EbayShippingService::getCarriers($this->ebay_profile->ebay_site_id),
             'psCarrier' => $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT']),
             'psCarrierModule' => $psCarrierModule,
-            'existingNationalCarrier' => EbayShipping::getNationalShippings($this->ebay_profile->id),
-            'deliveryTime' => $profile_configs['EBAY_DELIVERY_TIME'],
+            'existingInternationalCarrier' => EbayShippingInternationalZone::getExistingInternationalCarrier($this->ebay_profile->id),
+
             'prestashopZone' => Zone::getZones(),
-            'deliveryTimeOptions' => EbayDeliveryTimeOptions::getDeliveryTimeOptions(),
+            'excludeShippingLocation' => EbayShippingZoneExcluded::cacheEbayExcludedLocation($this->ebay_profile->id),
+            'internationalShippingLocations' => EbayShippingLocation::getInternationalShippingLocations(),
             'formUrl' => $this->_getUrl($url_vars),
-            'ebayZoneNational' => (isset($profile_configs['EBAY_ZONE_NATIONAL']) ? $profile_configs['EBAY_ZONE_NATIONAL'] : false),
-           'ebay_token' => $configs['EBAY_SECURITY_TOKEN'],
+            'ebayZoneInternational' => (isset($profile_configs['EBAY_ZONE_INTERNATIONAL']) ? $profile_configs['EBAY_ZONE_INTERNATIONAL'] : false),
+            'ebay_token' => $configs['EBAY_SECURITY_TOKEN'],
             'id_ebay_profile' => $this->ebay_profile->id,
             'newPrestashopZone' => $zones,
             'help_ship_cost' => array(
@@ -107,39 +107,50 @@ class EbayFormShippingTab extends EbayTab
 
         );
 
-        return $this->display('shipping.tpl', $template_vars);
+        return $this->display('interShipping.tpl', $template_vars);
     }
 
     public function postProcess()
     {
 
-        //Update global information about shipping (delivery time, ...)
-        $this->ebay_profile->setConfiguration('EBAY_DELIVERY_TIME', Tools::getValue('deliveryTime'));
-        //Update Shipping Method for National Shipping (Delete And Insert)
-        EbayShipping::truncate($this->ebay_profile->id);
+        //Update excluded location
+        if (Tools::getValue('excludeLocationHidden')) {
+            Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping_zone_excluded
+				SET excluded = 0
+				WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
 
-        if ($ebay_carriers = Tools::getValue('ebayCarrier')) {
+            if ($exclude_locations = Tools::getValue('excludeLocation')) {
+                $locations = array_keys($exclude_locations);
+                $where = 'location IN ("'.implode('","', array_map('pSQL', $locations)).'")';
 
-            $ps_carriers = Tools::getValue('psCarrier');
-            $extra_fees = Tools::getValue('extrafee');
-            $ps_ship = new Carrier($ps_carriers);
+                $where .= ' AND `id_ebay_profile` = '.(int) $this->ebay_profile->id;
 
-            $ps_ship->getMaxDeliveryPriceByPrice($this->ebay_profile->id);
-            foreach ($ebay_carriers as $key => $ebay_carrier) {
-                if (!empty($ebay_carrier) && !empty($ps_carriers[$key])) {
-                    //Get id_carrier and id_zone from ps_carrier
-                    $infos = explode('-', $ps_carriers[$key]);
-                    $ps_ship = new Carrier($infos[0]);
-                    if ($ps_ship->getMaxDeliveryPriceByPrice($infos[1]) == false) {
-                        $ship_cost = 0;
-                    } else {
-                        $ship_cost = $ps_ship->getMaxDeliveryPriceByPrice($infos[1]);
+                DB::getInstance()->update('ebay_shipping_zone_excluded', array('excluded' => 1), $where);
+
+
+            }
+        }
+
+        Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_shipping_international_zone
+			WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
+
+        if ($ebay_carriers_international = Tools::getValue('ebayCarrier_international')) {
+
+            $ps_carriers_international = Tools::getValue('psCarrier_international');
+            $extra_fees_international = Tools::getValue('extrafee_international');
+            $international_shipping_locations = Tools::getValue('internationalShippingLocation');
+
+            foreach ($ebay_carriers_international as $key => $ebay_carrier_international) {
+
+                if (!empty($ebay_carrier_international) && !empty($ps_carriers_international[$key]) && isset($international_shipping_locations[$key])) {
+                    $infos = explode('-', $ps_carriers_international[$key]);
+
+                    EbayShipping::insert($this->ebay_profile->id, $ebay_carrier_international, $infos[0], $extra_fees_international[$key], $infos[1], true);
+                    $last_id = EbayShipping::getLastShippingId($this->ebay_profile->id);
+
+                    foreach (array_keys($international_shipping_locations[$key]) as $id_ebay_zone) {
+                        EbayShippingInternationalZone::insert($this->ebay_profile->id, $last_id, $id_ebay_zone);
                     }
-                    if (Tools::getIsset($extra_fees) && (int)$ship_cost < $extra_fees) {
-                        return false;
-                    }
-
-                    EbayShipping::insert($this->ebay_profile->id, $ebay_carrier, $infos[0], $extra_fees[$key], $infos[1]);
                 }
             }
         }

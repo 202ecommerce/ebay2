@@ -25,87 +25,7 @@
 
 <form action="{$url|escape:'urlencode'}" method="post" class="form" id="advancedConfigForm">
     
-	<fieldset style="margin-top:10px;">
-		<legend><span data-dialoghelp="http://sellerupdate.ebay.co.uk/autumn2013/picture-standards" data-inlinehelp="{l s='Select the size of your main photo and any photos you want to include in your description. Go to Preferences> images. Your images must comply with eBay’s photo standards.' mod='ebay'}">{l s='Photo sizes' mod='ebay'}</span></legend>
 
-		<label>
-			{l s='Default photo' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
-				{if isset($sizes) && $sizes && sizeof($sizes)}
-					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div class="clear both"></div>
-
-		<label>
-			{l s='Main photo' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="ebay_select">
-				{if isset($sizes) && $sizes && sizeof($sizes)}
-					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div class="clear both"></div>
-
-		<label>
-			{l s='Small photo' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="sizesmall" data-inlinehelp="{l s='This photo will appear as thumbnail in your listing\'s description.' mod='ebay'}" class="ebay_select">
-				{if isset($sizes) && $sizes && sizeof($sizes)}
-					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div style="clear:both;"></div>
-
-		<label>
-			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
-		</div>
-		<div style="clear:both;"></div>
-		<label>
-			{l s='Send new product images on the next synchronization' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<a id="reset-image" href="#" target="_blank" class="button">Active</a>
-			<p id="reset-image-result"></p>
-		</div>
-		<div style="clear:both;"></div>
-        <label>
-			{l s='Do not send variations images' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="picture_skip_variations" value="1" {if $picture_skip_variations} checked="checked"{/if}>
-		</div>
-		<div style="clear:both;"></div>
-		<label>
-			{l s='Default photo CHARACT' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="picture_charact_variations" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
-				{if isset($itemspecifics) && $itemspecifics && sizeof($itemspecifics)}
-					{foreach from=$itemspecifics item='itemspecific'}
-						<option value="{$itemspecific.id_attribute_group|escape:'htmlall':'UTF-8'}"{if $itemspecific.id_attribute_group == $picture_charact_variations} selected{/if}>{$itemspecific.name|escape:'htmlall':'UTF-8'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div style="clear:both;"></div>
-	</fieldset>
     
     
 	<fieldset style="margin-top:10px;">
@@ -139,62 +59,8 @@
         
 	</fieldset>
 
-	<fieldset style="margin-top:10px;">
-        
-		<legend>{l s='Sync' mod='ebay'}</legend>
-		
-		<label>
-			{l s='Sync Orders' mod='ebay'}
-		</label>
-        <div class="margin-form">
-			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="save" {if $sync_orders_by_cron == false}checked="checked"{/if}/> {l s='every 30 minutes on page load' mod='ebay'}
-			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="cron" {if $sync_orders_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-	        <p><a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path|escape:'urlencode'}</a></p>
-        	
-        </div>
-		<label>
-			{l s='Sync Products' mod='ebay'}
-		</label>
-        <div class="margin-form">
-			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="save" {if $sync_products_by_cron == false}checked="checked"{/if}/> {l s='on save' mod='ebay'}
-			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="cron" {if $sync_products_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-	        <p><a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path|escape:'urlencode'}</a></p>
-        	
-        </div>
-		{if $help_Cat_upd.ps_version > '1.4.11'}
-		<label>
-			{l s='Synch cancellations, refunds and returns' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="radio" size="20" name="sync_orders_returns_mode" class="sync_orders_returns_mode" value="save" {if $sync_orders_returns_by_cron == false}checked="checked"{/if}/> {l s='every 30 minutes on page load' mod='ebay'}
-			<input type="radio" size="20" name="sync_orders_returns_mode" class="sync_orders_returns_mode" value="cron" {if $sync_orders_returns_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-			<p><a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_returns_by_cron == false};display:none{/if}">{$sync_orders_returns_by_cron_path|escape:'urlencode'}</a></p>
 
-		</div>
-		{/if}
-		<label>
-			{l s='Always override Business Policies' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="activate_resynchBP" value="1"{if $activate_resynchBP == 1} checked="checked"{/if} data-inlinehelp="{l s='If activiated, Business Policies created by PrestaShop will be overriden at every product synchronisation.' mod='ebay'}">
 
-		</div>
-		<div class="clear both"></div>
-
-	</fieldset>   
-	
-    
-    
-   <fieldset style="margin-top:10px;">
-       
-		<legend>{l s='Orders Collection Duration' mod='ebay'}</legend>
-		<label>{l s='Since when fetch orders (in days, change if you receive more than 100 orders per fortnight)' mod='ebay'} : </label>
-		<div class="margin-form">
-            <input type="text" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
-		</div>
-		<div style="clear:both;"></div>
-        
-    </fieldset>
       
     <fieldset style="margin-top:10px;">
        

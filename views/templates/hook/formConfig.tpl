@@ -47,7 +47,7 @@
 	{/if}
 </div>
 			<div class="tab-pane fade in active" id="annoncestab1">
-				<div class="panel-heading">
+				<div id='tab_title_level1' class="panel-heading">
 
 				</div>
 
@@ -62,6 +62,7 @@
 	<li role="presentation" id="menuTab80" class="menuTabButton "><a href="#">{l s='List Errors Products' mod='ebay'}{if $count_product_errors > 0}<span class="badge">{$count_product_errors}</span>{/if}</a></li>
 
 	<li role="presentation" id="menuTab9" class="menuTabButton"><a href="#">{l s='Ebay Listings' mod='ebay'}</a></li>
+	<li role="presentation" id="menuTab16" class="menuTabButton"><a href="#">{l s='Orphan Listings' mod='ebay'}</a></li>
 
 
 </ul>
@@ -78,11 +79,12 @@
 <ul class="nav nav-pills settings-menu menuTab ebay_hidden " role="tablist">
 
 	<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='Account settings' mod='ebay'}</a></li>
-
-	<li role="presentation" id="menuTab3" class="menuTabButton"><a href="#">5. {l s='Dispatch and Shipping' mod='ebay'}</a></li>
-
+	<li role="presentation" id="menuTab101" class="menuTabButton"><a href="#">2. {l s='Annonces settings' mod='ebay'}</a></li>
+	<li role="presentation" id="menuTab102" class="menuTabButton"><a href="#">3. {l s='Orders settings' mod='ebay'}</a></li>
+	<li role="presentation" id="menuTab3" class="menuTabButton"><a href="#">4. {l s='Dispatch and Shipping' mod='ebay'}</a></li>
+	<li role="presentation" id="menuTab103" class="menuTabButton"><a href="#">5. {l s='Internation Shipping' mod='ebay'}</a></li>
 	<li role="presentation" id="menuTab4" class="menuTabButton"><a href="#">6. {l s='Template manager' mod='ebay'}</a></li>
-
+	<li role="presentation" id="menuTab13" class="menuTabButton"><a href="#">7. {l s='Tools' mod='ebay'}</a></li>
 
 </ul>
 
@@ -93,6 +95,24 @@
 
 		{$form_parameters|ebayHtml}
 			</div>
+	</div>
+	<div id="menuTab101Sheet" class="tabItem tab-pane">
+		<div class="panel">
+
+			{$form_parameters_annonces_tab|ebayHtml}
+		</div>
+	</div>
+	<div id="menuTab102Sheet" class="tabItem tab-pane">
+		<div class="panel">
+
+			{$form_parameters_orders_tab|ebayHtml}
+		</div>
+	</div>
+	<div id="menuTab103Sheet" class="tabItem tab-pane">
+		<div class="panel">
+
+			{$form_inter_shipping|ebayHtml}
+		</div>
 	</div>
 	<div id="menuTab13Sheet" class="tabItem tab-pane">
 		<div class="panel">
@@ -116,7 +136,6 @@
 			</div>
 	</div>
 	<div id="menuTab9Sheet" class="tabItem tab-pane"><div class="panel">{$ebay_listings}</div></div>
-	<div id="menuTab11Sheet" class="tabItem tab-pane"><div class="panel">{$api_logs}</div></div>
 	<div id="menuTab12Sheet" class="tabItem tab-pane"><div class="panel">{$order_logs}</div></div>
 	<div id="menuTab6Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders}</div></div>
 	<div id="menuTab14Sheet" class="tabItem tab-pane"><div class="panel">{$orders_sync}</div></div>
@@ -125,8 +144,8 @@
 	<div id="menuTab81Sheet" class="tabItem tab-pane">{$dashboard}</div>
     <div id="menuTab15Sheet" class="tabItem tab-pane"><div class="panel">{$ps_products}</div></div>
 	<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
-
 	<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
+
 </div>
 <br clear="left" />
 <br />

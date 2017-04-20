@@ -53,92 +53,53 @@ class EbayFormParametersTab extends EbayTab
 
         $ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
         
-        $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
-
-        $returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option', Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
 
         $ebay_paypal_email = Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'));
         $shopCountry = Tools::getValue('ebay_shop_country', $this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY'));
-        $ebayListingDuration = $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') ? $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') : 'GTC';
 
         $user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
         $is_multishop =  Shop::isFeatureActive();
 
-        $order_states = OrderState::getOrderStates($this->ebay_profile->id_lang);
-        
-        $current_order_state = $this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE');
-        if ($current_order_state === null) {
-            foreach ($order_states as $order_state) {
-                if ($order_state['template'] === 'shipped') {
-                    // NDRArbuz: is this the best way to find it with no doubt?
-                    $current_order_state = $order_state['id_order_state'];
-                    break;
-                }
-            }
-        }
 
         $smarty_vars = array(
             'url'                       => $url,
             'ebay_sign_in_url'          => $ebay_sign_in_url,
             'ebay_token'                => Configuration::get('EBAY_SECURITY_TOKEN'),
             'configCurrencysign'        => $config_currency->sign,
-            'policies'                  => EbayReturnsPolicy::getReturnsPolicies(),
             'catLoaded'                 => !Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id),
             'createShopUrl'             => $createShopUrl,
             'ebayCountry'               => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
-            'ebayReturns'               => preg_replace('#<br\s*?/?>#i', "\n", $this->ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description),
             'ebayShopValue'             => $ebayShopValue,
             'shopPostalCode'            => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
-            'listingDurations'          => $this->_getListingDurations(),
             'ebayShop'                  => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
-            'returnsConditionAccepted'  => Tools::getValue('ebay_returns_accepted_option', $returns_policy_configuration->ebay_returns_accepted_option),
-            'automaticallyRelist'       => $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST'),
             'ebay_paypal_email'         => $ebay_paypal_email,
-            'returnsConditionAccepted'  => $returnsConditionAccepted,
-            'ebayListingDuration'       => $ebayListingDuration,
             'is_multishop'              => $is_multishop,
-            'within_values'             => unserialize(Configuration::get('EBAY_RETURNS_WITHIN_VALUES')),
-            'within'                    => $returns_policy_configuration->ebay_returns_within,
-            'whopays_values'            => unserialize(Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES')),
-            'whopays'                   => $returns_policy_configuration->ebay_returns_who_pays,
-            'activate_mails'            => Configuration::get('EBAY_ACTIVATE_MAILS'),
             'hasEbayBoutique'           => isset($user_profile['StoreUrl']) && !empty($user_profile['StoreUrl']) ? true : false,
             'currencies'                => TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop),
             'current_currency'          => (int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'),
             'ebay_shop_countries'       => EbayCountrySpec::getCountries(false),
             'current_ebay_shop_country' => $shopCountry,
-            'send_tracking_code'        => (bool)$this->ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'),
-            'order_states'              => $order_states,
-            'current_order_state'       => $current_order_state,
-            'current_order_return_state' => $this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE'),
             'immediate_payment'         => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
-            //EAN
-            'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
-            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
-            'help_ean' => array(
+            // CRON sync
+            'sync_products_by_cron'      => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
+            'sync_products_by_cron_url'  => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
+            'sync_products_by_cron_path' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
+            'sync_orders_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
+            'sync_orders_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
+            'sync_orders_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
+            'sync_orders_returns_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
+            'sync_orders_returns_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'sync_orders_returns_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'activate_resynchBP'         => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
+            'help_Cat_upd' => array(
                 'lang'           => $this->context->country->iso_code,
                 'module_version' => $this->ebay->version,
                 'ps_version'     => _PS_VERSION_,
-                'error_code'     => 'HELP-ADV-SETTINGS-EAN',
-            ),
-            'help_gtc' => array(
-                'lang'           => $this->context->country->iso_code,
-                'module_version' => $this->ebay->version,
-                'ps_version'     => _PS_VERSION_,
-                'error_code'     => 'HELP-SETTINGS-LISTING-DURATION',
+                'error_code'     => 'HELP-CATEGORY-UPDATE',
             ),
             'id_shop' => $this->context->shop->id,
-            'out_of_stock_value' => (bool)EbayConfiguration::get($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK'),
-            'help_out_of_stock' => array(
-                'lang'           => $this->context->country->iso_code,
-                'module_version' => $this->ebay->version,
-                'ps_version'     => _PS_VERSION_,
-                'error_code'     => 'HELP-SETTINGS-OUT-OF-STOCK',
-            ),
+
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
         );
 
@@ -179,31 +140,18 @@ class EbayFormParametersTab extends EbayTab
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
         $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_EAN', (string)Tools::getValue('synchronize_ean'));
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_MPN', (string)Tools::getValue('synchronize_mpn'));
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_UPC', (string)Tools::getValue('synchronize_upc'));
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_ISBN', (string)Tools::getValue('synchronize_isbn'));
-        $this->ebay->setConfiguration('EBAY_EAN_NOT_APPLICABLE', Tools::getValue('ean_not_applicable') ? 1 : 0);
-
 
         if ($this->ebay_profile->setConfiguration('EBAY_PAYPAL_EMAIL', pSQL(Tools::getValue('ebay_paypal_email')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP', pSQL(Tools::getValue('ebay_shop')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE', pSQL(Tools::getValue('ebay_shop_postalcode')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_COUNTRY', pSQL(Tools::getValue('ebay_shop_country')))
-            && $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
-            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
-            && $this->ebay_profile->setReturnsPolicyConfiguration(
-                pSQL(Tools::getValue('returnswithin')),
-                pSQL(Tools::getValue('returnswhopays')),
-                (Tools::nl2br(Tools::getValue('ebay_returns_description'))),
-                pSQL(Tools::getValue('ebay_returns_accepted_option'))
-            )
-            && $this->ebay->setConfiguration('EBAY_ACTIVATE_MAILS', Tools::getValue('activate_mails') ? 1 : 0)
+
+            && Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
+            && Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
+            && $this->ebay_profile->setConfiguration('EBAY_RESYNCHBP', Tools::getValue('activate_resynchBP') ? 1 : 0)
+            && Configuration::updateValue('EBAY_SYNC_ORDERS_RETURNS_BY_CRON', ('cron' === Tools::getValue('sync_orders_returns_mode')))
             && in_array((int) Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int) Tools::getValue('currency'))
-            && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int) Tools::getValue('send_tracking_code'))
-            && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int) Tools::getValue('shipped_order_state'))
-            && $this->ebay_profile->setConfiguration('EBAY_RETURN_ORDER_STATE', (int) Tools::getValue('return_order_state'))
             && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment'))
         ) {
 

@@ -37,7 +37,7 @@ $(document).ready(function () {
         return false;
     });
 
-    $('.panel-heading').html($('.list-group-item.active.main-menu-a').html());
+    $('#tab_title_level1').html($('.list-group-item.active.main-menu-a').html());
 
     $('.delete-profile').click(function (event) {
         event.preventDefault();
@@ -73,6 +73,7 @@ $(document).ready(function () {
     // Close modal on click on cancel button
     $(document).on('click', '.js-close-popin', function() {
         $.fancybox.close();
+
         $('.js-next-popin').show();
         $('.category_ps_list').html('');
         $('#form_product_to_sync').html('');
@@ -80,7 +81,7 @@ $(document).ready(function () {
         $('#impact_prix').val('');
         var courant_page = $('.page_config_category.selected');
         courant_page.removeClass('selected').hide();
-        $('.page_config_category#1').addClass('selected').show();
+        $('.first_page_popin').addClass('selected').show();
         $('.js-prev-popin').hide();
         $('#ps_category_list').show();
         $('#item_spec').html('');
@@ -95,7 +96,7 @@ $(document).ready(function () {
 
         $('.main-menu-a').removeClass('active');
         $('#' + menu_name + '-menu-link').addClass('active');
-        $('.panel-heading').html($('#' + menu_name + '-menu-link').html());
+        $('#tab_title_level1').html($('#' + menu_name + '-menu-link').html());
         $('.menuTab').hide();
         $('.menu-msg').hide();
         var menu = $('.' + menu_name + '-menu');

@@ -101,7 +101,7 @@
 			courant_page.removeClass('selected').hide();
 
 			var new_id =  parseInt(courant_page.attr('id'))+1;
-
+			$('.page_popin').html(''+new_id);
 			courant_page.parent().find('div#'+new_id).addClass('selected').show();
 			if (new_id == 2) {
 				$('.js-prev-popin').show();
@@ -133,6 +133,7 @@
 			courant_page.removeClass('selected').hide();
 			console.log(courant_page.attr('id'));
 			var new_id =  parseInt(courant_page.attr('id'))-1;
+			$('.page_popin').html(''+new_id);
 			console.log(new_id);
 			if(new_id == 1){
 				$('.js-prev-popin').hide();
@@ -201,7 +202,7 @@
                     }
 
 					$('select[name="store_category"]').children('option[value="' + data.storeCategoryId + '"]').attr('selected', 'selected');
-
+					$('.js-next-popin').removeAttr('disabled');
 					$('.modifier_cat').fancybox({
 						'modal': true,
 						'showCloseButton': false,
@@ -541,13 +542,13 @@
 	{* Category add modal *}
 	<div id="popin-add-cat" class="popin popin-lg" style="display: none;">
 		<div class="panel">
-			<div class="panel-heading">
+			<div  class="panel-heading">
 				<i class="icon-plus"></i> Ajouter une annonce
-				<span class="badge badge-success">1 / 3</span>
+				<span class="badge badge-success"><span class="page_popin" id="1">1</span> / 4</span>
 			</div>
 
 			<form action="" class="form-horizontal" method="post" id="category_config">
-				<div id="1" class="page_config_category selected">
+				<div id="1" class="page_config_category selected first_page_popin">
 					<div class="form-group page">
 						<label for="" class="control-label col-md-6" data-toggle="tooltip" data-placement="bottom" title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
 							Choisissez une ou plusieurs catégories PrestaShop :

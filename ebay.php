@@ -68,12 +68,12 @@ $classes_to_load = array(
     'tabs/EbayFormParametersTab',
     'tabs/EbayFormAdvancedParametersTab',
     'tabs/EbayFormShippingTab',
+    'tabs/EbayFormInterShippingTab',
     'tabs/EbayFormTemplateManagerTab',
     'tabs/EbayFormEbaySyncTab',
     'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
     'tabs/EbayListingsTab',
-    'tabs/EbayApiLogsTab',
     'tabs/EbayOrderLogsTab',
     'tabs/EbayOrdersSyncTab',
     'tabs/EbayOrdersReturnsSyncTab',
@@ -83,6 +83,8 @@ $classes_to_load = array(
     'tabs/EbayDashboardTab',
     'tabs/EbayOrdersTab',
     'tabs/EbayListErrorsProductsTab',
+    'tabs/EbayFormConfigAnnoncesTab',
+    'tabs/EbayFormConfigOrdersTab',
     'EbayAlert',
     'EbayOrderErrors',
     'EbayDbValidator',
@@ -1651,8 +1653,14 @@ class Ebay extends Module
 
         if (Tools::getValue('section') == 'parameters') {
             $tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
+        } elseif (Tools::getValue('section') == 'parametersannonces') {
+            $tab = new EbayFormConfigAnnoncesTab($this, $this->smarty, $this->context);
+        } elseif (Tools::getValue('section') == 'parametersorders') {
+            $tab = new EbayFormConfigOrdersTab($this, $this->smarty, $this->context);
         } elseif (Tools::getValue('section') == 'shipping') {
             $tab = new EbayFormShippingTab($this, $this->smarty, $this->context);
+        } elseif (Tools::getValue('section') == 'intershipping') {
+            $tab = new EbayFormInterShippingTab($this, $this->smarty, $this->context);
         } elseif (Tools::getValue('section') == 'template') {
             $tab = new EbayFormTemplateManagerTab($this, $this->smarty, $this->context);
         } elseif (Tools::getValue('section') == 'sync') {
@@ -1802,6 +1810,7 @@ class Ebay extends Module
         $form_advanced_parameters_tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
 
         $form_shipping_tab = new EbayFormShippingTab($this, $this->smarty, $this->context);
+        $form_inter_shipping_tab = new EbayFormInterShippingTab($this, $this->smarty, $this->context);
         $form_template_manager_tab = new EbayFormTemplateManagerTab($this, $this->smarty, $this->context);
         $form_ebay_sync_tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
         $form_ebay_order_history_tab = new EbayOrderHistoryTab($this, $this->smarty, $this->context);
@@ -1812,10 +1821,11 @@ class Ebay extends Module
         $orphan_listings = new EbayOrphanListingsTab($this, $this->smarty, $this->context);
         $tableOrders = new EbayOrdersTab($this, $this->smarty, $this->context);
         $tableListErrorProduct = new EbayListErrorsProductsTab($this, $this->smarty, $this->context);
-
+        $form_parameters_annonces_tab = new EbayFormConfigAnnoncesTab($this, $this->smarty, $this->context);
+        $form_parameters_orders_tab = new EbayFormConfigOrdersTab($this, $this->smarty, $this->context);
 
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
-        $api_logs = new EbayApiLogsTab($this, $this->smarty, $this->context, $this->_path);
+
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
@@ -1846,6 +1856,7 @@ class Ebay extends Module
             'form_parameters' => $form_parameters_tab->getContent(),
             'form_advanced_parameters' => $form_advanced_parameters_tab->getContent(),
             'form_shipping' => $form_shipping_tab->getContent(),
+            'form_inter_shipping' => $form_inter_shipping_tab->getContent(),
             'form_template_manager' => $form_template_manager_tab->getContent(),
             'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
             'orders_history' => $form_ebay_order_history_tab->getContent(),
@@ -1854,7 +1865,6 @@ class Ebay extends Module
             'ps_products' => $ps_products->getContent(),
             'orphan_listings' => $orphan_listings->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
-            'api_logs' => $api_logs->getContent(),
             'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab'),
             'alerts' => $alert->getAlerts(),
@@ -1869,6 +1879,8 @@ class Ebay extends Module
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
             'count_order_errors' => count(EbayOrderErrors::getAll()),
             'count_product_errors' => count(EbayTaskManager::getErrors($this->ebay_profile->id)),
+            'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
+            'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),
             );
 
 
@@ -2051,7 +2063,7 @@ class Ebay extends Module
             $days = Tools::substr($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'), 5);
 
             foreach (EbayProduct::getProducts($days, 10) as $item) {
-                $new_item_id = $ebay->relistFixedPriceItem($item['itemID']);
+                $new_item_id = $ebay->relistFixedPriceItem($item['id_product_ref']);
 
                 if (!$new_item_id) {
                     $new_item_id = $item['id_product_ref'];
