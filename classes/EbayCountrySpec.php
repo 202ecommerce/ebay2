@@ -31,7 +31,7 @@ if (!in_array('Ebay', get_declared_classes())) {
 class EbayCountrySpec
 {
     public $country;
-    public $accepted_isos = array( 'es', 'fr', 'nl', 'pl', 'be','it', 'gb', 'de');
+    public $accepted_isos = array( 'es', 'fr', 'nl', 'pl', 'be','it', 'gb', 'de', 'ie', 'au');
     protected $ebay_iso;
     private $dev;
     private static $multilang = array('be');
@@ -78,7 +78,6 @@ class EbayCountrySpec
             'picture_url' => 'http://pages.ebay.fr/professionnels/images.html',
             'top_rated_url' => 'http://pages.ebay.fr/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.fr/help/sell/business-policies.html',
-
         ),
         'nl' => array(
             'site_id' => 146,
@@ -99,7 +98,6 @@ class EbayCountrySpec
             'picture_url' => 'http://pages.ebay.nl/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.nl/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.nl/help/sell/business-policies.html',
-
         ),
         'pl' => array(
             'site_id' => 212,
@@ -116,8 +114,7 @@ class EbayCountrySpec
             'signin_pro_url' => 'https://scgi.ebay.pl/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
             'fee_url' => 'http://pages.ebay.pl/help/sell/businessfees.html',
             'title_desc_url' => 'http://pages.ebay.pl/help/sell/title_desc_ov.html',
-            'similar_items_url' => '
-http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
+            'similar_items_url' => 'http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.pl/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.pl/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.pl/help/sell/business-policies.html',
@@ -164,7 +161,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'top_rated_url' => 'http://pages.benl.ebay.be/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.benl.ebay.be/help/sell/business-policies.html',
         ),
-
         'ch' => array(
             'site_id' => 193,
             'documentation' => 'de',
@@ -184,7 +180,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.ch/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.ch/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.ch/help/sell/business-policies.html',
-
         ),
         'at' => array(
             'site_id' => 16,
@@ -205,8 +200,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.at/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.at/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.at/help/sell/business-policies.html',
-
-
         ),
         'it' => array(
             'site_id' => 101,
@@ -267,6 +260,46 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://sellercentre.ebay.co.uk/new-picture-standards',
             'top_rated_url' => 'http://pages.ebay.co.uk/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.co.uk/help/sell/business-policies.html',
+        ),
+        'ie' => array(
+            'site_id' => 205,
+            'documentation' => 'en',
+            'language' => 'en_IE',
+            'currency' => 'EUR',
+            'site_name' => 'IE',
+            'site_extension' => 'ie',
+            'img_stats' => null,
+            'iso_code' => 'ie',
+            'signin' => 'https://signin.ebay.ie/ws/eBayISAPI.dll',
+            'signin_pro_url' => 'https://scgi.ebay.ie/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.ie/ws/eBayISAPI.dll',
+            'pro_url' => 'http://sellercentre.ebay.ie/',
+            'fee_url' => 'http://sellercentre.ebay.ie/fees-business-sellers-0',
+            'title_desc_url' => 'http://pages.ebay.ie/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.ie/research-items-similar-yours',
+            'picture_url' => 'http://sellercentre.ebay.ie/new-picture-standards',
+            'top_rated_url' => 'http://pages.ebay.ie/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.ie/help/sell/business-policies.html',
+        ),
+        'au' => array(
+            'site_id' => 15,
+            'documentation' => 'en',
+            'language' => 'en_AU',
+            'currency' => 'AUD',
+            'site_name' => 'AU',
+            'site_extension' => 'com.au',
+            'img_stats' => null,
+            'iso_code' => 'au',
+            'signin' => 'https://signin.ebay.com.au/ws/eBayISAPI.dll',
+            'signin_pro_url' => 'https://scgi.ebay.com.au/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.com.au/ws/eBayISAPI.dll',
+            'pro_url' => 'http://sellercentre.ebay.com.au/',
+            'fee_url' => 'http://sellercentre.ebay.com.au/fees-business-sellers-0',
+            'title_desc_url' => 'http://pages.ebay.com.au/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.com.au/research-items-similar-yours',
+            'picture_url' => 'http://sellercentre.ebay.com.au/new-picture-standards',
+            'top_rated_url' => 'http://pages.ebay.com.au/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.com.au/help/sell/business-policies.html',
         ),
 
 
