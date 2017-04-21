@@ -163,6 +163,7 @@ class EbayDbValidator
             'date_add' => array('type' => 'datetime', 'length' => null),
             'date_upd' => array('type' => 'datetime', 'length' => null),
             'id_shipping_policies' => array('type' => 'varchar', 'length' => 125),
+            'id_category_ps' => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_product_configuration' => array(

@@ -433,6 +433,11 @@ class Ebay extends Module
          `'._DB_PREFIX_.'ebay_store_category_configuration`,
          `'._DB_PREFIX_.'ebay_user_identifier_token`,
          `'._DB_PREFIX_.'ebay_kb`,
+          `'._DB_PREFIX_.'category_business_config`,
+         `'._DB_PREFIX_.'business_policies`,
+         `'._DB_PREFIX_.'order_return_detail`,
+         `'._DB_PREFIX_.'logs`,
+          `'._DB_PREFIX_.'ebay_task_manager`,
          `'._DB_PREFIX_.'ebay_order_errors`;
          ');
 

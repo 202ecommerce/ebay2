@@ -33,10 +33,6 @@ class EbayFormEbaySyncTab extends EbayTab
             return '<p class="error"><b>' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
 
-        if (!EbayCategoryConfiguration::getTotalCategoryConfigurations($this->ebay_profile->id)) {
-            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'Category settings\' tab before using this tab', 'ebayformebaysynctab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
-        }
-
         $nb_products_mode_a = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "A");
         $nb_products_mode_b = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "B");
 
