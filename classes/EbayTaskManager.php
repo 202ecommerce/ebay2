@@ -164,7 +164,7 @@ class EbayTaskManager
     {
         $unidId = uniqid();
         if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0', 1000)) {
-            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_created`');
+            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_add`');
         }
         return false;
     }
