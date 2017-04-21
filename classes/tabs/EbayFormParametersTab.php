@@ -64,10 +64,11 @@ class EbayFormParametersTab extends EbayTab
 
         $smarty_vars = array(
             'url'                       => $url,
+            'admin_path'              => basename(_PS_ADMIN_DIR_),
             'ebay_sign_in_url'          => $ebay_sign_in_url,
             'ebay_token'                => Configuration::get('EBAY_SECURITY_TOKEN'),
             'configCurrencysign'        => $config_currency->sign,
-            'catLoaded'                 => !Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id),
+            'catLoaded'                 => Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id),
             'createShopUrl'             => $createShopUrl,
             'ebayCountry'               => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
             'ebayShopValue'             => $ebayShopValue,

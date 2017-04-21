@@ -135,7 +135,7 @@ class Ebay extends Module
         $this->version = '1.15.4';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
-
+        $this->class_tab = 'AdminEbay';
         $this->author = 'PrestaShop';
 
         parent::__construct();
@@ -236,6 +236,8 @@ class Ebay extends Module
                 }
 
             }
+
+
 
             // Warning uninstall
             $this->confirmUninstall = $this->l('Are you sure you want to uninistall this module? All configuration settings will be lost');
@@ -344,6 +346,7 @@ class Ebay extends Module
         $this->setConfiguration('EBAY_LOGS_DAYS', 30);
 
         $this->verifyAndFixDataBaseFor17();
+
 
         // Ebay 1.12.0
         EbayOrderErrors::install();
@@ -460,6 +463,13 @@ class Ebay extends Module
             if (!Db::getInstance()->execute($s)) {
                 return false;
             }
+        }
+        $id_tab = (int)Tab::getIdFromClassName($this->class_tab);
+
+        if ($id_tab)
+        {
+            $tab = new Tab($id_tab);
+            $tab->delete();
         }
 
         // Uninstall Module
@@ -1362,6 +1372,7 @@ class Ebay extends Module
 
     public function hookBackOfficeTop($params)
     {
+
         if (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 day')).'.000Z') {
             $stat = new EbayStat($this->stats_version, $this->ebay_profile);
             $stat->save();
@@ -1396,6 +1407,30 @@ class Ebay extends Module
             && !Shop::isFeatureActive())) {
             $this->hookHeader($params);
         }
+        $id_shop =  Shop::getContextShopID();
+        $profiles = EbayProfile::getProfilesByIdShop($id_shop);
+        $id_ebay_profiles = array();
+        foreach ($profiles as &$profile) {
+            $profile['site_name'] = EbayCountrySpec::getSiteNameBySiteId($profile['ebay_site_id']);
+            $id_ebay_profiles[] = $profile['id_ebay_profile'];
+        }
+
+        $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
+        $nb_errors=0;
+        foreach ($profiles as &$profile) {
+            $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
+            $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
+            $nb_errors +=$profile['count_product_errors'];
+        }
+        $link = $this->context->link;
+        $smarty_vars = array(
+            'path' => $this->_path,
+            'profiles' => $profiles,
+            'nb_errors' => $nb_errors,
+            'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
+        );
+        $this->smarty->assign($smarty_vars);
+        return $this->display(__FILE__, 'views/templates/hook/header_info.tpl');
     }
 
     /**
@@ -1485,7 +1520,7 @@ class Ebay extends Module
         $alerts = $this->__getAlerts();
 
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
-
+        $ebay_task_errors = EbayTaskManager::getErrors($this->ebay_profile->id);
         $url_data = array(
             'version' => $this->version,
             'shop' => urlencode(Configuration::get('PS_SHOP_NAME')),
@@ -1497,7 +1532,7 @@ class Ebay extends Module
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
             'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
             'count_order_errors' => count(EbayOrderErrors::getAll()),
-            'count_product_errors' => count(EbayTaskManager::getErrors($this->ebay_profile->id)),
+            'count_product_errors' => ($this->ebay_profile?count(EbayTaskManager::getErrors($this->ebay_profile->id)):false),
         );
         $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
 
@@ -1595,8 +1630,8 @@ class Ebay extends Module
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),
             'debug' => ($request->getDev())? 1:0,
-            'id_lang' => ($this->ebay_profile->id_lang?$this->ebay_profile->id_lang:Configuration::get('PS_LANG_DEFAULT')),
-            'id_ebay_profile' => $this->ebay_profile->id,
+            'id_lang' => ($this->ebay_profile && $this->ebay_profile->id_lang?$this->ebay_profile->id_lang:Configuration::get('PS_LANG_DEFAULT')),
+            'id_ebay_profile' => ($this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : false),
         ));
 
         // test if multishop Screen and all shops

@@ -41,6 +41,97 @@
 	{if $regenerate_token != false}
 	regenerate_token_show = true;
 	{/if}
+	var categories_ebay_l = {ldelim}
+		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
+		'no category selected' : "{l s='No category selected' mod='ebay'}",
+		'No category found'		 : "{l s='No category found' mod='ebay'}",
+		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
+		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
+		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
+		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
+		'Products' : "{l s='Products' mod='ebay'}",
+		'Stock' : "{l s='Stock' mod='ebay'}",
+		'Finish' : "{l s='Finish' mod='ebay'}",
+		'An error has occurred' : "{l s='An error has occurred' mod='ebay'}",
+		'Waiting' : "{l s='Waiting' mod='ebay'}",
+		'categories loaded success' : "{l s='categories loaded successfully.' mod='ebay'}",
+		'Download subcategories of' : "{l s='Download subcategories of' mod='ebay'}",
+		{rdelim};
+	// Import Category From eBay
+	function loadCategoriesFromEbay(step, id_category, row) {
+		var admin_path = "{$admin_path}";
+		alertOnExit(true, alert_exit_import_categories);
+		step = typeof step !== 'undefined' ? step : 1;
+		id_category = typeof id_category !== 'undefined' ? id_category : false;
+		row = typeof row !== 'undefined' ? row : 2;
+
+		$.ajax({
+			type: "POST",
+			dataType: 'json',
+			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step=" + step + "&id_category=" + id_category + "&admin_path=" + admin_path,
+			success: function (data) {
+				if (data == "error") {
+					if (step == 1) {
+						$('#cat_parent').addClass('error');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['An error has occurred']);
+					}
+					else if (step == 2) {
+						$('#load_cat_ebay tbody tr:nth-child(' + row + ')').addClass('error');
+					}
+					alertOnExit(false, "");
+				}
+				else {
+					var output;
+
+					if (step == 1) {
+						for (var i in data) {
+							output += '<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>' + categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
+						}
+						var count = $.map(data, function (n, i) {
+							return i;
+						}).length;
+						$('#cat_parent').removeClass('load').addClass('success');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['Finish'] + ' - ' + count + ' ' + categories_ebay_l['categories loaded success']);
+						$('#load_cat_ebay tbody').append(output);
+
+						$('#load_cat_ebay tbody tr:nth-child(2)').addClass('load');
+						loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(2)').attr('data-id'), 2);
+					}
+					else if (step == 2) {
+						var count = $.map(data, function (n, i) {
+							return i;
+						}).length;
+						$('#load_cat_ebay tbody tr:nth-child(' + row + ')').removeClass('load').addClass('success');
+
+						$('#load_cat_ebay tbody tr:nth-child(' + row + ') td:nth-child(3)').text(categories_ebay_l['Finish'] + ' - ' + count + ' ' + categories_ebay_l['categories loaded success']);
+
+						var next = row + 1;
+						if ($('#load_cat_ebay tbody tr:nth-child(' + next + ')').length > 0) {
+							$('#load_cat_ebay tbody tr:nth-child(' + next + ')').addClass('load');
+							loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(' + next + ')').attr('data-id'), next);
+						}
+						else {
+							loadCategoriesFromEbay(3);
+							$('#load_cat_ebay').css('display', 'none');
+							$('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
+							$('.warning.big.tips.h').show();
+							alertOnExit(false, "");
+							$('#menuTab2').removeClass('succes');
+							$('#menuTab2').addClass('wrong');
+							$('#menuTab8').removeClass('succes');
+							$('#menuTab8').addClass('wrong');
+
+							return loadCategories();
+
+						}
+						alertOnExit(false, "");
+					}
+					$.fancybox.close();
+				}
+			}
+		});
+
+	}
 	$(document).ready(function(){ldelim}
 		if(regenerate_token_show)
 		{ldelim}
@@ -53,6 +144,18 @@
 			$('.regenerate_token_button').show();
 			$('.regenerate_token_click').hide();
 		{rdelim});
+
+		{if $catLoaded == false}
+		$('.laod_cat').fancybox({
+			'modal': true,
+			'showCloseButton': false,
+			'padding': 0,
+			'parent': '#popin_load_category-container',
+		});
+		$('.laod_cat').click();
+		loadCategoriesFromEbay();
+		{/if}
+
 	})
 </script>
 
@@ -170,6 +273,7 @@
 	</fieldset>
 
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
+		<a href="#categoriesEbayProgression" class="laod_cat" style="display: none"></a>
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
 			<input class="primary button" type="submit" id="save_ebay_parameters" value="{l s='Save and continue' mod='ebay'}" />
@@ -178,3 +282,29 @@
 
 
 </form>
+<div id="popin_load_category-container">
+	<div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
+	<table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+		<thead>
+		<tr class="nodrag nodrop">
+			<th style="width:10%">
+				{l s='Status' mod='ebay'}
+			</th>
+			<th style="width:45%">
+				{l s='Description' mod='ebay'}
+			</th>
+			<th style="width:45%">
+				{l s='Result' mod='ebay'}
+			</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr id="cat_parent" class="load">
+			<td></td>
+			<td>{l s='Loading list of eBay categories' mod='ebay'}</td>
+			<td>{l s='In progress' mod='ebay'}</td>
+		</tr>
+		</tbody>
+	</table>
+		</div>
+</div>

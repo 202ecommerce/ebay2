@@ -81,6 +81,7 @@ $(document).ready(function () {
         $('#impact_prix').val('');
         var courant_page = $('.page_config_category.selected');
         courant_page.removeClass('selected').hide();
+        $('.page_popin').html('1');
         $('.first_page_popin').addClass('selected').show();
         $('.js-prev-popin').hide();
         $('#ps_category_list').show();
