@@ -27,7 +27,7 @@
         <p>Les produits ci-dessous ont été refusés par eBay. Attention si une annonce est déjà présente sur eBay, cette annonce n’est plus mise à jour.
             Une action manuelle est nécessaire pour corriger le refus de eBay, ou supprimez ce produit de votre synchronisation</p>
 
-        <table id="OrphanListings" class="table" >
+        <table id="AnnoncesErrorsListings" class="table" >
             <thead>
             <tr >
 
