@@ -219,7 +219,7 @@
 		<div class="show regenerate_token_click" style="display:block;text-align:center;cursor:pointer">
 			<span data-inlinehelp="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">{l s='Click here to generate a new authentication token.' mod='ebay'}</span>
 		</div>
-		<div class="hide regenerate_token_button" style="display:none;">
+		<div class="regenerate_token_button" style="display:none;">
 			<label>{l s='Regenerate Token' mod='ebay'} :</label>
 			<a href="{$url|escape:'htmlall':'UTF-8'}&action=regenerate_token">
 				<input type="button" id="token-btn" class="button" value="{l s='Regenerate Token' mod='ebay'}" />

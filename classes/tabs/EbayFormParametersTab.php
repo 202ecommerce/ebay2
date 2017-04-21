@@ -63,6 +63,7 @@ class EbayFormParametersTab extends EbayTab
 
 
         $smarty_vars = array(
+            'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
             'url'                       => $url,
             'admin_path'              => basename(_PS_ADMIN_DIR_),
             'ebay_sign_in_url'          => $ebay_sign_in_url,
