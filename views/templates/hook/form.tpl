@@ -46,7 +46,7 @@
     <script>
         if(typeof($j172) != 'undefined')
             $j = $j172;
-        else 
+        else
             $j = $;
     </script>
     <script src="{$fancybox|escape:'htmlall':'UTF-8'}"></script>
@@ -114,7 +114,6 @@
     </div>
 </div>
 {/if}
-
 
 
                 {if $show_welcome}
@@ -273,7 +272,7 @@
                                     <li>
                                         {assign var="link" value="<a href=\"{$picture_url|escape:'htmlall':'UTF-8'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">3</span> {{l s='|b|Take special care of your product pictures,|/b| |a|this will help buyers to buy from you.|/a|' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}
-                                    </li>    
+                                    </li>
                                     <li>
                                         {assign var="link" value="<a href=\"{$top_rated_url|escape:'htmlall':'UTF-8'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">4</span> {{l s='|b|Make buyers to come back|/b| by |a|delivering a great service|/a| and offering free shipping.' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}                                                        </li>
@@ -286,7 +285,7 @@
             <div style="clear:both"></div>
         </div>
     </div>
-    
+
     {if $current_profile && !$add_profile}
 <div class="row">
     {* Main navigation *}
@@ -312,15 +311,41 @@
 
     {/if}
 {/if}
+    <div id="popin_load_category-container">
+        <div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
+            <table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+                <thead>
+                <tr class="nodrag nodrop">
+                    <th style="width:10%">
+                        {l s='Status' mod='ebay'}
+                    </th>
+                    <th style="width:45%">
+                        {l s='Description' mod='ebay'}
+                    </th>
+                    <th style="width:45%">
+                        {l s='Result' mod='ebay'}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="cat_parent" class="load">
+                    <td></td>
+                    <td>{l s='Loading list of eBay categories' mod='ebay'}</td>
+                    <td>{l s='In progress' mod='ebay'}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <script type="text/javascript">
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
           'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
           'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}"
         };
-        
+
         var delete_profile_url = '{$delete_profile_url|escape:'htmlall':'UTF-8'}';
-        
+
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>

@@ -40,7 +40,7 @@
     vertical-align: top;
     margin-left: -9px;
     margin-top: -4px;
-">{$nb_errors|escape:'htmlall':'UTF-8'}</span>
+">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
         </button>
 
         <ul class="dropdown-menu" style="

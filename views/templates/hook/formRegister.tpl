@@ -213,11 +213,6 @@
             </div>
         </div>
 	</form>
-    {else}
-    <div style="text-align: center;color: black;">
-        <span style="font-weight: bold">{l s='You cannot use this module because your shop is based in Italy, United Kingdom or Germany.' mod='ebay'}</span></br></br>
-        <span style="font-weight: bold">{l s='Only previous version of this module can be used in all countries.' mod='ebay'}</span>
-    </div>
 
 {/if}
 </fieldset>

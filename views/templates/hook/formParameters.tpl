@@ -35,6 +35,10 @@
 {/if}
 <script type="text/javascript">
 	var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
+	var catLoaded = 0;
+	{if $catLoaded}
+		catLoaded = 1;
+	{/if}
 	var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
 	var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
 	var regenerate_token_show = false;
@@ -120,43 +124,44 @@
 							$('#menuTab2').addClass('wrong');
 							$('#menuTab8').removeClass('succes');
 							$('#menuTab8').addClass('wrong');
-
-							return loadCategories();
+							$.fancybox.close();
+							//return loadCategories();
 
 						}
 						alertOnExit(false, "");
 					}
-					$.fancybox.close();
+
 				}
 			}
 		});
 
 	}
-	$(document).ready(function(){ldelim}
-		if(regenerate_token_show)
-		{ldelim}
+	$(document).ready(function(){
+		if(regenerate_token_show) {
 			$('.regenerate_token_button').show();
 			$('.regenerate_token_button label').css('color', 'red').html("{l s='You must regenerate your authentication token' mod='ebay'}");
 			$('.regenerate_token_click').hide();
-		{rdelim}
-		$('.regenerate_token_click span').click(function()
-		{ldelim}
+		}
+		$('.regenerate_token_click span').click(function(){
 			$('.regenerate_token_button').show();
 			$('.regenerate_token_click').hide();
-		{rdelim});
-
-		{if $catLoaded == false}
-		$('.laod_cat').fancybox({
+		});
+		$('.load_cat_sync').fancybox({
 			'modal': true,
 			'showCloseButton': false,
 			'padding': 0,
 			'parent': '#popin_load_category-container',
 		});
-		$('.laod_cat').click();
-		loadCategoriesFromEbay();
-		{/if}
+		if(catLoaded == 1){
 
-	})
+			$('.load_cat_sync').click();
+			//loadCategoriesFromEbay();
+		}
+
+	});
+
+
+
 </script>
 
 	{if isset($check_token_tpl)}
@@ -273,38 +278,13 @@
 	</fieldset>
 
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
-		<a href="#categoriesEbayProgression" class="laod_cat" style="display: none"></a>
+		<a href="#categoriesEbayProgression" class="load_cat_sync" style="display: none"></a>
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-			<input class="primary button" type="submit" id="save_ebay_parameters" value="{l s='Save and continue' mod='ebay'}" />
+			<input  class="primary button" type="submit" id="save_ebay_parameters" value="{l s='Save and continue' mod='ebay'}" />
 		</a>
 	</div>
 
 
 </form>
-<div id="popin_load_category-container">
-	<div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
-	<table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
-		<thead>
-		<tr class="nodrag nodrop">
-			<th style="width:10%">
-				{l s='Status' mod='ebay'}
-			</th>
-			<th style="width:45%">
-				{l s='Description' mod='ebay'}
-			</th>
-			<th style="width:45%">
-				{l s='Result' mod='ebay'}
-			</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr id="cat_parent" class="load">
-			<td></td>
-			<td>{l s='Loading list of eBay categories' mod='ebay'}</td>
-			<td>{l s='In progress' mod='ebay'}</td>
-		</tr>
-		</tbody>
-	</table>
-		</div>
-</div>
+

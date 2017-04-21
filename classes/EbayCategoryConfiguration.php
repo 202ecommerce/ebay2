@@ -203,6 +203,12 @@ class EbayCategoryConfiguration
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' AND `id_category` = '.(int)$id_category);
     }
 
+    public static function deleteByIdProfile($id_ebay_profile)
+    {
+        Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_category_configuration`
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+    }
+
     public static function getEbayCategoryConfigurations($id_ebay_profile)
     {
         return Db::getInstance()->executeS('SELECT *

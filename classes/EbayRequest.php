@@ -361,22 +361,22 @@ class EbayRequest
             $datas = self::$userPreferencesCache;
         }
 
+        if(isset($datas->SellerProfileOptedIn)) {
+            $config = (array)$datas->SellerProfileOptedIn;
 
-        $config = (array)$datas->SellerProfileOptedIn;
+            if ($config[0]== 'true') {
+                $data = 1;
 
-        if ($config[0]== 'true') {
-            $data = 1;
+            } else {
+                $data = 0;
+            }
 
-        } else {
-            $data = 0;
-        }
-
-        if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
-            if ($data== 1) {
-                $this->importBusinessPolicies();
+            if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
+                if ($data== 1) {
+                    $this->importBusinessPolicies();
+                }
             }
         }
-
         return $userProfile;
     }
 

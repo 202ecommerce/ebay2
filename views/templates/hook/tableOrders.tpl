@@ -23,13 +23,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
-    <h2>{l s='Here is a record of your eBays orders' mod='ebay'} :</h2>
-    <p>
-        <b>{$date_last_import|escape:'htmlall':'UTF-8'}</b>
-    </p>
-    <br/>
-    <br/>
     <h2>{l s='Orders History' mod='ebay'} :</h2>
     <div class="ebay_mind big">{l s='If you have orders with NOSEND-EBAY in the email client, you can contact us to open a support ticket.' mod='ebay'}
         <a class="kb-help" data-errorcode="HELP-VISUALIZATION-NO-SEND-EBAY" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}"
