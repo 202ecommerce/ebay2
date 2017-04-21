@@ -164,18 +164,21 @@
                                                     <ul class="dropdown-menu">
                                                         <li class="clearfix head">
                                                             <span class="col-xs-4">utilisateur</span>
-                                                            <span class="col-xs-3">pays</span>
-                                                            <span class="col-xs-3 text-right">annonces</span>
+                                                            <span class="col-xs-2">pays</span>
+                                                            <span class="col-xs-2 text-right">annonces</span>
                                                             <span class="col-xs-2 text-right">erreurs</span>
+                                                            <span class="col-xs-2 text-right">Tasks to job</span>
                                                         </li>
                                                         {foreach from=$profiles item=profile}
 
                                                             <li>
                                                                 <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if} clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                                     <span id = 'name' class="col-xs-4">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
-                                                                    <span class="col-xs-3">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
-                                                                    <span class="col-xs-3 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
+                                                                    <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
+                                                                    <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                                                                     <span class="col-xs-2 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
+                                                                    <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+
                                                                 </a>
                                                             </li>
                                                         {/foreach}

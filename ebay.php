@@ -1428,6 +1428,7 @@ class Ebay extends Module
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         $nb_errors=0;
         foreach ($profiles as &$profile) {
+            $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
             $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
             $nb_errors +=$profile['count_product_errors'];
@@ -1564,6 +1565,7 @@ class Ebay extends Module
 
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         foreach ($profiles as &$profile) {
+            $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
             $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
         }
