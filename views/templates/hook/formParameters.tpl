@@ -155,7 +155,7 @@
 		if(catLoaded == 1){
 
 			$('.load_cat_sync').click();
-			//loadCategoriesFromEbay();
+			loadCategoriesFromEbay();
 		}
 
 	});
