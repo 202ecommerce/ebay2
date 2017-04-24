@@ -50,7 +50,8 @@
                 <span class="col-xs-4">utilisateur</span>
                 <span class="col-xs-2">pays</span>
                 <span class="col-xs-2 text-right">annonces</span>
-                <span class="col-xs-2 text-right">erreurs</span>
+                <span class="col-xs-1 text-right">erreurs Ann</span>
+                <span class="col-xs-1 text-right">erreurs Ord</span>
                 <span class="col-xs-2 text-right">Tasks to job</span>
             </li>
             {foreach from=$profiles item=profile}
@@ -60,7 +61,8 @@
                         <span id = 'name' class="col-xs-4">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
                         <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
                         <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
-                        <span class="col-xs-2 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
+                        <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
+                        <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
                         <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
 
                     </a>

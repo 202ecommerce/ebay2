@@ -328,6 +328,7 @@ class EbayDbValidator
             'error' => array('type' => 'varchar', 'length' => 255),
             'id_order_seller' => array('type' => 'int', 'length' => 30),
             'id_order_ebay' => array('type' => 'varchar', 'length' => 255),
+            'ebay_user_identifier' => array('type' => ' varchar', 'length' => 255),
             'total' => array('type' => 'int', 'length' => 30),
             'email' => array('type' => 'varchar', 'length' => 255),
             'date_order' => array('type' => 'datetime', 'length' => null),

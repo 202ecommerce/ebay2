@@ -398,6 +398,7 @@ class Ebay extends Module
 
     public function emptyEverything()
     {
+        $this->uninstall();
         Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'configuration WHERE name LIKE  "%EBAY%"');
         Db::getInstance()->Execute('DROP TABLE IF EXISTS
          `'._DB_PREFIX_.'ebay_category`,
@@ -440,8 +441,6 @@ class Ebay extends Module
           `'._DB_PREFIX_.'ebay_task_manager`,
          `'._DB_PREFIX_.'ebay_order_errors`;
          ');
-
-        $this->uninstall();
     }
 
     /**
@@ -468,13 +467,6 @@ class Ebay extends Module
             if (!Db::getInstance()->execute($s)) {
                 return false;
             }
-        }
-        $id_tab = (int)Tab::getIdFromClassName($this->class_tab);
-
-        if ($id_tab)
-        {
-            $tab = new Tab($id_tab);
-            $tab->delete();
         }
 
         // Uninstall Module
@@ -801,10 +793,8 @@ class Ebay extends Module
             // we set the new last update date after retrieving the last orders
             $this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
 
-            EbayOrderErrors::truncate();
-
             if ($orders = $this->__getEbayLastOrders($current_date)) {
-                $this->importOrders($orders);
+                $this->importOrders($orders, $this->ebay_profile);
             }
         }
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
@@ -883,11 +873,11 @@ class Ebay extends Module
 
     public function cronOrdersSync()
     {
-        EbayOrderErrors::truncate();
+
         $current_date = date('Y-m-d\TH:i:s').'.000Z';
 
         if ($orders = $this->__getEbayLastOrders($current_date)) {
-            $this->importOrders($orders);
+            $this->importOrders($orders, $this->ebay_profile);
         }
 
         // we set the new last update date after retrieving the last orders
@@ -895,7 +885,7 @@ class Ebay extends Module
     }
     public function cronOrdersReturnsSync()
     {
-        EbayOrderErrors::truncate();
+
         $current_date = date('Y-m-d\TH:i:s').'.000Z';
 
         if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
@@ -914,44 +904,44 @@ class Ebay extends Module
         $this->ebay_profile->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
     }
 
-    public function importOrders($orders)
+    public function importOrders($orders, $ebay_profile)
     {
 
         $errors_email = array();
-
+        $ebay_user_identifier = $ebay_profile->ebay_user_identifier;
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
             $errors = array();
-
+            EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
             $order->add($this->ebay_profile->id);
             if (!$order->isCompleted()) {
                 $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
-                $order->checkError($message);
+                $order->checkError($message, $ebay_user_identifier);
                 continue;
             }
 
             if ($order->exists()) {
                 $message = $this->l('Order already imported');
-                $order->checkError($message);
+                $order->checkError($message, $ebay_user_identifier);
                 continue;
             }
 
             // no order in ebay order table with this order_ref
             if (!$order->hasValidContact()) {
                 $message = $this->l('Invalid e-mail');
-                $order->checkError($message);
+                $order->checkError($message, $ebay_user_identifier);
                 continue;
             }
 
             if (!$order->isCountryEnable()) {
                 $message = $this->l('Country is not activated');
-                $order->checkError($message);
+                $order->checkError($message, $ebay_user_identifier);
                 continue;
             }
 
             if (!$order->hasAllProductsWithAttributes()) {
                 $message = $this->l('Could not find the products in database');
-                $order->checkError($message);
+                $order->checkError($message, $ebay_user_identifier);
                 continue;
             } else {
             }
@@ -1041,7 +1031,7 @@ class Ebay extends Module
                 $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
                 if (!($cart instanceof Cart)) {
                     $message = $this->l('Error while creating a cart for the order');
-                    $order->checkError($message);
+                    $order->checkError($message, $ebay_user_identifier);
                     continue;
                 }
 
@@ -1049,7 +1039,7 @@ class Ebay extends Module
                     // if products in the cart
                     $order->deleteCart($ebay_profile->id_shop);
                     $message = $this->l('Could not add product to cart (maybe your stock quantity is 0)');
-                    $order->checkError($message);
+                    $order->checkError($message, $ebay_user_identifier);
                     continue;
                 }
 
@@ -1429,6 +1419,7 @@ class Ebay extends Module
         $nb_errors=0;
         foreach ($profiles as &$profile) {
             $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
+            $profile['count_order_errors'] = count(EbayOrderErrors::getAll($profile['id_ebay_profile']));
             $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
             $nb_errors +=$profile['count_product_errors'];
@@ -1542,7 +1533,7 @@ class Ebay extends Module
             'id_lang' => (int) $this->context->language->id,
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
             'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
-            'count_order_errors' => count(EbayOrderErrors::getAll()),
+            'count_order_errors' => count(EbayOrderErrors::getAll($this->ebay_profile->id)),
             'count_product_errors' => ($this->ebay_profile?count(EbayTaskManager::getErrors($this->ebay_profile->id)):false),
         );
         $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
@@ -1566,6 +1557,7 @@ class Ebay extends Module
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         foreach ($profiles as &$profile) {
             $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
+            $profile['count_order_errors'] = count(EbayOrderErrors::getAll($profile['id_ebay_profile']));
             $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
         }
@@ -1592,7 +1584,7 @@ class Ebay extends Module
         } elseif (in_array($id_tab, array(13))) {
             $main_tab = 'advanced-settings';
         } else {
-            $main_tab = 'settings';
+            $main_tab = 'dashbord';
         }
         $request = new EbayRequest();
         $this->smarty->assign(array(
@@ -1924,7 +1916,7 @@ class Ebay extends Module
             'dashboard' =>   $dashboard->getContent(),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
-            'count_order_errors' => count(EbayOrderErrors::getAll()),
+            'count_order_errors' => count(EbayOrderErrors::getAll($this->ebay_profile->id)),
             'count_product_errors' => count(EbayTaskManager::getErrors($this->ebay_profile->id)),
             'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
             'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),

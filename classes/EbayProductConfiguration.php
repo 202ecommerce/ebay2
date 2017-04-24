@@ -59,6 +59,10 @@ class EbayProductConfiguration
             $fields_strs[] = '`'.bqSQL($key).'` = "'.pSQL($value).'"';
         }
 
+        if($data['blacklisted']){
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $data['id_ebay_profile']);
+        }
+
         $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_product_configuration` (`id_product`, `'.implode('`,`', array_keys($to_insert)).'`)
 			VALUES ('.(int)$product_id.', '.implode(',', $to_insert).')
 			ON DUPLICATE KEY UPDATE ';

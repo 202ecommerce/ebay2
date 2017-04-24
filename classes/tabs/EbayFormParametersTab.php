@@ -166,16 +166,5 @@ class EbayFormParametersTab extends EbayTab
         }
     }
 
-    private function _getListingDurations()
-    {
-        return array(
-            'Days_1'  => $this->ebay->l('1 Day'),
-            'Days_3'  => $this->ebay->l('3 Days'),
-            'Days_5'  => $this->ebay->l('5 Days'),
-            'Days_7'  => $this->ebay->l('7 Days'),
-            'Days_10' => $this->ebay->l('10 Days'),
-            'Days_30' => $this->ebay->l('30 Days'),
-            'GTC'     => $this->ebay->l('Good \'Till Canceled')
-        );
-    }
+
 }

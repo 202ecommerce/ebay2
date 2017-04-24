@@ -30,7 +30,7 @@ class EbayOrdersTab extends EbayTab
     public function getContent($id_ebay_profile)
     {
 
-        $orders_error = EbayOrderErrors::getAll();
+        $orders_error = EbayOrderErrors::getAll($id_ebay_profile);
         $orders = EbayOrder::getOrders();
         $vars = array();
         if (!empty($orders_error)) {

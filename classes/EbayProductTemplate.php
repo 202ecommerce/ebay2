@@ -33,7 +33,7 @@ class EbayProductTemplate extends ObjectModel
      */
     public static function getContent($ebay, $smarty)
     {
-        $logo_url = (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/'._PS_IMG_.Configuration::get('PS_LOGO').'?'.Configuration::get('PS_IMG_UPDATE_TIME'));
+        $logo_url = (Tools::getShopDomainSsl(true)._PS_IMG_.Configuration::get('PS_LOGO').'?'.Configuration::get('PS_IMG_UPDATE_TIME'));
 
         $smarty->assign(array(
             'shop_logo' => $logo_url,
@@ -51,6 +51,6 @@ class EbayProductTemplate extends ObjectModel
      **/
     protected static function __getModuleUrl()
     {
-        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/';
     }
 }

@@ -37,7 +37,7 @@
 
 			<td>
                 {if $a.id_product_ref}
-                    <a style="display: block;width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" href="{$a.link|escape:'htmlall':'UTF-8'}" target="_blank">{$a.link|escape:'htmlall':'UTF-8'}</a>
+                    <a style="display: block;width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" href="{$a.link|escape:'htmlall':'UTF-8'}" target="_blank">{$a.id_product_ref|escape:'htmlall':'UTF-8'}</a>
                 {/if} 
 			</td>
 

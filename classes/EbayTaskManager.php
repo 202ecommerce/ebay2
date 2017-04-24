@@ -57,6 +57,10 @@ class EbayTaskManager
         if(!isset($context->employee) && isset($id_employee)){
             $context->employee = new Employee($id_employee);
         }
+        if(!$product->active){
+            self::deleteTaskForPorduct($product->id);
+            return true;
+        }
         if ($type == 'end') {
             foreach ($ebay_profiles as $profile) {
                 $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
@@ -130,6 +134,7 @@ class EbayTaskManager
         if ($id_task == 14) {
             self::deleteTaskForPorduct($id_product);
         }
+        self::deleteErrorsForProduct($id_product);
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)) {
 
             Db::getInstance()->insert('ebay_task_manager', $vars);
@@ -139,6 +144,12 @@ class EbayTaskManager
     public static function deleteTaskForPorduct($id_product)
     {
         return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14');
+
+    }
+
+    public static function deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile)
+    {
+        return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14  AND `id_ebay_profile` = '. (int)$id_ebay_profile);
 
     }
 
@@ -164,7 +175,7 @@ class EbayTaskManager
     {
         $unidId = uniqid();
         if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0', 1000)) {
-            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_add`');
+            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_created`');
         }
         return false;
     }
@@ -205,7 +216,11 @@ class EbayTaskManager
 
     public static function getErrors($id_ebay_profile) {
 
-        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
+        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_created`');
+    }
+    public static function deleteErrorsForProduct($id_product) {
+
+        return DB::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_product` = '.(int)$id_product);
     }
 
     public static function getNbTasks($id_ebay_profile) {

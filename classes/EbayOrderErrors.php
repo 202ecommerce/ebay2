@@ -33,6 +33,7 @@ class EbayOrderErrors extends ObjectModel
     public $date_order;
     public $email;
     public $total;
+    public $ebay_user_identifier;
     public $date_add;
     public $date_upd;
 
@@ -45,6 +46,7 @@ class EbayOrderErrors extends ObjectModel
             'id_order_ebay' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
             'total' => array('type' => 'TYPE_INT', 'validate' => 'isInt'),
             'email' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
+            'ebay_user_identifier' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
             'date_order' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
             'date_add' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
             'date_upd' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
@@ -70,6 +72,7 @@ class EbayOrderErrors extends ObjectModel
 				 	`total` int(16) NOT NULL,
 				 	`email` varchar(255),
 				 	`date_order` datetime NOT NULL,
+				 	`ebay_user_identifier` varchar(255) NOT NULL,
 				 	date_add datetime NOT NULL,
 					date_upd datetime NOT NULL,
 					UNIQUE(`'.self::$definition['primary'].'`),
@@ -121,9 +124,10 @@ class EbayOrderErrors extends ObjectModel
 
     }
 
-    public static function getAll()
+    public static function getAll($id_ebay_profile)
     {
-        $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'`';
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+        $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `ebay_user_identifier` = "'.pSQL($ebay_profile->ebay_user_identifier).'"';
 
        return Db::getInstance()->ExecuteS($q);
     }

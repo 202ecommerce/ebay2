@@ -363,7 +363,7 @@ class EbayRequest
 
         if(isset($datas->SellerProfileOptedIn)) {
             $config = (array)$datas->SellerProfileOptedIn;
-
+  if (!empty($config)) {
             if ($config[0]== 'true') {
                 $data = 1;
 
@@ -375,8 +375,9 @@ class EbayRequest
                 if ($data== 1) {
                     $this->importBusinessPolicies();
                 }
+                EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $data);
             }
-        }
+        }}
         return $userProfile;
     }
 
@@ -752,7 +753,7 @@ class EbayRequest
 
             $policies_ship_name = rtrim($policies_ship_name, "-");
 
-            $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `name` ="' . $policies_ship_name . '"');
+            $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM '._DB_PREFIX_.'ebay_business_policies WHERE `name` ="'.$policies_ship_name.' AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'"');
 
             if (empty($seller_ship_prof) || $seller_ship_prof == null) {
                 $dataNewShipp = array(
@@ -834,7 +835,7 @@ class EbayRequest
                 $this->_logApiCall('setSellerProfile', $vars, $response, $data['id_product']);
             }
 
-            DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . $shippingPolicies[0]['id_bussines_Policie'] . '" WHERE `id_product` = "' . $data['id_product'] . '"');
+            DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
 
             $vars = array(
                 'payment_profile_id' => $policies_config[0]['id_payment'],

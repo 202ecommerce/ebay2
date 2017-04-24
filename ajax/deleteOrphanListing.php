@@ -41,7 +41,8 @@ $id_product_ref = Tools::getValue('id_product_ref');
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
-
+$product = EbayProduct::getProductsIdFromItemId($id_product_ref);
 EbayProduct::deleteByIdProductRef($id_product_ref);
+EbayTaskManager::deleteTaskForPorductAndEbayProfile($product['id_product'], $product['id_ebay_profile']);
 
 echo '1';

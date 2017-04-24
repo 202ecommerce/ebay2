@@ -439,7 +439,7 @@
 
 
 	<fieldset style="border: 0">
-		<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success"><span class="icon-plus"></span> Ajouter</a>
+		<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> Ajouter</a>
 		{if isset($img_alert) && !empty($img_alert)}
 			<div class="warning big">
                 {$img_alert['message']|escape:'htmlall':'UTF-8'}
@@ -485,7 +485,6 @@
 						<th>{l s='Catégorie eBay' mod='ebay'}</th>
 						<th>{l s='Multi var' mod='ebay'}</th>
 						<th>{l s='Annonces' mod='ebay'}</th>
-						<th>{l s='Boutique' mod='ebay'}</th>
 						<th>{l s='Etat' mod='ebay'}</th>
 						<th>{l s='Action' mod='ebay'}</th>
 					</tr>
@@ -497,13 +496,12 @@
 						{foreach from=$categories item=category}
 							<tr class="{$category.row_class|escape:'htmlall':'UTF-8'}">
 								<td>{$category.name|escape:'htmlall':'UTF-8'}</td>
-								<td>{$category.nb_products|escape:'htmlall':'UTF-8'}/{$category.nb_products_variations|escape:'htmlall':'UTF-8'} </td>
+								<td>{if $category.category_multi == 'yes'}<b>{$category.nb_products|escape:'htmlall':'UTF-8'}</b>/{$category.nb_products_variations|escape:'htmlall':'UTF-8'}{else}{$category.nb_products|escape:'htmlall':'UTF-8'}/<b>{$category.nb_products_variations|escape:'htmlall':'UTF-8'}</b>{/if} </td>
 								<td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.price|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.annonces|escape:'htmlall':'UTF-8'}</td>
-								<td>{$category.category_boutique|escape:'htmlall':'UTF-8'}</td>
 								<td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
 								<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span> Modifier</a></td>
 							</tr>

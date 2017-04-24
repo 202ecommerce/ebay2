@@ -116,7 +116,6 @@ class EbayFormEbaySyncTab extends EbayTab
                         'nb_products' => count($nb_products_man),
                         'nb_products_variations' => $nb_products_variations,
                         'nb_products_blocked' => $nb_products_blocked,
-                        'category_boutique' => EbayStoreCategory::getCategoryName($id_category_boutique),
                     );
                     $alt_row = !$alt_row;
                 }
@@ -164,6 +163,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'id_lang' => $this->ebay_profile->id_lang,
             'id_employee' => $this->context->employee->id,
             'date' => pSQL(date('Ymdhis')),
+            'shipping_tab_is_conf'      =>  (empty(EbayShipping::getNationalShippings($this->ebay_profile->id))?1:0),
 
         );
 
@@ -172,7 +172,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
     public function postProcess()
     {
-        var_dump($_POST);die;
+
         // Update Sync Option
         if ($this->ebay_profile == null) {
             return;

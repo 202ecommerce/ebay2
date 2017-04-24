@@ -147,11 +147,6 @@ class EbayOrder
             if ($country->active) {
                 return true;
             } else {
-                $order_error = new EbayOrderErrors();
-                $order_error->id_order_seller = (int) $this->id_order_seller;
-
-                $order_error->error = Tools::jsonEncode(array('type' => 'country', 'iso_code' => $this->country_iso_code));
-                $order_error->save();
 
                 return false;
             }
@@ -1069,9 +1064,10 @@ class EbayOrder
         return $orders;
     }
 
-    public function checkError($error)
+    public function checkError($error, $ebay_user_identifier)
     {
         $order_error = new EbayOrderErrors();
+        $order_error->ebay_user_identifier = $ebay_user_identifier;
         $order_error->id_order_seller = (int) $this->id_order_seller;
         $order_error->total = (int) $this->amount;
         $order_error->date_order = $this->date;
