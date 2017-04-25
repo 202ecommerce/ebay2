@@ -970,7 +970,7 @@ class EbaySynchronizer
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date);
+            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 
         return $res;
@@ -995,7 +995,7 @@ class EbaySynchronizer
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute);
+            EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute, $data['id_category_ps']);
         }
 
         return $ebay;
@@ -1129,7 +1129,7 @@ class EbaySynchronizer
         if ($res->ErrorCode == 291 || $res->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date);
+            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 
         return $res;
@@ -1145,7 +1145,7 @@ class EbaySynchronizer
         if ($res->ErrorCode == 291 || $res->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date);
+            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 
         return $res;
@@ -1513,11 +1513,11 @@ class EbaySynchronizer
         if (!empty($variation['picturesLarge'])) {
             $data['picturesLarge'] = $variation['picturesLarge'];
         }
-
-        foreach ($variation['variation_specifics'] as $variation_specific) {
-            $data['name'] .= ' ' . $variation_specific;
+        if(Tools::getIsset($variation['variation_specifics'])){
+            foreach ($variation['variation_specifics'] as $variation_specific) {
+                $data['name'] .= ' ' . $variation_specific;
+            }
         }
-
         $data['price'] = $variation['price'];
 
         if (isset($variation['price_original'])) {
@@ -1541,8 +1541,9 @@ class EbaySynchronizer
             );
 
             $data['id_product'] .= '-' . (int)$data['id_attribute'];
-            $data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);
-
+            if(Tools::getIsset($variation['variation_specifics'])) {
+                $data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);
+            }
             $data['ean13'] = Tools::getIsset($variation['ean13']) ? $variation['ean13'] : null;
             $data['upc'] = Tools::getIsset($variation['ean13']) ? $variation['upc'] : null;
             $data['isbn'] = Tools::getIsset($variation['ean13']) ? $variation['isbn'] : null;

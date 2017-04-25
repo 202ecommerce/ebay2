@@ -44,7 +44,7 @@
             <td>{if $a.exists}{$a.psProductName|escape:'htmlall':'UTF-8'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product|escape:'htmlall':'UTF-8'}{/if}</td>
             
             {if $a.exists}
-                <td class="center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}{l s='Yes' mod='ebay'}{/if}</td>
+                <td class="center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}<span style="color: red;">{l s='Yes' mod='ebay'}</span>{/if}</td>
             {else}
                 <td class="center">-</td>
             {/if}                
@@ -74,7 +74,7 @@
             {/if}
 
             {if $a.exists && $a.id_category_ref}
-                <td class="center">{if $a.sync}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+                <td class="center">{if $a.sync}{l s='Yes' mod='ebay'}{else}<span style="color: red;">{l s='No' mod='ebay'}</span>{/if}</td>
             {else}
                 <td class="center">-</td>
             {/if}
