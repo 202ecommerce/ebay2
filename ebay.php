@@ -85,6 +85,7 @@ $classes_to_load = array(
     'tabs/EbayListErrorsProductsTab',
     'tabs/EbayFormConfigAnnoncesTab',
     'tabs/EbayFormConfigOrdersTab',
+    'tabs/EbayProductsExcluTab',
     'EbayAlert',
     'EbayOrderErrors',
     'EbayDbValidator',
@@ -1862,7 +1863,7 @@ class Ebay extends Module
         $tableListErrorProduct = new EbayListErrorsProductsTab($this, $this->smarty, $this->context);
         $form_parameters_annonces_tab = new EbayFormConfigAnnoncesTab($this, $this->smarty, $this->context);
         $form_parameters_orders_tab = new EbayFormConfigOrdersTab($this, $this->smarty, $this->context);
-
+        $ebayProductsExcluTab = New EbayProductsExcluTab($this, $this->smarty, $this->context);
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
 
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
@@ -1920,6 +1921,7 @@ class Ebay extends Module
             'count_product_errors' => count(EbayTaskManager::getErrors($this->ebay_profile->id)),
             'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
             'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),
+            'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
             );
 
 

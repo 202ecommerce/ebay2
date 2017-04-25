@@ -63,6 +63,7 @@
 
 	<li role="presentation" id="menuTab9" class="menuTabButton"><a href="#">{l s='Ebay Listings' mod='ebay'}</a></li>
 	<li role="presentation" id="menuTab16" class="menuTabButton"><a href="#">{l s='Orphan Listings' mod='ebay'}</a></li>
+	<li role="presentation" id="menuTab106" class="menuTabButton"><a href="#">{l s='Products Exclu' mod='ebay'}</a></li>
 
 
 </ul>
@@ -145,6 +146,8 @@
     <div id="menuTab15Sheet" class="tabItem tab-pane"><div class="panel">{$ps_products}</div></div>
 	<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
 	<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
+	<div id="menuTab106Sheet" class="tabItem tab-pane"><div class="panel">{$ebayProductsExcluTab}</div></div>
+
 
 </div>
 <br clear="left" />

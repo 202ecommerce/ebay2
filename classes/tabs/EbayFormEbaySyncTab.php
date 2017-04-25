@@ -131,7 +131,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $root_category = Category::getRootCategory();
         $categories_ps = Category::getCategories($this->ebay_profile->id_lang);
         $category_list = $this->ebay->getChildCategories($categories_ps, $root_category->id_parent, array(), '');
-
+        $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
         $smarty_vars = array(
             'category_alerts'         => $this->_getAlertCategories(),
             'path'                    => $this->path,
@@ -163,7 +163,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'id_lang' => $this->ebay_profile->id_lang,
             'id_employee' => $this->context->employee->id,
             'date' => pSQL(date('Ymdhis')),
-            'shipping_tab_is_conf'      =>  (empty(EbayShipping::getNationalShippings($this->ebay_profile->id))?1:0),
+            'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
 
         );
 
