@@ -375,7 +375,7 @@ class EbayRequest
                 if ($data== 1) {
                     $this->importBusinessPolicies();
                 }
-                EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $data);
+                $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', $data);
             }
         }}
         return $userProfile;
@@ -1583,8 +1583,8 @@ class EbayRequest
         if ($config[0] === 'true') {
             $config_business_policies = 1;
         }
+        $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', $config_business_policies);
 
-        EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $config_business_policies);
         if ($config[0] === 'true') {
             if ($datas->SupportedSellerProfiles) {
                 Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_business_policies`

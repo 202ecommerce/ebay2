@@ -86,6 +86,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
 
                     $nb_products_blocked = 0;
+                    $nb_products_variations_blocked = 0;
                     $nb_products_man = Db::getInstance()->ExecuteS($sql);
                     $nb_products_variations = 0;
                     if ($nb_products) {
@@ -95,6 +96,7 @@ class EbayFormEbaySyncTab extends EbayTab
                             $nb_products_variations += count($variation);
                             if ($product_ps['blacklisted']) {
                                 $nb_products_blocked += 1;
+                                $nb_products_variations_blocked +=count($variation);
                             }
                         }
                     }
@@ -103,24 +105,33 @@ class EbayFormEbaySyncTab extends EbayTab
                    // $is_multi = EbayCategory::getInheritedIsMultiSku($category_config_list[$category['id_category']]['id_ebay_category'], $this->ebay_profile->ebay_site_id);
                     $ebay_category = EbaySynchronizer::__getEbayCategory($category['id_category'], $this->ebay_profile);
                     $id_category_boutique =EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($this->ebay_profile->id, $category['id_category']);
+                    if ($category_config_list[$category['id_category']]['percent']) {
+                        preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category_config_list[$category['id_category']]['percent'], $temp);
+                        $prix = array('sign' => $temp[1], 'value' => $temp[2], 'type' => ($temp[3]==''?'€':$temp[3]));
+                    } else {
+                        $prix = array('sign' => '', 'value' => '', 'type' => '');
+                    }
 
                     $categories[] = array(
                         'row_class' => $alt_row ? 'alt_row' : '',
                         'value'     => $category['id_category'],
                         'checked'   => ($category_config_list[$category['id_category']]['sync'] == 1 ? 'checked="checked"' : ''),
                         'name'      => $category['name'],
-                        'price' => $category_config_list[$category['id_category']]['percent']?$category_config_list[$category['id_category']]['percent']:0,
+                        'price' => $prix['sign'].$prix['value'].$prix['type'],
                         'category_ebay' => $category_ebay[0]['name'],
                         'category_multi' => $ebay_category->isMultiSku()?'yes' : 'non',
                         'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category']),
                         'nb_products' => count($nb_products_man),
                         'nb_products_variations' => $nb_products_variations,
                         'nb_products_blocked' => $nb_products_blocked,
+                        'nb_variations_tosync' => $nb_products_variations - $nb_products_variations_blocked,
+                        'nb_product_tosync' => count($nb_products_man) - $nb_products_blocked,
                     );
                     $alt_row = !$alt_row;
                 }
             }
         }
+
         $nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
         $sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
         $ebay_category_list = Db::getInstance()->executeS('SELECT *

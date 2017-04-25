@@ -142,6 +142,12 @@ class EbayFormShippingTab extends EbayTab
                     EbayShipping::insert($this->ebay_profile->id, $ebay_carrier, $infos[0], $extra_fees[$key], $infos[1]);
                 }
             }
+            $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
+
+            foreach ($products as $product_id) {
+                $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
+                EbayTaskManager::addTask('update',$product, null, $this->ebay_profile->id);
+            }
         }
     }
 }

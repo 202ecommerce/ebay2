@@ -194,9 +194,10 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
 
             if ($category['percent']) {
                 preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category['percent'], $temp);
-                $category['percent'] = array('sign' => $temp[1], 'value' => $temp[2], 'type' => $temp[3]);
+
+                $category['percent'] = array('sign' => $temp[1], 'value' => $temp[2], 'type' => ($temp[3]==''?'€':$temp[3]));
             } else {
-                $category['percent'] = array('sign' => '', 'value' => '', 'type' => '');
+                $category['percent'] = array('sign' => '+', 'value' => '', 'type' => '€');
             }
         }
         $smarty = Context::getContext()->smarty;

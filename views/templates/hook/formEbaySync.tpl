@@ -166,6 +166,18 @@
 			}
 		});
 
+		$('.categorySync').change(function() {
+			var id_product = $(this).val();
+			$.ajax({
+				cache: false,
+				dataType: 'json',
+				type: "POST",
+				url: module_dir + "ebay/ajax/ActiveCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_product,
+				success: function(data) {
+
+				}
+			});
+		});
 
 
 		$('.add_categories_ps li').live('click', function() {
@@ -501,7 +513,8 @@
 								<td>{$category.price|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
 								<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
-								<td>{$category.annonces|escape:'htmlall':'UTF-8'}</td>
+								<td>{$category.annonces|escape:'htmlall':'UTF-8'}/
+									{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
 								<td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
 								<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span> Modifier</a></td>
 							</tr>

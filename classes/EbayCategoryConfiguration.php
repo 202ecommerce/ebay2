@@ -231,6 +231,14 @@ class EbayCategoryConfiguration
 			AND `id_category` = '.(int)$id_category);
     }
 
+    public static function getConfigByCategoryId($id_ebay_profile, $id_category)
+    {
+        return Db::getInstance()->executeS('SELECT *
+			FROM `'._DB_PREFIX_.'ebay_category_configuration`
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND `id_category` = '.(int)$id_category);
+    }
+
     public static function getNbPrestashopCategories($id_ebay_profile)
     {
         return Db::getInstance()->getValue('SELECT count(*)

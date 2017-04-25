@@ -51,7 +51,7 @@ if ($ebay_category) {
         $date = date('Y-m-d H:i:s');
         if ($percent['value'] != '') {
             //$percent_sign_type = explode(':', $percent['sign']);
-            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').$percent['value'].($percent['type'] == 'percent' ? '%' : '€');
+            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').$percent['value'].($percent['type'] == 'percent' ? '%' : '');
         } else {
             $percentValue = null;
         }
@@ -63,9 +63,8 @@ if ($ebay_category) {
             'id_category' => (int) $id_category,
             'percent' => pSQL($percentValue),
             'date_upd' => pSQL($date),
-            'sync' => 0,
+            'sync' => 1,
         );
-        var_dump($data);
         if (EbayCategoryConfiguration::getIdByCategoryId($id_ebay_profile, $id_category)) {
             if ($data) {
                 EbayCategoryConfiguration::updateByIdProfileAndIdCategory($id_ebay_profile, $id_category, $data);
@@ -119,6 +118,7 @@ if (is_array(Tools::getValue('showed_products'))) {
             'blacklisted' => in_array($product_id, $to_synchronize_product_ids) ? 0 : 1,
             'extra_images' => 0,
         ));
+
     }
 
 }

@@ -142,7 +142,10 @@ class EbaySynchronizer
 
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
 
-            $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
+            if($data['variations'][0]) {
+                $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
+            }
+            
             $ebay = EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'),$id_product_attribute, $data['id_category_ps']);
         }
 
@@ -346,6 +349,7 @@ class EbaySynchronizer
      */
     public static function __loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_atributte = 0)
     {
+
         $variations = array();
         $combinations = array();
 
@@ -359,7 +363,9 @@ class EbaySynchronizer
 
             $context_correct_shop = $context->cloneContext();
             $context_correct_shop->shop = new Shop($ebay_profile->id_shop);
+
             $specific_price_output = null;
+
             $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
 
             $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
