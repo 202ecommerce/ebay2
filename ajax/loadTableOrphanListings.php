@@ -102,6 +102,7 @@ if ($is_one_five) {
         pl.`name`                            AS psProductName,
         ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
         ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
+        ecc.`sync`                           AS sync,
         ec.`id_category_ref`
     FROM `'._DB_PREFIX_.'ebay_product` ep
     
@@ -178,6 +179,8 @@ foreach ($res as &$row) {
     } elseif (!$row['active'] || $row['blacklisted']) {
         $final_res[] = $row;
     } elseif (is_null($row['id_category_ref'])) {
+        $final_res[] = $row;
+    } elseif (!$row['sync']) {
         $final_res[] = $row;
     }
 }
