@@ -1914,7 +1914,7 @@ class Ebay extends Module
             'alert_exit_import_categories' => $this->l('Import of eBay category is running.'),
             'order_returns' => $order_returns->getContent(),
             'orders_returns_sync' => $orders_returns_sync->getContent(),
-            'dashboard' =>   $dashboard->getContent(),
+            'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
             'count_order_errors' => count(EbayOrderErrors::getAll($this->ebay_profile->id)),

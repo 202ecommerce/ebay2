@@ -162,7 +162,7 @@ class EbayTaskManager
     public static function toJob()
     {
         $tasks = self::getJob();
-
+        Configuration::updateValue('DATE_LAST_SYNC_PRODUCTS', date('Y-m-d H:i:s'));
         if ($tasks) {
             while ($row = $tasks->fetch(PDO::FETCH_ASSOC)) {
                 $response = EbaySynchronizer::callFunction(self::getMethode($row['id_task']), array('id_product' => $row['id_product'], 'id_product_attribute' => $row['id_product_attribute'], 'id_ebay_profile' => $row['id_ebay_profile']));
@@ -175,7 +175,7 @@ class EbayTaskManager
     {
         $unidId = uniqid();
         if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0', 1000)) {
-            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_created`');
+            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_add`');
         }
         return false;
     }
@@ -216,7 +216,7 @@ class EbayTaskManager
 
     public static function getErrors($id_ebay_profile) {
 
-        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_created`');
+        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }
     public static function deleteErrorsForProduct($id_product) {
 

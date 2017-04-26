@@ -27,10 +27,19 @@
 class EbayDashboardTab extends EbayTab
 {
 
-    public function getContent()
+    public function getContent($id_ebay_profiles)
     {
+        $nb_products = EbayProduct::getNbProductsByIdEbayProfiles(array($id_ebay_profiles));
 
-        return $this->display('dashboard.tpl', array(
-        ));
+        $vars = array(
+            'nb_tasks' => EbayTaskManager::getNbTasks($id_ebay_profiles),
+            'count_order_errors' => count(EbayOrderErrors::getAll($id_ebay_profiles)),
+            'count_product_errors' => count(EbayTaskManager::getErrors($id_ebay_profiles)),
+            'nb_products' => (isset($nb_products[$id_ebay_profiles]) ? $nb_products[$id_ebay_profiles] : 0),
+            'dernier_import_order' => EbayConfiguration::get($id_ebay_profiles,'EBAY_ORDER_LAST_UPDATE'),
+            'dernier_import_product' => Configuration::get('DATE_LAST_SYNC_PRODUCTS'),
+        );
+
+        return $this->display('dashboard.tpl', $vars);
     }
 }

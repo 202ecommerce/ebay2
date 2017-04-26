@@ -78,7 +78,8 @@
     // Select item from user dropdown
     $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
         var url_ebay = "{$url_ebay}";
-        $(location).attr('href',url_ebay);
+
+        $(location).attr('href',url_ebay+'&ebay_profile='+$(this).data('value'));
     });
 
     /* $('.ebay_profils').change(function() {

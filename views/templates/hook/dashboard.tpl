@@ -10,18 +10,17 @@
 
 <br>
 <h4>Produits</h4>
-Nombre d’annonces eBay :<br>
-Produits en erreur : <br>
-Produits en attente :  ?<br>
-Flux produits : cron / PrestaShop ?<br>
+Nombre d’annonces eBay : {$nb_products}<br>
+Produits en erreur : {$count_product_errors}<br>
+Produits en attente :  {$nb_tasks}<br>
 <br>
 <h4>Ventes internationales passives</h4>
 Nombre de sites eBay :<br>
 <br>
 <h4>Commandes</h4>
 CA eBay 30 derniers jours : <br>
-Commandes en erreur : <br>
-Dernier import : 2017-03-08 12:34:57 par cron / PrestaShop<br>
+Commandes en erreur : {$count_order_errors}<br>
+Dernier import : {$dernier_import_order}<br>
 </div>
 
 <div class="col-md-3">
