@@ -764,17 +764,18 @@ class Ebay extends Module
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
         }
+
+
+
+        if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
+        // if the module is not upgraded or not configured don't do anything
+            return false;
+        }
         $ebay_site_id=$this->ebay_profile->ebay_site_id;
         if (Tools::getValue('resynchCategories')) {
             Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
             EbayCategoryConfiguration::deleteByIdProfile($this->ebay_profile->id);
         }
-
-        if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-// if the module is not upgraded or not configured don't do anything
-            return false;
-        }
-
         // if multishop, change context Shop to be default
         if ($this->is_multishop) {
             $old_context_shop = $this->__getContextShop();
