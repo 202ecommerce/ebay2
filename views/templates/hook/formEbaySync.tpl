@@ -333,11 +333,10 @@
 			// Item Conditions
 			var ebay_conditions = data.conditions;
 			var alt_row = true;
-
-			for (var condition_type in conditions_data)
-			{
-				var condition_data = conditions_data[condition_type];
-				var tds = '<td><select name="condition[' + category_id + '][' + condition_type + ']">';
+			if(Object.keys(ebay_conditions).length > 0) {
+				for (var condition_type in conditions_data) {
+					var condition_data = conditions_data[condition_type];
+					var tds = '<td><select name="condition[' + category_id + '][' + condition_type + ']">';
 
 				for (var id in ebay_conditions)
 					tds += '<option value="' + id + '" ' + ($.inArray(condition_type, ebay_conditions[id].types) >= 0 ? 'selected' : '') + '>' + ebay_conditions[id].name + '</option>';
@@ -345,9 +344,9 @@
 				tds += '</td><td>' + condition_data + '</td>';
 				trs += '<tr ' + (alt_row ? 'class="alt_row"' : '')+ 'category="'+ category_id + '">' + tds + '</tr>';
 
-				alt_row = !alt_row;
+					alt_row = !alt_row;
+				}
 			}
-
 			if (has_optionals)
 				trs += '<tr id="switch-optionals-' + category_id + '"><td><a href="#" onclick="return showOptionals(' + category_id + ')">See optional items</a></td><td></td></tr>';
 

@@ -196,7 +196,9 @@
                                             <button type="button" class="js-popin btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                                 <i class="icon-trash"></i>
                                             </button>
-
+                                            {if $debug == 1}
+                                                <small  style="background-color: #F80; color: #FFF; padding:5px;">in SANDBOX mode  !!</small>
+                                            {/if}
                                             <div class="pull-right">
             <span title="<h4>Aide</h4><p>Ici une paragraphe explicatif sur le fonctionnement du selecteur de profil.</p>" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
               <i class="process-icon-help"></i>
