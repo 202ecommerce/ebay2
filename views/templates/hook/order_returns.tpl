@@ -23,12 +23,13 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
-    <p>
-        <b>{l s='The "refunds and returns" tab displays all refunds and returns created on eBay and associated with an order imported in PrestaShop.' mod='ebay'}</b><br/>
-
-    </p>
-
+<p>
+<span><b>{l s='Retours importés par tâche cron. Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
+</p>
+<br>
+<a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"><input type="button" class="button"
+                                                                            value="{l s='Sync refunds and returns from eBay' mod='ebay'}"/></a>
+<br>
 
     <!-- table -->
 

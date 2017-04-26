@@ -193,7 +193,7 @@
                                                <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}"> <i class="icon-plus"></i></a>
                                             </button>
 
-                                            <button type="button" class="js-popin btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile">
+                                            <button type="button" class="js-popin btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                                 <i class="icon-trash"></i>
                                             </button>
 
@@ -297,9 +297,9 @@
     <div class="sidebar navigation col-md-3 col-lg-2">
         <ul class="list-group nav">
             <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashbord" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
-            <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#test2" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-success">{$count_order_errors}</span>{/if}</a>
-            <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#test3" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Annonces' mod='ebay'} {if $count_product_errors > 0}<span class="badge badge-danger">{$count_product_errors}</span>{/if}</a>
-            <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#test4" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>
+            <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-success">{$count_order_errors}</span>{/if}</a>
+            <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Annonces' mod='ebay'} {if $count_product_errors > 0}<span class="badge badge-danger">{$count_product_errors}</span>{/if}</a>
+            <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>
         </ul>
     </div>
       {*  <div class="ebay-boxes-2-col-table">
@@ -346,7 +346,10 @@
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
           'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
-          'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}"
+          'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}",
+            'Are you sure you want to exclure this product?' : "{l s='Are you sure you want to exclure this product?' mod='ebay'}",
+            'Are you sure you want to inclure this product?' : "{l s='Are you sure you want to inclure this product?' mod='ebay'}",
+            'Are you sure you want to delete this category?' : "{l s='Are you sure you want to delete this category?' mod='ebay'}"
         };
 
         var delete_profile_url = '{$delete_profile_url|escape:'htmlall':'UTF-8'}';

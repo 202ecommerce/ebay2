@@ -179,6 +179,21 @@
 			});
 		});
 
+		$('.delete_cat').on('click', function() {
+			var tr = $(this).parent().parent();
+			var id_category = $(this).data('id')
+			if (confirm(header_ebay_l['Are you sure you want to delete this category?'])) {
+				$.ajax({
+					cache: false,
+					dataType: 'json',
+					type: "POST",
+					url: module_dir + "ebay/ajax/deleteConfigCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_category,
+					success: function (data) {
+						tr.remove();
+					}
+				});
+			}
+		});
 
 		$('.add_categories_ps li').live('click', function() {
 			$('.category_ps_list').append($( this ));
@@ -516,7 +531,8 @@
 								<td>{$category.annonces|escape:'htmlall':'UTF-8'}/
 									{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
 								<td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
-								<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span> Modifier</a></td>
+								<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span> Modifier</a>
+									<a href="#" class="delete_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>DELETE</a></td>
 							</tr>
 						{/foreach}
 					{/if}

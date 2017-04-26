@@ -32,7 +32,10 @@ class EbayFormEbaySyncTab extends EbayTab
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
             return '<p class="error"><b>' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
-
+        $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
+        if (empty($national_shipping)) {
+            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'National Shipping\' tab before using this tab', 'ebayformebaysynctab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+        }
         $nb_products_mode_a = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "A");
         $nb_products_mode_b = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "B");
 
@@ -142,7 +145,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $root_category = Category::getRootCategory();
         $categories_ps = Category::getCategories($this->ebay_profile->id_lang);
         $category_list = $this->ebay->getChildCategories($categories_ps, $root_category->id_parent, array(), '');
-        $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
+
         $smarty_vars = array(
             'category_alerts'         => $this->_getAlertCategories(),
             'path'                    => $this->path,

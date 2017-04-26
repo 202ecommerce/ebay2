@@ -35,6 +35,13 @@
         <th class="center">
             <span>{l s='Nom' mod='ebay'}</span>
         </th>
+        <th class="center">
+            <span>{l s='Category PrestaShop' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span>{l s='Category Ebay' mod='ebay'}</span>
+        </th>
 
         <th class="center">{l s='Actions' mod='ebay'}</th>
 
@@ -45,8 +52,10 @@
     {if isset($products)}
         {foreach from=$products item="product"}
             <tr>
-                <td>{$product.id_product|escape:'htmlall':'UTF-8'}</td>
-                <td>{$product.name|escape:'htmlall':'UTF-8'}</td>
+                <td class="center">{$product.id_product|escape:'htmlall':'UTF-8'}</td>
+                <td class="center">{$product.name|escape:'htmlall':'UTF-8'}</td>
+                <td class="center">{$product.category_ps|escape:'htmlall':'UTF-8'}</td>
+                <td class="center"> {$product.category_ebay|escape:'htmlall':'UTF-8'}</td>
                 <td ><a class="btn btn-xs btn-block btn-warning" name="incluProduct" id="{$product.id_product}" href="#">{l s='Inclu' mod='ebay'}</a></td>
             </tr>
         {/foreach}
@@ -57,17 +66,20 @@
 
 {literal}
 <script>
+    var id_employee = {/literal}{$id_employee|escape:'htmlall':'UTF-8'}{literal};
     $('a[name="incluProduct"]').click(function (e) {
         var tr = $(this).parent().parent();
         e.preventDefault();
+        if (confirm(header_ebay_l['Are you sure you want to inclure this product?'])) {
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/inclureProductAjax.php',
-            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_product="+$(this).attr('id'),
+            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
             success: function (data) {
                 tr.remove();
             }
         });
+        }
     });
     {/literal}
 </script>

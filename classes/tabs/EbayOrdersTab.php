@@ -65,6 +65,18 @@ class EbayOrdersTab extends EbayTab
         }
         $vars['id_ebay_profile'] = $id_ebay_profile;
         $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
+
+        $url_vars = array(
+            'id_tab' => '6',
+            'section' => 'orders',
+        );
+
+        $url_vars['controller'] = Tools::getValue('controller');
+        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile,'EBAY_ORDER_LAST_UPDATE'));
+
+
+        $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+        $vars['url'] = $this->_getUrl($url_vars);
         return $this->display('tableOrders.tpl', $vars);
     }
 }

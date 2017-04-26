@@ -35,9 +35,16 @@ class EbayProductsExcluTab extends EbayTab
         if(!empty($ids_products)) {
             foreach ($ids_products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $ebay_profile->id_lang);
+               $ebay_category_id = EbayCategoryConfiguration::getConfigByCategoryId($ebay_profile->id, $product->id_category_default);
+                if($ebay_category_id){
+                    $ebay_category = EbayCategoryConfiguration::getEbayCategoryById($ebay_profile->id, $ebay_category_id[0]['id_ebay_category']);
+                }
+                $category_ps = new Category($product->id_category_default, $ebay_profile->id_lang);
                 $products[] = array(
                     'id_product' => $product_id['id_product'],
-                    'name' => $product->name
+                    'name' => $product->name,
+                    'category_ebay' => (isset($ebay_category[0]['name'])?$ebay_category[0]['name']:''),
+                    'category_ps' => $category_ps->name,
                 );
             }
         }
@@ -45,6 +52,7 @@ class EbayProductsExcluTab extends EbayTab
             'products' => $products,
             'id_ebay_profile' => $ebay_profile->id,
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+            'id_employee' => $this->context->employee->id,
         );
 
         return $this->display('tableProductsExclu.tpl', $vars);

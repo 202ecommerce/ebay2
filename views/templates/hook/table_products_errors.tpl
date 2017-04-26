@@ -102,6 +102,7 @@
 <script>
     $('.exclure_product').click(function (e) {
         e.preventDefault();
+        if (confirm(header_ebay_l['Are you sure you want to exclure this product?'])) {
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/exclureProductAjax.php',
@@ -110,6 +111,7 @@
                 $(this).parent().parent().remove();
             }
         });
+        }
     });
     {/literal}
 </script>

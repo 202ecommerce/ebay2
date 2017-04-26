@@ -73,8 +73,8 @@ if (Module::isInstalled('ebay')) {
                         'id_categories_ref_parent' => pSQL($cat['CategoryParentID']),
                         'level' => pSQL($cat['CategoryLevel'])
                     ));
-	    Db::getInstance()->execute('insert INTO `'._DB_PREFIX_.'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES 
-		    ('.pSQL($cat['CategoryName']).',
+	    Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES 
+		    ("'.pSQL($cat['CategoryName']).'",
 		    '.pSQL($cat['CategoryID']).',
 		    '.pSQL($cat['CategoryParentID']).',
 		    '.pSQL($cat['CategoryLevel']).')');
@@ -83,6 +83,7 @@ if (Module::isInstalled('ebay')) {
 
             } elseif ($step == 3) {
                 $id_profile_ebay = Tools::getValue('id_profile_ebay');
+                ini_set('max_execution_time', 300);
                 $res=$validator->comparationCategories($id_profile_ebay);
                 $validator->deleteTmp();
                 echo Tools::jsonEncode($res);

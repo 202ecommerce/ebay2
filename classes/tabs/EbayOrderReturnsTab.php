@@ -27,13 +27,25 @@
 class EbayOrderReturnsTab extends EbayTab
 {
 
-    public function getContent()
+    public function getContent($id_ebay_profile)
     {
         // Load prestashop ebay's configuration
         $returns= EbayOrder::getAllReturns();
-        
+        $url_vars = array(
+            'id_tab' => '78',
+            'section' => 'orders',
+        );
+
+        $url_vars['controller'] = Tools::getValue('controller');
+
+        $url = $this->_getUrl($url_vars);
+        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile,'EBAY_ORDER_LAST_UPDATE'));
+
+        $date_last_import = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         return $this->display('order_returns.tpl', array(
             'returns' => $returns,
+            'url' => $url,
+            'date_last_import' => $date_last_import,
         ));
     }
 }

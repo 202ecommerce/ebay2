@@ -1525,7 +1525,7 @@ class Ebay extends Module
         $alerts = $this->__getAlerts();
 
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
-        $ebay_task_errors = EbayTaskManager::getErrors($this->ebay_profile->id);
+
         $url_data = array(
             'version' => $this->version,
             'shop' => urlencode(Configuration::get('PS_SHOP_NAME')),
@@ -1536,7 +1536,7 @@ class Ebay extends Module
             'id_lang' => (int) $this->context->language->id,
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
             'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
-            'count_order_errors' => count(EbayOrderErrors::getAll($this->ebay_profile->id)),
+            'count_order_errors' => ($this->ebay_profile?count(EbayOrderErrors::getAll($this->ebay_profile->id)):false),
             'count_product_errors' => ($this->ebay_profile?count(EbayTaskManager::getErrors($this->ebay_profile->id)):false),
         );
         $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
@@ -1579,13 +1579,13 @@ class Ebay extends Module
         $add_profile_url = $this->__getUrl($url_vars);
 
         // main tab
-        $id_tab = Tools::getValue('id_tab', 1);
-        if (in_array($id_tab, array(5, 14))) {
-            $main_tab = 'sync';
-        } elseif (in_array($id_tab, array(15, 16, 9, 6, 11, 12))) {
-            $main_tab = 'visu';
-        } elseif (in_array($id_tab, array(13))) {
-            $main_tab = 'advanced-settings';
+        $id_tab = Tools::getValue('id_tab', 81);
+        if (in_array($id_tab, array(6, 78))) {
+            $main_tab = 'orders';
+        } elseif (in_array($id_tab, array(5, 80, 9, 16, 106))) {
+            $main_tab = 'annonces';
+        } elseif (in_array($id_tab, array(1,101,102,3,103,4,13))) {
+            $main_tab = 'settings';
         } else {
             $main_tab = 'dashbord';
         }
@@ -1914,7 +1914,7 @@ class Ebay extends Module
             'admin_path' => basename(_PS_ADMIN_DIR_),
             'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
             'alert_exit_import_categories' => $this->l('Import of eBay category is running.'),
-            'order_returns' => $order_returns->getContent(),
+            'order_returns' => $order_returns->getContent($this->ebay_profile->id),
             'orders_returns_sync' => $orders_returns_sync->getContent(),
             'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),

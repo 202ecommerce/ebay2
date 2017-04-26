@@ -105,13 +105,6 @@ if (is_array(Tools::getValue('showed_products'))) {
         $to_synchronize_product_ids = array();
     }
 
-    foreach ($to_synchronize_product_ids as $product_id_to_sync){
-        $product = new Product($product_id_to_sync);
-        EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), $id_ebay_profile);
-    }
-    // TODO remove extra_images
-
-
     foreach ($showed_product_ids as $product_id) {
         EbayProductConfiguration::insertOrUpdate($product_id, array(
             'id_ebay_profile' => $id_ebay_profile,
@@ -120,6 +113,15 @@ if (is_array(Tools::getValue('showed_products'))) {
         ));
 
     }
+
+    foreach ($to_synchronize_product_ids as $product_id_to_sync){
+        $product = new Product($product_id_to_sync);
+        EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), $id_ebay_profile);
+    }
+    // TODO remove extra_images
+
+
+
 
 }
 

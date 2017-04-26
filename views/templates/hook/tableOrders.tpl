@@ -22,17 +22,16 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
-    <h2>{l s='Orders History' mod='ebay'} :</h2>
-    <div class="ebay_mind big">{l s='If you have orders with NOSEND-EBAY in the email client, you can contact us to open a support ticket.' mod='ebay'}
-        <a class="kb-help" data-errorcode="HELP-VISUALIZATION-NO-SEND-EBAY" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}"
-           module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}"></a></div>
-
-
-
+<p>
+<span><b>{l s='Commandes importées par tâche cron. Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
+</p>
+<br>
+<a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"><input type="button" class="button"
+                                                                    value="{l s='Sync Orders from eBay' mod='ebay'}"/></a>
+<br>
     <!-- table -->
 
-    <table id="OrphanListings" class="table " >
+    <table id="OrderListings" class="table " >
         <thead>
         <tr >
 
