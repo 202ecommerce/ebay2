@@ -334,10 +334,11 @@ class Ebay extends Module
         $this->ebay_profile = EbayProfile::getCurrent();
 
         $this->setConfiguration('EBAY_INSTALL_DATE', date('Y-m-d\TH:i:s.000\Z'));
-        $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', 0);
+
         // Picture size
         if ($this->ebay_profile) {
             $this->ebay_profile->setPicturesSettings();
+            $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', 0);
         }
 
         // Init
