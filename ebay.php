@@ -1428,11 +1428,17 @@ class Ebay extends Module
             'profiles' => $profiles,
             'nb_errors' => $nb_errors,
             'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
+            '_module_ebay_dir_' => _MODULE_DIR_,
+            'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
+            'cron_url' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
         );
         $this->smarty->assign($smarty_vars);
         return $this->display(__FILE__, 'views/templates/hook/header_info.tpl');
     }
-
+    protected function _getModuleUrl()
+    {
+        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+    }
     /**
      * Main Form Method
      *

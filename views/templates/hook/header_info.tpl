@@ -87,6 +87,21 @@
         $(location).attr('href',url_ebay+'&ebay_profile='+$(this).data('value'));
     });
 
+    $(document).ready(function(){
+        var _module_ebay_dir_ = "{$_module_ebay_dir_}";
+        var ebay_token = "{$ebay_token}";
+        var cron_url = "{$cron_url}";
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: _module_ebay_dir_ + 'ebay/ajax/toJobEbay.php?token=' + ebay_token +'&cron_url='  + cron_url ,
+            success: function (data) {
+
+            }
+        });
+
+    });
+
     /* $('.ebay_profils').change(function() {
      $('.change_profile').find("input[name=ebay_profile]").val($( ".ebay_profils option:selected").attr('id'));
      $('.change_profile').submit();
