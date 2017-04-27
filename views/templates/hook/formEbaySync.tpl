@@ -172,9 +172,9 @@
 				cache: false,
 				dataType: 'json',
 				type: "POST",
-				url: module_dir + "ebay/ajax/ActiveCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_product,
+				url: module_dir + "ebay/ajax/ActiveCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_product + "&id_employee=" + id_employee + "&id_lang=" + id_lang,
 				success: function(data) {
-
+					$('.orhan_badge').html(data);
 				}
 			});
 		});
@@ -338,11 +338,11 @@
 					var condition_data = conditions_data[condition_type];
 					var tds = '<td><select name="condition[' + category_id + '][' + condition_type + ']">';
 
-				for (var id in ebay_conditions)
-					tds += '<option value="' + id + '" ' + ($.inArray(condition_type, ebay_conditions[id].types) >= 0 ? 'selected' : '') + '>' + ebay_conditions[id].name + '</option>';
+					for (var id in ebay_conditions)
+						tds += '<option value="' + id + '" ' + ($.inArray(condition_type, ebay_conditions[id].types) >= 0 ? 'selected' : '') + '>' + ebay_conditions[id].name + '</option>';
 
-				tds += '</td><td>' + condition_data + '</td>';
-				trs += '<tr ' + (alt_row ? 'class="alt_row"' : '')+ 'category="'+ category_id + '">' + tds + '</tr>';
+					tds += '</td><td>' + condition_data + '</td>';
+					trs += '<tr ' + (alt_row ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
 
 					alt_row = !alt_row;
 				}
@@ -415,6 +415,7 @@
 				$('#divPsCategories').html('');
 			}
 		});
+
 
 	});
 

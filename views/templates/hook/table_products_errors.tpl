@@ -43,9 +43,6 @@
                     <span>{l s='Nom' mod='ebay'}</span>
                 </th>
 
-                <th class="center">
-                    <span >{l s='Declinaison' mod='ebay'}</span>
-                </th>
 
                 <th>
                     <span >{l s='Annonces eBay' mod='ebay'}</span>
@@ -79,7 +76,6 @@
                         <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.id_product|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$task_error.declinason|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
                         <td >{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>

@@ -56,6 +56,9 @@ class EbayListErrorsProductsTab extends EbayTab
                 case 11:
                     $error = 'Mise à jour refusée';
                     break;
+                case 13:
+                    $error = 'Mise à jour du stock refusée';
+                    break;
                 case 14:
                     $error = 'Supprimant refusée';
                     break;

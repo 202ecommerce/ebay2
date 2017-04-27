@@ -30,10 +30,11 @@ function loadOrphans() {
 		url: module_dir + "ebay/ajax/loadTableOrphanListings.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile+'&id_shop='+id_shop,
 		success : function(data) {
       
-      console.log(data);
+            var datas = jQuery.parseJSON(data);
       
       $("table#OrphanListings tbody #removeRow").remove();
-      $("table#OrphanListings tbody").html(data);
+      $("table#OrphanListings tbody").html(datas.table);
+            $('.orhan_badge').html(datas.count);
       
       $('#orphans-form-view').hide();
       
@@ -50,7 +51,7 @@ function loadOrphans() {
         
       	$.ajax({
       		type: "POST",
-      		url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref,
+      		url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee,
       		success : function(data) {
       
             if (data == '1')

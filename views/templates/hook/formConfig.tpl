@@ -62,7 +62,7 @@
 	<li role="presentation" id="menuTab80" class="menuTabButton "><a href="#">{l s='List Errors Products' mod='ebay'}{if $count_product_errors > 0}<span class="badge">{$count_product_errors}</span>{/if}</a></li>
 
 	<li role="presentation" id="menuTab9" class="menuTabButton"><a href="#">{l s='Ebay Listings' mod='ebay'}</a></li>
-	<li role="presentation" id="menuTab16" class="menuTabButton"><a href="#">{l s='Orphan Listings' mod='ebay'}</a></li>
+	<li role="presentation" id="menuTab16" class="menuTabButton"><a href="#">{l s='Orphan Listings' mod='ebay'}<span class="badge orhan_badge">{if $count_orphan_listing > 0}{$count_orphan_listing}{/if}</span></a></li>
 	<li role="presentation" id="menuTab106" class="menuTabButton"><a href="#">{l s='Products Exclu' mod='ebay'}</a></li>
 
 
@@ -70,7 +70,7 @@
 
 <ul class=" nav nav-pills orders-menu menuTab ebay_hidden" role="tablist">
 
-	<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_product_errors > 0}<span class="badge">{$count_order_errors}</span>{/if}</a></li>
+	<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_order_errors > 0}<span class="badge badge-success">{$count_order_errors}</span>{/if}</a></li>
 
 	<li role="presentation" id="menuTab78" class="menuTabButton"><a href="#">{l s='Order Returns' mod='ebay'}</a></li>
 

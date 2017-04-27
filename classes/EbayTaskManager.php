@@ -46,7 +46,7 @@ class EbayTaskManager
 
     }
 
-    public static function addTask($type, $product, $id_employee = null, $id_ebay_profile = null)
+    public static function addTask($type, $product, $id_employee = null, $id_ebay_profile = null, $id_product_attribute = null)
     {
 
         $ebay_profiles = EbayProfile::getProfilesByIdShop();
@@ -57,20 +57,25 @@ class EbayTaskManager
         if(!isset($context->employee) && isset($id_employee)){
             $context->employee = new Employee($id_employee);
         }
-        if(!$product->active){
-            self::deleteTaskForPorduct($product->id);
-            return true;
-        }
+
         if ($type == 'end') {
+
             foreach ($ebay_profiles as $profile) {
                 $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
                 if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
-                    self::insertTask($product->id, 0, 14, $profile['id_ebay_profile']);
+                    if (isset($id_product_attribute)) {
+                        self::insertTask($product->id, $id_product_attribute, 14, $profile['id_ebay_profile']);
+                    } else {
+                        self::insertTask($product->id, 0, 14, $profile['id_ebay_profile']);
+                    }
                 }
             }
             return true;
         }
-
+        if(!$product->active){
+            self::deleteTaskForPorduct($product->id);
+            return true;
+        }
         if (isset($product->id)) {
 
             foreach ($ebay_profiles as $profile) {

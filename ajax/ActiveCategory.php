@@ -39,3 +39,33 @@ if($category_conf[0]['sync']){
     $value =1;
 }
 EbayCategoryConfiguration::updateByIdProfileAndIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'), $data = array('sync' => $value));
+
+if ($value) {
+    $sql = 'SELECT p.`id_product`
+            FROM `'._DB_PREFIX_.'product` p';
+
+    $sql .= Shop::addSqlAssociation('product', 'p');
+    $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+                ON (p.`id_product` = pl.`id_product`
+                AND pl.`id_lang` = '.(int) Tools::getValue('ebay_category');
+    $sql .= Shop::addSqlRestrictionOnLang('pl');
+    $sql .= ')
+            LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)Tools::getValue('profile').'
+            LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+                ON p.`id_product` = sa.`id_product`
+                AND sa.`id_product_attribute` = 0
+            WHERE ';
+    $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_category');
+    $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+
+
+
+    $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
+    foreach ($to_synchronize_product_ids as $product_id_to_sync){
+        $product = new Product($product_id_to_sync['id_product']);
+        EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), Tools::getValue('profile'));
+    }
+}
+
+echo count(EbayProduct::getOrphanListing(Tools::getValue('profile')));

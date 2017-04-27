@@ -461,15 +461,6 @@ class Ebay extends Module
      **/
     public function uninstall()
     {
-        $sql =array();
-        // Uninstall SQL
-        include dirname(__FILE__).'/sql/sql-uninstall.php';
-
-        foreach ($sql as $s) {
-            if (!Db::getInstance()->execute($s)) {
-                return false;
-            }
-        }
 
         // Uninstall Module
         if (!parent::uninstall()
@@ -764,6 +755,7 @@ class Ebay extends Module
 
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
+            return false;
         }
 
 
@@ -1421,10 +1413,13 @@ class Ebay extends Module
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         $nb_errors=0;
         foreach ($profiles as &$profile) {
+            $ebay_profile_hook = new EbayProfile($profile['id_ebay_profile']);
             $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-            $profile['count_order_errors'] = count(EbayOrderErrors::getAll($profile['id_ebay_profile']));
-            $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
+            $profile['count_order_errors'] = (EbayOrderErrors::getAll($profile['id_ebay_profile'])?count(EbayOrderErrors::getAll($profile['id_ebay_profile'])):0);
+            $profile['count_product_errors'] = (EbayTaskManager::getErrors($profile['id_ebay_profile'])?count(EbayTaskManager::getErrors($profile['id_ebay_profile'])):0)+ count(EbayProduct::getOrphanListing($profile['id_ebay_profile']));
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
+            $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
+            $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
             $nb_errors +=$profile['count_product_errors'];
         }
         $link = $this->context->link;
@@ -1525,6 +1520,12 @@ class Ebay extends Module
         $alerts = $this->__getAlerts();
 
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
+        $count_order_errors = 0;
+        $count_product_errors = 0;
+        if($this->ebay_profile){
+            $count_order_errors = EbayOrderErrors::getAll($this->ebay_profile->id);
+            $count_product_errors =EbayTaskManager::getErrors($this->ebay_profile->id);
+        }
 
         $url_data = array(
             'version' => $this->version,
@@ -1536,8 +1537,7 @@ class Ebay extends Module
             'id_lang' => (int) $this->context->language->id,
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
             'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
-            'count_order_errors' => ($this->ebay_profile?count(EbayOrderErrors::getAll($this->ebay_profile->id)):false),
-            'count_product_errors' => ($this->ebay_profile?count(EbayTaskManager::getErrors($this->ebay_profile->id)):false),
+
         );
         $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
 
@@ -1559,10 +1559,13 @@ class Ebay extends Module
 
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         foreach ($profiles as &$profile) {
+            $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
             $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-            $profile['count_order_errors'] = count(EbayOrderErrors::getAll($profile['id_ebay_profile']));
-            $profile['count_product_errors'] = count(EbayTaskManager::getErrors($profile['id_ebay_profile']));
+            $profile['count_order_errors'] = (EbayOrderErrors::getAll($profile['id_ebay_profile'])?count(EbayOrderErrors::getAll($profile['id_ebay_profile'])):0);
+            $profile['count_product_errors'] = (EbayTaskManager::getErrors($profile['id_ebay_profile'])?count(EbayTaskManager::getErrors($profile['id_ebay_profile'])):0)+ count(EbayProduct::getOrphanListing($profile['id_ebay_profile']));
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
+            $profile['token'] = ($ebay_profile->getToken()?1:0);
+            $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
         }
 
         $add_profile = (Tools::getValue('action') == 'addProfile');
@@ -1639,7 +1642,10 @@ class Ebay extends Module
             'debug' => ($request->getDev())? 1:0,
             'id_lang' => ($this->ebay_profile && $this->ebay_profile->id_lang?$this->ebay_profile->id_lang:Configuration::get('PS_LANG_DEFAULT')),
             'id_ebay_profile' => ($this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : false),
-        ));
+            'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
+            'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
+            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ count(EbayProduct::getOrphanListing($this->ebay_profile->id)),
+            ));
 
         // test if multishop Screen and all shops
 
@@ -1892,6 +1898,15 @@ class Ebay extends Module
             $alert->sendDailyMail();
             $this->ebay_profile->setConfiguration('EBAY_LAST_ALERT_MAIL', date('Y-m-d\TH:i:s').'.000Z');
         }
+        $count_order_errors = 0;
+        $count_product_errors = 0;
+        $count_orphan_listing = 0;
+        if($this->ebay_profile){
+            $count_order_errors = EbayOrderErrors::getAll($this->ebay_profile->id);
+            $count_product_errors =EbayTaskManager::getErrors($this->ebay_profile->id);
+            $count_orphan_listing = EbayProduct::getOrphanListing($this->ebay_profile->id);
+        }
+
 
         $smarty_vars = array(
             'class_general' => 'uncinq',
@@ -1919,8 +1934,10 @@ class Ebay extends Module
             'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
-            'count_order_errors' => count(EbayOrderErrors::getAll($this->ebay_profile->id)),
-            'count_product_errors' => count(EbayTaskManager::getErrors($this->ebay_profile->id)),
+            'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
+            'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
+            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ count(EbayProduct::getOrphanListing($this->ebay_profile->id)),
+            'count_orphan_listing' => ($count_orphan_listing?count($count_orphan_listing):0),
             'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
             'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),

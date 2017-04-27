@@ -43,6 +43,7 @@ class EbayOrderReturnsTab extends EbayTab
 
         $date_last_import = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         return $this->display('order_returns.tpl', array(
+            'type_sync_returns' => (Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON')?'Cron':'Prestashop'),
             'returns' => $returns,
             'url' => $url,
             'date_last_import' => $date_last_import,

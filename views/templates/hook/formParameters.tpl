@@ -32,7 +32,7 @@
 
 	</script>
 	{/literal}
-{/if}
+{else}
 <script type="text/javascript">
 	var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
 	var catLoaded = 0;
@@ -288,3 +288,4 @@
 
 </form>
 
+{/if}

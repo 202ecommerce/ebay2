@@ -44,5 +44,8 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
 $product = EbayProduct::getProductsIdFromItemId($id_product_ref);
 EbayProduct::deleteByIdProductRef($id_product_ref);
 EbayTaskManager::deleteTaskForPorductAndEbayProfile($product['id_product'], $product['id_ebay_profile']);
+$product_ps = new Product($product['id_product'], false, Tools::getValue('id_lang'));
+
+EbayTaskManager::addTask('end', $product_ps, Tools::getValue('id_employee'), $product['id_ebay_profile'], $product['id_product_attribute']);
 
 echo '1';

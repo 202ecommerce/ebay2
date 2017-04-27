@@ -46,6 +46,7 @@ class EbayOrphanListingsTab extends EbayTab
         $template_vars = array(
             'id_ebay_profile' => $this->ebay_profile->id,
             'show_orphan_listings_url' => $show_orphan_listings_url,
+            'id_employee' => $this->context->employee->id,
         );
 
         return $this->display('orphan_listings.tpl', $template_vars);

@@ -24,7 +24,8 @@
 *}
 
 <p>
-<span><b>{l s='Retours importés par tâche cron. Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
+<span><b>{l s='Retours importÃ©s par' mod='ebay'} {$type_sync_returns} <br>
+        {l s='Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
 <br>
 <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"><input type="button" class="button"

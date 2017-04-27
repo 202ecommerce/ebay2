@@ -176,10 +176,19 @@
                                                                 <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if} clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                                     <span id = 'name' class="col-xs-4">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
                                                                     <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
-                                                                    <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
-                                                                    <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
-                                                                    <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                                                                    <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+                                                                    {if $profile.token == 0 }
+                                                                        <span class="col-xs-6 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
+                                                                    {elseif $profile.category == 0}
+                                                                        <span class="col-xs-6 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
+                                                                    {else}
+                                                                        <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
+                                                                        <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
+                                                                        <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
+                                                                        <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+
+                                                                    {/if}
+
+
 
                                                                 </a>
                                                             </li>
@@ -300,7 +309,7 @@
         <ul class="list-group nav">
             <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashbord" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-success">{$count_order_errors}</span>{/if}</a>
-            <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Annonces' mod='ebay'} {if $count_product_errors > 0}<span class="badge badge-danger">{$count_product_errors}</span>{/if}</a>
+            <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Annonces' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>
         </ul>
     </div>

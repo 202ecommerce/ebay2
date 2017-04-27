@@ -26,12 +26,12 @@
 {if $relogin}
 
 	<script>
-		$(document).ready(function() {ldelim}
-				var win = window.location.href = '{$redirect_url|escape:'UTF-8'}';
-		{rdelim});
-	</script>
-{/if}
 
+				var win = window.location.href = '{$redirect_url|escape:'UTF-8'}';
+
+	</script>
+
+{else}
 <fieldset class="new">
 	<legend>{l s='Register the module on eBay' mod='ebay'}</legend>
 
@@ -277,3 +277,4 @@ function validateEmail(email){
 }
 {/literal}
 </script>
+{/if}
