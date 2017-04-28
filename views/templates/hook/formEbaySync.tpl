@@ -56,6 +56,7 @@
 		'Reference'							: "{l s='Reference' mod='ebay'}",
 		'EAN'								: "{l s='EAN' mod='ebay'}",
 		'UPC'								: "{l s='UPC' mod='ebay'}",
+
 		{rdelim};
 
 
@@ -149,14 +150,18 @@
 				ps_categories.push($( this ).attr('id'));
 			});
 			event.preventDefault();
+
 			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
-			$.ajax({
-				type: "POST",
-				url: url,
-				success: function (data) {
-					location.reload();
-				}
-			});
+			console.log(data);
+			if (confirm('Attantion ca va cree annonces!')) {
+				$.ajax({
+					type: "POST",
+					url: url,
+					success: function (data) {
+						location.reload();
+					}
+				});
+			}
 		});
 
 		$('.js-remove-item').live('click', function() {
@@ -178,7 +183,12 @@
 				}
 			});
 		});
-
+		$('.modifier_cat').fancybox({
+			'modal': true,
+			'showCloseButton': false,
+			'padding': 0,
+			'parent': '#popin-container',
+		});
 		$('.delete_cat').on('click', function() {
 			var tr = $(this).parent().parent();
 			var id_category = $(this).data('id')
@@ -230,12 +240,7 @@
 
 					$('select[name="store_category"]').children('option[value="' + data.storeCategoryId + '"]').attr('selected', 'selected');
 					$('.js-next-popin').removeAttr('disabled');
-					$('.modifier_cat').fancybox({
-						'modal': true,
-						'showCloseButton': false,
-						'padding': 0,
-						'parent': '#popin-container',
-					});
+
 				}
 			});
 
@@ -610,14 +615,10 @@
 							Choisissez une catégorie ebay :
 						</label>
 						<div class="input-group col-md-6 category_ebay">
-							<select name="category" id="categoryLevel1-0 default_list_category" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
-								{foreach from=$ebayCategories item=ebayCategory}
-									<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
-								{/foreach}
-							</select>
-							<input type="hidden" name="category[0]" value="0">
-						</div>
 
+
+						</div>
+						<input type="hidden" name="category[0]" value="0">
 					</div>
 
 					<div class="form-group">
@@ -789,7 +790,14 @@
 
 				<button class="js-prev-popin btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>prev</button>
 			</div>
+			<div style="display: none">
+				<select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
+					{foreach from=$ebayCategories item=ebayCategory}
+						<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
+					{/foreach}
+				</select>
 
+			</div>
 		</div>
 	</div>
 

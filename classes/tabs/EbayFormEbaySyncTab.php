@@ -75,6 +75,7 @@ class EbayFormEbaySyncTab extends EbayTab
                     $sql .= Shop::addSqlAssociation('product', 'p');
                     $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
                 ON (p.`id_product` = pl.`id_product`
+                
                 AND pl.`id_lang` = '.(int) $this->ebay_profile->id_lang;
                     $sql .= Shop::addSqlRestrictionOnLang('pl');
                     $sql .= ')
@@ -83,7 +84,7 @@ class EbayFormEbaySyncTab extends EbayTab
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
-            WHERE ';
+            WHERE  p.`active` = 1 AND ';
                     $sql .= ' product_shop.`id_category_default` = '.(int) $category['id_category'];
                     $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
 
@@ -96,7 +97,7 @@ class EbayFormEbaySyncTab extends EbayTab
                         foreach ($nb_products_man as $product_ps) {
                             $product = new Product($product_ps['id']);
                             $variation = $product->getWsCombinations();
-                            $nb_products_variations += count($variation);
+                            $nb_products_variations += (count($variation)>0?count($variation):1);
                             if ($product_ps['blacklisted']) {
                                 $nb_products_blocked += 1;
                                 $nb_products_variations_blocked +=count($variation);

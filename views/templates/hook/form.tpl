@@ -202,7 +202,7 @@
                                                <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}"> <i class="icon-plus"></i></a>
                                             </button>
 
-                                            <button type="button" class="js-popin btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
+                                            <button type="button" class="btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                                 <i class="icon-trash"></i>
                                             </button>
                                             {if $debug == 1}

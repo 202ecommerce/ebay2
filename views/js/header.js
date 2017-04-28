@@ -56,7 +56,7 @@ $(document).ready(function () {
     });
 
 
-    $('.js-popin').live('click', function() {
+    $('.js-popin').on('click', function() {
 
         $('.js-popin').fancybox({
             'modal': true,
@@ -65,6 +65,7 @@ $(document).ready(function () {
             'parent': '#popin-container',
         });
         $('.product_sync_info').hide();
+        $('.select_category_default').clone().appendTo($('div .category_ebay'));
         if($('ul.category_ps_list li').length == 0) {
             $('.js-next-popin').attr('disabled','disabled');
         }
@@ -86,6 +87,8 @@ $(document).ready(function () {
         $('.js-prev-popin').hide();
         $('#ps_category_list').show();
         $('#item_spec').html('');
+        $('div .category_ebay').html('');
+        $('#ps_category_autocomplete_input').val('');
         $('#item_spec').children().remove();
         $('select[name="payement_policies"]').find('option:selected').removeAttr("selected");
         $('select[name="return_policies"]').find('option:selected').removeAttr("selected");

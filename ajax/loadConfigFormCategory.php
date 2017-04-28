@@ -197,7 +197,7 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
 
                 $category['percent'] = array('sign' => $temp[1], 'value' => $temp[2], 'type' => ($temp[3]==''?'€':$temp[3]));
             } else {
-                $category['percent'] = array('sign' => '+', 'value' => '', 'type' => '€');
+                $category['percent'] = array('sign' => '+', 'value' => '0', 'type' => '€');
             }
         }
         $smarty = Context::getContext()->smarty;

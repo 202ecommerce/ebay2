@@ -1599,7 +1599,7 @@ class Ebay extends Module
             $main_tab = 'dashbord';
         }
         $request = new EbayRequest();
-        $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
+
         $this->smarty->assign(array(
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
@@ -1651,9 +1651,9 @@ class Ebay extends Module
             'id_ebay_profile' => ($this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : false),
             'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
             'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
-            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ count(EbayProduct::getOrphanListing($this->ebay_profile->id)),
-            'ebay_shipping_config_tab' => $this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK'),
-            'count_category' => EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id),
+            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ ($this->ebay_profile?count(EbayProduct::getOrphanListing($this->ebay_profile->id)):0),
+            'ebay_shipping_config_tab' => ($this->ebay_profile?$this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK'):0),
+            'count_category' => ($this->ebay_profile?EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id):0),
             ));
 
         // test if multishop Screen and all shops
