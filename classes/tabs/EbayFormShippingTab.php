@@ -40,7 +40,9 @@ class EbayFormShippingTab extends EbayTab
             'EBAY_DELIVERY_TIME',
             'EBAY_ZONE_NATIONAL',
         ));
-
+        if(!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')){
+            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+        }
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
             $template_vars = array('error_form_shipping' => 'true');
@@ -143,7 +145,7 @@ class EbayFormShippingTab extends EbayTab
                 }
             }
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
-
+            $this->ebay_profile->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
             foreach ($products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update',$product, null, $this->ebay_profile->id);

@@ -353,6 +353,33 @@
             </table>
         </div>
     </div>
+    <div id="popin_config_ok"">
+        <div  class="popin popin-lg" id="config_ok" style="display: none;text-align: center;padding: 15px;">
+            <p>Super, la synchronisation est Ok, vous allez maintenant </br>
+                choisir les produits à copier vers eBay</p>
+            <div class="panel-footer">
+                <button class="close_popin_config btn btn-default">OK</button>
+            </div>
+        </div>
+    </div>
+    <a href="#config_ok" class="popin_config_ok_sync" style="display: none"></a>
+    {if $ebay_shipping_config_tab > 0 && $count_category == 0}
+    <script>
+        $(document).ready(function() {
+            $('.popin_config_ok_sync').fancybox({
+                'modal': true,
+                'showCloseButton': false,
+                'padding': 0,
+                'parent': '#popin_config_ok',
+            });
+            $('.popin_config_ok_sync').click();
+
+            $(document).on('click', '.close_popin_config', function() {
+                $.fancybox.close();
+            });
+        });
+    </script>
+    {/if}
     <script type="text/javascript">
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
