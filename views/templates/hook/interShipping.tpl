@@ -60,7 +60,7 @@
 		// Carrier eBay
 		createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : 'big-linked') +"'' style='visibility:hidden'><p  class='label' data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Link' mod='ebay'}<strong>"+(hasValues ? valuePSCarrier : '')+"</strong>{l s='with eBay carrier' mod='ebay'}</p><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : 'ebayCarrier_international') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
 		{foreach from=$eBayCarrier item=carrier}
-			if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping') || ('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping'))
+			if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping'))
 				createSelecstShipping += "<option "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
 		{/foreach}
 		createSelecstShipping += "</select></div></td>";
@@ -116,7 +116,7 @@
 			processEbayCarrier(current.find('.eBayCarrier').eq(nbSelect));
 		}
 
-		$('#domesticShipping select, #internationalShipping select').unbind().change(function(){
+		$('#internationalShipping select').unbind().change(function(){
 			if ($(this).attr('class') == 'prestaCarrier')
 				displayEbayCarrier($(this));
 			else if ($(this).attr('class') == 'eBayCarrier')
@@ -124,104 +124,12 @@
 		});
 	}
 
-	function displayEbayCarrier(select)
-	{
-		var valSelect = $(select).find('option').filter(":selected").text();
-		var div = $(select).parent('div');
-		var hasA = div.siblings('a').length;
-		var tr = div.parent('td').parent('tr');
-		var message = "{l s='Between 0 and ' mod='ebay'}";
-		if ($(select).val().length > 1)
-		{
-			var contentA = $(select).find('option').filter(":selected").attr('data-realname');
-			var contentAprice = $(select).find('option').filter(":selected").attr('data-maxprice');
-			div.fadeOut(400, function() {
-				$(this).hide();
-				if (hasA > 0)
-				{
-					div.siblings('a').html(contentA).fadeIn();
-				}
-				else
-				{
-					var elementA = $('<a class="presta_shipping_text">');
-					elementA.append(contentA);
-					div.after(elementA);
-					tr.find("input").attr('max',contentAprice);
-					tr.find(".link_ship_cost").text(message + contentAprice);
-					elementA.click(function()
-					{
-						$(this).fadeOut(400, function(){
-							$(this).siblings('div').fadeIn();
-							tr.children('td').not(":first").css('visibility', 'hidden');
-							checkShippingConfiguration(tr.closest('table'));
-						});
-						return false;
-					});
-				}
-				var nextTd = tr.children('td').eq(1);
-				nextTd.children('p').children('strong').text(' '+valSelect+' ');
-				nextTd.css('visibility', 'visible');
-			});
-		}
-		else
-		{
-			if (hasA > 0)
-				div.siblings('a').fadeOut();
-			tr.children('td').not(":first").css('visibility', 'hidden');
-		}
-
-		processEbayCarrier(div.parent().next().find('select'));
-		cleanShippings();
-		checkShippingConfiguration(div.closest('table'));
 
 
-	}
-
-	function processEbayCarrier(select)
-	{
-		var div = $(select).parent('div');
-		var hasA = div.siblings('a').length;
-		var tr = div.parent('td').parent('tr');
-		var idDivParent = tr.parents('div').attr('id');
-
-		if ($(select).val() != 0)
-		{
-			var contentA = $(select).find('option').filter(":selected").text();
-			var newHtmlP = div.siblings('p').attr('data-validate');
-			var oldHtmlP = div.siblings('p').html();
-
-			div.fadeOut(400, function(){
-				$(this).hide();
-				if (hasA > 0)
-				{
-					div.siblings('a').html(contentA).fadeIn();
-				}
-				else
-				{
-					var elementA = $('<a class="ebay_shipping_text">');
-					elementA.append(contentA);
-					div.after(elementA);
-					elementA.click(function()
-					{
-						tr.children('td:eq(3), td:eq(2)').css('visibility', 'hidden');
-						$(this).fadeOut(400, function() {
-							$(this).siblings('div').fadeIn();
-						});
-						div.siblings('p').html(oldHtmlP);
-						checkShippingConfiguration(tr.closest('table'));
-						return false;
-					});
-				}
-				tr.children('td').css('visibility', 'visible');
-				div.siblings('p').html(newHtmlP);
-			});
-		}
-		checkShippingConfiguration(tr.closest('table'))
-	}
 	//]]>
 
 	{literal}
-	function addShippingFee(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
+	function addShippingFeeInter(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
 	{/literal}
 		var currentShippingService = -1;
 		var internationSuffix = '';
@@ -324,7 +232,7 @@
 		var string = "<div class='internationalShipping' data-id='"+lastId+"'>";
 		string += "<table class='table'>";
 		string += "<tr>";
-		string += addShippingFee(0, 1, idEbayCarrier, idPSCarrier, additionalFee);
+		string += addShippingFeeInter(0, 1, idEbayCarrier, idPSCarrier, additionalFee);
 		string += "</tr>";
 		string += "</table>";
 		string += "<label>{l s='Add country you will ship to' mod='ebay'}</label>";
@@ -399,7 +307,7 @@
 
 
 		/* EVENTS */
-		bindElements();
+		bindElementsInter();
 	});
 
 
@@ -429,7 +337,7 @@
 			});
 		});
 
-			bindElements();
+			bindElementsInter();
 
 		});
 		setTimeout(function(){
@@ -440,66 +348,8 @@
 
 	}
 
-	function cleanShippings()
-	{
-		$('#domesticShipping table tr').each(function(index, e){
-			$(e).find('a.ebay_shipping_text').eq(1).remove();
-		});
-		$('#internationalShipping table tr').each(function(index, e){
-			$(e).find('a.ebay_shipping_text').eq(1).remove();
-		});
-	}
 
-	function checkGlobalShippingConfiguration()
-	{
-
-		$('#internationalShipping table').each(function(index, e){
-			checkShippingConfiguration($(e));
-		});
-	}
-
-	/**
-	 * Check if a configuration is well configured
-	 * @param el jQuery Element : Table}
-	 * @param  Boolean isInternational [description]
-	 * @return Boolean                  [description]
-	 */
-	{literal}
-	function checkShippingConfiguration(el)
-	{
-		var is_configured = true;
-		var isInternational = true;
-		//Check if international or domestic shipping
-		if(el.closest('#domesticShipping').length == 1)
-			isInternational = false;
-
-		//Check shipping configuration
-		if(isInternational)
-		{
-			if(el.find('input').filter(':checked').length == 0)
-				is_configured = false;
-		}
-
-		if(el.find('.prestaCarrier').val() == '')
-			is_configured = false;
-
-		if(el.find('.eBayCarrier').val() == '')
-			is_configured = false;
-
-		if(is_configured)
-			el.removeClass('shipping_not_configured').addClass('shipping_configured');
-		else
-			el.removeClass('shipping_configured').addClass('shipping_not_configured');
-
-
-		bindElements();
-		return is_configured;
-
-
-	}
-	{/literal}
-
-	function bindElements()
+	function bindElementsInter()
 	{literal}{{/literal}
 		$('#internationalCarrier .deleteCarrier').unbind().click(function(){literal}{{/literal}
 			$(this).parent().parent().parent().parent().parent().remove();
@@ -516,7 +366,7 @@
 
 		$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
 			addInternationalShippingFee();
-			bindElements();
+			bindElementsInter();
 		});
 
 		$('#createlist').unbind().click(function(){literal}{{/literal}
@@ -527,12 +377,7 @@
 			$(this).hide().parent().find('.listcountry').show();
 		});
 
-		$('#internationalShipping select').unbind().change(function(){
-			if ($(this).attr('class') == 'prestaCarrier')
-				displayEbayCarrier($(this));
-			else if ($(this).attr('class') == 'eBayCarrier')
-				processEbayCarrier($(this));
-		});
+
 
 		$('#internationalShippingButton').unbind().click(function(){
 			addInterShipping($(this).attr('id').replace('Button', ''));

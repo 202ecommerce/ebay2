@@ -56,7 +56,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
 
         $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
 
-        $returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option', Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
+        $returnsConditionAccepted = $returns_policy_configuration->ebay_returns_accepted_option;
 
 
         $ebayListingDuration = $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') ? $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') : 'GTC';
@@ -130,7 +130,6 @@ class EbayFormConfigAnnoncesTab extends EbayTab
                 'error_code'     => 'HELP-SETTINGS-OUT-OF-STOCK',
             ),
         );
-
         return $this->display('formParametersAnnonces.tpl', $smarty_vars);
     }
 
@@ -187,6 +186,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             $this->ebay_profile->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);
             Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=101&section=category#dashbord');
         } else {
+
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
     }

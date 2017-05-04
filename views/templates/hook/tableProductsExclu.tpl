@@ -22,7 +22,12 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
+<div id="ProductsExcluRe">
+    <p class="center">
+        <button class="button">{l s='Refresh Product Exclu' mod='ebay'}</button>
+    </p>
+</div>
+</br>
 
 <table id="ProductsExclu" class="table" >
     <thead>
@@ -81,5 +86,10 @@
         });
         }
     });
+    var content_ebay_relistings = $("#ProductsExcluRe button");
+    content_ebay_relistings.live('click', 'button', function(){
+        loadProductExclu();
+    });
+
     {/literal}
 </script>

@@ -23,6 +23,61 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+
+<div id="ebayOrphanReListing">
+    <p class="center">
+        <button class="button">{l s='Refresh Listing' mod='ebay'}</button>
+    </p>
+</div>
+
+</br>
+
+<table id="OrphanListings" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+    <thead>
+    <tr class="nodrag nodrop">
+
+        <th style="width:110px;">
+            <span>{l s='eBay Listing' mod='ebay'}</span>
+        </th>
+
+        <th>
+            <span>{l s='PrestaShop Product' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span data-inlinehelp="{l s='Product has been disabled in the PrestaShop product page' mod='ebay'}">{l s='Product Disabled' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span data-inlinehelp="{l s='Does PrestaShop product have combinations' mod='ebay'}">{l s='Product Combinations' mod='ebay'}</span>
+        </th>
+
+        <th>
+            <span data-inlinehelp="{l s='PrestaShop product default category' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span data-inlinehelp="{l s='eBay category associated with PrestaShop product\'s default category' mod='ebay'}">{l s='eBay Category' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span data-inlinehelp="{l s='Does eBay category support multivariation listings ?' mod='ebay'}">{l s='Category Multi-sku' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span>
+        </th>
+
+        <th class="center">
+            <span>{l s='Action' mod='ebay'}</span>
+        </th>
+
+        <th class="center">{l s='Help' mod='ebay'}</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
 {if $ads === false || sizeof($ads) === 0}
 
 	<tr>
@@ -92,3 +147,13 @@
 	{/foreach}
 
 {/if}
+    </tbody>
+
+</table>
+</div>
+
+<script type="text/javascript">
+
+
+
+</script>

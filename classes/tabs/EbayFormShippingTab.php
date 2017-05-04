@@ -118,7 +118,7 @@ class EbayFormShippingTab extends EbayTab
         //Update global information about shipping (delivery time, ...)
         $this->ebay_profile->setConfiguration('EBAY_DELIVERY_TIME', Tools::getValue('deliveryTime'));
         //Update Shipping Method for National Shipping (Delete And Insert)
-        EbayShipping::truncate($this->ebay_profile->id);
+        EbayShipping::truncateNational($this->ebay_profile->id);
 
         if ($ebay_carriers = Tools::getValue('ebayCarrier')) {
 

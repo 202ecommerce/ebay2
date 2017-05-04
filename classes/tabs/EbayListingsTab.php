@@ -27,10 +27,11 @@
 class EbayListingsTab extends EbayTab
 {
 
-    public function getContent()
+    public function getContent($id_ebay_profile)
     {
         $template_vars = array(
             'id_employee' => $this->context->employee->id,
+            'id_ebay_profile' => $id_ebay_profile,
         );
         return $this->display('ebay_listings.tpl', $template_vars);
     }

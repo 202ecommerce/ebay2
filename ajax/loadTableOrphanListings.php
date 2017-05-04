@@ -40,18 +40,21 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
 
 $final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'));
 
-$smarty = Context::getContext()->smarty;
+$context = Context::getContext();
 
-// Smarty datas
+
+
+// Smarty
 $template_vars = array(
+    'id_ebay_profile' => Tools::getValue('profile'),
+    'id_employee' => Tools::getValue('id_employee'),
     'ads' => $final_res,
-
-);
-$ebay = new Ebay();
-$smarty->assign($template_vars);
-
-$res = array(
-    'table' => $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_orphan_listings.tpl'),
     'count' => count($final_res),
 );
-echo Tools::jsonEncode($res);
+
+// Smarty datas
+
+$ebay = new Ebay();
+$context->smarty->assign($template_vars);
+
+echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_orphan_listings.tpl');

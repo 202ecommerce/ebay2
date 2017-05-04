@@ -30,26 +30,15 @@ class EbayOrphanListingsTab extends EbayTab
     public function getContent()
     {
 
-        $controller = Tools::getValue('controller');
-        $configure = Tools::getValue('configure');
-        $token = Tools::getValue('token');
-        $tab_module = Tools::getValue('tab_module');
-        $module_name = Tools::getValue('module_name');
 
-        $show_orphan_listings_url = 'index.php?controller='.urlencode($controller).
-        '&configure='.urlencode($configure).'&token='.urlencode($token).
-        '&tab_module='.urlencode($tab_module).
-        '&module_name='.urlencode($module_name).
-            '&id_tab=16&section=orphan_listings';
 
-        // Smarty
-        $template_vars = array(
-            'id_ebay_profile' => $this->ebay_profile->id,
-            'show_orphan_listings_url' => $show_orphan_listings_url,
+        $vars = array(
+            'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
+            '_module_dir_' => _MODULE_DIR_,
         );
 
-        return $this->display('orphan_listings.tpl', $template_vars);
+        return $this->display('table_orphan_listings_ajax.tpl', $vars);
     }
 
     public function postProcess()

@@ -93,6 +93,7 @@ class EbayProfile extends ObjectModel
 
         if ($this->id_ebay_returns_policy_configuration) {
             $returns_policy_configuration = new EbayReturnsPolicyConfiguration($this->id_ebay_returns_policy_configuration);
+
         } else {
             $returns_policy_configuration = new EbayReturnsPolicyConfiguration();
         }
@@ -118,7 +119,9 @@ class EbayProfile extends ObjectModel
     public function setReturnsPolicyConfiguration($within, $who_pays, $description, $accepted_option)
     {
 
+
         $returns_policy_configuration = $this->getReturnsPolicyConfiguration();
+
         if ($returns_policy_configuration->ebay_returns_within != $within) {
             $returns_policy_configuration->ebay_returns_within = $within;
         }

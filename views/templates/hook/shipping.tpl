@@ -70,9 +70,9 @@
 		// end carrier Prestashop
 
 		// Carrier eBay
-		createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : 'big-linked') +"'' style='visibility:hidden'><p  class='label' data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Link' mod='ebay'}<strong>"+(hasValues ? valuePSCarrier : '')+"</strong>{l s='with eBay carrier' mod='ebay'}</p><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : 'ebayCarrier_international') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
+		createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : '') +"'' style='visibility:hidden'><p  class='label' data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Link' mod='ebay'}<strong>"+(hasValues ? valuePSCarrier : '')+"</strong>{l s='with eBay carrier' mod='ebay'}</p><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : '') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
 		{foreach from=$eBayCarrier item=carrier}
-			if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping') || ('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping'))
+			if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping'))
 				createSelecstShipping += "<option "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
 		{/foreach}
 		createSelecstShipping += "</select></div></td>";
@@ -109,7 +109,7 @@
 			processEbayCarrier(current.find('.eBayCarrier').eq(nbSelect));
 		}
 
-		$('#domesticShipping select, #internationalShipping select').unbind().change(function(){
+		$('#domesticShipping select').unbind().change(function(){
 			if ($(this).attr('class') == 'prestaCarrier')
 				displayEbayCarrier($(this));
 			else if ($(this).attr('class') == 'eBayCarrier')
@@ -322,6 +322,9 @@
 		$('#domesticShipping table tr').each(function(index, e){
 			$(e).find('a.ebay_shipping_text').eq(1).remove();
 		});
+		$('#internationalShipping table tr').each(function(index, e){
+			$(e).find('a.ebay_shipping_text').eq(1).remove();
+		});
 
 	}
 
@@ -401,7 +404,7 @@
 			$(this).hide().parent().find('.listcountry').show();
 		});
 
-		$('#domesticShipping select').unbind().change(function(){
+		$('#domesticShipping select, #internationalShipping select').unbind().change(function(){
 			if ($(this).attr('class') == 'prestaCarrier')
 				displayEbayCarrier($(this));
 			else if ($(this).attr('class') == 'eBayCarrier')

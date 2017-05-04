@@ -86,28 +86,52 @@
                                 data-lang="{$task_error.lang_iso}"
                                 module_version="1.11.0"
                                 prestashop_version="{$task_error.ps_version}"></a></td>
-                        <td ><a class="btn btn-xs btn-block btn-warning" id="{$task_error.id_product}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
-                            <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.id_product}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
+                        <td ><a class="btn btn-xs btn-block btn-warning" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
+                            <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.real_id}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
                     </tr>
                 {/foreach}
             {/if}
             </tbody>
 
         </table>
+<div id="popin-product-exclu" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+    <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+        <div class="panel-heading">
+            <i class="icon-trash"></i> Exclure Product
+        </div>
+        <p>Cette action va ajouter/modifier <span class="id_to_eclure" ></span> annonces sur eBay.</p>
+
+        <div class="panel-footer">
+            <button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+            <button class="js-exclu-confirm btn btn-danger pull-right"><i class="process-icon-save"></i>OK</button>
+        </div>
+    </div>
+</div>
+
 {literal}
 <script>
     $('.exclure_product').click(function (e) {
         e.preventDefault();
-        if (confirm(header_ebay_l['Are you sure you want to exclure this product?'])) {
+        $('.id_to_eclure').attr('id', $(this).attr('id'));
+        $('#popin-product-exclu').show();
+
+    });
+    $('.js-exclu-confirm').click(function (e) {
+        e.preventDefault();
+        exclureProduct($('.id_to_eclure').attr('id'));
+        $('#popin-product-exclu').hide();
+    });
+
+    function exclureProduct(id_product) {
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/exclureProductAjax.php',
-            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_product="+$(this).attr('id'),
+            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_product="+id_product,
             success: function (data) {
                 $(this).parent().parent().remove();
             }
         });
-        }
-    });
+    }
+
     {/literal}
 </script>

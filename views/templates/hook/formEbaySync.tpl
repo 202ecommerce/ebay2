@@ -117,6 +117,13 @@
 				$('.category_product_list_ebay').find('img').remove();
 			}
 			if (new_id == 4) {
+				var nb_annonces_to_job = 0;
+				$('.category_product_list_ebay').find('.sync-product').each(function () {
+					if ($(this).prop('checked')) {
+						nb_annonces_to_job ++;
+					}
+				});
+				$('.nb_annonces').html(nb_annonces_to_job);
 				$('#last_page_categorie_ps').html('').append($('.category_ps_list').children());
 				$('#last_page_categorie_ebay').html('').append($('.category_ebay').children().find('option:selected').last().text());
 				$('#last_page_categorie_boutique').html('').append($('select[name="store_category"]').find('option:selected').text());
@@ -143,7 +150,7 @@
 			courant_page.parent().find('#'+new_id).addClass('selected').show();
 
 		});
-		$('.js-save-popin').on('click', function() {
+		$('.js-save-category').on('click', function() {
 			var data = $('#category_config').serialize();
 			var ps_categories = new Array();
 			$('#last_page_categorie_ps').find('li').each(function( index ) {
@@ -153,7 +160,6 @@
 
 			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
 			console.log(data);
-			if (confirm('Attantion ca va cree annonces!')) {
 				$.ajax({
 					type: "POST",
 					url: url,
@@ -161,7 +167,6 @@
 						location.reload();
 					}
 				});
-			}
 		});
 
 		$('.js-remove-item').live('click', function() {
@@ -189,6 +194,15 @@
 			'padding': 0,
 			'parent': '#popin-container',
 		});
+
+		$('.js-save1-popin').on('click', function() {
+			$('#popin-categorie-save').show();
+		});
+		$('.js-notsave').on('click', function() {
+			event.preventDefault();
+			$('#popin-categorie-save').hide();
+		});
+
 		$('.delete_cat').on('click', function() {
 			var tr = $(this).parent().parent();
 			var id_category = $(this).data('id')
@@ -778,9 +792,25 @@
 							L’ajout de ces produits se fait automatiquement dans les minutes qui viennent.
 							<br>
 							<br>
-							<button class="js-save-popin btn btn-primary pull-right" style="display: none">Save</button>
+							<a href="#popin-categorie-save" class="js-save1-popin btn btn-lg btn-success">Save</a>
+
 						</div>
 					</div>
+
+					<div id="popin-categorie-save" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+						<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+							<div class="panel-heading">
+								<i class="icon-trash"></i> Save Categories
+							</div>
+							<p>Cette action va ajouter/modifier <span class="nb_annonces"></span> annonces sur eBay.</p>
+
+							<div class="panel-footer">
+								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+								<button class="js-save-category btn btn-danger pull-right"><i class="process-icon-save"></i>OK</button>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</form>
 
@@ -802,21 +832,5 @@
 	</div>
 
 	{* Profile removal modal *}
-	<div id="popin-remove-profile" class="popin popin-sm" style="display: none;">
-		<div class="panel">
-			<div class="panel-heading">
-				<i class="icon-trash"></i> Supprimer un profil
-			</div>
 
-			<p>Vous êtes sur le point de supprimer le profil <strong>UserName_eBayFrance_2_1</strong>.
-				Cette opération est irréversible en entraine la suppression des catégories et annonces synchronisées qui lui sont associées.</p>
-
-			<p>Êtes-vous sûr de vouloir supprimer ce profil ?</p>
-
-			<div class="panel-footer">
-				<button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-				<button class="js-close-popin btn btn-danger pull-right"><i class="process-icon-delete"></i>Supprimer</button>
-			</div>
-		</div>
-	</div>
 </div>

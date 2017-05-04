@@ -1378,6 +1378,11 @@ class Ebay extends Module
             Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
         }
 
+        if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
+            // if the module is not upgraded or not configured don't do anything
+            return false;
+        }
+
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
@@ -1926,7 +1931,7 @@ class Ebay extends Module
             'form_template_manager' => $form_template_manager_tab->getContent(),
             'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
             'orders_history' => $form_ebay_order_history_tab->getContent(),
-            'ebay_listings' => $listings_tab->getContent(),
+            'ebay_listings' => $listings_tab->getContent($this->ebay_profile->id),
             'orders_sync' => $orders_sync->getContent(),
             'ps_products' => $ps_products->getContent(),
             'orphan_listings' => $orphan_listings->getContent(),
@@ -2295,6 +2300,38 @@ class Ebay extends Module
         $content = EbaySynchronizer::fillAllTemplate($data, $content);
 
         echo $content;
+    }
+
+    public function displayProductExclu($id_employee) {
+
+        $ids_products = EbayProduct::getProductsBlocked($this->ebay_profile->id);
+        $products = array();
+        if(!empty($ids_products)) {
+            foreach ($ids_products as $product_id) {
+                $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
+                $ebay_category_id = EbayCategoryConfiguration::getConfigByCategoryId($this->ebay_profile->id, $product->id_category_default);
+                if($ebay_category_id){
+                    $ebay_category = EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id, $ebay_category_id[0]['id_ebay_category']);
+                }
+                $category_ps = new Category($product->id_category_default, $this->ebay_profile->id_lang);
+                $products[] = array(
+                    'id_product' => $product_id['id_product'],
+                    'name' => $product->name,
+                    'category_ebay' => (isset($ebay_category[0]['name'])?$ebay_category[0]['name']:''),
+                    'category_ps' => $category_ps->name,
+                );
+            }
+        }
+
+        $vars = array(
+            'products' => $products,
+            'id_ebay_profile' => $this->ebay_profile->id,
+            'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+            'id_employee' => $id_employee,
+        );
+
+        return $this->display(__FILE__,'views/templates/hook/tableProductsExclu.tpl', $vars);
+
     }
 
     public function displayEbayListingsAjax($id_employee = null)

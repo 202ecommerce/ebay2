@@ -32,7 +32,6 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
     die('ERROR: Invalid Token');
 }
 
-
 EbayProductConfiguration::insertOrUpdate(Tools::getValue('id_product'), array(
 'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
 'blacklisted' =>  1,

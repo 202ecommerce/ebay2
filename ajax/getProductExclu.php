@@ -24,18 +24,17 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayProductsExcluTab extends EbayTab
-{
-
-    public function getContent($ebay_profile)
-    {
-
-        $vars = array(
-            'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-            'id_employee' => $this->context->employee->id,
-        );
-
-        return $this->display('tableProductsExclu_ajax.tpl', $vars);
-
-    }
+if (!defined('TMP_DS')) {
+    define('TMP_DS', DIRECTORY_SEPARATOR);
 }
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+include '../../../init.php';
+include '../../../modules/ebay/ebay.php';
+
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR : INVALID TOKEN');
+}
+
+$ebay = new eBay();
+echo $ebay->displayProductExclu(Tools::getValue('id_employee'));

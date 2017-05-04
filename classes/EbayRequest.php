@@ -201,6 +201,7 @@ class EbayRequest
 
             curl_setopt($connection, CURLOPT_POSTFIELDS, $request); // Set the XML body of the request
         }
+        
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1); // Set it to return the transfer as a string from curl_exec
 
         $response = curl_exec($connection); // Send the Request
@@ -253,6 +254,7 @@ class EbayRequest
 
     private function _buildHeadersSeller($api_call)
     {
+        
 
         $headers = array(
 
@@ -312,6 +314,7 @@ class EbayRequest
 
     public function fetchToken($username, $session)
     {
+
         $response = $this->_makeRequest('FetchToken', array(
             'username' => $username,
             'session_id' => $session,
@@ -723,6 +726,7 @@ class EbayRequest
     {
 
         $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
+
         $vars = array(
             'returns_accepted_option' => $returns_policy_configuration->ebay_returns_accepted_option,
             'description' => preg_replace('#<br\s*?/?>#i', "\n", $returns_policy_configuration->ebay_returns_description),
@@ -732,6 +736,7 @@ class EbayRequest
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 1) {
             $policies_config = EbayBussinesPolicies::getPoliciesConfigurationbyIdCategory($data['categoryId'], $this->ebay_profile->id);
+
             $payement_name = EbayBussinesPolicies::getPoliciesbyID($policies_config[0]['id_payment'], $this->ebay_profile->id);
             $return_name = EbayBussinesPolicies::getPoliciesbyID($policies_config[0]['id_return'], $this->ebay_profile->id);
             $shippings = $data['shipping'];
@@ -1597,7 +1602,7 @@ class EbayRequest
                         'id_bussines_Policie' => $data['ProfileID'],
                         'id_ebay_profile' => $this->ebay_profile->id
                     );
-                    //var_dump($var);die;
+
                     Db::getInstance()->insert('ebay_business_policies', $var);
                 }
             }
@@ -1616,7 +1621,7 @@ class EbayRequest
         # update OutOfStockControlPreference if it change
         $out_of_stock = ($response->OutOfStockControlPreference == 'true') ? true : false;
         if ($out_of_stock != (bool)EbayConfiguration::get($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
-            EbayConfiguration::set($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK', $out_of_stock);
+           $this->ebay_profile->setConfiguration('EBAY_OUT_OF_STOCK', $out_of_stock);
         }
 
         return $response->SellerProfilePreferences;

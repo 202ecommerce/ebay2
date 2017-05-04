@@ -181,10 +181,16 @@ class EbayShipping
         DB::getInstance()->Execute($sql);
     }
 
-    public static function truncate($id_ebay_profile)
+    public static function truncateNational($id_ebay_profile)
     {
         return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_shipping
-            WHERE `id_ebay_profile` = '.(int) $id_ebay_profile);
+            WHERE `international` = 0 AND `id_ebay_profile` = '.(int) $id_ebay_profile);
+    }
+
+    public static function truncateInternational($id_ebay_profile)
+    {
+        return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_shipping
+            WHERE `international` = 1 AND `id_ebay_profile` = '.(int) $id_ebay_profile);
     }
 
     public static function getLastShippingId($id_ebay_profile)

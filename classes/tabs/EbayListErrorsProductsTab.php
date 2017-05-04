@@ -70,6 +70,7 @@ class EbayListErrorsProductsTab extends EbayTab
                 'date' => $task['date_upd'],
                 'name' => $product->name,
                 'id_product' => $id,
+                'real_id' => $task['id_product'],
                 'declinason' => $name_attribute,
                 'id_item' => ($item_id)?$item_id: null,
                 'error' => $error,

@@ -140,6 +140,7 @@ class EbayFormInterShippingTab extends EbayTab
             $extra_fees_international = Tools::getValue('extrafee_international');
             $international_shipping_locations = Tools::getValue('internationalShippingLocation');
 
+            EbayShipping::truncateInternational($this->ebay_profile->id);
             foreach ($ebay_carriers_international as $key => $ebay_carrier_international) {
 
                 if (!empty($ebay_carrier_international) && !empty($ps_carriers_international[$key]) && isset($international_shipping_locations[$key])) {

@@ -70,7 +70,7 @@
 
 <ul class=" nav nav-pills orders-menu menuTab ebay_hidden" role="tablist">
 
-	<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_order_errors > 0}<span class="badge badge-success">{$count_order_errors}</span>{/if}</a></li>
+	<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a></li>
 
 	<li role="presentation" id="menuTab78" class="menuTabButton"><a href="#">{l s='Order Returns' mod='ebay'}</a></li>
 

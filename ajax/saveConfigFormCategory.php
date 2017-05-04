@@ -126,22 +126,6 @@ if (is_array(Tools::getValue('showed_products'))) {
 }
 
 if (Tools::getValue('payement_policies') || Tools::getValue('return_policies')) {
-    $var = array();
-    $var[] = array(
-        'type' => 'EBAY_PAYMENT_POLICY',
-        'id_bussines_Policie' => Tools::getValue('payement_policies'),
-    );
-    $var[] = array(
-        'type' => 'EBAY_RETURN_POLICY',
-        'id_bussines_Policie' => Tools::getValue('return_policies'),
-    );
-
-    foreach ($var as $data) {
-        EbayBussinesPolicies::setBussinesPolicies($id_ebay_profile, $data);
-    }
-
-
-
     $payment = Tools::getValue('payement_policies');
     $return = Tools::getValue('return_policies');
     $ebay_category_id_ref = EbayCategory::getIdCategoryRefById($ebay_category, $ebay_profile->ebay_site_id);
