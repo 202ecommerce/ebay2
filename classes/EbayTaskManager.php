@@ -158,6 +158,12 @@ class EbayTaskManager
 
     }
 
+    public static function deleteTaskForOutOfStock($id_product, $id_ebay_profile)
+    {
+        return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 13  AND `id_ebay_profile` = '. (int)$id_ebay_profile);
+
+    }
+
     public static function taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)
     {
         return Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND

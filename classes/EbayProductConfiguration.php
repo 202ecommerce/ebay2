@@ -38,6 +38,16 @@ class EbayProductConfiguration
 			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
     }
 
+    public static function is_blocked($id_ebay_profile, $product_id)
+    {
+        return Db::getInstance()->Execute('SELECT  `blacklisted`, `extra_images`
+			FROM `'._DB_PREFIX_.'ebay_product_configuration`
+			WHERE `id_product` = '.(int)$product_id.'
+			AND `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND `blacklisted` = 1');
+    }
+
+
     public static function getBlacklistedProductIdsQuery($id_ebay_profile)
     {
         return 'SELECT `id_product`

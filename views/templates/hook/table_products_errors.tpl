@@ -76,9 +76,9 @@
                         <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.id_product|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
+                        <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
-                        <td >{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>
+                        <td class="error_description">{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>
                         <td ></td>
                         <td ><a class="kb-help"
                                 data-errorcode="{$task_error.error_code}"
@@ -86,7 +86,7 @@
                                 data-lang="{$task_error.lang_iso}"
                                 module_version="1.11.0"
                                 prestashop_version="{$task_error.ps_version}"></a></td>
-                        <td ><a class="btn btn-xs btn-block btn-warning" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
+                        <td ><a class="btn btn-xs btn-block btn-warning corige_product" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
                             <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.real_id}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
                     </tr>
                 {/foreach}
@@ -99,29 +99,77 @@
         <div class="panel-heading">
             <i class="icon-trash"></i> Exclure Product
         </div>
-        <p>Cette action va ajouter/modifier <span class="id_to_eclure" ></span> annonces sur eBay.</p>
+        <p>Si vous ne souhaitez pas corriger cette erreur immédiatement, vous pouvez exclure le produit de la synchronisation.
+        </p>
 
+        <p class="if_anonnces_exist" style="display: none;">Attention, une annonce eBay existe déjà. L'exclusion va mettre le stock de l'annonce eBay à 0, ce qui empèchera tout achat.
+        </p>
+        {if $out_of_stock}
+        <p >Attention, vous n’utilisez pas le statut « Hors stock », merci de l’activer
+        </p>
+        {/if}
         <div class="panel-footer">
-            <button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-            <button class="js-exclu-confirm btn btn-danger pull-right"><i class="process-icon-save"></i>OK</button>
+            <button class="js-notexclu btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+            <button class="js-exclu-confirm btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
         </div>
     </div>
 </div>
 
+<div id="popin-product-corige" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+    <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+        <div class="panel-heading" style="text-align: center;>
+            <i class="icon-trash"></i> Comment corriger ?
+        </div>
+        <p>Pour corriger, vous devez changer la configuration du module, ou mettre à jour le <a class="url_product_info" href="" target="_blank"> produit PrestaShop</a>, pour répondre au rejet de eBay.
+        </p>
+        </br>
+        <p style="text-align: center;"><span class="error_product" style="font-style: italic;"></span>
+        </p>
+
+        </br>
+        <p>202 ecommerce vous propose cette aide.</p>
+        </br>
+        <p>Lorsque vous corrigerez la configuration du module, ou le produit PrestaShop, une nouvelle synchronisation sera lancée automatiquement. Si le problème est corrigé, l’erreur disparaitra de cette liste.
+        </p>
+        </br>
+        <div class="panel-footer" style="text-align: center;">
+            <button class="js-corige-ok btn btn-success"><i class="process-icon-save"></i>OK</button>
+        </div>
+    </div>
+</div>
 {literal}
 <script>
     $('.exclure_product').click(function (e) {
         e.preventDefault();
-        $('.id_to_eclure').attr('id', $(this).attr('id'));
+        $('.if_anonnces_exist').attr('id', $(this).attr('id'));
+        if($(this).parent().parent().find('.item_id_error').html()){
+            $('p.if_anonnces_exist').show();
+        }
         $('#popin-product-exclu').show();
+
+    });
+    $('.corige_product').click(function (e) {
+        e.preventDefault();
+        $('.url_product_info').attr('href', $(this).attr('href'));
+        $('.error_product').html($(this).parent().parent().find('.error_description').text());
+        $('#popin-product-corige').show();
 
     });
     $('.js-exclu-confirm').click(function (e) {
         e.preventDefault();
-        exclureProduct($('.id_to_eclure').attr('id'));
+        exclureProduct($('.if_anonnces_exist').attr('id'));
         $('#popin-product-exclu').hide();
+        $('.if_anonnces_exist').hide();
     });
-
+    $('.js-notexclu').click(function (e) {
+        e.preventDefault();
+        $('#popin-product-exclu').hide();
+        $('.if_anonnces_exist').hide();
+    });
+    $('.js-corige-ok').click(function (e) {
+        e.preventDefault();
+        $('#popin-product-corige').hide();
+    });
     function exclureProduct(id_product) {
         $.ajax({
             type: 'POST',

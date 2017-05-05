@@ -973,7 +973,7 @@ class EbaySynchronizer
         }
 
         // if product not on eBay as we expected we add it
-        if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
+        if (isset($res->Errors) && $res->Errors->ErrorCode == 291 || isset($res->Errors) && $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
@@ -1019,7 +1019,10 @@ class EbaySynchronizer
         } else {
 
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
-            $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency,true);
+
+            if($data['variations']) {
+                $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency, true);
+		    }
 
             $ebay = EbaySynchronizer::__updateStockItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'), $id_product_attribute);
         }
@@ -1127,6 +1130,11 @@ class EbaySynchronizer
 
     private static function __updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
+        if(EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::is_blocked($id_ebay_profile, $product_id)){
+            foreach ($data['variations'] as &$variations){
+                $variations['quantity'] = 0;
+            }
+        }
         if ($res = $ebay->reviseStockFixedPriceItemMultiSku($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
         }
@@ -1143,6 +1151,9 @@ class EbaySynchronizer
 
     private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
+        if(EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::is_blocked($id_ebay_profile, $product_id)){
+            $data['quantity'] =0;
+        }
         if ($res = $ebay->reviseStockFixedPriceItem($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
         }

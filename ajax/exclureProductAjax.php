@@ -38,3 +38,9 @@ EbayProductConfiguration::insertOrUpdate(Tools::getValue('id_product'), array(
 'extra_images' => 0,
 ));
 EbayTaskManager::deleteTaskForPorduct(Tools::getValue('id_product'));
+$ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile'));
+if(EbayProduct::getIdProductRef(Tools::getValue('id_product'), $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)){
+    $product = new Product(Tools::getValue('id_product'));
+    EbayTaskManager::addTask('mod', $product, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'));
+    EbayTaskManager::deleteTaskForOutOfStock(Tools::getValue('id_product'), Tools::getValue('id_ebay_profile'));
+}

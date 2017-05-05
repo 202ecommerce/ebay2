@@ -179,6 +179,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'id_employee' => $this->context->employee->id,
             'date' => pSQL(date('Ymdhis')),
             'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
+            'bp_active' => $this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'),
 
         );
 

@@ -36,10 +36,11 @@ class EbayListErrorsProductsTab extends EbayTab
         $error = '';
         $context = Context::getContext();
         $link = $context->link;
+        $vars['out_of_stock'] = ($ebay_profile->getConfiguration('EBAY_OUT_OF_STOCK')?0:1);
         if (!empty($tasks)) {
         foreach ($tasks as $task){
             $context = Context::getContext();
-            $item_id = EbayProduct::getIdProductRef($task['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
+            $item_id = EbayProduct::getIdProductRef($task['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $task['id_product_attribute']);
 
             $product = new Product($task['id_product'],false, $ebay_profile->id_lang);
             $name_attribute = '';

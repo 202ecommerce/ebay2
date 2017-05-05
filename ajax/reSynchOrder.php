@@ -41,7 +41,7 @@ $ebay = new Ebay();
     if($order){
         EbayOrderErrors::deleteByOrderRef(Tools::getValue('id_order_ebay'));
     }
-    $ebay->importOrders($order, new EbayProfile(Tools::getValue('id_ebay_profile')));
+    $ebay->importOrders($order, $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile')));
    $new_log = EbayOrderErrors::getErrorByOrderRef(Tools::getValue('id_order_ebay'));
     if($new_log){
         foreach ($new_log as $log) {

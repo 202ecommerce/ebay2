@@ -39,7 +39,9 @@
         </OrderIDArray>
     {/if}
     <OrderRole>Seller</OrderRole>
-
+    {if $debug}
+    <OrderStatus>Completed</OrderStatus>
+    {/if}
     <Pagination>
         <EntriesPerPage>100</EntriesPerPage>
         <PageNumber>{$page_number|escape:'htmlall':'UTF-8'}</PageNumber>

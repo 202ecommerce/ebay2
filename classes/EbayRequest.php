@@ -1393,6 +1393,7 @@ class EbayRequest
             'create_time_to' => $create_time_to,
             'page_number' => $page,
             'ItemID' => $ItemID? $ItemID : false,
+            'debug' => ($this->getDev())? 0:1,
         );
 
         $response = $this->_makeRequest('GetOrders', $vars);

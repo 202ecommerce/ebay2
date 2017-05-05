@@ -46,6 +46,7 @@
 	var nbProducts = {$nb_products|escape:'htmlall':'UTF-8'};
 	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall':'UTF-8'};
 	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall':'UTF-8'};
+	var bp_active = {$bp_active|escape:'htmlall':'UTF-8'};
 	var l = {ldelim}
 		'Attributes'						: "{l s='Attributes' mod='ebay'}",
 		'Features'							: "{l s='Features' mod='ebay'}",
@@ -99,15 +100,23 @@
 		$('.js-next-popin').on('click', function() {
 
 			var courant_page = $('.page_config_category.selected');
-			courant_page.removeClass('selected').hide();
+
 
 			var new_id =  parseInt(courant_page.attr('id'))+1;
-			$('.page_popin').html(''+new_id);
-			courant_page.parent().find('div#'+new_id).addClass('selected').show();
+
+			if(!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "" )
+			{
+				$('.page_popin').html(''+new_id);
+				courant_page.removeClass('selected').hide();
+				courant_page.parent().find('div#'+new_id).addClass('selected').show();
+			}
 			if (new_id == 2) {
-				$('.js-prev-popin').show();
-				$('#item_spec').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
-				loadCategoryItemsSpecifics($('#id_ebay_categories_real').val());
+				if(!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "" )
+				{
+					$('.js-prev-popin').show();
+					$('#item_spec').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
+					loadCategoryItemsSpecifics($('#id_ebay_categories_real').val());
+				}
 			}
 			if (new_id == 3) {
 				$('.category_product_list_ebay').find('tbody').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
@@ -678,10 +687,10 @@
 						</div>
 						{/if}
 					</div>
-
+					{if $bp_active}
 					<div class="form-group">
 						<label for="" class="control-label col-md-6">
-							Business Policies :
+							Business Policies* :
 						</label>
 						<select name="return_policies" style="width: 200px;">
 							{if empty($RETURN_POLICY)}
@@ -693,8 +702,9 @@
 								<option value="{$RETURN.id_bussines_Policie}" >{$RETURN.name}</option>
 							{/foreach}
 						</select>
+
 						<label for="" class="control-label col-md-6">
-							Business Policies :
+							Business Policies* :
 						</label>
 						<select name="payement_policies" style="width: 200px;">
 						{if empty($PAYEMENTS)}
@@ -708,7 +718,7 @@
 						{/foreach}
 						</select>
 					</div>
-
+					{/if}
 					<div class="form-group" style="display: none">
 						<label for="" class="control-label col-md-6">
 							Exclure des produits :
@@ -806,7 +816,7 @@
 
 							<div class="panel-footer">
 								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-								<button class="js-save-category btn btn-danger pull-right"><i class="process-icon-save"></i>OK</button>
+								<button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
 							</div>
 						</div>
 					</div>

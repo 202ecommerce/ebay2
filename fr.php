@@ -605,6 +605,10 @@ $_MODULE['<{ebay}prestashop>shipping_74eb06e9bd03d904ca3e17736c6c6bcb'] = 'Ajout
 $_MODULE['<{ebay}prestashop>shipping_eb51d0bedb072c856c799050b2fbaa30'] = 'Cocher les cases des pays vers lesquels vous ne voulez pas livrer';
 $_MODULE['<{ebay}prestashop>shipping_b83fba61cfc197683690e44383ecbdf4'] = 'Exclure des régions des zones livrables';
 $_MODULE['<{ebay}prestashop>shipping_6f5d4da74257e113d6dc5396b535be11'] = 'Sélectionner les pays vers lesquels vous ne voulez pas livrer';
+$_MODULE['<{ebay}prestashop>tableorders_f55ec2b27fa5a52d78a4887a41b4603f'] = 'Référence eBay';
+$_MODULE['<{ebay}prestashop>tableorders_90671237c8057ce3f9fc253092b0e8ab'] = 'Référence ';
+$_MODULE['<{ebay}prestashop>tableorders_8d80f49a90d3329f1cadd55575b5008e'] = 'PrestaShop référence';
+
 $_MODULE['<{ebay}prestashop>shipping_26030c760e6e50206710389d768204a9'] = 'Sauvegarder et continuer';
 $_MODULE['<{ebay}prestashop>table_categories_193cfc9be3b995831c6af2fea6650e60'] = 'Page ';
 $_MODULE['<{ebay}prestashop>table_categories_d9efc413ecd9988caf09c5e921902dfc'] = '/ %s';

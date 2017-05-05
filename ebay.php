@@ -901,18 +901,21 @@ class Ebay extends Module
 
     public function importOrders($orders, $ebay_profile)
     {
-
+        $request = new EbayRequest();
         $errors_email = array();
         $ebay_user_identifier = $ebay_profile->ebay_user_identifier;
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
             $errors = array();
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
-            $order->add($this->ebay_profile->id);
-            if (!$order->isCompleted()) {
-                $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
-                $order->checkError($message, $ebay_user_identifier);
-                continue;
+
+
+            if(!$request->getDev()){
+                if (!$order->isCompleted()) {
+                    $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
+                    $order->checkError($message, $ebay_user_identifier);
+                    continue;
+                }
             }
 
             if ($order->exists()) {
@@ -920,7 +923,7 @@ class Ebay extends Module
                 $order->checkError($message, $ebay_user_identifier);
                 continue;
             }
-
+            $order->add($this->ebay_profile->id);
             // no order in ebay order table with this order_ref
             if (!$order->hasValidContact()) {
                 $message = $this->l('Invalid e-mail');
@@ -1454,6 +1457,7 @@ class Ebay extends Module
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
             $validatordb = new EbayDbValidator();
+            $validatordb->checkTemplate();
             $validatordb->checkDatabase(false);
         }
 
@@ -1756,7 +1760,7 @@ class Ebay extends Module
     private function __displayFormRegister()
     {
         $ebay = new EbayRequest();
-
+	self::addSmartyModifiers();
         $smarty_vars = array();
         $smarty_vars['show_send_stats'] = Configuration::get('EBAY_SEND_STATS') === false ? true : false;
 
@@ -1868,6 +1872,7 @@ class Ebay extends Module
      **/
     private function __displayFormConfig()
     {
+    self::addSmartyModifiers();
         $form_parameters_tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
         $form_advanced_parameters_tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
 
