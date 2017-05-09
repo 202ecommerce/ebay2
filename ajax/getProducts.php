@@ -67,12 +67,10 @@ $id_ebay_profile = (int) Tools::getValue('id_ebay_profile');
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) {
-
     $row['name'] = Tools::safeOutput($row['name']);
     $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
     $row['extra_images'] = Tools::safeOutput($row['extra_images']);
     $row['stock'] = Tools::safeOutput($row['stock']);
-
 }
 
 echo Tools::jsonEncode($res);

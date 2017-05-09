@@ -34,14 +34,15 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
     die('ERROR: Invalid Token');
 }
 $id_ebay_profile = Tools::getValue('profile');
+$ebay_profile = new EbayProfile($id_ebay_profile);
 $ebay_category = Tools::getValue('real_category_ebay');
 // Insert and update categories
 if ($ebay_category) {
 
 
-
+    $percent = array();
     $ps_categories = explode(",",Tools::getValue('ps_categories'));
-    $ebay_profile = new EbayProfile($id_ebay_profile);
+
     $impact_prix = Tools::getValue('impact_prix');
     $percent_sign_type = $impact_prix['sign'];
     $percent['value'] = $impact_prix['value'];

@@ -39,14 +39,12 @@ require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'confi
 include_once _PS_ADMIN_DIR_.'init.php';
 
 
-if (
-    !Tools::getValue('token')
+if (!Tools::getValue('token')
     || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
 }
 
-if (
-    !($errorcode = Tools::getValue('errorcode'))
+if (!($errorcode = Tools::getValue('errorcode'))
     || !($lang = Tools::getValue('lang'))
 ) {
     die('ERROR : INVALID DATA');

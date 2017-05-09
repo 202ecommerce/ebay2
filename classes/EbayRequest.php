@@ -260,7 +260,7 @@ class EbayRequest
 
             // Regulates versioning of the XML interface for the API
 
-            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . (($this->ebay_profile->ebay_site_id == 23)? 'FRBE': strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id))),
+            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . (($this->ebay_profile->ebay_site_id == 23)? 'FRBE': Tools::strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id))),
             'X-EBAY-SOA-OPERATION-NAME: ' . $api_call,
             'X-EBAY-SOA-SERVICE-VERSION: 1.0.0',
             'X-EBAY-SOA-SECURITY-TOKEN: ' . ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -1023,6 +1023,7 @@ class EbayRequest
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'quantity' => $data['quantity'],
             'price_update' => !isset($data['noPriceUpdate']),
+            'category_id' => $data['categoryId'],
             'start_price' => $data['price'],
             'resynchronize' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC') != 1),
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -1086,8 +1087,6 @@ class EbayRequest
             return false;
         }
         //$return_policy = $this->_getReturnPolicy($data);
-
-
 
         $vars = array(
             'item_id' => $data['itemID'],

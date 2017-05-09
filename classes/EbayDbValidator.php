@@ -343,6 +343,8 @@ class EbayDbValidator
             'id_ebay_profile' => array('type' => ' INT', 'length' => 30),
             'error' => array('type' => ' text', 'length' => null, 'null' => true),
             'error_code' => array('type' => 'int', 'length' => 30, 'null' => true),
+            'date_add' => array('type' => 'TIMESTAMP', 'length' => null),
+            'date_upd' => array('type' => 'TIMESTAMP', 'length' => null),
             'retry' => array('type' => 'int', 'length' => 30),
             'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true)
         ),
@@ -420,7 +422,8 @@ class EbayDbValidator
     private function addColumns($table, $field, $arguments)
     {
         $sql = 'ALTER TABLE `'._DB_PREFIX_.$table.'` 
-                ADD '.bqSQL($field).' '.bqSQL($arguments['type']).'('.pSQL($arguments['length']).')';
+                ADD '.bqSQL($field).' '.bqSQL($arguments['type']);
+         $sql .= ($arguments['length']?('('.pSQL($arguments['length']).')'):"");
 
 
         return Db::getInstance()->Execute($sql);
@@ -652,10 +655,12 @@ class EbayDbValidator
     {
         $this->logs[$table][] = array('status' => $status, 'action' => $action, 'result' => $result);
     }
+
     public function getNbTable()
     {
         return count($this->database);
     }
+
     public function checkSpecificTable($id)
     {
         $array = array_keys($this->database);
@@ -678,6 +683,7 @@ class EbayDbValidator
 
         return false;
     }
+
     public function getLog()
     {
         $result = array();
@@ -699,6 +705,7 @@ class EbayDbValidator
 
         return $result;
     }
+
     public function getCategoriesPsEbay()
     {
         $sql = 'SELECT
@@ -802,4 +809,5 @@ class EbayDbValidator
         Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'ebay_category_tmp`');
     
     }
+
 }

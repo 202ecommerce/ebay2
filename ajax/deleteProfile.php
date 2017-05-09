@@ -41,9 +41,7 @@ if (Module::isInstalled('ebay')) {
 
     $enable = Module::isEnabled('ebay');
 
-
     if ($enable) {
         die(EbayProfile::deleteById((int) Tools::getValue('profile')));
     }
-
 }

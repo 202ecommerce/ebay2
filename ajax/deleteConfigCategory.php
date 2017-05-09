@@ -51,8 +51,7 @@ $sql .= ')
 $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_category');
 $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
 $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
-foreach ($to_synchronize_product_ids as $product_id_to_sync){
-
+foreach ($to_synchronize_product_ids as $product_id_to_sync) {
     EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
 }
 EbayCategoryConfiguration::deleteByIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'));

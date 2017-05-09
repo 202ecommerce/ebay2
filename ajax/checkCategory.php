@@ -73,11 +73,10 @@ if (Module::isInstalled('ebay')) {
                         'id_categories_ref_parent' => pSQL($cat['CategoryParentID']),
                         'level' => pSQL($cat['CategoryLevel'])
                     ));
-	    Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES 
-		    ("'.pSQL($cat['CategoryName']).'",
-		    '.pSQL($cat['CategoryID']).',
-		    '.pSQL($cat['CategoryParentID']).',
-		    '.pSQL($cat['CategoryLevel']).')');
+                    Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES ("'.pSQL($cat['CategoryName']).'", 
+                    '.pSQL($cat['CategoryID']).', 
+                    '.pSQL($cat['CategoryParentID']).', 
+                    '.pSQL($cat['CategoryLevel']).')');
                 };
                     die(Tools::jsonEncode($cat));
 

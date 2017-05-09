@@ -156,7 +156,8 @@
 				$('.js-prev-popin').hide();
 			}
 			$('.js-save-popin').hide();
-			courant_page.parent().find('#'+new_id).addClass('selected').show();
+			console.log(courant_page.parent().find('#'+new_id));
+			courant_page.parent().find('div#'+new_id).addClass('selected').show();
 
 		});
 		$('.js-save-category').on('click', function() {
@@ -832,6 +833,7 @@
 			</div>
 			<div style="display: none">
 				<select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
+					<option value="0">no category selected</option>
 					{foreach from=$ebayCategories item=ebayCategory}
 						<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
 					{/foreach}

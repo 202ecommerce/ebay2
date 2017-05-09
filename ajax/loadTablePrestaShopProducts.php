@@ -150,7 +150,6 @@ $employee = new Employee((int) Tools::getValue('id_employee'));
 $context->employee = $employee;
 
 foreach ($res as &$row) {
-
     if ($row['EbayProductRef']) {
         $row['link'] = EbayProduct::getEbayUrl($row['EbayProductRef'], $ebay_request->getDev());
     }
@@ -164,14 +163,12 @@ foreach ($res as &$row) {
     }
 
     if ($row['id_category_ref']) {
-
         foreach ($ebay_categories as $cat) {
             if ($cat['id'] == $row['id_category_ref']) {
                 $row['ebay_category_full_name'] = $cat['name'];
                 break;
             }
         }
-
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
@@ -182,7 +179,6 @@ foreach ($res as &$row) {
     $link = $context->link;
 
     $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $row['id_product'].'&updateproduct') : $link->getProductLink((int) $row['id_product']));
-
 }
 
 $smarty = $context->smarty;

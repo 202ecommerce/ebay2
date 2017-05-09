@@ -32,7 +32,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
     die('ERROR: Invalid Token');
 }
 
-if(!Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')){
+if (!Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')) {
     //EbayTaskManager::toJob();
-    file_get_contents(Tools::getValue('cron_url'));
+    Tools::file_get_contents(Tools::getValue('cron_url'));
 }

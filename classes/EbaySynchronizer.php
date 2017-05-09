@@ -277,10 +277,6 @@ class EbaySynchronizer
 
         }
 
-        // Price Update
-        if (isset($p['noPriceUpdate'])) {
-            $data['noPriceUpdate'] = $p['noPriceUpdate'];
-        }
 
         $clean_percent = $ebay_category->getCleanPercent();
         // Save percent and price discount
@@ -435,17 +431,19 @@ class EbaySynchronizer
 
         if (!$picture_skip_variations && !empty($combination_images)) {
             foreach ($combination_images as $combination_image) {
-                foreach ($combination_image as $image) {
-                    // If issue, it's because of https/http in the url
-                    $link = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
-                    if ($id_product_atributte == 0) {
-                        $variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
+                if (!empty($combination_image)) {
+                    foreach ($combination_image as $image) {
+                        // If issue, it's because of https/http in the url
+                        $link = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
+                        if ($id_product_atributte == 0) {
+                            $variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
 
-                    } else {
-                        $variations[0]['pictures'][] = $link;
+                        } else {
+                            $variations[0]['pictures'][] = $link;
+                        }
+
+                        //$variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
                     }
-
-                    //$variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
                 }
             }
         }
@@ -1013,6 +1011,7 @@ class EbaySynchronizer
         $ebay_request = new EbayRequest($id_ebay_profile, $context->cloneContext());
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $data = EbaySynchronizer::getDatasProductForStock($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
+
         $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
         if (count($data['variations']) && $id_product_attribute == 0) {
             $ebay = EbaySynchronizer::__updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'));
@@ -1518,7 +1517,7 @@ class EbaySynchronizer
 
     private static function __getVariationData($data, $variation, $id_currency, $is_for_stock = false)
     {
-
+        
         if (!empty($variation['pictures'])) {
             $data['pictures'] = $variation['pictures'];
         }

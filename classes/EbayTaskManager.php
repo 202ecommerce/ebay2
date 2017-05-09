@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2017 PrestaShop
  *
@@ -24,6 +23,7 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayTaskManager
 {
     protected $taskDefinition = array(
@@ -77,7 +77,7 @@ class EbayTaskManager
             return true;
         }
         if (isset($product->id)) {
-
+            $sql = array();
             foreach ($ebay_profiles as $profile) {
                 $sql[] = 'SELECT `id_product`, ' . $profile['id_ebay_profile'] . ' AS `id_ebay_profile`, ' . $profile['id_lang'] . ' AS `id_lang`
             FROM `' . _DB_PREFIX_ . 'product`

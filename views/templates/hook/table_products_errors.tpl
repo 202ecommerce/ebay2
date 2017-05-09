@@ -29,7 +29,7 @@
 
         <table id="AnnoncesErrorsListings" class="table" >
             <thead>
-            <tr >
+            <tr>
 
                 <th style="width:110px;">
                     <span>{l s='Date' mod='ebay'}</span>
@@ -42,7 +42,6 @@
                 <th class="center">
                     <span>{l s='Nom' mod='ebay'}</span>
                 </th>
-
 
                 <th>
                     <span >{l s='Annonces eBay' mod='ebay'}</span>
