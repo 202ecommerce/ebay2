@@ -143,7 +143,7 @@ if (Tools::getValue('payement_policies') || Tools::getValue('return_policies')) 
 
 
 
-    EbayConfiguration::set($id_ebay_profile, 'EBAY_BUSINESS_POLICIES_CONFIG', 1);
+    $ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES_CONFIG', 1);
 
 }
 

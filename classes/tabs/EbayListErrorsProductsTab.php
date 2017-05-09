@@ -82,6 +82,7 @@ class EbayListErrorsProductsTab extends EbayTab
                 'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $product->id.'&updateproduct') : $link->getProductLink((int) $product->id)),
             );
         }
+
             $vars['id_ebay_profile'] = $id_ebay_profile;
             $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
         }
