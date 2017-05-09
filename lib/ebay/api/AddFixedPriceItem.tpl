@@ -81,17 +81,19 @@
 
 		{if isset($ktype)}
 		<ItemCompatibilityList>
+		{foreach from=$ktype key=name item=value}
 			<Compatibility>
 				<NameValueList>
 					<Name>KType</Name>
-					{foreach from=$ktype key=name item=value}
+					
 
 							<Value><![CDATA[{$value}]]></Value>
 
-					{/foreach}
+				
 				</NameValueList>
 
 			</Compatibility>
+				{/foreach}
 		</ItemCompatibilityList>
 		{/if}
 

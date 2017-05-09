@@ -86,6 +86,11 @@
 			<Title><![CDATA[{$title|cleanHtml}]]></Title>
 			<Description><![CDATA[{$description}]]></Description>
 		{/if}
+			{if isset($category_id)}
+		<PrimaryCategory>
+			<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
+		</PrimaryCategory>
+		{/if}
 		{if isset($shipping_details)}
 			<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
 		{/if}
@@ -104,17 +109,22 @@
 		{/if}
 		{if isset($ktype)}
 			<ItemCompatibilityList>
+				
+				{foreach from=$ktype key=name item=value}
 				<Compatibility>
 					<NameValueList>
 						<Name>KType</Name>
-						{foreach from=$ktype key=name item=value}
+
 
 							<Value><![CDATA[{$value}]]></Value>
 
-						{/foreach}
 					</NameValueList>
 
 				</Compatibility>
+
+				{/foreach}
+				
+				<ReplaceAll>TRUE</ReplaceAll>
 			</ItemCompatibilityList>
 		{/if}
 		{if isset($return_policy)}
