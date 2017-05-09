@@ -1064,7 +1064,7 @@ class EbayOrder
         return $orders;
     }
 
-    public function checkError($error, $ebay_user_identifier)
+    public function checkError($error, $ebay_user_identifier, $exist = false)
     {
         $order_error = new EbayOrderErrors();
         $order_error->ebay_user_identifier = $ebay_user_identifier;
@@ -1075,13 +1075,15 @@ class EbayOrder
         $order_error->email = $this->email;
         $order_error->error = $error;
         $order_error->save();
-        $this->delete();
+        if (!$exist) {
+            $this->delete();
+        }
     }
 
     public static function getOrders() {
         return Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_order_order`
-			WHERE `id_order` = null');
+			WHERE `id_order` > 0');
     }
     public static function getOrderByOrderRef($id_order_ref) {
         return Db::getInstance()->executeS('SELECT eoo.*

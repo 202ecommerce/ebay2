@@ -53,7 +53,7 @@ class EbayOrdersTab extends EbayTab
 
                 $vars['orders_tab'][] = array(
                     'date_ebay' => $order->date_add,
-                    'reference_ebay'  => $ord['id_order_ref'],
+                    'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),
                     'referance_marchand' => $order->payment,
                     'email' => $order->getCustomer()->email,
                     'total' => $order->total_paid,

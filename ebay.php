@@ -920,7 +920,7 @@ class Ebay extends Module
 
             if ($order->exists()) {
                 $message = $this->l('Order already imported');
-                $order->checkError($message, $ebay_user_identifier);
+                $order->checkError($message, $ebay_user_identifier, true);
                 continue;
             }
             $order->add($this->ebay_profile->id);
