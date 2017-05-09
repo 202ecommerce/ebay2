@@ -717,6 +717,7 @@ class EbayOrder
     public function update($id_ebay_profile = null)
     {
 
+
         if (is_array($this->id_orders)) {
             foreach ($this->id_orders as $id_shop => $id_order) {
 
@@ -727,7 +728,6 @@ class EbayOrder
                         'id_ebay_profile' => ($id_ebay_profile === null) ? null : (int) $id_ebay_profile,
                         'id_transaction' => $this->id_transaction,
                     ));
-
 
             }
             if ($res) {

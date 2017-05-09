@@ -58,7 +58,6 @@ if (Module::isInstalled('ebay')) {
             )';
                 Db::getInstance()->execute($sql);
                 if ($cat_root = $ebay_request->getCategories(false)) {
-
                     die(Tools::jsonEncode($cat_root));
                 } else {
                     die(Tools::jsonEncode('error'));
@@ -87,9 +86,6 @@ if (Module::isInstalled('ebay')) {
                 $validator->deleteTmp();
                 echo Tools::jsonEncode($res);
             }
-           
-           
         }
-        
     }
 }

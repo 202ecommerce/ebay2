@@ -1453,6 +1453,7 @@ class Ebay extends Module
      */
     public function getContent()
     {
+
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
