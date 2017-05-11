@@ -896,6 +896,7 @@ margin-bottom: 3px;
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: contain;
+	vertical-align: middle;
 }
 
 #content .conf.info{

@@ -35,8 +35,9 @@ class EbayFormConfigOrdersTab extends EbayTab
         );
 
         $url_vars['controller'] = Tools::getValue('controller');
-        if (!$this->ebay_profile->getConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK')) {
-            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'Annonces settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+
+        if(!$this->ebay_profile->getConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK')) {
+            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'Annonces settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
 
         $url = $this->_getUrl($url_vars);

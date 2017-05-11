@@ -30,11 +30,11 @@ class EbayFormEbaySyncTab extends EbayTab
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
         $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
         if (empty($national_shipping)) {
-            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'National Shipping\' tab before using this tab', 'ebayformebaysynctab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'International Shipping\' tab before using this tab', 'ebayformebaysynctab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
         $nb_products_mode_a = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "A");
         $nb_products_mode_b = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "B");

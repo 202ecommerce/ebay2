@@ -1512,7 +1512,8 @@ class Ebay extends Module
             }
         }
         $this->context->controller->addCSS(
-            $this->_path.'/views/css/ebayV2.css'
+            // $this->_path.'/views/css/ebayV2.css'
+            $this->_path.'/views/css/admin.css'
         );
         $this->html .= $this->__displayForm();
 

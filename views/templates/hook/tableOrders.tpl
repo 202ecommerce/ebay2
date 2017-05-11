@@ -23,15 +23,17 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <p>
-<span><b>{l s='Commandes importées par' mod='ebay'} {$type_sync_order}<br>
+    <span><b>{l s='Commandes importées par' mod='ebay'} {$type_sync_order}<br>
         {l s='Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
-<br>
-<a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"><input type="button" class="button"
-                                                                    value="{l s='Sync Orders from eBay' mod='ebay'}"/></a>
-<br>
-    <!-- table -->
 
+<p>
+    <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1" class="btn btn-default">
+        <i class="icon-refresh"></i> <span>{l s='Sync Orders from eBay' mod='ebay'}</span>
+    </a>
+</p>
+
+    <!-- table -->
     <table id="OrderListings" class="table " >
         <thead>
         <tr >

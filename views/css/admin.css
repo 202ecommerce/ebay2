@@ -1,0 +1,122 @@
+/**
+ * Ebay specific styling
+ *
+ * Every rule should be incapsulated in the .totebay selector
+ * to prevent styling elements outside the module container.
+ */
+.totebay .d-b {
+  display: block;
+}
+.totebay .d-ib {
+  display: inline-block;
+}
+.totebay .d-i {
+  display: inline;
+}
+.totebay .pos-r {
+  position: relative;
+}
+.totebay .pos-a {
+  position: absolute;
+}
+.totebay .menuTab {
+  margin-bottom: 15px;
+}
+.totebay .sidebar.navigation i,
+.totebay .panel-heading i {
+  margin-right: 5px;
+}
+.totebay .alert-no-icon {
+  padding-left: 15px !important;
+}
+.totebay .alert-no-icon:before {
+  display: none !important;
+}
+.totebay .btn [class^='icon-'] + span {
+  margin-left: 5px;
+}
+.totebay .form-horizontal > div:not(.pull-right):not(.panel-footer),
+.totebay .form-horizontal > label,
+.totebay .form-horizontal > button {
+  margin-right: 10px;
+}
+.totebay .popin > .panel {
+  margin-bottom: 0 !important;
+}
+.totebay .popin.popin-lg > .panel {
+  max-width: 800px;
+}
+.totebay .popin.popin-sm > .panel {
+  max-width: 500px;
+}
+.totebay .item-list {
+  max-height: 66px;
+  margin-top: 15px;
+  margin-bottom: 0;
+  padding-left: 0;
+  line-height: 22px;
+  list-style: none;
+  overflow-y: auto;
+}
+.totebay .item-list .item {
+  padding-left: 5px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-transition: all, 0.3s, linear;
+  -o-transition: all, 0.3s, linear;
+  -webkit-transition: all, 0.3s, linear;
+  transition: all, 0.3s, linear;
+}
+.totebay .item-list .item button {
+  display: none;
+}
+.totebay .item-list .item:hover {
+  background-color: #f4f8fb;
+}
+.totebay .item-list .item:hover button {
+  display: initial;
+}
+.totebay .item-list .item .badge {
+  line-height: 15px;
+  vertical-align: middle;
+}
+.totebay .panel-heading .badge.badge-success {
+  border-color: #72C279 !important;
+  color: #fff !important;
+  background-color: #72C279 !important;
+}
+.totebay .js-user-dropdown .dropdown-menu {
+  min-width: 360px;
+}
+.totebay .js-user-dropdown .dropdown-menu li:nth-child(even) {
+  background-color: #FCFDFE;
+}
+.totebay .js-user-dropdown .dropdown-menu li > a {
+  padding: 5px 0;
+}
+.totebay .js-user-dropdown .dropdown-menu li > a span[class^='col-']:first-child {
+  padding-left: 20px;
+}
+.totebay .js-user-dropdown .dropdown-menu li > a.selected span[class^='col-']:first-child {
+  position: relative;
+}
+.totebay .js-user-dropdown .dropdown-menu li > a.selected span[class^='col-']:first-child:before {
+  position: absolute;
+  left: 4px;
+  content: '\f00c';
+  font-family: "fontAwesome";
+  color: #3c763d;
+}
+.totebay .js-user-dropdown .dropdown-menu .head {
+  padding: 5px 0 10px 0;
+  font-weight: 600;
+}
+.totebay .js-user-dropdown .dropdown-menu .head > span {
+  padding: 0 5px;
+}
+.totebay .js-user-dropdown .dropdown-menu .head > span:first-child {
+  padding-left: 20px;
+}
+
+/*# sourceMappingURL=admin.css.map */

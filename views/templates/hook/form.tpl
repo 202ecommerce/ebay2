@@ -206,12 +206,12 @@
                                                 <i class="icon-trash"></i>
                                             </button>
                                             {if $debug == 1}
-                                                <small  style="background-color: #F80; color: #FFF; padding:5px;">in SANDBOX mode  !!</small>
+                                                <small  style="background-color: #F80; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">in SANDBOX mode !</small>
                                             {/if}
                                             <div class="pull-right">
-            <span title="<h4>Aide</h4><p>Ici une paragraphe explicatif sur le fonctionnement du selecteur de profil.</p>" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
-              <i class="process-icon-help"></i>
-            </span>
+                                                <span title="<h4>Aide</h4><p>Ici une paragraphe explicatif sur le fonctionnement du selecteur de profil.</p>" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
+                                                    <i class="process-icon-help"></i>
+                                                </span>
                                             </div>
                                         </form>
                                         <form class="change_profile" method="post">

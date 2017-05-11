@@ -25,7 +25,10 @@
 
 <div id="ebayOrphanListing">
     <p class="center">
-        <button class="button">{l s='See Orphan Listings' mod='ebay'}</button>
+        <button class="btn btn-default">
+            <i class="icon-eye"></i>
+            <span>{l s='See orphan listings' mod='ebay'}</span>
+        </button>
     </p>
 </div>
 

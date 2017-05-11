@@ -25,7 +25,10 @@
 
 <div id="ebayProductExclu">
     <p class="center">
-        <button class="button">{l s='See Products Exclure' mod='ebay'}</button>
+        <button class="btn btn-default">
+            <i class="icon-eye"></i>
+            <span>{l s='See excluded products' mod='ebay'}</span>
+        </button>
     </p>
 </div>
 

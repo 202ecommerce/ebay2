@@ -40,8 +40,9 @@ class EbayFormShippingTab extends EbayTab
             'EBAY_DELIVERY_TIME',
             'EBAY_ZONE_NATIONAL',
         ));
-        if (!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
-            return '<p class="error"><b>' . $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+
+        if(!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
+            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {

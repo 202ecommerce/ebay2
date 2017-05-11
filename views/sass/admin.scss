@@ -9,9 +9,31 @@
  */
 
 .totebay {
-  /**
-   * General styling
-   */
+  // Helpers
+.d-b {
+    display: block;
+  }
+
+  .d-ib {
+    display: inline-block;
+  }
+
+  .d-i {
+    display: inline;
+  }
+
+  .pos-r {
+    position: relative;
+  }
+
+  .pos-a {
+    position: absolute;
+  }
+
+  // General styling
+  .menuTab {
+    margin-bottom: 15px;
+  }
 
   // Adds spacing after icons
   .sidebar.navigation i,
@@ -27,8 +49,15 @@
     }
   }
 
-  // Uniformise spacing in horizontal-form
-  .form-horizontal > div:not(.pull-right),
+  // Add spacing in button with icons
+  .btn {
+    [class^='icon-'] + span {
+      margin-left: 5px;
+    }
+  }
+
+  // Uniformize spacing in horizontal-form
+  .form-horizontal > div:not(.pull-right):not(.panel-footer),
   .form-horizontal > label,
   .form-horizontal > button {
     margin-right: 10px;
@@ -48,7 +77,7 @@
     }
   }  
 
-  // Item list (like with category selection)
+  // Item list (eg. category selection)
   .item-list {
     max-height: 66px;
     margin-top: 15px;
