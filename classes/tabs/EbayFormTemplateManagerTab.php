@@ -91,14 +91,12 @@ class EbayFormTemplateManagerTab extends EbayTab
 
             foreach ($products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
-                EbayTaskManager::addTask('update',$product, null, $this->ebay_profile->id);
+                EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
 
             return $this->ebay->displayConfirmation($this->ebay->l('Settings updated', 'ebayformtemplatemanagertab'));
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed', 'ebayformtemplatemanagertab'));
         }
-
-
     }
 }

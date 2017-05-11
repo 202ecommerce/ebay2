@@ -307,6 +307,7 @@ class EbaySynchronizer
             $address->id_country = $country_address;
             $address->save();
         }
+
         return $data;
     }
 
@@ -952,7 +953,10 @@ class EbaySynchronizer
         } else {
 
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
-            $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
+	    if (Tools::getIsset($data['variations'][0])) {
+	    	$data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
+	    }
+            
             $ebay = EbaySynchronizer::__updateItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'), $id_product_attribute);
         }
 
@@ -1133,7 +1137,7 @@ class EbaySynchronizer
 
     private static function __updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
-        if(EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::is_blocked($id_ebay_profile, $product_id)){
+        if(EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)){
             foreach ($data['variations'] as &$variations){
                 $variations['quantity'] = 0;
             }
@@ -1154,7 +1158,7 @@ class EbaySynchronizer
 
     private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
-        if(EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::is_blocked($id_ebay_profile, $product_id)){
+        if(EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)){
             $data['quantity'] =0;
         }
         if ($res = $ebay->reviseStockFixedPriceItem($data)) {
@@ -1538,8 +1542,9 @@ class EbaySynchronizer
                 $data['name'] .= ' ' . $variation_specific;
             }
         }
-        $data['price'] = $variation['price'];
-
+        if (isset($variation['price'])) {
+            $data['price'] = $variation['price'];
+        }
         if (isset($variation['price_original'])) {
             $data['price_original'] = $variation['price_original'];
             $data['price_percent'] = $variation['price_percent'];

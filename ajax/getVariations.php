@@ -91,4 +91,3 @@ foreach ($res as $row) {
 }
 
 die(Tools::jsonEncode($final_res));
-

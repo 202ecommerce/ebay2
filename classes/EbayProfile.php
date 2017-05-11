@@ -93,7 +93,6 @@ class EbayProfile extends ObjectModel
 
         if ($this->id_ebay_returns_policy_configuration) {
             $returns_policy_configuration = new EbayReturnsPolicyConfiguration($this->id_ebay_returns_policy_configuration);
-
         } else {
             $returns_policy_configuration = new EbayReturnsPolicyConfiguration();
         }
@@ -153,7 +152,6 @@ class EbayProfile extends ObjectModel
         foreach ($configurations as $configuration) {
             $this->configurations[$configuration['name']] = $configuration['value'];
         }
-
     }
 
     public function setConfiguration($name, $value, $html = false)
@@ -390,7 +388,6 @@ class EbayProfile extends ObjectModel
             } else {
                 return false;
             }
-
         } catch (Exception $e) {
             return false;
         }
@@ -429,11 +426,9 @@ class EbayProfile extends ObjectModel
                 if (($current_profile_id_shop == $id_shop) || ($current_profile_id_shop == 0)) {
                     return new EbayProfile((int) $data[0]);
                 }
-
             } else {
                 return new EbayProfile((int) $data[0]);
             }
-
         }
 
         // if shop has changed we switch to the first shop profile
@@ -465,7 +460,6 @@ class EbayProfile extends ObjectModel
             if (!$is_shop_profile) {
                 return false;
             }
-
         }
 
         Configuration::updateValue('EBAY_CURRENT_PROFILE', $id_ebay_profile.'_'.$id_shop, false, 0, 0);

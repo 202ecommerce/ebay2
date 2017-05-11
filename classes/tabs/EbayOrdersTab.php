@@ -34,7 +34,6 @@ class EbayOrdersTab extends EbayTab
         $orders = EbayOrder::getOrders();
         $vars = array();
         if (!empty($orders_error)) {
-
             foreach ($orders_error as $order_er) {
                 $vars['errors'][] = array(
                     'date_ebay' => $order_er['date_order'],
@@ -47,7 +46,7 @@ class EbayOrdersTab extends EbayTab
                 );
             }
         }
-        if (!empty($orders)){
+        if (!empty($orders)) {
             foreach ($orders as $ord) {
                 $order = new Order($ord['id_order']);
 
@@ -72,7 +71,7 @@ class EbayOrdersTab extends EbayTab
         );
 
         $url_vars['controller'] = Tools::getValue('controller');
-        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile,'EBAY_ORDER_LAST_UPDATE'));
+        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile, 'EBAY_ORDER_LAST_UPDATE'));
         $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
 
         $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));

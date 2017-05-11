@@ -73,10 +73,7 @@ class EbayCategorySpecific
         foreach ($ebay_category_ids as $ebay_category_id) {
             $xml_data = $request->getCategorySpecifics($ebay_category_id);
             if ($xml_data->Recommendations->NameRecommendation) {
-
-
                 foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
-
                     $required = isset($recommendation->ValidationRules->MinValues) && ((int)$recommendation->ValidationRules->MinValues >= 1);
 
                     // if true can be used either in Item Specifics or VariationSpecifics
@@ -91,7 +88,6 @@ class EbayCategorySpecific
                         } else {
                             $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                         }
-
                     } else {
                         $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                     }
@@ -134,7 +130,6 @@ class EbayCategorySpecific
                     EbayCategorySpecificValue::insertIgnore($insert_data);
                 }
             }
-
         }
 
         return true;
@@ -147,7 +142,6 @@ class EbayCategorySpecific
             if (EbayCategorySpecific::isConfigured($item)) {
                 return true;
             }
-
         }
 
         return false;
@@ -160,9 +154,7 @@ class EbayCategorySpecific
             if (!EbayCategorySpecific::isConfigured($item)) {
                 return false;
             }
-
         }
-
         return true;
     }
 

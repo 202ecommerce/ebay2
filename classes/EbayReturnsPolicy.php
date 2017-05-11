@@ -38,7 +38,6 @@ class EbayReturnsPolicy
         $returnsWithin = Configuration::get('EBAY_RETURNS_WITHIN_VALUES');
         $returnsWhoPays = Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES');
         return $returnspolicy && $returnsWithin && $returnsWhoPays;
-
     }
 
     public static function insert($data)

@@ -78,7 +78,6 @@ if (Module::isInstalled('ebay')) {
                     '.pSQL($cat['CategoryLevel']).')');
                 };
                     die(Tools::jsonEncode($cat));
-
             } elseif ($step == 3) {
                 $id_profile_ebay = Tools::getValue('id_profile_ebay');
                 ini_set('max_execution_time', 300);

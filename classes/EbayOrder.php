@@ -656,8 +656,6 @@ class EbayOrder
             }
             Db::getInstance()->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
-
-
         return Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
     }
 
@@ -706,21 +704,15 @@ class EbayOrder
     {
         db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'ebay_order WHERE id_order_ref = "'.pSQL($this->id_order_ref).'"');
 
-
         if ($this->id_ebay_order) {
             $this->_writeLog($id_ebay_profile, 'deleted_orders', $this->id_ebay_order);
         }
-
-
     }
 
     public function update($id_ebay_profile = null)
     {
-
-
         if (is_array($this->id_orders)) {
             foreach ($this->id_orders as $id_shop => $id_order) {
-
                     $res = Db::getInstance()->insert('ebay_order_order', array(
                         'id_ebay_order' => (int) $this->id_ebay_order,
                         'id_order' => (int) $id_order,
@@ -728,12 +720,10 @@ class EbayOrder
                         'id_ebay_profile' => ($id_ebay_profile === null) ? null : (int) $id_ebay_profile,
                         'id_transaction' => $this->id_transaction,
                     ));
-
             }
             if ($res) {
                 $this->_writeLog($id_ebay_profile, 'updates_order', $res);
             }
-
         }
     }
 
@@ -799,7 +789,6 @@ class EbayOrder
             if (isset($data2[1])) {
                 $id_ebay_profile = (int) $data2[1];
             }
-
         }
 
         return array($id_product, $id_product_attribute, $id_ebay_profile);
@@ -838,7 +827,6 @@ class EbayOrder
             } else {
                 $reference = $skuItem;
             }
-
         }
 
         return trim($reference);
@@ -925,7 +913,6 @@ class EbayOrder
                                 'price' => (string) $transaction->TransactionPrice);
                         }
                     }
-
                 }
             }
         }
@@ -1080,12 +1067,14 @@ class EbayOrder
         }
     }
 
-    public static function getOrders() {
+    public static function getOrders()
+    {
         return Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_order_order`
 			WHERE `id_order` > 0');
     }
-    public static function getOrderByOrderRef($id_order_ref) {
+    public static function getOrderByOrderRef($id_order_ref)
+    {
         return Db::getInstance()->executeS('SELECT eoo.*
 			FROM `'._DB_PREFIX_.'ebay_order` eo
 			INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo

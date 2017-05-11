@@ -175,7 +175,6 @@ class EbayAlert
                     'prestashop_version' => _PS_VERSION_,
                 ),
             );
-
         }
     }
 
@@ -215,14 +214,12 @@ class EbayAlert
                         'message' => $msg,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('The product cron job has never been run.'),
                 );
             }
-
         }
 
         // ORDERS
@@ -248,14 +245,12 @@ class EbayAlert
                         'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('Order cron job has never been run.'),
                 );
             }
-
         }
 
         // Returns
@@ -281,15 +276,12 @@ class EbayAlert
                         'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('Order returns cron job has never been run.'),
                 );
             }
-
         }
-
     }
 }

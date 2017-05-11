@@ -33,7 +33,6 @@ class TotFormat
         } else {
             return $pattern;
         }
-
     }
 
     /**

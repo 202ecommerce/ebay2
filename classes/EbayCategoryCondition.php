@@ -52,7 +52,7 @@ class EbayCategoryCondition
         foreach ($ebay_category_ids as $category_id) {
             $xml_data = $request->getCategoryFeatures($category_id);
 
-            if (isset($xml_data->Category->KTypeSupported )) {
+            if (isset($xml_data->Category->KTypeSupported)) {
                 $ktype_value = $xml_data->Category->KTypeSupported;
 
                 EbayCategory::setKtypeConfiguration($category_id, $ktype_value, $id_ebay_profile);

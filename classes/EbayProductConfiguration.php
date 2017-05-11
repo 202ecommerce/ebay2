@@ -38,7 +38,7 @@ class EbayProductConfiguration
 			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
     }
 
-    public static function is_blocked($id_ebay_profile, $product_id)
+    public static function isblocked($id_ebay_profile, $product_id)
     {
         return Db::getInstance()->Execute('SELECT  `blacklisted`, `extra_images`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
@@ -69,7 +69,7 @@ class EbayProductConfiguration
             $fields_strs[] = '`'.bqSQL($key).'` = "'.pSQL($value).'"';
         }
 
-        if($data['blacklisted']){
+        if ($data['blacklisted']) {
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $data['id_ebay_profile']);
         }
 

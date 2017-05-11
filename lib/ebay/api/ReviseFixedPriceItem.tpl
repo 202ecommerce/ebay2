@@ -107,9 +107,9 @@
                 {/foreach}
             </ItemSpecifics>
 		{/if}
-		{if isset($ktype)}
+		{if $isKtype}
 			<ItemCompatibilityList>
-				
+				{if isset($ktype)}
 				{foreach from=$ktype key=name item=value}
 				<Compatibility>
 					<NameValueList>
@@ -123,7 +123,7 @@
 				</Compatibility>
 
 				{/foreach}
-				
+				{/if}
 				<ReplaceAll>TRUE</ReplaceAll>
 			</ItemCompatibilityList>
 		{/if}

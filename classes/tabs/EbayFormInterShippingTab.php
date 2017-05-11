@@ -126,8 +126,6 @@ class EbayFormInterShippingTab extends EbayTab
                 $where .= ' AND `id_ebay_profile` = '.(int) $this->ebay_profile->id;
 
                 DB::getInstance()->update('ebay_shipping_zone_excluded', array('excluded' => 1), $where);
-
-
             }
         }
 
@@ -135,14 +133,12 @@ class EbayFormInterShippingTab extends EbayTab
 			WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
 
         if ($ebay_carriers_international = Tools::getValue('ebayCarrier_international')) {
-
             $ps_carriers_international = Tools::getValue('psCarrier_international');
             $extra_fees_international = Tools::getValue('extrafee_international');
             $international_shipping_locations = Tools::getValue('internationalShippingLocation');
 
             EbayShipping::truncateInternational($this->ebay_profile->id);
             foreach ($ebay_carriers_international as $key => $ebay_carrier_international) {
-
                 if (!empty($ebay_carrier_international) && !empty($ps_carriers_international[$key]) && isset($international_shipping_locations[$key])) {
                     $infos = explode('-', $ps_carriers_international[$key]);
 
@@ -159,7 +155,7 @@ class EbayFormInterShippingTab extends EbayTab
 
         foreach ($products as $product_id) {
             $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
-            EbayTaskManager::addTask('update',$product, null, $this->ebay_profile->id);
+            EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
         }
     }
 }

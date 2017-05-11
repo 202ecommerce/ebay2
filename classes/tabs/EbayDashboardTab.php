@@ -32,16 +32,18 @@ class EbayDashboardTab extends EbayTab
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles(array($id_ebay_profiles));
         $count_order_errors = false;
         $count_product_errors = false;
-        if($id_ebay_profiles){
+
+        if ($id_ebay_profiles) {
             $count_order_errors = EbayOrderErrors::getAll($id_ebay_profiles);
             $count_product_errors =EbayTaskManager::getErrors($id_ebay_profiles);
         }
+
         $vars = array(
             'nb_tasks' => EbayTaskManager::getNbTasks($id_ebay_profiles),
             'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
             'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
             'nb_products' => (isset($nb_products[$id_ebay_profiles]) ? $nb_products[$id_ebay_profiles] : 0),
-            'dernier_import_order' => EbayConfiguration::get($id_ebay_profiles,'EBAY_ORDER_LAST_UPDATE'),
+            'dernier_import_order' => EbayConfiguration::get($id_ebay_profiles, 'EBAY_ORDER_LAST_UPDATE'),
             'dernier_import_product' => Configuration::get('DATE_LAST_SYNC_PRODUCTS'),
         );
 

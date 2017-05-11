@@ -114,7 +114,6 @@ class EbayRequest
         }
 
         $this->write_api_logs = Configuration::get('EBAY_API_LOGS');
-
     }
 
     public static function getValueOfFeature($val, $feature)
@@ -198,7 +197,6 @@ class EbayRequest
         curl_setopt($connection, CURLOPT_POST, 1);
 
         if (isset($request)) {
-
             curl_setopt($connection, CURLOPT_POSTFIELDS, $request); // Set the XML body of the request
         }
         
@@ -216,7 +214,6 @@ class EbayRequest
             }
 
             if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 100) {
-
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($api_call), true), FILE_APPEND | LOCK_EX);
@@ -366,21 +363,21 @@ class EbayRequest
 
         if(isset($datas->SellerProfileOptedIn)) {
             $config = (array)$datas->SellerProfileOptedIn;
-  if (!empty($config)) {
-            if ($config[0]== 'true') {
-                $data = 1;
-
-            } else {
-                $data = 0;
-            }
-
-            if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
-                if ($data== 1) {
-                    $this->importBusinessPolicies();
+            if (!empty($config)) {
+                if ($config[0]== 'true') {
+                    $data = 1;
+                } else {
+                    $data = 0;
                 }
-                $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', $data);
+
+                if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
+                    if ($data== 1) {
+                        $this->importBusinessPolicies();
+                    }
+                    $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', $data);
+                }
             }
-        }}
+        }
         return $userProfile;
     }
 
@@ -413,10 +410,8 @@ class EbayRequest
             foreach ($cat as $key => $value) {
                 $category[(string)$key] = (string)$value;
             }
-
             $categories[] = $category;
         }
-
         return $categories;
     }
 
@@ -783,7 +778,6 @@ class EbayRequest
                 $this->_logApiCall('addSellerProfile', $vars, $response, $data['id_product']);
 
                 if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
-
                     if ($response->errorMessage->error->errorId == '178149') {
                         $dataProf = array(
                         'id' => $name_shipping,
@@ -1013,7 +1007,7 @@ class EbayRequest
         if (!is_string($return_policy) && is_array($return_policy)) {
             return $this->error = $return_policy['error'];
         }
-
+        $ebay_category = new EbayCategory($this->ebay_profile, $data['categoryId']);
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
@@ -1035,6 +1029,7 @@ class EbayRequest
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
+            'isKtype' => (bool)$ebay_category->isKtype(),
 
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1230,17 +1225,16 @@ class EbayRequest
                 if (isset($variation['variations'])) {
                     if (isset($variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]])) {
                         $value = $variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]];
-                            if (!isset($attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang] . $value)]) && isset($variation['pictures'][0])) {
-                                if ($last_specific_name != $attribute_for_image->name[$this->ebay_profile->id_lang]) {
-                                    $variation_pictures[$key][0]['name'] = $attribute_for_image->name[$this->ebay_profile->id_lang];
-                                }
-                                $variation_pictures[$key][0]['value'] = $value;
-                                $variation_pictures[$key][0]['url'] = $variation['pictures'][0];
-                                $attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang] . $value)] = true;
-                                $last_specific_name = $attribute_for_image->name[$this->ebay_profile->id_lang];
+                        if (!isset($attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang] . $value)]) && isset($variation['pictures'][0])) {
+                            if ($last_specific_name != $attribute_for_image->name[$this->ebay_profile->id_lang]) {
+                                $variation_pictures[$key][0]['name'] = $attribute_for_image->name[$this->ebay_profile->id_lang];
                             }
+                            $variation_pictures[$key][0]['value'] = $value;
+                            $variation_pictures[$key][0]['url'] = $variation['pictures'][0];
+                            $attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang] . $value)] = true;
+                            $last_specific_name = $attribute_for_image->name[$this->ebay_profile->id_lang];
+                        }
                     } else {
-
                         foreach ($variation['variations'] as $variation_key => $variation_element) {
                             if (!isset($attribute_used[md5($variation_element['name'] . $variation_element['value'])]) && isset($variation['pictures'][$variation_key])) {
                                 if ($last_specific_name != $variation_element['name']) {
@@ -1263,7 +1257,6 @@ class EbayRequest
                         if (!in_array($value, $variation_specifics_set[$name])) {
                             $variation_specifics_set[$name][] = $value;
                         }
-
                     }
 
                     // send MPN as a variation specificcs
@@ -1336,7 +1329,7 @@ class EbayRequest
         $this->apiCall = 'ReviseFixedPriceItem';
 
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
-
+        $ebay_category = new EbayCategory($this->ebay_profile, $data['categoryId']);
         $vars = array(
             'item_id' => $data['itemID'],
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
@@ -1360,6 +1353,7 @@ class EbayRequest
             'item_specifics' => $data['item_specifics'],
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'ktype' => isset($data['ktype'])?$data['ktype']:array(),
+            'isKtype' => (bool)$ebay_category->isKtype(),
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1621,7 +1615,7 @@ class EbayRequest
         # update OutOfStockControlPreference if it change
         $out_of_stock = ($response->OutOfStockControlPreference == 'true') ? true : false;
         if ($out_of_stock != (bool)EbayConfiguration::get($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
-           $this->ebay_profile->setConfiguration('EBAY_OUT_OF_STOCK', $out_of_stock);
+            $this->ebay_profile->setConfiguration('EBAY_OUT_OF_STOCK', $out_of_stock);
         }
 
         return $response->SellerProfilePreferences;

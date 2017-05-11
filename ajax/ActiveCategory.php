@@ -31,14 +31,17 @@ include '../ebay.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
 }
-$category_conf = EbayCategoryConfiguration::getConfigByCategoryId(Tools::getValue('profile'),Tools::getValue('ebay_category'));
 
-if($category_conf[0]['sync']){
+$category_conf = EbayCategoryConfiguration::getConfigByCategoryId(Tools::getValue('profile'), Tools::getValue('ebay_category'));
+
+if ($category_conf[0]['sync']) {
     $value =0;
 } else {
     $value =1;
 }
+
 EbayCategoryConfiguration::updateByIdProfileAndIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'), $data = array('sync' => $value));
+
 $sql = 'SELECT p.`id_product`
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -58,15 +61,14 @@ $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_cat
 $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
 
 $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
-if ($value) {
 
-    foreach ($to_synchronize_product_ids as $product_id_to_sync){
+if ($value) {
+    foreach ($to_synchronize_product_ids as $product_id_to_sync) {
         $product = new Product($product_id_to_sync['id_product']);
         EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), Tools::getValue('profile'));
     }
 } else {
-    foreach ($to_synchronize_product_ids as $product_id_to_sync){
-
+    foreach ($to_synchronize_product_ids as $product_id_to_sync) {
         EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
     }
 }

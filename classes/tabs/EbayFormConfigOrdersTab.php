@@ -35,7 +35,7 @@ class EbayFormConfigOrdersTab extends EbayTab
         );
 
         $url_vars['controller'] = Tools::getValue('controller');
-        if(!$this->ebay_profile->getConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK')){
+        if (!$this->ebay_profile->getConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK')) {
             return '<p class="error"><b>' . $this->ebay->l('Please configure the \'Annonces settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
 
@@ -84,14 +84,12 @@ class EbayFormConfigOrdersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_RETURN_ORDER_STATE', (int) Tools::getValue('return_order_state'))
             && Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', (int)Tools::getValue('orders_days_backward'), false, 0, 0)
         ) {
-
-                $link = new Link();
-                $url = $link->getAdminLink('AdminModules');
+            $link = new Link();
+            $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
             Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=102&section=category#dashbord');
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
     }
-
 }

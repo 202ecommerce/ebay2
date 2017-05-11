@@ -40,7 +40,6 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
 
     if ($level > 1) {
         foreach ($ref_categories as $ref_id_category_ref => $category) {
-
             if ($ref_id_category_ref == $id_category_ref) {
                 if (isset($ref_categories[$category['id_category_ref_parent']]['children'])) {
                     if ((int) $category['id_category_ref'] != (int) $category['id_category_ref_parent']) {
@@ -70,7 +69,8 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
     return $var;
 }
 
-function getProductsSynchVariations($id_category, $ebay_profile) {
+function getProductsSynchVariations($id_category, $ebay_profile)
+{
     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -110,7 +110,7 @@ function getProductsSynchVariations($id_category, $ebay_profile) {
 if ($id_categori_ps = Tools::getValue('id_category_ps')) {
     if (Module::isInstalled('ebay')) {
         /** @var Ebay $ebay */
-    $ebay = Module::getInstanceByName('ebay');
+        $ebay = Module::getInstanceByName('ebay');
 
         $context = Context::getContext();
         $context->shop = new Shop((int) Tools::getValue('id_shop'));
@@ -205,17 +205,17 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
         /* Smarty datas */
         $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
         foreach ($category_list as $category_l) {
-            if($category_l['id_category'] == $id_categori_ps) {
+            if ($category_l['id_category'] == $id_categori_ps) {
                 $ps_category_real = $category_l;
             }
         }
 
         $bp_policies = EbayBussinesPolicies::getPoliciesConfigurationbyIdCategory($category_config_list[$id_categori_ps]['id_category_ref'], $ebay_profile->id);
 
-        $storeCategoryId =EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory( $ebay_profile->id, $id_categori_ps);
+        $storeCategoryId = EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory( $ebay_profile->id, $id_categori_ps);
 
         if ($category_config_list[$id_categori_ps]['percent']) {
-           $temp= $category_config_list[$id_categori_ps]['percent'];
+           $temp = $category_config_list[$id_categori_ps]['percent'];
             //$temp = explode(':', $percent['sign']);
             $percent = array('sign' => $temp['sign'], 'value' => $temp['value'], 'type' => $temp['type']);
         } else {
@@ -238,19 +238,5 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
         );
 
         echo Tools::jsonEncode($vars);
-
-}
-
-    /**
-     * Create selectors
-     *
-     * @param array $ref_categories
-     * @param int $id_category_ref
-     * @param int $id_category
-     * @param int $level
-     * @param object $ebay
-     *
-     * @return string
-     */
-
+    }
 }

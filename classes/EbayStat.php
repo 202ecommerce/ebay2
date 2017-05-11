@@ -80,10 +80,8 @@ class EbayStat
 
     private function _getDefaultShopUrl()
     {
-
         $shop = new Shop(Configuration::get('PS_SHOP_DEFAULT'));
         return $shop->getBaseURL();
-
     }
 
     public function save()

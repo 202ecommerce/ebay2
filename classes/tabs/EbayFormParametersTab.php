@@ -138,7 +138,6 @@ class EbayFormParametersTab extends EbayTab
 
     public function postProcess()
     {
-
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
         $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
@@ -150,7 +149,6 @@ class EbayFormParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_SHOP', pSQL(Tools::getValue('ebay_shop')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE', pSQL(Tools::getValue('ebay_shop_postalcode')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_COUNTRY', pSQL(Tools::getValue('ebay_shop_country')))
-
             && Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
             && Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
             && $this->ebay_profile->setConfiguration('EBAY_RESYNCHBP', Tools::getValue('activate_resynchBP') ? 1 : 0)
@@ -161,20 +159,17 @@ class EbayFormParametersTab extends EbayTab
         ) {
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
 
-                foreach ($products as $product_id) {
-                    $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
-                    EbayTaskManager::addTask('update',$product, null, $this->ebay_profile->id);
-                }
+            foreach ($products as $product_id) {
+                $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
+                EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
+            }
 
-                $link = new Link();
-                $url = $link->getAdminLink('AdminModules');
+            $link = new Link();
+            $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_PARAMETERS_TAB_OK', 1);
             Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2&section=category#dashbord');
-
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
     }
-
-
 }

@@ -284,9 +284,7 @@ class EbayLogger
 
         $log = EbayLogger::get(); // doit etre la même instance (si !name on prend la derniere instance créée (curent instance))
         $log->info('test MYLOGGER');
-
     }
-
 
     private function log($severity, $msg, $context = null, $backtrace = null)
     {
@@ -309,7 +307,6 @@ class EbayLogger
                     )
                 );
             } else {
-
                 $sql = 'INSERT INTO '._DB_PREFIX_.'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
 			VALUES(\''.(int) $this->uid.'\', \''.$datetime.'\', \''.(int)$severity.'\', \'0\', \''.pSQL($msg).'\',
 			 \''.pSQL($ctx ? Tools::jsonEncode($ctx) : null).'\', \''.pSQL($backtrace).'\')';

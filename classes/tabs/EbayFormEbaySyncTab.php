@@ -68,7 +68,6 @@ class EbayFormEbaySyncTab extends EbayTab
                 if (isset($category_config_list[$category['id_category']]['id_ebay_category'])
                     && $category_config_list[$category['id_category']]['id_ebay_category'] > 0
                 ) {
-
                     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -105,10 +104,9 @@ class EbayFormEbaySyncTab extends EbayTab
                         }
                     }
 
-                    $category_ebay =  EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id,$category_config_list[$category['id_category']]['id_ebay_category']);
+                    $category_ebay =  EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id, $category_config_list[$category['id_category']]['id_ebay_category']);
                    // $is_multi = EbayCategory::getInheritedIsMultiSku($category_config_list[$category['id_category']]['id_ebay_category'], $this->ebay_profile->ebay_site_id);
                     $ebay_category = EbaySynchronizer::__getEbayCategory($category['id_category'], $this->ebay_profile);
-                    $id_category_boutique =EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($this->ebay_profile->id, $category['id_category']);
                     if ($category_config_list[$category['id_category']]['percent']) {
                         preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category_config_list[$category['id_category']]['percent'], $temp);
                         $prix = array('sign' => $temp[1], 'value' => $temp[2], 'type' => ($temp[3]==''?'€':$temp[3]));
@@ -239,11 +237,10 @@ class EbayFormEbaySyncTab extends EbayTab
             } else {
                 $alert = $this->ebay->l('You have chosen eBay categories : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
             }
-
         }
-
         return $alert;
     }
+
     private function _translatePSConditions($ps_conditions)
     {
         foreach ($ps_conditions as &$condition) {

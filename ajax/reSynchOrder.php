@@ -36,43 +36,42 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
 }
 $ebay = new Ebay();
 
+$order =  EbayOrder::getEbayOrder(Tools::getValue('id_order_ebay'));
+if ($order) {
+    EbayOrderErrors::deleteByOrderRef(Tools::getValue('id_order_ebay'));
+}
 
-    $order =  EbayOrder::getEbayOrder(Tools::getValue('id_order_ebay'));
-    if($order){
-        EbayOrderErrors::deleteByOrderRef(Tools::getValue('id_order_ebay'));
+$ebay->importOrders($order, $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile')));
+$new_log = EbayOrderErrors::getErrorByOrderRef(Tools::getValue('id_order_ebay'));
+
+if ($new_log) {
+    foreach ($new_log as $log) {
+        $vars = array(
+            'date_ebay' => $log['date_order'],
+            'reference_ebay' => $log['id_order_ebay'],
+            'referance_marchand' => $log['id_order_seller'],
+            'email' => $log['email'],
+            'total' => $log['total'],
+            'error' => $log['error'],
+            'date_import' => $log['date_add'],
+        );
     }
-    $ebay->importOrders($order, $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile')));
-   $new_log = EbayOrderErrors::getErrorByOrderRef(Tools::getValue('id_order_ebay'));
-    if($new_log){
-        foreach ($new_log as $log) {
-            $vars = array(
-                'date_ebay' => $log['date_order'],
-                'reference_ebay' => $log['id_order_ebay'],
-                'referance_marchand' => $log['id_order_seller'],
-                'email' => $log['email'],
-                'total' => $log['total'],
-                'error' => $log['error'],
-                'date_import' => $log['date_add'],
-            );
-        }
+} else {
+    $orders = EbayOrder::getOrderByOrderRef(Tools::getValue('id_order_ebay'));
+    foreach ($orders as $ord) {
+        $order = new Order($ord['id_order']);
 
-    } else {
-        $orders = EbayOrder::getOrderByOrderRef(Tools::getValue('id_order_ebay'));
-        foreach ($orders as $ord) {
-            $order = new Order($ord['id_order']);
-
-            $vars = array(
-                'date_ebay' => $order->date_add,
-                'reference_ebay'  => $ord['id_order_ref'],
-                'referance_marchand' => $order->payment,
-                'email' => $order->getCustomer()->email,
-                'total' => $order->total_paid,
-                'id_prestashop' => $order->id,
-                'reference_ps' => $order->reference,
-                'date_import' => $order->date_add,
-            );
-        }
+        $vars = array(
+            'date_ebay' => $order->date_add,
+            'reference_ebay'  => $ord['id_order_ref'],
+            'referance_marchand' => $order->payment,
+            'email' => $order->getCustomer()->email,
+            'total' => $order->total_paid,
+            'id_prestashop' => $order->id,
+            'reference_ps' => $order->reference,
+            'date_import' => $order->date_add,
+        );
     }
+}
+
 echo Tools::jsonEncode($vars);
-
-

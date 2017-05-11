@@ -40,7 +40,7 @@ class EbayFormShippingTab extends EbayTab
             'EBAY_DELIVERY_TIME',
             'EBAY_ZONE_NATIONAL',
         ));
-        if(!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')){
+        if (!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
             return '<p class="error"><b>' . $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
         // Check if the module is configured
@@ -82,7 +82,6 @@ class EbayFormShippingTab extends EbayTab
                     } else {
                         $carrier['price'] = round($result, 2, PHP_ROUND_HALF_DOWN);
                     }
-
                 }
             }
         }
@@ -106,7 +105,6 @@ class EbayFormShippingTab extends EbayTab
                 'ps_version'     => _PS_VERSION_,
                 'error_code'     => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
             ),
-
         );
 
         return $this->display('shipping.tpl', $template_vars);
@@ -121,7 +119,6 @@ class EbayFormShippingTab extends EbayTab
         EbayShipping::truncateNational($this->ebay_profile->id);
 
         if ($ebay_carriers = Tools::getValue('ebayCarrier')) {
-
             $ps_carriers = Tools::getValue('psCarrier');
             $extra_fees = Tools::getValue('extrafee');
             $ps_ship = new Carrier($ps_carriers);
@@ -148,7 +145,7 @@ class EbayFormShippingTab extends EbayTab
             $this->ebay_profile->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
             foreach ($products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
-                EbayTaskManager::addTask('update',$product, null, $this->ebay_profile->id);
+                EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
         }
     }
