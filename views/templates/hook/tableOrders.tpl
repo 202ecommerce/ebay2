@@ -33,64 +33,69 @@
     </a>
 </p>
 
-    <!-- table -->
-    <table id="OrderListings" class="table " >
-        <thead>
-        <tr >
+<!-- table -->
+<table id="OrderListings" class="table " >
+    <thead>
+    <tr >
 
-            <th style="width:110px;">
-                <span>{l s='Data eBay' mod='ebay'}</span>
-            </th>
+        <th style="width:110px;">
+            <span>{l s='Data eBay' mod='ebay'}</span>
+        </th>
 
-            <th>
-                <span>{l s='Referance eBay' mod='ebay'}</span>
-            </th>
+        <th>
+            <span>{l s='Referance eBay' mod='ebay'}</span>
+        </th>
 
-            <th class="center">
-                <span>{l s='Referance b' mod='ebay'}</span>
-            </th>
+        <th class="center">
+            <span>{l s='Referance b' mod='ebay'}</span>
+        </th>
 
-            <th class="center">
-                <span >{l s='email' mod='ebay'}</span>
-            </th>
+        <th class="center">
+            <span >{l s='email' mod='ebay'}</span>
+        </th>
 
-            <th>
-                <span >{l s='Total' mod='ebay'}</span>
-            </th>
+        <th>
+            <span >{l s='Total' mod='ebay'}</span>
+        </th>
 
 
-            <th class="center">
-                <span >{l s='ID PrestaShop' mod='ebay'}</span>
-            </th>
+        <th class="center">
+            <span >{l s='ID PrestaShop' mod='ebay'}</span>
+        </th>
 
-            <th class="center">
-                <span>{l s='PrestaShop referance' mod='ebay'}</span>
-            </th>
+        <th class="center">
+            <span>{l s='PrestaShop referance' mod='ebay'}</span>
+        </th>
 
-            <th class="center">
-                <span>{l s='Date Import' mod='ebay'}</span>
-            </th>
+        <th class="center">
+            <span>{l s='Date Import' mod='ebay'}</span>
+        </th>
 
-            <th class="center">{l s='Actions' mod='ebay'}</th>
+        <th class="center">{l s='Actions' mod='ebay'}</th>
 
+    </tr>
+    </thead
+    <tbody>
+    {if isset($errors)}
+    {foreach from=$errors item="error"}
+        <tr>
+            <td>{$error.date_ebay|escape:'htmlall':'UTF-8'}</td>
+            <td>{$error.reference_ebay|escape:'htmlall':'UTF-8'}</td>
+            <td>{$error.referance_marchand|escape:'htmlall':'UTF-8'}</td>
+            <td>{$error.email|escape:'htmlall':'UTF-8'}</td>
+            <td>{$error.total|escape:'htmlall':'UTF-8'}</td>
+            <td colspan="2">{$error.error|escape:'htmlall':'UTF-8'}</td>
+            <td>{$error.date_import|escape:'htmlall':'UTF-8'}</td>
+            <td>
+                <a class="reSynchOrder btn btn-default btn-xs" id="{$error.reference_ebay}">
+                    <i class="icon-refresh"></i>
+                    <span>{l s='Réessayer' mod='ebay'}</span>
+                </a>
+            </td>
         </tr>
-        </thead
-        <tbody>
-        {if isset($errors)}
-        {foreach from=$errors item="error"}
-            <tr>
-                <td>{$error.date_ebay|escape:'htmlall':'UTF-8'}</td>
-                <td>{$error.reference_ebay|escape:'htmlall':'UTF-8'}</td>
-                <td>{$error.referance_marchand|escape:'htmlall':'UTF-8'}</td>
-                <td>{$error.email|escape:'htmlall':'UTF-8'}</td>
-                <td>{$error.total|escape:'htmlall':'UTF-8'}</td>
-                <td colspan="2">{$error.error|escape:'htmlall':'UTF-8'}</td>
-                <td>{$error.date_import|escape:'htmlall':'UTF-8'}</td>
-                <td><a class="reSynchOrder" id="{$error.reference_ebay}">{l s='Réessayer' mod='ebay'}</a></td>
-            </tr>
-        {/foreach}
-        {/if}
-        {if isset($orders_tab)}
+    {/foreach}
+    {/if}
+    {if isset($orders_tab)}
         {foreach from=$orders_tab item="order"}
             <tr>
                 <td>{$order.date_ebay|escape:'htmlall':'UTF-8'}</td>
@@ -98,16 +103,15 @@
                 <td>{$order.referance_marchand|escape:'htmlall':'UTF-8'}</td>
                 <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
                 <td>{$order.total|escape:'htmlall':'UTF-8'}</td>
-                <td >{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
-                <td >{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
-                <td >{$order.date_import|escape:'htmlall':'UTF-8'}</td>
-                <td ></td>
+                <td>{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
+                <td>{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
+                <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
+                <td></td>
             </tr>
         {/foreach}
-        {/if}
-        </tbody>
-
-    </table>
+    {/if}
+    </tbody>
+</table>
 
 <script type="text/javascript">
     {literal}
@@ -125,7 +129,7 @@
                 if (typeof data.id_prestashop !== 'undefined' ){
                     str += '<td >'+data.id_prestashop+'</td><td >'+data.reference_ps+'</td><td >'+data.date_import+'</td><td ></td>';
                 } else {
-                    str += '<td colspan="2">'+data.error+'</td><td>'+data.date_import+'</td><td><a class="reSynchOrder" id="'+data.reference_ebay+'">Réessayer</a></td>';
+                    str += '<td colspan="2">'+data.error+'</td><td>'+data.date_import+'</td><td><a class="reSynchOrder btn btn-default btn-xs" id="'+data.reference_ebay+'"><i class="icon-refresh"></i><span>Réessayer</span></a></td>';
                 }
                console.log(str);
                tr.html(str);

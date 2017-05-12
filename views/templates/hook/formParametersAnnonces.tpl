@@ -218,7 +218,7 @@
 			<div class="col-sm-9">
 				<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
 			</div>
-			<div class="col-lg-9 col-lg-push-3">
+			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
 					{l s='0 will send one picture' mod='ebay'}
 				</div>

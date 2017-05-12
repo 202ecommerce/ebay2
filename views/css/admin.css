@@ -90,7 +90,7 @@
   background-color: #72C279 !important;
 }
 .totebay .js-user-dropdown .dropdown-menu {
-  min-width: 360px;
+  min-width: 400px;
 }
 .totebay .js-user-dropdown .dropdown-menu li:nth-child(even) {
   background-color: #FCFDFE;
@@ -120,6 +120,17 @@
 }
 .totebay .js-user-dropdown .dropdown-menu .head > span:first-child {
   padding-left: 20px;
+}
+.totebay .js-user-dropdown .dropdown-menu .head small {
+  font-weight: 400;
+}
+.totebay .js-user-dropdown .dropdown-menu.dropdown-menu-top {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.navbar-header .totebay .js-user-dropdown.open .dropdown-toggle {
+  background-color: #000 !important;
 }
 
 /*# sourceMappingURL=admin.css.map */

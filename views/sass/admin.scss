@@ -123,7 +123,7 @@
   // Custom dropdown for user selection menu
   .js-user-dropdown {
     .dropdown-menu {
-      min-width: 360px;
+      min-width: 400px;
       li:nth-child(even) {
         background-color: #FCFDFE;
       }
@@ -154,7 +154,18 @@
             padding-left: 20px;
           }
         }
+        small {
+          font-weight: 400;
+        }
       }
+      &.dropdown-menu-top {
+        margin-top: 0;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+    .navbar-header &.open .dropdown-toggle {
+      background-color: #000 !important;
     }
   }
 }

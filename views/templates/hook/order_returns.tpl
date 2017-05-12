@@ -28,21 +28,21 @@
         {l s='Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
 <br>
-<a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"><input type="button" class="button"
-                                                                            value="{l s='Sync refunds and returns from eBay' mod='ebay'}"/></a>
+<a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1" class="btn btn-default">
+    <i class="icon-refresh"></i>
+    <span>{l s='Sync refunds and returns from eBay' mod='ebay'}</span>
+</a>
 <br>
 
-    <!-- table -->
-
-    <table id="OrderReturns" class="table" cellpadding="0" cellspacing="0" style="width: 100%;">
-        <thead>
+<!-- table -->
+<table id="OrderReturns" class="table" cellpadding="0" cellspacing="0" style="width: 100%;">
+    <thead>
         <tr class="nodrag nodrop">
-
-            <th style="width:110px;">
+            <th style="width: 110px;">
                 <span>{l s='PrestaShop Order' mod='ebay'}</span>
             </th>
 
-            <th style="width:110px;">
+            <th style="width: 110px;">
                 <span>{l s='eBay Order' mod='ebay'}</span>
             </th>
 
@@ -53,7 +53,6 @@
             <th class="center">
                 <span>{l s='Status' mod='ebay'}</span>
             </th>
-
 
             <th class="center">
                 <span>{l s='Type' mod='ebay'}</span>
@@ -66,19 +65,18 @@
             <th class="center">
                 <span>{l s='Id Product' mod='ebay'}</span>
             </th>
-
-
         </tr>
-        </thead>
+    </thead>
 
-        <tbody>
+    <tbody>
         {if empty($returns)}
-        <tr id="removeRow">
-            <td class="center" colspan="7">
-                {l s='No returns' mod='ebay'}
-            </td>
-        </tr>
+            <tr id="removeRow">
+                <td class="center" colspan="7">
+                    {l s='No returns' mod='ebay'}
+                </td>
+            </tr>
         {/if}
+
         {foreach from=$returns item="return"}
             <tr>
                 <td>{$return.id_order|escape:'htmlall':'UTF-8'}</td>
@@ -90,6 +88,5 @@
                 <td>{$return.id_item|escape:'htmlall':'UTF-8'}</td>
             </tr>
         {/foreach}
-        </tbody>
-
-    </table>
+    </tbody>
+</table>

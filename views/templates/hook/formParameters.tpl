@@ -185,7 +185,7 @@
 					<input type="text" class="form-control" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
 				</div>
 
-				<div class="col-lg-9 col-lg-push-3">
+				<div class="col-sm-9 col-sm-push-3">
 					<div class="help-block">
 						{l s='You have to set your PayPal e-mail account, this is the only payment solution available with this module.' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank"></a>
 					</div>
@@ -241,7 +241,7 @@
 				</div>
 			</div>
 
-			<div class="col-lg-9 col-lg-push-3 pos-r">
+			<div class="col-sm-9 col-sm-push-3 pos-r">
 				<span class="regenerate_token_click btn btn-default label-tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
 					<i class="icon-refresh"></i>
 					<span>{l s='Generate a new authentication token' mod='ebay'}</span>

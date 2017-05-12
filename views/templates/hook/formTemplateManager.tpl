@@ -117,9 +117,7 @@
 				</a>
 				<a href="{$action_url|escape:'htmlall':'UTF-8'}&reset_template=1" class="btn btn-warning" onclick="return confirm('{l s='Are you sure?' mod='ebay'}');">
 					<i class="icon-refresh"></i>
-					<span>
-						{l s='Reset template' mod='ebay'}
-					</span>
+					<span>{l s='Reset template' mod='ebay'}</span>
 				</a>
 			</div>
 		</div>

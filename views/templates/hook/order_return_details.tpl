@@ -25,7 +25,7 @@
 
 {if isset($returns[0].id_ebay_order)}
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-sm-12">
             <div class="panel">
                 <div class="panel-heading">
                     <span class="badge">{l s='eBay return or refund' mod='ebay'}</span>

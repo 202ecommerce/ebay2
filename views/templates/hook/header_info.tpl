@@ -23,57 +23,41 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
-<div class="pull-left">
+<div class="pull-left totebay">
     <div class="dropdown js-user-dropdown">
-
-        <button class="form-control dropdown-toggle" type="button" data-toggle="dropdown" style="
-    overflow: hidden;
-    background: transparent;
-    border: none;
-">
-            <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="
-    margin-top: -20px;
-"/>
-            <span class="badge badge-danger" style="
-    /* display: inline-block; */
-    vertical-align: top;
-    margin-left: -9px;
-    margin-top: -4px;
-">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
+        <button class="dropdown-toggle" type="button" data-toggle="dropdown" style="height: 35px; overflow: hidden; background-color: transparent; border: none; outline: none;">
+            <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px;"/>
+            <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
         </button>
 
-        <ul class="dropdown-menu" style="
-    min-width: 397px;
-">
+        <ul class="dropdown-menu dropdown-menu-top" style="min-width: 397px;">
             <li class="clearfix head">
-                <span class="col-xs-4">utilisateur</span>
-                <span class="col-xs-2">pays</span>
-                <span class="col-xs-2 text-right">annonces</span>
-                <span class="col-xs-1 text-right">erreurs Ann</span>
-                <span class="col-xs-1 text-right">erreurs Ord</span>
-                <span class="col-xs-2 text-right">Tasks to job</span>
+                <span class="col-xs-5">{l s='user' mod='ebay'}</span>
+                <span class="col-xs-2">{l s='country' mod='ebay'}</span>
+                <span class="col-xs-2 text-right"><small>{l s='ann.' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right"><small>{l s='ann. err.' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right"><small>{l s='ord. err.' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right"><small>{l s='tasks' mod='ebay'}</small></span>
             </li>
-            {foreach from=$profiles item=profile}
 
+            {foreach from=$profiles item=profile}
                 <li>
                     <a class="clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                        <span id = 'name' class="col-xs-4">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                        <span id='name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
                         <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
                         {if $profile.token == 0 }
-                            <span class="col-xs-6 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
+                            <span class="col-xs-5 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
                         {elseif $profile.category == 0}
-                            <span class="col-xs-6 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
+                            <span class="col-xs-5 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
                         {else}
                             <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                             <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
                             <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                            <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+                            <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
                         {/if}
                     </a>
                 </li>
             {/foreach}
-
         </ul>
     </div>
 </div>
@@ -99,7 +83,6 @@
 
             }
         });
-
     });
 
     /* $('.ebay_profils').change(function() {

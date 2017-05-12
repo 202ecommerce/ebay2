@@ -151,7 +151,7 @@
                                     <div class="panel clearfix panel-info">
                                         <form class="form-horizontal" role="form">
                                             <label class="control-label pull-left">
-                                                Profils :
+                                                {l s='Profiles' mod='ebay'} :
                                             </label>
 
                                             {* Custom dropdown with table inside *}
@@ -163,37 +163,32 @@
 
                                                     <ul class="dropdown-menu">
                                                         <li class="clearfix head">
-                                                            <span class="col-xs-4">utilisateur</span>
-                                                            <span class="col-xs-2">pays</span>
-                                                            <span class="col-xs-2 text-right">annonces</span>
-                                                            <span class="col-xs-1 text-right">erreurs Ann</span>
-                                                            <span class="col-xs-1 text-right">erreurs Ord</span>
-                                                            <span class="col-xs-2 text-right">Tasks to job</span>
+                                                            <span class="col-xs-5">{l s='user' mod='ebay'}</span>
+                                                            <span class="col-xs-2">{l s='country' mod='ebay'}</span>
+                                                            <span class="col-xs-2 text-right"><small>{l s='ann.' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='ann. err.' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='ord. err.' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='tasks' mod='ebay'}</small></span>
                                                         </li>
-                                                        {foreach from=$profiles item=profile}
 
+                                                        {foreach from=$profiles item=profile}
                                                             <li>
                                                                 <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if} clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                                                                    <span id = 'name' class="col-xs-4">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                                                                    <span id = 'name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
                                                                     <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
                                                                     {if $profile.token == 0 }
-                                                                        <span class="col-xs-6 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
+                                                                        <span class="col-xs-5 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
                                                                     {elseif $profile.category == 0}
-                                                                        <span class="col-xs-6 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
+                                                                        <span class="col-xs-5 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
                                                                     {else}
                                                                         <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                                                                        <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
-
+                                                                        <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
                                                                     {/if}
-
-
-
                                                                 </a>
                                                             </li>
                                                         {/foreach}
-
                                                     </ul>
                                                 </div>
                                             </div>
@@ -205,9 +200,11 @@
                                             <button type="button" class="btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                                 <i class="icon-trash"></i>
                                             </button>
+
                                             {if $debug == 1}
-                                                <small  style="background-color: #F80; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">in SANDBOX mode !</small>
+                                                <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                                             {/if}
+
                                             <div class="pull-right">
                                                 <span title="<h4>Aide</h4><p>Ici une paragraphe explicatif sur le fonctionnement du selecteur de profil.</p>" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
                                                     <i class="process-icon-help"></i>
@@ -302,7 +299,7 @@
         </div>
     </div>
 
-    {if $current_profile && !$add_profile}
+{if $current_profile && !$add_profile}
 <div class="row">
     {* Main navigation *}
     <div class="sidebar navigation col-md-3 col-lg-2">
@@ -331,28 +328,29 @@
         <div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
             <table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
                 <thead>
-                <tr class="nodrag nodrop">
-                    <th style="width:10%">
-                        {l s='Status' mod='ebay'}
-                    </th>
-                    <th style="width:45%">
-                        {l s='Description' mod='ebay'}
-                    </th>
-                    <th style="width:45%">
-                        {l s='Result' mod='ebay'}
-                    </th>
-                </tr>
+                    <tr class="nodrag nodrop">
+                        <th style="width: 10%">
+                            {l s='Status' mod='ebay'}
+                        </th>
+                        <th style="width: 45%">
+                            {l s='Description' mod='ebay'}
+                        </th>
+                        <th style="width: 45%">
+                            {l s='Result' mod='ebay'}
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr id="cat_parent" class="load">
-                    <td></td>
-                    <td>{l s='Loading list of eBay categories' mod='ebay'}</td>
-                    <td>{l s='In progress' mod='ebay'}</td>
-                </tr>
+                    <tr id="cat_parent" class="load">
+                        <td></td>
+                        <td>{l s='Loading list of eBay categories' mod='ebay'}</td>
+                        <td>{l s='In progress' mod='ebay'}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
     <div id="popin_config_ok"">
         <div  class="popin popin-lg" id="config_ok" style="display: none;text-align: center;padding: 15px;">
             <p>Super, la synchronisation est Ok, vous allez maintenant </br>
@@ -362,24 +360,27 @@
             </div>
         </div>
     </div>
-    <a href="#config_ok" class="popin_config_ok_sync" style="display: none"></a>
-    {if $ebay_shipping_config_tab > 0 && $count_category == 0}
-    <script>
-        $(document).ready(function() {
-            $('.popin_config_ok_sync').fancybox({
-                'modal': true,
-                'showCloseButton': false,
-                'padding': 0,
-                'parent': '#popin_config_ok',
-            });
-            $('.popin_config_ok_sync').click();
 
-            $(document).on('click', '.close_popin_config', function() {
-                $.fancybox.close();
+    <a href="#config_ok" class="popin_config_ok_sync" style="display: none"></a>
+
+    {if $ebay_shipping_config_tab > 0 && $count_category == 0}
+        <script>
+            $(document).ready(function() {
+                $('.popin_config_ok_sync').fancybox({
+                    'modal': true,
+                    'showCloseButton': false,
+                    'padding': 0,
+                    'parent': '#popin_config_ok',
+                });
+                $('.popin_config_ok_sync').click();
+
+                $(document).on('click', '.close_popin_config', function() {
+                    $.fancybox.close();
+                });
             });
-        });
-    </script>
+        </script>
     {/if}
+
     <script type="text/javascript">
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
@@ -395,8 +396,8 @@
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>
-    <script>
 
+    <script>
         // Select item from user dropdown
         $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
             $(this).parents('.dropdown').find('.dropdown-menu li a').removeClass('selected');
@@ -413,5 +414,6 @@
             $('.change_profile').submit();
         });*/
     </script>
+
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/header.js?date={$date|escape:'htmlall':'UTF-8'}"></script>
 <!-- after seller tips -->

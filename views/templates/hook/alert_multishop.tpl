@@ -24,15 +24,15 @@
 *}
 
 <div class="row">
-	<div class="panel col-lg-12">
+	<div class="panel col-sm-12">
 		<div class="panel-heading">
 			Informations
 		</div>
 		<div class="well clearfix">
-			<label class="control-label col-lg-3">
+			<label class="control-label col-sm-3">
 				<img src="../modules/ebay/views/img/ebay.png">
 			</label>
-			<div class="col-lg-9" style="margin-top:20px;">
+			<div class="col-sm-9" style="margin-top:20px;">
 				<p>
 					<strong>{l s='You can\'t use this module in the context of the current store. You need to choose a specific store to be abble to configure your module.' mod='ebay'}</strong>
 				</p>

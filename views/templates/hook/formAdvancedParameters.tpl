@@ -80,12 +80,12 @@
 
 		<div class="form-group">
 			<div class="col-sm-9 col-sm-push-3">
-				<div class="alert alert-info">
-					{l s='Click on "Start checking" if you want to proceed to verify your eBay database' mod='ebay'}
-				</div>
 				<a id="check_database" href="#" target="_blank" class="btn btn-default">
 					{l s='Start checking' mod='ebay'}
 				</a>
+				<div class="help-block">
+					{l s='Click on "Start checking" if you want to proceed to verify your eBay database' mod='ebay'}
+				</div>
 			</div>
 		</div>
 
@@ -149,18 +149,23 @@
 			</table>
 		</div>
 
-		<div id="new_cat" style="display: none; margin-top: 12px;max-height: 300px; overflow-y: scroll;">
+		<div id="new_cat" style="display: none; margin-top: 12px; max-height: 300px; overflow-y: scroll;">
 			<span>{l s='Some categories are existing in the new definition of categories from eBay but not in your definition. You might want to reload your categories' mod='ebay'}</span></br>
 			<ul id="categories_new">
 			</ul>
 		</div>
 
-		<div id="div_resynch" style="display:none; height: 100px; text-align: center; margin-top: 27px; font-family: sans-serif; font-size: 14px;">
+		<div id="div_resynch" style="display: none; text-align: center; font-family: sans-serif; font-size: 14px;">
 			<span>{l s='Have you read ' mod='ebay'}<a class="kb-help" style ="width: auto;height: 20px;background-image: none;" data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='this article' mod='ebay'}</a>{l s=' about category definition & reloading?' mod='ebay'}</span>
 			</br>
 			</br>
-			<input type="checkbox" name="accepted" id="accepted" value="yes" ><span style="color: red;"> {l s='I have understood all my categories will need to reconfigured manually' mod='ebay'}</span> <br>
-			</br><a class='primary button disable_link link_resynch'id="ReCategoriespar" href ="{$smarty.server.REQUEST_URI}&resynchCategories='1'">{l s='Reaload category definition' mod='ebay'}</a>
+			<div class="checkbox">
+				<label for="accepted" class="text-left">
+					<input type="checkbox" name="accepted" id="accepted" value="yes">
+					<span style="color: red;"> {l s='I have understood all my categories will need to reconfigured manually' mod='ebay'}</span>
+				</label>
+			</div>
+			</br><a class='btn btn-warning disable_link' id="ReCategoriespar" href="{$smarty.server.REQUEST_URI}&resynchCategories='1'">{l s='Reaload category definition' mod='ebay'}</a>
 		</div>
 
 		<div style="margin-top: 30px">
@@ -169,7 +174,7 @@
 					{l s='Category definition upgrade tool' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-					<a name="resynch" id="ResynchCategories" class="btn btn-default" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
+					<a name="resynch" id="ResynchCategories" class="btn btn-warning" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
 				</div>
 			</div>
 		</div>
@@ -213,14 +218,13 @@
 			</button>
 		</a>
 	</div>
-
-</form>  
+</form>
 	
 {literal}
 	<script>
 		var token = "{/literal}{$ebay_token|escape:'urlencode'}{literal}";
 		$(document).ready(function() {
-			setTimeout(function(){					
+			setTimeout(function() {					
 				$('#ebay_returns_description').val($('#ebayreturnshide').html());
 			}, 1000);
 		});
@@ -260,7 +264,7 @@
 		});
 
 		$(function() {
-			$('#reset-image').click(function(e){
+			$('#reset-image').click(function(e) {
 				e.preventDefault();
 				$.ajax({
 					type: 'POST',
@@ -269,7 +273,7 @@
 					beforeSend: function() {
 						$('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
 					}
-				}).done(function( data ) {
+				}).done(function(data) {
 					if (data == 'success')
 						$('#reset-image-result').html("<div class='alert alert-success'>{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}</div>");
 					else
@@ -281,7 +285,7 @@
 		});
 
 		$(function() {
-			$('#check_database').click(function(e){
+			$('#check_database').click(function(e) {
 				e.preventDefault();
 				// Premier tour : Récuperer le nombre de table
 				// Foreach de toutes les tables
@@ -293,7 +297,7 @@
 						$('#check_database_logs tbody tr').remove();
 						// $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
 					},
-					success: function( data ){
+					success: function(data) {
 						$('#check_database_progress').attr('data-nb_database', data);
 						$('#check_database_progress').show();
 						$('#check_database_logs').show();
@@ -304,7 +308,7 @@
 		});
 
 		$(function() {
-			$('#check_categories').click(function(e){
+			$('#check_categories').click(function(e) {
 				e.preventDefault();
 				$('#check_categories_logs').show();
 				$('#table_resynch tr').remove();
@@ -314,8 +318,7 @@
 			});
 		});
 
-		function comparation(step,id_categories, nextDatas,encour,size){
-
+		function comparation(step,id_categories, nextDatas,encour,size) {
 			$.ajax({
 				dataType: 'json',
 				type: 'POST',
@@ -386,11 +389,16 @@
 					}
 				}
 			});
-
 		}
-		$('#ResynchCategories').fancybox();
-		$('#accepted').change(function(){
-			if($('#ReCategoriespar').hasClass('disable_link')){
+
+		$('#ResynchCategories').fancybox({
+			'parent': '#popin-container'
+		});
+
+		$('#accepted').change(function() {
+			var val = $(this).prop('checked');
+
+			if (val) {
 				$('#ReCategoriespar').removeClass('disable_link');
 			} else {
 				$('#ReCategoriespar').addClass('disable_link');
@@ -408,7 +416,6 @@
 	var categories_true = "{l s='All configured categories are already using last category definition version, no action to be taken.' mod='ebay'}";
 	var categories_false = "{l s='The following categories are not configured based on the last category definition, you may need to reload categories.' mod='ebay'}";
 	var categories_null = "{l s='No category to compare because you did not set up any category in tab Settings > Categories' mod='ebay'}";
-
 </script>
 
 <style>
