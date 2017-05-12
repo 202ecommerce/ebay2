@@ -45,13 +45,18 @@ if (count($countries)) {
 
     foreach ($countries as $country) {
         $string .= '<div class="excludeCountry">
-            <input type="checkbox" name="excludeLocation['.Tools::safeOutput($country['location']).']" ';
+            <div class="checkbox">
+            <label for="excludeLocation['.Tools::safeOutput($country['location']).']" class="control-label">
+            <input type="checkbox" id="excludeLocation['.Tools::safeOutput($country['location']).']" name="excludeLocation['.Tools::safeOutput($country['location']).']" ';
 
         if ($country['excluded'] == 1) {
             $string .= ' checked="checked" ';
         }
 
-        $string .= '/>'.Tools::safeOutput($country['description']).'</div>';
+        $string .= '/>'.Tools::safeOutput($country['description']).'
+            </label>
+            </div>
+            </div>';
     }
 
     echo $string;

@@ -3,52 +3,38 @@
 	text-decoration: underline;
 }
 
-select.ebay_select{
+select.ebay_select {
 	color:#000 !important;
 }
 
-#selectTagTemplate {
-	background: white;
-	height: 22px;
-	margin-left: 5px;
-	margin-top: 4px;
-	margin-bottom: 3px;
-}
-.mceIframeContainer iframe
-{
+.mceIframeContainer iframe {
 	width: 800px !important;
 }
 
-.ebay_center
-{
+.ebay_center {
 	text-align: center !important;
 }
 
-#statsForm div.label
-{
-	width:100%;
-	margin-bottom:10px;
-	font-weight:bold;
+#statsForm div.label {
+	width: 100%;
+	margin-bottom: 10px;
+	font-weight: bold;
 }
 
-#statsForm div.input
-{
-	margin-bottom:5px;
-
+#statsForm div.input {
+	margin-bottom: 5px;
 }
 
-#statsForm div.input input
-{
-	margin-right:3px;
+#statsForm div.input input {
+	margin-right: 3px;
 }
 
-#statsForm div.input:last-child
-{
-	margin-bottom:10px;
+#statsForm div.input:last-child {
+	margin-bottom: 10px;
 }
 
-#statsForm .primary{
-	margin-top:10px;
+#statsForm .primary {
+	margin-top: 10px;
 }
 
 
@@ -58,8 +44,8 @@ select.ebay_select{
 
 input.primary {
 	text-shadow: none;
-	background-image:none;
-	background-color:#0055AA;
+	background-image: none;
+	background-color: #0055AA;
 	background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
 	background: -moz-linear-gradient(center top, #0055FF, #0055AA) repeat scroll 0 0 transparent;
 	color: white;
@@ -415,8 +401,17 @@ textarea + .tooltip {
 
 #domesticShipping td.linked, #internationalShipping td.linked
 {
-	background : url('../img/link.png') no-repeat 0 15px;
+	/*background : url('../img/link.png') no-repeat 0 15px;*/
 	padding-left: 45px;
+	position: relative;
+}
+
+#domesticShipping td.linked::before, #internationalShipping td.linked::before {
+	position: absolute;
+	left: 12px;
+	content: '\f0c1';
+	font-size: 20px;
+	font-family: 'Fontawesome';
 }
 
 .shipping_destinations ul, .shipping_destinations ul li{

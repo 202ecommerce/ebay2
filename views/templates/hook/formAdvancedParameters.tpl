@@ -23,60 +23,80 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form action="{$url|escape:'urlencode'}" method="post" class="form" id="advancedConfigForm">
-    
-
-    
-    
-	<fieldset style="margin-top:10px;">
-        
-		<legend>{l s='Logs' mod='ebay'}</legend>
-        
-		<label>
-			{l s='API Logs' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="api_logs" value="1"{if $api_logs} checked="checked"{/if}>
-		</div>        
-        
+<form action="{$url|escape:'urlencode'}" method="post" class="form form-horizontal panel" id="advancedConfigForm">
+	<fieldset>
+		<div class="panel-heading">{l s='Logs' mod='ebay'}</div>
+		
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="checkbox">	
+					<label for="api_logs">
+						<input type="checkbox" id="api_logs" name="api_logs" value="1"{if $api_logs} checked="checked"{/if}>
+						{l s='API Logs' mod='ebay'}
+					</label>
+				</div>
+			</div> 
+		</div>       
+		
 		{if !$is_writable && $activate_logs}<p class="warning">{l s='The log file is not writable' mod='ebay'}</p>{/if}
-		<label>
-			{l s='Applicative Logs' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
-			{if $log_file_exists}
-			<a href="#" class ='logs'  class="button" data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">{l s='Download' mod='ebay'}</a>
-			{/if}
-		</div>
-		<div class="clear both"></div>
 
-        
-		<label>{l s='Logs Conservation Duration' mod='ebay'} : </label>
-		<div class="margin-form">
-            <input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall':'UTF-8'}">
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="checkbox">
+					<label for="activate_logs">
+						<input type="checkbox" id="activate_logs" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
+						{l s='Applicative Logs' mod='ebay'}
+					</label>
+				</div>
+			</div>
 		</div>        
-        
-	</fieldset>
 
+		{if $log_file_exists}
+			<div class="form-group">
+				<div class="col-sm-9 col-sm-push-3">
+					<a href="#" class ='logs btn btn-default' data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">
+						<i class="icon-download"></i>
+						<span>
+							{l s='Download' mod='ebay'}
+						</span>
+					</a>
+				</div>
+			</div>
+		{/if}
 
-
-      
-    <fieldset style="margin-top:10px;">
-       
-		<legend>{l s='Check Database' mod='ebay'}</legend>
-		<label>{l s='Click on "Start checking" if you want to proceed to verify your eBay database' mod='ebay'} : </label>
-		<div class="margin-form">
-        	<a id="check_database" href="#" target="_blank" class="button">Start checking</a>
+		<div class="form-group">
+			<label class="control-label col-sm-3">
+				{l s='Logs Conservation Duration' mod='ebay'}
+			</label>
+			<div class="col-sm-9">
+				<input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall':'UTF-8'}">
+			</div>
 		</div>
-		<div style="clear:both;"></div>
-		<div id="check_database_progress" style="display:none;">
+	</fieldset>
+	  
+	<fieldset style="margin-top: 20px;">
+	   
+		<div class="panel-heading">{l s='Check Database' mod='ebay'}</div>
+
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="alert alert-info">
+					{l s='Click on "Start checking" if you want to proceed to verify your eBay database' mod='ebay'}
+				</div>
+				<a id="check_database" href="#" target="_blank" class="btn btn-default">
+					{l s='Start checking' mod='ebay'}
+				</a>
+			</div>
+		</div>
+
+		<div id="check_database_progress" style="display: none;">
 			<div class="progress">
 			  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="">
 			  </div>
 			</div>	
 		</div>
-		<div id="check_database_logs" style="display:none;">
+
+		<div id="check_database_logs" style="display: none;">
 			<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 				<thead>
 					<tr class="nodrag nodrop">
@@ -95,20 +115,22 @@
 				</tbody>
 			</table>
 		</div>
-
 	</fieldset>
 
-	<fieldset style="margin-top:10px;">
+	<fieldset style="margin-top: 20px;">
 
-		<legend >{l s='Category definition & upgrade' mod='ebay'}</legend>
-		<label >{l s='Category definition comparison tool' mod='ebay'} : </label>
-		<div class="margin-form">
-			<a name="comparison"  id="check_categories" href="#" target="_blank" class="button" data-inlinehelp="{l s='Compare your category definitions with last available category definitions from eBay' mod='ebay'}">{l s='Start comparison' mod='ebay'}</a>
+		<div class="panel-heading">{l s='Category definition & upgrade' mod='ebay'}</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-3">
+				{l s='Category definition comparison tool' mod='ebay'}
+			</label>
+			<div class="col-sm-9">
+				<a name="comparison"  id="check_categories" href="#" target="_blank" class="btn btn-default" data-inlinehelp="{l s='Compare your category definitions with last available category definitions from eBay' mod='ebay'}">{l s='Start comparison' mod='ebay'}</a>
+			</div>
 		</div>
-		<div style="clear:both;"></div>
 
-		<div id="check_categories_logs" style="display:none;">
-			</br>
+		<div id="check_categories_logs" style="display: none;">
 			<span> {l s='eBay categories used in your eBay module configuration compared to last available category definitions from eBay' mod='ebay'}</span></br>
 			</br><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 				<thead>
@@ -127,236 +149,258 @@
 			</table>
 		</div>
 
-		<div id="new_cat" style="display: none;    margin-top: 12px;max-height: 300px; overflow-y: scroll;">
-			<span> {l s='Some categories are existing in the new definition of categories from eBay but not in your definition. You might want to reload your categories' mod='ebay'}</span></br>
+		<div id="new_cat" style="display: none; margin-top: 12px;max-height: 300px; overflow-y: scroll;">
+			<span>{l s='Some categories are existing in the new definition of categories from eBay but not in your definition. You might want to reload your categories' mod='ebay'}</span></br>
 			<ul id="categories_new">
-
 			</ul>
-
 		</div>
 
-		<div id="div_resynch"  style="display:none; height: 100px;   text-align: center; margin-top: 27px;font-family: sans-serif;
-    font-size: 14px;">
-			<span> {l s='Have you read ' mod='ebay'}<a class="kb-help" style ="width: auto;height: 20px;background-image: none;" data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='this article' mod='ebay'}</a>{l s=' about category definition & reloading?' mod='ebay'}</span>
+		<div id="div_resynch" style="display:none; height: 100px; text-align: center; margin-top: 27px; font-family: sans-serif; font-size: 14px;">
+			<span>{l s='Have you read ' mod='ebay'}<a class="kb-help" style ="width: auto;height: 20px;background-image: none;" data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='this article' mod='ebay'}</a>{l s=' about category definition & reloading?' mod='ebay'}</span>
 			</br>
 			</br>
 			<input type="checkbox" name="accepted" id="accepted" value="yes" ><span style="color: red;"> {l s='I have understood all my categories will need to reconfigured manually' mod='ebay'}</span> <br>
 			</br><a class='primary button disable_link link_resynch'id="ReCategoriespar" href ="{$smarty.server.REQUEST_URI}&resynchCategories='1'">{l s='Reaload category definition' mod='ebay'}</a>
 		</div>
+
 		<div style="margin-top: 30px">
-		<label>{l s='Category definition upgrade tool' mod='ebay'} : </label>
-		<div class="margin-form">
-			<a name="resynch" id="ResynchCategories" class="button" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}...</a>
+			<div class="form-group">
+				<label class="control-label col-sm-3">
+					{l s='Category definition upgrade tool' mod='ebay'}
+				</label>
+				<div class="col-sm-9">
+					<a name="resynch" id="ResynchCategories" class="btn btn-default" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
+				</div>
+			</div>
 		</div>
-		</div>
-		<div style="clear:both;"></div>
 	</fieldset>
 
-   <fieldset style="margin-top:10px;">
-       
-		<legend>{l s='eBay module Data Usage' mod='ebay'}</legend>
-		<label>{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </label>
-		<div class="margin-form">
-            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'} &nbsp;&nbsp;
-            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}<br>
+   <fieldset style="margin-top: 20px;">
+	   
+		<div class="panel-heading">{l s='eBay module Data Usage' mod='ebay'}</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-3">
+				{l s='Statistics' mod='ebay'}
+			</label>
+			<div class="col-sm-9">
+				<div class="radio">
+					<label for="stats">
+						<input type="radio" id="stats" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'}
+					</label>
+				</div>
+				<div class="radio">
+					<label for="stats_y">
+						<input type="radio" id="stats_y" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}
+					</label>
+				</div>
+
+				<div class="help-block">
+					{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'}
+				</div>
+			</div>
 		</div>
-		<div style="clear:both;"></div>
-        
-    </fieldset>
-    
-	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
+		
+	</fieldset>
+	
+	<div id="buttonEbayParameters" class="panel-footer">
 		<a href="#categoriesProgression">
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-			<input class="primary button" type="submit" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
+			<input class="primary button" type="hidden" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
+			<button class="btn btn-default pull-right" type="submit" id="save_ebay_advanced_parameters">
+				<i class="process-icon-save"></i>
+				{l s='Save' mod='ebay'}
+			</button>
 		</a>
-	</div>        
-    
-	{literal}
-		<script>
-			var token = "{/literal}{$ebay_token|escape:'urlencode'}{literal}";
-			$(document).ready(function() {
-				setTimeout(function(){					
-					$('#ebay_returns_description').val($('#ebayreturnshide').html());
-				}, 1000);
-			});
+	</div>
+
+</form>  
+	
+{literal}
+	<script>
+		var token = "{/literal}{$ebay_token|escape:'urlencode'}{literal}";
+		$(document).ready(function() {
+			setTimeout(function(){					
+				$('#ebay_returns_description').val($('#ebayreturnshide').html());
+			}, 1000);
+		});
 
 
-			$('.logs').click(function(e) {
+		$('.logs').click(function(e) {
+			e.preventDefault();
+			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getLogs');;
+		});
+		
+		$('#token-btn').click(function() {
+				window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
+		});
+		
+		$('.sync_products_mode').change(function() {
+			if ($(this).val() == 'cron') {
+				$('#sync_products_by_cron_url').show();
+			} else {
+				$('#sync_products_by_cron_url').hide();
+			}
+		});
+
+		$('.sync_orders_mode').change(function() {
+			if ($(this).val() == 'cron') {
+				$('#sync_orders_by_cron_url').show();
+			} else {
+				$('#sync_orders_by_cron_url').hide();
+			}
+		});
+
+		$('.sync_orders_returns_mode').change(function() {
+			if ($(this).val() == 'cron') {
+				$('#sync_orders_returns_by_cron_url').show();
+			} else {
+				$('#sync_orders_returns_by_cron_url').hide();
+			}
+		});
+
+		$(function() {
+			$('#reset-image').click(function(e){
 				e.preventDefault();
-				window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getLogs');;
-			});
-			
-			$('#token-btn').click(function() {
-					window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
-			});
-            
-            $('.sync_products_mode').change(function() {
-                if ($(this).val() == 'cron') {
-                    $('#sync_products_by_cron_url').show();
-                } else {
-                    $('#sync_products_by_cron_url').hide();
-                }
-            });
-
-            $('.sync_orders_mode').change(function() {
-                if ($(this).val() == 'cron') {
-                    $('#sync_orders_by_cron_url').show();
-                } else {
-                    $('#sync_orders_by_cron_url').hide();
-                }
-            });
-
-			$('.sync_orders_returns_mode').change(function() {
-				if ($(this).val() == 'cron') {
-					$('#sync_orders_returns_by_cron_url').show();
-				} else {
-					$('#sync_orders_returns_by_cron_url').hide();
-				}
-			});
-
-            $(function() {
-				$('#reset-image').click(function(e){
-					e.preventDefault();
-					$.ajax({
-						type: 'POST',
-						url: module_dir + 'ebay/ajax/deleteProductImage.php',
-						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=delete-all",
-						beforeSend: function() {
-						    $('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
-						}
-					}).done(function( data ) {
-						if (data == 'success')
-							$('#reset-image-result').html("<div class='alert alert-success'>{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}</div>");
-						else
-							$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-					}).fail(function() {
-						$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-					})
-				});
-			});
-
-			$(function() {
-				$('#check_database').click(function(e){
-					e.preventDefault();
-					// Premier tour : Récuperer le nombre de table
-					// Foreach de toutes les tables
-					$.ajax({
-						type: 'POST',
-						url: module_dir + 'ebay/ajax/checkDatabase.php',
-						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getNbTable",
-						beforeSend: function() {
-							$('#check_database_logs tbody tr').remove();
-						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
-						},
-						success: function( data ){
-							$('#check_database_progress').attr('data-nb_database', data);
-							$('#check_database_progress').show();
-							$('#check_database_logs').show();
-							launchDatabaseChecking(1);
-						}
-					});
-				});
-			});
-
-			$(function() {
-				$('#check_categories').click(function(e){
-					e.preventDefault();
-					$('#check_categories_logs').show();
-					$('#table_resynch tr').remove();
-					$('#table_resynch').append("<tr style='font-weight: bold;'><td colspan='2' ><img src='{/literal}{$_module_dir_|escape:'htmlall':'UTF-8'}{literal}ebay/views/img/loading-small.gif' alt=''/></td></tr>");
-
-					comparation(1,false,false,0);
-				});
-			});
-
-			function comparation(step,id_categories, nextDatas,encour,size){
-
 				$.ajax({
-					dataType: 'json',
 					type: 'POST',
-					url: module_dir + 'ebay/ajax/checkCategory.php',
-					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay|escape:'urlencode'}{literal}&step=" + step + "&id_categories=" + id_categories,
+					url: module_dir + 'ebay/ajax/deleteProductImage.php',
+					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=delete-all",
 					beforeSend: function() {
+						$('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
+					}
+				}).done(function( data ) {
+					if (data == 'success')
+						$('#reset-image-result').html("<div class='alert alert-success'>{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}</div>");
+					else
+						$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
+				}).fail(function() {
+					$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
+				})
+			});
+		});
 
+		$(function() {
+			$('#check_database').click(function(e){
+				e.preventDefault();
+				// Premier tour : Récuperer le nombre de table
+				// Foreach de toutes les tables
+				$.ajax({
+					type: 'POST',
+					url: module_dir + 'ebay/ajax/checkDatabase.php',
+					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getNbTable",
+					beforeSend: function() {
+						$('#check_database_logs tbody tr').remove();
+						// $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
 					},
-					success: function( data ) {
-
-						if (step == 1 ||step == 2) {
-
-							if(nextDatas == false){
-								nextDatas = data;
-							}
-
-							if(step == 1) {
-								size = nextDatas.length;
-								size= size - 1;
-							}
-
-							categoryId = nextDatas[0].CategoryID;
-							nextDatas.shift();
-
-							if (nextDatas.length == 0) {
-									comparation(3,false,false,false,false);
-							} else{
-								if(step == 2) {
-									$('#table_resynch tr').last().remove();
-									encour = encour +1;
-
-									$('#table_resynch').append("<tr class='version_ok'><td>" + encour + "/"+ size +"</td><td style='color: #72C279;'></td></tr>");
-								}
-								comparation(2, categoryId, nextDatas,encour,size);
-							}
-
-						}
-						if (step == 3) {
-							$('#table_resynch tr').remove();
-							if (data['table'] != null) {
-								$.each(data['table'], function (key, value) {
-									if (value != 1) {
-										$('#table_resynch').append("<tr class='fail'><td>" + key + "</td><td style='color: red;'>" + category_false + "</td></tr>");
-									} else {
-										$('#table_resynch').append("<tr class='version_ok'><td>" + key + "</td><td style='color: #72C279;'>" + category_true + "</td></tr>");
-									}
-								});
-
-								$('#check_category_progress').show();
-								$('#check_category_logs').show();
-
-								if ($('.fail').length) {
-									$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_false + "</td></tr>");
-								} else {
-									$('#table_resynch').append("<tr style='background-color: #DFF2BF;font-weight: bold;'><td colspan='2' >" + categories_true + "</td></tr>");
-
-								}
-							} else {
-								$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_null + "</td></tr>");
-							}
-							if (data['new'] != false) {
-								$.each(data['new'], function (key, value) {
-
-									$('ul#categories_new').append("<li>" + value['name'] + "</li>");
-								})
-								$('#new_cat').show();
-							}
-						}
+					success: function( data ){
+						$('#check_database_progress').attr('data-nb_database', data);
+						$('#check_database_progress').show();
+						$('#check_database_logs').show();
+						launchDatabaseChecking(1);
 					}
 				});
+			});
+		});
 
-			}
-			$('#ResynchCategories').fancybox();
-			$('#accepted').change(function(){
-				if($('#ReCategoriespar').hasClass('disable_link')){
-					$('#ReCategoriespar').removeClass('disable_link');
-				} else {
-					$('#ReCategoriespar').addClass('disable_link');
+		$(function() {
+			$('#check_categories').click(function(e){
+				e.preventDefault();
+				$('#check_categories_logs').show();
+				$('#table_resynch tr').remove();
+				$('#table_resynch').append("<tr style='font-weight: bold;'><td colspan='2' ><img src='{/literal}{$_module_dir_|escape:'htmlall':'UTF-8'}{literal}ebay/views/img/loading-small.gif' alt=''/></td></tr>");
+
+				comparation(1,false,false,0);
+			});
+		});
+
+		function comparation(step,id_categories, nextDatas,encour,size){
+
+			$.ajax({
+				dataType: 'json',
+				type: 'POST',
+				url: module_dir + 'ebay/ajax/checkCategory.php',
+				data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay|escape:'urlencode'}{literal}&step=" + step + "&id_categories=" + id_categories,
+				beforeSend: function() {
+
+				},
+				success: function( data ) {
+
+					if (step == 1 ||step == 2) {
+
+						if(nextDatas == false){
+							nextDatas = data;
+						}
+
+						if(step == 1) {
+							size = nextDatas.length;
+							size= size - 1;
+						}
+
+						categoryId = nextDatas[0].CategoryID;
+						nextDatas.shift();
+
+						if (nextDatas.length == 0) {
+								comparation(3,false,false,false,false);
+						} else{
+							if(step == 2) {
+								$('#table_resynch tr').last().remove();
+								encour = encour +1;
+
+								$('#table_resynch').append("<tr class='version_ok'><td>" + encour + "/"+ size +"</td><td style='color: #72C279;'></td></tr>");
+							}
+							comparation(2, categoryId, nextDatas,encour,size);
+						}
+
+					}
+					if (step == 3) {
+						$('#table_resynch tr').remove();
+						if (data['table'] != null) {
+							$.each(data['table'], function (key, value) {
+								if (value != 1) {
+									$('#table_resynch').append("<tr class='fail'><td>" + key + "</td><td style='color: red;'>" + category_false + "</td></tr>");
+								} else {
+									$('#table_resynch').append("<tr class='version_ok'><td>" + key + "</td><td style='color: #72C279;'>" + category_true + "</td></tr>");
+								}
+							});
+
+							$('#check_category_progress').show();
+							$('#check_category_logs').show();
+
+							if ($('.fail').length) {
+								$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_false + "</td></tr>");
+							} else {
+								$('#table_resynch').append("<tr style='background-color: #DFF2BF;font-weight: bold;'><td colspan='2' >" + categories_true + "</td></tr>");
+
+							}
+						} else {
+							$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_null + "</td></tr>");
+						}
+						if (data['new'] != false) {
+							$.each(data['new'], function (key, value) {
+
+								$('ul#categories_new').append("<li>" + value['name'] + "</li>");
+							})
+							$('#new_cat').show();
+						}
+					}
 				}
 			});
 
-			{/literal}
-		</script>
+		}
+		$('#ResynchCategories').fancybox();
+		$('#accepted').change(function(){
+			if($('#ReCategoriespar').hasClass('disable_link')){
+				$('#ReCategoriespar').removeClass('disable_link');
+			} else {
+				$('#ReCategoriespar').addClass('disable_link');
+			}
+		});
+
+		{/literal}
+	</script>
 
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/advancedParameters.js"></script>
-</form>
 
 <script type="text/javascript">
 	var category_true = "{l s='Category definition is already last version' mod='ebay'}";

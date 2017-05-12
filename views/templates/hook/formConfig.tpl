@@ -23,11 +23,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <div class="col-md-9 col-lg-10">
+	{if isset($green_message) && $green_message}
+		<div class="alert alert-success conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
+	{/if}
+
 	<div class="panel">
 		<div class="tab-content">
-			{if isset($green_message) && $green_message}
-			<div class="module_confirmation conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
-			{/if}
 
 			<div class="bootstrap">
 				{if isset($alerts) && $alerts && sizeof($alerts)}
@@ -94,35 +95,23 @@
 					</div>
 
 					<div id="menuTab102Sheet" class="tabItem tab-pane">
-						<div class="panel">
-
-							{$form_parameters_orders_tab|ebayHtml}
-						</div>
+						{$form_parameters_orders_tab|ebayHtml}
 					</div>
 
 					<div id="menuTab103Sheet" class="tabItem tab-pane">
-						<div class="panel">
-
-							{$form_inter_shipping|ebayHtml}
-						</div>
+						{$form_inter_shipping|ebayHtml}
 					</div>
 
 					<div id="menuTab13Sheet" class="tabItem tab-pane">
-						<div class="panel">
-							{$form_advanced_parameters|ebayHtml}
-						</div>
+						{$form_advanced_parameters|ebayHtml}
 					</div>
 
 					<div id="menuTab3Sheet" class="tabItem tab-pane">
-						<div class="panel">
-							{$form_shipping|ebayHtml}
-						</div>
+						{$form_shipping|ebayHtml}
 					</div>
 
 					<div id="menuTab4Sheet" class="tabItem tab-pane">
-						<div class="panel">
-							{$form_template_manager|ebayHtml}
-						</div>
+						{$form_template_manager|ebayHtml}
 					</div>
 
 					<div id="menuTab5Sheet" class="tabItem tab-pane">

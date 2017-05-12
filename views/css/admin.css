@@ -26,6 +26,9 @@
 .totebay .panel-heading i {
   margin-right: 5px;
 }
+.totebay .nav-pills a span.badge {
+  margin-left: 5px;
+}
 .totebay .alert-no-icon {
   padding-left: 15px !important;
 }

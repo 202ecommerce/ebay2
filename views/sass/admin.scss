@@ -41,6 +41,11 @@
     margin-right: 5px;
   }
 
+  // Adds spacing before badge in menu item
+  .nav-pills a span.badge {
+    margin-left: 5px;
+  }
+
   // Display bootstrap alerts with no icon
   .alert-no-icon {
     padding-left: 15px !important;

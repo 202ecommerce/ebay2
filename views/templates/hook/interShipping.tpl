@@ -22,543 +22,557 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-<form action="{$formUrl|escape:'htmlall':'UTF-8'}" method="post">
+<form action="{$formUrl|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel">
+	<script type="text/javascript">
+		// <![CDATA[
+		function addInterShipping(currentName, idPSCarrier, idEbayCarrier, additionalFee, nbSelect, id_zone, zone) {
+			var lastId = 0;
+			var current = $("#"+currentName);
+			var hasValues = (typeof(idPSCarrier) != "undefined" && typeof(idEbayCarrier) != "undefined" && typeof(additionalFee) != "undefined");
+			if (current.children('table').length > 0)
+				lastId = parseInt(current.children('table').last().attr('data-nb')) + 1;
+			var createSelecstShipping = '';
+			createSelecstShipping += "<tr>";
 
-
-<script type="text/javascript">
-	// <![CDATA[
-	function addInterShipping(currentName, idPSCarrier, idEbayCarrier, additionalFee, nbSelect, id_zone, zone) {
-		var lastId = 0;
-		var current = $("#"+currentName);
-		var hasValues = (typeof(idPSCarrier) != "undefined" && typeof(idEbayCarrier) != "undefined" && typeof(additionalFee) != "undefined");
-		if (current.children('table').length > 0)
-			lastId = parseInt(current.children('table').last().attr('data-nb')) + 1;
-		var createSelecstShipping = '';
-		createSelecstShipping += "<tr>";
-
-		// Carrier Prestashop
-		createSelecstShipping += "<td><p class='label'><strong>{l s='Prestashop carrier' mod='ebay'}</strong></p><div><select name='"+ (currentName == 'domesticShipping' ? 'psCarrier' : 'psCarrier_international') +"["+ lastId +"]' class='prestaCarrier'><option value='' selected>{l s='Select a PrestaShop carrier' mod='ebay'}</option>";
-		{foreach from=$newPrestashopZone item=zone}
-			{if !empty($zone.carriers)}
-			 	createSelecstShipping += "<optgroup label='{$zone.name|escape:'htmlall':'UTF-8'}'>";
-					{foreach from=$zone.carriers item=carrier}
-						var testPSCarrier = (typeof(idPSCarrier) != "undefined"  && idPSCarrier == {$carrier.id_carrier|escape:'htmlall':'UTF-8'} && id_zone == {$zone.id_zone|escape:'htmlall':'UTF-8'});
-						createSelecstShipping += "<option "+ (testPSCarrier ? 'selected="selected"' : '')  +" data-realname='{$zone.name|escape:'htmlall':'UTF-8'}, {$carrier.name|escape:'htmlall':'UTF-8'}' value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}-{$zone.id_zone|escape:'htmlall':'UTF-8'}' data-maxprice='{$carrier.price|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
-						if (testPSCarrier) {
-							var valuePSCarrier = " {$carrier.name|escape:'htmlall':'UTF-8'} ";
-						}
-					{/foreach}
-				createSelecstShipping += "</optgroup>";
-			{/if}
-		{/foreach}
-		createSelecstShipping += "</select><span> {l s='Start by choosing a PrestaShop carrier to replicate on eBay' mod='ebay'}</span></div>";
-
-		createSelecstShipping += "</td>";
-
-		// end carrier Prestashop
-
-		// Carrier eBay
-		createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : 'big-linked') +"'' style='visibility:hidden'><p  class='label' data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Link' mod='ebay'}<strong>"+(hasValues ? valuePSCarrier : '')+"</strong>{l s='with eBay carrier' mod='ebay'}</p><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : 'ebayCarrier_international') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
-		{foreach from=$eBayCarrier item=carrier}
-			if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping'))
-				createSelecstShipping += "<option "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
-		{/foreach}
-		createSelecstShipping += "</select></div></td>";
-		// end carrier eBay
-
-		if (currentName == 'internationalShipping')
-		{
-			createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><p>{l s='Select the countries you will ship to:' mod='ebay'}</p>";
-			createSelecstShipping += "<ul style='float:left'>";
-			{foreach from=$internationalShippingLocations item=shippingLocation name=loop}
-				{if $smarty.foreach.loop.index%4 == 0 && $smarty.foreach.loop.index != 0}
-					createSelecstShipping += "</ul><ul style='float:left'>";
+			// Carrier Prestashop
+			createSelecstShipping += "<td><label>{l s='Prestashop carrier' mod='ebay'}</label><div><select name='"+ (currentName == 'domesticShipping' ? 'psCarrier' : 'psCarrier_international') +"["+ lastId +"]' class='prestaCarrier'><option value='' selected>{l s='Select a PrestaShop carrier' mod='ebay'}</option>";
+			{foreach from=$newPrestashopZone item=zone}
+				{if !empty($zone.carriers)}
+				 	createSelecstShipping += "<optgroup label='{$zone.name|escape:'htmlall':'UTF-8'}'>";
+						{foreach from=$zone.carriers item=carrier}
+							var testPSCarrier = (typeof(idPSCarrier) != "undefined"  && idPSCarrier == {$carrier.id_carrier|escape:'htmlall':'UTF-8'} && id_zone == {$zone.id_zone|escape:'htmlall':'UTF-8'});
+							createSelecstShipping += "<option "+ (testPSCarrier ? 'selected="selected"' : '')  +" data-realname='{$zone.name|escape:'htmlall':'UTF-8'}, {$carrier.name|escape:'htmlall':'UTF-8'}' value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}-{$zone.id_zone|escape:'htmlall':'UTF-8'}' data-maxprice='{$carrier.price|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
+							if (testPSCarrier) {
+								var valuePSCarrier = " {$carrier.name|escape:'htmlall':'UTF-8'} ";
+							}
+						{/foreach}
+					createSelecstShipping += "</optgroup>";
 				{/if}
-				if(typeof(zone) != "undefined" && zone.indexOf('{$shippingLocation.location|escape:'htmlall':'UTF-8'}') != -1)
-				{
-					createSelecstShipping += '<li><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}"> {$shippingLocation.description|escape:'htmlall':'UTF-8'}</li>';
+			{/foreach}
+			createSelecstShipping += "</select><span> {l s='Start by choosing a PrestaShop carrier to replicate on eBay' mod='ebay'}</span></div>";
+
+			createSelecstShipping += "</td>";
+
+			// end carrier Prestashop
+
+			// Carrier eBay
+			createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : 'big-linked') +"'' style='visibility:hidden'><label data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Linked' mod='ebay'}"+(hasValues ? valuePSCarrier : '')+"{l s='with an eBay carrier' mod='ebay'}</label><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : 'ebayCarrier_international') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
+			{foreach from=$eBayCarrier item=carrier}
+				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping'))
+					createSelecstShipping += "<option "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+			{/foreach}
+			createSelecstShipping += "</select></div></td>";
+			// end carrier eBay
+
+			if (currentName == 'internationalShipping')
+			{
+				createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><label class='d-b'>{l s='Select the countries you will ship to:' mod='ebay'}</label>";
+				createSelecstShipping += "<ul style='float:left'>";
+				{foreach from=$internationalShippingLocations item=shippingLocation name=loop}
+					{if $smarty.foreach.loop.index%4 == 0 && $smarty.foreach.loop.index != 0}
+						createSelecstShipping += "</ul><ul style='float:left'>";
+					{/if}
+					if(typeof(zone) != "undefined" && zone.indexOf('{$shippingLocation.location|escape:'htmlall':'UTF-8'}') != -1)
+					{
+						createSelecstShipping += '<li><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}"> {$shippingLocation.description|escape:'htmlall':'UTF-8'}</li>';
+					}
+					else
+					{
+						createSelecstShipping += '<li><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}"> {$shippingLocation.description|escape:'htmlall':'UTF-8'}</li>';
+					}
+				{/foreach}
+				createSelecstShipping += "</ul></td>";
+			}
+
+			// extrafree
+			createSelecstShipping += "<td style='visibility:hidden;'><label>{l s='Additional item cost' mod='ebay'}</label><div class='popin_ship_cost'></div><div class='input-group'><span class='input-group-addon'>{$configCurrencysign|escape:'htmlall':'UTF-8'}</span><input class='extrafee form-control' "+ ((typeof(additionalFee) != "undefined" && additionalFee > 0) ? 'value="'+additionalFee+'"' : '')  +" min = '0' name='"+ (currentName == 'domesticShipping' ? 'extrafee' : 'extrafee_international') +"["+ lastId +"]' type='number' step='0.01'></div>"+ (currentName == 'domesticShipping' ? '<div class="help-block">' : '<p>') +" <a class='kb-help link_ship_cost' style='width: auto;background-image: none;' data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a><a class='kb-help'  data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a>"+ (currentName == 'domesticShipping' ? '</div>' : '</p>') +"</td>";
+			// end extrafree
+
+			// trash
+			var atrash = $('<a class="ebay_trash btn btn-default btn-sm pull-right"><i class="icon-trash"></i></a>');
+			// var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
+			// atrash.append(imgtrash);
+			atrash.click(function() {
+				$(this).closest('table').remove();
+				return false;
+			});
+			var trash = $("<td style='visibility:hidden'>").append(atrash);
+			// end trash
+
+			createSelecstShipping += "</tr>";
+			createSelecstShipping = $(createSelecstShipping).append(trash);
+			if (hasValues) {
+				createSelecstShipping = $("<table data-nb='"+lastId+"' class='table'>").append(createSelecstShipping);
+			}
+			else {
+				createSelecstShipping = $("<table data-nb='"+lastId+"' class='table'>").append(createSelecstShipping);
+			}
+
+			current.append(createSelecstShipping);
+			if (hasValues) {
+				displayEbayCarrier(current.find('.prestaCarrier').eq(nbSelect));
+				processEbayCarrier(current.find('.eBayCarrier').eq(nbSelect));
+			}
+
+			$('#internationalShipping select').unbind().change(function(){
+				if ($(this).attr('class') == 'prestaCarrier')
+					displayEbayCarrier($(this));
+				else if ($(this).attr('class') == 'eBayCarrier')
+					processEbayCarrier($(this));
+			});
+		}
+
+
+
+		//]]>
+
+		{literal}
+		function addShippingFeeInter(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
+		{/literal}
+			var currentShippingService = -1;
+			var internationSuffix = '';
+
+			if(internationalOnly == 1)
+			{literal}{{/literal}
+				var lastId = $('#internationalCarrier .internationalShipping').length;
+				internationSuffix = '_international';
+			}
+			else
+			{literal}{{/literal}
+
+				var lastId = $('#nationalCarrier tr').length;
+				internationSuffix = '';
+			}
+
+
+			if(additionalFee == undefined)
+				additionalFee = '';
+
+			var stringShippingFee = "<tr class='onelineebaycarrier'>";
+			stringShippingFee += "<td>{l s='Choose your eBay carrier' mod='ebay'}</td>";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 		"<select name='ebayCarrier"+internationSuffix+"["+lastId+"]' id='ebayCarrier_"+lastId+"'>";
+			{foreach from=$eBayCarrier item=carrier}
+			currentShippingService = '{$carrier.shippingService|escape:'htmlall':'UTF-8'}';
+			//check for international
+			if((internationalOnly == 1 && '{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' === 'true') || (internationalOnly == 0 && '{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true') )
+			{literal}{{/literal}
+				if(currentShippingService == idEbayCarrier)
+				{literal}{{/literal}
+					stringShippingFee += 		"<option value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}' selected='selected'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
 				}
 				else
-				{
-					createSelecstShipping += '<li><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}"> {$shippingLocation.description|escape:'htmlall':'UTF-8'}</li>';
+				{literal}{{/literal}
+					stringShippingFee += 		"<option value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
 				}
+			}
 			{/foreach}
-			createSelecstShipping += "</ul></td>";
+			stringShippingFee += 		"</select>";
+			stringShippingFee += 	"</td>";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 		"{l s='Associate it with a PrestaShop carrier' mod='ebay'}";
+			stringShippingFee += 	"</td>";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 		"<select name='psCarrier"+internationSuffix+"["+lastId+"]' id='psCarrier_"+lastId+"'>";
+													{foreach from=$psCarrier item=carrier}
+			currentShippingService = {$carrier.id_carrier|escape:'htmlall':'UTF-8'};
+			if(currentShippingService == idPSCarrier)
+			{literal}{{/literal}
+				stringShippingFee += 		"<option value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}' selected='selected'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
+			}
+			else
+			{literal}{{/literal}
+				stringShippingFee += 		"<option value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
+			}
+													{/foreach}
+			stringShippingFee += 		"</select>";
+			stringShippingFee += 	"</td>";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 		"{l s='Add extra fee for this carrier' mod='ebay'} ";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 		"<input class = 'extrafee' type='text' name='extrafee"+internationSuffix+"["+lastId+"]' value='"+additionalFee+"'>";
+			stringShippingFee += 	"</td>";
+			stringShippingFee += 	"<td>";
+			stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";
+			stringShippingFee += 	"</td>";
+			stringShippingFee += "</tr>";
+
+			if(show == 1)
+				$('#nationalCarrier tr:last').after(stringShippingFee);
+			else
+				return stringShippingFee;
 		}
 
-		// extrafree
-		createSelecstShipping += "<td style='visibility:hidden;'><p  class='label'>{l s='Additional item cost' mod='ebay'}</p><span>{$configCurrencysign|escape:'htmlall':'UTF-8'} </span><div class='popin_ship_cost'></div><input class='extrafee' "+ ((typeof(additionalFee) != "undefined" && additionalFee > 0) ? 'value="'+additionalFee+'"' : '')  +" min = '0' name='"+ (currentName == 'domesticShipping' ? 'extrafee' : 'extrafee_international') +"["+ lastId +"]' type='number' step='0.01'>"+ (currentName == 'domesticShipping' ? '<span style="font-size:12px;">' : '<p>') +" <a class='kb-help link_ship_cost' style='width: auto;background-image: none;' data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a><a class='kb-help'  data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a>"+ (currentName == 'domesticShipping' ? '</span>' : '</p>') +"</td>";
-		// end extrafree
 
-		// trash
-		var atrash = $('<a class="ebay_trash">');
-		var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
-		atrash.append(imgtrash);
-		atrash.click(function() {
-			$(this).closest('table').remove();
-			return false;
-		});
-		var trash = $("<td style='visibility:hidden'>").append(atrash);
-		// end trash
+		function getShippingLocation(lastId, zone)
+		{literal}{{/literal}
+			var string = '';
+			{foreach from=$internationalShippingLocations item=shippingLocation}
+				if(zone != undefined && zone.indexOf('{$shippingLocation.location|escape:'htmlall':'UTF-8'}') != -1)
+				{literal}{{/literal}
+				string += '<div class="shippinglocationOption"><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}">{$shippingLocation.description|escape:'htmlall':'UTF-8'}</div>';
+				}
+				else
+				{literal}{{/literal}
+				string += '<div class="shippinglocationOption"><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}">{$shippingLocation.description|escape:'htmlall':'UTF-8'}</div>';
+				}
 
-		createSelecstShipping += "</tr>";
-		createSelecstShipping = $(createSelecstShipping).append(trash);
-		if (hasValues) {
-			createSelecstShipping = $("<table data-nb='"+lastId+"' class='table'>").append(createSelecstShipping);
-		}
-		else {
-			createSelecstShipping = $("<table data-nb='"+lastId+"' class='table'>").append(createSelecstShipping);
+			{/foreach}
+			return string;
 		}
 
-		current.append(createSelecstShipping);
-		if (hasValues) {
-			displayEbayCarrier(current.find('.prestaCarrier').eq(nbSelect));
-			processEbayCarrier(current.find('.eBayCarrier').eq(nbSelect));
-		}
 
-		$('#internationalShipping select').unbind().change(function(){
-			if ($(this).attr('class') == 'prestaCarrier')
-				displayEbayCarrier($(this));
-			else if ($(this).attr('class') == 'eBayCarrier')
-				processEbayCarrier($(this));
-		});
-	}
-
-
-
-	//]]>
-
-	{literal}
-	function addShippingFeeInter(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
-	{/literal}
-		var currentShippingService = -1;
-		var internationSuffix = '';
-
-		if(internationalOnly == 1)
+		function addInternationalShippingFee(idEbayCarrier, idPSCarrier, additionalFee, zone, zoneExcluded)
 		{literal}{{/literal}
 			var lastId = $('#internationalCarrier .internationalShipping').length;
-			internationSuffix = '_international';
+
+			var string = "<div class='internationalShipping' data-id='"+lastId+"'>";
+			string += "<table class='table'>";
+			string += "<tr>";
+			string += addShippingFeeInter(0, 1, idEbayCarrier, idPSCarrier, additionalFee);
+			string += "</tr>";
+			string += "</table>";
+			string += "<label>{l s='Add country you will ship to' mod='ebay'}</label>";
+			string += "<div class='margin-form'	>"+getShippingLocation(lastId, zone)+"</div>";
+			string += "<div style='width:100%;clear:both'></div>";
+			string += '</div>';
+
+			$('#internationalCarrier div.internationalShipping:last').after(string);
 		}
-		else
+
+		function excludeLocation()
 		{literal}{{/literal}
+			var string = '<input type="hidden" value="1" name="excludeLocationHidden"/>';
+			string += '<table class="allregion table">';
 
-			var lastId = $('#nationalCarrier tr').length;
-			internationSuffix = '';
-		}
+			{foreach from=$excludeShippingLocation.all item=region key=regionvalue name=count}
+				{if $smarty.foreach.count.index % 4 == 0}
+					string += "<tr>";
+				{/if}
+				string += "<td>";
+				string += "<div class='excludedLocation'>";
+				string += "<div class='checkbox'>";
+				string += "<label class='control-label' for='excludeLocation[{$regionvalue|escape:'htmlall':'UTF-8'}]'>";
+				string += "<input type='checkbox' id='excludeLocation[{$regionvalue|escape:'htmlall':'UTF-8'}]' name='excludeLocation[{$regionvalue|escape:'htmlall':'UTF-8'}]' {if in_array($regionvalue, $excludeShippingLocation.excluded)} checked='checked'{/if}/> {$region.description|escape:'htmlall':'UTF-8'}";
+				string += "</label>";
+				string += "</div>";
+				string += "<span class='showCountries' data-region='{$regionvalue|escape:'htmlall':'UTF-8'}'>({l s='Show all countries' mod='ebay'})</span>";
+				string += "<div class='listcountry'></div>";
+				string += "</div>";
+				string += "</td>";
 
-
-		if(additionalFee == undefined)
-			additionalFee = '';
-
-		var stringShippingFee = "<tr class='onelineebaycarrier'>";
-		stringShippingFee += "<td>{l s='Choose your eBay carrier' mod='ebay'}</td>";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<select name='ebayCarrier"+internationSuffix+"["+lastId+"]' id='ebayCarrier_"+lastId+"'>";
-		{foreach from=$eBayCarrier item=carrier}
-		currentShippingService = '{$carrier.shippingService|escape:'htmlall':'UTF-8'}';
-		//check for international
-		if((internationalOnly == 1 && '{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' === 'true') || (internationalOnly == 0 && '{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true') )
-		{literal}{{/literal}
-			if(currentShippingService == idEbayCarrier)
-			{literal}{{/literal}
-				stringShippingFee += 		"<option value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}' selected='selected'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
-			}
-			else
-			{literal}{{/literal}
-				stringShippingFee += 		"<option value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
-			}
-		}
-		{/foreach}
-		stringShippingFee += 		"</select>";
-		stringShippingFee += 	"</td>";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"{l s='Associate it with a PrestaShop carrier' mod='ebay'}";
-		stringShippingFee += 	"</td>";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<select name='psCarrier"+internationSuffix+"["+lastId+"]' id='psCarrier_"+lastId+"'>";
-												{foreach from=$psCarrier item=carrier}
-		currentShippingService = {$carrier.id_carrier|escape:'htmlall':'UTF-8'};
-		if(currentShippingService == idPSCarrier)
-		{literal}{{/literal}
-			stringShippingFee += 		"<option value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}' selected='selected'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
-		}
-		else
-		{literal}{{/literal}
-			stringShippingFee += 		"<option value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
-		}
-												{/foreach}
-		stringShippingFee += 		"</select>";
-		stringShippingFee += 	"</td>";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"{l s='Add extra fee for this carrier' mod='ebay'} ";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<input class = 'extrafee' type='text' name='extrafee"+internationSuffix+"["+lastId+"]' value='"+additionalFee+"'>";
-		stringShippingFee += 	"</td>";
-		stringShippingFee += 	"<td>";
-		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";
-		stringShippingFee += 	"</td>";
-		stringShippingFee += "</tr>";
-
-		if(show == 1)
-			$('#nationalCarrier tr:last').after(stringShippingFee);
-		else
-			return stringShippingFee;
-	}
-
-
-	function getShippingLocation(lastId, zone)
-	{literal}{{/literal}
-		var string = '';
-		{foreach from=$internationalShippingLocations item=shippingLocation}
-			if(zone != undefined && zone.indexOf('{$shippingLocation.location|escape:'htmlall':'UTF-8'}') != -1)
-			{literal}{{/literal}
-			string += '<div class="shippinglocationOption"><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}">{$shippingLocation.description|escape:'htmlall':'UTF-8'}</div>';
-			}
-			else
-			{literal}{{/literal}
-			string += '<div class="shippinglocationOption"><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}">{$shippingLocation.description|escape:'htmlall':'UTF-8'}</div>';
-			}
-
-		{/foreach}
-		return string;
-	}
-
-
-	function addInternationalShippingFee(idEbayCarrier, idPSCarrier, additionalFee, zone, zoneExcluded)
-	{literal}{{/literal}
-		var lastId = $('#internationalCarrier .internationalShipping').length;
-
-		var string = "<div class='internationalShipping' data-id='"+lastId+"'>";
-		string += "<table class='table'>";
-		string += "<tr>";
-		string += addShippingFeeInter(0, 1, idEbayCarrier, idPSCarrier, additionalFee);
-		string += "</tr>";
-		string += "</table>";
-		string += "<label>{l s='Add country you will ship to' mod='ebay'}</label>";
-		string += "<div class='margin-form'	>"+getShippingLocation(lastId, zone)+"</div>";
-		string += "<div style='width:100%;clear:both'></div>";
-		string += '</div>';
-
-		$('#internationalCarrier div.internationalShipping:last').after(string);
-	}
-
-	function excludeLocation()
-	{literal}{{/literal}
-		var string = '<input type="hidden" value="1" name="excludeLocationHidden"/>';
-		string += '<table class="allregion table">';
-
-		{foreach from=$excludeShippingLocation.all item=region key=regionvalue name=count}
-			{if $smarty.foreach.count.index % 4 == 0}
-				string += "<tr>";
-			{/if}
-			string += "<td>";
-			string += "<div class='excludedLocation'>";
-			string += "<input type='checkbox' name='excludeLocation[{$regionvalue|escape:'htmlall':'UTF-8'}]' {if in_array($regionvalue, $excludeShippingLocation.excluded)} checked='checked'{/if}/> {$region.description|escape:'htmlall':'UTF-8'}<br/>";
-			string += "<span class='showCountries' data-region='{$regionvalue|escape:'htmlall':'UTF-8'}'>({l s='Show all countries' mod='ebay'})</span>";
-			string += "<div class='listcountry'></div>";
-			string += "</div>";
-			string += "</td>";
-
-			{if $smarty.foreach.count.index % 4 == 3}
-				string += "</tr>";
-			{/if}
-		{/foreach}
-		string += "</table>";
-
-
-
-		return string;
-	}
-
-	jQuery(document).ready(function($)
-	{literal}{{/literal}
-		/* INIT */
-
-		{literal}
-		var zone = new Array();
-		var zoneExcluded = new Array();
-		{/literal}
-		{foreach from=$existingInternationalCarrier item=internationalCarrier}
-			zone = [];
-			zoneExcluded = [];
-			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
-				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall':'UTF-8'}');
+				{if $smarty.foreach.count.index % 4 == 3}
+					string += "</tr>";
+				{/if}
 			{/foreach}
-			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}', zone, zoneExcluded);
-		{/foreach}
+			string += "</table>";
 
 
-		showExcludeLocation();
 
+			return string;
+		}
 
-		var zone = new Array();
-		{foreach from=$existingInternationalCarrier item=internationalCarrier key=i}
-			zone = [];
-			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
-				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall':'UTF-8'}');
-			{/foreach}
-			{if isset($internationalCarrier.ebay_carrier) && isset($internationalCarrier.ps_carrier)}
-				addInterShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', {$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}, {$i|escape:'htmlall':'UTF-8'}, {$internationalCarrier.id_zone|escape:'htmlall':'UTF-8'}, zone);
-			{/if}
-		{foreachelse}
-			addInterShipping('internationalShipping');
-		{/foreach}
-
-
-		/* EVENTS */
-		bindElementsInter();
-	});
-
-
-	function showExcludeLocation()
-	{literal}{{/literal}
-		$('#nolist').fadeOut('normal', function()
+		jQuery(document).ready(function($)
 		{literal}{{/literal}
-			$('#list').html(excludeLocation());
+			/* INIT */
 
-		{literal}
-		$('.showCountries').each(function()
-		{
-			var showcountries = $(this);
-			$.ajax({
-				url: '{/literal}{$module_dir|escape:'htmlall':'UTF-8'}{literal}ajax/getCountriesLocation.php?token={/literal}{$ebay_token|escape:'htmlall':'UTF-8'}{literal}&profile={/literal}{$id_ebay_profile|escape:'htmlall':'UTF-8'}{literal}',
-				type: 'POST',
-				data: {region: $(this).attr('data-region')},
-				complete: function(xhr, textStatus) {
-
-				},
-				success: function(data, textStatus, xhr) {
-					showcountries.parent().find('.listcountry').html(data);
-				},
-				error: function(xhr, textStatus, errorThrown) {
-				//called when there is an error
-				}
-			});
-		});
-
-			bindElementsInter();
-
-		});
-		setTimeout(function(){
-			cleanShippings();
-			checkGlobalShippingConfiguration();
-		}, 500);
-		{/literal}
-
-	}
+			{literal}
+			var zone = new Array();
+			var zoneExcluded = new Array();
+			{/literal}
+			{foreach from=$existingInternationalCarrier item=internationalCarrier}
+				zone = [];
+				zoneExcluded = [];
+				{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
+					zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall':'UTF-8'}');
+				{/foreach}
+				addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}', zone, zoneExcluded);
+			{/foreach}
 
 
-	function bindElementsInter()
-	{literal}{{/literal}
-		$('#internationalCarrier .deleteCarrier').unbind().click(function(){literal}{{/literal}
-			$(this).parent().parent().parent().parent().parent().remove();
-		});
-
-		$('.addExcludedZone').unbind().click(function(){literal}{{/literal}
-			var excludedButton = $(this);
-			var excluded = getExcludeShippingLocation(excludedButton.parent());
-			$(this).before(excluded);
-		});
-
-
-
-
-		$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
-			addInternationalShippingFee();
-			bindElementsInter();
-		});
-
-		$('#createlist').unbind().click(function(){literal}{{/literal}
 			showExcludeLocation();
+
+
+			var zone = new Array();
+			{foreach from=$existingInternationalCarrier item=internationalCarrier key=i}
+				zone = [];
+				{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
+					zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall':'UTF-8'}');
+				{/foreach}
+				{if isset($internationalCarrier.ebay_carrier) && isset($internationalCarrier.ps_carrier)}
+					addInterShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', {$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}, {$i|escape:'htmlall':'UTF-8'}, {$internationalCarrier.id_zone|escape:'htmlall':'UTF-8'}, zone);
+				{/if}
+			{foreachelse}
+				addInterShipping('internationalShipping');
+			{/foreach}
+
+
+			/* EVENTS */
+			bindElementsInter();
 		});
 
-		$('.showCountries').unbind().click(function(){literal}{{/literal}
-			$(this).hide().parent().find('.listcountry').show();
-		});
+
+		function showExcludeLocation()
+		{literal}{{/literal}
+			$('#nolist').fadeOut('normal', function()
+			{literal}{{/literal}
+				$('#list').html(excludeLocation());
+
+			{literal}
+			$('.showCountries').each(function()
+			{
+				var showcountries = $(this);
+				$.ajax({
+					url: '{/literal}{$module_dir|escape:'htmlall':'UTF-8'}{literal}ajax/getCountriesLocation.php?token={/literal}{$ebay_token|escape:'htmlall':'UTF-8'}{literal}&profile={/literal}{$id_ebay_profile|escape:'htmlall':'UTF-8'}{literal}',
+					type: 'POST',
+					data: {region: $(this).attr('data-region')},
+					complete: function(xhr, textStatus) {
+
+					},
+					success: function(data, textStatus, xhr) {
+						showcountries.parent().find('.listcountry').html(data);
+					},
+					error: function(xhr, textStatus, errorThrown) {
+					//called when there is an error
+					}
+				});
+			});
+
+				bindElementsInter();
+
+			});
+			setTimeout(function(){
+				cleanShippings();
+				checkGlobalShippingConfiguration();
+			}, 500);
+			{/literal}
+
+		}
+
+
+		function bindElementsInter()
+		{literal}{{/literal}
+			$('#internationalCarrier .deleteCarrier').unbind().click(function(){literal}{{/literal}
+				$(this).parent().parent().parent().parent().parent().remove();
+			});
+
+			$('.addExcludedZone').unbind().click(function(){literal}{{/literal}
+				var excludedButton = $(this);
+				var excluded = getExcludeShippingLocation(excludedButton.parent());
+				$(this).before(excluded);
+			});
 
 
 
-		$('#internationalShippingButton').unbind().click(function(){
-			addInterShipping($(this).attr('id').replace('Button', ''));
-			checkGlobalShippingConfiguration();
-			return false;
-		});
 
-		{literal}
-		$('.shipping_destinations input').unbind().click(function(el){
-			checkShippingConfiguration($(this).closest('table'));
-		});
-		{/literal}
-	}
-</script>
-<style>
-{literal}
+			$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
+				addInternationalShippingFee();
+				bindElementsInter();
+			});
 
+			$('#createlist').unbind().click(function(){literal}{{/literal}
+				showExcludeLocation();
+			});
 
-	#internationalShipping table
-	{
-		padding: 0 5px 10px 10px;
-		-webkit-border-radius: 10px;
-		-moz-border-radius: 10px;
-		border-radius: 10px;
-	}
-
-	.internationalShipping{
-		background-color: #FFF;
-		border: 1px solid #AAA;
-		margin-bottom: 10px;
-	}
-
-	.excludedLocation{
-		float:left;
-		min-height:30px;
-		margin-right:10px;
-		min-width:140px;
-	}
-
-	.excludeCountry{
-		height:20px;
-		padding-left:5px;
-	}
-
-	.excludeCountry input{
-		margin-right:5px;
-	}
-
-	.allregion tr td{
-		vertical-align: top;
-	}
-
-	.showCountries{
-		color:blue;
-		font-size:9px;
-		padding-left:14px;
-		cursor:pointer;
-	}
+			$('.showCountries').unbind().click(function(){literal}{{/literal}
+				$(this).hide().parent().find('.listcountry').show();
+			});
 
 
 
-	.listcountry{
-		margin-top:10px;
-		display:none;
-	}
+			$('#internationalShippingButton').unbind().click(function(){
+				addInterShipping($(this).attr('id').replace('Button', ''));
+				checkGlobalShippingConfiguration();
+				return false;
+			});
 
-	.table tr td {
-		border-bottom:none;
-	}
-
-	.internationalShipping input[type="checkbox"]{
-		margin-right: 2px;
-		margin-left: 0px;
-		margin-top: -3px;
-	}
-
-
-
-	.shippinglocationOption{
-		float: left;
-		padding-top: 2px;
-		margin-right:10px;
-		margin-top: 3px;
-		margin-bottom:5px;
-	}
-
-
-	.unquatre .onelineebaycarrier select{
-		width:140px;
-	}
-
-	#internationalShipping ul li
-	{
-		padding: 10px 5px 0 0;
-	}
-{/literal}
-</style>
-
-<div style="display:none; position:absolute; width:500px; padding:20px 70px 20px 20px; left:30%;background-color:#FFF;border:4px solid #555;" id="warningOnCarriersContainer">
-	<div class="close"><img src="" alt=""></div>
-	<p class="error" id="warningOnCarriers" style="width:500px;">
-	{l s='The Prestashop carriers added through a module are not configurable with the eBay integration.' mod='ebay'}<br/><br/>
-	{l s='To overcome this issue, you can add a new carrier in your Prestashop back office and disable it from viewing in the Prestashop front office' mod='ebay'} <br/><br/>
-	{foreach from=$psCarrierModule item=carrier}
-		- <b>{$carrier.name|escape:'htmlall':'UTF-8'}</b><br/>
-	{/foreach}
-	</p>
-	<div class="fancyboxeBayClose"  style="text-align:center; margin-top:10px;font-weight:bold;cursor:pointer;">{l s='Close' mod='ebay'}</div>
-</div>
-<!--script type="text/javascript" src="../js/jquery/jquery.fancybox-1.3.4.js"></script-->
-<script>
+			{literal}
+			$('.shipping_destinations input').unbind().click(function(el){
+				checkShippingConfiguration($(this).closest('table'));
+			});
+			{/literal}
+		}
+	</script>
+	<style>
 	{literal}
-	$(document).ready(function() {
-		if(!typeof $.fancybox == 'function') {
-			$(".fancyboxeBay").fancybox({
-				maxWidth	: '500px',
-				maxHeight	: '300px',
-				fitToView	: false,
-				autoSize	: false,
-				closeClick	: false,
-				openEffect	: 'none',
-				closeEffect	: 'none'
-			});
+
+		#internationalShipping table {
+			padding: 0 5px 10px 10px;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			border-radius: 10px;
 		}
-		else{
-			$(".fancyboxeBay").click(function(){
-				$("#warningOnCarriersContainer").fadeIn();
-			});
-			$(".fancyboxeBayClose").click(function(){
-				$(this).parent().fadeOut();
-			});
+
+		.internationalShipping {
+			background-color: #FFF;
+			border: 1px solid #AAA;
+			margin-bottom: 10px;
 		}
-	});
-	var message_cost = "{/literal}{l s='Between 0 and ' mod='ebay'}{literal}";
-	$('.extrafee').live('keyup', '.js_numbers_only', function(event) {
 
-		var max = parseInt($(this).attr('max'));
-		console.log(max);
-		if ($(this).val() > max ) {
-
-			$(this).val(max);
-		} else if ($(this).val() < 0) {
-			$(this).val(0);
+		.excludedLocation {
+			float: left;
+			min-height: 30px;
+			margin-right: 10px;
+			min-width: 140px;
 		}
-	});
-	$('.extrafee').live('focus',function() {
-		$(this).parent().find('.popin_ship_cost').text(message_cost + $(this).attr('max'));
-		$(this).parent().find('.popin_ship_cost').css('display','block');
-	});
 
-	$('.extrafee').live('focusout',function() {
-		$(this).parent().find('.popin_ship_cost').css('display','none');
-	});
+		.excludeCountry {
+			/*height: 20px;*/
+			margin-top: -10px;
+			padding-left: 5px;
+		}
 
+		.excludeCountry input {
+			margin-right: 5px;
+		}
+
+		.allregion tr td {
+			vertical-align: top;
+		}
+
+		.showCountries {
+			color: blue;
+			font-size: 9px;
+			padding-left: 14px;
+			cursor: pointer;
+		}
+
+		.listcountry {
+			margin-top: 10px;
+			display: none;
+		}
+
+		.table tr td {
+			border-bottom: none;
+		}
+
+		#list .table input[type="checkbox"] {
+			margin: 3px 0 0 -20px;
+		}
+
+		.internationalShipping input[type="checkbox"] {
+			margin-right: 2px;
+			margin-left: 0px;
+			margin-top: -3px;
+		}
+
+		.shippinglocationOption {
+			float: left;
+			padding-top: 2px;
+			margin-right: 10px;
+			margin-top: 3px;
+			margin-bottom: 5px;
+		}
+
+		.unquatre .onelineebaycarrier select {
+			width: 140px;
+		}
+
+		#internationalShipping ul li {
+			padding: 10px 5px 0 0;
+		}
 	{/literal}
-</script>
+	</style>
 
-
-<fieldset style="margin-top:10px">
-	<legend><span data-dialoghelp="#DomShipp" data-inlinehelp="{l s='To configure international shipping you must select countries to ship to' mod='ebay'}">{l s='International shipping' mod='ebay'}</span></legend>
-	<div id="internationalShipping"></div>
-	<a id="internationalShippingButton" class="button bold"><img src="../img/admin/add.gif">{l s='Add new international carrier' mod='ebay'}</a>
-</fieldset>
-
-<fieldset style="margin-top:10px">
-	<legend><span data-inlinehelp="{l s='Check the boxes next to the countries you do not want to ship to.' mod='ebay'}">{l s='Exclude shipping locations' mod='ebay'}</span></legend>
-	<label>
-		{l s='Select any countries that you do not want to ship to' mod='ebay'} :
-	</label>
-	<div class="margin-form">
-		<div id="nolist">
-		</div>
-		<div id="list">
-
-		</div>
+	<div style="display:none; position:absolute; width:500px; padding:20px 70px 20px 20px; left:30%;background-color:#FFF;border:4px solid #555;" id="warningOnCarriersContainer">
+		<div class="close"><img src="" alt=""></div>
+		<p class="error" id="warningOnCarriers" style="width:500px;">
+			{l s='The Prestashop carriers added through a module are not configurable with the eBay integration.' mod='ebay'}<br/><br/>
+			{l s='To overcome this issue, you can add a new carrier in your Prestashop back office and disable it from viewing in the Prestashop front office' mod='ebay'} <br/><br/>
+			{foreach from=$psCarrierModule item=carrier}
+				- <b>{$carrier.name|escape:'htmlall':'UTF-8'}</b><br/>
+			{/foreach}
+		</p>
+		<div class="fancyboxeBayClose"  style="text-align:center; margin-top:10px;font-weight:bold;cursor:pointer;">{l s='Close' mod='ebay'}</div>
 	</div>
-</fieldset>
 
-<div id="buttonEbayShipping" style="margin-top:5px;">
-	<input class="primary button" name="submitSave" type="submit" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
-</div>
+	<!--script type="text/javascript" src="../js/jquery/jquery.fancybox-1.3.4.js"></script-->
+	<script>
+		{literal}
+		$(document).ready(function() {
+			if(!typeof $.fancybox == 'function') {
+				$(".fancyboxeBay").fancybox({
+					maxWidth	: '500px',
+					maxHeight	: '300px',
+					fitToView	: false,
+					autoSize	: false,
+					closeClick	: false,
+					openEffect	: 'none',
+					closeEffect	: 'none'
+				});
+			}
+			else{
+				$(".fancyboxeBay").click(function(){
+					$("#warningOnCarriersContainer").fadeIn();
+				});
+				$(".fancyboxeBayClose").click(function(){
+					$(this).parent().fadeOut();
+				});
+			}
+		});
+		var message_cost = "{/literal}{l s='Between 0 and ' mod='ebay'}{literal}";
+		$('.extrafee').live('keyup', '.js_numbers_only', function(event) {
+
+			var max = parseInt($(this).attr('max'));
+			console.log(max);
+			if ($(this).val() > max ) {
+
+				$(this).val(max);
+			} else if ($(this).val() < 0) {
+				$(this).val(0);
+			}
+		});
+		$('.extrafee').live('focus',function() {
+			$(this).parent().find('.popin_ship_cost').text(message_cost + $(this).attr('max'));
+			$(this).parent().find('.popin_ship_cost').css('display','block');
+		});
+
+		$('.extrafee').live('focusout',function() {
+			$(this).parent().find('.popin_ship_cost').css('display','none');
+		});
+
+		{/literal}
+	</script>
 
 
+	<fieldset style="margin-top:10px">
+		<div class="panel-heading">
+			<span data-dialoghelp="#DomShipp" data-inlinehelp="{l s='To configure international shipping you must select countries to ship to' mod='ebay'}">{l s='International shipping' mod='ebay'}</span>
+		</div>
+
+		<div id="internationalShipping"></div>
+
+		<a id="internationalShippingButton" class="btn btn-default">
+			<i class="icon-plus"></i>
+			<span>
+				{l s='Add new international carrier' mod='ebay'}
+			</span>
+		</a>
+	</fieldset>
+
+	<fieldset style="margin-top: 20px">
+		<div class="panel-heading">
+			<span data-inlinehelp="{l s='Check the boxes next to the countries you do not want to ship to.' mod='ebay'}">{l s='Exclude shipping locations' mod='ebay'}</span>
+		</div>
+
+		<label>
+			{l s='Select any countries that you do not want to ship to' mod='ebay'} :
+		</label>
+		<div class="margin-form">
+			<div id="nolist">
+			</div>
+
+			<div id="list">
+			</div>
+		</div>
+	</fieldset>
+
+	<div id="buttonEbayShipping" class="panel-footer">
+		<input class="primary button" name="submitSave" type="hidden" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
+		<button class="btn btn-default pull-right" type="submit" id="save_ebay_shipping">
+			<i class="process-icon-save"></i>
+			{l s='Save' mod='ebay'}
+		</button>
+	</div>
 </form>
