@@ -136,6 +136,7 @@ class EbayTaskManager
             'id_task' => $id_task,
             'id_ebay_profile' => $id_ebay_profile,
         );
+
         if ($id_task == 14) {
             self::deleteTaskForPorduct($id_product);
         }

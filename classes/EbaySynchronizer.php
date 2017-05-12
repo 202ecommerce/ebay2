@@ -584,13 +584,13 @@ class EbaySynchronizer
      */
     private static function __hasVariationProducts($variations, $id_ebay_profile)
     {
-
-        foreach ($variations as $variation) {
-            if ($variation['quantity'] >= 1 || EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
-                return true;
+        if ($variations) {
+            foreach ($variations as $variation) {
+                if ($variation['quantity'] >= 1 || EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
+                    return true;
+                }
             }
         }
-
         return false;
     }
 

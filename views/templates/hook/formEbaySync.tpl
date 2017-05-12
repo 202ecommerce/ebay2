@@ -811,7 +811,7 @@
 					<div id="popin-categorie-save" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
 						<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
 							<div class="panel-heading">
-								<i class="icon-trash"></i> Save Categories
+								<i class="icon-save"></i> Save Categories
 							</div>
 							<p>Cette action va ajouter/modifier <span class="nb_annonces"></span> annonces sur eBay.</p>
 
