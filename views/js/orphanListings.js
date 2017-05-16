@@ -75,10 +75,12 @@ $(document).ready(function () {
                 $(this).parent().parent().remove();
             }
         });
-        var content_ebay_relistings = $("#ebayOrphanReListing button");
-        content_ebay_relistings.live('click', 'button', function () {
-            loadOrphans();
-        });
+
+    });
+
+    var content_ebay_relistings = $("#ebayOrphanReListing button");
+    content_ebay_relistings.live('click', 'button', function () {
+        loadOrphans();
     });
 
 });
