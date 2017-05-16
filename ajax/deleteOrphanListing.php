@@ -42,9 +42,25 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 $product = EbayProduct::getProductsIdFromItemId($id_product_ref);
+if (Tools::getValue('action') == "end") {
+    EbayTaskManager::deleteTaskForPorductAndEbayProfile($product['id_product'], $product['id_ebay_profile']);
+    $product_ps = new Product($product['id_product'], false, Tools::getValue('id_lang'));
+    EbayTaskManager::addTask('end', $product_ps, Tools::getValue('id_employee'), $product['id_ebay_profile'], $product['id_product_attribute']);
+}
 
-EbayTaskManager::deleteTaskForPorductAndEbayProfile($product['id_product'], $product['id_ebay_profile']);
-$product_ps = new Product($product['id_product'], false, Tools::getValue('id_lang'));
-EbayTaskManager::addTask('end', $product_ps, Tools::getValue('id_employee'), $product['id_ebay_profile'], $product['id_product_attribute']);
-EbayProduct::deleteByIdProductRef($id_product_ref);
+if (Tools::getValue('action') == "out_of_stock") {
+    EbayProductConfiguration::insertOrUpdate($product['id_product'], array(
+        'id_ebay_profile' => $product['id_ebay_profile'],
+        'blacklisted' =>  1,
+        'extra_images' => 0,
+    ));
+    EbayTaskManager::deleteTaskForPorduct($product['id_product']);
+    $ebay_profile = new EbayProfile($product['id_ebay_profile']);
+   if (EbayProduct::getIdProductRef($product['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
+        $productPS = new Product($product['id_product']);
+
+       EbayTaskManager::addTask('mod', $productPS, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'), $product['id_product_attribute']);
+        EbayTaskManager::deleteTaskForOutOfStock($product['id_product'], $product['id_ebay_profile']);
+    }
+}
 echo '1';

@@ -39,8 +39,8 @@
                 <span class="col-xs-1 text-right"><small>{l s='ord. err.' mod='ebay'}</small></span>
                 <span class="col-xs-1 text-right"><small>{l s='tasks' mod='ebay'}</small></span>
             </li>
-
             {foreach from=$profiles item=profile}
+
                 <li>
                     <a class="clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                         <span id='name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
@@ -58,6 +58,7 @@
                     </a>
                 </li>
             {/foreach}
+
         </ul>
     </div>
 </div>
@@ -83,6 +84,7 @@
 
             }
         });
+
     });
 
     /* $('.ebay_profils').change(function() {

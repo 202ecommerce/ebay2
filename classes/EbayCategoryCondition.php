@@ -99,6 +99,10 @@ class EbayCategoryCondition
         // security to make sure there are values to enter befor truncating the table
         if ($conditions) {
             $db = Db::getInstance();
+
+            $dbEbay = new DbEbay();
+            $dbEbay->setDb($db);
+
             if (!$id_category) {
                 $db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition
 				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);

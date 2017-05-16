@@ -48,6 +48,7 @@ class EbayPrestashopProductsTab extends EbayTab
             'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
             'show_products_url'       => $show_products_url,
             'id_employee'             => Context::getContext()->employee->id,
+            'admin_path'      => basename(_PS_ADMIN_DIR_),
         );
 
         return $this->display('prestashop_products.tpl', $template_vars);

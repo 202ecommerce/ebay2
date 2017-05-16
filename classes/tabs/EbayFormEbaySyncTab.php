@@ -23,6 +23,10 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
+ 
+ if (_PS_VERSION_ > '1.7') {
+    include_once(dirname(__FILE__).'/../../classes/EbaySynchronizer.php');
+}
 
 class EbayFormEbaySyncTab extends EbayTab
 {

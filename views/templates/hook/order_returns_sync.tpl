@@ -27,7 +27,7 @@
     {l s='Only cancellation, refund and returns validated on eBay will be imported to PrestaShop.' mod='ebay'}
 </div>
 
-<fieldset style="margin-top: 10px;">
+<fieldset style="margin-top:10px;">
     <legend>{l s='Synchronize' mod='ebay'}</span></legend>
 
     <label>
@@ -40,7 +40,6 @@
         </a>
     </div>
 </fieldset>
-
 <br>
 <p>
     {l s='Refunds and returns are automatically retrieved from eBay every 30 minutes. You can immediately retrieve them by clicking the button below.' mod='ebay'}

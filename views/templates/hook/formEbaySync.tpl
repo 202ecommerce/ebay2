@@ -23,6 +23,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+
+
 <style>
 	{literal}
 	#button_ebay_sync1 {
@@ -56,9 +58,9 @@
 	#nbproducttosync {
 		font-weight: bold;
 	}
+
 	{/literal}
 </style>
-
 <script>
 	var module_time = "{$date|escape:'htmlall':'UTF-8'}";
 	var showOptionals;
@@ -99,6 +101,8 @@
 	{/foreach}
 
 	{literal}
+
+
 	$(document).ready(function() {
 		$("#ebay_sync_products_mode1").click(function() {
 			nbProducts = nbProductsModeA;
@@ -113,6 +117,18 @@
 		});
 		$('.modifier_cat').on('click', function() {
 			loadCategoriesConfig($(this).data('id'));
+		});
+
+		$('.reset_bp').on('click', function() {
+			var url = module_dir + "ebay/ajax/resetBp.php?token=" + ebay_token + "&profile=" + id_ebay_profile ;
+			$('.bp_group').html("");
+			$.ajax({
+				type: "POST",
+				url: url,
+				success: function (data) {
+					$('.bp_group').html(data);
+				}
+			});
 		});
 
 		$('.js-next-popin').on('click', function() {
@@ -178,6 +194,7 @@
 			courant_page.parent().find('div#'+new_id).addClass('selected').show();
 
 		});
+
 		$('.js-save-category').on('click', function() {
 			var data = $('#category_config').serialize();
 			var ps_categories = new Array();
@@ -216,6 +233,7 @@
 				}
 			});
 		});
+
 		$('.modifier_cat').fancybox({
 			'modal': true,
 			'showCloseButton': false,
@@ -270,6 +288,9 @@
 					$('.category_ps_list').html('<li class="item" id="'+ data.categoryList['id_category'] +'">'+data.categoryList['name']+'</b> </li>');
 					$('#form_product_to_sync').html(data.getNbSyncProducts);
 					$('#form_variations_to_sync').html(data.getNbSyncProductsVariations);
+					if (data.percent.type == '%') {
+						data.percent.type = "percent";
+					}
 					$('select[name="impact_prix[sing]"]').children('option[value="' + data.percent.sign + '"]').attr('selected', 'selected');
 					$('select[name="impact_prix[type]"]').children('option[value="' + data.percent.type + '"]').attr('selected', 'selected');
 					$('#impact_prix').val(data.percent.value);
@@ -284,6 +305,7 @@
 
 				}
 			});
+
 		}
 
 		function loadCategoryItemsSpecifics(category_id) {
@@ -396,6 +418,7 @@
 			row.children('td:nth-child(1)').attr('rowspan', $(trs).length + 1);
 
 			row.html('').append(trs + trs_optionals);
+
 		}
 
 		function writeOptions(value_prefix, options, selected_id) {
@@ -438,7 +461,9 @@
                     $('.category_product_list_ebay').find('tbody').append(str);
                 }
             });
-		}
+
+
+}
 
 		$('#ps_category_autocomplete_input').keyup(function () {
 			loadPsCategories($(this).val());
@@ -449,6 +474,8 @@
 				$('#divPsCategories').html('');
 			}
 		});
+
+
 	});
 
 	function changeCategoryMatch(level, id_categoris) {
@@ -484,7 +511,9 @@
 				$('#divPsCategories').html('').append(str);
 			}
 		});
+
 	}
+
 	{/literal}
 </script>
 
@@ -596,71 +625,71 @@
 			<span class="badge badge-success"><span class="page_popin" id="1">1</span> / 4</span>
 		</div>
 
-		<form action="" class="form-horizontal" method="post" id="category_config">
-			<div id="1" class="page_config_category selected first_page_popin">
-				<div class="form-group page">
-					<label for="" class="control-label col-md-6" data-toggle="tooltip" data-placement="bottom" title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
-						Choisissez une ou plusieurs catégories PrestaShop :
-					</label>
+			<form action="" class="form-horizontal" method="post" id="category_config">
+				<div id="1" class="page_config_category selected first_page_popin">
+					<div class="form-group page">
+						<label for="" class="control-label col-md-6" data-toggle="tooltip" data-placement="bottom" title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
+							Choisissez une ou plusieurs catégories PrestaShop :
+						</label>
 
-					<div class="input-group col-md-6" id="ps_category_list">
-						<div id="ajax_choose_category">
-							<div class="input-group">
-								<input type="text" id="ps_category_autocomplete_input" name="ps_category_autocomplete_input" autocomplete="off" class="ac_input">
-								<span class="input-group-addon"><i class="icon-search"></i></span>
+						<div class="input-group col-md-6" id="ps_category_list">
+							<div id="ajax_choose_category">
+								<div class="input-group">
+									<input type="text" id="ps_category_autocomplete_input" name="ps_category_autocomplete_input" autocomplete="off" class="ac_input">
+									<span class="input-group-addon"><i class="icon-search"></i></span>
+								</div>
+							</div>
+							<div id="divPsCategories">
 							</div>
 						</div>
-						<div id="divPsCategories">
+
+						<ul class="col-md-6 col-md-6 item-list category_ps_list">
+
+						</ul>
+
+					</div>
+
+					<div class="form-group">
+						<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon product_sync_info">
+							<span>produits : <span class="badge badge-info" id="form_product_to_sync"></span></span>
+							<span>variations : <span class="badge badge-info" id="form_variations_to_sync"></span></span>
 						</div>
 					</div>
 
-					<ul class="col-md-6 col-md-6 item-list category_ps_list">
-
-					</ul>
-
-				</div>
-
-				<div class="form-group">
-					<div class="col-md-push-6 col-md-6 alert alert-info alert-no-icon product_sync_info">
-						<span>produits : <span class="badge badge-info" id="form_product_to_sync"></span></span>
-						<span>variations : <span class="badge badge-info" id="form_variations_to_sync"></span></span>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Choisissez une catégorie ebay :
-					</label>
-					<div class="input-group col-md-6 category_ebay">
-
-
-					</div>
-					<input type="hidden" name="category[0]" value="0">
-				</div>
-
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Impact sur le prix :
-					</label>
-					<div class="input-group col-md-6">
-						<div class="row">
-
-
-								<select name="impact_prix[sign]" class="ebay_select">
-									<option value="+">+</option>
-									<option value="-">-</option>
-								</select>
-								<input type="text" id="impact_prix" name="impact_prix[value]" >
-								<select name="impact_prix[type]" class="ebay_select">
-									<option value="currency">€</option>
-									<option value="percent">%</option>
-								</select>
-
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Choisissez une catégorie ebay :
+						</label>
+						<div class="input-group col-md-6 category_ebay">
 
 
 						</div>
+						<input type="hidden" name="category[0]" value="0">
 					</div>
-				</div>
+
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Impact sur le prix :
+						</label>
+						<div class="input-group col-md-6">
+							<div class="row">
+
+
+									<select name="impact_prix[sign]" class="ebay_select">
+										<option value="+">+</option>
+										<option value="-">-</option>
+									</select>
+									<input type="text" id="impact_prix" name="impact_prix[value]" >
+									<select name="impact_prix[type]" class="ebay_select">
+										<option value="currency">€</option>
+										<option value="percent">%</option>
+									</select>
+
+
+
+							</div>
+						</div>
+					</div>
 
 				<div class="form-group">
 					<label for="" class="control-label col-md-6">
@@ -697,139 +726,141 @@
 						{/foreach}
 					</select>
 
-					<label for="" class="control-label col-md-6">
-						Business Policies* :
-					</label>
-					<select name="payement_policies" style="width: 200px;">
-					{if empty($PAYEMENTS)}
-						<option disabled="disabled" value="">{l s='Please create a payment policy in the Sell section of My eBay' mod='ebay'}</option>
-					{else}
-						<option  value=""></option>
+						<label for="" class="control-label col-md-6">
+							Business Policies* :
+						</label>
+						<select name="payement_policies" style="width: 200px;">
+						{if empty($PAYEMENTS)}
+							<option disabled="disabled" value="">{l s='Please create a payment policy in the Sell section of My eBay' mod='ebay'}</option>
+						{else}
+							<option  value=""></option>
+						{/if}
+
+						{foreach from=$PAYEMENTS item=PAYEMENT}
+							<option  value="{$PAYEMENT.id_bussines_Policie}">{$PAYEMENT.name}</option>
+						{/foreach}
+						</select>
+					</div>
+						<a href="#" class="reset_bp btn btn-lg btn-success"><span></span> Reset BP</a>
 					{/if}
+					<div class="form-group" style="display: none">
+						<label for="" class="control-label col-md-6">
+							Exclure des produits :
+						</label>
+						<div class="input-group col-md-6">
+							<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
+							<span class="input-group-addon"><i class="icon-search"></i></span>
+						</div>
+						<ul class="col-md-push-6 col-md-6 item-list">
+							<li class="item">Sandales bleues <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+							<li class="item">Balerines à pois dorées <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
+						</ul>
+					</div>
+				</div>
+				<div id="2" class="page_config_category" style="display: none">
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Faites correspondre les caractéristiques PrestaShop avec celle d'eBay:
+						</label>
+						<div class="input-group col-md-12 category_spec_ebay">
+							<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+								<thead>
+								<tr class="nodrag nodrop">
+									<th style="width:20%">
+										<span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">Caractéristiques d'objet</span><a class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
+									</th>
+									<th style="width:50%">
+										Caractéristiques Prestashop
+									</th>
+								</tr>
+								</thead>
+								<tbody id="item_spec">
+								</tbody>
+							</table>
+						</div>
 
-					{foreach from=$PAYEMENTS item=PAYEMENT}
-						<option  value="{$PAYEMENT.id_bussines_Policie}">{$PAYEMENT.name}</option>
+					</div>
+				</div>
+				<div id="3" class="page_config_category" style="display: none">
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Faites correspondre les caractéristiques PrestaShop avec celle d'eBay:
+						</label>
+						<div class="input-group col-md-12 category_product_list_ebay">
+							<table class="table tableDnD" width="80%" style="margin: auto">
+								<thead>
+								<tr class="product-row" category="5">
+									<th class="">ID Produit</th>
+									<th class="">Name</th>
+									<th class="ebay_center ">Stock</th>
+									<th class="ebay_center ">Déselectionnez les produits que vous ne voulez pas mettre
+										en vente sur eBay
+									</th>
+								</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<div id="4" class="page_config_category" style="display: none">
+					<div class="form-group">
+						<label for="" class="control-label col-md-6">
+							Config :
+						</label>
+					</div>
+					<div class="input-group col-md-12 total_config_list_ebay">
+						<div class="col-md-12">
+							<br>
+							 <b>Catégories PS : </b><span id="last_page_categorie_ps"> </span><br>
+							 <b>Catégory eBay : </b><span id="last_page_categorie_ebay"></span><br>
+							 <b>Impact prix : </b><span id="last_page_categorie_prix"> </span><br>
+							 <b>Catégorie de votre boutique eBay : </b><span id="last_page_categorie_boutique"></span><br>
+							<br>
+							<h4>Business Policies</h4>
+							 <b>Payement Policies : </b><span id="last_page_business_p"></span><br>
+							 <b>Return Policies : </b><span id="last_page_business_r"> </span><br><br><br>
+							L’ajout de ces produits se fait automatiquement dans les minutes qui viennent.
+							<br>
+							<br>
+							<a href="#popin-categorie-save" class="js-save1-popin btn btn-lg btn-success pull-right">Save</a>
+
+						</div>
+					</div>
+
+					<div id="popin-categorie-save" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+						<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+							<div class="panel-heading">
+								<i class="icon-save"></i> Save Categories
+							</div>
+							<p>Cette action va ajouter/modifier <span class="nb_annonces"></span> annonces sur eBay.</p>
+
+							<div class="panel-footer">
+								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+								<button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</form>
+
+			<div class="panel-footer">
+				<button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+				<button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>Suivant</button>
+
+				<button class="js-prev-popin btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>prev</button>
+			</div>
+			<div style="display: none">
+				<select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
+					<option value="0">no category selected</option>
+					{foreach from=$ebayCategories item=ebayCategory}
+						<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
 					{/foreach}
-					</select>
-				</div>
-				{/if}
-				<div class="form-group" style="display: none">
-					<label for="" class="control-label col-md-6">
-						Exclure des produits :
-					</label>
-					<div class="input-group col-md-6">
-						<input type="text" id="product_autocomplete_input" name="product_autocomplete_input" autocomplete="off" class="ac_input">
-						<span class="input-group-addon"><i class="icon-search"></i></span>
-					</div>
-					<ul class="col-md-push-6 col-md-6 item-list">
-						<li class="item">Sandales bleues <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-						<li class="item">Balerines à pois dorées <button type="button" class="btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button></li>
-					</ul>
-				</div>
-			</div>
-			<div id="2" class="page_config_category" style="display: none">
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Faites correspondre les caractéristiques PrestaShop avec celle d'eBay:
-					</label>
-					<div class="input-group col-md-12 category_spec_ebay">
-						<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
-							<thead>
-							<tr class="nodrag nodrop">
-								<th style="width:20%">
-									<span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">Caractéristiques d'objet</span><a class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
-								</th>
-								<th style="width:50%">
-									Caractéristiques Prestashop
-								</th>
-							</tr>
-							</thead>
-							<tbody id="item_spec">
-							</tbody>
-						</table>
-					</div>
-
-				</div>
-			</div>
-			<div id="3" class="page_config_category" style="display: none">
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Faites correspondre les caractéristiques PrestaShop avec celle d'eBay:
-					</label>
-					<div class="input-group col-md-12 category_product_list_ebay">
-						<table class="table tableDnD" width="80%" style="margin: auto">
-							<thead>
-							<tr class="product-row" category="5">
-								<th class="">ID Produit</th>
-								<th class="">Name</th>
-								<th class="ebay_center ">Stock</th>
-								<th class="ebay_center ">Déselectionnez les produits que vous ne voulez pas mettre
-									en vente sur eBay
-								</th>
-							</tr>
-							</thead>
-							<tbody>
-
-							</tbody>
-						</table>
-					</div>
-
-				</div>
-			</div>
-			<div id="4" class="page_config_category" style="display: none">
-				<div class="form-group">
-					<label for="" class="control-label col-md-6">
-						Config :
-					</label>
-				</div>
-				<div class="input-group col-md-12 total_config_list_ebay">
-					<div class="col-md-12">
-						<br>
-						 <b>Catégories PS : </b><span id="last_page_categorie_ps"> </span><br>
-						 <b>Catégory eBay : </b><span id="last_page_categorie_ebay"></span><br>
-						 <b>Impact prix : </b><span id="last_page_categorie_prix"> </span><br>
-						 <b>Catégorie de votre boutique eBay : </b><span id="last_page_categorie_boutique"></span><br>
-						<br>
-						<h4>Business Policies</h4>
-						 <b>Payement Policies : </b><span id="last_page_business_p"></span><br>
-						 <b>Return Policies : </b><span id="last_page_business_r"> </span><br><br><br>
-						L’ajout de ces produits se fait automatiquement dans les minutes qui viennent.
-						<br>
-						<br>
-						<a href="#popin-categorie-save" class="js-save1-popin btn btn-lg btn-success">Save</a>
-
-					</div>
-				</div>
-
-				<div id="popin-categorie-save" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
-					<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
-						<div class="panel-heading">
-							<i class="icon-trash"></i> Save Categories
-						</div>
-						<p>Cette action va ajouter/modifier <span class="nb_annonces"></span> annonces sur eBay.</p>
-						<div class="panel-footer">
-							<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-							<button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</form>
-
-		<div class="panel-footer">
-			<button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-			<button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>Suivant</button>
-
-			<button class="js-prev-popin btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>prev</button>
-		</div>
-		<div style="display: none">
-			<select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
-				<option value="0">no category selected</option>
-				{foreach from=$ebayCategories item=ebayCategory}
-					<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
-				{/foreach}
-			</select>
+				</select>
 
 		</div>
 	</div>

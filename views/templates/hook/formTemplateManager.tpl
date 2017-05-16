@@ -241,7 +241,6 @@
 		</button>
 	</div>
 </form>
-
 <script type="text/javascript">
 	$('#selectTagTemplate').bind('change', function(){
 		tinyMCE.activeEditor.execCommand('mceInsertContent', false, $(this).val())
@@ -261,4 +260,5 @@
 	$('#selectTagTemplateTitle').bind('change', function(){
 		$('#ebay_product_template_title').val($('#ebay_product_template_title').val()+$(this).val())
 	});
+	
 </script>	

@@ -42,8 +42,6 @@ $final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'));
 
 $context = Context::getContext();
 
-
-
 // Smarty
 $template_vars = array(
     'id_ebay_profile' => Tools::getValue('profile'),
@@ -53,7 +51,6 @@ $template_vars = array(
 );
 
 // Smarty datas
-
 $ebay = new Ebay();
 $context->smarty->assign($template_vars);
 

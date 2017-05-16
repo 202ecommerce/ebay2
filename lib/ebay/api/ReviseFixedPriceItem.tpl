@@ -84,7 +84,7 @@
 		{if isset($resynchronize) && $resynchronize}
 			<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
 			<Title><![CDATA[{$title|cleanHtml}]]></Title>
-			<Description><![CDATA[{$description}]]></Description>
+			<Description><![CDATA[{$description nofilter}]]></Description>
 		{/if}
 			{if isset($category_id)}
 		<PrimaryCategory>
@@ -95,7 +95,7 @@
 			<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
 		{/if}
 		{if isset($buyer_requirements_details)}
-			{$buyer_requirements_details|cleanHtml}
+			{$buyer_requirements_details|cleanHtml nofilter}
 		{/if}
 		{if isset($item_specifics)}
 			<ItemSpecifics>
@@ -107,35 +107,37 @@
                 {/foreach}
             </ItemSpecifics>
 		{/if}
-		{if $isKtype}
-			<ItemCompatibilityList>
-				{if isset($ktype)}
-				{foreach from=$ktype key=name item=value}
-				<Compatibility>
-					<NameValueList>
-						<Name>KType</Name>
+		{if isset($isKtype)}
+			{if $isKtype}
+				<ItemCompatibilityList>
+					{if isset($ktype)}
+					{foreach from=$ktype key=name item=value}
+					<Compatibility>
+						<NameValueList>
+							<Name>KType</Name>
 
 
-							<Value><![CDATA[{$value}]]></Value>
+								<Value><![CDATA[{$value}]]></Value>
 
-					</NameValueList>
+						</NameValueList>
 
-				</Compatibility>
+					</Compatibility>
 
-				{/foreach}
-				{/if}
-				<ReplaceAll>TRUE</ReplaceAll>
-			</ItemCompatibilityList>
+					{/foreach}
+					{/if}
+					<ReplaceAll>TRUE</ReplaceAll>
+				</ItemCompatibilityList>
+			{/if}
 		{/if}
 		{if isset($return_policy)}
-        {$return_policy|cleanHtml}
+        {$return_policy|cleanHtml nofilter}
 		{/if}
         {if isset($site)}
             <Site>{$site|escape:'htmlall':'UTF-8'}</Site>{/if}
         {if isset($variations)}
-            {$variations|cleanHtml}
+            {$variations|cleanHtml nofilter}
 		{elseif isset($product_listing_details)}
-            {$product_listing_details|cleanHtml}
+            {$product_listing_details|cleanHtml nofilter}
         {/if}
 
         {if isset($price_original)}

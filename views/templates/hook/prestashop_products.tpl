@@ -122,6 +122,7 @@
             'See main product': "{l s='See main product' mod='ebay'}",
         {rdelim};   
         var id_employee = {$id_employee|escape:'htmlall':'UTF-8'};
+        var admin_path = "{$admin_path|escape:'htmlall':'UTF-8'}";
     </script>
     
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/prestaShopProducts.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

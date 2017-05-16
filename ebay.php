@@ -29,6 +29,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+
+
+
 /* Loading eBay Class Request*/
 $classes_to_load = array(
     'EbayRequest',
@@ -93,6 +96,7 @@ $classes_to_load = array(
     'EbayLogger',
     'EbayBussinesPolicies',
     'EbayTaskManager',
+    'DbEbay',
 );
 
 foreach ($classes_to_load as $classname) {
@@ -190,6 +194,10 @@ class Ebay extends Module
         }
 
         $this->is_multishop = Shop::isFeatureActive();
+
+        if (!is_writable(_PS_CACHE_DIR_)) {
+            $this->warning = 'Please fix PrestaShop cache permission';
+        }
 
         // Check if installed
         if (self::isInstalled($this->name)) {
@@ -901,7 +909,9 @@ class Ebay extends Module
 
     public function importOrders($orders, $ebay_profile)
     {
-        $request = new EbayRequest();
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+ 	$request = new EbayRequest();
         $errors_email = array();
         $ebay_user_identifier = $ebay_profile->ebay_user_identifier;
         /** @var EbayOrder $order */
@@ -995,7 +1005,7 @@ class Ebay extends Module
                 $customer_ids[] = $id_customer;
 
                 // Fix on sending e-mail
-                Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
                 $customer_clear = new Customer();
                 if (method_exists($customer_clear, 'clearCache')) {
                     $customer_clear->clearCache(true);
@@ -1018,7 +1028,7 @@ class Ebay extends Module
                     $customer_ids[] = $id_customer;
 
                     // Fix on sending e-mail
-                    Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                    $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
                     $customer_clear = new Customer();
                     if (method_exists($customer_clear, 'clearCache')) {
                         $customer_clear->clearCache(true);
@@ -1073,7 +1083,7 @@ class Ebay extends Module
 
             foreach ($customer_ids as $id_customer) {
                 // Fix on sending e-mail
-                Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order->getEmail())), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order->getEmail())), 'UPDATE', '`id_customer` = '.(int) $id_customer);
             }
         }
 
@@ -1453,6 +1463,10 @@ class Ebay extends Module
      */
     public function getContent()
     {
+        $adminDir = basename(_PS_ADMIN_DIR_);
+        $this->smarty->assign([
+            'adminDir' => '/'.$adminDir,
+        ]);
 
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
@@ -1665,6 +1679,25 @@ class Ebay extends Module
             'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ ($this->ebay_profile?count(EbayProduct::getOrphanListing($this->ebay_profile->id)):0),
             'ebay_shipping_config_tab' => ($this->ebay_profile?$this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK'):0),
             'count_category' => ($this->ebay_profile?EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id):0),
+            'help_listing_rejection' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->version,
+                'prestashop_version'     => _PS_VERSION_,
+                'errorcode'     => 'HELP_LISTING_REJECTION',
+            ),
+            'help_order_import' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->version,
+                'prestashop_version'     => _PS_VERSION_,
+                'errorcode'     => 'HELP_ORDER_IMPORT',
+            ),
+            'help_ebay_seller' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->version,
+                'prestashop_version'     => _PS_VERSION_,
+                'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
+            ),
+
             ));
 
         // test if multishop Screen and all shops
@@ -2336,12 +2369,12 @@ class Ebay extends Module
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $id_employee,
         );
-
-        return $this->display(__FILE__,'views/templates/hook/tableProductsExclu.tpl', $vars);
+	 $this->smarty->assign($vars);
+	 return $this->display(__FILE__,'views/templates/hook/tableProductsExclu.tpl');
 
     }
 
-    public function displayEbayListingsAjax($id_employee = null)
+    public function displayEbayListingsAjax($admin_path, $id_employee = null)
     {
         $ebay = new EbayRequest();
         $employee = new Employee($id_employee);
@@ -2355,6 +2388,17 @@ class Ebay extends Module
             'id_lang' => $id_lang,
             'titleTemplate' => $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
         );
+
+        if ($this->isSymfonyProject()) {
+
+            // ...
+
+            require_once _PS_MODULE_DIR_.'/../app/AppKernel.php';
+            $kernel = new AppKernel(_PS_MODE_DEV_?'dev':'prod', _PS_MODE_DEV_);
+            $kernel->loadClassCache();
+            $kernel->boot();
+            $router = $kernel->getContainer()->get('router');
+        }
 
         foreach ($products as $p) {
             $data['real_id_product'] = (int) $p['id_product'];
@@ -2379,6 +2423,12 @@ class Ebay extends Module
                     $data['name'] .= ' '.$variation_specific;
                 }
 
+                if ($this->isSymfonyProject()) {
+                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', ['id' => $combinaison['id_product']]);
+                } else {
+                    $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
+                }
+
                 $products_ebay_listings[] = array(
                     'id_product' => $combinaison['id_product'].'-'.$combinaison['id_product_attribute'],
                     'quantity' => $combinaison['quantity'],
@@ -2386,10 +2436,17 @@ class Ebay extends Module
                     'prestashop_title' => $data['name'],
                     'ebay_title' => EbayRequest::prepareTitle($data),
                     'reference_ebay' => $reference_ebay,
-                    'link' => method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']),
+                    'link' => $url,
                     'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
                 );
             } else {
+
+                if ($this->isSymfonyProject()) {
+                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', ['id' => $data['real_id_product']]);
+                } else {
+                    $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']);
+                }
+
                 $products_ebay_listings[] = array(
                     'id_product' => $data['real_id_product'],
                     'quantity' => $product->quantity,
@@ -2397,8 +2454,8 @@ class Ebay extends Module
                     'prestashop_title' => $data['name'],
                     'ebay_title' => EbayRequest::prepareTitle($data),
                     'reference_ebay' => $reference_ebay,
-                    'link' => method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']),
-                    'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
+                    'link' => $url,
+		    'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
                 );
             }
         }
@@ -2471,5 +2528,14 @@ class Ebay extends Module
         $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
         fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
         fclose($stderr);
+    }
+
+    /**
+     * Allow us to use last features from SF component
+     * @return bool
+     */
+    public function isSymfonyProject()
+    {
+        return (bool) version_compare(_PS_VERSION_, '1.7', '>=');
     }
 }

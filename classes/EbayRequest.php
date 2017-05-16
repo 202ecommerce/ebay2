@@ -63,8 +63,13 @@ class EbayRequest
 
     private $write_api_logs;
 
+    private $cacheFolder;
+    private $session;
+
     public function __construct($id_ebay_profile = null, $context = null)
     {
+        //$this->dev = filter_var(getenv('PS_EBAY_SANDBOX'), FILTER_VALIDATE_BOOLEAN);
+
         /** Backward compatibility */
         require dirname(__FILE__) . '/../backward_compatibility/backward.php';
 
@@ -93,6 +98,8 @@ class EbayRequest
 
         $this->devID = '1db92af1-2824-4c45-8343-dfe68faa0280';
 
+
+
         if ($this->dev) {
             $this->appID = 'Prestash-2629-4880-ba43-368352aecc86';
             $this->certID = '6bd3f4bd-3e21-41e8-8164-7ac733218122';
@@ -114,6 +121,11 @@ class EbayRequest
         }
 
         $this->write_api_logs = Configuration::get('EBAY_API_LOGS');
+        $this->cacheFolder = _PS_CACHE_DIR_.'/ebay';
+        
+        if (!file_exists($this->cacheFolder)) {
+            mkdir($this->cacheFolder);
+        }
     }
 
     public static function getValueOfFeature($val, $feature)
@@ -145,13 +157,60 @@ class EbayRequest
     }
 
     /**
-     * @param       $api_call
+     * @param $apiCall
+     *
+     * @return bool
+     */
+    private function getRequestFromCache($apiCall)
+    {
+        $cachedFile = $this->cacheFolder.'/'.$apiCall.'.json';
+        if (file_exists($cachedFile)) {
+
+            /**
+             * Usage of `assoc` should stay to false cause it will required to rewrite all this class to use array instead of stdClass.
+             */
+
+            $contentCacheFile = Tools::jsonDecode(Tools::file_get_contents($cachedFile));
+            $date = new DateTime();
+            $dateFromCache = new DateTime($contentCacheFile->dateTime->date);
+            if ($date < $dateFromCache) {
+                return $contentCacheFile->content;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $apiCall
+     * @param $result
+     * @param DateTime $dateEndedCache
+     */
+    private function storeRequestToCache($apiCall, $result, DateTime $dateEndedCache)
+    {
+        $cachedFile = $this->cacheFolder.'/'.$apiCall.'.json';
+        $content = Tools::jsonEncode([
+            'content' => $result,
+            'dateTime' => $dateEndedCache,
+        ]);
+
+        if (file_put_contents($cachedFile, $content) === false) {
+            unlink($cachedFile);
+        }
+    }
+
+    /**
+     * @param       $apiCall
      * @param array $vars
      * @param bool $shoppingEndPoint
      * @return bool|SimpleXMLElement
      */
-    private function _makeRequest($api_call, $vars = array(), $shoppingEndPoint = false)
+    private function _makeRequest($apiCall, $vars = array(), $shoppingEndPoint = false, $lifeTimeCache = 0)
     {
+        if (($contentFromCache = $this->getRequestFromCache($apiCall))) {
+            return $contentFromCache;
+        }
+
         $request = null;
         $vars = array_merge($vars, array(
             'ebay_auth_token' => ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -160,21 +219,22 @@ class EbayRequest
 
         $this->smarty->assign($vars);
 
-        if ($shoppingEndPoint === 'post-order') {
-            $url = $this->apiUrlPostOrder . $vars['type'] . '/';
-            if (isset($vars['url'])) {
-                $url .= $vars['url'];
-            }
-        }
-        if ($api_call != null) {
-            $this->smarty->clearAssign(dirname(__FILE__) . '/../lib/ebay/api/' . $api_call . '.tpl');
-            $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $api_call . '.tpl');
+       
+        if ($apiCall != null) {
+            $this->smarty->clearAssign(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
+            $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
         }
 
         $connection = curl_init();
         if ($shoppingEndPoint === 'seller') {
             curl_setopt($connection, CURLOPT_URL, $this->apiUrlSeller);
         } elseif ($shoppingEndPoint === 'post-order') {
+
+            $url = $this->apiUrlPostOrder . $vars['type'] . '/';
+            if (isset($vars['url'])) {
+                $url .= $vars['url'];
+            }
+        
             curl_setopt($connection, CURLOPT_URL, $url);
         } else {
             curl_setopt($connection, CURLOPT_URL, $this->apiUrl);
@@ -186,13 +246,13 @@ class EbayRequest
         curl_setopt($connection, CURLOPT_SSL_VERIFYHOST, 0);
         // Set the headers (Different headers depending on the api call !)
         if ($shoppingEndPoint === true) {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersShopping($api_call));
+            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersShopping($apiCall));
         } elseif ($shoppingEndPoint === 'seller') {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersSeller($api_call));
+            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersSeller($apiCall));
         } elseif ($shoppingEndPoint === 'post-order') {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersPostOrder());
+            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersPostOrder($apiCall));
         } else {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($api_call));
+            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($apiCall));
         }
         curl_setopt($connection, CURLOPT_POST, 1);
 
@@ -216,21 +276,30 @@ class EbayRequest
             if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 100) {
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
-            file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($api_call), true), FILE_APPEND | LOCK_EX);
+            file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($apiCall), true), FILE_APPEND | LOCK_EX);
 
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n" . $request . "\n\n" . $response . "\n\n-------------------\n\n", FILE_APPEND | LOCK_EX);
         }
 
+        $result = false;
         // Send the request and get response
         if (stristr($response, 'HTTP 404') || !$response) {
-            $this->error = 'Error sending ' . $api_call . ' request';
+            $this->error = 'Error sending ' . $apiCall . ' request';
 
-            return false;
+            return $result;
         }
         if ($shoppingEndPoint === 'post-order') {
-            return $response;
+            $result = $response;
+        } else {
+            $result = simplexml_load_string($response);
         }
-        return simplexml_load_string($response);
+
+        if ($lifeTimeCache && $result->Ack != 'Failure') {
+            $date = new DateTime();
+            $this->storeRequestToCache($apiCall, $result, $date->modify('+ '.$lifeTimeCache.' hours'));
+        }
+
+        return $result;
     }
 
     private function _buildHeadersShopping($api_call)
@@ -337,7 +406,7 @@ class EbayRequest
             //Change API URL
             $apiUrl = $this->apiUrl;
             $this->apiUrl = ($this->dev) ? 'http://open.api.sandbox.ebay.com/shopping?' : 'http://open.api.ebay.com/shopping?';
-            $response = $this->_makeRequest('GetUserProfile', array('user_id' => $username), true);
+            $response = $this->_makeRequest('GetUserProfile', array('user_id' => $username), true, 24);
             if ($response === false) {
                 return false;
             }
@@ -345,7 +414,7 @@ class EbayRequest
             $userProfile = array(
                 'StoreUrl' => $response->User->StoreURL,
                 'StoreName' => $response->User->StoreName,
-                'SellerBusinessType' => $response->User->SellerBusinessType
+                'SellerBusinessType' => $response->User->SellerBusinessType,
             );
 
             self::$userProfileCache = $userProfile;
@@ -425,7 +494,7 @@ class EbayRequest
         $response = $this->_makeRequest('GetCategoryFeatures', array(
             'feature_id' => 'VariationsEnabled',
             'version' => $this->compatibility_level,
-        ));
+        ), false, 24);
 
         if ($response === false) {
             return false;
@@ -753,7 +822,7 @@ class EbayRequest
 
             $policies_ship_name = rtrim($policies_ship_name, "-");
 
-            $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM '._DB_PREFIX_.'ebay_business_policies WHERE `name` ="'.$policies_ship_name.' AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'"');
+            $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `name` ="' . $policies_ship_name . '" AND id_bussines_Policie != "" AND id_ebay_profile = '.(int)$this->ebay_profile->id);
 
             if (empty($seller_ship_prof) || $seller_ship_prof == null) {
                 $dataNewShipp = array(
@@ -1453,7 +1522,7 @@ class EbayRequest
 
         // Set Api Call
         $this->apiCall = 'GetStore';
-        $response = $this->_makeRequest('GetStore');
+        $response = $this->_makeRequest('GetStore', [], false, 24);
 
         return ($response === false) ? false : (isset($response->Store) ? $response->Store->CustomCategories->CustomCategory : false);
 

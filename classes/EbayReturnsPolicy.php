@@ -42,7 +42,10 @@ class EbayReturnsPolicy
 
     public static function insert($data)
     {
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_returns_policy', $data, 'INSERT');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_returns_policy', $data, 'INSERT');
     }
 
     public static function getReturnsPolicies()

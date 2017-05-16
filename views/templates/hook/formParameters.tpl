@@ -33,138 +33,142 @@
 	</script>
 	{/literal}
 {else}
-	<script type="text/javascript">
-		var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
-		var catLoaded = 0;
-		{if $catLoaded}
-			catLoaded = 1;
-		{/if}
-		var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
-		var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
-		var regenerate_token_show = false;
-		{if $regenerate_token != false}
-		regenerate_token_show = true;
-		{/if}
-		var categories_ebay_l = {ldelim}
-			'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
-			'no category selected' : "{l s='No category selected' mod='ebay'}",
-			'No category found'		 : "{l s='No category found' mod='ebay'}",
-			'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
-			'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
-			'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
-			'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
-			'Products' : "{l s='Products' mod='ebay'}",
-			'Stock' : "{l s='Stock' mod='ebay'}",
-			'Finish' : "{l s='Finish' mod='ebay'}",
-			'An error has occurred' : "{l s='An error has occurred' mod='ebay'}",
-			'Waiting' : "{l s='Waiting' mod='ebay'}",
-			'categories loaded success' : "{l s='categories loaded successfully.' mod='ebay'}",
-			'Download subcategories of' : "{l s='Download subcategories of' mod='ebay'}",
-			{rdelim};
-		// Import Category From eBay
-		function loadCategoriesFromEbay(step, id_category, row) {
-			var admin_path = "{$admin_path}";
-			alertOnExit(true, alert_exit_import_categories);
-			step = typeof step !== 'undefined' ? step : 1;
-			id_category = typeof id_category !== 'undefined' ? id_category : false;
-			row = typeof row !== 'undefined' ? row : 2;
+<script type="text/javascript">
+	var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
+	var catLoaded = 0;
+	{if $catLoaded}
+		catLoaded = 1;
+	{/if}
+	var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
+	var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
+	var regenerate_token_show = false;
+	{if $regenerate_token != false}
+	regenerate_token_show = true;
+	{/if}
+	var categories_ebay_l = {ldelim}
+		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
+		'no category selected' : "{l s='No category selected' mod='ebay'}",
+		'No category found'		 : "{l s='No category found' mod='ebay'}",
+		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
+		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
+		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
+		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
+		'Products' : "{l s='Products' mod='ebay'}",
+		'Stock' : "{l s='Stock' mod='ebay'}",
+		'Finish' : "{l s='Finish' mod='ebay'}",
+		'An error has occurred' : "{l s='An error has occurred' mod='ebay'}",
+		'Waiting' : "{l s='Waiting' mod='ebay'}",
+		'categories loaded success' : "{l s='categories loaded successfully.' mod='ebay'}",
+		'Download subcategories of' : "{l s='Download subcategories of' mod='ebay'}",
+		{rdelim};
+	// Import Category From eBay
+	function loadCategoriesFromEbay(step, id_category, row) {
+		var admin_path = "{$admin_path}";
+		alertOnExit(true, alert_exit_import_categories);
+		step = typeof step !== 'undefined' ? step : 1;
+		id_category = typeof id_category !== 'undefined' ? id_category : false;
+		row = typeof row !== 'undefined' ? row : 2;
 
-			$.ajax({
-				type: "POST",
-				dataType: 'json',
-				url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step=" + step + "&id_category=" + id_category + "&admin_path=" + admin_path,
-				success: function (data) {
-					if (data == "error") {
-						if (step == 1) {
-							$('#cat_parent').addClass('error');
-							$('#cat_parent td:nth-child(3)').text(categories_ebay_l['An error has occurred']);
+		$.ajax({
+			type: "POST",
+			dataType: 'json',
+			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step=" + step + "&id_category=" + id_category + "&admin_path=" + admin_path,
+			success: function (data) {
+				if (data == "error") {
+					if (step == 1) {
+						$('#cat_parent').addClass('error');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['An error has occurred']);
+					}
+					else if (step == 2) {
+						$('#load_cat_ebay tbody tr:nth-child(' + row + ')').addClass('error');
+					}
+					alertOnExit(false, "");
+				}
+				else {
+					var output;
+
+					if (step == 1) {
+						for (var i in data) {
+							output += '<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>' + categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
 						}
-						else if (step == 2) {
-							$('#load_cat_ebay tbody tr:nth-child(' + row + ')').addClass('error');
+						var count = $.map(data, function (n, i) {
+							return i;
+						}).length;
+						$('#cat_parent').removeClass('load').addClass('success');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['Finish'] + ' - ' + count + ' ' + categories_ebay_l['categories loaded success']);
+						$('#load_cat_ebay tbody').append(output);
+
+						$('#load_cat_ebay tbody tr:nth-child(2)').addClass('load');
+						loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(2)').attr('data-id'), 2);
+					}
+					else if (step == 2) {
+						var count = $.map(data, function (n, i) {
+							return i;
+						}).length;
+						$('#load_cat_ebay tbody tr:nth-child(' + row + ')').removeClass('load').addClass('success');
+
+						$('#load_cat_ebay tbody tr:nth-child(' + row + ') td:nth-child(3)').text(categories_ebay_l['Finish'] + ' - ' + count + ' ' + categories_ebay_l['categories loaded success']);
+
+						var next = row + 1;
+						if ($('#load_cat_ebay tbody tr:nth-child(' + next + ')').length > 0) {
+							$('#load_cat_ebay tbody tr:nth-child(' + next + ')').addClass('load');
+							loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(' + next + ')').attr('data-id'), next);
+						}
+						else {
+							loadCategoriesFromEbay(3);
+							$('#load_cat_ebay').css('display', 'none');
+							$('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
+							$('.warning.big.tips.h').show();
+							alertOnExit(false, "");
+							$('#menuTab2').removeClass('succes');
+							$('#menuTab2').addClass('wrong');
+							$('#menuTab8').removeClass('succes');
+							$('#menuTab8').addClass('wrong');
+							$.fancybox.close();
+							//return loadCategories();
+
 						}
 						alertOnExit(false, "");
 					}
-					else {
-						var output;
 
-						if (step == 1) {
-							for (var i in data) {
-								output += '<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>' + categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
-							}
-							var count = $.map(data, function (n, i) {
-								return i;
-							}).length;
-							$('#cat_parent').removeClass('load').addClass('success');
-							$('#cat_parent td:nth-child(3)').text(categories_ebay_l['Finish'] + ' - ' + count + ' ' + categories_ebay_l['categories loaded success']);
-							$('#load_cat_ebay tbody').append(output);
-
-							$('#load_cat_ebay tbody tr:nth-child(2)').addClass('load');
-							loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(2)').attr('data-id'), 2);
-						}
-						else if (step == 2) {
-							var count = $.map(data, function (n, i) {
-								return i;
-							}).length;
-							$('#load_cat_ebay tbody tr:nth-child(' + row + ')').removeClass('load').addClass('success');
-
-							$('#load_cat_ebay tbody tr:nth-child(' + row + ') td:nth-child(3)').text(categories_ebay_l['Finish'] + ' - ' + count + ' ' + categories_ebay_l['categories loaded success']);
-
-							var next = row + 1;
-							if ($('#load_cat_ebay tbody tr:nth-child(' + next + ')').length > 0) {
-								$('#load_cat_ebay tbody tr:nth-child(' + next + ')').addClass('load');
-								loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(' + next + ')').attr('data-id'), next);
-							}
-							else {
-								loadCategoriesFromEbay(3);
-								$('#load_cat_ebay').css('display', 'none');
-								$('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
-								$('.warning.big.tips.h').show();
-								alertOnExit(false, "");
-								$('#menuTab2').removeClass('succes');
-								$('#menuTab2').addClass('wrong');
-								$('#menuTab8').removeClass('succes');
-								$('#menuTab8').addClass('wrong');
-								$.fancybox.close();
-								//return loadCategories();
-							}
-							alertOnExit(false, "");
-						}
-					}
 				}
-			});
-		}
-
-		$(document).ready(function() {
-			if (regenerate_token_show) {
-				$('.regenerate_token_button').show();
-				$('.regenerate_token_button label').css('color', 'red').html("{l s='You must regenerate your authentication token' mod='ebay'}");
-				$('.regenerate_token_click').hide();
-			}
-
-			$('.regenerate_token_click span').click(function(){
-				$('.regenerate_token_button').show();
-				$('.regenerate_token_click').hide();
-			});
-
-			$('.load_cat_sync').fancybox({
-				'modal': true,
-				'showCloseButton': false,
-				'padding': 0,
-				'parent': '#popin_load_category-container',
-			});
-
-			if (catLoaded == 1) {
-				$('.load_cat_sync').click();
-				loadCategoriesFromEbay();
 			}
 		});
-	</script>
+
+	}
+	$(document).ready(function(){
+		if(regenerate_token_show) {
+			$('.regenerate_token_button').show();
+			$('.regenerate_token_button label').css('color', 'red').html("{l s='You must regenerate your authentication token' mod='ebay'}");
+			$('.regenerate_token_click').hide();
+		}
+		$('.regenerate_token_click span').click(function(){
+			$('.regenerate_token_button').show();
+			$('.regenerate_token_click').hide();
+		});
+		$('.load_cat_sync').fancybox({
+			'modal': true,
+			'showCloseButton': false,
+			'padding': 0,
+			'parent': '#popin_load_category-container',
+		});
+		if(catLoaded == 1){
+
+			$('.load_cat_sync').click();
+			loadCategoriesFromEbay();
+		}
+
+	});
+
+
+
+</script>
 
 	{if isset($check_token_tpl)}
-		<fieldset id="regenerate_token">
-			<legend>{l s='Token' mod='ebay'}</legend>
-				{$check_token_tpl|ebayHtml}
-		</fieldset>	
+	<fieldset id="regenerate_token">
+		<legend>{l s='Token' mod='ebay'}</legend>
+			{$check_token_tpl|ebayHtml}
+	</fieldset>	
 	{/if}
 		
 	<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel" id="configForm1">

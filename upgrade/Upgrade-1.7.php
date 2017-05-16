@@ -128,10 +128,11 @@ function upgrade_module_1_7($module)
         'ebay_shipping',
         'ebay_product',
     );
-
+    $dbEbay = new DbEbay();
+    $dbEbay->setDb(Db::getInstance());
     if (version_compare(_PS_VERSION_, '1.5', '<')) {
         foreach ($tables as $table) {
-            Db::getInstance()->autoExecute(_DB_PREFIX_.$table, array('id_ebay_profile' => $id_default_ebay_profile), 'UPDATE');
+            $dbEbay->autoExecute(_DB_PREFIX_.$table, array('id_ebay_profile' => $id_default_ebay_profile), 'UPDATE');
         }
     } else {
         foreach ($tables as $table) {
@@ -148,7 +149,7 @@ function upgrade_module_1_7($module)
             'id_order' => $row['id_order'],
         );
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
-            Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', $data, 'INSERT');
+            $dbEbay->autoExecute(_DB_PREFIX_.'ebay_order_order', $data, 'INSERT');
         } else {
             Db::getInstance()->insert('ebay_order_order', $data, false, true, Db::REPLACE);
         }

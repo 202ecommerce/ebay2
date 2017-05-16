@@ -75,7 +75,6 @@
 			</div>
 		{/if}
 	</fieldset>
-
 	<fieldset style="margin-top:10px;">
 		<div class="panel-heading">{l s='Orders Collection Duration' mod='ebay'}</div>
 

@@ -33,7 +33,7 @@
 		{if isset($autopay)}
 			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
 		{/if}        
-		<Title><![CDATA[{$title|cleanHtml}]]></Title>
+		<Title><![CDATA[{$title}]]></Title>
 		{if count($pictures)}
 			<PictureDetails>
 				<GalleryType>Gallery</GalleryType>
@@ -45,7 +45,7 @@
 				{/foreach}
 			</PictureDetails>
 		{/if}
-		<Description><![CDATA[{$description|ebayHtml}]]></Description>
+		<Description><![CDATA[{$description nofilter}]]></Description>
 		<PrimaryCategory>
 			<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
 		</PrimaryCategory>
@@ -97,16 +97,16 @@
 		</ItemCompatibilityList>
 		{/if}
 
-		{$return_policy|cleanHtml}
+		{$return_policy nofilter}
         {if isset($variations)}
-            {$variations|cleanHtml}
+            {$variations nofilter}
 		{elseif isset($product_listing_details)}
-            {$product_listing_details|cleanHtml}
+            {$product_listing_details nofilter}
         {/if}
 		{if isset($shipping_details)}
-		<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
+		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{/if}
-		{$buyer_requirements_details|cleanHtml}
+		{$buyer_requirements_details}
 		<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
         
         {if isset($price_original)}

@@ -32,6 +32,7 @@ require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'confi
 include dirname(__FILE__).'/../classes/EbayProductConfiguration.php';
 include dirname(__FILE__).'/../classes/EbayProfile.php';
 include(dirname(__FILE__) . '/../classes/EbaySynchronizer.php');
+include(dirname(__FILE__) . '/../classes/DbEbay.php');
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
@@ -40,7 +41,10 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 $id_ebay_profile = (int)Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
 
-Db::getInstance()->autoExecute(
+$dbEbay = new DbEbay();
+$dbEbay->setDb(Db::getInstance());
+
+$dbEbay->autoExecute(
     _DB_PREFIX_.'ebay_category_configuration',
     array('sync' => (int)Tools::getValue('action')),
     'UPDATE',

@@ -24,31 +24,24 @@
 *}
 
 <div class="col-md-9">
-<div class="alert alert-info alert-no-icon">
-    Le nombre d'articles synchronisés avec eBay est important, vous devriez <b>activer la tache cron</b> en allant dans l'onglet Configuration.
-</div>
 
-<div class="alert alert-danger alert-no-icon">
-    Il est impératif d'activer bla bla <b>produit hors stock</b> bla bla bla ...
-</div>
 
 <br>
 <h4>Produits</h4>
-Nombre d’annonces eBay : {$nb_products}<br>
-Produits en erreur : {$count_product_errors}<br>
-Produits en attente :  {$nb_tasks}<br>
+    Nombre de catégories PrestaShop : {$nb_categories|escape:'UTF-8'}<br>
+    Nombre de produit exclus : {$nb_products_exclu|escape:'UTF-8'}<br>
+    Nombre prévu d'annonces : {$nb_annonces_prevu|escape:'UTF-8'}<br>
+    Nombre d’annonces eBay : {$nb_products|escape:'UTF-8'}<br>
+    Nombre d'erreurs : {$count_product_errors|escape:'UTF-8'}<br>
+    Synchronisation : {$type_sync_product|escape:'UTF-8'}<br>
+    En cours d'envoi :  {$nb_tasks|escape:'UTF-8'}<br>
 <br>
 <h4>Ventes internationales passives</h4>
-Nombre de sites eBay :<br>
+    Nombre de pays : {$nb_country_shipping|escape:'UTF-8'} <br>
 <br>
 <h4>Commandes</h4>
-CA eBay 30 derniers jours : <br>
-Commandes en erreur : {$count_order_errors}<br>
-Dernier import : {$dernier_import_order}<br>
+    CA eBay 30 derniers jours : {$ca_total|escape:'UTF-8'} <br>
+    Commandes en erreur : {$count_order_errors|escape:'UTF-8'}<br>
+    Dernier import : {$date_last_import|escape:'UTF-8'} par {$type_sync_order|escape:'UTF-8'}<br>
 </div>
 
-<div class="col-md-3">
-    <div class="panel">
-        Des chiffres clé ici ?
-    </div>
-</div>

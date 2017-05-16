@@ -40,34 +40,47 @@ function loadOrphans() {
   
 }
 $(document).ready(function () {
-$('.delete-orphan').live('click', 'a', function(e) {
+    $('.delete-orphan').live('click', 'a', function(e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    if (!confirm(orphan_listings_ebay_l['Remove this ad?']))
-        return;
+        if (!confirm(orphan_listings_ebay_l['Remove this ad?']))
+            return;
 
-    var lnk = $(this);
+        var lnk = $(this);
 
-    var id_product_ref = $(this).attr('ref');
+        var id_product_ref = $(this).attr('ref');
 
-    $.ajax({
-        type: "POST",
-        url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee,
-        success : function(data) {
+        $.ajax({
+            type: "POST",
+            url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee + "&action=end",
+            success : function(data) {
 
-            if (data == '1')
-                lnk.parent().parent().remove(); // remove row
+                if (data == '1')
+                    lnk.parent().parent().remove(); // remove row
 
-        }
+            }
+        });
+
+
     });
 
-
-})
-    var content_ebay_relistings = $("#ebayOrphanReListing button");
-    content_ebay_relistings.live('click', 'button', function(){
-        loadOrphans();
+    $('.out_of_stock_orphan').live('click', 'a', function(e) {
+        var id_product_ref = $(this).attr('ref');
+        $.ajax({
+            type: 'POST',
+            url: module_dir + 'ebay/ajax/deleteOrphanListing.php',
+            data: "token=" + ebay_token + "&id_ebay_profile="+ id_ebay_profile +"&id_product_ref=" + id_product_ref +"&action=out_of_stock" + "&id_employee=" + id_employee,
+            success: function (data) {
+                $(this).parent().parent().remove();
+            }
+        });
+        var content_ebay_relistings = $("#ebayOrphanReListing button");
+        content_ebay_relistings.live('click', 'button', function () {
+            loadOrphans();
+        });
     });
+
 });
 /*
 $(document).ready(function() {

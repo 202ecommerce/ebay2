@@ -184,17 +184,26 @@ class EbayCategoryConfiguration
 
     public static function add($data)
     {
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', $data, 'INSERT');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category_configuration', $data, 'INSERT');
     }
 
     public static function updateByIdProfile($id_profile, $data)
     {
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', $data, 'UPDATE', '`id_ebay_profile` = '.(int)$id_profile);
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category_configuration', $data, 'UPDATE', '`id_ebay_profile` = '.(int)$id_profile);
     }
 
     public static function updateByIdProfileAndIdCategory($id_profile, $id_category, $data)
     {
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', $data, 'UPDATE', '`id_ebay_profile` = '.(int)$id_profile.' AND `id_category` = '.(int)$id_category);
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category_configuration', $data, 'UPDATE', '`id_ebay_profile` = '.(int)$id_profile.' AND `id_category` = '.(int)$id_category);
     }
 
     public static function deleteByIdCategory($id_ebay_profile, $id_category)

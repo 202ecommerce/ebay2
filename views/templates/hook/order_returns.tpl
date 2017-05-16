@@ -34,15 +34,17 @@
 </a>
 <br>
 
-<!-- table -->
-<table id="OrderReturns" class="table" cellpadding="0" cellspacing="0" style="width: 100%;">
-    <thead>
+    <!-- table -->
+
+    <table id="OrderReturns" class="table" cellpadding="0" cellspacing="0" style="width: 100%;">
+        <thead>
         <tr class="nodrag nodrop">
-            <th style="width: 110px;">
+
+            <th style="width:110px;">
                 <span>{l s='PrestaShop Order' mod='ebay'}</span>
             </th>
 
-            <th style="width: 110px;">
+            <th style="width:110px;">
                 <span>{l s='eBay Order' mod='ebay'}</span>
             </th>
 
@@ -53,6 +55,7 @@
             <th class="center">
                 <span>{l s='Status' mod='ebay'}</span>
             </th>
+
 
             <th class="center">
                 <span>{l s='Type' mod='ebay'}</span>
@@ -65,18 +68,19 @@
             <th class="center">
                 <span>{l s='Id Product' mod='ebay'}</span>
             </th>
+
+
         </tr>
-    </thead>
+        </thead>
 
-    <tbody>
+        <tbody>
         {if empty($returns)}
-            <tr id="removeRow">
-                <td class="center" colspan="7">
-                    {l s='No returns' mod='ebay'}
-                </td>
-            </tr>
+        <tr id="removeRow">
+            <td class="center" colspan="7">
+                {l s='No returns' mod='ebay'}
+            </td>
+        </tr>
         {/if}
-
         {foreach from=$returns item="return"}
             <tr>
                 <td>{$return.id_order|escape:'htmlall':'UTF-8'}</td>
@@ -88,5 +92,6 @@
                 <td>{$return.id_item|escape:'htmlall':'UTF-8'}</td>
             </tr>
         {/foreach}
-    </tbody>
-</table>
+        </tbody>
+
+    </table>

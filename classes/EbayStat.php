@@ -104,7 +104,11 @@ class EbayStat
             'data' => pSQL(Tools::jsonEncode($this->data)),
             'date_add' => pSQL($this->date_add),
         );
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_stat', $data, 'INSERT');
+
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_stat', $data, 'INSERT');
     }
 
     private static function _computeSignature($version, $data, $date_add)

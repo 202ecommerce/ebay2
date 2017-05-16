@@ -95,8 +95,7 @@
 			  </div>
 			</div>	
 		</div>
-
-		<div id="check_database_logs" style="display: none;">
+		<div id="check_database_logs" style="display:none;">
 			<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 				<thead>
 					<tr class="nodrag nodrop">
@@ -115,6 +114,7 @@
 				</tbody>
 			</table>
 		</div>
+
 	</fieldset>
 
 	<fieldset style="margin-top: 20px;">
@@ -149,10 +149,12 @@
 			</table>
 		</div>
 
-		<div id="new_cat" style="display: none; margin-top: 12px; max-height: 300px; overflow-y: scroll;">
-			<span>{l s='Some categories are existing in the new definition of categories from eBay but not in your definition. You might want to reload your categories' mod='ebay'}</span></br>
+		<div id="new_cat" style="display: none;    margin-top: 12px;max-height: 300px; overflow-y: scroll;">
+			<span> {l s='Some categories are existing in the new definition of categories from eBay but not in your definition. You might want to reload your categories' mod='ebay'}</span></br>
 			<ul id="categories_new">
+
 			</ul>
+
 		</div>
 
 		<div id="div_resynch" style="display: none; text-align: center; font-family: sans-serif; font-size: 14px;">
@@ -284,103 +286,104 @@
 			});
 		});
 
-		$(function() {
-			$('#check_database').click(function(e) {
-				e.preventDefault();
-				// Premier tour : Récuperer le nombre de table
-				// Foreach de toutes les tables
-				$.ajax({
-					type: 'POST',
-					url: module_dir + 'ebay/ajax/checkDatabase.php',
-					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getNbTable",
-					beforeSend: function() {
-						$('#check_database_logs tbody tr').remove();
-						// $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
-					},
-					success: function(data) {
-						$('#check_database_progress').attr('data-nb_database', data);
-						$('#check_database_progress').show();
-						$('#check_database_logs').show();
-						launchDatabaseChecking(1);
-					}
+			$(function() {
+				$('#check_database').click(function(e){
+					e.preventDefault();
+					// Premier tour : Récuperer le nombre de table
+					// Foreach de toutes les tables
+					$.ajax({
+						type: 'POST',
+						url: module_dir + 'ebay/ajax/checkDatabase.php',
+						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getNbTable",
+						beforeSend: function() {
+							$('#check_database_logs tbody tr').remove();
+						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
+						},
+						success: function( data ){
+							$('#check_database_progress').attr('data-nb_database', data);
+							$('#check_database_progress').show();
+							$('#check_database_logs').show();
+							launchDatabaseChecking(1);
+						}
+					});
 				});
 			});
-		});
 
-		$(function() {
-			$('#check_categories').click(function(e) {
-				e.preventDefault();
-				$('#check_categories_logs').show();
-				$('#table_resynch tr').remove();
-				$('#table_resynch').append("<tr style='font-weight: bold;'><td colspan='2' ><img src='{/literal}{$_module_dir_|escape:'htmlall':'UTF-8'}{literal}ebay/views/img/loading-small.gif' alt=''/></td></tr>");
+			$(function() {
+				$('#check_categories').click(function(e){
+					e.preventDefault();
+					$('#check_categories_logs').show();
+					$('#table_resynch tr').remove();
+					$('#table_resynch').append("<tr style='font-weight: bold;'><td colspan='2' ><img src='{/literal}{$_module_dir_|escape:'htmlall':'UTF-8'}{literal}ebay/views/img/loading-small.gif' alt=''/></td></tr>");
 
-				comparation(1,false,false,0);
+					comparation(1,false,false,0);
+				});
 			});
-		});
 
-		function comparation(step,id_categories, nextDatas,encour,size) {
-			$.ajax({
-				dataType: 'json',
-				type: 'POST',
-				url: module_dir + 'ebay/ajax/checkCategory.php',
-				data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay|escape:'urlencode'}{literal}&step=" + step + "&id_categories=" + id_categories,
-				beforeSend: function() {
+			function comparation(step,id_categories, nextDatas,encour,size){
 
-				},
-				success: function( data ) {
+				$.ajax({
+					dataType: 'json',
+					type: 'POST',
+					url: module_dir + 'ebay/ajax/checkCategory.php',
+					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay|escape:'urlencode'}{literal}&step=" + step + "&id_categories=" + id_categories,
+					beforeSend: function() {
 
-					if (step == 1 ||step == 2) {
+					},
+					success: function( data ) {
 
-						if(nextDatas == false){
-							nextDatas = data;
-						}
+						if (step == 1 ||step == 2) {
 
-						if(step == 1) {
-							size = nextDatas.length;
-							size= size - 1;
-						}
-
-						categoryId = nextDatas[0].CategoryID;
-						nextDatas.shift();
-
-						if (nextDatas.length == 0) {
-								comparation(3,false,false,false,false);
-						} else{
-							if(step == 2) {
-								$('#table_resynch tr').last().remove();
-								encour = encour +1;
-
-								$('#table_resynch').append("<tr class='version_ok'><td>" + encour + "/"+ size +"</td><td style='color: #72C279;'></td></tr>");
+							if(nextDatas == false){
+								nextDatas = data;
 							}
-							comparation(2, categoryId, nextDatas,encour,size);
-						}
 
-					}
-					if (step == 3) {
-						$('#table_resynch tr').remove();
-						if (data['table'] != null) {
-							$.each(data['table'], function (key, value) {
-								if (value != 1) {
-									$('#table_resynch').append("<tr class='fail'><td>" + key + "</td><td style='color: red;'>" + category_false + "</td></tr>");
-								} else {
-									$('#table_resynch').append("<tr class='version_ok'><td>" + key + "</td><td style='color: #72C279;'>" + category_true + "</td></tr>");
+							if(step == 1) {
+								size = nextDatas.length;
+								size= size - 1;
+							}
+
+							categoryId = nextDatas[0].CategoryID;
+							nextDatas.shift();
+
+							if (nextDatas.length == 0) {
+									comparation(3,false,false,false,false);
+							} else{
+								if(step == 2) {
+									$('#table_resynch tr').last().remove();
+									encour = encour +1;
+
+									$('#table_resynch').append("<tr class='version_ok'><td>" + encour + "/"+ size +"</td><td style='color: #72C279;'></td></tr>");
 								}
-							});
-
-							$('#check_category_progress').show();
-							$('#check_category_logs').show();
-
-							if ($('.fail').length) {
-								$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_false + "</td></tr>");
-							} else {
-								$('#table_resynch').append("<tr style='background-color: #DFF2BF;font-weight: bold;'><td colspan='2' >" + categories_true + "</td></tr>");
-
+								comparation(2, categoryId, nextDatas,encour,size);
 							}
-						} else {
-							$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_null + "</td></tr>");
+
 						}
-						if (data['new'] != false) {
-							$.each(data['new'], function (key, value) {
+						if (step == 3) {
+							$('#table_resynch tr').remove();
+							if (data['table'] != null) {
+								$.each(data['table'], function (key, value) {
+									if (value != 1) {
+										$('#table_resynch').append("<tr class='fail'><td>" + key + "</td><td style='color: red;'>" + category_false + "</td></tr>");
+									} else {
+										$('#table_resynch').append("<tr class='version_ok'><td>" + key + "</td><td style='color: #72C279;'>" + category_true + "</td></tr>");
+									}
+								});
+
+								$('#check_category_progress').show();
+								$('#check_category_logs').show();
+
+								if ($('.fail').length) {
+									$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_false + "</td></tr>");
+								} else {
+									$('#table_resynch').append("<tr style='background-color: #DFF2BF;font-weight: bold;'><td colspan='2' >" + categories_true + "</td></tr>");
+
+								}
+							} else {
+								$('#table_resynch').append("<tr style='background-color: red;font-weight: bold;'><td colspan='2' >" + categories_null + "</td></tr>");
+							}
+							if (data['new'] != false) {
+								$.each(data['new'], function (key, value) {
 
 								$('ul#categories_new').append("<li>" + value['name'] + "</li>");
 							})
@@ -416,6 +419,7 @@
 	var categories_true = "{l s='All configured categories are already using last category definition version, no action to be taken.' mod='ebay'}";
 	var categories_false = "{l s='The following categories are not configured based on the last category definition, you may need to reload categories.' mod='ebay'}";
 	var categories_null = "{l s='No category to compare because you did not set up any category in tab Settings > Categories' mod='ebay'}";
+
 </script>
 
 <style>

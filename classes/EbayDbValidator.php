@@ -367,10 +367,9 @@ class EbayDbValidator
         foreach ($profiles as $profile_ebay) {
             $profile = new EbayProfile($profile_ebay['id_ebay_profile']);
 
-            $template=  EbayConfiguration::get($profile_ebay['id_ebay_profile'], 'EBAY_PRODUCT_TEMPLATE');
+            $template=  $profile->getConfiguration('EBAY_PRODUCT_TEMPLATE');
             if(preg_match("/headerSearchProductPrestashop/i", $template)) {
-                $form = '<form action="http://stores.ebay.fr/%7Bliteral%7D%7BEBAY_SHOP%7D%7B/literal%7D/_i.html" method="get"><input class="headerSearchProductPrestashop" name="_nkw" type="text" value="" /><input name="_armrs" type="hidden" value="1" /><input name="_from" type="hidden" value="" /><input name="_ipg" type="hidden" value="" /><input name="_sasi" type="hidden" value="1" /></form>';
-                $template = str_replace($form, "", $template);
+                $template = preg_replace("/\s*\<form\>[^)]*\<\/form\>/", "", $template);
                 $profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $template, true);
             }
 

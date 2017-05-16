@@ -53,7 +53,7 @@ class EbayBussinesPolicies
 
     public static function getPoliciesbyName($name, $id_ebay_profile)
     {
-        return Db::getInstance()->executeS('SELECT id, name, id_bussines_Policie FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE name ="' . pSQL($name) . '" AND id_ebay_profile=' . (int)$id_ebay_profile);
+        return Db::getInstance()->executeS('SELECT id, name, id_bussines_Policie FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE name ="' . pSQL($name) . '" AND id_bussines_Policie != "" AND id_ebay_profile=' . (int)$id_ebay_profile);
 
     }
 

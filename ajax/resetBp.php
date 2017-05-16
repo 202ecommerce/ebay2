@@ -31,7 +31,8 @@ if (!defined('TMP_DS')) {
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'classes'.TMP_DS.'EbayTools.php';
-
+require_once dirname(__FILE__).'/../classes/EbayProfile.php';
+require_once dirname(__FILE__).'/../classes/EbayRequest.php';
 if (EbayTools::getValue('admin_path')) {
     define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.EbayTools::getValue('admin_path').TMP_DS);
 }
@@ -41,41 +42,20 @@ if (!Tools::getValue('token')
     die('ERROR : INVALID TOKEN');
 }
 
-if (!($id_profile = Tools::getValue('profile')) || !Validate::isInt($id_profile)
-    || !($step = Tools::getValue('step')) || !Validate::isInt($step)
-    || !($cat = Tools::getValue('id_category'))
-) {
-    die('ERROR : INVALID DATA');
-}
 
-if (Module::isInstalled('ebay')) {
-    $ebay = Module::getInstanceByName('ebay');
+$ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 
+$request = new EbayRequest($ebay_profile->id);
+$request->importBusinessPolicies();
+$vars = array(
+        'PAYEMENTS' =>EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $ebay_profile->id),
+        'RETURN_POLICY' => EbayBussinesPolicies::getPoliciesbyType('RETURN_POLICY', $ebay_profile->id),
+    );
 
-    $enable = Module::isEnabled('ebay');
+// Smarty datas
+$context = Context::getContext();
+$ebay = new Ebay();
+$context->smarty->assign($vars);
 
-    if ($enable) {
-        $ebay_request = new EbayRequest();
-        $ebay_profile = new EbayProfile((int) $id_profile);
+    echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/bp_selects.tpl');
 
-        if ($step == 1) {
-            EbayCategory::deleteCategoriesByIdCountry($ebay_profile->ebay_site_id);
-            Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 0);
-            if ($cat_root = $ebay_request->getCategories(false)) {
-                die(Tools::jsonEncode($cat_root));
-            } else {
-                die(Tools::jsonEncode('error'));
-            }
-        } else if ($step == 2) {
-            $cat = $ebay_request->getCategories((int) $cat);
-
-            if (EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
-                die(Tools::jsonEncode($cat));
-            } else {
-                die(Tools::jsonEncode('error'));
-            }
-        } elseif ($step == 3) {
-            Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
-        }
-    }
-}

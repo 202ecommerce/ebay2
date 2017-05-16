@@ -72,9 +72,9 @@ function loadPrestaShopProducts(page) {
     var mode = $('#products-mode').val();
     var search = $('#products-filter').val();
 
-    $.ajax({
+   /* $.ajax({
         type: "POST",
-        url: module_dir + "ebay/ajax/loadTablePrestaShopProducts.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + "&mode=" + mode + "&p=" + page + "&id_employee=" + id_employee + "&s=" + search,
+        url: module_dir + "ebay/ajax/loadTablePrestaShopProducts.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + "&mode=" + mode + "&p=" + page + "&id_employee=" + id_employee + "&s=" + search + "&admin_path=" + admin_path,
         success: function (data) {
 
             $('#products-form-view').hide();
@@ -90,7 +90,7 @@ function loadPrestaShopProducts(page) {
             loadedProducts = new Array();
 
         }
-    });
+    });*/
 }
 
 $(document).ready(function () {

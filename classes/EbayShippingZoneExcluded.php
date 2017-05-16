@@ -44,7 +44,10 @@ class EbayShippingZoneExcluded
 
     public static function insert($data)
     {
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', $data, 'INSERT');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', $data, 'INSERT');
     }
 
     public static function loadEbayExcludedLocations($id_ebay_profile)

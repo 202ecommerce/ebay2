@@ -39,7 +39,11 @@ class EbayStoreCategoryConfiguration
             'id_category' => (int) $id_category,
         );
 
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_store_category_configuration', $data, 'INSERT');
+
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_store_category_configuration', $data, 'INSERT');
     }
 
     public static function update($id_ebay_profile, $ebay_category_id, $id_category)

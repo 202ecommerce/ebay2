@@ -73,8 +73,9 @@ class EbayConfiguration
             'name' => pSQL($name),
             'value' => pSQL($value, $html),
         );
-
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_configuration', $datas, 'INSERT');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_configuration', $datas, 'INSERT');
 
 
     }

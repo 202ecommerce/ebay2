@@ -24,6 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
+
 class EbayTaskManager
 {
     protected $taskDefinition = array(
@@ -76,6 +77,7 @@ class EbayTaskManager
             self::deleteTaskForPorduct($product->id);
             return true;
         }
+
         if (isset($product->id)) {
             $sql = array();
             foreach ($ebay_profiles as $profile) {

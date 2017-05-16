@@ -129,8 +129,10 @@ class EbayProduct
 
     public static function insert($data)
     {
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
 
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $data, 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_product', $data, 'INSERT');
     }
 
     public static function updateByIdProductRef($id_product_ref, $datas)
@@ -144,12 +146,15 @@ class EbayProduct
 
         //If eBay Product has been inserted then the configuration of eBay is OK
         Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
-
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = "'.pSQL($id_product_ref).'"');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = "'.pSQL($id_product_ref).'"');
     }
 
     public static function updateByIdProduct($id_product, $datas, $id_ebay_profile, $id_attribute = 0)
     {
+    	$dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
         $to_insert = array();
         if (is_array($datas) && count($datas)) {
             foreach ($datas as $key => $data) {
@@ -159,8 +164,9 @@ class EbayProduct
 
         //If eBay Product has been inserted then the configuration of eBay is OK
         Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
-
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND `id_attribute` = "'.(int) $id_attribute.'"');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND `id_attribute` = "'.(int) $id_attribute.'"');
     }
 
     public static function deleteByIdProductRef($id_product_ref)

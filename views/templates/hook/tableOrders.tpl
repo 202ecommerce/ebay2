@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <p>
-    <span><b>{l s='Commandes importées par' mod='ebay'} {$type_sync_order}<br>
+<span><b>{l s='Commandes importées par' mod='ebay'} {$type_sync_order}<br>
         {l s='Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
 
@@ -38,40 +38,40 @@
     <thead>
     <tr >
 
-        <th style="width:110px;">
-            <span>{l s='Data eBay' mod='ebay'}</span>
-        </th>
+            <th style="width:110px;">
+                <span>{l s='Data eBay' mod='ebay'}</span>
+            </th>
 
-        <th>
-            <span>{l s='Referance eBay' mod='ebay'}</span>
-        </th>
+            <th>
+                <span>{l s='Referance eBay' mod='ebay'}</span>
+            </th>
 
-        <th class="center">
-            <span>{l s='Referance b' mod='ebay'}</span>
-        </th>
+            <th class="center">
+                <span>{l s='Referance b' mod='ebay'}</span>
+            </th>
 
-        <th class="center">
-            <span >{l s='email' mod='ebay'}</span>
-        </th>
+            <th class="center">
+                <span >{l s='email' mod='ebay'}</span>
+            </th>
 
-        <th>
-            <span >{l s='Total' mod='ebay'}</span>
-        </th>
+            <th>
+                <span >{l s='Total' mod='ebay'}</span>
+            </th>
 
 
-        <th class="center">
-            <span >{l s='ID PrestaShop' mod='ebay'}</span>
-        </th>
+            <th class="center">
+                <span >{l s='ID PrestaShop' mod='ebay'}</span>
+            </th>
 
-        <th class="center">
-            <span>{l s='PrestaShop referance' mod='ebay'}</span>
-        </th>
+            <th class="center">
+                <span>{l s='PrestaShop referance' mod='ebay'}</span>
+            </th>
 
-        <th class="center">
-            <span>{l s='Date Import' mod='ebay'}</span>
-        </th>
+            <th class="center">
+                <span>{l s='Date Import' mod='ebay'}</span>
+            </th>
 
-        <th class="center">{l s='Actions' mod='ebay'}</th>
+            <th class="center">{l s='Actions' mod='ebay'}</th>
 
     </tr>
     </thead
@@ -103,15 +103,16 @@
                 <td>{$order.referance_marchand|escape:'htmlall':'UTF-8'}</td>
                 <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
                 <td>{$order.total|escape:'htmlall':'UTF-8'}</td>
-                <td>{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
-                <td>{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
-                <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
-                <td></td>
+                <td >{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
+                <td >{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
+                <td >{$order.date_import|escape:'htmlall':'UTF-8'}</td>
+                <td ></td>
             </tr>
         {/foreach}
-    {/if}
-    </tbody>
-</table>
+        {/if}
+        </tbody>
+
+    </table>
 
 <script type="text/javascript">
     {literal}

@@ -526,8 +526,11 @@ class EbayOrder
 
         $this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
 
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
         // Fix on date
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int) $this->id_orders[$id_shop]);
+        $dbEbay->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int) $this->id_orders[$id_shop]);
 
         return $payment->currentOrder;
     }
@@ -545,6 +548,8 @@ class EbayOrder
         $total_shipping_tax_excl = 0;
         $id_carrier = (int) EbayShipping::getPsCarrierByEbayCarrier($ebay_profile->id, $this->shippingService);
 
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
 
         $carrier_tax_rate = (float) Tax::getCarrierTaxRate((int) $id_carrier);
 
@@ -576,7 +581,7 @@ class EbayOrder
                 ));
 
 
-            Db::getInstance()->autoExecute(
+            $dbEbay->autoExecute(
                 _DB_PREFIX_.'order_detail',
                 $detail_data,
                 'UPDATE',
@@ -588,7 +593,7 @@ class EbayOrder
                     'total_amount' => ((float) ($product['price'] - ($product['price'] / $coef_rate)) * $product['quantity']),
                 );
 
-                DB::getInstance()->autoExecute(_DB_PREFIX_.'order_detail_tax', $detail_tax_data, 'UPDATE', '`id_order_detail` = (SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute'].') ');
+                $dbEbay->autoExecute(_DB_PREFIX_.'order_detail_tax', $detail_tax_data, 'UPDATE', '`id_order_detail` = (SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute'].') ');
 
 
             $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
@@ -633,12 +638,12 @@ class EbayOrder
             // Update Incoice
             $invoice_data = $data;
             unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
-            Db::getInstance()->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+            $dbEbay->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
            // Update payment
             $payment_data = array(
                 'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
             );
-            Db::getInstance()->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
+            $dbEbay->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
 
 
 
@@ -654,9 +659,9 @@ class EbayOrder
                     'shipping_cost_tax_excl' => 0,
                 );
             }
-            Db::getInstance()->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+            $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+        return $dbEbay->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
     }
 
     public function _getTaxByProduct($id_product)
@@ -995,7 +1000,11 @@ class EbayOrder
 
     public static function insert($data)
     {
-        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order', $data, 'INSERT');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_order', $data, 'INSERT');
+
         return Db::getInstance()->Insert_ID();
     }
 

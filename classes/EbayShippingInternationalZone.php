@@ -56,4 +56,11 @@ class EbayShippingInternationalZone
 
         return $existing_international_carriers;
     }
+
+    public static function getInternationalZone($id_ebay_profile)
+    {
+        return DB::getInstance()->ExecuteS('SELECT *
+				FROM '._DB_PREFIX_.'ebay_shipping_international_zone
+				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.' GROUP BY id_ebay_zone ');;
+    }
 }

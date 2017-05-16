@@ -170,8 +170,8 @@
                                                             <span class="col-xs-1 text-right"><small>{l s='ord. err.' mod='ebay'}</small></span>
                                                             <span class="col-xs-1 text-right"><small>{l s='tasks' mod='ebay'}</small></span>
                                                         </li>
-
                                                         {foreach from=$profiles item=profile}
+
                                                             <li>
                                                                 <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if} clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                                     <span id = 'name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
@@ -186,9 +186,13 @@
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
                                                                     {/if}
+
+
+
                                                                 </a>
                                                             </li>
                                                         {/foreach}
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -200,15 +204,58 @@
                                             <button type="button" class="btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                                 <i class="icon-trash"></i>
                                             </button>
-
                                             {if $debug == 1}
                                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                                             {/if}
-
                                             <div class="pull-right">
                                                 <span title="<h4>Aide</h4><p>Ici une paragraphe explicatif sur le fonctionnement du selecteur de profil.</p>" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
-                                                    <i class="process-icon-help"></i>
+                                                  <a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>
                                                 </span>
+                                            </div>
+
+                                            <div id="popin-container-help">
+                                                {* Category add modal *}
+                                                <div class="popin popin-lg" id="popin-help" style="display: none; width: 700px;overflow-x: hidden;">
+
+                                                    <div class="new new_aide" style="width: 100%;text-align: center;  margin: 35px;">
+                                                        <span><b>{l s='Help for module eBay' mod='ebay'}</b></span></br>
+                                                        </br></br>
+                                                        <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/views/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
+                                                        <div id="" style=" float: right; width: 45%; display: inline-block; text-align: left;">
+                                                        <p >{l s='Problemes courants' mod='ebay'}</p>
+                                                            <a class="kb-help" data-errorcode="{$help_listing_rejection.errorcode}" data-module="ebay" data-lang="{$help_listing_rejection.lang}" module_version="{$help_listing_rejection.module_version}" prestashop_version="{$help_listing_rejection.prestashop_version}"></a></br>
+                                                            <a class="kb-help" data-errorcode="{$help_order_import.errorcode}" data-module="ebay" data-lang="{$help_order_import.lang}" module_version="{$help_order_import.module_version}" prestashop_version="{$help_order_import.prestashop_version}"></a>
+
+                                                        <p id=>{l s='Liens utiles' mod='ebay'}</p>
+
+                                                            <a href="https://help.202-ecommerce.com" target="_blank">{l s='Guide utilisateur' mod='ebay'}</a></br>
+                                                            <a href="https://support.202-ecommerce.com" target="_blank">{l s='Support' mod='ebay'}</a></br>
+                                                            <b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Evolutions du module' mod='ebay'}</a></b>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="new new_aide" style="width: 100%; display: inline-block;text-align: center; margin: 35px;">
+                                                        <span  style="text-align: center"><b>{l s='Help for eBay' mod='ebay'}</b></span></br>
+                                                        </br></br>
+                                                        <div id="" style="padding-bottom: 3em; float: left; width: 45%;">
+                                                            <img id="ebay-logo" src="../modules/ebay/views/img/ebay.png" />
+                                                            <p>{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
+                                                            <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}
+                                                                {l s='eBay represents a great opportunity for you to reach millions of new customers and help you to  grow your business.' mod='ebay'}</p>
+                                                        </div>
+                                                        <div id="" style=" float: right; width: 45%;text-align: left;">
+                                                        <p id="">{l s='Liens utiles' mod='ebay'}</p>
+
+                                                            <a class="kb-help" data-errorcode="{$help_ebay_seller.errorcode}" data-module="ebay" data-lang="{$help_ebay_seller.lang}" module_version="{$help_ebay_seller.module_version}" prestashop_version="{$help_ebay_seller.prestashop_version}"></a></br>
+                                                            <a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/informations-generales/support-marchand-ebay/" target="_blank">{l s='Frais et commissions eBay pour les vendeurs professionnels' mod='ebay'}</a></br>
+                                                            <a href="{$pro_url|escape:'htmlall':'UTF-8'}" target="_blank">{l s='Contacter le service aux vendeurs eBay' mod='ebay'}</a>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer" style="text-align: center">
+                                                        <button class="close_popin_help btn btn-default">OK</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </form>
                                         <form class="change_profile" method="post">
@@ -299,7 +346,7 @@
         </div>
     </div>
 
-{if $current_profile && !$add_profile}
+    {if $current_profile && !$add_profile}
 <div class="row">
     {* Main navigation *}
     <div class="sidebar navigation col-md-3 col-lg-2">
@@ -328,29 +375,28 @@
         <div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
             <table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
                 <thead>
-                    <tr class="nodrag nodrop">
-                        <th style="width: 10%">
-                            {l s='Status' mod='ebay'}
-                        </th>
-                        <th style="width: 45%">
-                            {l s='Description' mod='ebay'}
-                        </th>
-                        <th style="width: 45%">
-                            {l s='Result' mod='ebay'}
-                        </th>
-                    </tr>
+                <tr class="nodrag nodrop">
+                    <th style="width:10%">
+                        {l s='Status' mod='ebay'}
+                    </th>
+                    <th style="width:45%">
+                        {l s='Description' mod='ebay'}
+                    </th>
+                    <th style="width:45%">
+                        {l s='Result' mod='ebay'}
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr id="cat_parent" class="load">
-                        <td></td>
-                        <td>{l s='Loading list of eBay categories' mod='ebay'}</td>
-                        <td>{l s='In progress' mod='ebay'}</td>
-                    </tr>
+                <tr id="cat_parent" class="load">
+                    <td></td>
+                    <td>{l s='Loading list of eBay categories' mod='ebay'}</td>
+                    <td>{l s='In progress' mod='ebay'}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
     <div id="popin_config_ok"">
         <div  class="popin popin-lg" id="config_ok" style="display: none;text-align: center;padding: 15px;">
             <p>Super, la synchronisation est Ok, vous allez maintenant </br>
@@ -360,27 +406,24 @@
             </div>
         </div>
     </div>
-
     <a href="#config_ok" class="popin_config_ok_sync" style="display: none"></a>
-
     {if $ebay_shipping_config_tab > 0 && $count_category == 0}
-        <script>
-            $(document).ready(function() {
-                $('.popin_config_ok_sync').fancybox({
-                    'modal': true,
-                    'showCloseButton': false,
-                    'padding': 0,
-                    'parent': '#popin_config_ok',
-                });
-                $('.popin_config_ok_sync').click();
-
-                $(document).on('click', '.close_popin_config', function() {
-                    $.fancybox.close();
-                });
+    <script>
+        $(document).ready(function() {
+            $('.popin_config_ok_sync').fancybox({
+                'modal': true,
+                'showCloseButton': false,
+                'padding': 0,
+                'parent': '#popin_config_ok',
             });
-        </script>
-    {/if}
+            $('.popin_config_ok_sync').click();
 
+            $(document).on('click', '.close_popin_config', function() {
+                $.fancybox.close();
+            });
+        });
+    </script>
+    {/if}
     <script type="text/javascript">
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
@@ -396,8 +439,8 @@
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>
-
     <script>
+
         // Select item from user dropdown
         $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
             $(this).parents('.dropdown').find('.dropdown-menu li a').removeClass('selected');
@@ -409,11 +452,23 @@
 
         });
 
+        $(document).ready(function() {
+            $('.js-popin-help').fancybox({
+                'modal': true,
+                'showCloseButton': false,
+                'padding': 0,
+                'parent': '#popin-container-help',
+            });
+            $(document).on('click', '.close_popin_help', function() {
+                event.preventDefault();
+                $.fancybox.close();
+            });
+        });
+
        /* $('.ebay_profils').change(function() {
             $('.change_profile').find("input[name=ebay_profile]").val($( ".ebay_profils option:selected").attr('id'));
             $('.change_profile').submit();
         });*/
     </script>
-
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/header.js?date={$date|escape:'htmlall':'UTF-8'}"></script>
 <!-- after seller tips -->

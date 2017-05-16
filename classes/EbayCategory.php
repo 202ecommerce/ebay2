@@ -239,9 +239,12 @@ class EbayCategory
     {
         $db = Db::getInstance();
 
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb($db);
+
         foreach ($categories as $category) {
 
-                if (!$db->autoExecute(_DB_PREFIX_.'ebay_category', array(
+                if (!$dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
                     'id_category_ref'        => pSQL($category['CategoryID']),
                     'id_category_ref_parent' => pSQL($category['CategoryParentID']),
                     'id_country'             => pSQL($ebay_site_id),
@@ -266,10 +269,14 @@ class EbayCategory
     public static function updateCategoryTable($categories_multi_sku)
     {
         $db = Db::getInstance();
+
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb($db);
+
         $categories = $db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'ebay_category');
 
         foreach ($categories as $category) {
-            $db->autoExecute(_DB_PREFIX_.'ebay_category', array(
+            $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
                 'is_multi_sku' => isset($categories_multi_sku[$category['id_category_ref']]) ? (int)$categories_multi_sku[$category['id_category_ref']] : null,
             ), 'UPDATE', '`id_category_ref` = '.(int)$category['id_category_ref'], 0, true, true);
         }
@@ -333,11 +340,12 @@ class EbayCategory
 
     public static function setKtypeConfiguration($id_category_ref, $value, $id_ebay_profile)
     {
-
+        $dbEbay = new DbEbay();
+        $db = Db::getInstance();
+        $dbEbay->setDb($db);
         $ebay_profile= new EbayProfile($id_ebay_profile);
         $ebay_site_id = $ebay_profile->ebay_site_id;
-        $db = Db::getInstance();
-        $db->autoExecute(_DB_PREFIX_.'ebay_category', array(
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
             'k_type' => ($value == 'true') ? 1 : 0,
             ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref .' AND `id_country` = ' . (int)$ebay_site_id, 0, true, true);
 

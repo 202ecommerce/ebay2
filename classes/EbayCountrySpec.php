@@ -78,6 +78,28 @@ class EbayCountrySpec
             'picture_url' => 'http://pages.ebay.fr/professionnels/images.html',
             'top_rated_url' => 'http://pages.ebay.fr/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.fr/help/sell/business-policies.html',
+
+        ),
+        'ie' => array(
+            'site_id' => 205,
+            'documentation' => 'ie',
+            'language' => 'en_IE',
+            'currency' => 'EUR',
+            'site_name' => 'Ireland',
+            'site_extension' => 'ie',
+            'img_stats' => null,
+            'iso_code' => 'ie',
+            'signin' => 'https://signin.ebay.ie/ws/eBayISAPI.dll',
+            'signin_pro_url' => 'https://scgi.ebay.ie/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.ie/ws/eBayISAPI.dll',
+            'pro_url' => 'http://pages.ebay.ie/professionnels/index.html',
+            'fee_url' => 'http://pages.ebay.ie/help/sell/businessfees.html',
+            'title_desc_url' => 'http://pages.ebay.ie/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://pages.ebay.ie/help/search/questions/search-completed-listings.html',
+            'picture_url' => 'http://pages.ebay.ie/professionnels/images.html',
+            'top_rated_url' => 'http://pages.ebay.ie/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.ie/help/sell/business-policies.html',
+
         ),
         'nl' => array(
             'site_id' => 146,

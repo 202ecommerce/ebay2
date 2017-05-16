@@ -42,7 +42,10 @@ class EbayShippingService
 
     public static function insert($data)
     {
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
+        $dbEbay = new DbEbay();
+        $dbEbay->setDb(Db::getInstance());
+
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
     }
 
     public static function getCarriers($ebay_site_id)
