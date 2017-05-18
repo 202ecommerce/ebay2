@@ -51,7 +51,6 @@ class EbayCategory
         if ($id_category) {
             $this->id_category = (int)$id_category;
         }
-
     }
 
     private function _loadFromDb()
@@ -74,7 +73,6 @@ class EbayCategory
                 $this->$attribute = $value;
             }
         }
-
     }
 
     public function getIdCategoryRef()
@@ -192,7 +190,6 @@ class EbayCategory
             } else {
                 $ret[$row['id']]['types'][] = $row['type'];
             }
-
         }
 
         return $ret;
@@ -243,25 +240,23 @@ class EbayCategory
         $dbEbay->setDb($db);
 
         foreach ($categories as $category) {
+            if (!$dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
+                'id_category_ref'        => pSQL($category['CategoryID']),
+                'id_category_ref_parent' => pSQL($category['CategoryParentID']),
+                'id_country'             => pSQL($ebay_site_id),
+                'level'                  => pSQL($category['CategoryLevel']),
+                'is_multi_sku'           => isset($categories_multi_sku[$category['CategoryID']]) ? (int)$categories_multi_sku[$category['CategoryID']] : null,
+                'name'                   => pSQL($category['CategoryName']),
+            ), 'INSERT', '', 0, true, true)
+            ) {
+                $handle = fopen(dirname(__FILE__).'/../log/import_category_ebay.txt', 'a+');
+                fwrite($handle, print_r($category, true));
+                fwrite($handle, print_r($db->getMsgError(), true));
+                fclose($handle);
 
-                if (!$dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
-                    'id_category_ref'        => pSQL($category['CategoryID']),
-                    'id_category_ref_parent' => pSQL($category['CategoryParentID']),
-                    'id_country'             => pSQL($ebay_site_id),
-                    'level'                  => pSQL($category['CategoryLevel']),
-                    'is_multi_sku'           => isset($categories_multi_sku[$category['CategoryID']]) ? (int)$categories_multi_sku[$category['CategoryID']] : null,
-                    'name'                   => pSQL($category['CategoryName']),
-                ), 'INSERT', '', 0, true, true)
-                ) {
-
-                    $handle = fopen(dirname(__FILE__).'/../log/import_category_ebay.txt', 'a+');
-                    fwrite($handle, print_r($category, true));
-                    fwrite($handle, print_r($db->getMsgError(), true));
-                    fclose($handle);
-
-                    return false;
-                }
+                return false;
             }
+        }
 
         return true;
     }
@@ -348,6 +343,5 @@ class EbayCategory
         $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
             'k_type' => ($value == 'true') ? 1 : 0,
             ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref .' AND `id_country` = ' . (int)$ebay_site_id, 0, true, true);
-
     }
 }

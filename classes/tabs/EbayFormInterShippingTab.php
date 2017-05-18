@@ -79,7 +79,6 @@ class EbayFormInterShippingTab extends EbayTab
                     } else {
                         $carrier['price'] = round($result, 2, PHP_ROUND_HALF_DOWN);
                     }
-
                 }
             }
         }

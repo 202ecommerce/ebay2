@@ -36,11 +36,9 @@ function upgrade_module_1_2($module)
     if (!empty($sql) && is_array($sql)) {
         foreach ($sql as $request) {
             if (!Db::getInstance()->execute($request)) {
-
                 return false;
             }
         }
-
         $module->setConfiguration('EBAY_VERSION', $module->version);
     }
 

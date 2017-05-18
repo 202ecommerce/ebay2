@@ -24,8 +24,8 @@
 *}
 
 <p>
-<span><b>{l s='Retours importés par' mod='ebay'} {$type_sync_returns} <br>
-        {l s='Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
+<span><b>{l s='Returns imported by ' mod='ebay'} {$type_sync_returns} <br>
+        {l s='Last import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
 <br>
 <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1" class="btn btn-default">

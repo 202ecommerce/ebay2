@@ -36,6 +36,5 @@ class EbayProductsExcluTab extends EbayTab
         );
 
         return $this->display('tableProductsExclu_ajax.tpl', $vars);
-
     }
 }

@@ -56,10 +56,9 @@ if (Tools::getValue('action') == "out_of_stock") {
     ));
     EbayTaskManager::deleteTaskForPorduct($product['id_product']);
     $ebay_profile = new EbayProfile($product['id_ebay_profile']);
-   if (EbayProduct::getIdProductRef($product['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
+    if (EbayProduct::getIdProductRef($product['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
         $productPS = new Product($product['id_product']);
-
-       EbayTaskManager::addTask('mod', $productPS, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'), $product['id_product_attribute']);
+        EbayTaskManager::addTask('mod', $productPS, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'), $product['id_product_attribute']);
         EbayTaskManager::deleteTaskForOutOfStock($product['id_product'], $product['id_ebay_profile']);
     }
 }

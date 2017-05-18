@@ -271,7 +271,7 @@ class EbayCategoryConfiguration
         );
     }
 
-    public static function getEbayCategoryById($id_ebay_profile,  $id_ebay_category)
+    public static function getEbayCategoryById($id_ebay_profile, $id_ebay_category)
     {
 
         $ebay_profile = new EbayProfile($id_ebay_profile);
@@ -304,5 +304,4 @@ class EbayCategoryConfiguration
 
         return Db::getInstance()->executeS($sql);
     }
-
 }

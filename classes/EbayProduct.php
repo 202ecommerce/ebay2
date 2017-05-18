@@ -65,7 +65,6 @@ class EbayProduct
         } else {
             return '-';
         }
-
     }
 
     public static function getProductsIdFromTable($a)
@@ -83,7 +82,6 @@ class EbayProduct
         } else {
             return false;
         }
-
     }
 
     public static function getNbProducts($id_ebay_profile)
@@ -153,8 +151,6 @@ class EbayProduct
 
     public static function updateByIdProduct($id_product, $datas, $id_ebay_profile, $id_attribute = 0)
     {
-    	$dbEbay = new DbEbay();
-        $dbEbay->setDb(Db::getInstance());
         $to_insert = array();
         if (is_array($datas) && count($datas)) {
             foreach ($datas as $key => $data) {
@@ -175,7 +171,7 @@ class EbayProduct
 			WHERE `id_product_ref` = \''.pSQL($id_product_ref).'\'');
     }
 
-    public static function deleteByIdProduct($id_product, $id_attribute = 0, $id_ebay_profile)
+    public static function deleteByIdProduct($id_product, $id_ebay_profile, $id_attribute = 0)
     {
         return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
 			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');
@@ -203,7 +199,6 @@ class EbayProduct
         $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
 
         return Db::getInstance()->ExecuteS($sql);
-
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)
@@ -218,7 +213,7 @@ class EbayProduct
         }
 
         $site_extension = EbayCountrySpec::getSiteExtensionBySiteId($ebay_site_id);
-        if($ebay_site_id== 23){
+        if ($ebay_site_id== 23) {
             return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.befr.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
         }
         return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
@@ -233,7 +228,8 @@ class EbayProduct
         return $product_ids;
     }
 
-    public static function getOrphanListing($id_ebay_profile) {
+    public static function getOrphanListing($id_ebay_profile)
+    {
         $ebay_profile = new EbayProfile((int) $id_ebay_profile);
         $ebay_request = new EbayRequest();
         $is_one_five = version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0;
@@ -347,7 +343,6 @@ class EbayProduct
                         break;
                     }
                 }
-
             }
 
             if ($row['id_category_ref']) {

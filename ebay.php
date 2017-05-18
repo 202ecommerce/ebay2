@@ -204,12 +204,10 @@ class Ebay extends Module
             // Upgrade eBay module
             if (Configuration::get('EBAY_VERSION') != $this->version) {
                 $this->__upgrade();
-
             }
 
             //if (!empty($_POST) && Tools::getValue('ebay_profile'))
             if (!empty($_POST)) {
-
                 // called after adding a profile
                 if ((Tools::getValue('action') == 'logged') && Tools::isSubmit('ebayRegisterButton')) {
                     $this->__postProcessAddProfile();
@@ -235,22 +233,15 @@ class Ebay extends Module
                         $this->warning = $this->l('The eBay module currently works for eBay.fr, eBay.it, eBay.co.uk, eBay.pl, eBay.nl and eBay.es');
                         return false;
                     }
-
                 } else {
-
                     $iso_country = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
                     $iso_lang = Tools::strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
                     $this->ebay_country = EbayCountrySpec::getInstanceByCountryAndLang($iso_country, $iso_lang);
                     return false;
                 }
-
             }
-
-
-
             // Warning uninstall
             $this->confirmUninstall = $this->l('Are you sure you want to uninistall this module? All configuration settings will be lost');
-
         }
     }
 
@@ -484,7 +475,6 @@ class Ebay extends Module
             || !$this->unregisterHook('backOfficeTop')
             || !$this->unregisterHook('header')
             || !$this->unregisterHook('updateCarrier')) {
-
             return false;
         }
 
@@ -673,35 +663,31 @@ class Ebay extends Module
 
     public function hookadminOrder($params)
     {
+        $order = new Order($params['id_order']);
+        // If buy by this module
+        $res = array();
+        if ($order->module == $this->name) {
+            $returns = EbayOrder::getReturnsByOrderId($params['id_order']);
+            foreach ($returns as $return) {
+                $id_product = EbayProduct::getProductsIdFromItemId($return['id_item']);
+                $product = new Product($id_product['id_product']);
 
-            $order = new Order($params['id_order']);
-            // If buy by this module
-            $res = array();
-            if ($order->module == $this->name) {
-                $returns = EbayOrder::getReturnsByOrderId($params['id_order']);
-                foreach ($returns as $return) {
-                    $id_product = EbayProduct::getProductsIdFromItemId($return['id_item']);
-                    $product = new Product($id_product['id_product']);
-
-                    $res[]= array(
-                            'type_of_refund' => $return['type'],
-                            'date' => $return['date'],
-                            'product_name' => $product->name,
-                            'description' => $return['description'],
-                            'id_ebay_order' => $return['id_ebay_order'],
-                            'status' => $return['status'],
-
-                    );
-                }
-                $smarty_vars = array(
-                    'returns' => $res,
+                $res[]= array(
+                        'type_of_refund' => $return['type'],
+                        'date' => $return['date'],
+                        'product_name' => $product->name,
+                        'description' => $return['description'],
+                        'id_ebay_order' => $return['id_ebay_order'],
+                        'status' => $return['status'],
                 );
-                $this->smarty->assign($smarty_vars);
-
-                return $this->display(__FILE__, 'views/templates/hook/order_return_details.tpl');
-
             }
+            $smarty_vars = array(
+                'returns' => $res,
+            );
+            $this->smarty->assign($smarty_vars);
 
+            return $this->display(__FILE__, 'views/templates/hook/order_return_details.tpl');
+        }
     }
 
     /**
@@ -786,12 +772,10 @@ class Ebay extends Module
         $this->hookUpdateProductAttributeEbay(); // Fix hook update product attribute
 
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
-        if (
-            ((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
+        if (((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
             &&
             ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS') == 1) {
-
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
             $this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
@@ -801,33 +785,27 @@ class Ebay extends Module
             }
         }
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
-        if (
-            ((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 0)
+        if (((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 0)
             &&
             ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS_RETURNS') == 1) {
-
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
             $this->ebay_profile->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
 
             if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
-
                 if (isset($orders['refund'][0]['cancellations'])) {
                     foreach ($orders['refund'][0]['cancellations'] as $refund) {
                         $this->importCanceletions($refund);
                     }
                 }
                 if (isset($orders['return'][0]['members'])) {
-
                     foreach ($orders['return'][0]['members'] as $return) {
                         $this->importReturn($return);
                     }
                 }
-
             }
         }
-
 
         $this->__cleanLogs();
 
@@ -835,7 +813,6 @@ class Ebay extends Module
         if ($this->is_multishop) {
             $this->__setContextShop($old_context_shop);
         }
-
         $this->__relistItems();
     }
 
@@ -866,17 +843,15 @@ class Ebay extends Module
         if ($has_cleaned_logs) {
             Configuration::updateValue('EBAY_LOGS_LAST_CLEANUP', true, false, 0, 0);
         }
-
     }
 
     public function cronProductsSync()
     {
-       EbayTaskManager::toJob();
+        EbayTaskManager::toJob();
     }
 
     public function cronOrdersSync()
     {
-
         $current_date = date('Y-m-d\TH:i:s').'.000Z';
 
         if ($orders = $this->__getEbayLastOrders($current_date)) {
@@ -886,6 +861,7 @@ class Ebay extends Module
         // we set the new last update date after retrieving the last orders
         $this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
     }
+
     public function cronOrdersReturnsSync()
     {
 
@@ -896,13 +872,11 @@ class Ebay extends Module
                 $this->importCanceletions($refund);
             }
             if (isset($orders['return'][0]['members'])) {
-
                 foreach ($orders['return'][0]['members'] as $return) {
                     $this->importReturn($return);
                 }
             }
         }
-
         // we set the new last update date after retrieving the last orders
         $this->ebay_profile->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
     }
@@ -911,7 +885,7 @@ class Ebay extends Module
     {
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
- 	$request = new EbayRequest();
+        $request = new EbayRequest();
         $errors_email = array();
         $ebay_user_identifier = $ebay_profile->ebay_user_identifier;
         /** @var EbayOrder $order */
@@ -919,8 +893,7 @@ class Ebay extends Module
             $errors = array();
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
-
-            if(!$request->getDev()){
+            if (!$request->getDev()) {
                 if (!$order->isCompleted()) {
                     $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
                     $order->checkError($message, $ebay_user_identifier);
@@ -966,7 +939,6 @@ class Ebay extends Module
                             AND ps.`active` = 1
                             AND ps.`id_product` IN ('.implode(',', $product_ids).')';
 
-
                     $nb_products_in_shop = Db::getInstance()->getValue($sql);
                     if ($nb_products_in_shop == count($product_ids)) {
                         $id_shops = array($first_id_shop);
@@ -983,7 +955,6 @@ class Ebay extends Module
                 } else {
                     $has_shared_customers = true;
                 }
-
             } else {
                 $default_shop = Configuration::get('PS_SHOP_DEFAULT') ? Configuration::get('PS_SHOP_DEFAULT') : 1;
                 $id_shops = array($default_shop);
@@ -1010,7 +981,6 @@ class Ebay extends Module
                 if (method_exists($customer_clear, 'clearCache')) {
                     $customer_clear->clearCache(true);
                 }
-
             }
 
             foreach ($id_shops as $id_shop) {
@@ -1033,7 +1003,6 @@ class Ebay extends Module
                     if (method_exists($customer_clear, 'clearCache')) {
                         $customer_clear->clearCache(true);
                     }
-
                 }
 
                 $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
@@ -1071,10 +1040,8 @@ class Ebay extends Module
                     $carrier->active = false;
                     $carrier->save();
                 }
-
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
-
             }
             foreach ($order->getProducts() as $product) {
                 $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
@@ -1228,11 +1195,10 @@ class Ebay extends Module
                 $history->changeIdOrderState($this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE'), (int)($order_id[0]['id_order']));
             }
         }
-
     }
+
     public function importReturn($return)
     {
-
         if (!empty($return)) {
             $id_order = EbayOrder::getOrderbytransactionId((string) $return['creationInfo']['item']['transactionId']);
             $vars = array(
@@ -1253,7 +1219,6 @@ class Ebay extends Module
             } else {
                 DB::getInstance()->insert('ebay_order_return_detail', $vars);
             }
-
         }
     }
 
@@ -1265,7 +1230,6 @@ class Ebay extends Module
      */
     public function hookUpdateProduct($params)
     {
-
         if (!isset($params['product']->id) && !isset($params['id_product'])) {
             return false;
         }
@@ -1281,9 +1245,7 @@ class Ebay extends Module
         }
 
         EbayTaskManager::addTask('update', $params['product']);
-
     }
-
 
 
     public function hookActionUpdateQuantity($params)
@@ -1308,8 +1270,6 @@ class Ebay extends Module
         }
 
         EbayTaskManager::addTask('stock', $params['product']);
-
-
     }
 
 
@@ -1336,7 +1296,6 @@ class Ebay extends Module
 
             $ebay_request = new EbayRequest(null, 'ORDER_BACKOFFICE');
             $ebay_request->orderCreateReturn($id_order_ref);
-
         }
     }
 
@@ -1395,14 +1354,20 @@ class Ebay extends Module
             // if the module is not upgraded or not configured don't do anything
             return false;
         }
-
+        if (Configuration::get('EBAY_VERSION') != $this->version) {
+            set_time_limit(3600);
+            $this->setConfiguration('EBAY_VERSION', $this->version);
+            Configuration::set('EBAY_VERSION', $this->version);
+            $validatordb = new EbayDbValidator();
+            $validatordb->checkTemplate();
+            $validatordb->checkDatabase(false);
+        }
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
             ($tracking_number = Tools::getValue('tracking_number'))
             &&
             ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order))) {
-
             Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `'._DB_PREFIX_.'ebay_profile`');
             $id_ebay_profile = EbayOrder::getIdProfilebyIdOrder($id_order);
             $order = new Order($id_order);
@@ -1464,9 +1429,9 @@ class Ebay extends Module
     public function getContent()
     {
         $adminDir = basename(_PS_ADMIN_DIR_);
-        $this->smarty->assign([
+        $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
-        ]);
+        ));
 
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
@@ -1553,7 +1518,7 @@ class Ebay extends Module
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
         $count_order_errors = 0;
         $count_product_errors = 0;
-        if($this->ebay_profile){
+        if ($this->ebay_profile) {
             $count_order_errors = EbayOrderErrors::getAll($this->ebay_profile->id);
             $count_product_errors =EbayTaskManager::getErrors($this->ebay_profile->id);
         }
@@ -1766,7 +1731,7 @@ class Ebay extends Module
             $tab = new EbayFormTemplateManagerTab($this, $this->smarty, $this->context);
         } elseif (Tools::getValue('section') == 'sync') {
             $tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
-        }  elseif (Tools::getValue('section') == 'advanced_parameters') {
+        } elseif (Tools::getValue('section') == 'advanced_parameters') {
             $tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
         }
 
@@ -1795,7 +1760,7 @@ class Ebay extends Module
     private function __displayFormRegister()
     {
         $ebay = new EbayRequest();
-	self::addSmartyModifiers();
+        self::addSmartyModifiers();
         $smarty_vars = array();
         $smarty_vars['show_send_stats'] = Configuration::get('EBAY_SEND_STATS') === false ? true : false;
 
@@ -1826,7 +1791,6 @@ class Ebay extends Module
 
                 $this->ebay_profile = EbayProfile::getByLangShopSiteAndUsername((int) Tools::getValue('ebay_language'), $id_shop, Tools::getValue('ebay_country'), $ebay_username, EbayProductTemplate::getContent($this, $this->smarty));
                 EbayProfile::setProfile($this->ebay_profile->id);
-
             }
 
             $smarty_vars['check_token_tpl'] = $this->displayCheckToken();
@@ -1898,7 +1862,6 @@ class Ebay extends Module
         $this->smarty->assign($smarty_vars);
 
         return $this->display(__FILE__, 'views/templates/hook/checkToken.tpl');
-
     }
 
     /**
@@ -1907,7 +1870,7 @@ class Ebay extends Module
      **/
     private function __displayFormConfig()
     {
-    self::addSmartyModifiers();
+        self::addSmartyModifiers();
         $form_parameters_tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
         $form_advanced_parameters_tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
 
@@ -1925,7 +1888,7 @@ class Ebay extends Module
         $tableListErrorProduct = new EbayListErrorsProductsTab($this, $this->smarty, $this->context);
         $form_parameters_annonces_tab = new EbayFormConfigAnnoncesTab($this, $this->smarty, $this->context);
         $form_parameters_orders_tab = new EbayFormConfigOrdersTab($this, $this->smarty, $this->context);
-        $ebayProductsExcluTab = New EbayProductsExcluTab($this, $this->smarty, $this->context);
+        $ebayProductsExcluTab = new EbayProductsExcluTab($this, $this->smarty, $this->context);
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
 
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
@@ -1933,14 +1896,12 @@ class Ebay extends Module
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
         // test if everything is green
         if ($this->ebay_profile && $this->ebay_profile->isAllSettingsConfigured()) {
-
             if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
                 $green_message = $this->l('Your profile is ready to go, go to Synchronization to list your products');
             } elseif (!empty($_POST) && Tools::isSubmit('submitSave')) {
 // config has changed
                 $green_message = $this->l('To implement these changes on active listings you need to    resynchronize your items');
             }
-
         }
 
         // Get all alerts
@@ -1955,12 +1916,11 @@ class Ebay extends Module
         $count_order_errors = 0;
         $count_product_errors = 0;
         $count_orphan_listing = 0;
-        if($this->ebay_profile){
+        if ($this->ebay_profile) {
             $count_order_errors = EbayOrderErrors::getAll($this->ebay_profile->id);
             $count_product_errors =EbayTaskManager::getErrors($this->ebay_profile->id);
             $count_orphan_listing = EbayProduct::getOrphanListing($this->ebay_profile->id);
         }
-
 
         $smarty_vars = array(
             'class_general' => 'uncinq',
@@ -2047,7 +2007,6 @@ class Ebay extends Module
         } else {
             $this->html .= $this->displayError($this->l('Settings failed'));
         }
-
     }
 
     /**
@@ -2070,12 +2029,9 @@ class Ebay extends Module
         if (isset($categories[$id])) {
             $cats = $categories[$id];
         } elseif (!$id) {
-
             $cats = reset($categories); // fix to deal with the case where the first element of categories has no key
-
         }
         if (isset($cats) && $cats) {
-
             foreach ($cats as $idc => $cc) {
                 $name = '';
                 if ($path) {
@@ -2094,11 +2050,9 @@ class Ebay extends Module
                 $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], '');
 
                 $category_tab = array_merge($category_tab, $categoryTmp);
-
             }
         }
         if ($search) {
-
             $category_tab_filtered = array();
             foreach ($category_tab as $c) {
                 if (strpos(Tools::strtolower($c['name']), Tools::strtolower($search)) !== false) {
@@ -2159,7 +2113,6 @@ class Ebay extends Module
                     echo $this->displayError($message);
                 }
                 @unlink(dirname(__FILE__).'/log/syncError.php');
-
             } else {
                 echo 'OK|'.$this->displayConfirmation($this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')');
             }
@@ -2271,14 +2224,12 @@ class Ebay extends Module
         } else {
             Shop::setContext(Shop::CONTEXT_SHOP, Configuration::get('PS_SHOP_DEFAULT'));
         }
-
     }
 
     public function addSqlRestrictionOnLang($alias)
     {
 
         return Shop::addSqlRestrictionOnLang($alias);
-
     }
 
     /**
@@ -2342,15 +2293,16 @@ class Ebay extends Module
         echo $content;
     }
 
-    public function displayProductExclu($id_employee) {
+    public function displayProductExclu($id_employee)
+    {
 
         $ids_products = EbayProduct::getProductsBlocked($this->ebay_profile->id);
         $products = array();
-        if(!empty($ids_products)) {
+        if (!empty($ids_products)) {
             foreach ($ids_products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 $ebay_category_id = EbayCategoryConfiguration::getConfigByCategoryId($this->ebay_profile->id, $product->id_category_default);
-                if($ebay_category_id){
+                if ($ebay_category_id) {
                     $ebay_category = EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id, $ebay_category_id[0]['id_ebay_category']);
                 }
                 $category_ps = new Category($product->id_category_default, $this->ebay_profile->id_lang);
@@ -2369,9 +2321,8 @@ class Ebay extends Module
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $id_employee,
         );
-	 $this->smarty->assign($vars);
-	 return $this->display(__FILE__,'views/templates/hook/tableProductsExclu.tpl');
-
+        $this->smarty->assign($vars);
+        return $this->display(__FILE__, 'views/templates/hook/tableProductsExclu.tpl');
     }
 
     public function displayEbayListingsAjax($admin_path, $id_employee = null)
@@ -2390,9 +2341,6 @@ class Ebay extends Module
         );
 
         if ($this->isSymfonyProject()) {
-
-            // ...
-
             require_once _PS_MODULE_DIR_.'/../app/AppKernel.php';
             $kernel = new AppKernel(_PS_MODE_DEV_?'dev':'prod', _PS_MODE_DEV_);
             $kernel->loadClassCache();
@@ -2409,7 +2357,7 @@ class Ebay extends Module
             $data['upc'] = $p['upc'];
             $reference_ebay = $p['id_product_ref'];
             $product = new Product((int) $p['id_product'], true, $id_lang);
-            $category= new Category($product->getDefaultCategory(),$id_lang);
+            $category= new Category($product->getDefaultCategory(), $id_lang);
             if ((int) $p['id_attribute'] > 0) {
                 // No Multi Sku case so we do multiple products from a multivariation product
                 $combinaison = $this->__getAttributeCombinationsById($product, (int) $p['id_attribute'], $id_lang);
@@ -2424,7 +2372,7 @@ class Ebay extends Module
                 }
 
                 if ($this->isSymfonyProject()) {
-                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', ['id' => $combinaison['id_product']]);
+                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $combinaison['id_product']));
                 } else {
                     $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
                 }
@@ -2440,9 +2388,8 @@ class Ebay extends Module
                     'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
                 );
             } else {
-
                 if ($this->isSymfonyProject()) {
-                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', ['id' => $data['real_id_product']]);
+                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $data['real_id_product']));
                 } else {
                     $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']);
                 }
@@ -2455,7 +2402,7 @@ class Ebay extends Module
                     'ebay_title' => EbayRequest::prepareTitle($data),
                     'reference_ebay' => $reference_ebay,
                     'link' => $url,
-		    'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
+                    'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
                 );
             }
         }
@@ -2495,7 +2442,6 @@ class Ebay extends Module
                 ORDER BY pa.`id_product_attribute`';
 
         return Db::getInstance()->ExecuteS($sql);
-
     }
 
 

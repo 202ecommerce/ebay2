@@ -57,5 +57,4 @@ $context = Context::getContext();
 $ebay = new Ebay();
 $context->smarty->assign($vars);
 
-    echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/bp_selects.tpl');
-
+echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/bp_selects.tpl');

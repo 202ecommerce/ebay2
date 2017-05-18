@@ -30,8 +30,6 @@ class EbayOrphanListingsTab extends EbayTab
     public function getContent()
     {
 
-
-
         $vars = array(
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
@@ -43,7 +41,6 @@ class EbayOrphanListingsTab extends EbayTab
 
     public function postProcess()
     {
-
     }
 
     /*
@@ -51,8 +48,8 @@ class EbayOrphanListingsTab extends EbayTab
      * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
      *
      */
+
     private function _getAlertCategories()
     {
-
     }
 }

@@ -24,7 +24,6 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-
 class EbayTaskManager
 {
     protected $taskDefinition = array(
@@ -44,23 +43,20 @@ class EbayTaskManager
 
     public function __construct()
     {
-
     }
 
     public static function addTask($type, $product, $id_employee = null, $id_ebay_profile = null, $id_product_attribute = null)
     {
-
         $ebay_profiles = EbayProfile::getProfilesByIdShop();
         $context = Context::getContext();
-        if(isset($id_ebay_profile)){
+        if (isset($id_ebay_profile)) {
             $ebay_profiles = EbayProfile::getProfilesById($id_ebay_profile);
         }
-        if(!isset($context->employee) && isset($id_employee)){
+        if (!isset($context->employee) && isset($id_employee)) {
             $context->employee = new Employee($id_employee);
         }
 
         if ($type == 'end') {
-
             foreach ($ebay_profiles as $profile) {
                 $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
                 if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
@@ -71,9 +67,10 @@ class EbayTaskManager
                     }
                 }
             }
+
             return true;
         }
-        if(!$product->active){
+        if (!$product->active) {
             self::deleteTaskForPorduct($product->id);
             return true;
         }
@@ -89,14 +86,10 @@ class EbayTaskManager
             (' . EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($profile['id_ebay_profile'])) . ')';
             }
 
-
             foreach ($sql as $q) {
                 if ($products_ebay = Db::getInstance()->executeS($q)) {
-
                     foreach ($products_ebay as $product_ebay) {
-
                         $ebay_profile = new EbayProfile($product_ebay['id_ebay_profile']);
-
                         $id_attributes = array();
 
                         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
@@ -110,18 +103,17 @@ class EbayTaskManager
                             $id_attributes[] = 0;
                         }
 
-                            foreach ($id_attributes as $id_attribute) {
-                                $id_tasks = array(10);
-                                if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute)) {
-                                    $id_tasks = array(13, 11);
-                                    if ($type == 'stock') {
-                                        $id_tasks = array(13);
-                                    }
+                        foreach ($id_attributes as $id_attribute) {
+                            $id_tasks = array(10);
+                            if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute)) {
+                                $id_tasks = array(13, 11);
+                                if ($type == 'stock') {
+                                    $id_tasks = array(13);
                                 }
-                                foreach ($id_tasks as $id_task) {
+                            }
 
+                            foreach ($id_tasks as $id_task) {
                                 self::insertTask($product_ebay['id_product'], $id_attribute, $id_task, $product_ebay['id_ebay_profile']);
-
                             }
                         }
                     }
@@ -137,6 +129,7 @@ class EbayTaskManager
             'id_product_attribute' => $id_product_atttibute,
             'id_task' => $id_task,
             'id_ebay_profile' => $id_ebay_profile,
+            'locked' => 0
         );
 
         if ($id_task == 14) {
@@ -144,7 +137,6 @@ class EbayTaskManager
         }
         self::deleteErrorsForProduct($id_product);
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)) {
-
             Db::getInstance()->insert('ebay_task_manager', $vars);
         }
     }
@@ -152,19 +144,16 @@ class EbayTaskManager
     public static function deleteTaskForPorduct($id_product)
     {
         return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14');
-
     }
 
     public static function deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile)
     {
         return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14  AND `id_ebay_profile` = '. (int)$id_ebay_profile);
-
     }
 
     public static function deleteTaskForOutOfStock($id_product, $id_ebay_profile)
     {
         return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 13  AND `id_ebay_profile` = '. (int)$id_ebay_profile);
-
     }
 
     public static function taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)
@@ -189,7 +178,7 @@ class EbayTaskManager
     {
         $unidId = uniqid();
         if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0', 1000)) {
-            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager  ORDER BY `date_add`');
+            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "'.$unidId.'" ORDER BY `date_add`');
         }
         return false;
     }
@@ -205,7 +194,6 @@ class EbayTaskManager
     {
         if (isset($response->Errors) && isset($response->Ack) && (string)$response->Ack != 'Success' && (string)$response->Ack != 'Warning') {
             foreach ($response->Errors as $e) {
-
                 if ($e->SeverityCode == 'Error') {
                     $msg = (string)$e->LongMessage;
                     if (isset($e->ErrorParameters->Value)) {
@@ -228,16 +216,19 @@ class EbayTaskManager
         }
     }
 
-    public static function getErrors($id_ebay_profile) {
+    public static function getErrors($id_ebay_profile)
+    {
 
         return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }
-    public static function deleteErrorsForProduct($id_product) {
+    public static function deleteErrorsForProduct($id_product)
+    {
 
         return DB::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_product` = '.(int)$id_product);
     }
 
-    public static function getNbTasks($id_ebay_profile) {
+    public static function getNbTasks($id_ebay_profile)
+    {
 
         $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE `error_code` IS NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
         return count($tasks);

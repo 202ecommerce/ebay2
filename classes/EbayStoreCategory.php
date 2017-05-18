@@ -111,7 +111,6 @@ class EbayStoreCategory extends ObjectModel
                 if ($is_not_compatible) {
                     $not_compatible_store_categories[] = $cat;
                 }
-
             }
         }
 
@@ -135,7 +134,6 @@ class EbayStoreCategory extends ObjectModel
 
         // make sure that all referenced categories still exists
         EbayStoreCategoryConfiguration::checkExistingCategories($ebay_profile->id);
-
     }
 
     private static function _writeStoreCategory($category_data, $id_ebay_profile, $ebay_parent_category_id = null)
@@ -159,7 +157,6 @@ class EbayStoreCategory extends ObjectModel
                 EbayStoreCategory::_writeStoreCategory($child_category, $id_ebay_profile, $store_category->ebay_category_id);
             }
         }
-
     }
 
     public static function getCategoriesWithConfiguration($id_ebay_profile)
@@ -181,14 +178,10 @@ class EbayStoreCategory extends ObjectModel
             unset($category['id_category']);
 
             if (!isset($final_categories['c_'.$ebay_category_id])) {
-
                 $final_categories['c_'.$ebay_category_id] = $category;
                 $final_categories['c_'.$ebay_category_id]['id_categories'] = array($id_category);
-
             } else {
-
                 $final_categories['c_'.$ebay_category_id]['id_categories'][] = $id_category;
-
             }
         }
 
@@ -204,11 +197,9 @@ class EbayStoreCategory extends ObjectModel
     {
         $blacklist_ids = array();
         foreach ($store_categories as $cat) {
-
             if ($cat['ebay_parent_category_id']) {
                 $blacklist_ids[] = $cat['ebay_parent_category_id'];
             }
-
         }
 
         $final_categories = array();
@@ -216,20 +207,17 @@ class EbayStoreCategory extends ObjectModel
             if (!in_array($cat['ebay_category_id'], $blacklist_ids)) {
                 $final_categories[] = $cat;
             }
-
         }
 
         return $final_categories;
-
     }
+
     public static function getCategoryName($ebay_category_id)
     {
         $categoryName = Db::getInstance()->getValue('SELECT  `name` 
 FROM `'._DB_PREFIX_.'ebay_store_category` 
 			WHERE `ebay_category_id` = '.(int) $ebay_category_id);
 
-
         return $categoryName;
     }
-
 }

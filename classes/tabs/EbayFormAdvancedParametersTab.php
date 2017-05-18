@@ -85,6 +85,5 @@ class EbayFormAdvancedParametersTab extends EbayTab
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
-
     }
 }

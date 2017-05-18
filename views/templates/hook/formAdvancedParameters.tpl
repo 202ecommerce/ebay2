@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form action="{$url|escape:'urlencode'}" method="post" class="form form-horizontal panel" id="advancedConfigForm">
+<form action="{$url}" method="post" class="form form-horizontal panel" id="advancedConfigForm">
 	<fieldset>
 		<div class="panel-heading">{l s='Logs' mod='ebay'}</div>
 		
@@ -224,7 +224,7 @@
 	
 {literal}
 	<script>
-		var token = "{/literal}{$ebay_token|escape:'urlencode'}{literal}";
+		var token = "{/literal}{$ebay_token}{literal}";
 		$(document).ready(function() {
 			setTimeout(function() {					
 				$('#ebay_returns_description').val($('#ebayreturnshide').html());
@@ -238,7 +238,7 @@
 		});
 		
 		$('#token-btn').click(function() {
-				window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
+				window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token}{literal}');
 		});
 		
 		$('.sync_products_mode').change(function() {
@@ -271,7 +271,7 @@
 				$.ajax({
 					type: 'POST',
 					url: module_dir + 'ebay/ajax/deleteProductImage.php',
-					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=delete-all",
+					data: "token={/literal}{$ebay_token}{literal}&action=delete-all",
 					beforeSend: function() {
 						$('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
 					}
@@ -294,7 +294,7 @@
 					$.ajax({
 						type: 'POST',
 						url: module_dir + 'ebay/ajax/checkDatabase.php',
-						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getNbTable",
+						data: "token={/literal}{$ebay_token}{literal}&action=getNbTable",
 						beforeSend: function() {
 							$('#check_database_logs tbody tr').remove();
 						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
@@ -326,7 +326,7 @@
 					dataType: 'json',
 					type: 'POST',
 					url: module_dir + 'ebay/ajax/checkCategory.php',
-					data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay|escape:'urlencode'}{literal}&step=" + step + "&id_categories=" + id_categories,
+					data: "token={/literal}{$ebay_token}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay}{literal}&step=" + step + "&id_categories=" + id_categories,
 					beforeSend: function() {
 
 					},

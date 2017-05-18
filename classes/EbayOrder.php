@@ -147,7 +147,6 @@ class EbayOrder
             if ($country->active) {
                 return true;
             } else {
-
                 return false;
             }
         }
@@ -437,7 +436,6 @@ class EbayOrder
         //         if ($id_product == $product['id_product'])
         //             break;
         foreach ($product_list as $p) {
-//Nombre de produit donc nombre de tour
             foreach ($this->product_list as $product) {
                 if ($p['id_product'] == $product['id_product'] && $p['id_product_attribute'] == $product['id_product_attribute']) {
                     break;
@@ -453,36 +451,28 @@ class EbayOrder
 
             if ($product['quantity'] >= $minimal_quantity) {
                 $id_product_attribute = empty($product['id_product_attribute']) ? null : $product['id_product_attribute'];
-
-
-                    $update = $this->carts[$ebay_profile->id_shop]->updateQty(
-                        (int) $product['quantity'],
-                        (int) $product['id_product'],
-                        $id_product_attribute,
-                        false,
-                        'up',
-                        0,
-                        new Shop($ebay_profile->id_shop)
-                    );
-
-                    if ($update === true) {
-                        $cart_nb_products++;
-                    }
-
-
-
+                $update = $this->carts[$ebay_profile->id_shop]->updateQty(
+                    (int) $product['quantity'],
+                    (int) $product['id_product'],
+                    $id_product_attribute,
+                    false,
+                    'up',
+                    0,
+                    new Shop($ebay_profile->id_shop)
+                );
+                if ($update === true) {
+                    $cart_nb_products++;
+                }
             } else {
                 // minimal quantity for purchase not met
                 $this->_sendMinimalQtyAlertEmail($prod->name, $minimal_quantity, $product['quantity']);
             }
-
         }
 
         $this->carts[$ebay_profile->id_shop]->update();
 
         $this->carts[$ebay_profile->id_shop]->getProducts(true);
         $this->carts[$ebay_profile->id_shop]->getDeliveryOptionList(null, true);
-
 
         return (boolean) $cart_nb_products;
     }
@@ -518,9 +508,7 @@ class EbayOrder
         } catch (Exception $e) {
             $this->_writeLog($id_ebay_profile, $e->getMessage(), false, 'End of validate order FAIL!');
             $this->delete();
-
         }
-
 
         $this->id_orders[$id_shop] = $payment->currentOrder;
 
@@ -610,56 +598,49 @@ class EbayOrder
             'total_shipping' => (float) $total_shipping_tax_incl,
 
         );
+        $order = new Order((int) $this->id_orders[$ebay_profile->id_shop]);
+        $data = array_merge(
+            $data,
+            array(
+                'total_paid_tax_incl' => (float) $this->amount,
+                'total_paid_tax_excl' => (float) ($total_price_tax_excl + $total_shipping_tax_excl),
+                'total_shipping_tax_incl' => (float) $total_shipping_tax_incl,
+                'total_shipping_tax_excl' => (float) $total_shipping_tax_excl,
+                )
+        );
 
-
-            $order = new Order((int) $this->id_orders[$ebay_profile->id_shop]);
-
-
+        if ((float) $this->shippingServiceCost == 0) {
             $data = array_merge(
                 $data,
                 array(
-                    'total_paid_tax_incl' => (float) $this->amount,
-                    'total_paid_tax_excl' => (float) ($total_price_tax_excl + $total_shipping_tax_excl),
-                    'total_shipping_tax_incl' => (float) $total_shipping_tax_incl,
-                    'total_shipping_tax_excl' => (float) $total_shipping_tax_excl,
+                    'total_shipping_tax_excl' => 0,
+                    'total_shipping_tax_incl' => 0,
                 )
             );
+        }
+        // Update Incoice
+        $invoice_data = $data;
+        unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
+        $dbEbay->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+       // Update payment
+        $payment_data = array(
+            'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
+        );
+        $dbEbay->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
 
-            if ((float) $this->shippingServiceCost == 0) {
-                $data = array_merge(
-                    $data,
-                    array(
-                        'total_shipping_tax_excl' => 0,
-                        'total_shipping_tax_incl' => 0,
-                    )
-                );
+        $ship_data = array(
+            'shipping_cost_tax_incl' => (float) $total_shipping_tax_incl,
+            'shipping_cost_tax_excl' => (float) $total_shipping_tax_excl,
+        );
 
-            }
-            // Update Incoice
-            $invoice_data = $data;
-            unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
-            $dbEbay->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
-           // Update payment
-            $payment_data = array(
-                'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
-            );
-            $dbEbay->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
-
-
-
+        if ((float) $this->shippingServiceCost == 0) {
             $ship_data = array(
-                'shipping_cost_tax_incl' => (float) $total_shipping_tax_incl,
-                'shipping_cost_tax_excl' => (float) $total_shipping_tax_excl,
+                'shipping_cost_tax_incl' => 0,
+                'shipping_cost_tax_excl' => 0,
             );
+        }
 
-            if ((float) $this->shippingServiceCost == 0) {
-
-                $ship_data = array(
-                    'shipping_cost_tax_incl' => 0,
-                    'shipping_cost_tax_excl' => 0,
-                );
-            }
-            $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+        $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
         return $dbEbay->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
     }

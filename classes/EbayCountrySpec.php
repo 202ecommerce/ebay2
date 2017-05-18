@@ -337,7 +337,6 @@ class EbayCountrySpec
         } else {
             $this->country = $this->_getCountry();
         }
-
     }
 
     public function getTitleDescUrl()
@@ -407,7 +406,6 @@ class EbayCountrySpec
         } else {
             return $this->_getCountryData('signin_sandbox');
         }
-
     }
 
     public function getImgStats()
@@ -453,8 +451,6 @@ class EbayCountrySpec
     {
         $iso_code = $this->ebay_iso;
 
-
-      
         if (isset(self::$country_data[$iso_code]) && isset(self::$country_data[$iso_code][$data])) {
             return self::$country_data[$iso_code][$data];
         } else if (isset(self::$country_data['fr'][$data])) {
@@ -462,7 +458,6 @@ class EbayCountrySpec
         } else {
             return null;
         }
-
     }
 
     /**
@@ -560,7 +555,6 @@ class EbayCountrySpec
         } else {
             return self::getInstanceByKey('gb');
         }
-
     }
 
     /**
@@ -572,7 +566,6 @@ class EbayCountrySpec
         if (is_bool($dev)) {
             $this->dev = $dev;
         }
-
     }
 
     /**

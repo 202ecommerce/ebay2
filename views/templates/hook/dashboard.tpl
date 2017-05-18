@@ -27,21 +27,20 @@
 
 
 <br>
-<h4>Produits</h4>
-    Nombre de catégories PrestaShop : {$nb_categories|escape:'UTF-8'}<br>
-    Nombre de produit exclus : {$nb_products_exclu|escape:'UTF-8'}<br>
-    Nombre prévu d'annonces : {$nb_annonces_prevu|escape:'UTF-8'}<br>
-    Nombre d’annonces eBay : {$nb_products|escape:'UTF-8'}<br>
-    Nombre d'erreurs : {$count_product_errors|escape:'UTF-8'}<br>
-    Synchronisation : {$type_sync_product|escape:'UTF-8'}<br>
-    En cours d'envoi :  {$nb_tasks|escape:'UTF-8'}<br>
+<h4>{l s='Produits' mod='ebay'}</h4>
+    {l s='Number of PrestaShop categories :' mod='ebay'} {$nb_categories}<br>
+    {l s='Number of excluded products :' mod='ebay'} {$nb_products_exclu}<br>
+    {l s='Number of announcements expected :' mod='ebay'} {$nb_annonces_prevu}<br>
+    {l s='Number of eBay announcements :' mod='ebay'} {$nb_products}<br>
+    {l s='Numbers of errors :' mod='ebay'} {$count_product_errors}<br>
+    {l s='Synchronization :' mod='ebay'} {$type_sync_product}<br>
+    {l s='Sending :' mod='ebay'}  {$nb_tasks}<br>
 <br>
-<h4>Ventes internationales passives</h4>
-    Nombre de pays : {$nb_country_shipping|escape:'UTF-8'} <br>
+<h4>{l s='International passive sales' mod='ebay'}</h4>
+    {l s='Number of countries :' mod='ebay'} {$nb_country_shipping} <br>
 <br>
-<h4>Commandes</h4>
-    CA eBay 30 derniers jours : {$ca_total|escape:'UTF-8'} <br>
-    Commandes en erreur : {$count_order_errors|escape:'UTF-8'}<br>
-    Dernier import : {$date_last_import|escape:'UTF-8'} par {$type_sync_order|escape:'UTF-8'}<br>
+<h4>{l s='Orders' mod='ebay'}</h4>
+    {l s='CA eBay 30 last days :' mod='ebay'} {$ca_total} <br>
+    {l s='Errors orders :' mod='ebay'} {$count_order_errors}<br>
+    {l s='Last import :' mod='ebay'} {$date_last_import} par {$type_sync_order}<br>
 </div>
-

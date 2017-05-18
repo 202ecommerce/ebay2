@@ -207,7 +207,7 @@
 		$.ajax({
 			type: "POST",
 			url: '{/literal}{$load_kb_path}{literal}',
-			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
+			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path}{literal}"},
 			dataType: "json",
 			success: function(data)
 			{

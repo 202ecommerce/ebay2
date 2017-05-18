@@ -65,8 +65,6 @@ class EbayShippingZoneExcluded
         }
 
         Db::getInstance()->insert('ebay_shipping_zone_excluded', $excluded_locations);
-
-
     }
 
     public static function cacheEbayExcludedLocation($id_ebay_profile)

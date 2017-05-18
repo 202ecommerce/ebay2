@@ -79,7 +79,7 @@
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/inclureProductAjax.php',
-            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
+            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
             success: function (data) {
                 tr.remove();
             }

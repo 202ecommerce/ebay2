@@ -368,13 +368,11 @@ class EbayDbValidator
             $profile = new EbayProfile($profile_ebay['id_ebay_profile']);
 
             $template=  $profile->getConfiguration('EBAY_PRODUCT_TEMPLATE');
-            if(preg_match("/headerSearchProductPrestashop/i", $template)) {
+            if (preg_match("/headerSearchProductPrestashop/i", $template)) {
                 $template = preg_replace("/\s*\<form\>[^)]*\<\/form\>/", "", $template);
                 $profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $template, true);
             }
-
         }
-
     }
 
     public function writeLog()
@@ -396,13 +394,11 @@ class EbayDbValidator
         } else {
             $this->checkField($table, $fields);
         }
-
     }
 
     private function checkField($table, $fields)
     {
         foreach ($fields as $field => $arguments) {
-
             $result = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM `'._DB_PREFIX_.$table.'` LIKE \''.$field.'\';');
 
             if ($result === false) {
@@ -415,7 +411,6 @@ class EbayDbValidator
             } else {
                 $this->checkTypeFields($table, $field, $arguments);
             }
-
         }
     }
     private function addColumns($table, $field, $arguments)
@@ -424,10 +419,7 @@ class EbayDbValidator
                 ADD '.bqSQL($field).' '.bqSQL($arguments['type']);
          $sql .= ($arguments['length']?('('.pSQL($arguments['length']).')'):"");
 
-
         return Db::getInstance()->Execute($sql);
-
-
     }
 
     private function checkTypeFields($table, $field, $arguments)
@@ -437,7 +429,6 @@ class EbayDbValidator
 
         $reset = false;
         if ($result && !empty($result[0])) {
-
             // Check Null Attribute
             if (isset($result[0]['Null'])
                 &&
@@ -454,38 +445,32 @@ class EbayDbValidator
             if (isset($result[0]['Type']) && isset($arguments['type'])) {
                 // is int
                 if (preg_match('/^int\(([0-9]+)\)$/', $result[0]['Type'], $rs)) {
-                    if (
-                        ($arguments['type'] != 'int')
+                    if (($arguments['type'] != 'int')
                         ||
                         (!isset($arguments['length']) || $rs[1] < $arguments['length'])
                     ) {
                         $reset = true;
                     }
-
                 }
 
                 // is tinyint
                 if (preg_match('/^tinyint\(([0-9]+)\)$/', $result[0]['Type'], $rs)) {
-                    if (
-                        ($arguments['type'] != 'tinyint')
+                    if (($arguments['type'] != 'tinyint')
                         ||
                         (!isset($arguments['length']) || $rs[1] < $arguments['length'])
                     ) {
                         $reset = true;
                     }
-
                 }
 
                 // is varchar
                 if (preg_match('/^varchar\(([0-9]+)\)$/', $result[0]['Type'], $rs)) {
-                    if (
-                        ($arguments['type'] != 'varchar')
+                    if (($arguments['type'] != 'varchar')
                         ||
                         (!isset($arguments['length']) || $rs[1] < $arguments['length'])
                     ) {
                         $reset = true;
                     }
-
                 }
 
                 // is text
@@ -499,19 +484,16 @@ class EbayDbValidator
                     && ($arguments['type'] != 'datetime')) {
                     $reset = true;
                 }
-
             }
 
             // Check default
             if (isset($result[0]['Default'])) {
-                if (
-                    !isset($arguments['default'])
+                if (!isset($arguments['default'])
                     ||
                     ($result[0]['Default'] !== $arguments['default'])
                 ) {
                     $reset = true;
                 }
-
             }
 
             // Check Primary Attribute
@@ -522,7 +504,6 @@ class EbayDbValidator
                 } else {
                     // Delete primary
                 }
-
             }
 
             // Check Extra Attribute
@@ -533,7 +514,6 @@ class EbayDbValidator
                 } else {
                     // Delete primary
                 }
-
             }
             if ($result[0]['Extra'] != 'auto_increment' && isset($arguments['auto_increment'])) {
                 $reset = true;
@@ -544,11 +524,9 @@ class EbayDbValidator
             } else {
                 $this->setLog($table, 'success', 'The '.$field.' field in '.$table.' is good');
             }
-
         } else {
             $this->setLog($table, 'error', 'SQL REQUEST : '.$sql);
         }
-
     }
 
     private function repairTable($table)
@@ -559,7 +537,6 @@ class EbayDbValidator
         $primary_key = array(); //Case of double primary key
 
         foreach ($this->database[$table] as $column => $arguments) {
-
             $sql .= '`'.$column.'` '.$arguments['type'];
 
             if ($arguments['length']) {
@@ -574,7 +551,6 @@ class EbayDbValidator
                 if ($arguments['null']) {
                     $sql .= ' NULL ';
                 }
-
             } else {
                 $sql .= ' NOT NULL ';
             }
@@ -603,7 +579,6 @@ class EbayDbValidator
         } else {
             $this->setLog($table, 'error', 'SQL REQUEST : '.$sql, Db::getInstance()->getMsgError());
         }
-
     }
 
     private function repairField($table, $field, $arguments)
@@ -633,7 +608,6 @@ class EbayDbValidator
             if ($arguments['default'] === null) {
                 $sql .= 'DEFAULT NULL ';
             }
-
         }
 
         if (isset($arguments['auto_increment']) && $arguments['auto_increment']) {
@@ -647,7 +621,6 @@ class EbayDbValidator
         } else {
             $this->setLog($table, 'error', 'SQL REQUEST : '.$sql, Db::getInstance()->getMsgError());
         }
-
     }
 
     private function setLog($table, $status, $action, $result = '')
@@ -669,7 +642,6 @@ class EbayDbValidator
             return true;
         }
         return false;
-
     }
 
     public function getLogForSpecificTable($id)
@@ -688,18 +660,15 @@ class EbayDbValidator
         $result = array();
 
         foreach ($this->logs as $table => $logs) {
-
             foreach ($logs as $log) {
                 if ($log['status'] != 'success') {
                     $result[$table][] = array('status' => $log['status'], 'action' => $log['action'], 'result' => $log['result']);
                 }
-
             }
 
             if (!array_key_exists($table, $result)) {
                 $result[$table][] = array('status' => 'success', 'action' => 'No action on '.$table.' table', 'result' => 'The table is perfect');
             }
-
         }
 
         return $result;
@@ -731,7 +700,6 @@ class EbayDbValidator
 			WHERE ecp. `id_category_ref` is not null)';
 
         return Db::getInstance()->executeS($sql);
-
     }
 
     public function getCategoriesTmp()
@@ -783,13 +751,10 @@ class EbayDbValidator
                     $statut=1;
                     break;
                 }
-
             }
             if ($statut == 0) {
                 $result['table'][$cat_p['name']] = 0;
-
             }
-
         }
 
         $ps_ebay_cat= $this->getCategoriesPsEbay();
@@ -799,14 +764,11 @@ class EbayDbValidator
         $result['new']=$ps_ebay_cat;
         $datas=array();
          return $datas[] = $result;
-        
     }
 
     public function deleteTmp()
     {
 
         Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'ebay_category_tmp`');
-    
     }
-
 }

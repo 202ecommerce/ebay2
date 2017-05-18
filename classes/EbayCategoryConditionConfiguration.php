@@ -53,6 +53,5 @@ class EbayCategoryConditionConfiguration
         }
 
         Db::getInstance()->insert('ebay_category_condition_configuration', $to_insert, false, false, Db::REPLACE);
-
     }
 }

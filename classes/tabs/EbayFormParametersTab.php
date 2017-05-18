@@ -141,7 +141,7 @@ class EbayFormParametersTab extends EbayTab
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
         $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
-        if(Tools::getValue('ebay_shop_postalcode') == ''){
+        if (Tools::getValue('ebay_shop_postalcode') == '') {
             return $this->ebay->displayError($this->ebay->l('Code postal failed'));
         }
 
@@ -167,7 +167,7 @@ class EbayFormParametersTab extends EbayTab
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_PARAMETERS_TAB_OK', 1);
-            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2&section=category#dashbord');
+            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=1&section=settings');
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }

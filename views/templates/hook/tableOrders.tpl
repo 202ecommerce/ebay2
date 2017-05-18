@@ -23,8 +23,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <p>
-<span><b>{l s='Commandes importées par' mod='ebay'} {$type_sync_order}<br>
-        {l s='Dernier import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
+<span><b>{l s='Orders imported by' mod='ebay'} {$type_sync_order}<br>
+        {l s='Last import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
 
 <p>
@@ -47,7 +47,7 @@
             </th>
 
             <th class="center">
-                <span>{l s='Referance b' mod='ebay'}</span>
+                <span>{l s='Referance' mod='ebay'}</span>
             </th>
 
             <th class="center">
@@ -122,7 +122,7 @@
        $.ajax({
            type: 'POST',
            url: module_dir + 'ebay/ajax/reSynchOrder.php',
-           data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_order_ebay="+$(this).attr('id'),
+           data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay="+$(this).attr('id'),
            success: function (data) {
                var data = jQuery.parseJSON(data);
                console.log(data);

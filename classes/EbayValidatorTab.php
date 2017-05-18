@@ -79,11 +79,9 @@ class EbayValidatorTab
                         'message'      => $ebay->l('Your need to configure the field ', 'ebayvalidatortab').' '.$config,
                     );
                 }
-
             } else {
                 $has_something_configured = true;
             }
-
         }
 
         // if nothing is configured, we don't show a message
@@ -172,7 +170,6 @@ class EbayValidatorTab
         return array(
             'indicator' => 'success',
         );
-
     }
 
     public static function getSynchronisationTabConfiguration($id_ebay_profile)

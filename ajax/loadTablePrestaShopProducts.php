@@ -24,16 +24,15 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once __DIR__.'/../../../config/config.inc.php';
-require_once __DIR__.'/../ebay.php';
+require_once dirname(__FILE__).'/../../../config/config.inc.php';
+require_once dirname(__FILE__).'/../ebay.php';
 
 $ebay = new Ebay();
 
 $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 $ebay_request = new EbayRequest();
 
-/** @var LinkCore $link */
-$link = $context->link;
+
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
@@ -148,6 +147,8 @@ $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile
 $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
 
 $context = Context::getContext();
+/** @var LinkCore $link */
+$link = $context->link;
 $employee = new Employee((int) Tools::getValue('id_employee'));
 $context->employee = $employee;
 
@@ -178,18 +179,16 @@ foreach ($res as &$row) {
     }
     // only true if category synced with an eBay category
 
-
     if (version_compare(_PS_VERSION_, '1.7', '>=')) {
         require_once _PS_MODULE_DIR_.'/../app/AppKernel.php';
         $kernel = new AppKernel(_PS_MODE_DEV_?'dev':'prod', _PS_MODE_DEV_);
         $kernel->loadClassCache();
         $kernel->boot();
         $router = $kernel->getContainer()->get('router');
-        $row['link'] = $link->getAdminLink('AdminProducts')."/".Tools::getValue('admin_path').$router->generate('admin_product_form', ['id' => $row['id_product']]);
+        $row['link'] = $link->getAdminLink('AdminProducts')."/".Tools::getValue('admin_path').$router->generate('admin_product_form', array('id' => $row['id_product']));
     } else {
         $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $row['id_product'].'&updateproduct') : $link->getProductLink((int) $row['id_product']));
     }
-
 }
 
 $smarty = $context->smarty;

@@ -287,7 +287,7 @@
 					</div>
 
 					<div class="help-block">
-						<a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path|escape:'urlencode'}</a>
+						<a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path}</a>
 					</div>
 				</div>
 			</div>
@@ -312,7 +312,7 @@
 					</div>
 					
 					<div class="help-block">
-						<a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path|escape:'urlencode'}</a>
+						<a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path}</a>
 					</div>
 				</div>
 			</div>
@@ -338,7 +338,7 @@
 						</div>
 
 						<div class="help-block">
-							<a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_returns_by_cron == false}display:none{/if}">{$sync_orders_returns_by_cron_path|escape:'urlencode'}</a>
+							<a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url}" target="_blank" style="{if $sync_orders_returns_by_cron == false}display:none{/if}">{$sync_orders_returns_by_cron_path}</a>
 						</div>
 					</div>
 				</div>

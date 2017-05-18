@@ -109,7 +109,7 @@ if (is_array(Tools::getValue('showed_products'))) {
         ));
     }
 
-    foreach ($to_synchronize_product_ids as $product_id_to_sync){
+    foreach ($to_synchronize_product_ids as $product_id_to_sync) {
         $product = new Product($product_id_to_sync);
         EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), $id_ebay_profile);
     }

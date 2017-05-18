@@ -38,6 +38,7 @@ class EbayConfiguration
      *
      * @return boolean
      */
+
     public static function updateAPIToken()
     {
         $profile_data = explode('_', Configuration::get('EBAY_CURRENT_PROFILE'));
@@ -75,9 +76,8 @@ class EbayConfiguration
         );
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
+
         return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_configuration', $datas, 'INSERT');
-
-
     }
 
     public static function getAll($id_ebay_profile, $exceptions = false)
@@ -107,7 +107,6 @@ class EbayConfiguration
             if ($ps_value && !$ebay_value) {
                 EbayConfiguration::set($id_ebay_profile, $name, $ps_value);
             }
-
         }
         foreach ($attributes_html as $name) {
             $ps_value = Configuration::get($name);
@@ -115,7 +114,6 @@ class EbayConfiguration
             if ($ps_value && !$ebay_value) {
                 EbayConfiguration::set($id_ebay_profile, $name, $ps_value, true);
             }
-
         }
     }
 }

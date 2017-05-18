@@ -95,7 +95,6 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
         if ($row = Db::getInstance()->getRow($sql)) {
             return $row['id_ebay_returns_policy_configuration'];
         }
-
     }
 
     // for upgrade to eBay module version 1.7

@@ -189,10 +189,10 @@ class EbayRequest
     private function storeRequestToCache($apiCall, $result, DateTime $dateEndedCache)
     {
         $cachedFile = $this->cacheFolder.'/'.$apiCall.'.json';
-        $content = Tools::jsonEncode([
+        $content = Tools::jsonEncode(array(
             'content' => $result,
             'dateTime' => $dateEndedCache,
-        ]);
+        ));
 
         if (file_put_contents($cachedFile, $content) === false) {
             unlink($cachedFile);
@@ -229,7 +229,6 @@ class EbayRequest
         if ($shoppingEndPoint === 'seller') {
             curl_setopt($connection, CURLOPT_URL, $this->apiUrlSeller);
         } elseif ($shoppingEndPoint === 'post-order') {
-
             $url = $this->apiUrlPostOrder . $vars['type'] . '/';
             if (isset($vars['url'])) {
                 $url .= $vars['url'];
@@ -430,7 +429,7 @@ class EbayRequest
             $datas = self::$userPreferencesCache;
         }
 
-        if(isset($datas->SellerProfileOptedIn)) {
+        if (isset($datas->SellerProfileOptedIn)) {
             $config = (array)$datas->SellerProfileOptedIn;
             if (!empty($config)) {
                 if ($config[0]== 'true') {
@@ -811,13 +810,12 @@ class EbayRequest
                 $namedesc .= $key . '-';
                 $shipservice = EbayShippingService::getCarrierByName($key, $this->ebay_profile->ebay_site_id);
                 $policies_ship_name .= $shipservice[0]['shippingServiceID'] . '_' . $national[0]['serviceCosts'] . '-';
-
             }
+
             foreach ($shippings['internationalShip'] as $key => $national) {
                 $namedesc .= $key;
                 $shipservice = EbayShippingService::getCarrierByName($key, $this->ebay_profile->ebay_site_id);
                 $policies_ship_name .= $shipservice[0]['shippingServiceID'] . '_' . $national[0]['serviceCosts'] . '-';
-
             }
 
             $policies_ship_name = rtrim($policies_ship_name, "-");
@@ -883,7 +881,6 @@ class EbayRequest
                     );
                     EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                 }
-
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
             if (!empty($seller_ship_prof) && EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RESYNCHBP') == 1) {
@@ -913,9 +910,7 @@ class EbayRequest
                 'shipping_profile_id' => $shippingPolicies[0]['id_bussines_Policie'],
                 'shipping_profile_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
             );
-
         }
-
 
         Ebay::addSmartyModifiers();
 
@@ -1009,8 +1004,6 @@ class EbayRequest
 
     private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null)
     {
-
-
     }
 
     /**
@@ -1448,8 +1441,6 @@ class EbayRequest
 
     public function getOrders($create_time_from, $create_time_to, $page, $ItemID = false)
     {
-
-
         $vars = array(
             'create_time_from' => $create_time_from,
             'create_time_to' => $create_time_to,
@@ -1476,7 +1467,6 @@ class EbayRequest
                 if ($e->ErrorCode == 932 || $e->ErrorCode == 931) {
                     Configuration::updateValue('EBAY_TOKEN_REGENERATE', true, false, 0, 0);
                 }
-
                 $this->error .= (string)$e->LongMessage;
             }
         }
@@ -1495,7 +1485,6 @@ class EbayRequest
 
         $response = $this->_makeRequest(null, $vars, 'post-order');
         return Tools::jsonDecode($response, true);
-
     }
 
     public function getUserCancellations($create_time_from, $create_time_to)
@@ -1510,7 +1499,6 @@ class EbayRequest
 
         $response = $this->_makeRequest(null, $vars, 'post-order');
         return Tools::jsonDecode($response, true);
-
     }
 
     /**
@@ -1522,10 +1510,9 @@ class EbayRequest
 
         // Set Api Call
         $this->apiCall = 'GetStore';
-        $response = $this->_makeRequest('GetStore', [], false, 24);
+        $response = $this->_makeRequest('GetStore', array(), false, 24);
 
         return ($response === false) ? false : (isset($response->Store) ? $response->Store->CustomCategories->CustomCategory : false);
-
     }
 
     /**

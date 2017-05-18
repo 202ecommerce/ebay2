@@ -40,13 +40,11 @@ function upgrade_module_1_8($module)
                 return false;
             }
         }
-
     }
 
     // upgrade existing profiles
     $profiles = EbayProfile::getProfilesByIdShop();
     foreach ($profiles as $profile) {
-
         $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
 
         // set id_lang if not set
@@ -87,7 +85,6 @@ function upgrade_module_1_8($module)
         // update ebay_product_configuration
         $ebay_profile = EbayProfile::getCurrent();
         $dbEbay->autoExecute(_DB_PREFIX_.'ebay_product_configuration', array('id_ebay_profile' => $ebay_profile->id), 'UPDATE');
-
     }
 
     return true;

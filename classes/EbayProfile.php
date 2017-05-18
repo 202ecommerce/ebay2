@@ -322,7 +322,6 @@ class EbayProfile extends ObjectModel
         }
 
         return $is_all_set;
-
     }
 
     /**

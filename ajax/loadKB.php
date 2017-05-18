@@ -68,5 +68,4 @@ if (Validate::isString($name_module) && Module::isInstalled($name_module)) {
             die(Tools::jsonEncode(array('result' => 'error', 'code' => 'kb-001', 'more' => 'Aucun lien trouvé')));
         }
     }
-    
 }

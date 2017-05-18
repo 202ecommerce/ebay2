@@ -41,7 +41,6 @@ function upgrade_module_1_7($module)
                 return false;
             }
         }
-
     }
 
     Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int) Configuration::get('EBAY_ZONE_NATIONAL').' WHERE international = 0');

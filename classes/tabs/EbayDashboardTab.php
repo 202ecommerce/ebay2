@@ -107,8 +107,8 @@ class EbayDashboardTab extends EbayTab
         }
         $annonces_prevu = 0;
         foreach ($categories as $cat) {
-            if($cat['checked']) {
-                if($cat['category_multi']) {
+            if ($cat['checked']) {
+                if ($cat['category_multi']) {
                     $annonces_prevu += $cat['nb_product_tosync'];
                 } else {
                     $annonces_prevu += $cat['nb_variations_tosync'];

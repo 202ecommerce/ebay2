@@ -24,8 +24,7 @@
 *}
 
 
-        <p>Les produits ci-dessous ont été refusés par eBay. Attention si une annonce est déjà présente sur eBay, cette annonce n’est plus mise à jour.
-            Une action manuelle est nécessaire pour corriger le refus de eBay, ou supprimez ce produit de votre synchronisation</p>
+        <p>{l s='The following products has been refused from eBay. Pay attention: if an announcement is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>
 
         <table id="AnnoncesErrorsListings" class="table" >
             <thead>
@@ -44,11 +43,11 @@
                 </th>
 
                 <th>
-                    <span >{l s='Annonces eBay' mod='ebay'}</span>
+                    <span >{l s='eBay listings' mod='ebay'}</span>
                 </th>
 
                 <th class="center">
-                    <span >{l s='Erreur' mod='ebay'}</span>
+                    <span >{l s='Error' mod='ebay'}</span>
                 </th>
 
                 <th class="center">
@@ -60,7 +59,7 @@
                 </th>
 
                 <th class="center">
-                    <span>{l s='Aide' mod='ebay'}</span>
+                    <span>{l s='Help' mod='ebay'}</span>
                 </th>
 
                 <th class="center">{l s='Actions' mod='ebay'}</th>
@@ -173,7 +172,7 @@
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/exclureProductAjax.php',
-            data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&id_ebay_profile={/literal}{$id_ebay_profile|escape:'urlencode'}{literal}&id_product="+id_product,
+            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_product="+id_product,
             success: function (data) {
                 $(this).parent().parent().remove();
             }

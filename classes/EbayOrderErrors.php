@@ -82,7 +82,6 @@ class EbayOrderErrors extends ObjectModel
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public static function uninstall()
@@ -93,7 +92,6 @@ class EbayOrderErrors extends ObjectModel
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public static function truncate()
@@ -115,29 +113,29 @@ class EbayOrderErrors extends ObjectModel
                 if ($error->type == 'country') {
                     $result[$error->iso_code][] = $row;
                 }
-
                 return $result;
             }
         } else {
             return false;
         }
-
     }
 
     public static function getAll($id_ebay_profile)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `ebay_user_identifier` = "'.pSQL($ebay_profile->ebay_user_identifier).'"';
-
-       return Db::getInstance()->ExecuteS($q);
+        return Db::getInstance()->ExecuteS($q);
     }
 
-    public static function deleteByOrderRef($id_order_ref) {
+    public static function deleteByOrderRef($id_order_ref)
+    {
         $q = 'DELETE FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `id_order_ebay` = "'.pSQL($id_order_ref).'"';
 
         return Db::getInstance()->Execute($q);
     }
-    public static function getErrorByOrderRef($id_order_ref) {
+
+    public static function getErrorByOrderRef($id_order_ref)
+    {
         $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `id_order_ebay` = "'.pSQL($id_order_ref).'"';
 
         return Db::getInstance()->ExecuteS($q);

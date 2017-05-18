@@ -38,7 +38,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
 
         $url_vars['controller'] = Tools::getValue('controller');
 
-        if(!$this->ebay_profile->getConfiguration('EBAY_PARAMETERS_TAB_OK')){
+        if (!$this->ebay_profile->getConfiguration('EBAY_PARAMETERS_TAB_OK')) {
             return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
 

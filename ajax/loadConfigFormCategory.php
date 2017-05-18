@@ -212,10 +212,10 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
 
         $bp_policies = EbayBussinesPolicies::getPoliciesConfigurationbyIdCategory($category_config_list[$id_categori_ps]['id_category_ref'], $ebay_profile->id);
 
-        $storeCategoryId = EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory( $ebay_profile->id, $id_categori_ps);
+        $storeCategoryId = EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $id_categori_ps);
 
         if ($category_config_list[$id_categori_ps]['percent']) {
-           $temp = $category_config_list[$id_categori_ps]['percent'];
+            $temp = $category_config_list[$id_categori_ps]['percent'];
             //$temp = explode(':', $percent['sign']);
             $percent = array('sign' => $temp['sign'], 'value' => $temp['value'], 'type' => $temp['type']);
         } else {

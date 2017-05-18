@@ -49,8 +49,6 @@ class EbayProductImage
             );
 
             $db->insert('ebay_product_image', $data);
-
-
         }
 
         return $ebay_url;

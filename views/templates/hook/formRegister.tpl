@@ -27,7 +27,7 @@
 
 	<script>
 
-				var win = window.location.href = '{$redirect_url|escape:'UTF-8'}';
+				var win = window.location.href = '{$redirect_url}';
 
 	</script>
 
@@ -99,7 +99,7 @@
                         return false;
                     }
 
-                    window.open(link + "{/literal}{$window_open_url|escape:'UTF-8'}{literal}");
+                    window.open(link + "{/literal}{$window_open_url}{literal}");
 				}
 			});
 		});
