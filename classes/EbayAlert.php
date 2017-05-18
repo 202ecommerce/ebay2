@@ -239,7 +239,7 @@ class EbayAlert
                         'type' => 'error',
                         'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
-                } 
+                }
             } else {
                 $this->errors[] = array(
                     'type' => 'error',

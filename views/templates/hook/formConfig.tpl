@@ -31,13 +31,13 @@
 			{foreach from=$alerts item='alert'}
 				<div class="{if $ps_version > '1.5'}alert {/if}alert-{if $alert.type == 'error'}danger{if $ps_version < '1.5'} error{/if}{elseif $alert.type == 'warning'}warning{if $ps_version < '1.5'} warn{/if}{elseif $alert.type == 'info'}info{if $ps_version < '1.5'} conf{/if}{/if}"><button type="button" class="close" data-dismiss="alert">×</button>
 					{if isset($alert.link_warn)}
-					{assign var="link" value='<a href="'|cat:$alert.link_warn|cat:'" target="_blank">'}
-					{$alert.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
+						{assign var="link" value='<a href="'|cat:$alert.link_warn|cat:'" target="_blank">'}
+						{$alert.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
 					{else}
-					{$alert.message|escape:'htmlall':'UTF-8'}
+						{$alert.message|escape:'htmlall':'UTF-8'}
 					{/if}
 					{if isset($alert.kb)}
-					<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}"></a>
+						<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}"></a>
 					{/if}
 				</div>
 			{/foreach}

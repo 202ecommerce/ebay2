@@ -356,9 +356,6 @@ class EbayProduct
                 $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
             }
 
-
-
-
             // filtering
             if (!$row['exists']) {
                 $final_res[] = $row;

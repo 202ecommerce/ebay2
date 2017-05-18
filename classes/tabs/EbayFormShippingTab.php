@@ -123,7 +123,7 @@ class EbayFormShippingTab extends EbayTab
             $ps_carriers = Tools::getValue('psCarrier');
             $extra_fees = Tools::getValue('extrafee');
             $ps_ship = new Carrier($ps_carriers);
-
+            EbayTaskManager::deleteErrors($this->ebay_profile->id);
             $ps_ship->getMaxDeliveryPriceByPrice($this->ebay_profile->id);
             foreach ($ebay_carriers as $key => $ebay_carrier) {
                 if (!empty($ebay_carrier) && !empty($ps_carriers[$key])) {
@@ -144,7 +144,7 @@ class EbayFormShippingTab extends EbayTab
             }
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
             $this->ebay_profile->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
-            EbayTaskManager::deleteErrors($this->ebay_profile->id);
+            
             foreach ($products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);

@@ -177,7 +177,7 @@ class EbayTaskManager
     public static function getJob()
     {
         $unidId = uniqid();
-        if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0', 1000)) {
+        if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` IS NULL', 1000)) {
             return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "'.$unidId.'" ORDER BY `date_add`');
         }
         return false;
@@ -237,7 +237,7 @@ class EbayTaskManager
     public static function deleteErrors($id_ebay_profile)
     {
         $sql = 'UPDATE `'._DB_PREFIX_.'ebay_task_manager`
-										SET `error_code` = null, `error` = ""
+										SET `error_code` = null, `error` = "", `retry` = null
 										WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
         
 	return  Db::getInstance()->execute($sql);
