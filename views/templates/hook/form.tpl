@@ -208,7 +208,7 @@
                                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                                             {/if}
                                             <div class="pull-right">
-                                                <span title="<h4>Aide</h4><p>Ici une paragraphe explicatif sur le fonctionnement du selecteur de profil.</p>" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
+                                                <span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
                                                   <a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>
                                                 </span>
                                             </div>
