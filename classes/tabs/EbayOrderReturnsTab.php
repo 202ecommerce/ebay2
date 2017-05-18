@@ -39,7 +39,7 @@ class EbayOrderReturnsTab extends EbayTab
         $url_vars['controller'] = Tools::getValue('controller');
 
         $url = $this->_getUrl($url_vars);
-        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile, 'EBAY_ORDER_LAST_UPDATE'));
+        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile, 'EBAY_ORDER_RETURNS_LAST_UPDATE'));
 
         $date_last_import = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         return $this->display('order_returns.tpl', array(
