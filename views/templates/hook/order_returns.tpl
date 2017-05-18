@@ -27,12 +27,12 @@
 <span><b>{l s='Returns imported by ' mod='ebay'} {$type_sync_returns} <br>
         {l s='Last import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</b> </span>
 </p>
-<br>
-<a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1" class="btn btn-default">
-    <i class="icon-refresh"></i>
-    <span>{l s='Sync refunds and returns from eBay' mod='ebay'}</span>
-</a>
-<br>
+<p>
+    <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1" class="btn btn-default">
+        <i class="icon-refresh"></i>
+        <span>{l s='Sync refunds and returns from eBay' mod='ebay'}</span>
+    </a>
+</p>
 
     <!-- table -->
 
