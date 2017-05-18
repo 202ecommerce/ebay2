@@ -30,11 +30,11 @@
 <h4>{l s='Produits' mod='ebay'}</h4>
     {l s='Number of PrestaShop categories :' mod='ebay'} {$nb_categories}<br>
     {l s='Number of excluded products :' mod='ebay'} {$nb_products_exclu}<br>
-    {l s='Number of announcements expected :' mod='ebay'} {$nb_annonces_prevu}<br>
-    {l s='Number of eBay announcements :' mod='ebay'} {$nb_products}<br>
+    {l s='Number of listings expected :' mod='ebay'} {$nb_annonces_prevu}<br>
+    {l s='Number of eBay listings :' mod='ebay'} {$nb_products}<br>
     {l s='Numbers of errors :' mod='ebay'} {$count_product_errors}<br>
     {l s='Synchronization :' mod='ebay'} {$type_sync_product}<br>
-    {l s='Sending :' mod='ebay'}  {$nb_tasks}<br>
+    {l s='Updates to send :' mod='ebay'}  {$nb_tasks}<br>
 <br>
 <h4>{l s='International passive sales' mod='ebay'}</h4>
     {l s='Number of countries :' mod='ebay'} {$nb_country_shipping} <br>

@@ -222,17 +222,17 @@
                                                         </br></br>
                                                         <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/views/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
                                                         <div id="" style=" float: right; width: 45%; display: inline-block; text-align: left;">
-                                                        <p ><b>{l s='Problemes courants' mod='ebay'}</b></p>
-                                                            {l s='Annonces rejetées' mod='ebay'}<a class="kb-help" data-errorcode="{$help_listing_rejection.errorcode}" data-module="ebay" data-lang="{$help_listing_rejection.lang}" module_version="{$help_listing_rejection.module_version}" prestashop_version="{$help_listing_rejection.prestashop_version}">
+                                                        <p ><b>{l s='Known issues' mod='ebay'}</b></p>
+                                                            {l s='Rejected listings' mod='ebay'}<a class="kb-help" data-errorcode="{$help_listing_rejection.errorcode}" data-module="ebay" data-lang="{$help_listing_rejection.lang}" module_version="{$help_listing_rejection.module_version}" prestashop_version="{$help_listing_rejection.prestashop_version}">
                                                             </a></br>
-                                                            {l s='Commande non importée' mod='ebay'}<a class="kb-help" data-errorcode="{$help_order_import.errorcode}" data-module="ebay" data-lang="{$help_order_import.lang}" module_version="{$help_order_import.module_version}" prestashop_version="{$help_order_import.prestashop_version}">
+                                                            {l s='Order import issue' mod='ebay'}<a class="kb-help" data-errorcode="{$help_order_import.errorcode}" data-module="ebay" data-lang="{$help_order_import.lang}" module_version="{$help_order_import.module_version}" prestashop_version="{$help_order_import.prestashop_version}">
                                                             </a>
 
-                                                        <p id=><b>{l s='Liens utiles' mod='ebay'}</b></p>
+                                                        <p id=><b>{l s='Usefull links' mod='ebay'}</b></p>
 
-                                                            <a href="https://help.202-ecommerce.com" target="_blank">{l s='Guide utilisateur' mod='ebay'}</a></br>
+                                                            <a href="https://help.202-ecommerce.com" target="_blank">{l s='User guide' mod='ebay'}</a></br>
                                                             <a href="https://support.202-ecommerce.com" target="_blank">{l s='Support' mod='ebay'}</a></br>
-                                                            <b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Evolutions du module' mod='ebay'}</a></b>
+                                                            <b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Module evolutions' mod='ebay'}</a></b>
 
                                                         </div>
                                                     </div>
@@ -246,12 +246,12 @@
                                                                 {l s='eBay represents a great opportunity for you to reach millions of new customers and help you to  grow your business.' mod='ebay'}</p>
                                                         </div>
                                                         <div id="" style=" float: right; width: 45%;text-align: left;">
-                                                        <p id=""><b>{l s='Liens utiles' mod='ebay'}</b></p>
+                                                        <p id=""><b>{l s='Usefull links' mod='ebay'}</b></p>
 
-                                                            {l s='Espace vendeurs eBay' mod='ebay'}<a class="kb-help" data-errorcode="{$help_ebay_seller.errorcode}" data-module="ebay" data-lang="{$help_ebay_seller.lang}" module_version="{$help_ebay_seller.module_version}" prestashop_version="{$help_ebay_seller.prestashop_version}">
+                                                            {l s='eBay Seller center' mod='ebay'}<a class="kb-help" data-errorcode="{$help_ebay_seller.errorcode}" data-module="ebay" data-lang="{$help_ebay_seller.lang}" module_version="{$help_ebay_seller.module_version}" prestashop_version="{$help_ebay_seller.prestashop_version}">
                                                             </a></br>
-                                                            <a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/informations-generales/support-marchand-ebay/" target="_blank">{l s='Frais et commissions eBay pour les vendeurs professionnels' mod='ebay'}</a></br>
-                                                            <a href="{$pro_url|escape:'htmlall':'UTF-8'}" target="_blank">{l s='Contacter le service aux vendeurs eBay' mod='ebay'}</a>
+                                                            <a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/informations-generales/support-marchand-ebay/" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></br>
+                                                            <a href="{$pro_url|escape:'htmlall':'UTF-8'}" target="_blank">{l s='Contact eBay merchant support' mod='ebay'}</a>
 
                                                         </div>
                                                     </div>

@@ -24,7 +24,7 @@
 *}
 
 
-        <p>{l s='The following products has been refused from eBay. Pay attention: if an announcement is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>
+        <p>{l s='The following products has been refused from eBay. Pay attention: if an listing is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>
 
         <table id="AnnoncesErrorsListings" class="table" >
             <thead>

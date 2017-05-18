@@ -824,7 +824,7 @@
 							<div class="panel-heading">
 								<i class="icon-save"></i> {l s='Save Categories' mod='ebay'}
 							</div>
-							<p>{l s='This action will add/modify ' mod='ebay'} <span class="nb_annonces"></span> {l s='announcements on eBay.' mod='ebay'}</p>
+							<p>{l s='This action will add/modify ' mod='ebay'} <span class="nb_annonces"></span> {l s='listings on eBay.' mod='ebay'}</p>
 
 							<div class="panel-footer">
 								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>{l s='Annuler' mod='ebay'}</button>
