@@ -158,6 +158,7 @@
         exclureProduct($('.if_anonnces_exist').attr('id'));
         $('#popin-product-exclu').hide();
         $('.if_anonnces_exist').hide();
+        location.reload();
     });
     $('.js-notexclu').click(function (e) {
         e.preventDefault();
