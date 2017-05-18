@@ -117,7 +117,7 @@
 
 
                 {if $show_welcome}
-                    <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}
+                    <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='EBay Module Status' mod='ebay'}
 
                     </legend>
 
@@ -163,12 +163,12 @@
 
                                                     <ul class="dropdown-menu">
                                                         <li class="clearfix head">
-                                                            <span class="col-xs-5">{l s='user' mod='ebay'}</span>
-                                                            <span class="col-xs-2">{l s='country' mod='ebay'}</span>
-                                                            <span class="col-xs-2 text-right"><small>{l s='ann.' mod='ebay'}</small></span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='ann. err.' mod='ebay'}</small></span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='ord. err.' mod='ebay'}</small></span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='tasks' mod='ebay'}</small></span>
+                                                            <span class="col-xs-5">{l s='User' mod='ebay'}</span>
+                                                            <span class="col-xs-2">{l s='Country' mod='ebay'}</span>
+                                                            <span class="col-xs-2 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='Listing errors' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='Order errors' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='Tasks' mod='ebay'}</small></span>
                                                         </li>
                                                         {foreach from=$profiles item=profile}
 
@@ -197,11 +197,11 @@
                                                 </div>
                                             </div>
 
-                                            <button type="button" class="btn btn-default pull-left" title="add profile">
+                                            <button type="button" class="btn btn-default pull-left" title="{l s='Add profile' mod='ebay'}">
                                                <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}"> <i class="icon-plus"></i></a>
                                             </button>
 
-                                            <button type="button" class="btn btn-default pull-left delete-profile" title="remove profile" href="#popin-remove-profile" data-profile="{$current_profile->id}">
+                                            <button type="button" class="btn btn-default pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                                 <i class="icon-trash"></i>
                                             </button>
                                             {if $debug == 1}
@@ -356,7 +356,7 @@
         <ul class="list-group nav">
             <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashbord" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
-            <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Annonces' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
+            <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Listings' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>
         </ul>
     </div>

@@ -63,7 +63,7 @@
 
 					<li role="presentation" id="menuTab9" class="menuTabButton"><a href="#">{l s='Ebay Listings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab16" class="menuTabButton"><a href="#">{l s='Orphan Listings' mod='ebay'}<span class="badge orhan_badge">{if $count_orphan_listing > 0}{$count_orphan_listing}{/if}</span></a></li>
-					<li role="presentation" id="menuTab106" class="menuTabButton"><a href="#">{l s='Products Exclu' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab106" class="menuTabButton"><a href="#">{l s='Excluded products' mod='ebay'}</a></li>
 				</ul>
 
 				<ul class=" nav nav-pills orders-menu menuTab ebay_hidden" role="tablist">
@@ -76,7 +76,7 @@
 
 				<ul class="nav nav-pills settings-menu menuTab ebay_hidden " role="tablist">
 					<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='Account settings' mod='ebay'}</a></li>
-					<li role="presentation" id="menuTab101" class="menuTabButton"><a href="#">2. {l s='Annonces settings' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab101" class="menuTabButton"><a href="#">2. {l s='Listing settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab102" class="menuTabButton"><a href="#">3. {l s='Orders settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab3" class="menuTabButton"><a href="#">4. {l s='Dispatch and Shipping' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab103" class="menuTabButton"><a href="#">5. {l s='Internation Shipping' mod='ebay'}</a></li>

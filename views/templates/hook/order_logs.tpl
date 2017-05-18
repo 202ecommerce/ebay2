@@ -72,7 +72,7 @@
     var order_logs_ebay_l = {ldelim}
         'No logs available'    : "{l s='No logs available' mod='ebay'}",
         'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
-        'show'                 : "{l s='show' mod='ebay'}"
+        'show'                 : "{l s='Show' mod='ebay'}"
         {rdelim};
 </script>
 <script type="text/javascript"

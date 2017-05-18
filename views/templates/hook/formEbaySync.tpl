@@ -563,7 +563,7 @@
 					<th>{l s='Products / variations' mod='ebay'}</th>
 					<th>{l s='Manual Exclusions' mod='ebay'}</th>
 					<th>{l s='Price impact' mod='ebay'}</th>
-					<th>{l s='eBay category' mod='ebay'}</th>
+					<th>{l s='EBay category' mod='ebay'}</th>
 					<th>{l s='Multi var' mod='ebay'}</th>
 					<th>{l s='Listing' mod='ebay'}</th>
 					<th>{l s='Status' mod='ebay'}</th>
@@ -754,7 +754,7 @@
 								<thead>
 								<tr class="nodrag nodrop">
 									<th style="width:20%">
-										<span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">Caractéristiques d'objet</span><a class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
+										<span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">{l s='Item specifics' mod='ebay'}</span><a class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
 									</th>
 									<th style="width:50%">
 										{l s='Prestashop characteristics' mod='ebay'}
@@ -771,7 +771,7 @@
 				<div id="3" class="page_config_category" style="display: none">
 					<div class="form-group">
 						<label for="" class="control-label col-md-6">
-							{l s='Faites correspondre les caractéristiques PrestaShop avec celle d‘eBay:' mod='ebay'}
+							{l s='Choose products to exclude from eBay :' mod='ebay'}
 						</label>
 						<div class="input-group col-md-12 category_product_list_ebay">
 							<table class="table tableDnD" width="80%" style="margin: auto">
@@ -795,19 +795,19 @@
 				<div id="4" class="page_config_category" style="display: none">
 					<div class="form-group">
 						<label for="" class="control-label col-md-6">
-							{l s='Config :' mod='ebay'}
+							{l s='Confirm configuration' mod='ebay'}
 						</label>
 					</div>
 					<div class="input-group col-md-12 total_config_list_ebay">
 						<div class="col-md-12">
 							<br>
-							 <b>{l s='Categories PS :' mod='ebay'} </b><span id="last_page_categorie_ps"> </span><br>
+							 <b>{l s='PrestaShop categories :' mod='ebay'} </b><span id="last_page_categorie_ps"> </span><br>
 							 <b>{l s='EBay Category :' mod='ebay'} </b><span id="last_page_categorie_ebay"></span><br>
 							 <b>{l s='Impact price :' mod='ebay'} </b><span id="last_page_categorie_prix"> </span><br>
 							 <b>{l s='Category of your eBay Store :' mod='ebay'} </b><span id="last_page_categorie_boutique"></span><br>
 							<br>
-							<h4>{l s='Business Policies' mod='ebay'}</h4>
 							{if $bp_active}
+								<h4>{l s='Business Policies' mod='ebay'}</h4>
 								 <b>{l s='Payement Policies :' mod='ebay'} </b><span id="last_page_business_p"></span><br>
 							 	<b>{l s='Return Policies :' mod='ebay'} </b><span id="last_page_business_r"> </span><br><br><br>
 							{/if}
@@ -827,7 +827,7 @@
 							<p>{l s='This action will add/modify ' mod='ebay'} <span class="nb_annonces"></span> {l s='listings on eBay.' mod='ebay'}</p>
 
 							<div class="panel-footer">
-								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>{l s='Annuler' mod='ebay'}</button>
+								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
 								<button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
 							</div>
 						</div>

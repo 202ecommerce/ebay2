@@ -27,7 +27,7 @@
 
 
 <br>
-<h4>{l s='Produits' mod='ebay'}</h4>
+<h4>{l s='Products' mod='ebay'}</h4>
     {l s='Number of PrestaShop categories :' mod='ebay'} {$nb_categories}<br>
     {l s='Number of excluded products :' mod='ebay'} {$nb_products_exclu}<br>
     {l s='Number of listings expected :' mod='ebay'} {$nb_annonces_prevu}<br>

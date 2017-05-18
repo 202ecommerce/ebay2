@@ -45,11 +45,11 @@
             </th>
 
             <th style="width:110px;">
-                <span>{l s='eBay Order' mod='ebay'}</span>
+                <span>{l s='EBay Order' mod='ebay'}</span>
             </th>
 
             <th class="center">
-                <span>{l s='Discription' mod='ebay'}</span>
+                <span>{l s='Description' mod='ebay'}</span>
             </th>
 
             <th class="center">

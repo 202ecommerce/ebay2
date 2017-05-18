@@ -32,12 +32,12 @@
 
         <ul class="dropdown-menu dropdown-menu-top" style="min-width: 397px;">
             <li class="clearfix head">
-                <span class="col-xs-5">{l s='user' mod='ebay'}</span>
-                <span class="col-xs-2">{l s='country' mod='ebay'}</span>
-                <span class="col-xs-2 text-right"><small>{l s='ann.' mod='ebay'}</small></span>
-                <span class="col-xs-1 text-right"><small>{l s='ann. err.' mod='ebay'}</small></span>
-                <span class="col-xs-1 text-right"><small>{l s='ord. err.' mod='ebay'}</small></span>
-                <span class="col-xs-1 text-right"><small>{l s='tasks' mod='ebay'}</small></span>
+                <span class="col-xs-5">{l s='User' mod='ebay'}</span>
+                <span class="col-xs-2">{l s='Country' mod='ebay'}</span>
+                <span class="col-xs-2 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right"><small>{l s='Listing errors' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right"><small>{l s='Order errors' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right"><small>{l s='Tasks' mod='ebay'}</small></span>
             </li>
             {foreach from=$profiles item=profile}
 

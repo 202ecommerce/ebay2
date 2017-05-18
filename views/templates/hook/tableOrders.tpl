@@ -43,15 +43,15 @@
             </th>
 
             <th>
-                <span>{l s='Referance eBay' mod='ebay'}</span>
+                <span>{l s='eBay reference' mod='ebay'}</span>
             </th>
 
             <th class="center">
-                <span>{l s='Referance' mod='ebay'}</span>
+                <span>{l s='Reference' mod='ebay'}</span>
             </th>
 
             <th class="center">
-                <span >{l s='email' mod='ebay'}</span>
+                <span >{l s='Email' mod='ebay'}</span>
             </th>
 
             <th>
@@ -64,7 +64,7 @@
             </th>
 
             <th class="center">
-                <span>{l s='PrestaShop referance' mod='ebay'}</span>
+                <span>{l s='PrestaShop Reference' mod='ebay'}</span>
             </th>
 
             <th class="center">
