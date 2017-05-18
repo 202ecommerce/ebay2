@@ -201,7 +201,7 @@ class EbayAlert
 
                 $date = date('Y-m-d', strtotime($last_sync_datetime));
                 $time = date('H:i:s', strtotime($last_sync_datetime));
-                $msg = $this->ebay->l('Last product synchronization has been done the ').$date.$this->ebay->l(' at ').$time.$this->ebay->l(' and it tried to synchronize ').Configuration::get('NB_PRODUCTS_LAST');
+                $msg = $this->ebay->l('Last product synchronization has been done the ').$date.$this->ebay->l(' at ').$time;
 
                 if (strtotime($last_sync_datetime) < $warning_date) {
                     $this->warnings[] = array(
