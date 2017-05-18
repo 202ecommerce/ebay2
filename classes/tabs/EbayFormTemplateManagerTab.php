@@ -88,7 +88,7 @@ class EbayFormTemplateManagerTab extends EbayTab
         // Saving new configurations
         if ($this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $ebay_product_template, true) && $this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', $ebay_product_template_title)) {
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
-
+            EbayTaskManager::deleteErrors($this->ebay_profile->id);
             foreach ($products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);

@@ -239,12 +239,7 @@ class EbayAlert
                         'type' => 'error',
                         'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
-                } else {
-                    $this->infos[] = array(
-                        'type' => 'info',
-                        'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
-                    );
-                }
+                } 
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
@@ -268,11 +263,6 @@ class EbayAlert
                 if ($interval >= 1) {
                     $this->errors[] = array(
                         'type' => 'error',
-                        'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
-                    );
-                } else {
-                    $this->infos[] = array(
-                        'type' => 'info',
                         'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
                 }

@@ -176,12 +176,14 @@ class EbayFormConfigAnnoncesTab extends EbayTab
                 pSQL(Tools::getValue('ebay_returns_accepted_option'))
             )
         ) {
+            EbayTaskManager::deleteErrors($this->ebay_profile->id);
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
 
             foreach ($products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
+
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);

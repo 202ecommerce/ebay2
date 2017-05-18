@@ -233,4 +233,13 @@ class EbayTaskManager
         $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE `error_code` IS NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
         return count($tasks);
     }
+
+    public static function deleteErrors($id_ebay_profile)
+    {
+        $sql = 'UPDATE `'._DB_PREFIX_.'ebay_task_manager`
+										SET `error_code` = null, `error` = ""
+										WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
+        
+	return  Db::getInstance()->execute($sql);
+    }
 }
