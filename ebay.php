@@ -2422,6 +2422,11 @@ class Ebay extends Module
     }
      */
 
+    public function _getAttributeCombinationsByIds($product, $id_attribute, $id_lang)
+    {
+        return $this->__getAttributeCombinationsById($product, $id_attribute, $id_lang);
+    }
+
     private function __getAttributeCombinationsById($product, $id_attribute, $id_lang)
     {
         if (method_exists($product, 'getAttributeCombinationsById')) {

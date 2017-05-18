@@ -66,10 +66,18 @@ class EbayListErrorsProductsTab extends EbayTab
                 }
                 $id = $task['id_product'] . (($task['id_product_attribute'] != 0) ? '_' . $task['id_product_attribute'] : '');
                 $desc = $task['error_code'] . ' : ' . $task['error'];
-
+                $name_product = $product->name;
+                if ((int) $task['id_product_attribute'] > 0) {
+                    $combinaison = $this->ebay->_getAttributeCombinationsByIds($product, (int) $task['id_product_attribute'], $ebay_profile->id_lang);
+                    $combinaison = $combinaison[0];
+                    $variation_specifics = EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id);
+                    foreach ($variation_specifics as $variation_specific) {
+                        $name_product .= ' '.$variation_specific;
+                    }
+                }
                 $vars['task_errors'][] = array(
                     'date' => $task['date_upd'],
-                    'name' => $product->name,
+                    'name' => $name_product,
                     'id_product' => $id,
                     'real_id' => $task['id_product'],
                     'declinason' => $name_attribute,
