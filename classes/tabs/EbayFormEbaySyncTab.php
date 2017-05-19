@@ -125,7 +125,7 @@ class EbayFormEbaySyncTab extends EbayTab
                         'name'      => $category['name'],
                         'price' => $prix['sign'].$prix['value'].$prix['type'],
                         'category_ebay' => $category_ebay[0]['name'],
-                        'category_multi' => $ebay_category->isMultiSku()?'yes' : 'non',
+                        'category_multi' => $ebay_category->isMultiSku()?'yes' : 'no',
                         'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category']),
                         'nb_products' => count($nb_products_man),
                         'nb_products_variations' => $nb_products_variations,

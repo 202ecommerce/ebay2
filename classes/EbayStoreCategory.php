@@ -138,23 +138,25 @@ class EbayStoreCategory extends ObjectModel
 
     private static function _writeStoreCategory($category_data, $id_ebay_profile, $ebay_parent_category_id = null)
     {
-        $store_category = new EbayStoreCategory();
-        $store_category->id_ebay_profile = (int) $id_ebay_profile;
-        $store_category->ebay_category_id = pSQL($category_data->CategoryID);
-        $store_category->name = (string) $category_data->Name;
-        $store_category->order = (int) $category_data->Order;
+        if($category_data->CategoryID){
+            $store_category = new EbayStoreCategory();
+            $store_category->id_ebay_profile = (int) $id_ebay_profile;
+            $store_category->ebay_category_id = pSQL($category_data->CategoryID);
+            $store_category->name = (string) $category_data->Name;
+            $store_category->order = (int) $category_data->Order;
 
-        if ($ebay_parent_category_id) {
-            $store_category->ebay_parent_category_id = $ebay_parent_category_id;
-        } else {
-            $store_category->ebay_parent_category_id = 0;
-        }
+            if ($ebay_parent_category_id) {
+                $store_category->ebay_parent_category_id = $ebay_parent_category_id;
+            } else {
+                $store_category->ebay_parent_category_id = 0;
+            }
 
-        $store_category->save();
+            $store_category->save();
 
-        if (isset($category_data->ChildCategory)) {
-            foreach ($category_data->ChildCategory as $child_category) {
-                EbayStoreCategory::_writeStoreCategory($child_category, $id_ebay_profile, $store_category->ebay_category_id);
+            if (isset($category_data->ChildCategory)) {
+                foreach ($category_data->ChildCategory as $child_category) {
+                    EbayStoreCategory::_writeStoreCategory($child_category, $id_ebay_profile, $store_category->ebay_category_id);
+                }
             }
         }
     }

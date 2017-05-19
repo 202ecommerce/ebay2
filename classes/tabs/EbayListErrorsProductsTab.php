@@ -64,6 +64,7 @@ class EbayListErrorsProductsTab extends EbayTab
                         $error = 'Supprimant refusée';
                         break;
                 }
+
                 $id = $task['id_product'] . (($task['id_product_attribute'] != 0) ? '_' . $task['id_product_attribute'] : '');
                 $desc = $task['error_code'] . ' : ' . $task['error'];
                 $name_product = $product->name;

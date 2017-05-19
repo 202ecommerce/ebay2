@@ -1117,7 +1117,7 @@ class EbaySynchronizer
 
     private static function __updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
-        if (EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)) {
+        if (EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)) {
             foreach ($data['variations'] as &$variations) {
                 $variations['quantity'] = 0;
             }
@@ -1138,7 +1138,7 @@ class EbaySynchronizer
 
     private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
-        if (EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && !EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)) {
+        if (EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)) {
             $data['quantity'] =0;
         }
         if ($res = $ebay->reviseStockFixedPriceItem($data)) {

@@ -46,9 +46,9 @@
                         <span id='name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
                         <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
                         {if $profile.token == 0 }
-                            <span class="col-xs-5 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
+                            <span class="col-xs-5 text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
                         {elseif $profile.category == 0}
-                            <span class="col-xs-5 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
+                            <span class="col-xs-5 text-right">{l s='No category configured' mod='ebay'}</span>
                         {else}
                             <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                             <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>

@@ -177,9 +177,9 @@
                                                                     <span id = 'name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
                                                                     <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
                                                                     {if $profile.token == 0 }
-                                                                        <span class="col-xs-5 text-right">{l s='Non associé à eBay' mod='ebay'}</span>
+                                                                        <span class="col-xs-5 text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
                                                                     {elseif $profile.category == 0}
-                                                                        <span class="col-xs-5 text-right">{l s='Aucune catégorie configurée' mod='ebay'}</span>
+                                                                        <span class="col-xs-5 text-right">{l s='No category configured' mod='ebay'}</span>
                                                                     {else}
                                                                         <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
@@ -402,8 +402,7 @@
     </div>
     <div id="popin_config_ok"">
         <div  class="popin popin-lg" id="config_ok" style="display: none;text-align: center;padding: 15px;">
-            <p>Super, la synchronisation est Ok, vous allez maintenant </br>
-                choisir les produits à copier vers eBay</p>
+            <p>{l s='Module configuration is done, you now have to choose products to be sent to eBay in Listing tab.' mod='ebay'}</p>
             <div class="panel-footer">
                 <button class="close_popin_config btn btn-default">OK</button>
             </div>
