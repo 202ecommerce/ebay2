@@ -94,8 +94,10 @@ class EbayProduct
     public static function getNbProductsByCategory($id_ebay_profile, $id_category)
     {
         return Db::getInstance()->getValue('SELECT count(*)
-			FROM `'._DB_PREFIX_.'ebay_product`
-			WHERE `id_category_ps` = '.(int)$id_category .' AND `id_ebay_profile` = '.(int) $id_ebay_profile);
+			FROM `'._DB_PREFIX_.'ebay_product` ep
+			INNER JOIN `'._DB_PREFIX_.'product` p
+			ON p.`id_product` = ep.`id_product`
+			WHERE p.`id_category_default` = '.(int)$id_category .' AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile);
     }
 
     public static function getNbProductsByIdEbayProfiles($id_ebay_profiles = array())

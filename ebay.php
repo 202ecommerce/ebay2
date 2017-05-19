@@ -1354,14 +1354,7 @@ class Ebay extends Module
             // if the module is not upgraded or not configured don't do anything
             return false;
         }
-        if (Configuration::get('EBAY_VERSION') != $this->version) {
-            set_time_limit(3600);
-            $this->setConfiguration('EBAY_VERSION', $this->version);
-            Configuration::set('EBAY_VERSION', $this->version);
-            $validatordb = new EbayDbValidator();
-            $validatordb->checkTemplate();
-            $validatordb->checkDatabase(false);
-        }
+
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
@@ -1392,7 +1385,20 @@ class Ebay extends Module
             $profile['site_name'] = EbayCountrySpec::getSiteNameBySiteId($profile['ebay_site_id']);
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
-
+        if (Configuration::get('EBAY_VERSION') != $this->version) {
+            set_time_limit(3600);
+            //Configuration::set('EBAY_VERSION', $this->version);
+            $this->setConfiguration('EBAY_VERSION', $this->version);
+	    
+            foreach ($profiles as &$profile) {
+                if (EbayConfiguration::get($profile['id_ebay_profile'],'EBAY_SYNC_PRODUCTS_MODE') == "A") {
+                    EbayCategoryConfiguration::activeAllCAtegories($profile['id_ebay_profile']);
+                }
+            }
+            $validatordb = new EbayDbValidator();
+            $validatordb->checkTemplate();
+            $validatordb->checkDatabase(false);
+        }
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         $nb_errors=0;
         foreach ($profiles as &$profile) {
@@ -1436,6 +1442,7 @@ class Ebay extends Module
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
+            $this->setConfiguration('EBAY_VERSION', $this->version);
             $validatordb = new EbayDbValidator();
             $validatordb->checkTemplate();
             $validatordb->checkDatabase(false);

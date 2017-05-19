@@ -129,7 +129,7 @@ class EbayTaskManager
             'id_product_attribute' => $id_product_atttibute,
             'id_task' => $id_task,
             'id_ebay_profile' => $id_ebay_profile,
-            'locked' => 0
+            'locked' => 0,
         );
 
         if ($id_task == 14) {
@@ -164,6 +164,7 @@ class EbayTaskManager
 
     public static function toJob()
     {
+        self::cleanTasks();
         $tasks = self::getJob();
         Configuration::updateValue('DATE_LAST_SYNC_PRODUCTS', date('Y-m-d H:i:s'));
         if ($tasks) {
@@ -177,7 +178,7 @@ class EbayTaskManager
     public static function getJob()
     {
         $unidId = uniqid();
-        if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` IS NULL', 1000)) {
+        if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0', 500)) {
             return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "'.$unidId.'" ORDER BY `date_add`');
         }
         return false;
@@ -216,6 +217,12 @@ class EbayTaskManager
         }
     }
 
+    public static function cleanTasks()
+    {
+
+        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 40 MINUTE');
+    }
+
     public static function getErrors($id_ebay_profile)
     {
 
@@ -237,7 +244,7 @@ class EbayTaskManager
     public static function deleteErrors($id_ebay_profile)
     {
         $sql = 'UPDATE `'._DB_PREFIX_.'ebay_task_manager`
-										SET `error_code` = null, `error` = "", `retry` = null
+										SET `error_code` = null, `error` = "", `retry` = 0
 										WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
         
 	return  Db::getInstance()->execute($sql);

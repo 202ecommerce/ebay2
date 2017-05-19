@@ -61,7 +61,7 @@
                 <td class="center">{$product.name|escape:'htmlall':'UTF-8'}</td>
                 <td class="center">{$product.category_ps|escape:'htmlall':'UTF-8'}</td>
                 <td class="center"> {$product.category_ebay|escape:'htmlall':'UTF-8'}</td>
-                <td ><a class="btn btn-xs btn-block btn-warning" name="incluProduct" id="{$product.id_product}" href="#">{l s='Inclu' mod='ebay'}</a></td>
+                <td ><a class="btn btn-xs btn-block btn-warning" name="incluProduct" id="{$product.id_product}" href="#">{l s='Include' mod='ebay'}</a></td>
             </tr>
         {/foreach}
     {/if}
