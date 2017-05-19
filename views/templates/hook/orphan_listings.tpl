@@ -51,7 +51,7 @@
 				</th>
                 
 				<th class="center">
-					<span data-inlinehelp="{l s='Product has been disabled in the PrestaShop product page' mod='ebay'}">{l s='Product Disabled' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='Product has been excluded from synchronisation' mod='ebay'}">{l s='Product excluded' mod='ebay'}</span>
 				</th>
 				
                 <th class="center">
