@@ -217,11 +217,11 @@ class EbayRequest
             'error_language' => $this->ebay_country->getLanguage(),
         ));
 
-        $this->smarty->assign($vars);
 
        
         if ($apiCall != null) {
-            $this->smarty->clearAssign(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
+            $this->smarty->clearAllAssign();
+            $this->smarty->assign($vars, null, true);
             $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
         }
 

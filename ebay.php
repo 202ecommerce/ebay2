@@ -1391,7 +1391,16 @@ class Ebay extends Module
             $this->setConfiguration('EBAY_VERSION', $this->version);
 	    
             foreach ($profiles as &$profile) {
-                if (EbayConfiguration::get($profile['id_ebay_profile'],'EBAY_SYNC_PRODUCTS_MODE') == "A") {
+                $profile_ebay = new EbayProfile($profile['id_ebay_profile']);
+                if (!$profile_ebay->getConfiguration('EBAY_PAYPAL_EMAIL')) {
+                    $profile_ebay->setConfiguration('EBAY_PARAMETERS_TAB_OK', 0);
+                } else {
+                    $profile_ebay->setConfiguration('EBAY_PARAMETERS_TAB_OK', 1);
+                    $profile_ebay->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);
+                    $profile_ebay->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
+                    $profile_ebay->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
+                }
+                if ($profile_ebay->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == "A") {
                     EbayCategoryConfiguration::activeAllCAtegories($profile['id_ebay_profile']);
                 }
             }
