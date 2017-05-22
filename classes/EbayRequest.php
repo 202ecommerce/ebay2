@@ -1148,6 +1148,7 @@ class EbayRequest
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
+	    'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
             'price_update' => !isset($data['noPriceUpdate']),
@@ -1186,6 +1187,7 @@ class EbayRequest
             'country_currency' => $currency->iso_code,
             'condition_id' => (isset($data['condition']))?$data['condition']:null,
             'listing_type' => 'FixedPriceItem',
+	    'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'price_update' => !isset($data['noPriceUpdate']),
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],

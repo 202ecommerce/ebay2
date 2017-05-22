@@ -129,6 +129,7 @@ class EbayTaskManager
             'id_product_attribute' => $id_product_atttibute,
             'id_task' => $id_task,
             'id_ebay_profile' => $id_ebay_profile,
+            'retry' => 0,
             'locked' => 0,
         );
 
