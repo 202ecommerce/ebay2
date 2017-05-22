@@ -136,7 +136,9 @@
             
             <td class="center">
                 <a href="#" class="delete-orphan" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"><img src="../img/admin/delete.gif" /></a>
-                <a href="#" class="out_of_stock_orphan btn btn-xs btn-block btn-danger" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"><i class="icon-ban"></i>{l s='OUT OF STOCK' mod='ebay'}</a></a>
+                {if $a.exists && $a.id_category_ref}
+                    <a href="#" class="out_of_stock_orphan btn btn-xs btn-block btn-danger" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"><i class="icon-ban"></i>{l s='OUT OF STOCK' mod='ebay'}</a></a>
+                {/if}
             </td>
             
             <td>
