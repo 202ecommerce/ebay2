@@ -82,7 +82,7 @@
                     if (username == -1)
                         username = $('#eBayUsername').val();
 
-                        console.log(ebay_profiles);
+
 
                     var exists = false;
                     for (var i in ebay_profiles) {

@@ -165,7 +165,7 @@
                                                         <li class="clearfix head">
                                                             <span class="col-xs-5">{l s='User' mod='ebay'}</span>
                                                             <span class="col-xs-2">{l s='Country' mod='ebay'}</span>
-                                                            <span class="col-xs-2 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
+                                                            <span class="col-xs-1 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
                                                             <span class="col-xs-1 text-right"><small>{l s='Listing errors' mod='ebay'}</small></span>
                                                             <span class="col-xs-1 text-right"><small>{l s='Order errors' mod='ebay'}</small></span>
                                                             <span class="col-xs-1 text-right"><small>{l s='Tasks' mod='ebay'}</small></span>
@@ -181,7 +181,7 @@
                                                                     {elseif $profile.category == 0}
                                                                         <span class="col-xs-5 text-right">{l s='No category configured' mod='ebay'}</span>
                                                                     {else}
-                                                                        <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
+                                                                        <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>

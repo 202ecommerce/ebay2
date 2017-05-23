@@ -125,14 +125,14 @@
            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay="+$(this).attr('id'),
            success: function (data) {
                var data = jQuery.parseJSON(data);
-               console.log(data);
+
                 var str = '<td>'+data.date_ebay+'</td><td>'+data.reference_ebay+'</td><td>'+data.referance_marchand+'</td><td>'+data.email+'</td><td>'+data.total+'</td>';
                 if (typeof data.id_prestashop !== 'undefined' ){
                     str += '<td >'+data.id_prestashop+'</td><td >'+data.reference_ps+'</td><td >'+data.date_import+'</td><td ></td>';
                 } else {
                     str += '<td colspan="2">'+data.error+'</td><td>'+data.date_import+'</td><td><a class="reSynchOrder btn btn-default btn-xs" id="'+data.reference_ebay+'"><i class="icon-refresh"></i><span>Réessayer</span></a></td>';
                 }
-               console.log(str);
+
                tr.html(str);
            }
        });

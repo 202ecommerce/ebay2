@@ -30,30 +30,30 @@
             <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
         </button>
 
-        <ul class="dropdown-menu dropdown-menu-top" style="min-width: 397px;">
+        <ul class="dropdown-menu dropdown-menu-top" style="min-width: 560px;">
             <li class="clearfix head">
-                <span class="col-xs-5">{l s='User' mod='ebay'}</span>
-                <span class="col-xs-2">{l s='Country' mod='ebay'}</span>
-                <span class="col-xs-2 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
-                <span class="col-xs-1 text-right"><small>{l s='Listing errors' mod='ebay'}</small></span>
-                <span class="col-xs-1 text-right"><small>{l s='Order errors' mod='ebay'}</small></span>
-                <span class="col-xs-1 text-right"><small>{l s='Tasks' mod='ebay'}</small></span>
+                <span class="col-xs-5" style="position: relative; float: left; padding-left: 20px; padding-right: 5px; min-height: 1px; width: 170px; font-weight: 600;">{l s='User' mod='ebay'}</span>
+                <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px; font-weight: 600;">{l s='Country' mod='ebay'}</span>
+                <span class="col-xs-2 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Listings' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Listing errors' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Order errors' mod='ebay'}</small></span>
+                <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Tasks' mod='ebay'}</small></span>
             </li>
             {foreach from=$profiles item=profile}
 
                 <li>
-                    <a class="clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                        <span id='name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
-                        <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
+                    <a class="clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" style="padding: 5px 0;">
+                        <span id='name' class="col-xs-5" style="position: relative; float: left; padding-left: 20px; padding-right: 5px; min-height: 1px; width: 170px;">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                        <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px;">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
                         {if $profile.token == 0 }
-                            <span class="col-xs-5 text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
+                            <span class="col-xs-5 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 170px;">{l s='Not associated with Ebay' mod='ebay'}</span>
                         {elseif $profile.category == 0}
-                            <span class="col-xs-5 text-right">{l s='No category configured' mod='ebay'}</span>
+                            <span class="col-xs-5 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 170px;">{l s='No category configured' mod='ebay'}</span>
                         {else}
-                            <span class="col-xs-2 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
-                            <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
-                            <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                            <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+                            <span class="col-xs-2 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-success">{$profile.nb_products}</span></span>
+                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
+                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
+                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
                         {/if}
                     </a>
                 </li>
@@ -67,21 +67,20 @@
 
     // Select item from user dropdown
     $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
-        var url_ebay = "{$url_ebay}";
-
-        $(location).attr('href',url_ebay+'&ebay_profile='+$(this).data('value'));
+        var url_ebay = '{$url_ebay}';
+        $(location).attr('href', url_ebay + '&ebay_profile=' + $(this).data('value'));
     });
 
     $(document).ready(function(){
-        var _module_ebay_dir_ = "{$_module_ebay_dir_}";
-        var ebay_token = "{$ebay_token}";
-        var cron_url = "{$cron_url}";
+        var _module_ebay_dir_ = '{$_module_ebay_dir_}';
+        var ebay_token = '{$ebay_token}';
+        var cron_url = '{$cron_url}';
         $.ajax({
-            type: "POST",
+            type: 'POST',
             dataType: 'json',
-            url: _module_ebay_dir_ + 'ebay/ajax/toJobEbay.php?token=' + ebay_token +'&cron_url='  + cron_url ,
+            url: _module_ebay_dir_ + 'ebay/ajax/toJobEbay.php?token=' + ebay_token + '&cron_url=' + cron_url,
             success: function (data) {
-
+                // @TODO put something here ?
             }
         });
 

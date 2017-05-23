@@ -223,6 +223,12 @@ class EbayRequest
             //$this->smarty->clearAllAssign();
             $this->smarty->assign($vars, null, true);
             $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
+            $this->smarty->clearAssign($vars);
+
+        }
+
+        if ($apiCall == "ReviseFixedPriceItemStock") {
+            $apiCall = "ReviseFixedPriceItem";
         }
 
         $connection = curl_init();
@@ -297,7 +303,7 @@ class EbayRequest
             $date = new DateTime();
             $this->storeRequestToCache($apiCall, $result, $date->modify('+ '.$lifeTimeCache.' hours'));
         }
-
+        unset($vars);
         return $result;
     }
 
@@ -1092,10 +1098,15 @@ class EbayRequest
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'isKtype' => (bool)$ebay_category->isKtype(),
+            'variations' => null,
 
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
+        } else {
+            $vars['shipping_details'] = null;
+            $vars['payment_method'] = null;
+            $vars['pay_pal_email_address'] = null;
         }
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
@@ -1154,13 +1165,15 @@ class EbayRequest
             'price_update' => !isset($data['noPriceUpdate']),
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'category_id' => $data['categoryId'],
+            'variations' => null,
         );
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
-        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars);
+        $this->_logApiCall('ReviseFixedPriceItemStock', $vars, $response, $data['id_product']);
 
         if ($response === false) {
             return false;
@@ -1200,9 +1213,9 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
+        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars);
 
-        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+        $this->_logApiCall('ReviseFixedPriceItemStock', $vars, $response, $data['id_product']);
 
         if ($response === false) {
             return false;
@@ -1424,6 +1437,10 @@ class EbayRequest
             $vars['shipping_details'] = $this->_getShippingDetails($data);
             $vars['payment_method'] = 'PayPal';
             $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
+        } else {
+            $vars['shipping_details'] = null;
+            $vars['payment_method'] = null;
+            $vars['pay_pal_email_address'] = null;
         }
 
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {

@@ -182,15 +182,15 @@
 			$('.js-next-popin').show();
 			var courant_page = $('.page_config_category.selected');
 			courant_page.removeClass('selected').hide();
-			console.log(courant_page.attr('id'));
+
 			var new_id =  parseInt(courant_page.attr('id'))-1;
 			$('.page_popin').html(''+new_id);
-			console.log(new_id);
+
 			if(new_id == 1){
 				$('.js-prev-popin').hide();
 			}
 			$('.js-save-popin').hide();
-			console.log(courant_page.parent().find('#'+new_id));
+
 			courant_page.parent().find('div#'+new_id).addClass('selected').show();
 
 		});
@@ -204,7 +204,7 @@
 			event.preventDefault();
 
 			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
-			console.log(data);
+
 				$.ajax({
 					type: "POST",
 					url: url,
@@ -456,7 +456,7 @@
 							str += '</table></td></tr>';
 						}
 					}
-					console.log(str);
+
 
                     $('.category_product_list_ebay').find('tbody').append(str);
                 }
