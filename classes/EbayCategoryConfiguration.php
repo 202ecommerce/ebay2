@@ -45,9 +45,8 @@ class EbayCategoryConfiguration
 				AND `id_ebay_category` > 0
 				AND `id_ebay_profile` = '.(int)$ebay_profile->id;
 
-        if ($sync_mode == 'B') {
-            $sql .= ' AND `sync` = 1';
-        }
+        $sql .= ' AND `sync` = 1';
+
 
         return $sql;
     }

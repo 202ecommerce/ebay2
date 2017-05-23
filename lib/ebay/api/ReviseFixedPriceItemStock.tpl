@@ -52,14 +52,14 @@
 		{if isset($sku)}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
-		{if isset($listing_duration)}
-		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
-		{/if}
+
 		{if isset($quantity)}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 
-
+		{if isset($site)}
+			<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
+		{/if}
         {if isset($variations)}
             {$variations|cleanHtml nofilter}
 		{elseif isset($product_listing_details)}

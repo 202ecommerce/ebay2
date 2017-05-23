@@ -36,7 +36,7 @@
         <Brand><![CDATA[{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name|escape:'htmlall':'UTF-8'}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}]]></Brand>
         <MPN>{if (isset($mpn) && $mpn != "")}{$mpn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</MPN>
     </BrandMPN>
-    {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</EAN>{/if}
+    {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</EAN>{/if}
     {if ($synchronize_isbn != "")}<ISBN>{if (isset($isbn) && $isbn != "")}{$isbn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</ISBN>{/if}
     {if ($synchronize_upc != "")}<UPC>{if (isset($upc) && $upc != "")}{$upc|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</UPC>{/if}
 </ProductListingDetails>

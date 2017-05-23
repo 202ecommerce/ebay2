@@ -55,18 +55,14 @@
                     <SoldOffeBay>true</SoldOffeBay>
                 </DiscountPriceInfo>
             {/if}
-			{if (isset($ean_not_applicable) && $ean_not_applicable == 1)}
-				{assign var="does_not_apply" value="Does not apply"}
-			{else}
-				{assign var="does_not_apply" value=""}
-			{/if}
+
 
 			{assign var="sync_VariationProductListingDetails" value=($synchronize_ean||$synchronize_isbn||$synchronize_upc)}
 			{if $sync_VariationProductListingDetails}
 			<VariationProductListingDetails>
-				{if ($synchronize_ean != "")}<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</EAN>{/if}
-				{if ($synchronize_isbn != "")}<ISBN>{if isset($variation.isbn) && $variation.isbn != ''}{$variation.isbn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</ISBN>{/if}
-				{if ($synchronize_upc != "")}<UPC>{if isset($variation.upc) && $variation.upc != ''}{$variation.upc|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</UPC>{/if}
+				{if ($synchronize_ean != "")}<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</EAN>{/if}
+				{if ($synchronize_isbn != "")}<ISBN>{if isset($variation.isbn) && $variation.isbn != ''}{$variation.isbn|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</ISBN>{/if}
+				{if ($synchronize_upc != "")}<UPC>{if isset($variation.upc) && $variation.upc != ''}{$variation.upc|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</UPC>{/if}
 			</VariationProductListingDetails>
 			{/if}
 		</Variation>

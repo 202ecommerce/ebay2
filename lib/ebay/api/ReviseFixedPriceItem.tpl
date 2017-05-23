@@ -37,9 +37,7 @@
 		{if isset($country_currency)}
 			<Currency>{$country_currency|escape:'htmlall':'UTF-8'}</Currency>
 		{/if}
-		{if isset($condition_id)}
 		<ConditionID>{if $condition_id > 0}{$condition_id|escape:'htmlall':'UTF-8'}{else}1000{/if}</ConditionID>
-		{/if}
 		{if isset($listing_type)}
 			<ListingType>{$listing_type|escape:'htmlall':'UTF-8'}</ListingType>
 		{/if}
@@ -72,9 +70,7 @@
 		{if isset($sku)}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
-		{if isset($listing_duration)}
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
-		{/if}
 		{if isset($quantity)}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
@@ -85,19 +81,13 @@
 			<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
 			<Title><![CDATA[{$title|cleanHtml}]]></Title>
 			<Description><![CDATA[{$description nofilter}]]></Description>
-		{/if}
-			{if isset($category_id)}
-		<PrimaryCategory>
-			<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
-		</PrimaryCategory>
-		{/if}
+		
+			
 		{if isset($shipping_details) && !$bp_active}
 			<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
 		{/if}
-		{if isset($buyer_requirements_details)}
-			{$buyer_requirements_details|cleanHtml nofilter}
+			{$buyer_requirements_details|cleanHtml}
 		{/if}
-		{if isset($item_specifics)}
 			<ItemSpecifics>
 				{foreach from=$item_specifics key=name item=value}
 					<NameValueList>
@@ -106,7 +96,7 @@
                     </NameValueList>
                 {/foreach}
             </ItemSpecifics>
-		{/if}
+		
 		{if isset($isKtype)}
 			{if $isKtype}
 				<ItemCompatibilityList>
@@ -129,11 +119,12 @@
 				</ItemCompatibilityList>
 			{/if}
 		{/if}
-		{if isset($return_policy)}
+		
         {$return_policy|cleanHtml nofilter}
-		{/if}
+		
         {if isset($site)}
-            <Site>{$site|escape:'htmlall':'UTF-8'}</Site>{/if}
+            <Site>{$site|escape:'htmlall':'UTF-8'}</Site>
+		{/if}
         {if isset($variations)}
             {$variations|cleanHtml nofilter}
 		{elseif isset($product_listing_details)}

@@ -252,7 +252,7 @@ class EbaySynchronizer
             'id_lang' => $id_lang,
             'real_id_product' => (int)$product_id,
             'ebay_store_category_id' => $ebay_store_category_id,
-            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+            'ean_not_applicable' => 1,
             'synchronize_ean' => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
             'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
             'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
@@ -467,8 +467,6 @@ class EbaySynchronizer
      */
     public static function __getVariationSpecifics($product_id, $product_attribute_id, $id_lang, $ebay_site_id, $ebay_category = false)
     {
-        $variation_specifics_pairs = array();
-
         $sql = '
             SELECT agl.name AS name, al.name AS value
             FROM ' . _DB_PREFIX_ . 'product_attribute_combination pac
@@ -1089,7 +1087,7 @@ class EbaySynchronizer
             'condition' => $conditions[$product->condition],
             'real_id_product' => (int)$product_id,
             'ebay_store_category_id' => $ebay_store_category_id,
-            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+            'ean_not_applicable' => 1,
             'synchronize_ean' => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
             'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
             'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
