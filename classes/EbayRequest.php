@@ -220,7 +220,7 @@ class EbayRequest
 
        
         if ($apiCall != null) {
-            $this->smarty->clearAllAssign();
+            //$this->smarty->clearAllAssign();
             $this->smarty->assign($vars, null, true);
             $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
         }
