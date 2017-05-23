@@ -46,7 +46,6 @@ class EbayFormConfigOrdersTab extends EbayTab
 
         $ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
 
-
         $order_states = OrderState::getOrderStates($this->ebay_profile->id_lang);
         
         $current_order_state = $this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE');

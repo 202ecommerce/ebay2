@@ -214,14 +214,12 @@ class EbayRequest
             'error_language' => $this->ebay_country->getLanguage(),
         ));
 
-
        
         if ($apiCall != null) {
             //$this->smarty->clearAllAssign();
             $this->smarty->assign($vars, null, true);
             $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
             $this->smarty->clearAssign($vars);
-
         }
 
         if ($apiCall == "ReviseFixedPriceItemStock") {
@@ -1157,7 +1155,7 @@ class EbayRequest
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
-	    'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
+            'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
             'price_update' => !isset($data['noPriceUpdate']),
@@ -1166,6 +1164,8 @@ class EbayRequest
             'category_id' => $data['categoryId'],
             'variations' => null,
         );
+
+
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
@@ -1198,7 +1198,7 @@ class EbayRequest
             'country_currency' => $currency->iso_code,
             'condition_id' => (isset($data['condition']))?$data['condition']:null,
             'listing_type' => 'FixedPriceItem',
-	    'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
+            'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'price_update' => !isset($data['noPriceUpdate']),
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
@@ -1206,6 +1206,7 @@ class EbayRequest
             'site' => $this->ebay_country->getSiteName(),
             'variations' => $this->_getVariations($data),
         );
+
 
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
@@ -1363,6 +1364,7 @@ class EbayRequest
             'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
             'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
             'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
+
         );
 
         $this->smarty->assign($vars);
@@ -1413,7 +1415,6 @@ class EbayRequest
             'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'listing_type' => 'FixedPriceItem',
-
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),

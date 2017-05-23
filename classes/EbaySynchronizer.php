@@ -1102,8 +1102,8 @@ class EbaySynchronizer
         if (Tools::getValue('id_product_attribute')) {
             $id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');
             $key = $product->id . '-' . $id_product_attribute_fix . '_' . $ebay_profile->id;
-            if (isset($data['variations'][$key]['quantity'])) {
-                $data['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data_for_stock['variations'][$key]['quantity']);
+            if (isset($data_for_stock['variations'][$key]['quantity'])) {
+                $data_for_stock['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data_for_stock['variations'][$key]['quantity']);
             }
         }
         $context = Context::getContext();

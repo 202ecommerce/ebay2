@@ -83,7 +83,6 @@
                 // @TODO put something here ?
             }
         });
-
     });
 
     /* $('.ebay_profils').change(function() {

@@ -234,7 +234,7 @@
 
 		$('.logs').click(function(e) {
 			e.preventDefault();
-			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getLogs');;
+			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token}{literal}&action=getLogs');;
 		});
 		
 		$('#token-btn').click(function() {

@@ -138,7 +138,7 @@ class EbayStoreCategory extends ObjectModel
 
     private static function _writeStoreCategory($category_data, $id_ebay_profile, $ebay_parent_category_id = null)
     {
-        if($category_data->CategoryID){
+        if ($category_data->CategoryID) {
             $store_category = new EbayStoreCategory();
             $store_category->id_ebay_profile = (int) $id_ebay_profile;
             $store_category->ebay_category_id = pSQL($category_data->CategoryID);
