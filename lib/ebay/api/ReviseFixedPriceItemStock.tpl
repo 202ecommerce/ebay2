@@ -31,24 +31,15 @@
 		{if isset($country)}
 			<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
 		{/if}
-		{if isset($autopay)}
-			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
-		{/if}        
+
 		{if isset($country_currency)}
 			<Currency>{$country_currency|escape:'htmlall':'UTF-8'}</Currency>
 		{/if}
-		{if isset($condition_id)}
-		<ConditionID>{if $condition_id > 0}{$condition_id|escape:'htmlall':'UTF-8'}{else}1000{/if}</ConditionID>
-		{/if}
+
 		{if isset($listing_type)}
 			<ListingType>{$listing_type|escape:'htmlall':'UTF-8'}</ListingType>
 		{/if}
-		{if isset($payment_method)}
-			<PaymentMethods>{$payment_method|escape:'htmlall':'UTF-8'}</PaymentMethods>
-		{/if}
-		{if isset($pay_pal_email_address)}
-			<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
-		{/if}
+
 		{if isset($postal_code)}
 			<PostalCode>{$postal_code|escape:'htmlall':'UTF-8'}</PostalCode>
 		{/if}
@@ -58,17 +49,6 @@
 			</PrimaryCategory>		
 		{/if}
 
-		{if isset($pictures)&& count($pictures)}
-			<PictureDetails>
-				<GalleryType>Gallery</GalleryType>
-				{if $pictures|count > 1}
-					<PhotoDisplay>PicturePack</PhotoDisplay>
-				{/if}
-				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture|escape:'htmlall':'UTF-8'}</PictureURL>
-				{/foreach}
-			</PictureDetails>
-		{/if}
 		{if isset($sku)}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
@@ -78,73 +58,12 @@
 		{if isset($quantity)}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
-		{if $price_update && isset($start_price)}
-			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>
-		{/if}
-		{if isset($resynchronize) && $resynchronize}
-			<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
-			<Title><![CDATA[{$title|cleanHtml}]]></Title>
-			<Description><![CDATA[{$description nofilter}]]></Description>
-		{/if}
-			{if isset($category_id)}
-		<PrimaryCategory>
-			<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
-		</PrimaryCategory>
-		{/if}
-		{if isset($shipping_details) && !$bp_active}
-			<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
-		{/if}
-		{if isset($buyer_requirements_details)}
-			{$buyer_requirements_details|cleanHtml nofilter}
-		{/if}
-		{if isset($item_specifics)}
-			<ItemSpecifics>
-				{foreach from=$item_specifics key=name item=value}
-					<NameValueList>
-						<Name><![CDATA[{$name|cleanHtml}]]></Name>
-                        <Value><![CDATA[{$value|cleanHtml}]]></Value>
-                    </NameValueList>
-                {/foreach}
-            </ItemSpecifics>
-		{/if}
-		{if isset($isKtype)}
-			{if $isKtype}
-				<ItemCompatibilityList>
-					{if isset($ktype)}
-					{foreach from=$ktype key=name item=value}
-					<Compatibility>
-						<NameValueList>
-							<Name>KType</Name>
 
 
-								<Value><![CDATA[{$value}]]></Value>
-
-						</NameValueList>
-
-					</Compatibility>
-
-					{/foreach}
-					{/if}
-					<ReplaceAll>TRUE</ReplaceAll>
-				</ItemCompatibilityList>
-			{/if}
-		{/if}
-		{if isset($return_policy)}
-        {$return_policy|cleanHtml nofilter}
-		{/if}
-        {if isset($site)}
-            <Site>{$site|escape:'htmlall':'UTF-8'}</Site>{/if}
         {if isset($variations)}
             {$variations|cleanHtml nofilter}
 		{elseif isset($product_listing_details)}
             {$product_listing_details|cleanHtml nofilter}
-        {/if}
-
-        {if isset($price_original)}
-            <DiscountPriceInfo>
-                <OriginalRetailPrice>{$price_original|escape:'htmlall':'UTF-8'}</OriginalRetailPrice>
-                <SoldOffeBay>true</SoldOffeBay>
-            </DiscountPriceInfo>
         {/if}
 
         {if isset($ebay_store_category_id)}

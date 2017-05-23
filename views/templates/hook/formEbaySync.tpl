@@ -814,7 +814,7 @@
 							{l s='The addition of these products is done automatically in the next few minutes.' mod='ebay'}
 							<br>
 							<br>
-							<a href="#popin-categorie-save" class="js-save1-popin btn btn-lg btn-success pull-right">Save</a>
+							<a href="#popin-categorie-save" class="js-save1-popin btn btn-lg btn-success pull-right">{l s='Save' mod='ebay'}</a>
 
 						</div>
 					</div>

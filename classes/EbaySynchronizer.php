@@ -1081,7 +1081,7 @@ class EbaySynchronizer
         $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
         $conditions = $ebay_category->getConditionsValues($id_ebay_profile);
         // Generate array and try insert in database
-        $data = array(
+        $data_for_stock = array(
             'quantity' => $quantity_product,
             'categoryId' => $ebay_category->getIdCategoryRef(),
             'variations' => $variations,
@@ -1096,14 +1096,14 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
         );
         unset($variations);
-        $data = array_merge($data, EbaySynchronizer::__getProductData($product, $ebay_profile));
+        $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
 
         // Fix hook update product
         if (Tools::getValue('id_product_attribute')) {
             $id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');
             $key = $product->id . '-' . $id_product_attribute_fix . '_' . $ebay_profile->id;
             if (isset($data['variations'][$key]['quantity'])) {
-                $data['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data['variations'][$key]['quantity']);
+                $data['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data_for_stock['variations'][$key]['quantity']);
             }
         }
         $context = Context::getContext();
@@ -1112,7 +1112,7 @@ class EbaySynchronizer
             $address->id_country = $country_address;
             $address->save();
         }
-        return $data;
+        return $data_for_stock;
     }
 
     private static function __updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)

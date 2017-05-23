@@ -207,10 +207,7 @@ class EbayRequest
      */
     private function _makeRequest($apiCall, $vars = array(), $shoppingEndPoint = false, $lifeTimeCache = 0)
     {
-        if (($contentFromCache = $this->getRequestFromCache($apiCall))) {
-            return $contentFromCache;
-        }
-
+       
         $request = null;
         $vars = array_merge($vars, array(
             'ebay_auth_token' => ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -801,6 +798,7 @@ class EbayRequest
             'description' => preg_replace('#<br\s*?/?>#i', "\n", $returns_policy_configuration->ebay_returns_description),
             'within' => $returns_policy_configuration->ebay_returns_within,
             'whopays' => $returns_policy_configuration->ebay_returns_who_pays,
+            'payment_profile_id' => null
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 1) {
@@ -1431,6 +1429,7 @@ class EbayRequest
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'ktype' => isset($data['ktype'])?$data['ktype']:array(),
             'isKtype' => (bool)$ebay_category->isKtype(),
+            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
