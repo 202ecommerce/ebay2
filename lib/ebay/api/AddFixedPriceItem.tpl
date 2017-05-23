@@ -103,7 +103,7 @@
 		{elseif isset($product_listing_details)}
             {$product_listing_details nofilter}
         {/if}
-		{if isset($shipping_details)}
+		{if isset($shipping_details) && !$bp_active}
 		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{/if}
 		{$buyer_requirements_details}
