@@ -57,14 +57,13 @@
             {/if}
 
 
-			{assign var="sync_VariationProductListingDetails" value=($synchronize_ean||$synchronize_isbn||$synchronize_upc)}
-			{if $sync_VariationProductListingDetails}
+
 			<VariationProductListingDetails>
-				{if ($synchronize_ean != "")}<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</EAN>{/if}
+				<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</EAN>
 				{if ($synchronize_isbn != "")}<ISBN>{if isset($variation.isbn) && $variation.isbn != ''}{$variation.isbn|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</ISBN>{/if}
 				{if ($synchronize_upc != "")}<UPC>{if isset($variation.upc) && $variation.upc != ''}{$variation.upc|escape:'htmlall':'UTF-8'}{else}Does not apply{/if}</UPC>{/if}
 			</VariationProductListingDetails>
-			{/if}
+			
 		</Variation>
 	{/foreach}
 	<Pictures>
