@@ -933,16 +933,16 @@ class EbayRequest
     private function _getProductListingDetails($data)
     {
         $vars = array(
-            'ean' => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
-            'mpn' => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
-            'upc' => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
-            'isbn' => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+            'ean' => $this->configurationValues($data, $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN')),
+            'mpn' => $this->configurationValues($data, $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN')),
+            'upc' => $this->configurationValues($data, $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC')),
+            'isbn' => $this->configurationValues($data, $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN')),
             'manufacturer_name' => $data['manufacturer_name'],
             'ean_not_applicable' => 1,
-            'synchronize_ean' => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
+            'synchronize_ean' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
         );
 
         $this->smarty->assign($vars);
@@ -1296,10 +1296,10 @@ class EbayRequest
             $attribute_used = array();
 
             foreach ($data['variations'] as $key => $variation) {
-                $data['variations'][$key]['ean13'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_EAN'));
-                $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_MPN'));
-                $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_UPC'));
-                $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_ISBN'));
+                $data['variations'][$key]['ean13'] = $this->configurationValues($data['variations'][$key], $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'));
+                $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'));
+                $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'));
+                $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'));
                 $attribute_for_image = new AttributeGroup($this->ebay_profile->getConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS'));
 
                 if (isset($variation['variations'])) {
@@ -1340,7 +1340,7 @@ class EbayRequest
                     }
 
                     // send MPN as a variation specificcs
-                    if (Configuration::get('EBAY_SYNCHRONIZE_MPN') !== "" && Configuration::get('EBAY_SYNCHRONIZE_MPN') != null) {
+                    if ($this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN') !== "" && $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN') != null) {
                         $mpn = $data['variations'][$key]['mpn'];
                         if ($mpn == "") {
                             $mpn = "Does not apply";
@@ -1364,10 +1364,10 @@ class EbayRequest
             'price_update' => !isset($data['noPriceUpdate']),
             'variation_specifics_set' => $variation_specifics_set,
             'ean_not_applicable' => 1,
-            'synchronize_ean' => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
+            'synchronize_ean' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
 
         );
 

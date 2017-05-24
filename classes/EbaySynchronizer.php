@@ -253,10 +253,10 @@ class EbaySynchronizer
             'real_id_product' => (int)$product_id,
             'ebay_store_category_id' => $ebay_store_category_id,
             'ean_not_applicable' => 1,
-            'synchronize_ean' => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
+            'synchronize_ean' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
         );
         $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
@@ -1088,10 +1088,10 @@ class EbaySynchronizer
             'real_id_product' => (int)$product_id,
             'ebay_store_category_id' => $ebay_store_category_id,
             'ean_not_applicable' => 1,
-            'synchronize_ean' => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn' => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc' => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
+            'synchronize_ean' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
         );
         unset($variations);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));

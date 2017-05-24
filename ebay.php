@@ -2347,7 +2347,7 @@ class Ebay extends Module
         $employee = new Employee($id_employee);
         $this->context->employee = $employee;
         $link = $this->context->link;
-        $id_lang = $this->context->language->id;
+        $id_lang = $this->ebay_profile->id_lang;
 
         $products_ebay_listings = array();
         $products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false);

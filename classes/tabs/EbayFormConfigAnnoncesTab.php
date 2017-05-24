@@ -105,11 +105,11 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             'whopays_values'            => unserialize(Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES')),
             'whopays'                   => $returns_policy_configuration->ebay_returns_who_pays,
             //EAN
-            'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
-            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+            'synchronize_ean'    => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn'    => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc'    => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn'   => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
+            'ean_not_applicable' => (int)$this->ebay_profile->getConfiguration('EBAY_EAN_NOT_APPLICABLE'),
             'help_ean' => array(
                 'lang'           => $this->context->country->iso_code,
                 'module_version' => $this->ebay->version,
@@ -146,11 +146,11 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
         $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_EAN', (string)Tools::getValue('synchronize_ean'));
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_MPN', (string)Tools::getValue('synchronize_mpn'));
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_UPC', (string)Tools::getValue('synchronize_upc'));
-        $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_ISBN', (string)Tools::getValue('synchronize_isbn'));
-        $this->ebay->setConfiguration('EBAY_EAN_NOT_APPLICABLE', Tools::getValue('ean_not_applicable') ? 1 : 0);
+        $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_EAN', (string)Tools::getValue('synchronize_ean'));
+        $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_MPN', (string)Tools::getValue('synchronize_mpn'));
+        $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_UPC', (string)Tools::getValue('synchronize_upc'));
+        $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_ISBN', (string)Tools::getValue('synchronize_isbn'));
+        $this->ebay_profile->setConfiguration('EBAY_EAN_NOT_APPLICABLE', Tools::getValue('ean_not_applicable') ? 1 : 0);
 
 
         // Reset Image if they have modification on the size
