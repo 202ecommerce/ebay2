@@ -64,8 +64,10 @@ $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
 
 if ($value) {
     foreach ($to_synchronize_product_ids as $product_id_to_sync) {
-        $product = new Product($product_id_to_sync['id_product']);
-        EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), Tools::getValue('profile'));
+        if (!EbayProductConfiguration::isblocked(Tools::getValue('profile'), $product_id_to_sync['id_product'])) {
+            $product = new Product($product_id_to_sync['id_product']);
+            EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), Tools::getValue('profile'));
+        }
     }
 } else {
     foreach ($to_synchronize_product_ids as $product_id_to_sync) {
