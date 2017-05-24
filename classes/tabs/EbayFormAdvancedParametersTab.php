@@ -52,7 +52,7 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'logs_conservation_duration' => Configuration::get('EBAY_LOGS_DAYS'),
 
             // number of days to collect the oders for backward
-            'orders_days_backward' => Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'),
+            'orders_days_backward' => $this->ebay_profile->getConfiguration('EBAY_ORDERS_DAYS_BACKWARD'),
             'id_profile_ebay' => $this->ebay_profile->id,
             '_path' => $this->path,
             // send stats to eBay

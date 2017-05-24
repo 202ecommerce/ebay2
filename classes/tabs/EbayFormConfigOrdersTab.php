@@ -67,7 +67,7 @@ class EbayFormConfigOrdersTab extends EbayTab
             'order_states'              => $order_states,
             'current_order_state'       => $current_order_state,
             'current_order_return_state' => $this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE'),
-            'orders_days_backward' => Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'),
+            'orders_days_backward' => $this->ebay_profile->getConfiguration('EBAY_ORDERS_DAYS_BACKWARD'),
             'id_profile_ebay' => $this->ebay_profile->id,
             '_path' => $this->path,
 
@@ -82,7 +82,7 @@ class EbayFormConfigOrdersTab extends EbayTab
         if ($this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int) Tools::getValue('send_tracking_code'))
             && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int) Tools::getValue('shipped_order_state'))
             && $this->ebay_profile->setConfiguration('EBAY_RETURN_ORDER_STATE', (int) Tools::getValue('return_order_state'))
-            && Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', (int)Tools::getValue('orders_days_backward'), false, 0, 0)
+            && $this->ebay_profile->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', (int)Tools::getValue('orders_days_backward'), false, 0, 0)
         ) {
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');

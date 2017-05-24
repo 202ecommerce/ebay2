@@ -343,7 +343,7 @@ class Ebay extends Module
         // Init
         $this->setConfiguration('EBAY_VERSION', $this->version);
 
-        $this->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 15);
+        $this->ebay_profile->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 15);
         $this->setConfiguration('EBAY_LOGS_DAYS', 30);
 
         $this->verifyAndFixDataBaseFor17();
@@ -1104,7 +1104,7 @@ class Ebay extends Module
      **/
     private function __getEbayLastOrders($until_date)
     {
-        $nb_days_backward = (int) Configuration::get('EBAY_ORDERS_DAYS_BACKWARD');
+        $nb_days_backward = (int) $this->ebay_profile->getConfiguration('EBAY_ORDERS_DAYS_BACKWARD');
 
         if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
             //If it is more than 30 days that we installed the module
@@ -1144,7 +1144,7 @@ class Ebay extends Module
 
     private function __getEbayLastOrdersReturnsRefunds($until_date)
     {
-        $nb_days_backward = (int) Configuration::get('EBAY_ORDERS_DAYS_BACKWARD');
+        $nb_days_backward = (int) $this->ebay_profile->getConfiguration('EBAY_ORDERS_DAYS_BACKWARD');
 
         if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
             //If it is more than 30 days that we installed the module
