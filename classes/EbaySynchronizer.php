@@ -1514,7 +1514,7 @@ class EbaySynchronizer
         if (!empty($variation['picturesLarge'])) {
             $data['picturesLarge'] = $variation['picturesLarge'];
         }
-        if (Tools::getIsset($variation['variation_specifics'])) {
+        if (isset($variation['variation_specifics'])) {
             foreach ($variation['variation_specifics'] as $variation_specific) {
                 $data['name'] .= ' ' . $variation_specific;
             }
