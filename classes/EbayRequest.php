@@ -734,9 +734,10 @@ class EbayRequest
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
-            $vars['payment_method'] = 'PayPal';
-            $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
         }
+
+        $vars['payment_method'] = 'PayPal';
+        $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
         if (isset($data['price_original']) && ($data['price_original'] > $data['price'])) {
             $vars['price_original'] = $data['price_original'];
@@ -1101,11 +1102,9 @@ class EbayRequest
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
-        } else {
-            $vars['shipping_details'] = null;
-            $vars['payment_method'] = null;
-            $vars['pay_pal_email_address'] = null;
         }
+        $vars['payment_method'] = 'PayPal';
+        $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
@@ -1166,6 +1165,7 @@ class EbayRequest
             'category_id' => $data['categoryId'],
             'variations' => null,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
+            'site' => $this->ebay_country->getSiteName(),
         );
 
 
@@ -1264,11 +1264,11 @@ class EbayRequest
             'ktype' => isset($data['ktype'])? $data['ktype'] : null,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
         );
+        $vars['payment_method'] = 'PayPal';
+        $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
-            $vars['payment_method'] = 'PayPal';
-            $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
         }
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
@@ -1439,13 +1439,10 @@ class EbayRequest
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
-            $vars['payment_method'] = 'PayPal';
-            $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
-        } else {
-            $vars['shipping_details'] = null;
-            $vars['payment_method'] = null;
-            $vars['pay_pal_email_address'] = null;
+
         }
+        $vars['payment_method'] = 'PayPal';
+        $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];

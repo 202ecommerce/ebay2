@@ -41,10 +41,8 @@
 		{if isset($listing_type)}
 			<ListingType>{$listing_type|escape:'htmlall':'UTF-8'}</ListingType>
 		{/if}
-		{if isset($payment_method)}
+		{if isset($payment_method) && !$bp_active}
 			<PaymentMethods>{$payment_method|escape:'htmlall':'UTF-8'}</PaymentMethods>
-		{/if}
-		{if isset($pay_pal_email_address)}
 			<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
 		{/if}
 		{if isset($postal_code)}
