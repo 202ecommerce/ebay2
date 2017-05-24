@@ -1165,6 +1165,7 @@ class EbayRequest
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'category_id' => $data['categoryId'],
             'variations' => null,
+            'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
         );
 
 
