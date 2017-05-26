@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = true;
+    private $dev = false;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
