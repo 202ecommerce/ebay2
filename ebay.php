@@ -1071,7 +1071,7 @@ class Ebay extends Module
 
         file_put_contents(dirname(__FILE__).'/log/orders.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
 
-        if (Configuration::get('EBAY_ACTIVATE_MAILS') && $errors_email) {
+       /* if (Configuration::get('EBAY_ACTIVATE_MAILS') && $errors_email) {
             $data = '';
             foreach ($errors_email as $e) {
                 $data .= '<p>Id order : <strong>'.$e['id_order_seller'].'</strong></p><ul>';
@@ -1093,7 +1093,7 @@ class Ebay extends Module
                 null,
                 dirname(__FILE__).'/views/templates/mails/'
             );
-        }
+        }*/
     }
 
     /**

@@ -64,7 +64,7 @@ class EbayCategoryCondition
                     Db::getInstance()->execute($sql);
                 }
             }
-	    $condition_enabled = false;
+            $condition_enabled = false;
             if (isset($xml_data->Category->ConditionEnabled)) {
                 $condition_enabled = $xml_data->Category->ConditionEnabled;
             } elseif (isset($xml_data->SiteDefaults->ConditionEnabled)) {

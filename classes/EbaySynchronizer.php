@@ -1125,7 +1125,7 @@ class EbaySynchronizer
         }
 
         // if product not on eBay as we expected we add it
-        if ($res->ErrorCode == 291 || $res->ErrorCode == 17) {
+        if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
@@ -1144,7 +1144,7 @@ class EbaySynchronizer
         }
 
         // if product not on eBay as we expected we add it
-        if ($res->ErrorCode == 291 || $res->ErrorCode == 17) {
+        if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
