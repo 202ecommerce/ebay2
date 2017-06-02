@@ -121,10 +121,10 @@ if (Tools::getValue('payement_policies') || Tools::getValue('return_policies')) 
     $return = Tools::getValue('return_policies');
     $ebay_category_id_ref = EbayCategory::getIdCategoryRefById($ebay_category, $ebay_profile->ebay_site_id);
     $data = array(
-        'id_ebay_profile' => $id_ebay_profile,
-        'id_category' => $ebay_category_id_ref,
-        'id_return' => $return,
-        'id_payment' => $payment,
+        'id_ebay_profile' => (int) $id_ebay_profile,
+        'id_category' => (int) $ebay_category_id_ref,
+        'id_return' => pSQl($return),
+        'id_payment' => pSQL($payment),
     );
 
     EbayBussinesPolicies::deletePoliciesConfgbyidCategories($id_ebay_profile, $ebay_category_id_ref);
