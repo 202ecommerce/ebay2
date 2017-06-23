@@ -59,7 +59,7 @@ class EbayTaskManager
         if ($type == 'end') {
             foreach ($ebay_profiles as $profile) {
                 $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
-                if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
+                if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop)) {
                     if (isset($id_product_attribute)) {
                         self::insertTask($product->id, $id_product_attribute, 14, $profile['id_ebay_profile']);
                     } else {
@@ -105,7 +105,7 @@ class EbayTaskManager
 
                         foreach ($id_attributes as $id_attribute) {
                             $id_tasks = array(10);
-                            if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute)) {
+                            if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop)) {
                                 $id_tasks = array(13, 11);
                                 if ($type == 'stock') {
                                     $id_tasks = array(13);

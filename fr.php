@@ -473,6 +473,7 @@ $_MODULE['<{ebay}prestashop>formtemplatemanager_11a44a2bd5c6c4255f544148b972da2b
 $_MODULE['<{ebay}prestashop>formtemplatemanager_296c9b65c1036517e0579589043624b8'] = 'Distinguer vous de la foule.';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_f4f876171ba748c9ab4dcc54c7b93f5d'] = 'Assurez vous que vos descriptions contiennent toutes les informations utiles à l\'acheteur';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_cc93c31bcb64bbc1694d2a630a2c4e4c'] = 'Utilisez les mêmes mots que l\'acheteur utilisera pour trouver votre objet';
+$_MODULE['<{ebay}prestashop>formtemplatemanager_b9253d7bb7c3b62ac44256be517d1bb5'] = 'En cas de problèmes d\'affichages de vos images produits, vérifiez que celles-ci ont été correctement générées par Prestashop. Vous pouvez également modifier le paramètre   \"TAILLE DES PHOTOS\" dans \"paramètre des annonces\"';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_f0cac024410d239f1fa636115812c1c3'] = 'template du produit Ebay';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_31fde7b05ac8952dacf4af8a704074ec'] = 'Prévisualiser';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_729a51874fe901b092899e9e8b31c97a'] = 'Etes-vous sûr ?';

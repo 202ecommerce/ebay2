@@ -32,8 +32,9 @@
 	</script>
 
 {else}
-<fieldset class="new">
-	<legend>{l s='Register the module on eBay' mod='ebay'}</legend>
+<fieldset>
+
+
 
 {if $logged}
 {$check_token_tpl|ebayHtml}
@@ -106,7 +107,8 @@
 		{/literal}
 	</script>
 
-	<form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" id="ebay_register_form">
+	<form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" id="ebay_register_form" class="form form-horizontal panel">
+        <div class="panel-heading">{l s='Register the module on eBay' mod='ebay'}</div>
         <div id="ebay-register-content">
             <div id="title_register">
                 <strong>{l s='I have a professional eBay account:' mod='ebay'}</strong>
@@ -187,7 +189,7 @@
                         <tr>
                             <td colspan="2">
                                <div class="margin-form">
-                                    <input type="submit" id="ebayRegisterButton" name="ebayRegisterButton" class="button ebay-float-right" value="{l s='Link your ebay account' mod='ebay'}" />
+                                    <input type="submit" id="ebayRegisterButton" name="ebayRegisterButton" class="btn btn-default pull-right" value="{l s='Link your ebay account' mod='ebay'}" />
                                 </div>
                             </td>
                         </tr>
@@ -203,7 +205,7 @@
                         {l s='Get started now, Its fast and easy.' mod='ebay'}
                     </div>
                     <p id="ebay-register-p">{l s='Once you have registered on eBay you will obtain the eBay ID required to configure the eBay add-on.' mod='ebay'}</p>
-                     <a id="ebay-register-link" href="{$signin_pro_url|escape:'htmlall':'UTF-8'}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
+                     <a id="ebay-register-link" href="{$signin_pro_url|escape:'htmlall':'UTF-8'}" class="btn btn-default pull-left" target="_blank">{l s='Register' mod='ebay'}</a>
                     <!--
             		<br /><br />
             		<br /><u><a href="{l s='http://pages.ebay.com/help/sell/businessfees.html' mod='ebay'}" target="_blank">{l s='Review the eBay business seller fees page' mod='ebay'}</a></u>

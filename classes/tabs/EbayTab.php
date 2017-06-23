@@ -70,6 +70,6 @@ class EbayTab
      **/
     protected function _getModuleUrl()
     {
-        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/';
     }
 }

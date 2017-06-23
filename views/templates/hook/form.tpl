@@ -215,7 +215,8 @@
 
                                             <div id="popin-container-help">
                                                 {* Category add modal *}
-                                                <div class="popin popin-lg" id="popin-help" style="display: none; width: 700px;overflow-x: hidden;">
+
+                                                {*<div class="popin popin-lg" id="popin-help" style="display: none; width: 700px;overflow-x: hidden;">
 
                                                     <div class="new new_aide" style="width: 100%;text-align: center;  margin: 35px;">
                                                         <span><b>{l s='Help for module eBay' mod='ebay'}</b></span></br>
@@ -258,7 +259,7 @@
                                                     <div class="panel-footer" style="text-align: center">
                                                         <button class="close_popin_help btn btn-default">OK</button>
                                                     </div>
-                                                </div>
+                                                </div>*}
                                             </div>
                                         </form>
                                         <form class="change_profile" method="post">
@@ -455,15 +456,9 @@
         });
 
         $(document).ready(function() {
-            $('.js-popin-help').fancybox({
-                'modal': true,
-                'showCloseButton': false,
-                'padding': 0,
-                'parent': '#popin-container-help',
-            });
-            $(document).on('click', '.close_popin_help', function() {
+            $(document).on('click', '.js-popin-help', function() {
                 event.preventDefault();
-                $.fancybox.close();
+                window.open("{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/help/help.pdf", 'pdf');
             });
         });
 

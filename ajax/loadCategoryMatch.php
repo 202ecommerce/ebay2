@@ -39,7 +39,9 @@ sleep(1);
 
 $id_ebay_profile = (int) Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
-
+$levelExists = array();
+$context = Context::getContext();
+$ebay = new Ebay();
 $current_path = Db::getInstance()->getRow('
     SELECT ecc.`id_ebay_category`, ec.`id_category_ref`, ec.`id_category_ref_parent`, ec.`level`
     FROM `'._DB_PREFIX_.'ebay_category_configuration` ecc
@@ -57,7 +59,6 @@ for ($levelStart = $current_path['level']; $levelStart > 1; $levelStart--) {
         AND ec.`id_country` = '.(int) $ebay_profile->ebay_site_id);
 }
 
-$level_exists = array();
 
 for ($level = 0; $level <= 5; $level++) {
     if (Tools::getValue('level') >= $level) {
@@ -79,20 +80,24 @@ for ($level = 0; $level <= 5; $level++) {
         }
 
         if ($ebay_category_list_level) {
-            $level_exists[$level + 1] = true;
-
-            echo '<select name="category['.(int) Tools::getValue('id_category').']" id="categoryLevel'.(int) ($level + 1).'-'.(int) Tools::getValue('id_category').'" rel="'.(int) Tools::getValue('id_category').'" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch('.(int) ($level + 1).', '.(int) Tools::getValue('id_category').');">
-                <option value="0">'.Tools::safeOutput(Tools::getValue('ch_cat_str')).'</option>';
-
-            foreach ($ebay_category_list_level as $ec) {
-                echo '<option value="'.(int) $ec['id_ebay_category'].'" '.((Tools::getValue('level'.($level + 1)) && Tools::getValue('level'.($level + 1)) == $ec['id_ebay_category']) ? 'selected="selected"' : '').'>'.Tools::safeOutput($ec['name']).($ec['is_multi_sku'] == 1 ? ' *' : '').'</option>';
-            }
-
-            echo '</select> ';
+            $levelExists[$level + 1] = true;
+            $tpl_var = array(
+                "level" => $level,
+                "id_category" => (int) Tools::getValue('id_category'),
+                "ch_cat_str" => Tools::safeOutput(Tools::getValue('ch_cat_str')),
+                "ebay_category_list_level" => $ebay_category_list_level,
+                "select" => Tools::getValue('level'.($level + 1)),
+            );
+            $context->smarty->assign($tpl_var);
+            echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/form_select_change_category_match.tpl');
         }
     }
 }
 
-if (!isset($level_exists[Tools::getValue('level') + 1])) {
-    echo '<input id="id_ebay_categories_real" type="hidden" name="real_category_ebay" value="'.(int) Tools::getValue('level'.Tools::getValue('level')).'" />';
+if (!isset($levelExists[Tools::getValue('level') + 1])) {
+    $tpl_var = array(
+        "value" => (int) Tools::getValue('level'.Tools::getValue('level'))
+    );
+    $context->smarty->assign($tpl_var);
+    echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/form_select_change_category_match_input.tpl');
 }

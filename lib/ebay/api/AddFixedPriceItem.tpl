@@ -27,7 +27,7 @@
 	<ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
 	<WarningLevel>High</WarningLevel>
 	<Item>
-		{if isset($sku)}
+		{if isset($sku) && !isset($variations)}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 		{if isset($autopay)}
@@ -67,7 +67,7 @@
 		<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
 		{/if}
 		<PostalCode>{$postal_code|escape:'htmlall':'UTF-8'}</PostalCode>
-		{if isset($quantity)}
+		{if isset($quantity) && !isset($variations)}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 		<ItemSpecifics>
@@ -104,9 +104,9 @@
             {$product_listing_details nofilter}
         {/if}
 		{if isset($shipping_details) && !$bp_active}
-		<ShippingDetails>{$shipping_details}</ShippingDetails>
+		<ShippingDetails>{$shipping_details nofilter}</ShippingDetails>
 		{/if}
-		{$buyer_requirements_details}
+		{$buyer_requirements_details nofilter}
 		<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
         
         {if isset($price_original)}

@@ -33,7 +33,7 @@ require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'confi
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
 }
-
+include dirname(__FILE__).'/../ebay.php';
 $id_ebay_profile = (int) Tools::getValue('profile');
 $sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded
     WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
@@ -42,21 +42,15 @@ $countries = Db::getInstance()->ExecuteS($sql);
 
 if (count($countries)) {
     $string = '';
-
+    $context = Context::getContext();
+    $ebay = new Ebay();
     foreach ($countries as $country) {
-        $string .= '<div class="excludeCountry">
-            <div class="checkbox">
-            <label for="excludeLocation['.Tools::safeOutput($country['location']).']" class="control-label">
-            <input type="checkbox" id="excludeLocation['.Tools::safeOutput($country['location']).']" name="excludeLocation['.Tools::safeOutput($country['location']).']" ';
-
-        if ($country['excluded'] == 1) {
-            $string .= ' checked="checked" ';
-        }
-
-        $string .= '/>'.Tools::safeOutput($country['description']).'
-            </label>
-            </div>
-            </div>';
+        $tpl_var = array(
+            "location" => Tools::safeOutput($country['location']),
+            "country" => $country,
+        );
+        $context->smarty->assign($tpl_var);
+        $string .= $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/form_countriesShipping.tpl');
     }
 
     echo $string;

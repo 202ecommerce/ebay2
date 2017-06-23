@@ -274,7 +274,7 @@ class EbayCategoryConfiguration
     {
     
         $sql = "UPDATE "._DB_PREFIX_."ebay_category_configuration SET `sync`= 1 WHERE `sync` = 0 AND `id_ebay_profile` = ".(int) $id_ebay_profile;
-        return DB::getInstance()->executeS($sql);
+        return DB::getInstance()->execute($sql);
     }
 
     public static function getEbayCategoryById($id_ebay_profile, $id_ebay_category)

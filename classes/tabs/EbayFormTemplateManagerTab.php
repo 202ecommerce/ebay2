@@ -31,7 +31,10 @@ class EbayFormTemplateManagerTab extends EbayTab
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            return '<div class="alert alert-warning alert-no-icon">'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformtemplatemanagertab').'</div><script type="text/javascript">$("#menuTab4").addClass("wrong")</script>';
+            $vars = array(
+                'msg' => $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformtemplatemanagertab'),
+            );
+            return $this->display('alert_tabs.tpl', $vars);
         }
 
         $iso = $this->context->language->iso_code;
@@ -55,7 +58,9 @@ class EbayFormTemplateManagerTab extends EbayTab
         }
 
         $ebay_product_template_title = $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE');
-
+        $this->context->controller->addCSS(
+            _MODULE_DIR_.'ebay/views/css/ebay.css'
+        );
         $smarty_vars = array(
             'action_url' => $action_url,
             'ebay_product_template' => $ebay_product_template,

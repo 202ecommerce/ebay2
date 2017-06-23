@@ -156,5 +156,6 @@ class EbayFormInterShippingTab extends EbayTab
             $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
             EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
         }
+        return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
     }
 }

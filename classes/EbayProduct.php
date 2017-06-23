@@ -26,7 +26,7 @@
 
 class EbayProduct
 {
-    public static function getIdProductRef($id_product, $ebay_identifier, $ebay_site_id, $id_attribute = null)
+    public static function getIdProductRef($id_product, $ebay_identifier, $ebay_site_id, $id_attribute = null, $id_shop = null)
     {
         $query = 'SELECT `id_product_ref`
 			FROM `'._DB_PREFIX_.'ebay_product` ep
@@ -38,6 +38,9 @@ class EbayProduct
 
         if ($id_attribute) {
             $query .= ' AND ep.`id_attribute` = '.(int) $id_attribute;
+        }
+        if ($id_shop) {
+            $query .= ' AND ep1.`id_shop` = '.(int) $id_shop;
         }
         return Db::getInstance()->getValue($query);
     }

@@ -74,7 +74,6 @@ $classes_to_load = array(
     'tabs/EbayFormInterShippingTab',
     'tabs/EbayFormTemplateManagerTab',
     'tabs/EbayFormEbaySyncTab',
-    'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
     'tabs/EbayListingsTab',
     'tabs/EbayOrderLogsTab',
@@ -141,7 +140,7 @@ class Ebay extends Module
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
-        $this->author = 'PrestaShop';
+        $this->author = '202-ecommerce';
 
         parent::__construct();
 
@@ -338,12 +337,13 @@ class Ebay extends Module
         if ($this->ebay_profile) {
             $this->ebay_profile->setPicturesSettings();
             $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', 0);
+            $this->ebay_profile->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 14);
         }
 
         // Init
         $this->setConfiguration('EBAY_VERSION', $this->version);
 
-        $this->ebay_profile->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 15);
+
         $this->setConfiguration('EBAY_LOGS_DAYS', 30);
 
         $this->verifyAndFixDataBaseFor17();
@@ -937,7 +937,7 @@ class Ebay extends Module
                             FROM `'._DB_PREFIX_.'product_shop` ps
                             WHERE ps.`id_shop` = '.(int) $first_id_shop.'
                             AND ps.`active` = 1
-                            AND ps.`id_product` IN ('.implode(',', $product_ids).')';
+                            AND ps.`id_product` IN ('.pSQL(implode(',', $product_ids)).')';
 
                     $nb_products_in_shop = Db::getInstance()->getValue($sql);
                     if ($nb_products_in_shop == count($product_ids)) {
@@ -1070,30 +1070,6 @@ class Ebay extends Module
         }
 
         file_put_contents(dirname(__FILE__).'/log/orders.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
-
-       /* if (Configuration::get('EBAY_ACTIVATE_MAILS') && $errors_email) {
-            $data = '';
-            foreach ($errors_email as $e) {
-                $data .= '<p>Id order : <strong>'.$e['id_order_seller'].'</strong></p><ul>';
-                foreach ($e['messages'] as $m) {
-                    $data .= '<li>'.$m.'</li>';
-                }
-                $data .= '</ul><br/>';
-            }
-            Mail::Send(
-                (int) Configuration::get('PS_LANG_DEFAULT'),
-                'errorsImportEbay',
-                Mail::l('Errors import', (int) Configuration::get('PS_LANG_DEFAULT')),
-                array('{errors_email}' => $data),
-                (string) Configuration::get('PS_SHOP_EMAIL'),
-                null,
-                (string) Configuration::get('PS_SHOP_EMAIL'),
-                (string) Configuration::get('PS_SHOP_NAME'),
-                null,
-                null,
-                dirname(__FILE__).'/views/templates/mails/'
-            );
-        }*/
     }
 
     /**
@@ -1202,20 +1178,20 @@ class Ebay extends Module
         if (!empty($return)) {
             $id_order = EbayOrder::getOrderbytransactionId((string) $return['creationInfo']['item']['transactionId']);
             $vars = array(
-                'id_return' => (string) $return['returnId'],
-                'type' => $return['creationInfo']['type'],
+                'id_return' => pSQL($return['returnId']),
+                'type' => pSQL($return['creationInfo']['type']),
                 'date' => $return['creationInfo']['creationDate']['value'],
-                'description' => $return['creationInfo']['comments']['content'],
-                'status' => $return['status'],
-                'id_item' => (string)  $return['creationInfo']['item']['itemId'],
-                'id_transaction' => (string) $return['creationInfo']['item']['transactionId'],
-                'id_ebay_order' => $id_order['id_ebay_order'],
-                'id_order' => $id_order[0]['id_order'],
+                'description' => pSQL($return['creationInfo']['comments']['content']),
+                'status' => pSQL($return['status']),
+                'id_item' => pSQL($return['creationInfo']['item']['itemId']),
+                'id_transaction' => pSQL($return['creationInfo']['item']['transactionId']),
+                'id_ebay_order' => pSQL($id_order['id_ebay_order']),
+                'id_order' => pSQL($id_order[0]['id_order']),
             );
 
-            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' ._DB_PREFIX_. 'ebay_order_return_detail WHERE `id_return` = ' .$vars['id_return']);
+            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' ._DB_PREFIX_. 'ebay_order_return_detail WHERE `id_return` = ' .pSQL($vars['id_return']));
             if (!empty($lin_is)) {
-                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' .$vars['id_return']);
+                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' .pSQL($vars['id_return']));
             } else {
                 DB::getInstance()->insert('ebay_order_return_detail', $vars);
             }
@@ -1399,6 +1375,7 @@ class Ebay extends Module
                     $profile_ebay->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);
                     $profile_ebay->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
                     $profile_ebay->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
+                    $profile_ebay->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 14);
                 }
                 if ($profile_ebay->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == "A") {
                     EbayCategoryConfiguration::activeAllCAtegories($profile['id_ebay_profile']);
@@ -1491,14 +1468,15 @@ class Ebay extends Module
 
         // If isset Post Var, post process else display form
         if (!empty($_POST) && (Tools::isSubmit('submitSave') || Tools::isSubmit('btnSubmitSyncAndPublish') || Tools::isSubmit('btnSubmitSync'))) {
-            $errors = $this->__postValidation();
+            $errors = null;
 
             if (!count($errors)) {
                 $this->__postProcess();
             } else {
-                foreach ($errors as $error) {
-                    $this->html .= '<div class="alert error"><img src="../modules/ebay/views/img/forbbiden.gif" alt="nok" />&nbsp;'.$error.'</div>';
-                }
+                $vars = array(
+                    'errors' => $errors
+                );
+                $this->html .= $this->display('alert_tabs.tpl', $vars);
             }
 
             if (Configuration::get('EBAY_SEND_STATS')) {
@@ -1894,7 +1872,6 @@ class Ebay extends Module
         $form_inter_shipping_tab = new EbayFormInterShippingTab($this, $this->smarty, $this->context);
         $form_template_manager_tab = new EbayFormTemplateManagerTab($this, $this->smarty, $this->context);
         $form_ebay_sync_tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
-        $form_ebay_order_history_tab = new EbayOrderHistoryTab($this, $this->smarty, $this->context);
         //$help_tab = new EbayHelpTab($this, $this->smarty, $this->context);
         $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
         $orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
@@ -1946,7 +1923,6 @@ class Ebay extends Module
             'form_inter_shipping' => $form_inter_shipping_tab->getContent(),
             'form_template_manager' => $form_template_manager_tab->getContent(),
             'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
-            'orders_history' => $form_ebay_order_history_tab->getContent(),
             'ebay_listings' => $listings_tab->getContent($this->ebay_profile->id),
             'orders_sync' => $orders_sync->getContent(),
             'ps_products' => $ps_products->getContent(),
@@ -2081,59 +2057,6 @@ class Ebay extends Module
         return $category_tab;
     }
 
-    public function ajaxProductSync()
-    {
-        $itemConditionError = false;
-        self::addSmartyModifiers();
-        $nb_products = EbaySynchronizer::getNbSynchronizableProducts($this->ebay_profile);
-        $products = EbaySynchronizer::getProductsToSynchronize($this->ebay_profile, Tools::getValue('option'));
-        $nb_products_less = EbaySynchronizer::getNbProductsLess($this->ebay_profile, (int) $this->ebay_profile->getConfiguration('EBAY_SYNC_LAST_PRODUCT'));
-        // Send each product on eBay
-        if (count($products)) {
-            $this->ebay_profile->setConfiguration('EBAY_SYNC_LAST_PRODUCT', (int) $products[0]['id_product']);
-            EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_profile->id_lang, 'SYNC_FROM_MODULE_BACK');
-
-            // we cheat a bit to display a consistent number of products done
-            $nb_products_done = min($nb_products - $nb_products_less + 1, $nb_products);
-
-            echo 'KO|<div class="box_sync_ajax"><img src="'.$this->getPath().'/views/img/ajax-loader-small.gif" border="0" style="width:32px;height:32px;vertical-align:middle" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'</div>';
-        } else {
-            if (file_exists(dirname(__FILE__).'/log/syncError.php')) {
-                $context = Context::getContext();
-                include dirname(__FILE__).'/log/syncError.php';
-                if (count($context->all_error) == 0) {
-                    $msg = $this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')<br/><br/>';
-                } else {
-                    $msg = '';
-                }
-
-                $msg .= $this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
-
-                foreach ($context->all_error as $error) {
-                    $products_details = '<br /><u>'.$this->l('Product(s) concerned').' :</u>';
-
-                    foreach ($error['products'] as $product) {
-                        $products_details .= '<br />- '.$product;
-                    }
-
-                    $msg .= $error['msg'].'<br />'.$products_details;
-                }
-
-                echo 'OK|'.$this->displayError($msg);
-
-                if ($itemConditionError) {
-                    //Add a specific message for item condition error
-                    $message = $this->l('The item condition value defined in your  configuration is not supported in the eBay category.').'<br/>';
-                    $message .= $this->l('You can modify your item condition in the configuration settings (see supported conditions by categories here: http://pages.ebay.co.uk/help/sell/item-condition.html) ');
-                    $message .= $this->l('A later version of the module will allow you to specify item conditions by category');
-                    echo $this->displayError($message);
-                }
-                @unlink(dirname(__FILE__).'/log/syncError.php');
-            } else {
-                echo 'OK|'.$this->displayConfirmation($this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')');
-            }
-        }
-    }
 
     private function __relistItems()
     {
@@ -2268,10 +2191,6 @@ class Ebay extends Module
 
     public function ajaxPreviewTemplate($content, $id_lang)
     {
-        // work around for the tinyMCE bug deleting the css line
-        $css_line = '<link rel="stylesheet" type="text/css" href="'.$this->__getModuleUrl().'views/css/ebay.css" />';
-        $content = $css_line.$content;
-
         // random product
         $category = Category::getRootCategory($id_lang);
         $product = $category->getProducts($id_lang, 0, 1, null, null, false, true, true, 1, false);

@@ -251,7 +251,7 @@
 
 		$('.delete_cat').on('click', function() {
 			var tr = $(this).parent().parent();
-			var id_category = $(this).data('id')
+			var id_category = $(this).data('id');
 			if (confirm(header_ebay_l['Are you sure you want to delete this category?'])) {
 				$.ajax({
 					cache: false,
@@ -571,7 +571,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{if $categories|count == 0}
+				{if $categories|@count == 0}
 					<tr><td colspan="2">{l s='No category found.' mod='ebay'}</td></tr>
 				{else}
 					{foreach from=$categories item=category}

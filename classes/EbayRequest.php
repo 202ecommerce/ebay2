@@ -219,7 +219,7 @@ class EbayRequest
             //$this->smarty->clearAllAssign();
             $this->smarty->assign($vars, null, true);
             $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $apiCall . '.tpl');
-            $this->smarty->clearAssign($vars);
+            //$this->smarty->clearAssign($vars);
         }
 
         if ($apiCall == "ReviseFixedPriceItemStock") {
@@ -729,8 +729,8 @@ class EbayRequest
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
-            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
-
+            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'variations' => null,
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);

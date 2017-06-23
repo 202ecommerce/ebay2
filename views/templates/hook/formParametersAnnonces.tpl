@@ -216,7 +216,7 @@
 				{l s='Number of additional pictures' mod='ebay'}
 			</label>
 			<div class="col-sm-9">
-				<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
+				<input type="number" class="form-control" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">

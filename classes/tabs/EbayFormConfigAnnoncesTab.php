@@ -28,9 +28,6 @@ class EbayFormConfigAnnoncesTab extends EbayTab
 {
     public function getContent()
     {
-        // Loading config currency
-        $config_currency = new Currency((int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
-
         $url_vars = array(
             'id_tab'  => '101',
             'section' => 'parametersannonces'
@@ -39,7 +36,10 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         $url_vars['controller'] = Tools::getValue('controller');
 
         if (!$this->ebay_profile->getConfiguration('EBAY_PARAMETERS_TAB_OK')) {
-            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+            $vars = array(
+                'msg' => $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
+            );
+            return $this->display('alert_tabs.tpl', $vars);
         }
 
         $url = $this->_getUrl($url_vars);
@@ -51,9 +51,6 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
 
         $createShopUrl = 'http://cgi3.ebay.'.$ebay_country->getSiteExtension().'/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
-
-        $ebay_request = new EbayRequest();
-
 
         $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
 
@@ -145,7 +142,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         }
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
-        $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
+
         $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_EAN', (string)Tools::getValue('synchronize_ean'));
         $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_MPN', (string)Tools::getValue('synchronize_mpn'));
         $this->ebay_profile->setConfiguration('EBAY_SYNCHRONIZE_UPC', (string)Tools::getValue('synchronize_upc'));
@@ -187,7 +184,8 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);
-            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=101&section=category#dashbord');
+            //Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=101&section=category#dashbord');
+            return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }

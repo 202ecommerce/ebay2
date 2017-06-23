@@ -49,11 +49,11 @@
 			</PrimaryCategory>		
 		{/if}
 
-		{if isset($sku)}
+		{if isset($sku) && !isset($variations)}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 
-		{if isset($quantity)}
+		{if isset($quantity) && !isset($variations)}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 
@@ -62,8 +62,6 @@
 		{/if}
         {if isset($variations)}
             {$variations|cleanHtml nofilter}
-		{elseif isset($product_listing_details)}
-            {$product_listing_details|cleanHtml nofilter}
         {/if}
 
         {if isset($ebay_store_category_id)}

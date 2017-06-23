@@ -91,10 +91,10 @@ class EbayLogger
 		';
         $where = array();
         if ($keyword) {
-            $where[] = ' message LIKE "%'.$keyword.'%" OR context LIKE "%'.$keyword.'%"';
+            $where[] = ' message LIKE "%'.pSQL($keyword).'%" OR context LIKE "%'.pSQL($keyword).'%"';
         }
         if ($uid) {
-            $where[] = 'uid = "'.$uid.'" ';
+            $where[] = 'uid = "'.pSQL($uid).'" ';
         }
         if ($where) {
             $sql .= 'WHERE '.implode(' AND ', $where);
@@ -157,21 +157,6 @@ class EbayLogger
             }
         }
 
-        //EbayLogger::test();
-        $html = '<form method="GET" action="index.php" >';
-        $html .= '<a href="'.$currentIndex.'&logs=1">BACK</a>&nbsp;&nbsp;&nbsp;';
-        $html .= '<a href="'.$currentIndex.'&logs=CLEAR">CLEAR</a>&nbsp;&nbsp;&nbsp;';
-        $html .= '<a href="'.$currentIndex.'&logs=TEST">TEST</a>&nbsp;&nbsp;&nbsp;';
-        $html .= '<a href="'.$currentIndex.'&logs=EXPORT">EXPORT</a>&nbsp;&nbsp;&nbsp;';
-        $html .= '<input name="controller" type="hidden" value="AdminModules">';
-        $html .= '<input name="configure" type="hidden" value="ebay">';
-        $html .= '<input name="token" type="hidden" value="'.Tools::getAdminTokenLite('AdminModules').'">';
-        $html .= '<input name="logs" type="hidden" value="1">';
-        $html .= '<input name="keyword" type="text" placeholder="search in logs ...">';
-        $html .= '</form>';
-        $html .= '<p></p>';
-        $html .= "<h5>$keyword $uid</h5>";
-        $html .= '<p></p>';
 
 
         $logs = self::getLogs($uid, $keyword); //self::getLogs();
@@ -234,7 +219,7 @@ class EbayLogger
         //$currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&totlookbook_edit='.Tools::getValue('totlookbook_edit', 'global');
         $helper->currentIndex = $_SERVER['REQUEST_URI'];
 
-
+        $html = "";
         $html .= $helper->generateList($logs, $fields_list);
 
         return $html;

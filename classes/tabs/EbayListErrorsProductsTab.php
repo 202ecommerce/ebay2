@@ -40,7 +40,7 @@ class EbayListErrorsProductsTab extends EbayTab
         if (!empty($tasks)) {
             foreach ($tasks as $task) {
                 $context = Context::getContext();
-                $item_id = EbayProduct::getIdProductRef($task['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $task['id_product_attribute']);
+                $item_id = EbayProduct::getIdProductRef($task['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $task['id_product_attribute'], $ebay_profile->id_shop);
 
                 $product = new Product($task['id_product'], false, $ebay_profile->id_lang);
                 $name_attribute = '';

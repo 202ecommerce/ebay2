@@ -42,7 +42,10 @@ class EbayFormShippingTab extends EbayTab
         ));
 
         if (!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
-            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+            $vars = array(
+                'msg' => $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
+            );
+            return $this->display('alert_tabs.tpl', $vars);
         }
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
@@ -150,5 +153,6 @@ class EbayFormShippingTab extends EbayTab
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
         }
+        return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
     }
 }

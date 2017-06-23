@@ -130,7 +130,7 @@ if ($shopGroup->share_stock) {
 }
 
 if ($search) {
-    $query .= ' AND pl.`name` LIKE \'%'.$search.'%\'';
+    $query .= ' AND pl.`name` LIKE \'%'.pSQL($search).'%\'';
 }
 
 //$query .= ' GROUP BY s.`id_product`';

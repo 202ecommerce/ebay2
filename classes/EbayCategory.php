@@ -51,6 +51,8 @@ class EbayCategory
         if ($id_category) {
             $this->id_category = (int)$id_category;
         }
+
+        $this->_loadFromDb();
     }
 
     private function _loadFromDb()

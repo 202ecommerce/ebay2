@@ -126,7 +126,7 @@ class EbaySynchronizer
         $context = Context::getContext();
         $ebay_request = new EbayRequest($id_ebay_profile, $context->cloneContext());
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        if ($itemID = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute)) {
+        if ($itemID = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop)) {
             $ebay = $ebay_request->endFixedPriceItem($itemID);
             EbayProduct::deleteByIdProductRef($itemID);
             return $ebay;
@@ -141,10 +141,12 @@ class EbaySynchronizer
         $data = EbaySynchronizer::getDatasProduct($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
 
         if (count($data['variations'])&& $id_product_attribute == 0) {
+            $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
+            $data['description'] = EbaySynchronizer::__getMultiSkuItemDescription($data, $id_currency);
             $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'), $data['id_category_ps']);
         } else {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
-
+            $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
             if ($data['variations'][0]) {
                 $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
             }
@@ -500,9 +502,9 @@ class EbaySynchronizer
     {
         //Fix for payment modules validating orders out of context, $link will not  generate fatal error.
         $link = is_object($context_link) ? $context_link : new Link();
-        $prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true) . '/' : '');
+        //$prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true) . '/' : '');
 
-        return str_replace('https://', 'http://', $prefix . $link->getImageLink('ebay', $id_product . '-' . $id_image, $size));
+        return $link->getImageLink('ebay', $id_product . '-' . $id_image, $size);
     }
 
     /**
@@ -870,7 +872,7 @@ class EbaySynchronizer
     private static function __addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_category_ps)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
+        $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
         if (empty($item_id)) {
             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, 0);
             $res = $ebay->addFixedPriceItemMultiSku($data);
@@ -913,7 +915,7 @@ class EbaySynchronizer
     private static function __addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_category_ps, $id_attribute = 0)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute);
+        $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop);
         if (empty($item_id)) {
             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, $id_attribute);
             $res = $ebay->addFixedPriceItem($data);
@@ -934,12 +936,15 @@ class EbaySynchronizer
         $ebay_request = new EbayRequest($id_ebay_profile, $context->cloneContext());
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $data = EbaySynchronizer::getDatasProduct($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
-        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
+        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
 
         if (count($data['variations']) && $id_product_attribute == 0) {
+            $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
+            $data['description'] = EbaySynchronizer::__getMultiSkuItemDescription($data, $id_currency);
             $ebay = EbaySynchronizer::__updateMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'));
         } else {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
+            $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
             if (Tools::getIsset($data['variations'][0])) {
                 $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
             }
@@ -1005,7 +1010,7 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $data = EbaySynchronizer::getDatasProductForStock($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
 
-        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
+        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
         if (count($data['variations']) && $id_product_attribute == 0) {
             $ebay = EbaySynchronizer::__updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'));
         } else {

@@ -34,11 +34,17 @@ class EbayFormEbaySyncTab extends EbayTab
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+            $vars = array(
+                'msg' => $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab'),
+            );
+            return $this->display('alert_tabs.tpl', $vars);
         }
         $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
         if (empty($national_shipping)) {
-            return '<div class="alert alert-warning alert-no-icon">' . $this->ebay->l('Please configure the \'International Shipping\' tab before using this tab', 'ebayformebaysynctab') . '</div><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+            $vars = array(
+                'msg' => $this->ebay->l('Please configure the \'International Shipping\' tab before using this tab', 'ebayformebaysynctab'),
+            );
+            return $this->display('alert_tabs.tpl', $vars);
         }
         $nb_products_mode_a = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "A");
         $nb_products_mode_b = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "B");
@@ -181,7 +187,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'id_employee' => $this->context->employee->id,
             'date' => pSQL(date('Ymdhis')),
             'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
-            'bp_active' => $this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'),
+            'bp_active' => ($this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'))?$this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'):0,
 
         );
 

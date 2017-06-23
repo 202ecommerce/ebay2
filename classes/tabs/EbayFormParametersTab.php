@@ -167,7 +167,8 @@ class EbayFormParametersTab extends EbayTab
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_PARAMETERS_TAB_OK', 1);
-            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=1&section=settings');
+            //Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=1&section=settings');
+            return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }

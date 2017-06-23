@@ -57,7 +57,7 @@ if (Module::isInstalled('ebay')) {
         $cookie = new Cookie('psEbay', '', 3600);
 
         $ebay = new eBay((int) Tools::getValue('profile'));
-        $ebay->ajaxProductSync();
+        //$ebay->ajaxProductSync();
 
         unset($cookie);
     }
