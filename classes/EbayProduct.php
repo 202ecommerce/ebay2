@@ -254,8 +254,12 @@ class EbayProduct
         ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
         ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
         ecc.`sync`                           AS sync,
-        ec.`id_category_ref`
+        ec.`id_category_ref`,
+        etm.`id_task`
     FROM `'._DB_PREFIX_.'ebay_product` ep
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_task_manager` etm 
+    ON ep.`id_product` = etm.`id_product`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`

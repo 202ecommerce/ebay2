@@ -88,6 +88,8 @@ $classes_to_load = array(
     'tabs/EbayFormConfigAnnoncesTab',
     'tabs/EbayFormConfigOrdersTab',
     'tabs/EbayProductsExcluTab',
+    'tabs/EbayLogJobsTab',
+    'tabs/EbayLogWorkersTab',
     'EbayAlert',
     'EbayOrderErrors',
     'EbayDbValidator',
@@ -136,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.0';
+        $this->version = '2.0.1';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -1358,7 +1360,7 @@ class Ebay extends Module
         $profiles = EbayProfile::getProfilesByIdShop($id_shop);
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
-            $profile['site_name'] = EbayCountrySpec::getSiteNameBySiteId($profile['ebay_site_id']);
+            $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
         if (Configuration::get('EBAY_VERSION') != $this->version) {
@@ -1543,7 +1545,7 @@ class Ebay extends Module
         $profiles = EbayProfile::getProfilesByIdShop($id_shop);
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
-            $profile['site_name'] = EbayCountrySpec::getSiteNameBySiteId($profile['ebay_site_id']);
+            $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
 
@@ -1584,7 +1586,10 @@ class Ebay extends Module
         }
         $request = new EbayRequest();
 
+        $id_profile = $this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : '';
+
         $this->smarty->assign(array(
+            'nb_tasks_in_work_url' => _MODULE_DIR_.'ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
@@ -1612,7 +1617,7 @@ class Ebay extends Module
             'show_welcome_stats' => $ebay_send_stats === false,
             'free_shop_for_90_days' => $this->shopIsAvailableFor90DaysOffer(),
             'show_welcome' => (($ebay_send_stats !== false) && (!count($id_ebay_profiles))),
-            'show_seller_tips' => (($ebay_send_stats !== false) && $this->ebay_profile && $this->ebay_profile->getToken()),
+            'show_seller_tips' => ( $this->ebay_profile && $this->ebay_profile->getToken()),
             'current_profile' => $this->ebay_profile,
             'current_profile_site_extension' => ($this->ebay_profile ? EbayCountrySpec::getSiteExtensionBySiteId($this->ebay_profile->ebay_site_id) : ''),
             'profiles' => $profiles,
@@ -1887,6 +1892,9 @@ class Ebay extends Module
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
+
+        $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
+        $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
         // test if everything is green
         if ($this->ebay_profile && $this->ebay_profile->isAllSettingsConfigured()) {
             if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
@@ -1947,6 +1955,8 @@ class Ebay extends Module
             'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
             'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
+            'ebayLogJobs' => $log_jobs->getContent($this->ebay_profile->id),
+            'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
             );
 
 
@@ -2343,7 +2353,8 @@ class Ebay extends Module
         }
 
         $this->smarty->assign('products_ebay_listings', $products_ebay_listings);
-
+        $this->smarty->assign('id_employee', $id_employee);
+        $this->smarty->assign('admin_path', $admin_path);
         echo $this->display(__FILE__, 'views/templates/hook/ebay_listings_ajax.tpl');
     }
 

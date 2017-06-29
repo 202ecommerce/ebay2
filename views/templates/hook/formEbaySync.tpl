@@ -39,6 +39,22 @@
 		font-size: 25px;
 	}
 
+	input.categorySync[type="checkbox"] {
+		display:none;
+	}
+
+	input.categorySync[type="checkbox"] + label::before{
+		color:red;
+		content:"\2716";
+		font-size:18px;
+	}
+
+	input.categorySync[type="checkbox"]:checked + label::before{
+		color:green;
+		content:"\2714";
+		font-size:20px;
+	}
+
 	#button_ebay_sync2{
 		background-image: url({/literal}{$path}{literal}views/img/ebay.png);
 		background-repeat: no-repeat;
@@ -62,6 +78,7 @@
 	{/literal}
 </style>
 <script>
+	var product_sync_for_delete;
 	var module_time = "{$date|escape:'htmlall':'UTF-8'}";
 	var showOptionals;
 	var id_employee = {$id_employee|escape:'htmlall':'UTF-8'};
@@ -203,11 +220,12 @@
 			});
 			event.preventDefault();
 
-			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php?token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data;
+			var url = module_dir + "ebay/ajax/saveConfigFormCategory.php";
 
 				$.ajax({
 					type: "POST",
 					url: url,
+					data: "token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data,
 					success: function (data) {
 						location.reload();
 					}
@@ -250,20 +268,30 @@
 		});
 
 		$('.delete_cat').on('click', function() {
-			var tr = $(this).parent().parent();
-			var id_category = $(this).data('id');
-			if (confirm(header_ebay_l['Are you sure you want to delete this category?'])) {
-				$.ajax({
-					cache: false,
-					dataType: 'json',
-					type: "POST",
-					url: module_dir + "ebay/ajax/deleteConfigCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_category,
-					success: function (data) {
-						tr.remove();
-					}
-				});
-			}
+		    $('#popin-delete-productSync').show();
+            product_sync_for_delete = $(this);
+            $name_categorie = $(this).closest('tr').children().first().html();
+            $('#popin-delete-productSync span.name_categorie').html($name_categorie);
 		});
+
+        $(document).on('click', '#popin-delete-productSync .cancel-delete', function(){
+            $('#popin-delete-productSync').hide();
+        });
+
+        $(document).on('click', '#popin-delete-productSync .ok-delete', function(){
+            $('#popin-delete-productSync').hide();
+            var tr = $(product_sync_for_delete).parent().parent();
+            var id_category = $(product_sync_for_delete).data('id');
+            $.ajax({
+                    cache: false,
+                    dataType: 'json',
+                    type: "POST",
+                    url: module_dir + "ebay/ajax/deleteConfigCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_category,
+                    success: function (data) {
+                        tr.remove();
+                    }
+                });
+        });
 
 		$('.add_categories_ps li').live('click', function() {
 			$('.category_ps_list').append($( this ));
@@ -583,9 +611,9 @@
 							<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
 							<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
 							<td>{$category.annonces|escape:'htmlall':'UTF-8'}/{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
-							<td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
-							<td><a href="#popin-add-cat" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Modify' mod='ebay'}</a>
-								<a href="#" class="delete_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Delete' mod='ebay'}</a></td>
+							<td><input type="checkbox" class="categorySync" id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} /><label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}"></label>
+							<td><a href="#popin-add-cat" style="width:100%" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Modify' mod='ebay'}</a>
+								<a href="#" style="width:100%" class="delete_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Delete' mod='ebay'}</a></td>
 						</tr>
 					{/foreach}
 				{/if}
@@ -740,7 +768,7 @@
 						{/foreach}
 						</select>
 					</div>
-						<a href="#" class="reset_bp btn btn-lg btn-success"><span></span> Reset BP</a>
+						<a href="#" class="reset_bp btn btn-lg btn-success"><span></span> {l s='Reset BP' mod='ebay'}</a>
 					{/if}
 
 				</div>
@@ -852,4 +880,18 @@
 		</div>
 	</div>
 {* Profile removal modal *}
+</div>
+<div id="popin-delete-productSync" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+	<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+		<div class="panel-heading">
+			<i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
+		</div>
+		<p>{l s='Souhaitez-vous supprimer la synchronisation de la categorie' mod='ebay'} <span class="name_categorie"></span>?</p>
+		<p>{l s='Les annonces eBay apparaitront dans la liste des annonces orphelines ou vous pourrez les supprimer definitivement' mod='ebay'}</p>
+
+		<div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
+			<button class="cancel-delete btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+			<button class="ok-delete btn btn-success pull-right" style="padding:15px">OK</button>
+		</div>
+	</div>
 </div>

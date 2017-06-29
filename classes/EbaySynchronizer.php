@@ -224,6 +224,7 @@ class EbaySynchronizer
 
         /** @var EbayCategory $ebay_category */
         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
+
         $variations = null;
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
 
@@ -299,6 +300,7 @@ class EbaySynchronizer
         }
 
         $data['description'] = EbaySynchronizer::__getEbayDescription($product, $ebay_profile, $id_lang);
+        
         if (count($data['variations'])) {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
             $data['description'] = EbaySynchronizer::__getMultiSkuItemDescription($data, $id_currency);
@@ -452,6 +454,7 @@ class EbaySynchronizer
                 }
             }
         }
+
         unset($combinations);
         return $variations;
     }
@@ -494,7 +497,7 @@ class EbaySynchronizer
         foreach ($attributes_values as $attribute_value) {
             $variation_specifics_pairs[$attribute_value['name']] = $attribute_value['value'];
         }
-
+     
         return $variation_specifics_pairs;
     }
 
@@ -502,9 +505,9 @@ class EbaySynchronizer
     {
         //Fix for payment modules validating orders out of context, $link will not  generate fatal error.
         $link = is_object($context_link) ? $context_link : new Link();
-        //$prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true) . '/' : '');
+        $prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true) . '/' : '');
 
-        return $link->getImageLink('ebay', $id_product . '-' . $id_image, $size);
+       return str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
     }
 
     /**
@@ -945,7 +948,7 @@ class EbaySynchronizer
         } else {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
             $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
-            if (Tools::getIsset($data['variations'][0])) {
+            if (isset($data['variations'][0])) {
                 $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
             }
             $ebay = EbaySynchronizer::__updateItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'), $id_product_attribute);
@@ -1548,13 +1551,13 @@ class EbaySynchronizer
             );
 
             $data['id_product'] .= '-' . (int)$data['id_attribute'];
-            if (Tools::getIsset($variation['variation_specifics'])) {
+            if (isset($variation['variation_specifics'])) {
                 $data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);
             }
-            $data['ean13'] = Tools::getIsset($variation['ean13']) ? $variation['ean13'] : null;
-            $data['upc'] = Tools::getIsset($variation['ean13']) ? $variation['upc'] : null;
-            $data['isbn'] = Tools::getIsset($variation['ean13']) ? $variation['isbn'] : null;
-            $data['reference'] = Tools::getIsset($variation['ean13']) ? $variation['reference'] : null;
+            $data['ean13'] = isset($variation['ean13']) ? $variation['ean13'] : null;
+            $data['upc'] = isset($variation['ean13']) ? $variation['upc'] : null;
+            $data['isbn'] = isset($variation['ean13']) ? $variation['isbn'] : null;
+            $data['reference'] = isset($variation['ean13']) ? $variation['reference'] : null;
         }
         return $data;
     }

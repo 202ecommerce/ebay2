@@ -23,34 +23,31 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div id="ebayProductExclu">
-    <p class="center">
-        <button class="btn btn-default">
-            <i class="icon-eye"></i>
-            <span>{l s='See excluded products' mod='ebay'}</span>
-        </button>
-    </p>
+
+
+<div>
+	<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
+		<thead>
+		<tr class="nodrag nodrop">
+			<th>{l s='ID' mod='ebay'}</th>
+			<th>{l s='Date' mod='ebay'}</th>
+			<th>{l s='ID Product' mod='ebay'}</th>
+			<th>{l s='ID Attribute' mod='ebay'}</th>
+		</tr>
+		</thead>
+		<tbody>
+		{if $tasks}
+			{foreach from=$tasks item='task'}
+				<tr>
+					<td>{$task.id|escape:'htmlall':'UTF-8'}</td>
+					<td>{$task.date_add|escape:'htmlall':'UTF-8'}</td>
+					<td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
+					<td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
+				</tr>
+			{/foreach}
+		{/if}
+		<tr></tr>
+		</tbody>
+	</table>
 </div>
 
-
-<script type="text/javascript">
-    var url_tab = "{$url_tab nofilter}";
-    function loadProductExclu(){
-    $.ajax({
-        type: "POST",
-        url: module_dir+'ebay/ajax/getProductExclu.php',
-        data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}",
-        success: function(data)
-        {
-            $('#ebayProductExclu').fadeOut(400, function(){
-                $(this).html(data).fadeIn();
-            })
-        }
-    });
-    }
-    var content_ebay_listings = $("#ebayProductExclu button");
-    content_ebay_listings.bind('click', 'button', function(){
-        loadProductExclu();
-    });
-    //]]>
-</script>

@@ -33,7 +33,7 @@
         <ul class="dropdown-menu dropdown-menu-top" style="min-width: 560px;">
             <li class="clearfix head">
                 <span class="col-xs-5" style="position: relative; float: left; padding-left: 20px; padding-right: 5px; min-height: 1px; width: 170px; font-weight: 600;">{l s='User' mod='ebay'}</span>
-                <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px; font-weight: 600;">{l s='Country' mod='ebay'}</span>
+                <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px; font-weight: 600;">{l s='Site ebay' mod='ebay'}</span>
                 <span class="col-xs-2 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Listings' mod='ebay'}</small></span>
                 <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Listing errors' mod='ebay'}</small></span>
                 <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Order errors' mod='ebay'}</small></span>
@@ -53,7 +53,7 @@
                             <span class="col-xs-2 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-success">{$profile.nb_products}</span></span>
                             <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
                             <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-primary">{$profile.nb_tasks}</span></span>
                         {/if}
                     </a>
                 </li>

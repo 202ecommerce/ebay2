@@ -33,7 +33,7 @@
 		{if isset($autopay)}
 			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
 		{/if}        
-		<Title><![CDATA[{$title}]]></Title>
+		<Title><![CDATA[{$title|unescape:"UTF-8" nofilter}]]></Title>
 		{if count($pictures)}
 			<PictureDetails>
 				<GalleryType>Gallery</GalleryType>
@@ -53,7 +53,7 @@
 
 
 		<ConditionID>{if $condition_id > 0}{$condition_id|escape:'htmlall':'UTF-8'}{else}1000{/if}</ConditionID>
-		{if $price_update && isset($start_price)}
+		{if $price_update && isset($start_price) && $start_price}
 			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>
 		{/if}
 		<CategoryMappingAllowed>true</CategoryMappingAllowed>

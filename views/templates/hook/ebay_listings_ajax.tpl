@@ -24,6 +24,9 @@
 *}
 
 {if $products_ebay_listings}
+	<button  id="refresh_list">
+		{l s='Refresh list' mod='ebay'}
+	</button>
     <table class="table" cellpadding="0" cellspacing="0">
     	<tr>
     		<th>{l s='Id product' mod='ebay'}</th>
@@ -45,3 +48,21 @@
 {else}
     <p class="center"><b>{l s='No listing with this profile' mod='ebay'}</b></p>
 {/if}
+
+
+<script>
+	$('#refresh_list').click(refreshList);
+    function refreshList(){
+        $.ajax({
+            type: "POST",
+            url: module_dir+'ebay/ajax/getEbayListings.php',
+            data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}&id_shop="+id_shop+"&admin_path={$admin_path|escape:'htmlall':'UTF-8'}",
+            success: function(data)
+            {
+                $('#ebayListings').fadeOut(400, function(){
+                    $(this).html(data).fadeIn();
+                })
+            }
+        });
+	}
+</script>

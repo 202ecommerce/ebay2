@@ -39,8 +39,66 @@ function loadOrphans() {
 
   
 }
+
+
+
+function delete_orphan(index, element) {
+
+
+    var lnk = $(element);
+
+    var id_product_ref = $(element).attr('ref');
+
+    $.ajax({
+        type: "POST",
+        url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee + "&action=end",
+        success : function(data) {
+
+            if (data == '1')
+                lnk.closest('tr').remove(); // remove row
+
+        }
+    });
+
+
+}
+function delete_all_orphans() {
+    $('a.delete-orphan').each(delete_orphan);
+}
+
+var element_for_delete;
+
 $(document).ready(function () {
-    $('.delete-orphan').live('click', 'a', function(e) {
+
+    $(document).on('click', '.delete_all_orphans', function(){
+        $('#popin-delete-all-products').show();
+    });
+
+    $(document).on('click', '#popin-delete-all-products .cancel-delete', function(){
+        $('#popin-delete-all-products').hide();
+    });
+
+    $(document).on('click', '#popin-delete-all-products .ok-delete', function(){
+        delete_all_orphans();
+        $('#popin-delete-all-products').hide();
+    });
+
+    $('.delete-orphan').live('click', 'a', function(e){
+        e.preventDefault();
+        $('#popin-delete-product').show();
+        element_for_delete = $(this);
+    });
+
+    $(document).on('click', '#popin-delete-product .cancel-delete', function(){
+        $('#popin-delete-product').hide();
+    });
+
+    $(document).on('click', '#popin-delete-product .ok-delete', function(){
+        $('#popin-delete-product').hide();
+        delete_orphan(0, element_for_delete);
+    });
+
+    /*$('.delete-orphan').live('click', 'a', function(e) {
 
         e.preventDefault();
 
@@ -76,9 +134,9 @@ $(document).ready(function () {
             }
         });
 
-    });
+    });*/
 
-    var content_ebay_relistings = $("#ebayOrphanReListing button");
+    var content_ebay_relistings = $("#ebayOrphanReListing button.loadListOrphan");
     content_ebay_relistings.live('click', 'button', function () {
         loadOrphans();
     });

@@ -23,6 +23,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+var profileId ;
 $(document).ready(function () {
     $('#ebay-seller-tips-link').click(function (event) {
         event.preventDefault();
@@ -41,18 +42,26 @@ $(document).ready(function () {
 
     $('.delete-profile').click(function (event) {
         event.preventDefault();
-        var profileId = $(this).data('profile');
-        if (confirm(header_ebay_l['Are you sure you want to delete the profile number %profile_number%?'].replace('%profile_number%', profileId))) {
-            $.ajax({
-                type: "POST",
-                url: delete_profile_url + '&profile=' + profileId,
-                cache: false,
-                success: function (data) {
-                    window.location.replace(window.location.href.replace("&action=logged", ""));
-                }
-            });
-        }
-        return false;
+        profileId = $(this).data('profile');
+        $('#popin-delete-profile').show();
+        $("#popin-delete-profile .id_profile").html(profileId);
+    });
+
+    $(document).on('click', '#popin-delete-profile .cancel-delete', function(){
+        $('#popin-delete-profile').hide();
+    });
+
+
+    $(document).on('click', '#popin-delete-profile .ok-delete', function(){
+        $('#popin-delete-profile').hide();
+        $.ajax({
+            type: "POST",
+            url: delete_profile_url + '&profile=' + profileId,
+            cache: false,
+            success: function (data) {
+                window.location.replace(window.location.href.replace("&action=logged", ""));
+            }
+        });
     });
 
 

@@ -164,7 +164,7 @@
                                                     <ul class="dropdown-menu">
                                                         <li class="clearfix head">
                                                             <span class="col-xs-5">{l s='User' mod='ebay'}</span>
-                                                            <span class="col-xs-2">{l s='Country' mod='ebay'}</span>
+                                                            <span class="col-xs-2">{l s='Site ebay' mod='ebay'}</span>
                                                             <span class="col-xs-1 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
                                                             <span class="col-xs-1 text-right"><small>{l s='Listing errors' mod='ebay'}</small></span>
                                                             <span class="col-xs-1 text-right"><small>{l s='Order errors' mod='ebay'}</small></span>
@@ -184,7 +184,7 @@
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
                                                                         <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                                                                        <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_tasks}</span></span>
+                                                                        <span class="col-xs-1 text-right"><span class="badge badge-primary">{$profile.nb_tasks}</span></span>
                                                                     {/if}
 
 
@@ -207,6 +207,10 @@
                                             {if $debug == 1}
                                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                                             {/if}
+                                            <span class="nb_tasks_in_work">
+                                                {l s='In work ' mod='ebay'}<b></b>{l s=' tasks' mod='ebay'} <span class="btn btn-default refreshNbTasksInWork">{l s='Refresh' mod='ebay'}</span>
+                                            </span>
+
                                             <div class="pull-right">
                                                 <span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
                                                   <a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>
@@ -359,6 +363,7 @@
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
             <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Listings' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>
+            <a id="log-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#log" data-sub="log"><i class=""></i> {l s='Log' mod='ebay'}</a>
         </ul>
     </div>
       {*  <div class="ebay-boxes-2-col-table">
@@ -410,6 +415,20 @@
         </div>
     </div>
     <a href="#config_ok" class="popin_config_ok_sync" style="display: none"></a>
+
+    <div id="popin-delete-profile" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+        <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+            <div class="panel-heading">
+                <i class="icon-trash"></i> {l s='Profile' mod='ebay'}
+            </div>
+            <p>{l s='Are you sure you want to delete the profile number ' mod='ebay'}<span class="id_profile"></span>?</p>
+
+            <div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
+                <button class="cancel-delete btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+                <button class="ok-delete btn btn-success pull-right" style="padding:15px">OK</button>
+            </div>
+        </div>
+    </div>
     {if $ebay_shipping_config_tab > 0 && $count_category == 0}
     <script>
         $(document).ready(function() {
@@ -441,6 +460,22 @@
 
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
+        var nb_tasks_in_work_url = '{$nb_tasks_in_work_url}';
+        function loadNbTasksInWork(e){
+            $.ajax({
+                url : nb_tasks_in_work_url,
+                success : function(data) {
+                    if (data != '0'){
+                        $('.nb_tasks_in_work').show();
+                        $('.nb_tasks_in_work b').html(data);
+                    } else{
+                        $('.nb_tasks_in_work').hide();
+                    }
+                }
+            });
+        };
+        loadNbTasksInWork();
+        $(document).on('click', '.refreshNbTasksInWork', loadNbTasksInWork);
     </script>
     <script>
 
