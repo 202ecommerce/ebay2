@@ -226,6 +226,9 @@
 					type: "POST",
 					url: url,
 					data: "token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop +'&ps_categories='+ps_categories+ '&'+data,
+                    beforeSend:function(){
+                        $('.ajaxLoading').show();
+					},
 					success: function (data) {
 						location.reload();
 					}
@@ -857,6 +860,7 @@
 							<div class="panel-footer">
 								<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
 								<button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
+								<div class="ajaxLoading pull-right" style="display:none; margin-top:10px"><img src="../modules/ebay/views/img/ajax-loader-small.gif"></div>
 							</div>
 						</div>
 					</div>

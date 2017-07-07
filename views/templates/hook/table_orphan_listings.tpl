@@ -28,6 +28,7 @@
     <p class="center">
         <button class="button loadListOrphan">{l s='Refresh Listing' mod='ebay'}</button>
         <button class="delete_all_orphans">{l s='Delete all' mod='ebay'}</button>
+        <button class="delete_several_orphans">{l s='Delete selected products' mod='ebay'}</button>
     </p>
 </div>
 
@@ -36,6 +37,8 @@
 <table id="OrphanListings" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
     <thead>
     <tr class="nodrag nodrop">
+        
+        <th></th>
 
         <th style="width:110px;">
             <span>{l s='eBay Listing' mod='ebay'}</span>
@@ -96,6 +99,10 @@
             {continue}
         {/if}
 		<tr{if $k % 2 !== 0} class="alt_row"{/if}>
+            
+            <td>
+                <input type="checkbox" class="checkboxfordelete">
+            </td>
 
 			<td>
                 {if $a.id_product_ref}
@@ -184,6 +191,20 @@
             <i class="icon-trash"></i> {l s='Orphan Listing' mod='ebay'}
         </div>
         <p>{l s='Remove this product?' mod='ebay'}</p>
+
+        <div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
+            <button class="cancel-delete btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+            <button class="ok-delete btn btn-success pull-right" style="padding:15px">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="popin-delete-several-products" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+    <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+        <div class="panel-heading">
+            <i class="icon-trash"></i> {l s='Orphan Listing' mod='ebay'}
+        </div>
+        <p>{l s='Remove selected products?' mod='ebay'}</p>
 
         <div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
             <button class="cancel-delete btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>

@@ -341,6 +341,22 @@ class EbayProduct
 
         $final_res = array();
         foreach ($res as &$row) {
+            $ret =false;
+            if (!$row['exists']) {
+                $ret = true;
+            } elseif (!$row['EbayCategoryExists']) {
+                $ret = true;
+            } elseif (!$row['active'] || $row['blacklisted']) {
+                $ret = true;
+            } elseif (is_null($row['id_category_ref'])) {
+                $ret = true;
+            } elseif (!$row['sync']) {
+                $ret = true;
+            }
+
+            if ($ret===false) continue;
+
+
             if (isset($row['id_product_ref']) && $row['id_product_ref']) {
                 $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
             }
@@ -365,8 +381,10 @@ class EbayProduct
                 $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
             }
 
+            $final_res[] = $row;
+
             // filtering
-            if (!$row['exists']) {
+            /*if (!$row['exists']) {
                 $final_res[] = $row;
             } elseif (!$row['EbayCategoryExists']) {
                 $final_res[] = $row;
@@ -376,7 +394,7 @@ class EbayProduct
                 $final_res[] = $row;
             } elseif (!$row['sync']) {
                 $final_res[] = $row;
-            }
+            }*/
         }
 
         return $final_res;

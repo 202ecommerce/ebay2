@@ -27,7 +27,7 @@
 	<ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
 	<WarningLevel>High</WarningLevel>
 	<Item>
-		{if isset($sku) && !isset($variations)}
+		{if isset($sku) && !isset($variations) && $variations}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 		{if isset($autopay)}

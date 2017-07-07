@@ -502,5 +502,6 @@
             $('.change_profile').submit();
         });*/
     </script>
+    <script  type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/form_sync_tab.js" async ></script>
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/header.js?date={$date|escape:'htmlall':'UTF-8'}"></script>
 <!-- after seller tips -->

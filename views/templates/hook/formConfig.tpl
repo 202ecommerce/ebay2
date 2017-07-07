@@ -121,7 +121,10 @@
 
 					<div id="menuTab5Sheet" class="tabItem tab-pane">
 						<div class="panel">
-							{$form_ebay_sync|ebayHtml}
+							{*$form_ebay_sync|ebayHtml*}
+							<div class="ajaxLoadingFormSyncTab" style="display:none; position:relative; height:60px">
+								<img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;">
+							</div>
 						</div>
 					</div>
 

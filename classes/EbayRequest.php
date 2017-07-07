@@ -707,6 +707,7 @@ class EbayRequest
         }
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
+
         $vars = array(
             'sku' => 'prestashop-' . $data['id_product'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -1292,6 +1293,7 @@ class EbayRequest
         $variation_pictures = array();
         $variation_specifics_set = array();
 
+
         if (isset($data['variations'])) {
             $last_specific_name = '';
             $attribute_used = array();
@@ -1358,7 +1360,6 @@ class EbayRequest
             }
         }
 
-
         $vars = array(
             'variations' => isset($data['variations']) ? $data['variations'] : array(),
             'variations_pictures' => $variation_pictures,
@@ -1373,7 +1374,6 @@ class EbayRequest
         );
 
         $this->smarty->assign($vars);
-
         return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetVariations.tpl');
     }
 

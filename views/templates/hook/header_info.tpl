@@ -22,13 +22,13 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
-<div class="pull-left totebay">
-    <div class="dropdown js-user-dropdown">
-        <button class="dropdown-toggle" type="button" data-toggle="dropdown" style="height: 35px; overflow: hidden; background-color: transparent; border: none; outline: none;">
-            <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px;"/>
-            <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
-        </button>
+{if $visible_logo}
+    <div class="pull-left totebay">
+        <div class="dropdown js-user-dropdown">
+            <button class="dropdown-toggle" type="button" data-toggle="dropdown" style="height: 35px; overflow: hidden; background-color: transparent !important; border: none; outline: none;">
+                <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px;"/>
+                <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
+            </button>
 
         <ul class="dropdown-menu dropdown-menu-top" style="min-width: 560px;">
             <li class="clearfix head">
@@ -59,9 +59,11 @@
                 </li>
             {/foreach}
 
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
+{/if}
+
 
 <script>
 
