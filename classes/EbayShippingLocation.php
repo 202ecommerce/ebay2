@@ -29,7 +29,7 @@ class EbayShippingLocation
     public static function getEbayShippingLocations()
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_location');
+			FROM '._DB_PREFIX_.'ebay_shipping_location GROUP BY `description`');
     }
 
     public static function getTotal()

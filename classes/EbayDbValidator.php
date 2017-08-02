@@ -199,6 +199,7 @@ class EbayDbValidator
             'id_return_policy' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
             'value' => array('type' => 'varchar', 'length' => 256),
             'description' => array('type' => 'varchar', 'length' => 256),
+            'id_country' => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_returns_policy_configuration' => array(

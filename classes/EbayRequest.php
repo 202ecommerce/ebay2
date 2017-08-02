@@ -707,6 +707,7 @@ class EbayRequest
         }
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
+
         $vars = array(
             'sku' => 'prestashop-' . $data['id_product'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -1262,7 +1263,8 @@ class EbayRequest
             'item_specifics' => $data['item_specifics'],
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'ktype' => isset($data['ktype'])? $data['ktype'] : null,
-            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
+            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'start_price' => false,
         );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
@@ -1290,6 +1292,7 @@ class EbayRequest
     {
         $variation_pictures = array();
         $variation_specifics_set = array();
+
 
         if (isset($data['variations'])) {
             $last_specific_name = '';
@@ -1357,7 +1360,6 @@ class EbayRequest
             }
         }
 
-
         $vars = array(
             'variations' => isset($data['variations']) ? $data['variations'] : array(),
             'variations_pictures' => $variation_pictures,
@@ -1372,7 +1374,6 @@ class EbayRequest
         );
 
         $this->smarty->assign($vars);
-
         return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetVariations.tpl');
     }
 
@@ -1434,7 +1435,8 @@ class EbayRequest
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'ktype' => isset($data['ktype'])?$data['ktype']:array(),
             'isKtype' => (bool)$ebay_category->isKtype(),
-            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
+            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'start_price' => false,
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {

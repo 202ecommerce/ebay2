@@ -25,7 +25,7 @@
 
 <div id="ebayOrphanListing">
     <p class="center">
-        <button class="btn btn-default">
+        <button class="btn btn-default loadListOrphan">
             <i class="icon-eye"></i>
             <span>{l s='See orphan listings' mod='ebay'}</span>
         </button>
@@ -37,8 +37,8 @@
     // <![CDATA[
     var id_employee={$id_employee|escape:'htmlall':'UTF-8'};
     var profile={$id_ebay_profile|escape:'htmlall':'UTF-8'};
-    var content_ebay_listings = $("#ebayOrphanListing button");
-    content_ebay_listings.bind('click', 'button', function(){
+    var content_ebay_listings = $("#ebayOrphanListing button.loadListOrphan");
+    content_ebay_listings.bind('click',  function(){
         $.ajax({
             type: "POST",
             url: module_dir+'ebay/ajax/loadTableOrphanListings.php',

@@ -24,42 +24,45 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
+require_once dirname(__FILE__).'/EbayConfiguration.php';
+
 class EbayReturnsPolicy
 {
-    public static function getAll()
+    public static function getAll($id_profile)
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_returns_policy');
+			FROM '._DB_PREFIX_.'ebay_returns_policy WHERE `id_country`=(SELECT `ebay_site_id` FROM '._DB_PREFIX_.'ebay_profile WHERE `id_ebay_profile`='.$id_profile.')');
     }
 
-    public static function getTotal()
+    public static function getTotal($id_profile)
     {
-        $returnspolicy = Db::getInstance()->getValue('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_returns_policy');
-        $returnsWithin = Configuration::get('EBAY_RETURNS_WITHIN_VALUES');
-        $returnsWhoPays = Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES');
+        $returnspolicy = Db::getInstance()->getValue('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_returns_policy WHERE `id_country`=(SELECT `ebay_site_id` FROM '._DB_PREFIX_.'ebay_profile WHERE `id_ebay_profile`='.$id_profile.')');
+        $returnsWithin = EbayConfiguration::get($id_profile, 'EBAY_RETURNS_WITHIN_VALUES');
+        $returnsWhoPays = EbayConfiguration::get($id_profile, 'EBAY_RETURNS_WHO_PAYS_VALUES');
         return $returnspolicy && $returnsWithin && $returnsWhoPays;
     }
 
-    public static function insert($data)
+    public static function insert($id_profile, $data)
     {
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
+        $id_country = Db::getInstance()->getValue('SELECT `ebay_site_id` FROM '._DB_PREFIX_.'ebay_profile WHERE `id_ebay_profile`='.$id_profile);
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_returns_policy', $data, 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_returns_policy', array_merge(array('id_country'=>(int)$id_country),$data), 'INSERT');
     }
 
-    public static function getReturnsPolicies()
+    public static function getReturnsPolicies($id_profile)
     {
         // already in the DB
-        if (EbayReturnsPolicy::getTotal()) {
-            return EbayReturnsPolicy::getAll();
+        if (EbayReturnsPolicy::getTotal($id_profile)) {
+            return EbayReturnsPolicy::getAll($id_profile);
         }
 
         $ebay_request = new EbayRequest();
         $policiesDetails = $ebay_request->getReturnsPolicies();
 
         foreach ($policiesDetails['ReturnsAccepted'] as $returns_policy) {
-            EbayReturnsPolicy::insert(array_map('pSQL', $returns_policy));
+            EbayReturnsPolicy::insert($id_profile, array_map('pSQL', $returns_policy));
         }
 
         $ReturnsWithin = array();
@@ -67,14 +70,14 @@ class EbayReturnsPolicy
             $ReturnsWithin[] = array_map('pSQL', $returns_within);
         }
 
-        Configuration::updateValue('EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false, 0, 0);
+        EbayConfiguration::set($id_profile, 'EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false, 0, 0);
 
         $returnsWhoPays = array();
         foreach ($policiesDetails['ReturnsWhoPays'] as $returns_within) {
             $returnsWhoPays[] = array_map('pSQL', $returns_within);
         }
 
-        Configuration::updateValue('EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false, 0, 0);
+        EbayConfiguration::set($id_profile, 'EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false, 0, 0);
 
         return $policiesDetails['ReturnsAccepted'];
     }

@@ -138,7 +138,8 @@ class EbayFormShippingTab extends EbayTab
                     } else {
                         $ship_cost = $ps_ship->getMaxDeliveryPriceByPrice($infos[1]);
                     }
-                    if (Tools::getIsset($extra_fees) && (int)$ship_cost < $extra_fees) {
+                    if (isset($extra_fees) && (int)$ship_cost < $extra_fees[0]) {
+		   
                         return false;
                     }
 

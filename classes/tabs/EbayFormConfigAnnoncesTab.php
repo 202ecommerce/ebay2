@@ -85,7 +85,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             'picture_per_listing' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING'),
             'picture_skip_variations' => (bool)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SKIP_VARIATIONS'),
             'picture_charact_variations' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS'),
-            'policies'                  => EbayReturnsPolicy::getReturnsPolicies(),
+            'policies'                  => EbayReturnsPolicy::getReturnsPolicies($this->ebay_profile->id),
             'createShopUrl'             => $createShopUrl,
             'ebayReturns'               => preg_replace('#<br\s*?/?>#i', "\n", $this->ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description),
             'ebayShopValue'             => $ebayShopValue,
@@ -97,9 +97,9 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             'returnsConditionAccepted'  => $returnsConditionAccepted,
             'ebayListingDuration'       => $ebayListingDuration,
             'is_multishop'              => $is_multishop,
-            'within_values'             => unserialize(Configuration::get('EBAY_RETURNS_WITHIN_VALUES')),
+            'within_values'             => unserialize(EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RETURNS_WITHIN_VALUES')),
             'within'                    => $returns_policy_configuration->ebay_returns_within,
-            'whopays_values'            => unserialize(Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES')),
+            'whopays_values'            => unserialize(EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RETURNS_WHO_PAYS_VALUES')),
             'whopays'                   => $returns_policy_configuration->ebay_returns_who_pays,
             //EAN
             'synchronize_ean'    => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
@@ -134,7 +134,6 @@ class EbayFormConfigAnnoncesTab extends EbayTab
 
     public function postProcess()
     {
-
         // Saving new configurations
         $picture_per_listing = (int) Tools::getValue('picture_per_listing');
         if ($picture_per_listing < 0) {

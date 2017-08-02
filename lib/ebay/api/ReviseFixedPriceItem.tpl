@@ -65,19 +65,19 @@
 				{/foreach}
 			</PictureDetails>
 		{/if}
-		{if isset($sku) && !isset($variations)}
+		{if isset($sku) && !isset($variations) && $variations}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
-		{if isset($quantity) && !isset($variations)}
+		{if isset($quantity) && !isset($variations) && $variations}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
-		{if $price_update && isset($start_price)}
+		{if $price_update && isset($start_price) && $start_price}
 			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>
 		{/if}
 		{if isset($resynchronize) && $resynchronize}
 			<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
-			<Title><![CDATA[{$title|cleanHtml}]]></Title>
+			<Title><![CDATA[{$title|unescape:"UTF-8" nofilter}]]></Title>
 			<Description><![CDATA[{$description nofilter}]]></Description>
 		
 			

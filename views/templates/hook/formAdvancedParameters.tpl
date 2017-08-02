@@ -182,7 +182,7 @@
 		</div>
 	</fieldset>
 
-   <fieldset style="margin-top: 20px;">
+   <fieldset style="margin-top: 20px; display:none;">
 	   
 		<div class="panel-heading">{l s='eBay module Data Usage' mod='ebay'}</div>
 
@@ -193,12 +193,12 @@
 			<div class="col-sm-9">
 				<div class="radio">
 					<label for="stats">
-						<input type="radio" id="stats" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'}
+						<input type="radio" id="stats" name="stats" value="0" > {l s='No thanks' mod='ebay'}
 					</label>
 				</div>
 				<div class="radio">
 					<label for="stats_y">
-						<input type="radio" id="stats_y" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}
+						<input type="radio" id="stats_y" name="stats" value="1" checked="checked"> {l s='I agree' mod='ebay'}
 					</label>
 				</div>
 

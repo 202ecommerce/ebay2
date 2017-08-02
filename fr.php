@@ -444,6 +444,7 @@ $_MODULE['<{ebay}prestashop>formparametersorders_c9cc8cce247e49bae79f15173ce9735
 $_MODULE['<{ebay}prestashop>formregister_9a5c99bf25e84cd8fe7c500f7ec698f2'] = 'Enregistrer le module sur eBay';
 $_MODULE['<{ebay}prestashop>formregister_19fb52a1add2ebba0f6e81d9a5c53e80'] = 'Vous devez renseigner votre eBay User ID';
 $_MODULE['<{ebay}prestashop>formregister_9b1cb96681f5c0570601ee841310d359'] = 'Un compte existe déjà avec cet identifiant et ce site eBay';
+$_MODULE['<{ebay}prestashop>formregister_9a5c99bf25e84cd8fe7c500f7ec698f2'] = 'Enregistrer le module sur eBay';
 $_MODULE['<{ebay}prestashop>formregister_6e34142871b2486bca4bfab605008b8a'] = 'J\'ai un compte eBay professionnel :';
 $_MODULE['<{ebay}prestashop>formregister_e4723bdd65ec2af60e37c0531a67a6a1'] = 'Vous êtes nouveau sur eBay ?';
 $_MODULE['<{ebay}prestashop>formregister_7ba7cc1dfb00eca77b600084f4ba1304'] = 'Pseudo eBay';

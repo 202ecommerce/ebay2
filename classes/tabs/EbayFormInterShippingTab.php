@@ -111,7 +111,7 @@ class EbayFormInterShippingTab extends EbayTab
 
     public function postProcess()
     {
-
+        EbayShipping::truncateInternational($this->ebay_profile->id);
         //Update excluded location
         if (Tools::getValue('excludeLocationHidden')) {
             Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping_zone_excluded

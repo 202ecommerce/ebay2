@@ -127,6 +127,13 @@ class EbayOrderErrors extends ObjectModel
         return Db::getInstance()->ExecuteS($q);
     }
 
+    public static function getAllCount($id_ebay_profile)
+    {
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+        $q = 'SELECT COUNT(*) AS nb FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `ebay_user_identifier` = "'.pSQL($ebay_profile->ebay_user_identifier).'"';
+        return Db::getInstance()->ExecuteS($q);
+    }
+
     public static function deleteByOrderRef($id_order_ref)
     {
         $q = 'DELETE FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `id_order_ebay` = "'.pSQL($id_order_ref).'"';

@@ -175,9 +175,12 @@
 		<fieldset>
 			<div class="panel-heading">{l s='Account details' mod='ebay'}</div>
 
-			<div class="alert alert-info alert-no-icon">
-				{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="https://www.paypal.com/" target="_blank">{l s='a PayPal account.' mod='ebay'}</a>.
-			</div>
+			{if !$ebay_paypal_email}
+				<div class="alert alert-info alert-no-icon">
+                    {l s='To list your products on eBay, you need to create' mod='ebay'} <a href="https://www.paypal.com/" target="_blank">{l s='a PayPal account.' mod='ebay'}</a>.
+				</div>
+			{/if}
+
 			
 			<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall':'UTF-8'}" />            
 			

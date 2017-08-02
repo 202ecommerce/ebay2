@@ -254,8 +254,12 @@ class EbayProduct
         ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
         ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
         ecc.`sync`                           AS sync,
-        ec.`id_category_ref`
+        ec.`id_category_ref`,
+        etm.`id_task`
     FROM `'._DB_PREFIX_.'ebay_product` ep
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_task_manager` etm 
+    ON ep.`id_product` = etm.`id_product`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`
@@ -337,6 +341,22 @@ class EbayProduct
 
         $final_res = array();
         foreach ($res as &$row) {
+            $ret =false;
+            if (!$row['exists']) {
+                $ret = true;
+            } elseif (!$row['EbayCategoryExists']) {
+                $ret = true;
+            } elseif (!$row['active'] || $row['blacklisted']) {
+                $ret = true;
+            } elseif (is_null($row['id_category_ref'])) {
+                $ret = true;
+            } elseif (!$row['sync']) {
+                $ret = true;
+            }
+
+            if ($ret===false) continue;
+
+
             if (isset($row['id_product_ref']) && $row['id_product_ref']) {
                 $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
             }
@@ -361,8 +381,10 @@ class EbayProduct
                 $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
             }
 
+            $final_res[] = $row;
+
             // filtering
-            if (!$row['exists']) {
+            /*if (!$row['exists']) {
                 $final_res[] = $row;
             } elseif (!$row['EbayCategoryExists']) {
                 $final_res[] = $row;
@@ -372,7 +394,7 @@ class EbayProduct
                 $final_res[] = $row;
             } elseif (!$row['sync']) {
                 $final_res[] = $row;
-            }
+            }*/
         }
 
         return $final_res;
