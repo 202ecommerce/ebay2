@@ -74,9 +74,17 @@ class EbayShipping
             $shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
             FROM '._DB_PREFIX_.'product_carrier WHERE id_product = '.(int) $id_product);
             if (count($shippings_product) > 0) {
-                if (array_intersect_assoc($shippings, $shippings_product)) {
-                    $shippings = array_intersect_assoc($shippings, $shippings_product);
+                $result_compare = array();
+                foreach ($shippings_product as $item){
+                    foreach ($shippings as $shipping_item){
+                        $compare = array_intersect_assoc($item,$shipping_item);
+                        if($compare) $result_compare[] = $compare;
+                    }
                 }
+                if ($result_compare) return $result_compare;
+                /*if (array_intersect_assoc($shippings, $shippings_product)) {
+                    $shippings = array_intersect_assoc($shippings, $shippings_product);
+                }*/
             }
         }
 

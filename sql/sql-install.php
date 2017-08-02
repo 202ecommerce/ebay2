@@ -157,6 +157,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_returns_policy` (
 		  `id_return_policy` int(11) NOT NULL AUTO_INCREMENT,
 		  `value` varchar(256) NOT NULL,
 		  `description` varchar(256) NOT NULL,
+		  `id_country` INT(11),
 		  PRIMARY KEY (`id_return_policy`)
 		) ENGINE='._MYSQL_ENGINE_.'  DEFAULT CHARSET=utf8';
 

@@ -95,6 +95,7 @@ class EbayTaskManager
                         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
                         $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
 
+
                         if (count($variations) && !EbaySynchronizer::__isProductMultiSku($ebay_category, $product->id, $product_ebay['id_lang'], $ebay_profile->ebay_site_id)) {
                             foreach ($variations as $variation) {
                                 $id_attributes[] = $variation['id_attribute'];
@@ -228,6 +229,12 @@ class EbayTaskManager
     {
 
         return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
+    }
+
+    public static function getErrorsCount($id_ebay_profile)
+    {
+
+        return DB::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }
 
     public static function deleteErrorsForProduct($id_product)

@@ -84,7 +84,7 @@
                                 data-lang="{$task_error.lang_iso}"
                                 module_version="1.11.0"
                                 prestashop_version="{$task_error.ps_version}"></a></td>
-                        <td ><a class="btn btn-xs btn-block btn-warning corige_product" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corrige' mod='ebay'}</a>
+                        <td ><a class="btn btn-xs btn-block btn-warning corige_product" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corriger' mod='ebay'}</a>
                             <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.real_id}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
                     </tr>
                 {/foreach}
@@ -106,15 +106,15 @@
         <p >Attention, vous n’utilisez pas le statut « Hors stock », merci de l’activer
         </p>
         {/if}
-        <div class="panel-footer">
+        <div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
             <button class="js-notexclu btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
-            <button class="js-exclu-confirm btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
+            <button class="js-exclu-confirm btn btn-success pull-right" style="padding:15px">OK</button>
         </div>
     </div>
 </div>
 
-<div id="popin-product-corige" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
-    <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+<div id="popin-product-corige" class="popin popin-sm" style="display: none;position: fixed;z-index: 3;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+    <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 12% auto;">
         <div class="panel-heading" style="text-align: center;>
             <i class="icon-trash"></i> Comment corriger ?
         </div>
@@ -131,12 +131,20 @@
         </p>
         </br>
         <div class="panel-footer" style="text-align: center;">
-            <button class="js-corige-ok btn btn-success"><i class="process-icon-save"></i>OK</button>
+            <button class="js-corige-ok btn btn-success" style="padding:15px">OK</button>
         </div>
     </div>
 </div>
 {literal}
 <script>
+    $(document).on('click', '#popin-product-corige', function(){
+        $(this).hide();
+    });
+
+    $(document).on('click', '#popin-product-corige .panel', function(e){
+        e.stopPropagation();
+    });
+
     $('.exclure_product').click(function (e) {
         e.preventDefault();
         $('.if_anonnces_exist').attr('id', $(this).attr('id'));

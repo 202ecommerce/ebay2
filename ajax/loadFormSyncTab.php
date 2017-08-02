@@ -24,25 +24,17 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayProductsExcluTab extends EbayTab
-{
+require_once dirname(__FILE__).'/../../../config/config.inc.php';
+require_once dirname(__FILE__).'/../../../init.php';
+require_once dirname(__FILE__).'/../ebay.php';
+require_once dirname(__FILE__).'/../classes/tabs/EbayFormEbaySyncTab.php';
 
-    public function getContent($ebay_profile)
-    {
-        /*$url_vars = array(
-            'id_tab' => '106',
-            'section' => 'excludeproduct',
-        );
-        $url_vars['controller'] = Tools::getValue('controller');*/
-        $url_vars = $this->context->link->getAdminLink('AdminModules');
-        $url_vars .= '&configure=ebay&module_name=ebay&id_tab=106&section=sync#';
 
-        $vars = array(
-            'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-            'id_employee' => $this->context->employee->id,
-            'url_tab' => $url_vars,
-        );
-
-        return $this->display('tableProductsExclu_ajax.tpl', $vars);
-    }
+if (!Configuration::get('EBAY_SECURITY_TOKEN')
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
+$ebay = new Ebay;
+$context = Context::getContext();
+$form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
+die($form_ebay_sync_tab->getContent());

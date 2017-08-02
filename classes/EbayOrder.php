@@ -1071,4 +1071,13 @@ class EbayOrder
 			ON eo.`id_ebay_order` = eoo.`id_ebay_order`
 			WHERE eo.`id_order_ref` = '.(int) $id_order_ref);
     }
+
+    public static function getSumOrders($period = '-30 days')
+    {
+        $period = strtotime($period);
+        return Db::getInstance()->executeS('SELECT SUM(o.`total_paid`) as sum
+			FROM `'._DB_PREFIX_.'ebay_order_order` eo
+			LEFT JOIN `'._DB_PREFIX_.'orders` o ON eo.`id_order` = o.`id_order`
+			WHERE eo.`id_order` > 0 AND o.`date_add`>"'.$period.'"');
+    }
 }

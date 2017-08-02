@@ -46,10 +46,6 @@ class EbayFormEbaySyncTab extends EbayTab
             );
             return $this->display('alert_tabs.tpl', $vars);
         }
-        $nb_products_mode_a = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "A");
-        $nb_products_mode_b = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "B");
-
-        $nb_products = ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B' ? $nb_products_mode_b : $nb_products_mode_a);
 
         // Display Form
         $url_vars = array(
@@ -102,14 +98,15 @@ class EbayFormEbaySyncTab extends EbayTab
                     $nb_products_variations_blocked = 0;
                     $nb_products_man = Db::getInstance()->ExecuteS($sql);
                     $nb_products_variations = 0;
-                    if ($nb_products) {
+                    if ($nb_products_man) {
                         foreach ($nb_products_man as $product_ps) {
                             $product = new Product($product_ps['id']);
                             $variation = $product->getWsCombinations();
-                            $nb_products_variations += (count($variation)>0?count($variation):1);
+                            $count_variation = count($variation);
+                            $nb_products_variations += ($count_variation>0?$count_variation:1);
                             if ($product_ps['blacklisted']) {
                                 $nb_products_blocked += 1;
-                                $nb_products_variations_blocked +=count($variation);
+                                $nb_products_variations_blocked +=$count_variation;
                             }
                         }
                     }
@@ -144,25 +141,21 @@ class EbayFormEbaySyncTab extends EbayTab
             }
         }
 
-        $nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
-        $sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
+        //$nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
+        //$sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
         $ebay_category_list = Db::getInstance()->executeS('SELECT *
             FROM `'._DB_PREFIX_.'ebay_category`
             WHERE `id_category_ref` = `id_category_ref_parent`
             AND `id_country` = '.(int) $this->ebay_profile->ebay_site_id);
-        $ebay_alert = new EbayAlert($this->ebay);
-        $root_category = Category::getRootCategory();
-        $categories_ps = Category::getCategories($this->ebay_profile->id_lang);
-        $category_list = $this->ebay->getChildCategories($categories_ps, $root_category->id_parent, array(), '');
+
 
         $smarty_vars = array(
             'category_alerts'         => $this->_getAlertCategories(),
             'path'                    => $this->path,
-            'nb_products'             => $nb_products ? $nb_products : 0,
-            'nb_products_mode_a'      => $nb_products_mode_a ? $nb_products_mode_a : 0,
-            'nb_products_mode_b'      => $nb_products_mode_b ? $nb_products_mode_b : 0,
-            'nb_products_sync_url'    => $nb_products_sync_url,
-            'sync_products_url'       => $sync_products_url,
+            'nb_products'             => 0,
+            'nb_products_mode_a'      => 0,
+            'nb_products_mode_b'      => 0,
+
             'sync_message_exit'       => $this->ebay->l('A synchronization is currently underway. If you leave this page, it will be abandoned.', 'ebayformebaysynctab'),
             'action_url'              => $action_url,
             'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
@@ -171,20 +164,18 @@ class EbayFormEbaySyncTab extends EbayTab
             'sync_2'                  => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
             'is_sync_mode_b'          => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
             'ebay_sync_mode'          => (int)($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
-            'prod_str'                => $nb_products >= 2 ? $this->ebay->l('products', 'ebayformebaysynctab') : $this->ebay->l('product', 'ebayformebaysynctab'),
-            'admin_path'              => basename(_PS_ADMIN_DIR_),
+            //'admin_path'              => basename(_PS_ADMIN_DIR_),
             'load_kb_path'            => _MODULE_DIR_ . 'ebay/ajax/loadKB.php',
-            'img_alert'               => $ebay_alert->checkNumberPhoto(),
-            'PAYEMENTS' =>EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $this->ebay_profile->id),
+            'PAYEMENTS' => EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $this->ebay_profile->id),
             'RETURN_POLICY' => EbayBussinesPolicies::getPoliciesbyType('RETURN_POLICY', $this->ebay_profile->id),
             'storeCategories' =>  EbayStoreCategory::getCategoriesWithConfiguration($this->ebay_profile->id),
             'ebayCategories' => $ebay_category_list,
-            'ps_categories' => $category_list,
+            //'ps_categories' => $category_list,
             'conditions' => $this->_translatePSConditions(EbayCategoryConditionConfiguration::getPSConditions()),
             'possible_attributes' => AttributeGroup::getAttributesGroups($this->context->cookie->id_lang),
             'possible_features' => Feature::getFeatures($this->context->cookie->id_lang, true),
             'id_lang' => $this->ebay_profile->id_lang,
-            'id_employee' => $this->context->employee->id,
+            'id_employee' => isset($this->context->employee) && $this->context->employee->id > 0 ? $this->context->employee->id : 0,
             'date' => pSQL(date('Ymdhis')),
             'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
             'bp_active' => ($this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'))?$this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'):0,

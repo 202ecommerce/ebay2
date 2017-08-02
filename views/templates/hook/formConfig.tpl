@@ -84,6 +84,11 @@
 					<li role="presentation" id="menuTab13" class="menuTabButton"><a href="#">7. {l s='Tools' mod='ebay'}</a></li>
 				</ul>
 
+				<ul class="nav nav-pills log-menu menuTab ebay_hidden " role="tablist">
+					<li role="presentation" id="menuTab17" class="menuTabButton"><a href="#">1. {l s='Jobs to be done' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab18" class="menuTabButton"><a href="#">2. {l s='Workers' mod='ebay'}</a></li>
+				</ul>
+
 
 				<div id="tabList" class="{$class_general|escape:'htmlall':'UTF-8'} tab-content">
 					<div id="menuTab1Sheet" class="tabItem tab-pane">
@@ -116,7 +121,10 @@
 
 					<div id="menuTab5Sheet" class="tabItem tab-pane">
 						<div class="panel">
-							{$form_ebay_sync|ebayHtml}
+							{*$form_ebay_sync|ebayHtml*}
+							<div class="ajaxLoadingFormSyncTab" style="display:none; position:relative; height:60px">
+								<img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;">
+							</div>
 						</div>
 					</div>
 
@@ -131,6 +139,8 @@
 					<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
 					<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
 					<div id="menuTab106Sheet" class="tabItem tab-pane"><div class="panel">{$ebayProductsExcluTab}</div></div>
+					<div id="menuTab17Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogJobs nofilter}</div></div>
+					<div id="menuTab18Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogWorkers nofilter}</div></div>
 				</div>
 
 				{*

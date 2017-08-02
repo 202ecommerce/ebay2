@@ -24,25 +24,25 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayProductsExcluTab extends EbayTab
-{
-
-    public function getContent($ebay_profile)
-    {
-        /*$url_vars = array(
-            'id_tab' => '106',
-            'section' => 'excludeproduct',
-        );
-        $url_vars['controller'] = Tools::getValue('controller');*/
-        $url_vars = $this->context->link->getAdminLink('AdminModules');
-        $url_vars .= '&configure=ebay&module_name=ebay&id_tab=106&section=sync#';
-
-        $vars = array(
-            'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-            'id_employee' => $this->context->employee->id,
-            'url_tab' => $url_vars,
-        );
-
-        return $this->display('tableProductsExclu_ajax.tpl', $vars);
-    }
+if (!defined('TMP_DS')) {
+    define('TMP_DS', DIRECTORY_SEPARATOR);
 }
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR: Invalid Token');
+}
+
+include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
+
+$id_profile = Tools::getValue('id_profile');
+if ($id_profile){
+    $table = _DB_PREFIX_.'ebay_task_manager';
+    $sql_select = "SELECT COUNT(*) AS nb  FROM `$table` WHERE `locked` != 0 AND `id_ebay_profile` = $id_profile";
+    $res_select = DB::getInstance()->executeS($sql_select);
+    $nb_tasks_in_work = $res_select[0]['nb'];
+    die($nb_tasks_in_work);
+}
+
+die('0');
