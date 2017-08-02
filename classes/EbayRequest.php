@@ -268,12 +268,12 @@ class EbayRequest
 
         // Debug
 
-        if ($this->debug) {
+        if ($this->debug || $this->dev) {
             if (!file_exists(dirname(__FILE__) . '/../log/request.txt')) {
                 file_put_contents(dirname(__FILE__) . '/../log/request.txt', "<?php\n\n", FILE_APPEND | LOCK_EX);
             }
 
-            if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 100) {
+            if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 30) {
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($apiCall), true), FILE_APPEND | LOCK_EX);
