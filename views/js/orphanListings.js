@@ -178,6 +178,25 @@ $(document).ready(function () {
         loadOrphans();
     });
 
+    $(document).on('click', '.navPaginationListOrphanProductTab .pagination span', function(){
+        var page = $(this).attr('value');
+        if(page){
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/loadTableOrphanListings.php',
+                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + page,
+                success: function(data)
+                {
+                    $('#ebayOrphanListing').fadeOut(400, function(){
+                        $(this).html(data).fadeIn();
+                    })
+                }
+            });
+        }
+
+
+    });
+
 });
 /*
 $(document).ready(function() {

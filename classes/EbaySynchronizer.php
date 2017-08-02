@@ -921,6 +921,9 @@ class EbaySynchronizer
         $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop);
         if (empty($item_id)) {
             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, $id_attribute);
+
+            $data['id_for_sku'] = $id_attribute;
+
             $res = $ebay->addFixedPriceItem($data);
             if ($res->ItemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile, $id_attribute);
@@ -992,6 +995,7 @@ class EbaySynchronizer
      */
     private static function __updateItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute = 0)
     {
+        $data['id_for_sku'] = $id_attribute;
         if ($res = $ebay->reviseFixedPriceItem($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
         }
@@ -1012,7 +1016,7 @@ class EbaySynchronizer
         $ebay_request = new EbayRequest($id_ebay_profile, $context->cloneContext());
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $data = EbaySynchronizer::getDatasProductForStock($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
-
+        $data['id_for_sku'] = $id_product_attribute;
         $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
         if (count($data['variations']) && $id_product_attribute == 0) {
             $ebay = EbaySynchronizer::__updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'));
@@ -1102,6 +1106,7 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
         );
         unset($variations);
+        $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
 
         // Fix hook update product

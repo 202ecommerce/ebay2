@@ -182,13 +182,10 @@ class EbayProduct
 			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');
     }
 
-    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
-    {
+    public static function getCountProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted){
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
-			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
-			pl.`name`, m.`name` as manufacturer_name
-			FROM `'._DB_PREFIX_.'ebay_product` ep
+        $sql = 'SELECT COUNT(*) as `count`
+			FROM (SELECT ep.id_product FROM `'._DB_PREFIX_.'ebay_product` ep
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
@@ -201,9 +198,58 @@ class EbayProduct
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
 
-        $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
+        $sql .= ' GROUP BY ep.id_product, ep.id_attribute, ep.id_product_ref) AS T';
 
         return Db::getInstance()->ExecuteS($sql);
+    }
+
+    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current=null, $length=20)
+    {
+        if ($page_current){
+            $offset = ((int) $page_current - 1) * (int) $length;
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
+			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
+			pl.`name`, m.`name` as manufacturer_name
+			FROM `'._DB_PREFIX_.'ebay_product` ep
+			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
+
+            $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
+
+            $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+            if ($no_blacklisted) {
+                $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
+            }
+
+            $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
+            $sql .= ' ORDER BY ep.`id_product` LIMIT '.$length.' OFFSET '.$offset;
+
+            return Db::getInstance()->ExecuteS($sql, false);
+        } else{
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
+			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
+			pl.`name`, m.`name` as manufacturer_name
+			FROM `'._DB_PREFIX_.'ebay_product` ep
+			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
+
+            $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
+
+            $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+            if ($no_blacklisted) {
+                $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
+            }
+
+            $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
+
+            return Db::getInstance()->ExecuteS($sql, false);
+        }
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)
@@ -233,8 +279,82 @@ class EbayProduct
         return $product_ids;
     }
 
-    public static function getOrphanListing($id_ebay_profile)
+    public static function getCountOrphanListing($id_ebay_profile)
     {
+        $ebay_profile = new EbayProfile((int) $id_ebay_profile);
+        $is_one_five = version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0;
+        if ($is_one_five) {
+            // to check if a product has attributes (multi-variations),
+            // we check if it has a "default_on" attribute in the product_attribute table
+            $query = 'SELECT COUNT(DISTINCT(ep.`id_ebay_product`)) as `number`
+    FROM `'._DB_PREFIX_.'ebay_product` ep
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_task_manager` etm 
+    ON ep.`id_product` = etm.`id_product`
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+    ON epc.`id_product` = ep.`id_product`
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'product` p
+    ON p.`id_product` = ep.`id_product`
+    '.Shop::addSqlAssociation('product', 'p').'
+
+    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+    ON pl.`id_product` = p.`id_product`
+    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
+
+    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+    ON pa.`id_product` = p.`id_product`
+    AND pa.default_on = 1
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    ON ecc.`id_category` = product_shop.`id_category_default`
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+    ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) ';
+        } else {
+            // to check if a product has attributes (multi-variations),
+            // we check if it has a "default_on" attribute in the product_attribute table
+            $query = 'SELECT COUNT(DISTINCT(ep.`id_ebay_product`)) as `number`
+    FROM `'._DB_PREFIX_.'ebay_product` ep
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+    ON epc.`id_product` = ep.`id_product`
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'product` p
+    ON p.`id_product` = ep.`id_product`
+
+    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+    ON pl.`id_product` = p.`id_product`
+    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
+
+    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+    ON pa.`id_product` = p.`id_product`
+    AND pa.default_on = 1
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    ON ecc.`id_category` = p.`id_category_default`
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+    ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) ';
+        }
+
+        return Db::getInstance()->executeS($query);
+    }
+
+    public static function getOrphanListing($id_ebay_profile, $page_current, $length=20)
+    {
+        $offset = ((int) $page_current - 1) * (int) $length;
         $ebay_profile = new EbayProfile((int) $id_ebay_profile);
         $ebay_request = new EbayRequest();
         $is_one_five = version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0;
@@ -284,7 +404,7 @@ class EbayProduct
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id;
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.' ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
         } else {
             // to check if a product has attributes (multi-variations),
             // we check if it has a "default_on" attribute in the product_attribute table
@@ -326,7 +446,7 @@ class EbayProduct
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id;
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.' ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
         }
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $ebay = new Ebay();
@@ -354,8 +474,9 @@ class EbayProduct
                 $ret = true;
             }
 
-            if ($ret===false) continue;
-
+            if ($ret === false) {
+                continue;
+            }
 
             if (isset($row['id_product_ref']) && $row['id_product_ref']) {
                 $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
@@ -383,18 +504,7 @@ class EbayProduct
 
             $final_res[] = $row;
 
-            // filtering
-            /*if (!$row['exists']) {
-                $final_res[] = $row;
-            } elseif (!$row['EbayCategoryExists']) {
-                $final_res[] = $row;
-            } elseif (!$row['active'] || $row['blacklisted']) {
-                $final_res[] = $row;
-            } elseif (is_null($row['id_category_ref'])) {
-                $final_res[] = $row;
-            } elseif (!$row['sync']) {
-                $final_res[] = $row;
-            }*/
+
         }
 
         return $final_res;

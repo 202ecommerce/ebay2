@@ -168,6 +168,11 @@
     </tbody>
 
 </table>
+{if $pages_all >1}
+    <div class="navPaginationListOrphanProductTab" style="display:flex; justify-content:center">
+        {include file=$tpl_include}
+    </div>
+{/if}
 </div>
 
 

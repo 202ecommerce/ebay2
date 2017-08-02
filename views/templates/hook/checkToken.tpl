@@ -31,9 +31,10 @@
 			type: "POST",
 			success: function(data)
 			{ldelim}
-				if (data == 'OK')
-					window.location.href = '{$window_location_href}';
-				else
+				if (data == 'OK') {
+                    window.location.href = '{$window_location_href}';
+                   
+                } else
 					setTimeout ("checkToken()", 5000);
 			{rdelim}
 		{rdelim});
