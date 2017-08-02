@@ -136,6 +136,21 @@
 			loadCategoriesConfig($(this).data('id'));
 		});
 
+		$('.js-popin').on('click', function() {
+
+			$('.js-popin').fancybox({
+				'modal': true,
+				'showCloseButton': false,
+				'padding': 0,
+				'parent': '#popin-container',
+			});
+			$('.product_sync_info').hide();
+			$('.select_category_default').clone().appendTo($('div .category_ebay'));
+			if($('ul.category_ps_list li').length == 0) {
+				$('.js-next-popin').attr('disabled','disabled');
+			}
+		});
+
 		$('.reset_bp').on('click', function() {
 			var url = module_dir + "ebay/ajax/resetBp.php?token=" + ebay_token + "&profile=" + id_ebay_profile ;
 			$('.bp_group').html("");
@@ -622,6 +637,12 @@
 				{/if}
 			</tbody>
 		</table>
+		{if isset($pagination) && $pagination}
+			<div class="navPaginationSyncTab" style="display:flex; justify-content:center">
+                {include file=$tpl_include}
+			</div>
+		{/if}
+
 		{if $sync_1}
 			<script>
 				$(document).ready(function() {ldelim}
@@ -772,6 +793,7 @@
 						</select>
 					</div>
 						<a href="#" class="reset_bp btn btn-lg btn-success"><span></span> {l s='Reset BP' mod='ebay'}</a>
+
 					{/if}
 
 				</div>

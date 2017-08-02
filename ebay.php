@@ -910,8 +910,7 @@ class Ebay extends Module
             }
 
             if ($order->exists()) {
-                $message = $this->l('Order already imported');
-                $order->checkError($message, $ebay_user_identifier, true);
+
                 continue;
             }
             $order->add($this->ebay_profile->id);
@@ -1077,7 +1076,7 @@ class Ebay extends Module
             );
         }
 
-        file_put_contents(dirname(__FILE__).'/log/orders.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
+        //file_put_contents(dirname(__FILE__).'/log/orders.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
     }
 
     /**
@@ -1580,8 +1579,8 @@ class Ebay extends Module
             $profile_count_product_errors = EbayTaskManager::getErrorsCount($profile['id_ebay_profile']);
             $ebay_profile_hook = new EbayProfile($profile['id_ebay_profile']);
             $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-            $profile['count_order_errors'] = (isset($profile_count_order_errors['nb']) ? $profile_count_order_errors['nb']:0);
-            $profile['count_product_errors'] = (isset($profile_count_product_errors['nb']) ?$profile_count_product_errors['nb']:0);
+            $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb']:0);
+            $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ?$profile_count_product_errors[0]['nb']:0);
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
             $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
             $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
@@ -1616,7 +1615,7 @@ class Ebay extends Module
         $id_profile = $this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : '';
 
         $this->smarty->assign(array(
-            'nb_tasks_in_work_url' => _MODULE_DIR_.'ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
+            'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
@@ -1650,7 +1649,7 @@ class Ebay extends Module
             'profiles' => $profiles,
             'add_profile' => $add_profile,
             'add_profile_url' => $add_profile_url,
-            'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
+            'delete_profile_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int) Tools::getValue('id_tab'),
             'pro_url' => $this->ebay_country->getProUrl(),
@@ -1667,7 +1666,7 @@ class Ebay extends Module
             'id_ebay_profile' => ($this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : false),
             'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
             'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
-            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ ($this->ebay_profile?count(EbayProduct::getOrphanListing($this->ebay_profile->id)):0),
+            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ ($this->ebay_profile?EbayProduct::getCountOrphanListing($this->ebay_profile->id)[0]['number']:0),
             'ebay_shipping_config_tab' => ($this->ebay_profile?$this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK'):0),
             'count_category' => ($this->ebay_profile?EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id):0),
             'help_listing_rejection' => array(
@@ -1948,7 +1947,7 @@ class Ebay extends Module
         if ($this->ebay_profile) {
             $count_order_errors = EbayOrderErrors::getAllCount($this->ebay_profile->id);
             $count_product_errors = EbayTaskManager::getErrorsCount($this->ebay_profile->id);
-            $count_orphan_listing = EbayProduct::getOrphanListing($this->ebay_profile->id);
+            $count_orphan_listing = EbayProduct::getCountOrphanListing($this->ebay_profile->id)[0]['number'];
         }
 
         $smarty_vars = array(
@@ -1976,10 +1975,10 @@ class Ebay extends Module
             'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
-            'count_order_errors' => (isset($count_order_errors['nb'])?$count_order_errors['nb']:0),
-            'count_product_errors' => (isset($count_product_errors['nb'])?$count_product_errors['nb']:0),
-            'count_product_errors_total' => (isset($count_product_errors['nb'])?$count_product_errors['nb']:0)+ ($count_orphan_listing?count($count_orphan_listing):0),
-            'count_orphan_listing' => ($count_orphan_listing?count($count_orphan_listing):0),
+            'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
+            'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0),
+            'count_product_errors_total' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ ($count_orphan_listing?$count_orphan_listing:0),
+            'count_orphan_listing' => ($count_orphan_listing?$count_orphan_listing:0),
             'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
             'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
@@ -2298,7 +2297,7 @@ class Ebay extends Module
         return $this->display(__FILE__, 'views/templates/hook/tableProductsExclu.tpl');
     }
 
-    public function displayEbayListingsAjax($admin_path, $id_employee = null)
+    public function displayEbayListingsAjax($admin_path, $id_employee = null, $page_current=1, $length=20)
     {
         $ebay = new EbayRequest();
         $employee = new Employee($id_employee);
@@ -2307,7 +2306,18 @@ class Ebay extends Module
         $id_lang = $this->ebay_profile->id_lang;
 
         $products_ebay_listings = array();
-        $products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false);
+        $nb_products = EbayProduct::getCountProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false);
+        $products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false, $page_current);
+        $pages_all = ceil(((int) $nb_products[0]['count'])/ (int) $length);
+        $range =3;
+        $start = $page_current - $range;
+        if ($start <= 0)
+            $start = 1;
+        $stop = $page_current + $range;
+        if ($stop>$pages_all)
+            $stop = $pages_all;
+        $prev_page = (int) $page_current - 1;
+        $next_page = (int) $page_current + 1;
         $data = array(
             'id_lang' => $id_lang,
             'titleTemplate' => $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
@@ -2321,7 +2331,7 @@ class Ebay extends Module
             $router = $kernel->getContainer()->get('router');
         }
 
-        foreach ($products as $p) {
+        while ($p = $products->fetch(PDO::FETCH_ASSOC)) {
             $data['real_id_product'] = (int) $p['id_product'];
             $data['name'] = $p['name'];
             $data['manufacturer_name'] = $p['manufacturer_name'];
@@ -2379,10 +2389,19 @@ class Ebay extends Module
                 );
             }
         }
-
+        $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
         $this->smarty->assign('products_ebay_listings', $products_ebay_listings);
         $this->smarty->assign('id_employee', $id_employee);
         $this->smarty->assign('admin_path', $admin_path);
+        $this->smarty->assign(array(
+            'prev_page'               => $prev_page,
+            'next_page'               => $next_page,
+            'tpl_include'             => $tpl_include,
+            'pages_all'               => $pages_all,
+            'page_current'            => $page_current,
+            'start'                   => $start,
+            'stop'                    => $stop,
+        ));
         echo $this->display(__FILE__, 'views/templates/hook/ebay_listings_ajax.tpl');
     }
 

@@ -65,11 +65,11 @@
 				{/foreach}
 			</PictureDetails>
 		{/if}
-		{if isset($sku) && !isset($variations) && $variations}
+		{if $sku && isset($sku) && !$variations}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
-		{if isset($quantity) && !isset($variations) && $variations}
+		{if isset($quantity)  && !$variations}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 		{if $price_update && isset($start_price) && $start_price}
@@ -123,7 +123,7 @@
         {if isset($site)}
             <Site>{$site|escape:'htmlall':'UTF-8'}</Site>
 		{/if}
-        {if isset($variations)}
+        {if isset($variations) && $variations}
             {$variations|cleanHtml nofilter}
 		{elseif isset($product_listing_details)}
             {$product_listing_details|cleanHtml nofilter}

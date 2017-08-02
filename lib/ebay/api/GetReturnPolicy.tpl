@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{if isset($payment_profile_id)}
+{if isset($payment_profile_id) && $payment_profile_id}
     <SellerProfiles>
         <SellerPaymentProfile>
             <PaymentProfileID>{$payment_profile_id}</PaymentProfileID>

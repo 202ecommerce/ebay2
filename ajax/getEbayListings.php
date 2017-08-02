@@ -34,5 +34,6 @@ if (Tools::getValue('id_shop')) {
     $context = Context::getContext();
     $context->shop = new Shop((int) Tools::getValue('id_shop'));
 }
+$page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
 $ebay = new eBay();
-$ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), (int) Tools::getValue('id_employee'));
+$ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), (int) Tools::getValue('id_employee'), $page_current);

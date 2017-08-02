@@ -133,13 +133,15 @@ class EbayFormShippingTab extends EbayTab
                     //Get id_carrier and id_zone from ps_carrier
                     $infos = explode('-', $ps_carriers[$key]);
                     $ps_ship = new Carrier($infos[0]);
-                    if ($ps_ship->getMaxDeliveryPriceByPrice($infos[1]) == false) {
-                        $ship_cost = 0;
+                    if ($ps_ship->shipping_method == 1) {
+                        $ship_cost =$ps_ship->getMaxDeliveryPriceByWeight($infos[1]);
                     } else {
                         $ship_cost = $ps_ship->getMaxDeliveryPriceByPrice($infos[1]);
                     }
+                    if ($ship_cost == false) {
+                        $ship_cost = 0;
+                    }
                     if (isset($extra_fees) && (int)$ship_cost < $extra_fees[0]) {
-		   
                         return false;
                     }
 
@@ -148,8 +150,8 @@ class EbayFormShippingTab extends EbayTab
             }
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
             $this->ebay_profile->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
-            
-            foreach ($products as $product_id) {
+
+            while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }

@@ -30,7 +30,7 @@ if (_PS_VERSION_ > '1.7') {
 
 class EbayFormEbaySyncTab extends EbayTab
 {
-    public function getContent()
+    public function getContent($page_current=1, $length=20)
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
@@ -42,7 +42,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
         if (empty($national_shipping)) {
             $vars = array(
-                'msg' => $this->ebay->l('Please configure the \'International Shipping\' tab before using this tab', 'ebayformebaysynctab'),
+                'msg' => $this->ebay->l('Please configure the \'National Shipping\' tab before using this tab', 'ebayformebaysynctab'),
             );
             return $this->display('alert_tabs.tpl', $vars);
         }
@@ -67,13 +67,34 @@ class EbayFormEbaySyncTab extends EbayTab
 
         $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         $categories = array();
-
+        $ids_category = array();
+        $pagination = false;
         if ($category_list) {
             $alt_row = false;
+            $count_categories = 0;
             foreach ($category_list as $category) {
                 if (isset($category_config_list[$category['id_category']]['id_ebay_category'])
                     && $category_config_list[$category['id_category']]['id_ebay_category'] > 0
                 ) {
+                    $ids_category[$category['id_category']] = $category;
+                    $count_categories += 1;
+                }
+            }
+            asort($ids_category);
+            $pages_all = ceil($count_categories/$length);
+            $pagination = $pages_all > 1 ? true : false;
+            $range =3;
+            $start = $page_current - $range;
+            if ($start <= 0)
+                $start = 1;
+            $stop = $page_current + $range;
+            if ($stop>$pages_all)
+                $stop = $pages_all;
+            $offset = ($page_current-1) * $length;
+            $part_ids_category = array_slice($ids_category, $offset, $length);
+            foreach ($part_ids_category as $id_category => $category) {
+
+               
                     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -137,7 +158,7 @@ class EbayFormEbaySyncTab extends EbayTab
                         'nb_product_tosync' => count($nb_products_man) - $nb_products_blocked,
                     );
                     $alt_row = !$alt_row;
-                }
+
             }
         }
 
@@ -148,8 +169,17 @@ class EbayFormEbaySyncTab extends EbayTab
             WHERE `id_category_ref` = `id_category_ref_parent`
             AND `id_country` = '.(int) $this->ebay_profile->ebay_site_id);
 
+        $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
 
         $smarty_vars = array(
+            'prev_page'               => isset($page_current) ? $page_current-1 : 0,
+            'next_page'               => isset($page_current) ? $page_current+1 : 0,
+            'tpl_include'             => $tpl_include,
+            'pagination'              => $pagination,
+            'pages_all'               => isset($pages_all) ? $pages_all : 0,
+            'page_current'            => isset($page_current) ? $page_current : 0,
+            'start'                   => isset($start) ? $start : 0,
+            'stop'                    => isset($stop) ? $stop : 0,
             'category_alerts'         => $this->_getAlertCategories(),
             'path'                    => $this->path,
             'nb_products'             => 0,

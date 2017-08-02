@@ -161,7 +161,7 @@ class EbayOrder
     {
         return (boolean) Db::getInstance()->getValue('SELECT `id_ebay_order`
 			FROM `'._DB_PREFIX_.'ebay_order`
-			WHERE `id_order_ref` = \''.pSQL($this->id_order_ref).'\'');
+			WHERE `id_order_ref` = "'.pSQL($this->id_order_ref).'"');
     }
 
     /**
@@ -887,10 +887,10 @@ class EbayOrder
                     }
                 }
 
-                if (!$product_has_find && false) {
+                if (!$product_has_find && !$products) {
                     //Not possible with ebay multivariation products to retrieve the correct product
-                    if (!isset($transaction->Variation->SKU)) {
-                        if ($p = EbayProduct::getProductsIdFromItemId($transaction->Item->ID)) {
+                    if (!isset($transaction->Variation->SKU) && !isset($transaction->Item->SKU)) {
+                        if ($p = EbayProduct::getProductsIdFromItemId($transaction->Item->ItemID)) {
                             $products[] = array(
                                 'id_product' => $p['id_product'],
                                 'id_product_attribute' => $p['id_product_attribute'],
@@ -1075,7 +1075,7 @@ class EbayOrder
     public static function getSumOrders($period = '-30 days')
     {
         $period = strtotime($period);
-        return Db::getInstance()->executeS('SELECT SUM(o.`total_paid`) as sum
+        return Db::getInstance()->executeS('SELECT ROUND(SUM(o.`total_paid`), 2) as sum
 			FROM `'._DB_PREFIX_.'ebay_order_order` eo
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON eo.`id_order` = o.`id_order`
 			WHERE eo.`id_order` > 0 AND o.`date_add`>"'.$period.'"');

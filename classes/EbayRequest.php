@@ -268,12 +268,12 @@ class EbayRequest
 
         // Debug
 
-        if ($this->debug) {
+        if ($this->debug || $this->dev) {
             if (!file_exists(dirname(__FILE__) . '/../log/request.txt')) {
                 file_put_contents(dirname(__FILE__) . '/../log/request.txt', "<?php\n\n", FILE_APPEND | LOCK_EX);
             }
 
-            if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 100) {
+            if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 30) {
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($apiCall), true), FILE_APPEND | LOCK_EX);
@@ -320,13 +320,19 @@ class EbayRequest
 
     private function _buildHeadersSeller($api_call)
     {
-        
+        $global_id = Tools::strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id));
+        if ($this->ebay_profile->ebay_site_id == 23) {
+            $global_id = 'FRBE';
+        }
+        if ($this->ebay_profile->ebay_site_id == 123) {
+            $global_id = 'NLBE';
+        }
 
         $headers = array(
 
             // Regulates versioning of the XML interface for the API
 
-            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . (($this->ebay_profile->ebay_site_id == 23)? 'FRBE': Tools::strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id))),
+            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . $global_id,
             'X-EBAY-SOA-OPERATION-NAME: ' . $api_call,
             'X-EBAY-SOA-SERVICE-VERSION: 1.0.0',
             'X-EBAY-SOA-SECURITY-TOKEN: ' . ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -441,7 +447,7 @@ class EbayRequest
 
                 if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
                     if ($data== 1) {
-                        $this->importBusinessPolicies();
+                        $this->importBusinessPolicies($datas);
                     }
                     $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', $data);
                 }
@@ -731,12 +737,14 @@ class EbayRequest
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
-            'variations' => null,
+            'variations' => false,
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
-
+         if ( $data['id_for_sku'] > 0) {
+             $vars['sku'] .= '_'.$data['id_for_sku'];
+         }
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
@@ -799,7 +807,7 @@ class EbayRequest
             'description' => preg_replace('#<br\s*?/?>#i', "\n", $returns_policy_configuration->ebay_returns_description),
             'within' => $returns_policy_configuration->ebay_returns_within,
             'whopays' => $returns_policy_configuration->ebay_returns_who_pays,
-            'payment_profile_id' => null
+            'payment_profile_id' => false
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 1) {
@@ -1097,7 +1105,7 @@ class EbayRequest
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'isKtype' => (bool)$ebay_category->isKtype(),
-            'variations' => null,
+            'variations' => false,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
 
         );
@@ -1164,11 +1172,14 @@ class EbayRequest
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'category_id' => $data['categoryId'],
-            'variations' => null,
+            'variations' => false,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'site' => $this->ebay_country->getSiteName(),
+            'item_specifics' => $data['item_specifics'],
         );
-
+        if ( $data['id_for_sku'] > 0) {
+            $vars['sku'] .= '_'.$data['id_for_sku'];
+        }
 
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
@@ -1209,6 +1220,8 @@ class EbayRequest
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'site' => $this->ebay_country->getSiteName(),
             'variations' => $this->_getVariations($data),
+            'item_specifics' => $data['item_specifics'],
+            'sku' => false,
         );
 
 
@@ -1265,6 +1278,7 @@ class EbayRequest
             'ktype' => isset($data['ktype'])? $data['ktype'] : null,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'start_price' => false,
+            'sku' => false,
         );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
@@ -1437,6 +1451,7 @@ class EbayRequest
             'isKtype' => (bool)$ebay_category->isKtype(),
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'start_price' => false,
+            'sku' => false,
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1650,16 +1665,19 @@ class EbayRequest
         return $this->dev;
     }
 
-    public function importBusinessPolicies()
+    public function importBusinessPolicies($datas = false)
     {
-        $datas = $this->getUserPreferences();
+        if ($datas) {
+            $datas = $this->getUserPreferences();
+        }
+
         $config_business_policies = 0;
         $config = (array)$datas->SellerProfileOptedIn;
 
         if ($config[0] === 'true') {
             $config_business_policies = 1;
         }
-        $this->ebay_profile->setConfiguration('EBAY_BUSINESS_POLICIES', $config_business_policies);
+
 
         if ($config[0] === 'true') {
             if ($datas->SupportedSellerProfiles) {
