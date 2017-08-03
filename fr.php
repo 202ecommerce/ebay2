@@ -724,5 +724,5 @@ $_MODULE['<{ebay}prestashop>table_products_errors_b5a7adde1af5c87d7fd797b6245c2a
 $_MODULE['<{ebay}prestashop>table_products_errors_27ce7f8b5623b2e2df568d64cf051607'] = 'Stock';
 $_MODULE['<{ebay}prestashop>table_products_errors_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
 $_MODULE['<{ebay}prestashop>table_products_errors_06df33001c1d7187fdd81ea1f5b277aa'] = 'Actions';
-$_MODULE['<{ebay}prestashop>table_products_errors_fdbf4f4b7fc9cc387dc19c7642a865fc'] = 'Coririgé';
+$_MODULE['<{ebay}prestashop>table_products_errors_fdbf4f4b7fc9cc387dc19c7642a865fc'] = 'Corrigé';
 $_MODULE['<{ebay}prestashop>table_products_errors_3f93dbf35e26c8d22154667df36d4d19'] = 'Exclure';
