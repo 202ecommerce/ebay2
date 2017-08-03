@@ -382,6 +382,7 @@
 {/if}
     <div id="popin_load_category-container">
         <div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
+            <button class="btn btn-default" id="exit_load_cat">{l s="Close"}</button>
             <table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
                 <thead>
                 <tr class="nodrag nodrop">

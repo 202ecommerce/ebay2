@@ -1675,29 +1675,30 @@ class EbayRequest
         if ($datas) {
             $datas = $this->getUserPreferences();
         }
+        if ($datas) {
+            $config_business_policies = 0;
+            $config = (array)$datas->SellerProfileOptedIn;
 
-        $config_business_policies = 0;
-        $config = (array)$datas->SellerProfileOptedIn;
-
-        if ($config[0] === 'true') {
-            $config_business_policies = 1;
-        }
+            if ($config[0] === 'true') {
+                $config_business_policies = 1;
+            }
 
 
-        if ($config[0] === 'true') {
-            if ($datas->SupportedSellerProfiles) {
-                Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_business_policies`
+            if ($config[0] === 'true') {
+                if ($datas->SupportedSellerProfiles) {
+                    Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_business_policies`
                 WHERE `id_ebay_profile` = ' . (int)$this->ebay_profile->id);
-                foreach ($datas->SupportedSellerProfiles->children() as $data) {
-                    $data = (array)$data;
-                    $var = array(
-                        'type' => $data['ProfileType'],
-                        'name' => $data['ProfileName'],
-                        'id_bussines_Policie' => $data['ProfileID'],
-                        'id_ebay_profile' => $this->ebay_profile->id
-                    );
+                    foreach ($datas->SupportedSellerProfiles->children() as $data) {
+                        $data = (array)$data;
+                        $var = array(
+                            'type' => $data['ProfileType'],
+                            'name' => $data['ProfileName'],
+                            'id_bussines_Policie' => $data['ProfileID'],
+                            'id_ebay_profile' => $this->ebay_profile->id
+                        );
 
-                    Db::getInstance()->insert('ebay_business_policies', $var);
+                        Db::getInstance()->insert('ebay_business_policies', $var);
+                    }
                 }
             }
         }

@@ -160,10 +160,10 @@ class EbayDashboardTab extends EbayTab
 
 
             }
-            $nb_products = (int) $res_num_products[0]['num_products'];
-            $products_variations = (int) $res_variations[0]['nb_variations'];
-            $products_blocked = (int) $res_products_blocked[0]['num_products'];
-            $products_variations_blocked = (int) $res_variations_blocked[0]['nb_variations'];
+            $nb_products = (int) isset($res_num_products[0]['num_products'])?$res_num_products[0]['num_products']:0;
+            $products_variations = (int) isset($res_variations[0]['nb_variations'])?$res_variations[0]['nb_variations']:0;
+            $products_blocked = (int) isset($res_products_blocked[0]['num_products'])?$res_products_blocked[0]['num_products']:0;
+            $products_variations_blocked = (int) isset($res_variations_blocked[0]['nb_variations'])?$res_variations_blocked[0]['nb_variations']:0;
 
         }
         $annonces_prevu = $nb_products+$products_variations-($products_blocked+$products_variations_blocked);

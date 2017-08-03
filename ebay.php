@@ -138,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.1';
+        $this->version = '2.0.2';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
