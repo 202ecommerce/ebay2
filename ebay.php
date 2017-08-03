@@ -1613,6 +1613,14 @@ class Ebay extends Module
         $request = new EbayRequest();
 
         $id_profile = $this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : '';
+        if ($this->ebay_profile){
+            $count_orphan = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
+            $count_orphan = (int) $count_orphan[0]['number'];
+        } else{
+            $count_orphan = 0;
+        }
+
+
 
         $this->smarty->assign(array(
             'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
@@ -1666,7 +1674,7 @@ class Ebay extends Module
             'id_ebay_profile' => ($this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : false),
             'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
             'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
-            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ ($this->ebay_profile?EbayProduct::getCountOrphanListing($this->ebay_profile->id)[0]['number']:0),
+            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ $count_orphan,
             'ebay_shipping_config_tab' => ($this->ebay_profile?$this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK'):0),
             'count_category' => ($this->ebay_profile?EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id):0),
             'help_listing_rejection' => array(
@@ -1947,7 +1955,8 @@ class Ebay extends Module
         if ($this->ebay_profile) {
             $count_order_errors = EbayOrderErrors::getAllCount($this->ebay_profile->id);
             $count_product_errors = EbayTaskManager::getErrorsCount($this->ebay_profile->id);
-            $count_orphan_listing = EbayProduct::getCountOrphanListing($this->ebay_profile->id)[0]['number'];
+            $count_orphan_listing = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
+            $count_orphan_listing = $count_orphan_listing[0]['number'];
         }
 
         $smarty_vars = array(

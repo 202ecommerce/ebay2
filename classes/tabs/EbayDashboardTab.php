@@ -170,11 +170,13 @@ class EbayDashboardTab extends EbayTab
 
         $total = EbayOrder::getSumOrders();
         $total = $total[0]['sum'] ? $total[0]['sum'] : 0;
+        $count_orphan_listing = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
+        $count_orphan_listing = $count_orphan_listing[0]['number'];
 
         $vars = array(
             'nb_tasks' => EbayTaskManager::getNbTasks($id_ebay_profiles),
             'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
-            'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ EbayProduct::getCountOrphanListing($id_ebay_profiles)[0]['number'],
+            'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ (int) $count_orphan_listing,
             'nb_products' => (isset($nb_products[$id_ebay_profiles]) ? $nb_products[$id_ebay_profiles] : 0),
             'dernier_import_product' => Configuration::get('DATE_LAST_SYNC_PRODUCTS'),
             'nb_categories' => count(EbayCategoryConfiguration::getEbayCategories($id_ebay_profiles)),
