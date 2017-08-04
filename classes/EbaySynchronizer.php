@@ -285,9 +285,9 @@ class EbaySynchronizer
             }
         }
 
-        if (isset($product['noPriceUpdate'])) {
-            $data['noPriceUpdate'] = $product['noPriceUpdate'];
-        }
+
+
+
 
         $clean_percent = $ebay_category->getCleanPercent();
         // Save percent and price discount
@@ -1107,6 +1107,7 @@ class EbaySynchronizer
             'synchronize_mpn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
             'synchronize_upc' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
+            'id_category_ps' => $product->id_category_default,
         );
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
@@ -1563,9 +1564,9 @@ class EbaySynchronizer
                 $data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);
             }
             $data['ean13'] = isset($variation['ean13']) ? $variation['ean13'] : null;
-            $data['upc'] = isset($variation['ean13']) ? $variation['upc'] : null;
-            $data['isbn'] = isset($variation['ean13']) ? $variation['isbn'] : null;
-            $data['reference'] = isset($variation['ean13']) ? $variation['reference'] : null;
+            $data['upc'] = isset($variation['upc']) ? $variation['upc'] : null;
+            $data['isbn'] = isset($variation['isbn']) ? $variation['isbn'] : null;
+            $data['reference'] = isset($variation['reference']) ? $variation['reference'] : null;
         }
         return $data;
     }
