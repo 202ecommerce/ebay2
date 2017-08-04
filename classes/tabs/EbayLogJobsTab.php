@@ -36,6 +36,4 @@ class EbayLogJobsTab extends EbayTab
         $this->smarty->assign(array('tasks' => $tasks));
         return $this->display('ebay_log_jobs.tpl', array());
     }
-
-
 }

@@ -78,6 +78,8 @@ class EbayTaskManager
             return true;
         }
 
+
+
         if (isset($product->id)) {
             $sql = array();
             foreach ($ebay_profiles as $profile) {

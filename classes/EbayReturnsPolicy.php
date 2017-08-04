@@ -48,7 +48,7 @@ class EbayReturnsPolicy
         $dbEbay->setDb(Db::getInstance());
         $id_country = Db::getInstance()->getValue('SELECT `ebay_site_id` FROM '._DB_PREFIX_.'ebay_profile WHERE `id_ebay_profile`='.$id_profile);
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_returns_policy', array_merge(array('id_country'=>(int)$id_country),$data), 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_returns_policy', array_merge(array('id_country'=>(int)$id_country), $data), 'INSERT');
     }
 
     public static function getReturnsPolicies($id_profile)

@@ -742,9 +742,9 @@ class EbayRequest
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
-         if ( $data['id_for_sku'] > 0) {
-             $vars['sku'] .= '_'.$data['id_for_sku'];
-         }
+        if ($data['id_for_sku'] > 0) {
+            $vars['sku'] .= '_'.$data['id_for_sku'];
+        }
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
@@ -1112,8 +1112,7 @@ class EbayRequest
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
-
-        if ( $data['id_for_sku'] > 0) {
+        if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
         }
 
@@ -1182,7 +1181,7 @@ class EbayRequest
             'site' => $this->ebay_country->getSiteName(),
             'item_specifics' => $data['item_specifics'],
         );
-        if ( $data['id_for_sku'] > 0) {
+        if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
         }
 

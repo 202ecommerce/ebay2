@@ -153,18 +153,12 @@ class EbayDashboardTab extends EbayTab
                 $sql_num_products .= ' ecc.sync=1 AND ec.is_multi_sku = 1 AND ';
                 $sql_num_products .= ' product_shop.`id_category_default` IN (' . $id_categories_str . ')';
                 $sql_num_products .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
-
-
-                $res_num_products = Db::getInstance()->ExecuteS($sql_num_products); 
-
-
-
+                $res_num_products = Db::getInstance()->ExecuteS($sql_num_products);
             }
             $nb_products = (int) isset($res_num_products[0]['num_products'])?$res_num_products[0]['num_products']:0;
             $products_variations = (int) isset($res_variations[0]['nb_variations'])?$res_variations[0]['nb_variations']:0;
             $products_blocked = (int) isset($res_products_blocked[0]['num_products'])?$res_products_blocked[0]['num_products']:0;
             $products_variations_blocked = (int) isset($res_variations_blocked[0]['nb_variations'])?$res_variations_blocked[0]['nb_variations']:0;
-
         }
         $annonces_prevu = $nb_products+$products_variations-($products_blocked+$products_variations_blocked);
 

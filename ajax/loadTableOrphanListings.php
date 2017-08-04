@@ -44,11 +44,16 @@ $final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'), $page_cur
 $pages_all = ceil(((int) $count_orphans_product[0]['number'])/((int) $length));
 $range =3;
 $start = $page_current - $range;
-if ($start <= 0)
+if ($start <= 0) {
     $start = 1;
+}
+
 $stop = $page_current + $range;
-if ($stop>$pages_all)
+
+if ($stop>$pages_all) {
     $stop = $pages_all;
+}
+
 $prev_page = (int) $page_current - 1;
 $next_page = (int) $page_current + 1;
 $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';

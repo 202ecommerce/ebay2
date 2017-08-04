@@ -182,7 +182,8 @@ class EbayProduct
 			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');
     }
 
-    public static function getCountProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted){
+    public static function getCountProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
+    {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $sql = 'SELECT COUNT(*) as `count`
 			FROM (SELECT ep.id_product FROM `'._DB_PREFIX_.'ebay_product` ep
@@ -203,9 +204,9 @@ class EbayProduct
         return Db::getInstance()->ExecuteS($sql);
     }
 
-    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current=null, $length=20)
+    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20)
     {
-        if ($page_current){
+        if ($page_current) {
             $offset = ((int) $page_current - 1) * (int) $length;
             $ebay_profile = new EbayProfile($id_ebay_profile);
             $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
@@ -228,7 +229,7 @@ class EbayProduct
             $sql .= ' ORDER BY ep.`id_product` LIMIT '.$length.' OFFSET '.$offset;
 
             return Db::getInstance()->ExecuteS($sql, false);
-        } else{
+        } else {
             $ebay_profile = new EbayProfile($id_ebay_profile);
             $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
@@ -352,7 +353,7 @@ class EbayProduct
         return Db::getInstance()->executeS($query);
     }
 
-    public static function getOrphanListing($id_ebay_profile, $page_current, $length=20)
+    public static function getOrphanListing($id_ebay_profile, $page_current, $length = 20)
     {
         $offset = ((int) $page_current - 1) * (int) $length;
         $ebay_profile = new EbayProfile((int) $id_ebay_profile);
@@ -503,8 +504,6 @@ class EbayProduct
             }
 
             $final_res[] = $row;
-
-
         }
 
         return $final_res;

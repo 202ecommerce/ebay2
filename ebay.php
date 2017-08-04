@@ -910,7 +910,6 @@ class Ebay extends Module
             }
 
             if ($order->exists()) {
-
                 continue;
             }
             $order->add($this->ebay_profile->id);
@@ -1393,7 +1392,7 @@ class Ebay extends Module
             $validatordb->checkDatabase(false);
         }
 
-        if ($visible_logo){
+        if ($visible_logo) {
             $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
             $nb_errors=0;
             foreach ($profiles as &$profile) {
@@ -1411,7 +1410,7 @@ class Ebay extends Module
         }
 
         $link = $this->context->link;
-        if ($visible_logo){
+        if ($visible_logo) {
             $smarty_vars = array(
                 'visible_logo' => $visible_logo,
                 'path' => $this->_path,
@@ -1422,7 +1421,7 @@ class Ebay extends Module
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
                 'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
             );
-        } else{
+        } else {
             $smarty_vars = array(
                 'visible_logo' => $visible_logo,
                 'path' => $this->_path,
@@ -1613,10 +1612,10 @@ class Ebay extends Module
         $request = new EbayRequest();
 
         $id_profile = $this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : '';
-        if ($this->ebay_profile){
+        if ($this->ebay_profile) {
             $count_orphan = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
             $count_orphan = (int) $count_orphan[0]['number'];
-        } else{
+        } else {
             $count_orphan = 0;
         }
 
@@ -1933,9 +1932,8 @@ class Ebay extends Module
         // test if everything is green
         if ($this->ebay_profile && $this->ebay_profile->isAllSettingsConfigured()) {
             if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
-               $green_message = $this->l('Your profile is ready to go, go to Synchronization to list your products');
+                $green_message = $this->l('Your profile is ready to go, go to Synchronization to list your products');
             } elseif (!empty($_POST) && Tools::isSubmit('submitSave')) {
-// config has changed
                 $green_message = $this->l('To implement these changes on active listings you need to    resynchronize your items');
             }
         }
@@ -2306,7 +2304,7 @@ class Ebay extends Module
         return $this->display(__FILE__, 'views/templates/hook/tableProductsExclu.tpl');
     }
 
-    public function displayEbayListingsAjax($admin_path, $id_employee = null, $page_current=1, $length=20)
+    public function displayEbayListingsAjax($admin_path, $id_employee = null, $page_current = 1, $length = 20)
     {
         $ebay = new EbayRequest();
         $employee = new Employee($id_employee);
@@ -2320,11 +2318,13 @@ class Ebay extends Module
         $pages_all = ceil(((int) $nb_products[0]['count'])/ (int) $length);
         $range =3;
         $start = $page_current - $range;
-        if ($start <= 0)
+        if ($start <= 0) {
             $start = 1;
+        }
         $stop = $page_current + $range;
-        if ($stop>$pages_all)
+        if ($stop>$pages_all) {
             $stop = $pages_all;
+        }
         $prev_page = (int) $page_current - 1;
         $next_page = (int) $page_current + 1;
         $data = array(
@@ -2432,7 +2432,6 @@ class Ebay extends Module
     private function __getAttributeCombinationsById($product, $id_attribute, $id_lang)
     {
         if (method_exists($product, 'getAttributeCombinationsById')) {
-
             return $product->getAttributeCombinationsById((int) $id_attribute, $id_lang);
         }
 
@@ -2448,7 +2447,6 @@ class Ebay extends Module
                 AND pa.`id_product_attribute` = '.(int) $id_attribute.'
                 GROUP BY pa.`id_product_attribute`, ag.`id_attribute_group`
                 ORDER BY pa.`id_product_attribute`';
-		
         return Db::getInstance()->ExecuteS($sql);
     }
 
