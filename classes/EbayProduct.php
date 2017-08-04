@@ -290,8 +290,7 @@ class EbayProduct
             $query = 'SELECT COUNT(DISTINCT(ep.`id_ebay_product`)) as `number`
     FROM `'._DB_PREFIX_.'ebay_product` ep
     
-    LEFT JOIN `'._DB_PREFIX_.'ebay_task_manager` etm 
-    ON ep.`id_product` = etm.`id_product`
+    
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`
@@ -301,9 +300,6 @@ class EbayProduct
     ON p.`id_product` = ep.`id_product`
     '.Shop::addSqlAssociation('product', 'p').'
 
-    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-    ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
@@ -331,9 +327,6 @@ class EbayProduct
     LEFT JOIN `'._DB_PREFIX_.'product` p
     ON p.`id_product` = ep.`id_product`
 
-    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-    ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
@@ -350,7 +343,7 @@ class EbayProduct
     AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) ';
         }
 
-        return Db::getInstance()->executeS($query);
+        return  Db::getInstance()->executeS($query);
     }
 
     public static function getOrphanListing($id_ebay_profile, $page_current, $length = 20)

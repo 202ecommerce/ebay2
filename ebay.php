@@ -934,7 +934,7 @@ class Ebay extends Module
             }
 
             if ($this->is_multishop) {
-                $shops_data = $order->getProductsAndProfileByShop();
+                $shops_data = $order->getProductsAndProfileByShop(); 
                 $id_shops = array_keys($shops_data);
                 if (count($id_shops) > 1) {
                     $product_ids = $order->getProductIds();
@@ -1531,7 +1531,7 @@ class Ebay extends Module
             Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0);
         }
         // End Save eBay Stats
-
+        
         $alerts = $this->__getAlerts();
 
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
@@ -1571,7 +1571,7 @@ class Ebay extends Module
             $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
-
+        
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         foreach ($profiles as &$profile) {
             $profile_count_order_errors = EbayOrderErrors::getAllCount($profile['id_ebay_profile']);
@@ -1584,7 +1584,7 @@ class Ebay extends Module
             $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
             $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
         }
-
+        
         $add_profile = (Tools::getValue('action') == 'addProfile');
 
         $url_vars = array(
@@ -1610,7 +1610,7 @@ class Ebay extends Module
             $main_tab = 'dashbord';
         }
         $request = new EbayRequest();
-
+        
         $id_profile = $this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : '';
         if ($this->ebay_profile) {
             $count_orphan = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
@@ -1618,8 +1618,7 @@ class Ebay extends Module
         } else {
             $count_orphan = 0;
         }
-
-
+        
 
         $this->smarty->assign(array(
             'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
@@ -1695,18 +1694,18 @@ class Ebay extends Module
                 'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
             ),
 
-            ));
-
+            ));    
         // test if multishop Screen and all shops
 
         $is_all_shops = in_array(Shop::getContext(), array(Shop::CONTEXT_ALL, Shop::CONTEXT_GROUP));
 
-
+        
         if (!($this->ebay_profile && $this->ebay_profile->getToken()) || $add_profile || Tools::isSubmit('ebayRegisterButton')) {
             $template = $this->__displayFormRegister();
         } else {
             $template = $this->__displayFormConfig();
         }
+        
         return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
     }
 
@@ -1981,7 +1980,7 @@ class Ebay extends Module
             'orders_returns_sync' => $orders_returns_sync->getContent(),
             'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
-            'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
+            //'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
             'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
             'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0),
             'count_product_errors_total' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ ($count_orphan_listing?$count_orphan_listing:0),
@@ -1993,7 +1992,7 @@ class Ebay extends Module
             'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
             );
 
-
+	
         $this->smarty->assign($smarty_vars);
 
         return $this->display(__FILE__, 'views/templates/hook/formConfig.tpl');

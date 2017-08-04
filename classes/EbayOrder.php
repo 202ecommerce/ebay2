@@ -185,7 +185,7 @@ class EbayOrder
 			AND `deleted` = 0'.(Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
 
         $format = new TotFormat();
-
+            
         // Add customer if he doesn't exist
         //if ($id_customer < 1) RAPH
         if (!$id_customer) {
@@ -302,7 +302,7 @@ class EbayOrder
     {
         $res = array();
         foreach ($this->product_list as $product) {
-            if ($product['id_ebay_profile']) {
+            if (false) {
                 $ebay_profile = new EbayProfile((int)$product['id_ebay_profile']);
             } else {
                 $sql = 'SELECT epr.`id_ebay_profile`
@@ -327,7 +327,7 @@ class EbayOrder
                 }
             }
 
-            if (!isset($res[$ebay_profile->id_shop])) {
+            if (!array_key_exists( $ebay_profile->id_shop, $res)) {
                 $res[$ebay_profile->id_shop] = array(
                     'id_ebay_profiles' => array($ebay_profile->id),
                     'id_products'      => array(),
