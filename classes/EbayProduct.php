@@ -397,10 +397,38 @@ class EbayProduct
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+    
+    
+    JOIN (SELECT ep.`id_ebay_product` as `id`
+    FROM `'._DB_PREFIX_.'ebay_product` ep   
+    
+    
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+    ON epc.`id_product` = ep.`id_product`
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
-    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.' AND etm.`id_task` != 14
-    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) '.' 
-    ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
+    LEFT JOIN `'._DB_PREFIX_.'product` p
+    ON p.`id_product` = ep.`id_product`
+    '.Shop::addSqlAssociation('product', 'p').'
+
+
+    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+    ON pa.`id_product` = p.`id_product`
+    AND pa.default_on = 1
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    ON ecc.`id_category` = product_shop.`id_category_default`
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+    ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0)
+     ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset.') as l ON l.id = ep.`id_ebay_product`';
+
+
         } else {
             // to check if a product has attributes (multi-variations),
             // we check if it has a "default_on" attribute in the product_attribute table
