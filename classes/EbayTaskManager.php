@@ -234,8 +234,19 @@ class EbayTaskManager
         return DB::getInstance()->update('ebay_task_manager', array('locked' => 0), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 40 MINUTE');
     }
 
-    public static function getErrors($id_ebay_profile)
+    public static function getCountErrors ($id_ebay_profile)
     {
+        $res_sql = DB::getInstance()->executeS('SELECT COUNT(*) as `count` FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile);
+        return (int) $res_sql[0]['count'];
+    }
+
+    public static function getErrors($id_ebay_profile, $page_current=false, $length=false)
+    {
+        if ($page_current and $length){
+            $limit = (int) $length;
+            $offset = $limit * ( (int) $page_current - 1 );
+            return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add` LIMIT  '.$limit.' OFFSET '.$offset);
+        }
 
         return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }

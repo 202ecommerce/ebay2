@@ -398,7 +398,9 @@ class EbayProduct
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.' ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.' AND etm.`id_task` != 14
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) '.' 
+    ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
         } else {
             // to check if a product has attributes (multi-variations),
             // we check if it has a "default_on" attribute in the product_attribute table
@@ -440,7 +442,9 @@ class EbayProduct
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.' ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) '.' 
+    ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset;
         }
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $ebay = new Ebay();
@@ -452,10 +456,10 @@ class EbayProduct
         $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
 
         $res = Db::getInstance()->executeS($query);
-
+        
         $final_res = array();
         foreach ($res as &$row) {
-            $ret =false;
+            /*$ret =false;
             if (!$row['exists']) {
                 $ret = true;
             } elseif (!$row['EbayCategoryExists']) {
@@ -470,7 +474,7 @@ class EbayProduct
 
             if ($ret === false) {
                 continue;
-            }
+            }*/
 
             if (isset($row['id_product_ref']) && $row['id_product_ref']) {
                 $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());

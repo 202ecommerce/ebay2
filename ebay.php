@@ -1618,7 +1618,7 @@ class Ebay extends Module
         } else {
             $count_orphan = 0;
         }
-        
+
 
         $this->smarty->assign(array(
             'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
@@ -1980,7 +1980,7 @@ class Ebay extends Module
             'orders_returns_sync' => $orders_returns_sync->getContent(),
             'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
-            //'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
+            'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
             'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
             'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0),
             'count_product_errors_total' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ ($count_orphan_listing?$count_orphan_listing:0),

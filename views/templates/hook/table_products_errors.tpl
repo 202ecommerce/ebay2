@@ -25,73 +25,80 @@
 
 
         <p>{l s='The following products has been refused from eBay. Pay attention: if an listing is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>
+        <div id = 'contentProductErrors'>
+            <table id="AnnoncesErrorsListings" class="table" >
+                <thead>
+                <tr>
 
-        <table id="AnnoncesErrorsListings" class="table" >
-            <thead>
-            <tr>
+                    <th style="width:110px;">
+                        <span>{l s='Date' mod='ebay'}</span>
+                    </th>
 
-                <th style="width:110px;">
-                    <span>{l s='Date' mod='ebay'}</span>
-                </th>
+                    <th>
+                        <span>{l s='ID' mod='ebay'}</span>
+                    </th>
 
-                <th>
-                    <span>{l s='ID' mod='ebay'}</span>
-                </th>
+                    <th class="center">
+                        <span>{l s='Nom' mod='ebay'}</span>
+                    </th>
 
-                <th class="center">
-                    <span>{l s='Nom' mod='ebay'}</span>
-                </th>
+                    <th>
+                        <span >{l s='eBay listings' mod='ebay'}</span>
+                    </th>
 
-                <th>
-                    <span >{l s='eBay listings' mod='ebay'}</span>
-                </th>
+                    <th class="center">
+                        <span >{l s='Error' mod='ebay'}</span>
+                    </th>
 
-                <th class="center">
-                    <span >{l s='Error' mod='ebay'}</span>
-                </th>
+                    <th class="center">
+                        <span >{l s='Description' mod='ebay'}</span>
+                    </th>
 
-                <th class="center">
-                    <span >{l s='Description' mod='ebay'}</span>
-                </th>
+                    <th class="center">
+                        <span>{l s='Stock' mod='ebay'}</span>
+                    </th>
 
-                <th class="center">
-                    <span>{l s='Stock' mod='ebay'}</span>
-                </th>
+                    <th class="center">
+                        <span>{l s='Help' mod='ebay'}</span>
+                    </th>
 
-                <th class="center">
-                    <span>{l s='Help' mod='ebay'}</span>
-                </th>
+                    <th class="center">{l s='Actions' mod='ebay'}</th>
 
-                <th class="center">{l s='Actions' mod='ebay'}</th>
+                </tr>
+                </thead>
 
-            </tr>
-            </thead>
+                <tbody>
+                {if isset($task_errors)}
+                    {foreach from=$task_errors item="task_error"}
+                        <tr>
+                            <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$task_error.id_product|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
+                            <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
+                            <td class="error_description">{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>
+                            <td ></td>
+                            <td ><a class="kb-help"
+                                    data-errorcode="{$task_error.error_code}"
+                                    data-module="ebay"
+                                    data-lang="{$task_error.lang_iso}"
+                                    module_version="1.11.0"
+                                    prestashop_version="{$task_error.ps_version}"></a></td>
+                            <td ><a class="btn btn-xs btn-block btn-warning corige_product" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corriger' mod='ebay'}</a>
+                                <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.real_id}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
+                        </tr>
+                    {/foreach}
+                {/if}
+                </tbody>
 
-            <tbody>
-            {if isset($task_errors)}
-                {foreach from=$task_errors item="task_error"}
-                    <tr>
-                        <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$task_error.id_product|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
-                        <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
-                        <td class="error_description">{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>
-                        <td ></td>
-                        <td ><a class="kb-help"
-                                data-errorcode="{$task_error.error_code}"
-                                data-module="ebay"
-                                data-lang="{$task_error.lang_iso}"
-                                module_version="1.11.0"
-                                prestashop_version="{$task_error.ps_version}"></a></td>
-                        <td ><a class="btn btn-xs btn-block btn-warning corige_product" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corriger' mod='ebay'}</a>
-                            <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.real_id}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
-                    </tr>
-                {/foreach}
+            </table>
+            {if $pages_all >1}
+                <div class="navPaginationListProducErrorsTab" style="display:flex; justify-content:center">
+                    {include file=$tpl_include}
+                </div>
             {/if}
-            </tbody>
+        </div>
 
-        </table>
 <div id="popin-product-exclu" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
     <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
         <div class="panel-heading">
@@ -135,6 +142,7 @@
         </div>
     </div>
 </div>
+
 {literal}
 <script>
     $(document).on('click', '#popin-product-corige', function(){
@@ -145,7 +153,7 @@
         e.stopPropagation();
     });
 
-    $('.exclure_product').click(function (e) {
+    $(document).on('click', '.exclure_product', function (e) {
         e.preventDefault();
         $('.if_anonnces_exist').attr('id', $(this).attr('id'));
         if($(this).parent().parent().find('.item_id_error').html()){
@@ -154,26 +162,26 @@
         $('#popin-product-exclu').show();
 
     });
-    $('.corige_product').click(function (e) {
+    $(document).on('click', '.corige_product', function (e) {
         e.preventDefault();
         $('.url_product_info').attr('href', $(this).attr('href'));
         $('.error_product').html($(this).parent().parent().find('.error_description').text());
         $('#popin-product-corige').show();
 
     });
-    $('.js-exclu-confirm').click(function (e) {
+    $(document).on('click', '.js-exclu-confirm', function (e) {
         e.preventDefault();
         exclureProduct($('.if_anonnces_exist').attr('id'));
         $('#popin-product-exclu').hide();
         $('.if_anonnces_exist').hide();
         location.reload();
     });
-    $('.js-notexclu').click(function (e) {
+    $(document).on('click', '.js-notexclu', function (e) {
         e.preventDefault();
         $('#popin-product-exclu').hide();
         $('.if_anonnces_exist').hide();
     });
-    $('.js-corige-ok').click(function (e) {
+    $(document).on('click', '.js-corige-ok', function (e) {
         e.preventDefault();
         $('#popin-product-corige').hide();
     });
@@ -187,6 +195,28 @@
             }
         });
     }
+
+    $(document).on('click', '.navPaginationListProducErrorsTab .pagination span', function(){
+        var page = $(this).attr('value');
+        if(page){
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/paginationProductErrors.php',
+                data: "token_for_product={/literal}{$token_for_product}{literal}&profile=" + id_ebay_profile + "&page=" + page,
+                beforeSend : function(){
+                    var html = '<div style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                    $('#menuTab80Sheet .panel').empty();
+                    $('#menuTab80Sheet .panel').append(html);
+                },
+                success: function(data)
+                {
+                    $('#menuTab80Sheet .panel').html(data)
+                }
+            });
+        }
+
+
+    });
 
     {/literal}
 </script>
