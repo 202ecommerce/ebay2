@@ -2351,33 +2351,36 @@ class Ebay extends Module
             $category= new Category($product->getDefaultCategory(), $id_lang);
             if ((int) $p['id_attribute'] > 0) {
                 // No Multi Sku case so we do multiple products from a multivariation product
-                $combinaison = $this->__getAttributeCombinationsById($product, (int) $p['id_attribute'], $id_lang);
-                $combinaison = $combinaison[0];
+                
+                if ($combinaison = $this->__getAttributeCombinationsById($product, (int) $p['id_attribute'], $id_lang)){
+                    $combinaison = $combinaison[0];
 
-                $data['reference'] = $combinaison['reference'];
-                $data['ean13'] = $combinaison['ean13'];
-                $data['upc'] = $combinaison['upc'];
-                $variation_specifics = EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang, $this->ebay_profile->ebay_site_id);
-                foreach ($variation_specifics as $variation_specific) {
-                    $data['name'] .= ' '.$variation_specific;
+                    $data['reference'] = $combinaison['reference'];
+                    $data['ean13'] = $combinaison['ean13'];
+                    $data['upc'] = $combinaison['upc'];
+                    $variation_specifics = EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang, $this->ebay_profile->ebay_site_id);
+                    foreach ($variation_specifics as $variation_specific) {
+                        $data['name'] .= ' '.$variation_specific;
+                    }
+
+                    if ($this->isSymfonyProject()) {
+                        $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $combinaison['id_product']));
+                    } else {
+                        $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
+                    }
+
+                    $products_ebay_listings[] = array(
+                        'id_product' => $combinaison['id_product'].'-'.$combinaison['id_product_attribute'],
+                        'quantity' => $combinaison['quantity'],
+                        'category' => $category->name,
+                        'prestashop_title' => $data['name'],
+                        'ebay_title' => EbayRequest::prepareTitle($data),
+                        'reference_ebay' => $reference_ebay,
+                        'link' => $url,
+                        'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
+                    );
                 }
-
-                if ($this->isSymfonyProject()) {
-                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $combinaison['id_product']));
-                } else {
-                    $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
-                }
-
-                $products_ebay_listings[] = array(
-                    'id_product' => $combinaison['id_product'].'-'.$combinaison['id_product_attribute'],
-                    'quantity' => $combinaison['quantity'],
-                    'category' => $category->name,
-                    'prestashop_title' => $data['name'],
-                    'ebay_title' => EbayRequest::prepareTitle($data),
-                    'reference_ebay' => $reference_ebay,
-                    'link' => $url,
-                    'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
-                );
+		
             } else {
                 if ($this->isSymfonyProject()) {
                     $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $data['real_id_product']));
