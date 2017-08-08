@@ -605,7 +605,7 @@
 		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
 			<input type="text" style="width:200px" placeholder="Searche categories Prestashop">
 			<button class="searcheBtn">Searche</button>
-			<button class="researcheBtn">Researche</button>
+			<button class="researcheBtn">Reset</button>
 		</div>
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 			<thead>
