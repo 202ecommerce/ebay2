@@ -65,6 +65,49 @@ $(document).ready(function(){
             });
         }
     });
+
+    $(document).on('click', '#searcheEbaySync .searcheBtn', function(){
+        var searche = $('#searcheEbaySync input').attr('value');
+        if(searche){
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php?searche=' + searche,
+                data: "token="+ebay_token,
+                beforeSend:function(){
+                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                    $('#menuTab5Sheet .panel').empty();
+                    $('#menuTab5Sheet .panel').append(html);
+                },
+                success: function(data)
+                {
+                    $('#menuTab5Sheet .panel').append(data);
+                    $('.ajaxLoadingFormSyncTab').hide();
+
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#searcheEbaySync .researcheBtn', function(){
+
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php',
+                data: "token="+ebay_token,
+                beforeSend:function(){
+                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                    $('#menuTab5Sheet .panel').empty();
+                    $('#menuTab5Sheet .panel').append(html);
+                },
+                success: function(data)
+                {
+                    $('#menuTab5Sheet .panel').append(data);
+                    $('.ajaxLoadingFormSyncTab').hide();
+
+                }
+            });
+
+    });
 });
 
 

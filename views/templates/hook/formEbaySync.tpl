@@ -602,6 +602,11 @@
 		<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode_1" value="1" {if $ebay_sync_mode == 1}checked="checked"{/if}/> <span data-inlinehelp="{l s='This will only synchronisze products that are not yet listed on eBay.' mod='ebay'}">{l s='Only sync new products' mod='ebay'}</span>
 	</div>*}
 	<div style="display: block;" id="catSync">
+		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
+			<input type="text" style="width:200px" placeholder="Searche categories Prestashop">
+			<button class="searcheBtn">Searche</button>
+			<button class="researcheBtn">Researche</button>
+		</div>
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 			<thead>
 				<tr class="nodrag nodrop">
