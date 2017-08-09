@@ -74,7 +74,7 @@ function delete_orphan_by_checkbox(index, element){
         type: "POST",
         url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee + "&action=end",
         success : function(data) {
-
+            
             if (data == '1')
                 lnk.closest('tr').remove(); // remove row
 

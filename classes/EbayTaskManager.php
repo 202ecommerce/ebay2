@@ -58,9 +58,6 @@ class EbayTaskManager
 
         if ($type == 'end') {
             foreach ($ebay_profiles as $profile) {
-                if (EbayProductConfiguration::isblocked($profile['id_ebay_profile'], $product->id)) {
-                    continue;
-                }
                 $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
                 if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop)) {
                     if (isset($id_product_attribute)) {
