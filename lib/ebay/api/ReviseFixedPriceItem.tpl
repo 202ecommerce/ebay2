@@ -82,15 +82,15 @@
 		
 			
 		{if isset($shipping_details) && !$bp_active}
-			<ShippingDetails>{$shipping_details|cleanHtml nofilter}</ShippingDetails>
+			<ShippingDetails>{$shipping_details nofilter}</ShippingDetails>
 		{/if}
-			{$buyer_requirements_details|cleanHtml nofilter}
+			{$buyer_requirements_details nofilter}
 		{/if}
 			<ItemSpecifics>
 				{foreach from=$item_specifics key=name item=value}
 					<NameValueList>
-						<Name><![CDATA[{$name|cleanHtml}]]></Name>
-                        <Value><![CDATA[{$value|cleanHtml}]]></Value>
+						<Name><![CDATA[{$name}]]></Name>
+                        <Value><![CDATA[{$value}]]></Value>
                     </NameValueList>
                 {/foreach}
             </ItemSpecifics>
@@ -118,15 +118,15 @@
 			{/if}
 		{/if}
 		
-        {$return_policy|cleanHtml nofilter}
+        {$return_policy nofilter}
 		
         {if isset($site)}
             <Site>{$site|escape:'htmlall':'UTF-8'}</Site>
 		{/if}
         {if isset($variations) && $variations}
-            {$variations|cleanHtml nofilter}
+            {$variations nofilter}
 		{elseif isset($product_listing_details)}
-            {$product_listing_details|cleanHtml nofilter}
+            {$product_listing_details nofilter}
         {/if}
 
         {if isset($price_original)}

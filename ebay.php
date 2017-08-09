@@ -1655,7 +1655,7 @@ class Ebay extends Module
             'profiles' => $profiles,
             'add_profile' => $add_profile,
             'add_profile_url' => $add_profile_url,
-            'delete_profile_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
+            'delete_profile_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int) Tools::getValue('id_tab'),
             'pro_url' => $this->ebay_country->getProUrl(),

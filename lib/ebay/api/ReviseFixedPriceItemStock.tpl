@@ -64,14 +64,14 @@
 		<ItemSpecifics>
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
-					<Name><![CDATA[{$name|cleanHtml}]]></Name>
-					<Value><![CDATA[{$value|cleanHtml}]]></Value>
+					<Name><![CDATA[{$name}]]></Name>
+					<Value><![CDATA[{$value}]]></Value>
 				</NameValueList>
 			{/foreach}
 		</ItemSpecifics>
 {/if}
         {if isset($variations) && $variations}
-            {$variations|cleanHtml nofilter}
+            {$variations nofilter}
         {/if}
 
         {if isset($ebay_store_category_id)}

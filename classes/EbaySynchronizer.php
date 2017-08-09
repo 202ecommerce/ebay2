@@ -74,6 +74,7 @@ class EbaySynchronizer
         $nb_no_variation_attribute_groups = Db::getInstance()->getValue('SELECT COUNT(*)
             FROM `' . _DB_PREFIX_ . 'ebay_category_specific`
             WHERE `can_variation` = 0
+	    AND `id_category_ref` = ' .$ebay_category->getIdCategoryRef().'
             AND `ebay_site_id` = ' . (int)$ebay_site_id . '
             AND `id_attribute_group` IN (' . implode(', ', $attribute_group_ids) . ')');
 

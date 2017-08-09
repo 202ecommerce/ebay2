@@ -29,7 +29,7 @@ require_once dirname(__FILE__).'/EbayTab.php';
 
 class EbayLogWorkersTab extends EbayTab
 {
-    public function getContent($id_profile, $page_current=1, $length=20)
+    public function getContent($id_profile, $page_current = 1, $length = 20)
     {
         $table = _DB_PREFIX_.'ebay_task_manager';
         $sql_count_tasks = "SELECT COUNT(*) as `count` FROM `$table` WHERE `locked` != 0 AND `id_ebay_profile` = $id_profile";

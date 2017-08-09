@@ -603,9 +603,9 @@
 	</div>*}
 	<div style="display: block;" id="catSync">
 		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
-			<input type="text" style="width:200px" class="name_cat" placeholder="Searche categories Prestashop" {if $searche}value="{$searche}"{/if}>
-			<button class="searcheBtn btn btn-success">Searche</button>
-			<button class="researcheBtn btn btn-warning">Reset</button>
+			<input type="text" style="width:200px" class="name_cat" placeholder="{l s='Searche categories Prestashop' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+			<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
+			<button class="researcheBtn btn btn-warning">{l s='Reset' mod='ebay'}</button>
 		</div>
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 			<thead>

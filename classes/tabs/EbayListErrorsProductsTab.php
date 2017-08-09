@@ -27,11 +27,10 @@
 class EbayListErrorsProductsTab extends EbayTab
 {
 
-    public function getContent($id_ebay_profile, $page_current=1, $length=20, $token_for_product=false)
+    public function getContent($id_ebay_profile, $page_current = 1, $length = 20, $token_for_product = false)
     {
-
         $count_product_errors = EbayTaskManager::getCountErrors($id_ebay_profile);
-        $pages_all = ceil($count_product_errors / (int) $length );
+        $pages_all = ceil($count_product_errors / (int) $length);
         $range =3;
         $start = (int) $page_current - $range;
         if ($start <= 0) {
@@ -58,7 +57,6 @@ class EbayListErrorsProductsTab extends EbayTab
         $vars['out_of_stock'] = ($ebay_profile->getConfiguration('EBAY_OUT_OF_STOCK') ? 0 : 1);
         if (!empty($tasks)) {
             foreach ($tasks as $task) {
-                
                 $item_id = EbayProduct::getIdProductRef($task['id_product'], $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $task['id_product_attribute'], $ebay_profile->id_shop);
 
                 $product = new Product($task['id_product'], false, $ebay_profile->id_lang);
@@ -96,7 +94,7 @@ class EbayListErrorsProductsTab extends EbayTab
                     }
                 }
 
-                if ($token_for_product){
+                if ($token_for_product) {
                     $vars['task_errors'][] = array(
                         'date' => $task['date_upd'],
                         'name' => $name_product,
@@ -111,7 +109,7 @@ class EbayListErrorsProductsTab extends EbayTab
                         'desc_error' => $desc,
                         'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false).'&token='.$token_for_product . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
                     );
-                } else{
+                } else {
                     $vars['task_errors'][] = array(
                         'date' => $task['date_upd'],
                         'name' => $name_product,
@@ -129,9 +127,9 @@ class EbayListErrorsProductsTab extends EbayTab
                 }
             }
 
-            if ($token_for_product){
+            if ($token_for_product) {
                 $vars['token_for_product'] = $token_for_product;
-            } else{
+            } else {
                 $vars['token_for_product'] = Tools::getAdminTokenLite('AdminProducts');
             }
 
@@ -151,5 +149,4 @@ class EbayListErrorsProductsTab extends EbayTab
 
         return $this->display('table_products_errors.tpl', $vars);
     }
-
 }
