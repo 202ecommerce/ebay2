@@ -168,7 +168,7 @@
     </tbody>
 
 </table>
-{if $pages_all >1}
+{if isset($pages_all) and $pages_all >1}
     <div class="navPaginationListOrphanProductTab" style="display:flex; justify-content:center">
         {include file=$tpl_include}
     </div>

@@ -92,7 +92,7 @@
                 </tbody>
 
             </table>
-            {if $pages_all >1}
+            {if isset($pages_all) and $pages_all >1}
                 <div class="navPaginationListProducErrorsTab" style="display:flex; justify-content:center">
                     {include file=$tpl_include}
                 </div>
@@ -202,7 +202,7 @@
             $.ajax({
                 type: "POST",
                 url: module_dir+'ebay/ajax/paginationProductErrors.php',
-                data: "token_for_product={/literal}{$token_for_product}{literal}&profile=" + id_ebay_profile + "&page=" + page,
+                data: "token_for_product={/literal}{if isset($token_for_product)}{$token_for_product}{/if}{literal}&profile=" + id_ebay_profile + "&page=" + page,
                 beforeSend : function(){
                     var html = '<div style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
                     $('#menuTab80Sheet .panel').empty();

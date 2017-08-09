@@ -46,10 +46,11 @@ $(document).ready(function(){
 
     $(document).on('click', '.navPaginationSyncTab .pagination span', function(){
         var page = $(this).attr('value');
+        var searche = $('#searcheEbaySync .name_cat').attr('value');
         if(page){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page,
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page+'&searche='+searche,
                 data: "token="+ebay_token,
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';

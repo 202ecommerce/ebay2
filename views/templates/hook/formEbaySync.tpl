@@ -603,7 +603,7 @@
 	</div>*}
 	<div style="display: block;" id="catSync">
 		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
-			<input type="text" style="width:200px" placeholder="Searche categories Prestashop">
+			<input type="text" style="width:200px" class="name_cat" placeholder="Searche categories Prestashop" {if $searche}value="{$searche}"{/if}>
 			<button class="searcheBtn btn btn-success">Searche</button>
 			<button class="researcheBtn btn btn-warning">Reset</button>
 		</div>

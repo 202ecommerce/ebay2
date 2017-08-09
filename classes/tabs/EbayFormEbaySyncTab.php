@@ -177,6 +177,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
 
         $smarty_vars = array(
+            'searche'                 => $searche,
             'prev_page'               => isset($page_current) ? $page_current-1 : 0,
             'next_page'               => isset($page_current) ? $page_current+1 : 0,
             'tpl_include'             => $tpl_include,
