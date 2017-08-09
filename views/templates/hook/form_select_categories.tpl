@@ -33,7 +33,7 @@
 	<select name="category[{$id_category}]" id="categoryLevel{$category.level}-{$id_category}" rel="{$id_category}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch({$level}, {$id_category});">
 		<option value="0">{$ch_cat_str}</option>
 		{foreach from=$ref_categories item="category"}
-			{if (isset($category.id_category_ref) && $category.id_category_ref == ($category.id_category_ref_parent && !empty($category.id_ebay_category)))}
+			{if (isset($category.id_category_ref) && $category.id_category_ref == $category.id_category_ref_parent && !empty($category.id_ebay_category))}
 				<option value="{$category.id_ebay_category}"{if $category.id_category_ref == $id_category_ref} selected{/if}>{$category.name}</option>
 			{/if}
 		{/foreach}
