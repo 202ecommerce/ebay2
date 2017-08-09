@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = false;
+    private $dev = true;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -1410,7 +1410,7 @@ class EbayRequest
             return false;
         }
 
-        return $this->_checkForErrors($response);
+        return $response->ItemID;
     }
 
     public function reviseFixedPriceItemMultiSku($data = array())

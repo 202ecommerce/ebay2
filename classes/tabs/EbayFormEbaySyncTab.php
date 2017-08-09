@@ -30,7 +30,7 @@ if (_PS_VERSION_ > '1.7') {
 
 class EbayFormEbaySyncTab extends EbayTab
 {
-    public function getContent($page_current = 1, $length = 20, $searche=false)
+    public function getContent($page_current = 1, $length = 20, $searche = false)
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
@@ -64,9 +64,9 @@ class EbayFormEbaySyncTab extends EbayTab
         foreach (EbayCategoryConfiguration::getEbayCategoryConfigurations($this->ebay_profile->id) as $c) {
             $category_config_list[$c['id_category']] = $c;
         }
-        if ($searche){
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0, array(),'', $searche);
-        } else{
+        if ($searche) {
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0, array(), '', $searche);
+        } else {
             $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         }
 

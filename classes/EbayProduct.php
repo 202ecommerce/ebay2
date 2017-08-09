@@ -170,9 +170,9 @@ class EbayProduct
         return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND `id_attribute` = "'.(int) $id_attribute.'"');
     }
 
-    public static function deleteByIdProductRef($id_product_ref, $id_ebay_profile=false)
+    public static function deleteByIdProductRef($id_product_ref, $id_ebay_profile = false)
     {
-        if ($id_ebay_profile){
+        if ($id_ebay_profile) {
             return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
 			    WHERE `id_product_ref` = \''.pSQL($id_product_ref).'\' AND `id_ebay_profile`='.$id_ebay_profile);
         }
@@ -431,8 +431,6 @@ class EbayProduct
     WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
     AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0)
      ORDER BY ep.`id_ebay_profile` LIMIT '.$length.' OFFSET '.$offset.') as l ON l.id = ep.`id_ebay_product`';
-
-
         } else {
             // to check if a product has attributes (multi-variations),
             // we check if it has a "default_on" attribute in the product_attribute table

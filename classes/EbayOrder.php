@@ -327,7 +327,7 @@ class EbayOrder
                 }
             }
 
-            if (!array_key_exists( $ebay_profile->id_shop, $res)) {
+            if (!array_key_exists($ebay_profile->id_shop, $res)) {
                 $res[$ebay_profile->id_shop] = array(
                     'id_ebay_profiles' => array($ebay_profile->id),
                     'id_products'      => array(),
