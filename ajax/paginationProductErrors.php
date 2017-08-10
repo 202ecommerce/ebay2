@@ -40,5 +40,4 @@ $context = Context::getContext();
 $ebayErrorsProducts = new EbayListErrorsProductsTab($ebay, $context->smarty, $context);
 $response = $ebayErrorsProducts->getContent($id_ebay_profile, $page_current, $length, $token_for_product);
 echo $response;
-die ();
-
+die();

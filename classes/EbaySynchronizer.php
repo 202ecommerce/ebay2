@@ -74,7 +74,7 @@ class EbaySynchronizer
         $nb_no_variation_attribute_groups = Db::getInstance()->getValue('SELECT COUNT(*)
             FROM `' . _DB_PREFIX_ . 'ebay_category_specific`
             WHERE `can_variation` = 0
-	    AND `id_category_ref` = ' .$ebay_category->getIdCategoryRef().'
+	        AND `id_category_ref` = ' .$ebay_category->getIdCategoryRef().'
             AND `ebay_site_id` = ' . (int)$ebay_site_id . '
             AND `id_attribute_group` IN (' . implode(', ', $attribute_group_ids) . ')');
 
@@ -1146,7 +1146,8 @@ class EbaySynchronizer
         // if product not on eBay as we expected we add it
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
-            EbayProduct::deleteByIdProductRef($data['itemID']);
+            EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($data['itemID'], $id_ebay_profile);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 
@@ -1165,7 +1166,8 @@ class EbaySynchronizer
         // if product not on eBay as we expected we add it
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
-            EbayProduct::deleteByIdProductRef($data['itemID']);
+            EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($data['itemID'], $id_ebay_profile);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 

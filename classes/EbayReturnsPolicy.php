@@ -69,7 +69,7 @@ class EbayReturnsPolicy
         foreach ($policiesDetails['ReturnsWithin'] as $returns_within) {
             $ReturnsWithin[] = array_map('pSQL', $returns_within);
         }
-	Db::getInstance()->execute('delete
+        Db::getInstance()->execute('delete
 			FROM `'._DB_PREFIX_.'ebay_configuration`
 			WHERE `id_ebay_profile` = '.(int) $id_profile.'
 			AND `name` = "'.pSQL('EBAY_RETURNS_WITHIN_VALUES').'"');
@@ -79,7 +79,7 @@ class EbayReturnsPolicy
         foreach ($policiesDetails['ReturnsWhoPays'] as $returns_within) {
             $returnsWhoPays[] = array_map('pSQL', $returns_within);
         }
-	Db::getInstance()->execute('delete
+        Db::getInstance()->execute('delete
 			FROM `'._DB_PREFIX_.'ebay_configuration`
 			WHERE `id_ebay_profile` = '.(int) $id_profile.'
 			AND `name` = "'.pSQL('EBAY_RETURNS_WHO_PAYS_VALUES').'"');

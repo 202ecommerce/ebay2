@@ -479,7 +479,7 @@
         $(document).on('click', '.refreshNbTasksInWork', loadNbTasksInWork);
     </script>
     <script>
-
+        var module_dir = "{$_module_dir_|escape:'htmlall':'UTF-8'}";
         // Select item from user dropdown
         $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
             $(this).parents('.dropdown').find('.dropdown-menu li a').removeClass('selected');

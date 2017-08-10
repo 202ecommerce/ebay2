@@ -33,8 +33,6 @@ require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'confi
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
 }
-
-
 function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $ebay)
 {
 
@@ -45,8 +43,7 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
     if ((int)$level > 1) {
         foreach ($ref_categories as $ref_id_category_ref => $category) {
             if ($ref_id_category_ref == $id_category_ref) {
-                if (isset($ref_categories[$category['id_category_ref_parent']]['children']))  {
-
+                if (isset($ref_categories[$category['id_category_ref_parent']]['children'])) {
                     if ((int) $category['id_category_ref'] != (int) $category['id_category_ref_parent']) {
                         $var .= getSelectors($ref_categories, (int) $category['id_category_ref_parent'], (int) $id_category, (int) ($level - 1), $ebay);
                     }
@@ -62,7 +59,6 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
             }
         }
     } else {
-
         $valid_categories = array();
         foreach ($ref_categories as $ref_id_category_ref => $category) {
             if (isset($category['id_category_ref']) && (int) $category['id_category_ref'] == (int) $category['id_category_ref_parent'] && !empty($category['id_ebay_category'])) {

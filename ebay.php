@@ -151,7 +151,7 @@ class Ebay extends Module
 
         $this->displayName = $this->l('eBay');
         $this->description = $this->l('Easily export your products from PrestaShop to eBay, the biggest market place, to acquire new customers and realize more sales.');
-        $this->module_key = '7cc82adcef692ecc8425baa13dd40428';
+        $this->module_key = '91a52165797d12abfadeb0829bb671fc';
 
         // Checking Extension
         $this->__checkExtensionsLoading();
@@ -934,7 +934,7 @@ class Ebay extends Module
             }
 
             if ($this->is_multishop) {
-                $shops_data = $order->getProductsAndProfileByShop(); 
+                $shops_data = $order->getProductsAndProfileByShop();
                 $id_shops = array_keys($shops_data);
                 if (count($id_shops) > 1) {
                     $product_ids = $order->getProductIds();
@@ -1531,7 +1531,7 @@ class Ebay extends Module
             Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0);
         }
         // End Save eBay Stats
-        
+
         $alerts = $this->__getAlerts();
 
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
@@ -1571,7 +1571,7 @@ class Ebay extends Module
             $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
-        
+
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
         foreach ($profiles as &$profile) {
             $profile_count_order_errors = EbayOrderErrors::getAllCount($profile['id_ebay_profile']);
@@ -1584,7 +1584,7 @@ class Ebay extends Module
             $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
             $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
         }
-        
+
         $add_profile = (Tools::getValue('action') == 'addProfile');
 
         $url_vars = array(
@@ -1610,7 +1610,7 @@ class Ebay extends Module
             $main_tab = 'dashbord';
         }
         $request = new EbayRequest();
-        
+
         $id_profile = $this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : '';
         if ($this->ebay_profile) {
             $count_orphan = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
@@ -1618,6 +1618,7 @@ class Ebay extends Module
         } else {
             $count_orphan = 0;
         }
+
 
 
         $this->smarty->assign(array(
@@ -1694,18 +1695,18 @@ class Ebay extends Module
                 'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
             ),
 
-            ));    
+            ));
+
         // test if multishop Screen and all shops
 
         $is_all_shops = in_array(Shop::getContext(), array(Shop::CONTEXT_ALL, Shop::CONTEXT_GROUP));
 
-        
+
         if (!($this->ebay_profile && $this->ebay_profile->getToken()) || $add_profile || Tools::isSubmit('ebayRegisterButton')) {
             $template = $this->__displayFormRegister();
         } else {
             $template = $this->__displayFormConfig();
         }
-        
         return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
     }
 
@@ -1992,7 +1993,7 @@ class Ebay extends Module
             'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
             );
 
-	
+
         $this->smarty->assign($smarty_vars);
 
         return $this->display(__FILE__, 'views/templates/hook/formConfig.tpl');
@@ -2352,7 +2353,7 @@ class Ebay extends Module
             if ((int) $p['id_attribute'] > 0) {
                 // No Multi Sku case so we do multiple products from a multivariation product
                 
-                if ($combinaison = $this->__getAttributeCombinationsById($product, (int) $p['id_attribute'], $id_lang)){
+                if ($combinaison = $this->__getAttributeCombinationsById($product, (int)$p['id_attribute'], $id_lang)) {
                     $combinaison = $combinaison[0];
 
                     $data['reference'] = $combinaison['reference'];
@@ -2380,7 +2381,6 @@ class Ebay extends Module
                         'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
                     );
                 }
-		
             } else {
                 if ($this->isSymfonyProject()) {
                     $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $data['real_id_product']));
@@ -2400,6 +2400,7 @@ class Ebay extends Module
                 );
             }
         }
+
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
         $this->smarty->assign('products_ebay_listings', $products_ebay_listings);
         $this->smarty->assign('id_employee', $id_employee);

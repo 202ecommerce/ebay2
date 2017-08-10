@@ -69,6 +69,7 @@ $(document).ready(function(){
 
     $(document).on('click', '#searcheEbaySync .searcheBtn', function(){
         var searche = $('#searcheEbaySync input').attr('value');
+
         if(searche){
             $.ajax({
                 type: "POST",
