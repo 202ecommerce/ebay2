@@ -45,6 +45,11 @@
     			</tr>
     		{/foreach}
     </table>
+	{if $pages_all >1}
+		<div class="navPaginationListProductTab" style="display:flex; justify-content:center">
+            {include file=$tpl_include}
+		</div>
+	{/if}
 {else}
     <p class="center"><b>{l s='No listing with this profile' mod='ebay'}</b></p>
 {/if}

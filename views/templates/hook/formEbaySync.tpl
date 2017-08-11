@@ -136,6 +136,21 @@
 			loadCategoriesConfig($(this).data('id'));
 		});
 
+		$('.js-popin').on('click', function() {
+
+			$('.js-popin').fancybox({
+				'modal': true,
+				'showCloseButton': false,
+				'padding': 0,
+				'parent': '#popin-container',
+			});
+			$('.product_sync_info').hide();
+			$('.select_category_default').clone().appendTo($('div .category_ebay'));
+			if($('ul.category_ps_list li').length == 0) {
+				$('.js-next-popin').attr('disabled','disabled');
+			}
+		});
+
 		$('.reset_bp').on('click', function() {
 			var url = module_dir + "ebay/ajax/resetBp.php?token=" + ebay_token + "&profile=" + id_ebay_profile ;
 			$('.bp_group').html("");
@@ -587,6 +602,11 @@
 		<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode_1" value="1" {if $ebay_sync_mode == 1}checked="checked"{/if}/> <span data-inlinehelp="{l s='This will only synchronisze products that are not yet listed on eBay.' mod='ebay'}">{l s='Only sync new products' mod='ebay'}</span>
 	</div>*}
 	<div style="display: block;" id="catSync">
+		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
+			<input type="text" style="width:200px" class="name_cat" placeholder="{l s='Searche categories Prestashop' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+			<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
+			<button class="researcheBtn btn btn-warning">{l s='Reset' mod='ebay'}</button>
+		</div>
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 			<thead>
 				<tr class="nodrag nodrop">
@@ -622,6 +642,12 @@
 				{/if}
 			</tbody>
 		</table>
+		{if isset($pagination) && $pagination}
+			<div class="navPaginationSyncTab" style="display:flex; justify-content:center">
+                {include file=$tpl_include}
+			</div>
+		{/if}
+
 		{if $sync_1}
 			<script>
 				$(document).ready(function() {ldelim}
@@ -772,6 +798,7 @@
 						</select>
 					</div>
 						<a href="#" class="reset_bp btn btn-lg btn-success"><span></span> {l s='Reset BP' mod='ebay'}</a>
+
 					{/if}
 
 				</div>

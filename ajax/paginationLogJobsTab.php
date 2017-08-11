@@ -24,16 +24,22 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__).'/../../../config/config.inc.php';
-require_once dirname(__FILE__).'/../ebay.php';
+include_once dirname(__FILE__).'/../../../config/config.inc.php';
+include_once dirname(__FILE__).'/../../../init.php';
+include_once dirname(__FILE__).'/../classes/tabs/EbayLogJobsTab.php';
+include_once dirname(__FILE__).'/../ebay.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR : INVALID TOKEN');
+
+if (!Configuration::get('EBAY_SECURITY_TOKEN')
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
-if (Tools::getValue('id_shop')) {
-    $context = Context::getContext();
-    $context->shop = new Shop((int) Tools::getValue('id_shop'));
-}
+$id_ebay_profile = Tools::getValue('profile');
 $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
-$ebay = new eBay();
-$ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), (int) Tools::getValue('id_employee'), $page_current);
+$length = Tools::getValue('length') ? Tools::getValue('length') : 20;
+$ebay = new Ebay();
+$context = Context::getContext();
+$logJobsTab = new EbayLogJobsTab($ebay, $context->smarty, $context);
+$response = $logJobsTab->getContent($id_ebay_profile, $page_current, $length);
+
+die($response);

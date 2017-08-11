@@ -382,6 +382,7 @@
 {/if}
     <div id="popin_load_category-container">
         <div  class="popin popin-lg" id="categoriesEbayProgression" style="display: none; height: 500px;">
+            <button class="btn btn-default" id="exit_load_cat">{l s='Close' mod='ebay'}</button>
             <table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
                 <thead>
                 <tr class="nodrag nodrop">
@@ -478,7 +479,7 @@
         $(document).on('click', '.refreshNbTasksInWork', loadNbTasksInWork);
     </script>
     <script>
-
+        var module_dir = "{$_module_dir_|escape:'htmlall':'UTF-8'}";
         // Select item from user dropdown
         $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
             $(this).parents('.dropdown').find('.dropdown-menu li a').removeClass('selected');

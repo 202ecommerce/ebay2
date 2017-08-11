@@ -34,7 +34,10 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
     || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
+$page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
+$length = Tools::getValue('length') ? Tools::getValue('length') : 20;
+$searche = Tools::getValue('searche');
 $ebay = new Ebay;
 $context = Context::getContext();
 $form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
-die($form_ebay_sync_tab->getContent());
+die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche));

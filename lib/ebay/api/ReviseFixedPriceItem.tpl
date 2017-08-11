@@ -65,11 +65,11 @@
 				{/foreach}
 			</PictureDetails>
 		{/if}
-		{if isset($sku) && !isset($variations) && $variations}
+		{if $sku && isset($sku) && !$variations}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
-		{if isset($quantity) && !isset($variations) && $variations}
+		{if isset($quantity)  && !$variations}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 		{if $price_update && isset($start_price) && $start_price}
@@ -82,15 +82,15 @@
 		
 			
 		{if isset($shipping_details) && !$bp_active}
-			<ShippingDetails>{$shipping_details|cleanHtml nofilter}</ShippingDetails>
+			<ShippingDetails>{$shipping_details nofilter}</ShippingDetails>
 		{/if}
-			{$buyer_requirements_details|cleanHtml nofilter}
+			{$buyer_requirements_details nofilter}
 		{/if}
 			<ItemSpecifics>
 				{foreach from=$item_specifics key=name item=value}
 					<NameValueList>
-						<Name><![CDATA[{$name|cleanHtml}]]></Name>
-                        <Value><![CDATA[{$value|cleanHtml}]]></Value>
+						<Name><![CDATA[{$name}]]></Name>
+                        <Value><![CDATA[{$value}]]></Value>
                     </NameValueList>
                 {/foreach}
             </ItemSpecifics>
@@ -118,15 +118,15 @@
 			{/if}
 		{/if}
 		
-        {$return_policy|cleanHtml nofilter}
+        {$return_policy nofilter}
 		
         {if isset($site)}
             <Site>{$site|escape:'htmlall':'UTF-8'}</Site>
 		{/if}
-        {if isset($variations)}
-            {$variations|cleanHtml nofilter}
+        {if isset($variations) && $variations}
+            {$variations nofilter}
 		{elseif isset($product_listing_details)}
-            {$product_listing_details|cleanHtml nofilter}
+            {$product_listing_details nofilter}
         {/if}
 
         {if isset($price_original)}

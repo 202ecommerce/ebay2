@@ -180,6 +180,19 @@
 				</div>
 			</div>
 		</div>
+
+
+		<div style="margin-top: 30px">
+			<div class="form-group">
+				<label class="control-label col-sm-3">
+					{l s='Reload store eBay categories tool' mod='ebay'}
+				</label>
+				<div class="col-sm-9">
+					<a name="reload_categories_store" id="reload_categories_store" class="btn btn-warning" href ="#">{l s='Reload store categories' mod='ebay'}</a>
+				</div>
+			</div>
+		</div>
+
 	</fieldset>
 
    <fieldset style="margin-top: 20px; display:none;">
@@ -221,6 +234,11 @@
 		</a>
 	</div>
 </form>
+<form id="reload_categories_store_go" method="post"
+	  action="{$url}">
+	<input type="hidden" name="refresh_store_cat" value="1"/>
+	<input type="hidden" class="btn btn-warning" type="submit" value="{l s='Reload store categories' mod='ebay'}"/>
+</form>
 	
 {literal}
 	<script>
@@ -234,7 +252,12 @@
 
 		$('.logs').click(function(e) {
 			e.preventDefault();
-			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token}{literal}&action=getLogs');;
+			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token}{literal}&action=getLogs');
+		});
+
+		$('#reload_categories_store').click(function(e) {
+			e.preventDefault();
+			$('#reload_categories_store_go').submit();
 		});
 		
 		$('#token-btn').click(function() {

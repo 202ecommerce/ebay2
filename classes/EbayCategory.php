@@ -32,6 +32,7 @@ class EbayCategory
     private $is_multi_sku;
     private $k_type;
     private $ebay_profile;
+    private $id; /*id from table ebay_category*/
 
     private $percent;
 
@@ -57,7 +58,7 @@ class EbayCategory
 
     private function _loadFromDb()
     {
-        $sql = 'SELECT ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `'._DB_PREFIX_.'ebay_category` ec
+        $sql = 'SELECT ecc.`id_category`, ec.`id_category_ref`, ec.`id_ebay_category` as `id`, ec.`is_multi_sku`, ecc.`percent` FROM `'._DB_PREFIX_.'ebay_category` ec
 			LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
 			ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
 			AND ecc.`id_ebay_profile` = '.(int)$this->ebay_profile->id.'
@@ -209,7 +210,7 @@ class EbayCategory
             $sql = 'SELECT e.condition_type, e.id_condition_ref as condition_id
 				FROM '._DB_PREFIX_.'ebay_category_condition_configuration e
 				WHERE e.`id_ebay_profile` = '.(int)$id_ebay_profile.'
-				AND e.id_category_ref = '.(int)$this->id_category_ref;
+				AND e.id_category_ref = '.(int)$this->id/*id_category_ref*/;
 
             $res = Db::getInstance()->executeS($sql);
 

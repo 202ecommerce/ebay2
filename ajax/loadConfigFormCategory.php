@@ -40,7 +40,7 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
     $context = Context::getContext();
     $ebay = new Ebay();
 
-    if ($level > 1) {
+    if ((int)$level > 1) {
         foreach ($ref_categories as $ref_id_category_ref => $category) {
             if ($ref_id_category_ref == $id_category_ref) {
                 if (isset($ref_categories[$category['id_category_ref_parent']]['children'])) {
@@ -59,11 +59,18 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
             }
         }
     } else {
+        $valid_categories = array();
+        foreach ($ref_categories as $ref_id_category_ref => $category) {
+            if (isset($category['id_category_ref']) && (int) $category['id_category_ref'] == (int) $category['id_category_ref_parent'] && !empty($category['id_ebay_category'])) {
+                $valid_categories[$ref_id_category_ref] = $category;
+            }
+        }
+
         $tpl_var = array(
             "level" => $level,
             "id_category" => $id_category,
             "ch_cat_str" => Tools::safeOutput(Tools::getValue('ch_cat_str')),
-            "ref_categories" => $ref_categories,
+            "ref_categories" => $valid_categories,
             "id_category_ref" => $id_category_ref
         );
         $context->smarty->assign($tpl_var);

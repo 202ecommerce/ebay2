@@ -141,6 +141,7 @@ class EbayFormParametersTab extends EbayTab
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
         $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
+
         if (Tools::getValue('ebay_shop_postalcode') == '') {
             return $this->ebay->displayError($this->ebay->l('Code postal failed'));
         }
@@ -159,7 +160,7 @@ class EbayFormParametersTab extends EbayTab
         ) {
             $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
             EbayTaskManager::deleteErrors($this->ebay_profile->id);
-            foreach ($products as $product_id) {
+            while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
