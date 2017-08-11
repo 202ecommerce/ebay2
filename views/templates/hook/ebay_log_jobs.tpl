@@ -25,7 +25,7 @@
 
 
 
-<div>
+<div id="contentLogJobsTab">
 	<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 		<thead>
 		<tr class="nodrag nodrop">
@@ -49,5 +49,35 @@
 		<tr></tr>
 		</tbody>
 	</table>
+    {if $pages_all >1}
+		<div class="navPaginationListLogJobsTab" style="display:flex; justify-content:center">
+            {include file=$tpl_include}
+		</div>
+    {/if}
 </div>
 
+{literal}
+<script>
+    $(document).on('click', '.navPaginationListLogJobsTab .pagination span', function(){
+        var page = $(this).attr('value');
+        if(page){
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/paginationLogJobsTab.php',
+                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + page,
+                beforeSend : function(){
+                    $('#contentLogJobsTab').empty();
+                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                    $('#ebayOrphanListing').append(html);
+                },
+                success: function(data)
+                {
+                    $('#contentLogJobsTab').html(data);
+                }
+            });
+        }
+
+
+    });
+</script>
+{/literal}

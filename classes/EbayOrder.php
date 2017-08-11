@@ -161,7 +161,7 @@ class EbayOrder
     {
         return (boolean) Db::getInstance()->getValue('SELECT `id_ebay_order`
 			FROM `'._DB_PREFIX_.'ebay_order`
-			WHERE `id_order_ref` = \''.pSQL($this->id_order_ref).'\'');
+			WHERE `id_order_ref` = "'.pSQL($this->id_order_ref).'"');
     }
 
     /**
@@ -185,7 +185,7 @@ class EbayOrder
 			AND `deleted` = 0'.(Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
 
         $format = new TotFormat();
-
+            
         // Add customer if he doesn't exist
         //if ($id_customer < 1) RAPH
         if (!$id_customer) {
@@ -302,7 +302,7 @@ class EbayOrder
     {
         $res = array();
         foreach ($this->product_list as $product) {
-            if ($product['id_ebay_profile']) {
+            if (false) {
                 $ebay_profile = new EbayProfile((int)$product['id_ebay_profile']);
             } else {
                 $sql = 'SELECT epr.`id_ebay_profile`
@@ -327,7 +327,7 @@ class EbayOrder
                 }
             }
 
-            if (!isset($res[$ebay_profile->id_shop])) {
+            if (!array_key_exists($ebay_profile->id_shop, $res)) {
                 $res[$ebay_profile->id_shop] = array(
                     'id_ebay_profiles' => array($ebay_profile->id),
                     'id_products'      => array(),
@@ -887,10 +887,10 @@ class EbayOrder
                     }
                 }
 
-                if (!$product_has_find && false) {
+                if (!$product_has_find && !$products) {
                     //Not possible with ebay multivariation products to retrieve the correct product
-                    if (!isset($transaction->Variation->SKU)) {
-                        if ($p = EbayProduct::getProductsIdFromItemId($transaction->Item->ID)) {
+                    if (!isset($transaction->Variation->SKU) && !isset($transaction->Item->SKU)) {
+                        if ($p = EbayProduct::getProductsIdFromItemId($transaction->Item->ItemID)) {
                             $products[] = array(
                                 'id_product' => $p['id_product'],
                                 'id_product_attribute' => $p['id_product_attribute'],
@@ -1075,7 +1075,7 @@ class EbayOrder
     public static function getSumOrders($period = '-30 days')
     {
         $period = strtotime($period);
-        return Db::getInstance()->executeS('SELECT SUM(o.`total_paid`) as sum
+        return Db::getInstance()->executeS('SELECT ROUND(SUM(o.`total_paid`), 2) as sum
 			FROM `'._DB_PREFIX_.'ebay_order_order` eo
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON eo.`id_order` = o.`id_order`
 			WHERE eo.`id_order` > 0 AND o.`date_add`>"'.$period.'"');

@@ -49,19 +49,29 @@
 			</PrimaryCategory>		
 		{/if}
 
-		{if isset($sku) && !isset($variations)}
+		{if $sku && isset($sku) && !$variations}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 
-		{if isset($quantity) && !isset($variations)}
+		{if isset($quantity) && !$variations}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 
 		{if isset($site)}
 			<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
 		{/if}
-        {if isset($variations)}
-            {$variations|cleanHtml nofilter}
+		{if $item_specifics}
+		<ItemSpecifics>
+			{foreach from=$item_specifics key=name item=value}
+				<NameValueList>
+					<Name><![CDATA[{$name}]]></Name>
+					<Value><![CDATA[{$value}]]></Value>
+				</NameValueList>
+			{/foreach}
+		</ItemSpecifics>
+{/if}
+        {if isset($variations) && $variations}
+            {$variations nofilter}
         {/if}
 
         {if isset($ebay_store_category_id)}

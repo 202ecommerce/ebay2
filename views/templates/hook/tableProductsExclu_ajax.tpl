@@ -34,7 +34,7 @@
 
 
 <script type="text/javascript">
-    var url_tab = "{$url_tab nofilter}";
+    var url_tab = "{$url_tab}";
     function loadProductExclu(){
     $.ajax({
         type: "POST",

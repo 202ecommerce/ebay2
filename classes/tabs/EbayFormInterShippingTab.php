@@ -152,7 +152,7 @@ class EbayFormInterShippingTab extends EbayTab
         }
         $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
         EbayTaskManager::deleteErrors($this->ebay_profile->id);
-        foreach ($products as $product_id) {
+        while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
             $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
             EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
         }

@@ -37,7 +37,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
 $id_profile = Tools::getValue('id_profile');
-if ($id_profile){
+if ($id_profile) {
     $table = _DB_PREFIX_.'ebay_task_manager';
     $sql_select = "SELECT COUNT(*) AS nb  FROM `$table` WHERE `locked` != 0 AND `id_ebay_profile` = $id_profile";
     $res_select = DB::getInstance()->executeS($sql_select);

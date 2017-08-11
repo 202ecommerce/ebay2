@@ -53,6 +53,8 @@
                 {/foreach}
             {/foreach}
             {if !empty($international_services)}
+
+
                 {foreach from=$international_services key=service_name item=services}
                     {foreach from=$services item=service}
                         {if $service.serviceCosts !== false}
@@ -68,6 +70,9 @@
 
                         {/if}
                     {/foreach}
+                {/foreach}
+                {foreach from=$excluded_zones item=zone}
+                    <excludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</excludeShipToLocation>
                 {/foreach}
             {/if}
             <shippingPolicyCurrency>{$currency_id|escape:'htmlall':'UTF-8'}</shippingPolicyCurrency>

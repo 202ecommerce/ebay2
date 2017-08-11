@@ -78,9 +78,11 @@
 					if (step == 1) {
 						$('#cat_parent').addClass('error');
 						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['An error has occurred']);
+						$('#exit_load_cat').show();
 					}
 					else if (step == 2) {
 						$('#load_cat_ebay tbody tr:nth-child(' + row + ')').addClass('error');
+						$('#exit_load_cat').show();
 					}
 					alertOnExit(false, "");
 				}
@@ -152,6 +154,10 @@
 			'padding': 0,
 			'parent': '#popin_load_category-container',
 		});
+		$('#exit_load_cat').click(function(){
+			$.fancybox.close();
+		});
+
 		if(catLoaded == 1){
 
 			$('.load_cat_sync').click();

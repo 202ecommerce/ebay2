@@ -65,20 +65,7 @@ $(document).ready(function () {
     });
 
 
-    $('.js-popin').on('click', function() {
 
-        $('.js-popin').fancybox({
-            'modal': true,
-            'showCloseButton': false,
-            'padding': 0,
-            'parent': '#popin-container',
-        });
-        $('.product_sync_info').hide();
-        $('.select_category_default').clone().appendTo($('div .category_ebay'));
-        if($('ul.category_ps_list li').length == 0) {
-            $('.js-next-popin').attr('disabled','disabled');
-        }
-    });
 
     // Close modal on click on cancel button
     $(document).on('click', '.js-close-popin', function() {

@@ -24,16 +24,20 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__).'/../../../config/config.inc.php';
-require_once dirname(__FILE__).'/../ebay.php';
+include_once dirname(__FILE__).'/../../../config/config.inc.php';
+include_once dirname(__FILE__).'/../../../init.php';
+include_once dirname(__FILE__).'/../ebay.php';
+include_once dirname(__FILE__).'/../classes/tabs/EbayListErrorsProductsTab.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR : INVALID TOKEN');
-}
-if (Tools::getValue('id_shop')) {
-    $context = Context::getContext();
-    $context->shop = new Shop((int) Tools::getValue('id_shop'));
-}
+
+
+$token_for_product = Tools::getValue('token_for_product');
 $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
-$ebay = new eBay();
-$ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), (int) Tools::getValue('id_employee'), $page_current);
+$length = Tools::getValue('length') ? Tools::getValue('length') : 20;
+$id_ebay_profile = Tools::getValue('profile');
+$ebay = new Ebay();
+$context = Context::getContext();
+$ebayErrorsProducts = new EbayListErrorsProductsTab($ebay, $context->smarty, $context);
+$response = $ebayErrorsProducts->getContent($id_ebay_profile, $page_current, $length, $token_for_product);
+echo $response;
+die();

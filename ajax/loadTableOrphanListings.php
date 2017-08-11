@@ -37,8 +37,27 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
     || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
+$page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
+$length = 20;
+$count_orphans_product = EbayProduct::getCountOrphanListing(Tools::getValue('profile'));
+$final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'), $page_current);
+$pages_all = ceil(((int) $count_orphans_product[0]['number'])/((int) $length));
+$range =3;
+$start = $page_current - $range;
+if ($start <= 0) {
+    $start = 1;
+}
 
-$final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'));
+$stop = $page_current + $range;
+
+if ($stop>$pages_all) {
+    $stop = $pages_all;
+}
+
+$prev_page = (int) $page_current - 1;
+$next_page = (int) $page_current + 1;
+$tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
+
 
 $context = Context::getContext();
 
@@ -53,5 +72,14 @@ $template_vars = array(
 // Smarty datas
 $ebay = new Ebay();
 $context->smarty->assign($template_vars);
+$context->smarty->assign(array(
+    'prev_page'               => $prev_page,
+    'next_page'               => $next_page,
+    'tpl_include'             => $tpl_include,
+    'pages_all'               => $pages_all,
+    'page_current'            => $page_current,
+    'start'                   => $start,
+    'stop'                    => $stop,
+));
 
 echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_orphan_listings.tpl');
