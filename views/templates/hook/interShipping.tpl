@@ -25,6 +25,17 @@
 <form action="{$formUrl|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel">
 	<script type="text/javascript">
 		// <![CDATA[
+
+		function checkCountShippingInternational(){
+			var shipping = $('#internationalShipping table');
+			if (shipping.length >= 5){
+				$('#internationalShippingButton').hide();
+			}
+		}
+
+        checkCountShippingInternational();
+
+
 		function addInterShipping(currentName, idPSCarrier, idEbayCarrier, additionalFee, nbSelect, id_zone, zone) {
 			var lastId = 0;
 			var current = $("#"+currentName);
@@ -384,8 +395,11 @@
 			$('#internationalShippingButton').unbind().click(function(){
 				addInterShipping($(this).attr('id').replace('Button', ''));
 				checkGlobalShippingConfiguration();
+				checkCountShippingInternational();
 				return false;
 			});
+
+
 
 			{literal}
 			$('.shipping_destinations input').unbind().click(function(el){

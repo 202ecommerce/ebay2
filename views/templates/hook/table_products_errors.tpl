@@ -264,7 +264,7 @@
             profile: id_ebay_profile,
             page: 1,
         };
-        
+
         $.ajax({
             type: "POST",
             url: module_dir+'ebay/ajax/paginationProductErrors.php',

@@ -220,7 +220,7 @@ class EbayProduct
         return Db::getInstance()->ExecuteS($sql);
     }
 
-    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20, $search)
+    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20, $search=array())
     {
         if ($page_current) {
             $offset = ((int) $page_current - 1) * (int) $length;

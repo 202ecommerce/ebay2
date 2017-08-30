@@ -420,6 +420,17 @@
 				return false;
 			});
 
+			$(document).on('click', '#domesticShippingButton', checkCountShippingNational);
+
+            checkCountShippingNational();
+
+			function checkCountShippingNational(){
+				var shipping = $('.shipping_not_configured');
+				if (shipping.length >= 4){
+					$('#domesticShippingButton').hide();
+				}
+			};
+
 			{literal}
 			$('.shipping_destinations input').unbind().click(function(el){
 				checkShippingConfiguration($(this).closest('table'));
