@@ -27,7 +27,7 @@
 	<button  id="refresh_list" class="btn btn-default">
 		{l s='Refresh list' mod='ebay'}
 	</button>
-	<button class="btn btn-default" id="searchBtn">{l s='Search' mod='ebay'}</button>
+	<button class="btn btn-default" id="searchBtnListing">{l s='Search' mod='ebay'}</button>
     <table class="table" cellpadding="0" cellspacing="0">
     	<tr>
     		<th>{l s='Id product' mod='ebay'}</th>
@@ -76,7 +76,7 @@
 <script>
 	$('#refresh_list').click(refreshList);
 
-    $('#searchBtn').click(search);
+    $('#searchBtnListing').click(search);
 
     function refreshList(){
         $.ajax({

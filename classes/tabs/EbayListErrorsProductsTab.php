@@ -27,10 +27,12 @@
 class EbayListErrorsProductsTab extends EbayTab
 {
 
-    public function getContent($id_ebay_profile, $page_current = 1, $length = 20, $token_for_product = false)
+    public function getContent($id_ebay_profile, $page_current = 1, $length = 20, $token_for_product = false, $search=false)
     {
-        $count_product_errors = EbayTaskManager::getCountErrors($id_ebay_profile);
-        $pages_all = ceil($count_product_errors / (int) $length);
+
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+        $count_product_errors = EbayTaskManager::getCountErrors($id_ebay_profile, $search, $ebay_profile->id_lang);
+        $pages_all = ceil((int)$count_product_errors / (int) $length);
         $range =3;
         $start = (int) $page_current - $range;
         if ($start <= 0) {
@@ -47,9 +49,9 @@ class EbayListErrorsProductsTab extends EbayTab
         $next_page = (int) $page_current + 1;
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
 
-        $tasks = EbayTaskManager::getErrors($id_ebay_profile, $page_current, $length);
+        $tasks = EbayTaskManager::getErrors($id_ebay_profile, $page_current, $length, $search, $ebay_profile->id_lang);
 
-        $ebay_profile = new EbayProfile($id_ebay_profile);
+
         $vars = array();
         $error = '';
         $context = Context::getContext();
@@ -146,7 +148,12 @@ class EbayListErrorsProductsTab extends EbayTab
             );
             $vars = array_merge($vars, $data_for_paginaton);
         }
-
+        $vars['search'] = $search;
+        if ($token_for_product) {
+            $vars['token_for_product'] = $token_for_product;
+        } else {
+            $vars['token_for_product'] = Tools::getAdminTokenLite('AdminProducts');
+        }
         return $this->display('table_products_errors.tpl', $vars);
     }
 }

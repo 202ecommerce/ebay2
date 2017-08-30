@@ -243,18 +243,45 @@ class EbayTaskManager
         return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` >  NOW() - INTERVAL 40 MINUTE');
     }
 
-    public static function getCountErrors($id_ebay_profile)
+    public static function getCountErrors($id_ebay_profile, $search=false, $id_lang=null)
     {
-        $res_sql = DB::getInstance()->executeS('SELECT COUNT(*) as `count` FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile);
-        return (int) $res_sql[0]['count'];
+        if($search && $id_lang){
+            $query = "SELECT COUNT(*) as `count` FROM "._DB_PREFIX_."ebay_task_manager etm
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = $id_lang
+                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = $id_ebay_profile";
+            if ($search['id_product']){
+                $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
+            }
+            if ($search['name_product']){
+                $query .= " AND pl.name LIKE '%".$search['name_product']."%'";
+            }
+
+            $result = DB::getInstance()->ExecuteS($query);
+            return (int) $result[0]['count'];
+        } else{
+            $res_sql = DB::getInstance()->executeS('SELECT COUNT(*) as `count` FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile);
+            return (int) $res_sql[0]['count'];
+        }
+
     }
 
-    public static function getErrors($id_ebay_profile, $page_current = false, $length = false)
+    public static function getErrors($id_ebay_profile, $page_current = false, $length = false, $search=false, $id_lang=null)
     {
-        if ($page_current && $length) {
+        if ($page_current && $length && $search && $id_lang) {
             $limit = (int) $length;
             $offset = $limit * ( (int) $page_current - 1 );
-            return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add` LIMIT  '.$limit.' OFFSET '.$offset);
+            $query = "SELECT * FROM "._DB_PREFIX_."ebay_task_manager etm
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = $id_lang
+                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = $id_ebay_profile";
+            if ($search['id_product']){
+                $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
+            }
+            if ($search['name_product']){
+                $query .= " AND pl.name LIKE '%".$search['name_product']."%'";
+            }
+            $query .=  " ORDER BY `date_add` LIMIT $limit  OFFSET $offset";
+            //var_dump($query); die();
+            return DB::getInstance()->ExecuteS($query);
         }
 
         return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');

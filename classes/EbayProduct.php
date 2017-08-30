@@ -227,7 +227,7 @@ class EbayProduct
             $ebay_profile = new EbayProfile($id_ebay_profile);
             $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
-			pl.`name`, m.`name` as manufacturer_name
+			pl.`name`, m.`name` as manufacturer_name, cl.name as name_cat
 			FROM `'._DB_PREFIX_.'ebay_product` ep
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)

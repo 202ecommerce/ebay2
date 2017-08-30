@@ -2349,7 +2349,7 @@ class Ebay extends Module
             $data['upc'] = $p['upc'];
             $reference_ebay = $p['id_product_ref'];
             $product = new Product((int) $p['id_product'], true, $id_lang);
-            $category= new Category($product->getDefaultCategory(), $id_lang);
+
             if ((int) $p['id_attribute'] > 0) {
                 // No Multi Sku case so we do multiple products from a multivariation product
                 
@@ -2373,7 +2373,7 @@ class Ebay extends Module
                     $products_ebay_listings[] = array(
                         'id_product' => $combinaison['id_product'].'-'.$combinaison['id_product_attribute'],
                         'quantity' => $combinaison['quantity'],
-                        'category' => $category->name,
+                        'category' => $p['name_cat'],
                         'prestashop_title' => $data['name'],
                         'ebay_title' => EbayRequest::prepareTitle($data),
                         'reference_ebay' => $reference_ebay,
@@ -2391,7 +2391,7 @@ class Ebay extends Module
                 $products_ebay_listings[] = array(
                     'id_product' => $data['real_id_product'],
                     'quantity' => $product->quantity,
-                    'category' => $category->name,
+                    'category' => $p['name_cat'],
                     'prestashop_title' => $data['name'],
                     'ebay_title' => EbayRequest::prepareTitle($data),
                     'reference_ebay' => $reference_ebay,
