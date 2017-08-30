@@ -29,6 +29,7 @@ if (_PS_VERSION_ > '1.7') {
 }
 
 include_once('EbayConfiguration.php');
+include_once('EbayTaskManager.php');
 
 
 
@@ -980,8 +981,11 @@ class EbaySynchronizer
         // if product not on eBay as we expected we add it
         if (isset($res->Errors) && $res->Errors->ErrorCode == 291 || isset($res->Errors) && $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
+            $product = new Product($product_id);
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
-            EbayTaskManager::deleteTaskForPorductAndEbayProfile($data['itemID'], $id_ebay_profile);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 
@@ -1007,8 +1011,11 @@ class EbaySynchronizer
         // if product not on eBay as we expected we add it
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
+            $product = new Product($product_id);
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
-            EbayTaskManager::deleteTaskForPorductAndEbayProfile($data['itemID'], $id_ebay_profile);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_attribute);
             EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps'], $id_attribute);
         }
 
@@ -1139,6 +1146,7 @@ class EbaySynchronizer
                 $variations['quantity'] = 0;
             }
         }
+
         if ($res = $ebay->reviseStockFixedPriceItemMultiSku($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
         }
@@ -1146,15 +1154,18 @@ class EbaySynchronizer
         // if product not on eBay as we expected we add it
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
+            $product = new Product($product_id);
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
-            EbayTaskManager::deleteTaskForPorductAndEbayProfile($data['itemID'], $id_ebay_profile);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 
         return $res;
     }
 
-    private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date)
+    private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_product_attribute=0)
     {
         if (EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)) {
             $data['quantity'] =0;
@@ -1166,8 +1177,11 @@ class EbaySynchronizer
         // if product not on eBay as we expected we add it
         if ($res->Errors->ErrorCode == 291 || $res->Errors->ErrorCode == 17) {
             // We delete from DB and Add it on eBay
+            $product = new Product($product_id);
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
-            EbayTaskManager::deleteTaskForPorductAndEbayProfile($data['itemID'], $id_ebay_profile);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_product_attribute);
             $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
         }
 

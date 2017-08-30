@@ -257,6 +257,16 @@ class EbayProduct
         }
     }
 
+    public static function getProductsIdForSync($id_ebay_profile)
+    {
+        $sql = "SELECT p.id_product 
+                FROM "._DB_PREFIX_."product p
+                LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc ON p.id_product = epc.id_product
+                WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
+                AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
+        return DB::getInstance()->ExecuteS($sql, false);
+    }
+
     public static function getEbayUrl($reference, $mode_dev = false)
     {
         $ebay_site_id = Db::getInstance()->getValue('SELECT ep.`ebay_site_id`

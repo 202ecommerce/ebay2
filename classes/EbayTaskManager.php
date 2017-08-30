@@ -112,9 +112,15 @@ class EbayTaskManager
                         foreach ($id_attributes as $id_attribute) {
                             $id_tasks = array(10);
                             if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop)) {
+                                
                                 $id_tasks = array(13, 11);
                                 if ($type == 'stock') {
                                     $id_tasks = array(13);
+                                }
+                                if (StockAvailable::getQuantityAvailableByProduct($product->id, null, $ebay_profile->id_shop) == 0 &&
+                                    !(bool)EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK'))
+                                {
+                                    $id_tasks = array(14);
                                 }
                             }
 
@@ -153,9 +159,17 @@ class EbayTaskManager
         return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14');
     }
 
-    public static function deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile)
+    public static function deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile, $id_product_attribute=0)
     {
-        return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14  AND `id_ebay_profile` = '. (int)$id_ebay_profile);
+        if ($id_product_attribute != 0){
+            $result = Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14  AND `id_ebay_profile` = '. (int)$id_ebay_profile).' AND `id_product_attribute`='.$id_product_attribute;
+
+            return $result;
+        } else{
+            $result = Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `id_product` = ' . (int)$id_product . ' AND `id_task` != 14  AND `id_ebay_profile` = '. (int)$id_ebay_profile);
+            
+            return $result;
+        }
     }
 
     public static function deleteTaskForOutOfStock($id_product, $id_ebay_profile)

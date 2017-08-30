@@ -158,7 +158,8 @@ class EbayFormParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int) Tools::getValue('currency'))
             && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment'))
         ) {
-            $products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
+            //$products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
+            $products = EbayProduct::getProductsIdForSync($this->ebay_profile->id);
             EbayTaskManager::deleteErrors($this->ebay_profile->id);
             while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);

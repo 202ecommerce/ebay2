@@ -1225,8 +1225,8 @@ class Ebay extends Module
         if (!($this->ebay_profile instanceof EbayProfile)) {
             return false;
         }
-
-        EbayTaskManager::addTask('update', $params['product']);
+	$product = isset($params['product']) ? $params['product'] : new Product($id_product);
+        EbayTaskManager::addTask('update', $product);
     }
 
 

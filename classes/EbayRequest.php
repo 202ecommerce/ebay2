@@ -934,7 +934,7 @@ class EbayRequest
 
     private function _getBuyerRequirementDetails($datas)
     {
-        $vars = array('has_excluded_zones' => (boolean)count($datas['shipping']['excludedZone']));
+        $vars = array('has_excluded_zones' => isset($datas['shipping']) ? (boolean)count($datas['shipping']['excludedZone']) : false);
         $this->smarty->assign($vars);
 
         return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetBuyerRequirementDetails.tpl');
