@@ -2304,7 +2304,7 @@ class Ebay extends Module
         return $this->display(__FILE__, 'views/templates/hook/tableProductsExclu.tpl');
     }
 
-    public function displayEbayListingsAjax($admin_path, $id_employee = null, $page_current = 1, $length = 20)
+    public function displayEbayListingsAjax($admin_path, $id_employee = null, $page_current = 1, $length = 20, $search)
     {
         $ebay = new EbayRequest();
         $employee = new Employee($id_employee);
@@ -2313,8 +2313,8 @@ class Ebay extends Module
         $id_lang = $this->ebay_profile->id_lang;
 
         $products_ebay_listings = array();
-        $nb_products = EbayProduct::getCountProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false);
-        $products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false, $page_current);
+        $nb_products = EbayProduct::getCountProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false, $search);
+        $products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false, $page_current, $length, $search);
         $pages_all = ceil(((int) $nb_products[0]['count'])/ (int) $length);
         $range =3;
         $start = $page_current - $range;
@@ -2413,6 +2413,7 @@ class Ebay extends Module
             'page_current'            => $page_current,
             'start'                   => $start,
             'stop'                    => $stop,
+            'search'                  => $search,
         ));
         echo $this->display(__FILE__, 'views/templates/hook/ebay_listings_ajax.tpl');
     }
