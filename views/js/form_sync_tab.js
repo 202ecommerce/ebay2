@@ -47,10 +47,11 @@ $(document).ready(function(){
     $(document).on('click', '.navPaginationSyncTab .pagination span', function(){
         var page = $(this).attr('value');
         var searche = $('#searcheEbaySync .name_cat').attr('value');
+        var id_cat = $('#searcheEbaySync .id_cat').attr('value');
         if(page){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page+'&searche='+searche,
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page+'&searche='+searche + '&id_category=' + id_cat,
                 data: "token="+ebay_token,
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -68,12 +69,13 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '#searcheEbaySync .searcheBtn', function(){
-        var searche = $('#searcheEbaySync input').attr('value');
+        var searche = $('#searcheEbaySync .name_cat').attr('value');
+        var id_cat = $('#searcheEbaySync .id_cat').attr('value');
 
-        if(searche){
+        if(searche || id_cat){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?searche=' + searche,
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php?searche=' + searche + '&id_category=' + id_cat,
                 data: "token="+ebay_token,
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';

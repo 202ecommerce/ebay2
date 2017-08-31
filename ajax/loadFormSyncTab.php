@@ -37,7 +37,9 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
 $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
 $length = Tools::getValue('length') ? Tools::getValue('length') : 20;
 $searche = Tools::getValue('searche');
+$id_category = Tools::getValue('id_category');
+
 $ebay = new Ebay;
 $context = Context::getContext();
 $form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
-die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche));
+die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche, $id_category));

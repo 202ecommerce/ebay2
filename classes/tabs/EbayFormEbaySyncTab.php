@@ -30,7 +30,7 @@ if (_PS_VERSION_ > '1.7') {
 
 class EbayFormEbaySyncTab extends EbayTab
 {
-    public function getContent($page_current = 1, $length = 20, $searche = false)
+    public function getContent($page_current = 1, $length = 20, $searche = false, $id_category_search = false)
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
@@ -60,12 +60,17 @@ class EbayFormEbaySyncTab extends EbayTab
 
         // Loading categories
         $category_config_list = array();
-
+        //var_dump(Category::getCategories($this->context->language->id, true, true, ' and c.id_category=5')); die();
         foreach (EbayCategoryConfiguration::getEbayCategoryConfigurations($this->ebay_profile->id) as $c) {
             $category_config_list[$c['id_category']] = $c;
         }
-        if ($searche) {
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0, array(), '', $searche);
+        if ($searche || $id_category_search) {
+            $filter = '';
+            if ($id_category_search){
+                $id_category_search = pSQL($id_category_search);
+                $filter = " AND c.id_category LIKE '%$id_category_search%'";
+            }
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, $filter), 0, array(), '', $searche);
         } else {
             $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         }
@@ -177,6 +182,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
 
         $smarty_vars = array(
+            'id_category_search'             => $id_category_search,
             'searche'                 => $searche,
             'prev_page'               => isset($page_current) ? $page_current-1 : 0,
             'next_page'               => isset($page_current) ? $page_current+1 : 0,
