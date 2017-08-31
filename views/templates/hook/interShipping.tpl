@@ -30,6 +30,7 @@
 			var shipping = $('#internationalShipping table');
 			if (shipping.length >= 5){
 				$('#internationalShippingButton').hide();
+				$('#transportInterWarning').show();
 			}
 		}
 
@@ -563,6 +564,10 @@
 				{l s='Add new international carrier' mod='ebay'}
 			</span>
 		</a>
+		<div class="alert alert-warning" style="display: none;" id="transportInterWarning">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+            {l s='Maximum transporteur reached' mod='ebay'}
+		</div>
 	</fieldset>
 
 	<fieldset style="margin-top: 20px">

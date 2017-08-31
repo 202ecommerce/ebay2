@@ -428,6 +428,7 @@
 				var shipping = $('.shipping_not_configured');
 				if (shipping.length >= 4){
 					$('#domesticShippingButton').hide();
+					$('#transportDomesticWarning').show();
 				}
 			};
 
@@ -555,6 +556,10 @@
 				{l s='Add new domestic carrier' mod='ebay'}
 			</span>
 		</a>
+		<div class="alert alert-warning" style="display: none;" id="transportDomesticWarning">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			{l s='Maximum transporteur reached' mod='ebay'}
+		</div>
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
