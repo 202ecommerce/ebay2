@@ -208,7 +208,7 @@
                                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                                             {/if}
                                             <span class="nb_tasks_in_work">
-                                                {l s='In work ' mod='ebay'}<b></b>{l s=' tasks' mod='ebay'} <span class="btn btn-default refreshNbTasksInWork">{l s='Refresh' mod='ebay'}</span>
+                                                {l s='In work ' mod='ebay'} <b></b> {l s=' products' mod='ebay'} <span class="btn btn-default refreshNbTasksInWork">{l s='Refresh' mod='ebay'}</span>
                                             </span>
 
                                             <div class="pull-right">

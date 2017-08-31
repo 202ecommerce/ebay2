@@ -603,9 +603,9 @@
 	</div>*}
 	<div style="display: block;" id="catSync">
 		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
-			<div style="display: flex; flex-direction: column;">
-				<input type="text" style="width:300px" class="name_cat" placeholder="{l s='Searche categories Prestashop' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
-				<input type="text" style="width:300px" class="id_cat" placeholder="{l s='Searche categories Prestashop by ID' mod='ebay'}" {if $id_category_search}value="{$id_category_search}"{/if}>
+			<div style="display: flex;">
+				<input type="text" style="width:300px" class="name_cat" placeholder="{l s='Search categories Prestashop by name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+				<input type="text" style="width:300px" class="id_cat" placeholder="{l s='Search categories Prestashop by ID' mod='ebay'}" {if $id_category_search}value="{$id_category_search}"{/if}>
 			</div>
 			<div>
 				<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
