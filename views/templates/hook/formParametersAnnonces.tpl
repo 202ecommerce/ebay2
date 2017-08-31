@@ -304,6 +304,16 @@
 				<input type="text" readonly value="{if $out_of_stock_value}{l s='Activated' mod='ebay'}{else}{l s='Deactivated' mod='ebay'}{/if}" class="d-ib" style="text-align: center;">
 			</div>
 		</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-3">
+                {l s='Limit of ebay stock' mod='ebay'}
+			</label>
+			<div class="col-sm-9">
+				<input type="number" name="limitEbayStock" max="50" min="1" class="form-control" id="limitEbayStock"
+					   value="{if $limitEbayStock}{$limitEbayStock}{else}50{/if}" style="width:50px">
+			</div>
+		</div>
 	</fieldset>
 		
 	<div class="panel-footer id="buttonEbayParameters" style="margin-top:5px;">
@@ -317,3 +327,19 @@
 	</div>
 	<div id="ebayreturnshide" style="display:none;">{$ebayReturns|escape:'htmlall':'UTF-8'}</div>
 </form>
+
+<script>
+	$(document).ready(function(){
+	    $('#limitEbayStock').change(changeLimitStock);
+	    function changeLimitStock(){
+            var stock = $('#limitEbayStock');
+            if (stock.val() > 50){
+                $('#limitEbayStock').val('50');
+			}
+			if (stock.val() < 1){
+                $('#limitEbayStock').val('1');
+			}
+		}
+
+	});
+</script>

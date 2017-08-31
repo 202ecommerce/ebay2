@@ -73,8 +73,9 @@ class EbayFormConfigAnnoncesTab extends EbayTab
                 }
             }
         }
-
+        $limitEbayStock = EbayConfiguration::get($this->ebay_profile->id, 'LIMIT_EBAY_STOCK');
         $smarty_vars = array(
+            'limitEbayStock'            => $limitEbayStock,
             'url'                       => $url,
             // pictures
             'sizes'               => ImageType::getImagesTypes('products'),
@@ -134,6 +135,12 @@ class EbayFormConfigAnnoncesTab extends EbayTab
 
     public function postProcess()
     {
+        // Saving a limit of ebay stock
+        $limitEbayStock = (int) Tools::getValue('limitEbayStock');
+        $limitEbayStock = $limitEbayStock < 1 ? 1 : $limitEbayStock;
+        $limitEbayStock = $limitEbayStock > 50 ? 50 : $limitEbayStock;
+        EbayConfiguration::set($this->ebay_profile->id, 'LIMIT_EBAY_STOCK', $limitEbayStock);
+
         // Saving new configurations
         $picture_per_listing = (int) Tools::getValue('picture_per_listing');
         if ($picture_per_listing < 0) {

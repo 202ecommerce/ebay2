@@ -170,7 +170,7 @@ class EbaySynchronizer
     {
 
         $logger = new EbayLogger('DEBUG');
-
+        $limitEbayStock = (int) EbayConfiguration::get($id_ebay_profile, 'LIMIT_EBAY_STOCK');
         //Fix for orders that are passed in a country without taxes
         $context = Context::getContext();
         if ($context->cart) {
@@ -217,7 +217,7 @@ class EbaySynchronizer
             return false;
         }
 
-        $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$product_id, $ebay_profile);
+        $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$product_id, $ebay_profile, $limitEbayStock);
 
 
         if (!$ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
@@ -231,7 +231,7 @@ class EbaySynchronizer
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
 
         if (!empty($prodAttributeCombinations)) {
-            $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute);
+            $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute, $limitEbayStock);
         }
 
 
@@ -283,7 +283,9 @@ class EbaySynchronizer
             $id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');
             $key = $product->id . '-' . $id_product_attribute_fix . '_' . $ebay_profile->id;
             if (isset($data['variations'][$key]['quantity'])) {
-                $data['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data['variations'][$key]['quantity']);
+                $quantity = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data['variations'][$key]['quantity']);
+                $quantity = (int) $quantity > $limitEbayStock ? $limitEbayStock : $quantity;
+                $data['variations'][$key]['quantity'] = $quantity;
             }
         }
 
@@ -318,6 +320,7 @@ class EbaySynchronizer
             $address->save();
         }
 
+
         return $data;
     }
 
@@ -326,10 +329,11 @@ class EbaySynchronizer
      * @param int $id_product
      * @return int
      */
-    private static function __getProductQuantity(Product $product, $id_product, $ebay_profile)
+    private static function __getProductQuantity(Product $product, $id_product, $ebay_profile, $limitEbayStock=0)
     {
 
         $quantity_product = StockAvailable::getQuantityAvailableByProduct($id_product, null, $ebay_profile->id_shop);
+        $quantity_product = (int) $quantity_product > $limitEbayStock ? $limitEbayStock : $quantity_product;
 
 
         return $quantity_product;
@@ -358,7 +362,7 @@ class EbaySynchronizer
      * @param EbayCategory $ebay_category
      * @return array
      */
-    public static function __loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_atributte = 0)
+    public static function __loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_atributte = 0, $limitEbayStock=0)
     {
 
         $variations = array();
@@ -391,7 +395,7 @@ class EbaySynchronizer
                 'reference' => $combinaison['reference'],
                 'ean13' => $combinaison['ean13'],
                 'upc' => $combinaison['upc'],
-                'quantity' => $combinaison['quantity'],
+                'quantity' => (int)$combinaison['quantity'] > $limitEbayStock ? $limitEbayStock : $combinaison['quantity'],
                 'price_static' => $price,
                 'variation_specifics' => EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
                 'variations' => array(
@@ -401,8 +405,9 @@ class EbaySynchronizer
                     )),
             );
 
-
-            $variation['quantity'] = StockAvailable::getQuantityAvailableByProduct($product->id, $variation['id_attribute'], $ebay_profile->id_shop);
+            $quantity = StockAvailable::getQuantityAvailableByProduct($product->id, $variation['id_attribute'], $ebay_profile->id_shop, $limitEbayStock);
+            $quantity = (int) $quantity > $limitEbayStock ? $limitEbayStock : $quantity;
+            $variation['quantity'] = $quantity;
 
 
             if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $ebay_category->getPercent())) {
@@ -1046,7 +1051,7 @@ class EbaySynchronizer
     public static function getDatasProductForStock($product_id, $id_product_attribute, $id_ebay_profile, $id_lang)
     {
         $logger = new EbayLogger('DEBUG');
-
+        $limitEbayStock = (int) EbayConfiguration::get($id_ebay_profile, 'LIMIT_EBAY_STOCK');
         //Fix for orders that are passed in a country without taxes
         $context = Context::getContext();
         if ($context->cart) {
@@ -1087,7 +1092,7 @@ class EbaySynchronizer
             return false;
         }
 
-        $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$product_id, $ebay_profile);
+        $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$product_id, $ebay_profile, $limitEbayStock);
 
         if (!$ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
             $ebay_profile->setConfiguration('EBAY_HAS_SYNCED_PRODUCTS', 1);
@@ -1098,7 +1103,7 @@ class EbaySynchronizer
         $variations = null;
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
         if (!empty($prodAttributeCombinations)) {
-            $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute);
+            $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute, $limitEbayStock);
         }
         $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
         $conditions = $ebay_category->getConditionsValues($id_ebay_profile);
@@ -1118,6 +1123,7 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
         );
+
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
@@ -1127,7 +1133,9 @@ class EbaySynchronizer
             $id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');
             $key = $product->id . '-' . $id_product_attribute_fix . '_' . $ebay_profile->id;
             if (isset($data_for_stock['variations'][$key]['quantity'])) {
-                $data_for_stock['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data_for_stock['variations'][$key]['quantity']);
+                $quantity = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data_for_stock['variations'][$key]['quantity']);
+                $quantity = (int) $quantity > $limitEbayStock ? $limitEbayStock : $quantity;
+                $data_for_stock['variations'][$key]['quantity'] = $quantity;
             }
         }
         $context = Context::getContext();
