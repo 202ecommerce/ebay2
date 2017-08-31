@@ -30,7 +30,7 @@ if (_PS_VERSION_ > '1.7') {
 
 class EbayFormEbaySyncTab extends EbayTab
 {
-    public function getContent($page_current = 1, $length = 20, $searche = false, $id_category_search = false)
+    public function getContent($page_current = 1, $length = 20, $searche = false, $filter = array())
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
@@ -64,13 +64,20 @@ class EbayFormEbaySyncTab extends EbayTab
         foreach (EbayCategoryConfiguration::getEbayCategoryConfigurations($this->ebay_profile->id) as $c) {
             $category_config_list[$c['id_category']] = $c;
         }
-        if ($searche || $id_category_search) {
-            $filter = '';
-            if ($id_category_search){
-                $id_category_search = pSQL($id_category_search);
-                $filter = " AND c.id_category LIKE '%$id_category_search%'";
+        if ($searche ||
+            (isset($filter['id_product']) && $filter['id_product']) ||
+            (isset($filter['name_product']) && $filter['name_product'])
+        ) {
+            $idsCategories = $this->getIdsCategory($filter);
+            if (!empty($idsCategories)){
+                $idsCategories = implode(',', $idsCategories);
+                $query_filter = " AND c.id_category IN ($idsCategories)";
+            } else{
+                $query_filter = " AND 0";
             }
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, $filter), 0, array(), '', $searche);
+
+
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, $query_filter), 0, array(), '', $searche);
         } else {
             $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         }
@@ -182,7 +189,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
 
         $smarty_vars = array(
-            'id_category_search'             => $id_category_search,
+            'filter'                  => $filter,
             'searche'                 => $searche,
             'prev_page'               => isset($page_current) ? $page_current-1 : 0,
             'next_page'               => isset($page_current) ? $page_current+1 : 0,
@@ -301,5 +308,32 @@ class EbayFormEbaySyncTab extends EbayTab
         }
 
         return $ps_conditions;
+    }
+
+    //$filter array that contains keys for filter
+    //return array that contains ids categories
+
+    public function getIdsCategory($filter)
+    {
+        $id_lang = $this->context->language->id;
+        $query = "SELECT DISTINCT (c.id_category) FROM "._DB_PREFIX_."category c
+                  LEFT JOIN "._DB_PREFIX_."product p ON c.id_category=p.id_category_default 
+                  LEFT JOIN "._DB_PREFIX_."product_lang pl ON pl.id_product=p.id_product AND pl.id_lang=$id_lang WHERE 1 ";
+        if ($filter['id_product']){
+            $id_product = pSQL($filter['id_product']);
+            $query .= " AND p.id_product=$id_product";
+        }
+        if ($filter['name_product']){
+            $name_product = pSQL($filter['name_product']);
+            $query .= " AND pl.name LIKE '%$name_product%'";
+        }
+        $result = DB::getInstance()->ExecuteS($query);
+        $ids_categories = array();
+        if ($result){
+            foreach ($result as $row){
+                $ids_categories[] = $row['id_category'];
+            }
+        }
+        return $ids_categories;
     }
 }

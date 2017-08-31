@@ -47,11 +47,12 @@ $(document).ready(function(){
     $(document).on('click', '.navPaginationSyncTab .pagination span', function(){
         var page = $(this).attr('value');
         var searche = $('#searcheEbaySync .name_cat').attr('value');
-        var id_cat = $('#searcheEbaySync .id_cat').attr('value');
+        var id_prod = $('#searcheEbaySync .id_prod').attr('value');
+        var name_prod = $('#searcheEbaySync .name_prod').attr('value');
         if(page){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page+'&searche='+searche + '&id_category=' + id_cat,
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page+'&searche='+searche + '&id_product=' + id_prod + "&name_product=" + name_prod,
                 data: "token="+ebay_token,
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -70,12 +71,12 @@ $(document).ready(function(){
 
     $(document).on('click', '#searcheEbaySync .searcheBtn', function(){
         var searche = $('#searcheEbaySync .name_cat').attr('value');
-        var id_cat = $('#searcheEbaySync .id_cat').attr('value');
-
-        if(searche || id_cat){
+        var id_prod = $('#searcheEbaySync .id_prod').attr('value');
+        var name_prod = $('#searcheEbaySync .name_prod').attr('value');
+        if(searche || id_prod || name_prod){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?searche=' + searche + '&id_category=' + id_cat,
+                url: module_dir+'ebay/ajax/loadFormSyncTab.php?searche=' + searche + '&id_product=' + id_prod + "&name_product=" + name_prod,
                 data: "token="+ebay_token,
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';

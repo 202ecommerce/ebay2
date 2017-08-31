@@ -605,7 +605,10 @@
 		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
 			<div style="display: flex;">
 				<input type="text" style="width:300px" class="name_cat" placeholder="{l s='Search categories Prestashop by name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
-				<input type="text" style="width:300px" class="id_cat" placeholder="{l s='Search categories Prestashop by ID' mod='ebay'}" {if $id_category_search}value="{$id_category_search}"{/if}>
+				<input type="text" style="width:300px" class="id_prod" placeholder="{l s='Search categories Prestashop by ID product' mod='ebay'}"
+					   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
+				<input type="text" style="width:300px" class="name_prod" placeholder="{l s='Search categories Prestashop by product name' mod='ebay'}"
+                       {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
 			</div>
 			<div>
 				<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
