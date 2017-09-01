@@ -48,7 +48,7 @@ class EbayOrdersTab extends EbayTab
         }
         if (!empty($orders)) {
             foreach ($orders as $ord) {
-                
+
 
                 $vars['orders_tab'][] = array(
                     'date_ebay' => $ord['date_add'],
