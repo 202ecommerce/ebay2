@@ -77,7 +77,7 @@ class EbayDbValidator
             'id_country' => array('type' => 'int', 'length' => 11),
             'id_ebay_category' => array('type' => 'int', 'length' => 11),
             'id_category' => array('type' => 'int', 'length' => 11),
-            'percent' => array('type' => 'varchar', 'length' => 4),
+            'percent' => array('type' => 'varchar', 'length' => 6),
             'sync' => array('type' => 'tinyint', 'length' => 1),
             'date_add' => array('type' => 'datetime', 'length' => null),
             'date_upd' => array('type' => 'datetime', 'length' => null),

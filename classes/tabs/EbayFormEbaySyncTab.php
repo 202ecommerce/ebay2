@@ -154,7 +154,7 @@ class EbayFormEbaySyncTab extends EbayTab
                 // $is_multi = EbayCategory::getInheritedIsMultiSku($category_config_list[$category['id_category']]['id_ebay_category'], $this->ebay_profile->ebay_site_id);
                 $ebay_category = EbaySynchronizer::__getEbayCategory($category['id_category'], $this->ebay_profile);
                 if ($category_config_list[$category['id_category']]['percent']) {
-                    preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category_config_list[$category['id_category']]['percent'], $temp);
+                    preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,3})([\%]{0,1})$#is', $category_config_list[$category['id_category']]['percent'], $temp);
                     $prix = array('sign' => $temp[1], 'value' => $temp[2], 'type' => ($temp[3] == '' ? '€' : $temp[3]));
                 } else {
                     $prix = array('sign' => '', 'value' => '', 'type' => '');
