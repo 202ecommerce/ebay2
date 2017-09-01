@@ -1059,9 +1059,11 @@ class EbayOrder
 
     public static function getOrders()
     {
-        return Db::getInstance()->executeS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_order_order`
-			WHERE `id_order` > 0');
+        return Db::getInstance()->executeS('SELECT eoo.*, o.date_add, o.payment, c.email, o.total_paid, o.reference
+			FROM `'._DB_PREFIX_.'ebay_order_order` eoo
+			LEFT JOIN '._DB_PREFIX_.'orders o ON eoo.id_order=o.id_order
+			LEFT JOIN '._DB_PREFIX_.'customer c ON o.id_customer=c.id_customer
+			WHERE eoo.`id_order` > 0 ORDER BY o.date_add DESC');
     }
     public static function getOrderByOrderRef($id_order_ref)
     {

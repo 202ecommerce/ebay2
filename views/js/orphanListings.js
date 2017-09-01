@@ -178,7 +178,7 @@ $(document).ready(function () {
         loadOrphans();
     });
 
-    $(document).on('click', '.navPaginationListOrphanProductTab .pagination span', function(){
+    $('.navPaginationListOrphanProductTab .pagination span').click(function(){
         var page = $(this).attr('value');
         if(page){
             $.ajax({

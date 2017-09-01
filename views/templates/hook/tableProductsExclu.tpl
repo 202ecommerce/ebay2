@@ -24,7 +24,7 @@
 *}
 <div id="ProductsExcluRe">
     <p class="center">
-        <button class="button">{l s='Refresh excluded products' mod='ebay'}</button>
+        <button class="button btn btn-default">{l s='Refresh excluded products' mod='ebay'}</button>
     </p>
 </div>
 </br>
