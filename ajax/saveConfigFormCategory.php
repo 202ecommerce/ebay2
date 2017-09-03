@@ -57,7 +57,7 @@ if ($ebay_category) {
 
         $data = array(
             'id_ebay_profile' => (int) $id_ebay_profile,
-            'id_country' => 8,
+            'id_country' => (int) $ebay_profile->ebay_site_id,
             'id_ebay_category' => (int) $ebay_category,
             'id_category' => (int) $id_category,
             'percent' => pSQL($percentValue),

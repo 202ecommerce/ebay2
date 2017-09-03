@@ -179,7 +179,7 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             ORDER BY `level`';
 
         $datas = Db::getInstance()->executeS($sql);
-
+        
         foreach ($datas as $category) {
             /* Add datas */
             if (isset($category['id_category'])) {
