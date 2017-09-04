@@ -240,7 +240,7 @@ class EbayTaskManager
 
     public static function cleanTasks()
     {
-        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` >  NOW() - INTERVAL 40 MINUTE');
+        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 40 MINUTE');
     }
 
     public static function getCountErrors($id_ebay_profile, $search=false, $id_lang=null)
