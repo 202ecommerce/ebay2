@@ -204,16 +204,16 @@ class EbayProduct
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
         if ($search['id_product']){
-            $sql .= ' AND p.`id_product` LIKE \'%'.$search['id_product'].'%\'';
+            $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
         }
         if ($search['id_product_ebay']){
-            $sql .= ' AND ep.`id_product_ref` LIKE \'%'.$search['id_product_ebay'].'%\'';
+            $sql .= ' AND ep.`id_product_ref` = '.pSQL($search['id_product_ebay']);
         }
         if ($search['name_product']){
-            $sql .= ' AND pl.`name` LIKE \'%'.$search['name_product'].'%\'';
+            $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
         }
         if ($search['name_cat']){
-            $sql .= ' AND cl.`name` LIKE \'%'.$search['name_cat'].'%\'';
+            $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
         }
         $sql .= ' GROUP BY ep.id_product, ep.id_attribute, ep.id_product_ref) AS T';
 
@@ -242,16 +242,16 @@ class EbayProduct
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
             if ($search['id_product']){
-                $sql .= ' AND p.`id_product` LIKE \'%'.$search['id_product'].'%\'';
+                $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
             }
             if ($search['id_product_ebay']){
-                $sql .= ' AND ep.`id_product_ref` LIKE \'%'.$search['id_product_ebay'].'%\'';
+                $sql .= ' AND ep.`id_product_ref` = '.pSQL($search['id_product_ebay']);
             }
             if ($search['name_product']){
-                $sql .= ' AND pl.`name` LIKE \'%'.$search['name_product'].'%\'';
+                $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
             }
             if ($search['name_cat']){
-                $sql .= ' AND cl.`name` LIKE \'%'.$search['name_cat'].'%\'';
+                $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
             }
             $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
             $sql .= ' ORDER BY ep.`id_product` LIMIT '.$length.' OFFSET '.$offset;
