@@ -176,7 +176,7 @@ class EbayDashboardTab extends EbayTab
             'nb_categories' => count(EbayCategoryConfiguration::getEbayCategories($id_ebay_profiles)),
             'nb_products_exclu' => count(EbayProduct::getProductsBlocked($id_ebay_profiles)),
             'nb_annonces_prevu' => $annonces_prevu,
-            'nb_country_shipping' => count(EbayShippingInternationalZone::getInternationalZone($id_ebay_profiles)),
+            'country_shipping' => EbayShippingInternationalZone::getInternationalZone($id_ebay_profiles),
             'type_sync_product' => (Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')?'Cron':'Prestashop'),
             'ca_total' => $total,
         );

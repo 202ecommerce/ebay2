@@ -888,7 +888,18 @@ class EbaySynchronizer
         if (empty($item_id)) {
             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, 0);
             $res = $ebay->addFixedPriceItemMultiSku($data);
-
+            if (isset($res->Errors) && !isset($res->ItemID)) {
+                foreach ($res->Errors as $error) {
+                    if ($error->ErrorCode == 21919067) {
+                        $res->ItemID = $res->Errors->ErrorParameters[1];
+                        if ($res->ItemID > 0) {
+                            EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                        }
+                        unset($res->Errors);
+                        return $res;
+                    }
+                }
+            }
             if ($res->ItemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
             } else {
@@ -934,6 +945,18 @@ class EbaySynchronizer
             $data['id_for_sku'] = $id_attribute;
 
             $res = $ebay->addFixedPriceItem($data);
+            if (isset($res->Errors) && !isset($res->ItemID)) {
+                foreach ($res->Errors as $error) {
+                    if ($error->ErrorCode == 21919067) {
+                        $res->ItemID = $res->Errors->ErrorParameters[1];
+                        if ($res->ItemID > 0) {
+                            EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                        }
+                        unset($res->Errors);
+                        return $res;
+                    }
+                }
+            }
             if ($res->ItemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile, $id_attribute);
             } else {

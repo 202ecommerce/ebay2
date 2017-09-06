@@ -207,7 +207,7 @@ class EbayProduct
             $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
         }
         if ($search['id_product_ebay']){
-            $sql .= ' AND ep.`id_product_ref` = '.pSQL($search['id_product_ebay']);
+            $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
         }
         if ($search['name_product']){
             $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
@@ -245,7 +245,7 @@ class EbayProduct
                 $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
             }
             if ($search['id_product_ebay']){
-                $sql .= ' AND ep.`id_product_ref` = '.pSQL($search['id_product_ebay']);
+                $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
             }
             if ($search['name_product']){
                 $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';

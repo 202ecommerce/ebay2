@@ -82,7 +82,7 @@
                     $('#ebayListings').fadeOut(400, function(){
                         $(this).html(data).fadeIn();
                     })
-                    console.log(data);
+                   
                 }
             });
         }

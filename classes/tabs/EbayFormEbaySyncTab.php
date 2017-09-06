@@ -77,7 +77,7 @@ class EbayFormEbaySyncTab extends EbayTab
             }
 
 
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, $query_filter), 0, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '',  $query_filter), 0, array(), '', $searche);
         } else {
             $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         }
@@ -279,7 +279,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
         $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
 
-        $var = implode(', ', $cat_with_problem);
+        $var = implode('; ', $cat_with_problem);
 
         if (count($cat_with_problem) > 0) {
             if (count($cat_with_problem) == 1) {

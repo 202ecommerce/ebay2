@@ -26,9 +26,9 @@
 
 <div id="ebayOrphanReListing">
     <p class="center">
-        <button class="button loadListOrphan btn btn-default">{l s='Refresh Listing' mod='ebay'}</button>
-        <button class="delete_all_orphans btn btn-default">{l s='Delete all' mod='ebay'}</button>
-        <button class="delete_several_orphans btn btn-default">{l s='Delete selected products' mod='ebay'}</button>
+        <button class="button loadListOrphan btn btn-md btn-default">{l s='Refresh Listing' mod='ebay'}</button>
+        <button class="delete_all_orphans btn btn-md btn-default">{l s='Delete all' mod='ebay'}</button>
+        <button class="delete_several_orphans btn btn-md btn-default">{l s='Delete selected products' mod='ebay'}</button>
     </p>
 </div>
 
