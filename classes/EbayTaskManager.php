@@ -267,12 +267,13 @@ class EbayTaskManager
 
     public static function getErrors($id_ebay_profile, $page_current = false, $length = false, $search=false, $id_lang=null)
     {
-        if ($page_current && $length && $search && $id_lang) {
+        $profile = new EbayProfile($id_ebay_profile);
+        if ($page_current && $length && $id_lang) {
             $limit = (int) $length;
             $offset = $limit * ( (int) $page_current - 1 );
             $query = "SELECT * FROM "._DB_PREFIX_."ebay_task_manager etm
-                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = $id_lang
-                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = $id_ebay_profile";
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".$id_lang." AND pl.id_shop = ".$profile->id_shop."
+                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".$id_ebay_profile;
             if ($search['id_product']){
                 $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
             }
