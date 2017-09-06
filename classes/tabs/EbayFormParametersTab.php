@@ -61,7 +61,7 @@ class EbayFormParametersTab extends EbayTab
 
         $is_multishop =  Shop::isFeatureActive();
 
-
+        
         $smarty_vars = array(
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
             'url'                       => $url,

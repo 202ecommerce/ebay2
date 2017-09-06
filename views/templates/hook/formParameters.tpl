@@ -127,6 +127,15 @@
 							$('#menuTab8').removeClass('succes');
 							$('#menuTab8').addClass('wrong');
 							$.fancybox.close();
+							var location_array = document.location.search.split('&');
+							var url = new Array();
+							location_array.forEach(function(currentValue){
+                                if (currentValue.indexOf('resynchCategories') == -1){
+									url.push(currentValue);
+								}
+								console.log(currentValue.indexOf('resynchCategories'));
+							});
+							document.location.search = url.join('&') ;
 							//return loadCategories();
 
 						}
