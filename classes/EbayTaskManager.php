@@ -246,8 +246,9 @@ class EbayTaskManager
     public static function getCountErrors($id_ebay_profile, $search=false, $id_lang=null)
     {
         if($search && $id_lang){
+$profile = new EbayProfile($id_ebay_profile);
             $query = "SELECT COUNT(*) as `count` FROM "._DB_PREFIX_."ebay_task_manager etm
-                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = $id_lang
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".$id_lang." AND pl.id_shop = ".$profile->id_shop."
                        WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = $id_ebay_profile";
             if ($search['id_product']){
                 $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
