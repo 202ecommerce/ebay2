@@ -1377,6 +1377,7 @@ class Ebay extends Module
                 if (!$profile_ebay->getConfiguration('EBAY_PAYPAL_EMAIL')) {
                     $profile_ebay->setConfiguration('EBAY_PARAMETERS_TAB_OK', 0);
                 } else {
+                    $profile_ebay->setConfiguration('LIMIT_EBAY_STOCK', 50);
                     $profile_ebay->setConfiguration('EBAY_PARAMETERS_TAB_OK', 1);
                     $profile_ebay->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);
                     $profile_ebay->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
