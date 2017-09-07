@@ -43,7 +43,7 @@ function upgrade_module_1_8($module)
     }
 
     // upgrade existing profiles
-    $profiles = EbayProfile::getProfilesByIdShop();
+    $profiles = EbayProfile::getAllProfile();
     foreach ($profiles as $profile) {
         $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
 
@@ -75,8 +75,8 @@ function upgrade_module_1_8($module)
         // update ebay_category
         $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array('id_country' => $ebay_site_id), 'UPDATE');
 
-        if (Configuration::get('EBAY_CATEGORY_LOADED')) {
-            Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1, false, 0, 0);
+        if ($ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED')) {
+            $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
         }
 
         // update ebay_category_specific

@@ -768,7 +768,8 @@ class Ebay extends Module
         }
         $ebay_site_id=$this->ebay_profile->ebay_site_id;
         if (Tools::getValue('resynchCategories')) {
-            Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
+            //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
+            $this->ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
             EbayCategoryConfiguration::deleteByIdProfile($this->ebay_profile->id);
         }
         // if multishop, change context Shop to be default
@@ -1360,8 +1361,9 @@ class Ebay extends Module
             && !Shop::isFeatureActive())) {
             $this->hookHeader($params);
         }
+
         $id_shop =  Shop::getContextShopID();
-        $profiles = EbayProfile::getProfilesByIdShop($id_shop);
+        $profiles = EbayProfile::getAllProfile();
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
             $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
@@ -1391,6 +1393,15 @@ class Ebay extends Module
             $validatordb = new EbayDbValidator();
             $validatordb->checkTemplate();
             $validatordb->checkDatabase(false);
+            foreach ($profiles as $profile)
+            {
+                $profile_ebay = new EbayProfile($profile['id_ebay_profile']);
+                $name_exists = $profile_ebay->getCatalogConfiguration('EBAY_CATEGORY_LOADED');
+                if ($name_exists !== '0' && !$name_exists){
+                    $value = Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id, null, null, $this->ebay_profile->id_shop);
+                    $profile_ebay->setCatalogConfiguration('EBAY_CATEGORY_LOADED', $value);
+                }
+            }
         }
 
         if ($visible_logo) {

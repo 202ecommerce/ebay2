@@ -61,6 +61,13 @@ class EbayFormParametersTab extends EbayTab
 
         $is_multishop =  Shop::isFeatureActive();
 
+        if ( $this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == '1' ||
+            ($this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') !== '0' && Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id))
+        ){
+            $catLoaded = 0;
+        } else{
+            $catLoaded = 1;
+        }
         
         $smarty_vars = array(
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
@@ -69,7 +76,7 @@ class EbayFormParametersTab extends EbayTab
             'ebay_sign_in_url'          => $ebay_sign_in_url,
             'ebay_token'                => Configuration::get('EBAY_SECURITY_TOKEN'),
             'configCurrencysign'        => $config_currency->sign,
-            'catLoaded'                 => !Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id),
+            'catLoaded'                 => $catLoaded,
             'createShopUrl'             => $createShopUrl,
             'ebayCountry'               => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
             'ebayShopValue'             => $ebayShopValue,

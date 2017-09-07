@@ -949,6 +949,7 @@ class EbaySynchronizer
                 foreach ($res->Errors as $error) {
                     if ($error->ErrorCode == 21919067) {
                         $res->ItemID = $res->Errors->ErrorParameters[1];
+
                         if ($res->ItemID > 0) {
                             EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
                         }
