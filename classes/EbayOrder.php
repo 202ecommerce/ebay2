@@ -1063,7 +1063,7 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order_order` eoo
 			LEFT JOIN '._DB_PREFIX_.'orders o ON eoo.id_order=o.id_order
 			LEFT JOIN '._DB_PREFIX_.'customer c ON o.id_customer=c.id_customer
-			WHERE eoo.`id_order` > 0 ORDER BY o.date_add ASC');
+			WHERE eoo.`id_order` > 0 ORDER BY o.date_add DESC');
     }
     public static function getOrderByOrderRef($id_order_ref)
     {
