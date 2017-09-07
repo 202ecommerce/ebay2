@@ -32,7 +32,7 @@ class EbayLogJobsTab extends EbayTab
     public function getContent($id_profile, $page_current = 1, $length = 20)
     {
         $table = _DB_PREFIX_.'ebay_task_manager';
-        $sql_count_tasks = "SELECT COUNT(*) as `count` FROM `$table` WHERE `locked` = 0 AND `id_ebay_profile` = $id_profile";
+        $sql_count_tasks = "SELECT COUNT(*) as `count` FROM `$table` WHERE `locked` = 0 AND `retry` = 0 AND `id_ebay_profile` = $id_profile";
         $res_count_tasks = DB::getInstance()->executeS($sql_count_tasks);
 
         $count_tasks = (int) $res_count_tasks[0]['count'];
@@ -55,7 +55,7 @@ class EbayLogJobsTab extends EbayTab
         $limit = $length;
         $offset = (int) $length * ( (int) $page_current - 1 );
 
-        $sql_select = "SELECT * FROM `$table` WHERE `locked` = 0 AND `id_ebay_profile` = $id_profile ORDER BY `date_add` LIMIT $limit OFFSET $offset";
+        $sql_select = "SELECT * FROM `$table` WHERE `locked` = 0 AND `retry` = 0 AND  `id_ebay_profile` = $id_profile ORDER BY `date_add` LIMIT $limit OFFSET $offset";
         $tasks = DB::getInstance()->executeS($sql_select);
         $this->smarty->assign(array('tasks' => $tasks));
         $this->smarty->assign(array(

@@ -165,7 +165,7 @@ class EbayAlert
             $context = Context::getContext();
             $protocol = Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http';
             $this->errors[] = array(
-                'type' => 'warning',
+                'type' => 'error',
                 'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL than set up, this module will not work properly. Please log in using @link@this url.@/link@'),
                 'link_warn' => $protocol.'://'.$domain.DIRECTORY_SEPARATOR.basename(_PS_ADMIN_DIR_).DIRECTORY_SEPARATOR,
                 'kb' => array(
