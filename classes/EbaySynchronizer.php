@@ -970,7 +970,7 @@ class EbaySynchronizer
         $ebay_request = new EbayRequest($id_ebay_profile, $context->cloneContext());
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $data = EbaySynchronizer::getDatasProduct($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
-        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
+        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop);
         $data['id_for_sku'] = $id_product_attribute;
         if (count($data['variations']) && $id_product_attribute == 0) {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
@@ -1053,7 +1053,7 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $data = EbaySynchronizer::getDatasProductForStock($product_id, $id_product_attribute, $id_ebay_profile, $ebay_profile->id_lang);
         $data['id_for_sku'] = $id_product_attribute;
-        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
+        $data['itemID'] = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop);
         if (count($data['variations']) && $id_product_attribute == 0) {
             $ebay = EbaySynchronizer::__updateStockMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay_request, $date = date('Y-m-d H:i:s'));
         } else {
