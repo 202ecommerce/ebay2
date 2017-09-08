@@ -69,15 +69,14 @@ class EbayFormEbaySyncTab extends EbayTab
             (isset($filter['name_product']) && $filter['name_product'])
         ) {
             $idsCategories = $this->getIdsCategory($filter);
-            if (!empty($idsCategories)){
+            if (!empty($idsCategories)) {
                 $idsCategories = implode(',', $idsCategories);
                 $query_filter = " AND c.id_category IN ($idsCategories)";
-            } else{
+            } else {
                 $query_filter = " AND 0";
             }
 
-
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '',  $query_filter), 0, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), 0, array(), '', $searche);
         } else {
             $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         }
@@ -315,22 +314,24 @@ class EbayFormEbaySyncTab extends EbayTab
 
     public function getIdsCategory($filter)
     {
+
         $id_lang = $this->context->language->id;
         $query = "SELECT DISTINCT (c.id_category) FROM "._DB_PREFIX_."category c
                   LEFT JOIN "._DB_PREFIX_."product p ON c.id_category=p.id_category_default 
                   LEFT JOIN "._DB_PREFIX_."product_lang pl ON pl.id_product=p.id_product AND pl.id_lang=$id_lang WHERE 1 ";
-        if ($filter['id_product']){
+        if ($filter['id_product']) {
             $id_product = pSQL($filter['id_product']);
             $query .= " AND p.id_product=$id_product";
         }
-        if ($filter['name_product']){
+        if ($filter['name_product']) {
             $name_product = pSQL($filter['name_product']);
             $query .= " AND pl.name LIKE '%$name_product%'";
         }
+
         $result = DB::getInstance()->ExecuteS($query);
         $ids_categories = array();
-        if ($result){
-            foreach ($result as $row){
+        if ($result) {
+            foreach ($result as $row) {
                 $ids_categories[] = $row['id_category'];
             }
         }

@@ -585,12 +585,12 @@ class EbayProfile extends ObjectModel
         $name_exists = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_catalog_configuration 
                                                     WHERE `name`= '" . $name_configuration . "' 
                                                     AND `id_country` = " . $this->ebay_site_id);
-        if ($name_exists){
+        if ($name_exists) {
             $data = array(
                 'value' => pSQL($value_configuration)
             );
             return DB::getInstance()->update('ebay_catalog_configuration', $data, ' `name` = \'' . pSQL($name_configuration) . '\' AND `id_country` = ' . $this->ebay_site_id);
-        } else{
+        } else {
             $data = array(
                 'value' => pSQL($value_configuration),
                 'id_country' => $this->ebay_site_id,
@@ -598,7 +598,6 @@ class EbayProfile extends ObjectModel
             );
             DB::getInstance()->insert('ebay_catalog_configuration', $data);
         }
-
     }
 
     //return array containing all id of profile

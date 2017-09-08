@@ -36,7 +36,7 @@
     {l s='Synchronization :' mod='ebay'} {$type_sync_product}<br>
     {l s='Updates to send :' mod='ebay'}  {$nb_tasks}<br>
 <br>
-<h4>{l s='International passive sales' mod='ebay'} : {if $country_shipping}{l s='YES'}{else}{l s='NO'}{/if}</h4>
+<h4>{l s='International passive sales' mod='ebay'} : {if $country_shipping}{l s='YES' mod='ebay'}{else}{l s='NO' mod='ebay'}{/if}</h4>
     {if $country_shipping}
         {l s='Countries :' mod='ebay'}<br>
         {foreach from=$country_shipping item=country}

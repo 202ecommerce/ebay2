@@ -57,6 +57,7 @@ class EbayDashboardTab extends EbayTab
             'type_sync_product' => (Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')?'Cron':'Prestashop'),
             'ca_total' => $total,
         );
+
         $datetime = new DateTime(EbayConfiguration::get($id_ebay_profiles, 'EBAY_ORDER_LAST_UPDATE'));
         $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
 

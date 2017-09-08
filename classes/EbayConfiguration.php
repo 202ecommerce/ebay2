@@ -71,7 +71,7 @@ class EbayConfiguration
     {
         $name = pSQL($name);
         $checkExist = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_configuration WHERE id_ebay_profile=$id_ebay_profile AND `name`='$name'");
-        if ($checkExist){
+        if ($checkExist) {
             $datas = array(
                 'value' => pSQL($value, $html),
             );

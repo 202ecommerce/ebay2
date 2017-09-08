@@ -36,8 +36,7 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'section' => 'advanced_parameters',
         );
 
-            $url_vars['controller'] = Tools::getValue('controller');
-
+        $url_vars['controller'] = Tools::getValue('controller');
 
         $url = $this->_getUrl($url_vars);
 
@@ -57,7 +56,6 @@ class EbayFormAdvancedParametersTab extends EbayTab
             '_path' => $this->path,
             // send stats to eBay
             'stats' => Configuration::get('EBAY_SEND_STATS'),
-
         );
 
         return $this->display('formAdvancedParameters.tpl', $smarty_vars);

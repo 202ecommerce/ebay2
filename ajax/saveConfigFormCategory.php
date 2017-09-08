@@ -50,7 +50,7 @@ if ($ebay_category) {
         $date = date('Y-m-d H:i:s');
         if ($percent['value'] != '') {
             //$percent_sign_type = explode(':', $percent['sign']);
-            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').round($percent['value'],2).($percent['type'] == 'percent' ? '%' : '');
+            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').round($percent['value'], 2).($percent['type'] == 'percent' ? '%' : '');
         } else {
             $percentValue = null;
         }

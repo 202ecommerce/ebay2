@@ -203,16 +203,16 @@ class EbayProduct
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
-        if ($search['id_product']){
+        if ($search['id_product']) {
             $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
         }
-        if ($search['id_product_ebay']){
+        if ($search['id_product_ebay']) {
             $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
         }
-        if ($search['name_product']){
+        if ($search['name_product']) {
             $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
         }
-        if ($search['name_cat']){
+        if ($search['name_cat']) {
             $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
         }
         $sql .= ' GROUP BY ep.id_product, ep.id_attribute, ep.id_product_ref) AS T';
@@ -220,7 +220,7 @@ class EbayProduct
         return Db::getInstance()->ExecuteS($sql);
     }
 
-    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20, $search=array())
+    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20, $search = array())
     {
         if ($page_current) {
             $offset = ((int) $page_current - 1) * (int) $length;
@@ -241,16 +241,16 @@ class EbayProduct
             if ($no_blacklisted) {
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
-            if ($search['id_product']){
+            if ($search['id_product']) {
                 $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
             }
-            if ($search['id_product_ebay']){
+            if ($search['id_product_ebay']) {
                 $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
             }
-            if ($search['name_product']){
+            if ($search['name_product']) {
                 $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
             }
-            if ($search['name_cat']){
+            if ($search['name_cat']) {
                 $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
             }
             $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';

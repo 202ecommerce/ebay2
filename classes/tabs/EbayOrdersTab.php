@@ -26,10 +26,8 @@
 
 class EbayOrdersTab extends EbayTab
 {
-
     public function getContent($id_ebay_profile)
     {
-
         $orders_error = EbayOrderErrors::getAll($id_ebay_profile);
         $orders = EbayOrder::getOrders();
         $vars = array();
@@ -48,8 +46,6 @@ class EbayOrdersTab extends EbayTab
         }
         if (!empty($orders)) {
             foreach ($orders as $ord) {
-
-
                 $vars['orders_tab'][] = array(
                     'date_ebay' => $ord['date_add'],
                     'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),

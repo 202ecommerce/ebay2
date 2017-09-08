@@ -801,7 +801,7 @@ class EbayRequest
     {
 
         $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
-        
+
         $vars = array(
             'returns_accepted_option' => $returns_policy_configuration->ebay_returns_accepted_option,
             'description' => preg_replace('#<br\s*?/?>#i', "\n", $returns_policy_configuration->ebay_returns_description),
@@ -809,7 +809,7 @@ class EbayRequest
             'whopays' => $returns_policy_configuration->ebay_returns_who_pays,
             'payment_profile_id' => false
         );
-        
+
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 1) {
             $policies_config = EbayBussinesPolicies::getPoliciesConfigurationbyIdCategory($data['categoryId'], $this->ebay_profile->id);
 
@@ -1078,7 +1078,7 @@ class EbayRequest
             return false;
         }
         $return_policy = $this->_getReturnPolicy($data);
-        
+
         if (!is_string($return_policy) && is_array($return_policy)) {
             return $this->error = $return_policy['error'];
         }
@@ -1424,7 +1424,7 @@ class EbayRequest
         if (!is_string($return_policy) && is_array($return_policy)) {
             return $this->error = $return_policy['error'];
         }
-       
+
         // Set Api Call
         $this->apiCall = 'ReviseFixedPriceItem';
 

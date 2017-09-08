@@ -138,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.2';
+        $this->version = '2.0.3';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -760,8 +760,6 @@ class Ebay extends Module
             return false;
         }
 
-
-
         if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
         // if the module is not upgraded or not configured don't do anything
             return false;
@@ -1226,7 +1224,7 @@ class Ebay extends Module
         if (!($this->ebay_profile instanceof EbayProfile)) {
             return false;
         }
-	$product = isset($params['product']) ? $params['product'] : new Product($id_product);
+        $product = isset($params['product']) ? $params['product'] : new Product($id_product);
         EbayTaskManager::addTask('update', $product);
     }
 
@@ -1361,7 +1359,6 @@ class Ebay extends Module
             && !Shop::isFeatureActive())) {
             $this->hookHeader($params);
         }
-
         $id_shop =  Shop::getContextShopID();
         $profiles = EbayProfile::getAllProfile();
         $id_ebay_profiles = array();
@@ -1393,11 +1390,10 @@ class Ebay extends Module
             $validatordb = new EbayDbValidator();
             $validatordb->checkTemplate();
             $validatordb->checkDatabase(false);
-            foreach ($profiles as $profile)
-            {
+            foreach ($profiles as $profile) {
                 $profile_ebay = new EbayProfile($profile['id_ebay_profile']);
                 $name_exists = $profile_ebay->getCatalogConfiguration('EBAY_CATEGORY_LOADED');
-                if ($name_exists !== '0' && !$name_exists){
+                if ($name_exists !== '0' && !$name_exists) {
                     $value = Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id, null, null, $this->ebay_profile->id_shop);
                     $profile_ebay->setCatalogConfiguration('EBAY_CATEGORY_LOADED', $value);
                 }
@@ -1461,7 +1457,6 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
-
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
@@ -1585,6 +1580,7 @@ class Ebay extends Module
         }
 
         $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
+
         foreach ($profiles as &$profile) {
             $profile_count_order_errors = EbayOrderErrors::getAllCount($profile['id_ebay_profile']);
             $profile_count_product_errors = EbayTaskManager::getErrorsCount($profile['id_ebay_profile']);
@@ -2316,7 +2312,7 @@ class Ebay extends Module
         return $this->display(__FILE__, 'views/templates/hook/tableProductsExclu.tpl');
     }
 
-    public function displayEbayListingsAjax($admin_path, $id_employee = null, $page_current = 1, $length = 20, $search)
+    public function displayEbayListingsAjax($admin_path, $search, $id_employee = null, $page_current = 1, $length = 20)
     {
         $ebay = new EbayRequest();
         $employee = new Employee($id_employee);
@@ -2412,7 +2408,6 @@ class Ebay extends Module
                 );
             }
         }
-
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
         $this->smarty->assign('products_ebay_listings', $products_ebay_listings);
         $this->smarty->assign('id_employee', $id_employee);

@@ -26,7 +26,6 @@
 
 class EbayOrderReturnsTab extends EbayTab
 {
-
     public function getContent($id_ebay_profile)
     {
         // Load prestashop ebay's configuration

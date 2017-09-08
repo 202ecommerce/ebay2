@@ -320,7 +320,6 @@ class EbaySynchronizer
             $address->save();
         }
 
-
         return $data;
     }
 
@@ -329,12 +328,10 @@ class EbaySynchronizer
      * @param int $id_product
      * @return int
      */
-    private static function __getProductQuantity(Product $product, $id_product, $ebay_profile, $limitEbayStock=0)
+    private static function __getProductQuantity(Product $product, $id_product, $ebay_profile, $limitEbayStock = 0)
     {
-
         $quantity_product = StockAvailable::getQuantityAvailableByProduct($id_product, null, $ebay_profile->id_shop);
         $quantity_product = (int) $quantity_product > $limitEbayStock ? $limitEbayStock : $quantity_product;
-
 
         return $quantity_product;
     }
@@ -362,9 +359,8 @@ class EbaySynchronizer
      * @param EbayCategory $ebay_category
      * @return array
      */
-    public static function __loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_atributte = 0, $limitEbayStock=0)
+    public static function __loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_atributte = 0, $limitEbayStock = 0)
     {
-
         $variations = array();
         $combinations = array();
 
@@ -499,7 +495,7 @@ class EbaySynchronizer
         if ($ebay_category !== false) {
             $sql .= '  AND (ecs.id_category_ref = ' . (int)$ebay_category->getIdCategoryRef() . ' OR ecs.id_category_ref IS NULL)';
         }
-        
+
         $attributes_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 
         $variation_specifics_pairs = array();
@@ -949,7 +945,6 @@ class EbaySynchronizer
                 foreach ($res->Errors as $error) {
                     if ($error->ErrorCode == 21919067) {
                         $res->ItemID = $res->Errors->ErrorParameters[1];
-
                         if ($res->ItemID > 0) {
                             EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
                         }
@@ -1147,7 +1142,6 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
         );
-
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
@@ -1178,7 +1172,6 @@ class EbaySynchronizer
                 $variations['quantity'] = 0;
             }
         }
-
         if ($res = $ebay->reviseStockFixedPriceItemMultiSku($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
         }
@@ -1197,7 +1190,7 @@ class EbaySynchronizer
         return $res;
     }
 
-    private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_product_attribute=0)
+    private static function __updateStockItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_product_attribute = 0)
     {
         if (EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK') && EbayProductConfiguration::isblocked($id_ebay_profile, $product_id)) {
             $data['quantity'] =0;

@@ -61,11 +61,11 @@ class EbayFormParametersTab extends EbayTab
 
         $is_multishop =  Shop::isFeatureActive();
 
-        if ( $this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == '1' ||
+        if ($this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == '1' ||
             ($this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') !== '0' && Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id))
-        ){
+        ) {
             $catLoaded = 0;
-        } else{
+        } else {
             $catLoaded = 1;
         }
         
