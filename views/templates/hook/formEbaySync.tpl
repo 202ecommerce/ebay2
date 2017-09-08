@@ -606,7 +606,7 @@
 	<h4>{l s='Search categories Prestashop' mod='ebay'}</h4>
 	<div id="catSync">
 		<div id="searcheEbaySync">
-			<input type="text" class="name_cat" placeholder="{l s='by name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+			<input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
 			<input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
 				   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
 			<input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
@@ -769,7 +769,7 @@
 				{if $bp_active}
 				<div class="form-group">
 					<label for="" class="control-label col-md-6">
-						{l s='Business Policies* :' mod='ebay'}
+						{l s='Return Policies* :' mod='ebay'}
 					</label>
 					<select name="return_policies" style="width: 200px;">
 						{if empty($RETURN_POLICY)}
@@ -783,7 +783,7 @@
 					</select>
 
 						<label for="" class="control-label col-md-6">
-							{l s='Business Policies* :' mod='ebay'}
+							{l s='Payement  Policies* :' mod='ebay'}
 						</label>
 						<select name="payement_policies" style="width: 200px;">
 						{if empty($PAYEMENTS)}
@@ -917,8 +917,8 @@
 		<div class="panel-heading">
 			<i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
 		</div>
-		<p>{l s='Souhaitez-vous supprimer la synchronisation de la categorie' mod='ebay'} <span class="name_categorie"></span>?</p>
-		<p>{l s='Les annonces eBay apparaitront dans la liste des annonces orphelines ou vous pourrez les supprimer definitivement' mod='ebay'}</p>
+		<p>{l s='Do you want to stop and delete the synchronization of the category' mod='ebay'} <span class="name_categorie"></span>?</p>
+		<p>{l s='Then you can find the eBay products of this category in the orphan listing, where you can delete them definitevely.' mod='ebay'}</p>
 
 		<div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
 			<button class="cancel-delete btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>

@@ -1942,7 +1942,6 @@ class Ebay extends Module
             if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
                 $green_message = $this->l('Your profile is ready to go, go to Synchronization to list your products');
             } elseif (!empty($_POST) && Tools::isSubmit('submitSave')) {
-                $green_message = $this->l('To implement these changes on active listings you need to    resynchronize your items');
             }
         }
 

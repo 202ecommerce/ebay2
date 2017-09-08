@@ -308,10 +308,16 @@
 		<div class="form-group">
 			<label class="control-label col-sm-3">
                 {l s='Limit of ebay stock' mod='ebay'}
+				<a class="kb-help" data-errorcode="{$help_limit_of_stock.error_code}" data-module="ebay" data-lang="{$help_limit_of_stock.lang}" module_version="{$help_limit_of_stock.module_version}" prestashop_version="{$help_limit_of_stock.ps_version}" href="" target="_blank"></a>
 			</label>
 			<div class="col-sm-9">
 				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control" id="limitEbayStock"
 					   value="{if $limitEbayStock || $limitEbayStock === '0'}{$limitEbayStock}{else}50{/if}" style="width:50px">
+			</div>
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="help-block">
+					{l s='0 - unlimited, 1 min - 50 max to limit stock' mod='ebay'}
+				</div>
 			</div>
 		</div>
 	</fieldset>

@@ -130,6 +130,12 @@ class EbayFormConfigAnnoncesTab extends EbayTab
                 'ps_version'     => _PS_VERSION_,
                 'error_code'     => 'HELP-SETTINGS-OUT-OF-STOCK',
             ),
+            'help_limit_of_stock' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-SETTINGS-STOCK-LIMIT',
+            ),
         );
         return $this->display('formParametersAnnonces.tpl', $smarty_vars);
     }
