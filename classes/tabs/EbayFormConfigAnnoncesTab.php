@@ -74,6 +74,8 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             }
         }
         $limitEbayStock = EbayConfiguration::get($this->ebay_profile->id, 'LIMIT_EBAY_STOCK');
+        $limitEbayStock = $limitEbayStock ? $limitEbayStock : '50';
+        $limitEbayStock = $limitEbayStock == '1000000' ? '0' : $limitEbayStock;
         $smarty_vars = array(
             'limitEbayStock'            => $limitEbayStock,
             'url'                       => $url,
@@ -137,8 +139,8 @@ class EbayFormConfigAnnoncesTab extends EbayTab
     {
         // Saving a limit of ebay stock
         $limitEbayStock = (int) Tools::getValue('limitEbayStock');
-        $limitEbayStock = $limitEbayStock < 1 ? 1 : $limitEbayStock;
         $limitEbayStock = $limitEbayStock > 50 ? 50 : $limitEbayStock;
+        $limitEbayStock = $limitEbayStock <= 0 ? 1000000 : $limitEbayStock;
         EbayConfiguration::set($this->ebay_profile->id, 'LIMIT_EBAY_STOCK', $limitEbayStock);
 
         // Saving new configurations

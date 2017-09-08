@@ -166,7 +166,7 @@ class EbayDashboardTab extends EbayTab
         $total = $total[0]['sum'] ? $total[0]['sum'] : 0;
         $count_orphan_listing = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
         $count_orphan_listing = $count_orphan_listing[0]['number'];
-
+        //var_dump($annonces_prevu); die();
         $vars = array(
             'nb_tasks' => EbayTaskManager::getNbTasks($id_ebay_profiles),
             'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),

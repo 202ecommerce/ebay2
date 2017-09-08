@@ -310,8 +310,8 @@
                 {l s='Limit of ebay stock' mod='ebay'}
 			</label>
 			<div class="col-sm-9">
-				<input type="number" name="limitEbayStock" max="50" min="1" class="form-control" id="limitEbayStock"
-					   value="{if $limitEbayStock}{$limitEbayStock}{else}50{/if}" style="width:50px">
+				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control" id="limitEbayStock"
+					   value="{if $limitEbayStock || $limitEbayStock === '0'}{$limitEbayStock}{else}50{/if}" style="width:50px">
 			</div>
 		</div>
 	</fieldset>
@@ -336,8 +336,8 @@
             if (stock.val() > 50){
                 $('#limitEbayStock').val('50');
 			}
-			if (stock.val() < 1){
-                $('#limitEbayStock').val('1');
+			if (stock.val() < 0){
+                $('#limitEbayStock').val('0');
 			}
 		}
 
