@@ -30,7 +30,7 @@
 <h4>{l s='Products' mod='ebay'}</h4>
     {l s='Number of PrestaShop categories :' mod='ebay'} {$nb_categories}<br>
     {l s='Number of excluded products :' mod='ebay'} {$nb_products_exclu}<br>
-    {l s='Number of listings expected :' mod='ebay'} {$nb_annonces_prevu}<br>
+   
     {l s='Number of eBay listings :' mod='ebay'} {$nb_products}<br>
     {l s='Numbers of errors :' mod='ebay'} {$count_product_errors}<br>
     {l s='Synchronization :' mod='ebay'} {$type_sync_product}<br>
