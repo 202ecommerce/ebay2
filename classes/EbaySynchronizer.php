@@ -436,7 +436,9 @@ class EbaySynchronizer
             $combination_images = $product->getCombinationImages($ebay_profile->id_lang);
         } else {
             $combination_imagesAll = $product->getCombinationImages($ebay_profile->id_lang);
-            $combination_images[] = $combination_imagesAll[$id_product_atributte];
+            if (isset($combination_imagesAll[$id_product_atributte])) {
+	    	$combination_images[] = $combination_imagesAll[$id_product_atributte];
+	    }
         }
 
 
@@ -890,6 +892,8 @@ class EbaySynchronizer
                         $res->ItemID = $res->Errors->ErrorParameters[1];
                         if ($res->ItemID > 0) {
                             EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                        } else {
+                            EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, 0);
                         }
                         unset($res->Errors);
                         return $res;
@@ -947,6 +951,8 @@ class EbaySynchronizer
                         $res->ItemID = $res->Errors->ErrorParameters[1];
                         if ($res->ItemID > 0) {
                             EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                        } else {
+                            EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, $id_attribute);
                         }
                         unset($res->Errors);
                         return $res;
