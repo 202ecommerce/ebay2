@@ -26,9 +26,14 @@
 
 
 <div id="contentLogJobsTab">
+    <div class="buttonContainer">
+        <button class="btn btn-default deleteAllLog">{l s='Delete all'}</button>
+        <button class="btn btn-default deleteSelectedLog">{l s='Delete selected'}</button>
+    </div>
 	<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 		<thead>
 		<tr class="nodrag nodrop">
+            <th><input type="checkbox" class="logAllCheck"></th>
 			<th>{l s='ID' mod='ebay'}</th>
 			<th>{l s='Date' mod='ebay'}</th>
 			<th>{l s='ID Product' mod='ebay'}</th>
@@ -39,6 +44,7 @@
 		{if $tasks}
 			{foreach from=$tasks item='task'}
 				<tr>
+                    <td><input type="checkbox" class="logCheck" value="{$task.id|escape:'htmlall':'UTF-8'}"></td>
 					<td>{$task.id|escape:'htmlall':'UTF-8'}</td>
 					<td>{$task.date_add|escape:'htmlall':'UTF-8'}</td>
 					<td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
@@ -76,8 +82,50 @@
                 }
             });
         }
-
-
     });
+
+    $(document).on('click', '.logAllCheck', function(){
+        var state = $(this).prop('checked');
+        $('.logCheck').prop('checked', state);
+    });
+
+    $(document).on('click', '.deleteAllLog', function(){
+        var ids = [];
+        $('.logCheck').each(function(){
+            ids.push($(this).attr('value'));
+        });
+        deleteTasksByIds(ids);
+    });
+
+    $(document).on('click', '.deleteSelectedLog', function(){
+        var ids = [];
+        $('.logCheck:checked').each(function(){
+            ids.push($(this).attr('value'));
+        });
+        deleteTasksByIds(ids);
+    });
+
+    function deleteTasksByIds(ids_tasks) {
+        if (ids_tasks.length == 0){
+            console.log('vfgsfgs');
+            return;
+        }
+        $.ajax({
+            type : 'POST',
+            url : module_dir+'ebay/ajax/deleteTasks.php',
+            data : {
+                ids_tasks : ids_tasks
+            },
+            success : function(data){
+                $('.logCheck').each(function(){
+                    if (ids_tasks.indexOf($(this).attr('value')) != -1){
+                        $(this).closest('tr').remove();
+                    }
+
+                });
+            }
+        })
+    }
+
 </script>
 {/literal}

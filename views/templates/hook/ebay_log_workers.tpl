@@ -26,9 +26,14 @@
 
 
 <div id="contentLogWorkersTab">
+	<div class="buttonContainer">
+		<button class="btn btn-default deleteAllWork">{l s='Delete all'}</button>
+		<button class="btn btn-default deleteSelectedWork">{l s='Delete selected'}</button>
+	</div>
 	<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 		<thead>
 		<tr class="nodrag nodrop">
+			<th><input type="checkbox" class="workAllCheck"></th>
 			<th>{l s='ID' mod='ebay'}</th>
 			<th>{l s='Date' mod='ebay'}</th>
 			<th>{l s='ID Product' mod='ebay'}</th>
@@ -39,6 +44,7 @@
 		{if $tasks}
 			{foreach from=$tasks item='task'}
 				<tr>
+					<td><input type="checkbox" class="workCheck" value="{$task.id|escape:'htmlall':'UTF-8'}"></td>
 					<td>{$task.id|escape:'htmlall':'UTF-8'}</td>
 					<td>{$task.date_add|escape:'htmlall':'UTF-8'}</td>
 					<td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
@@ -79,6 +85,50 @@
 
 
         });
+
+        $(document).on('click', '.workAllCheck', function(){
+            var state = $(this).prop('checked');
+            $('.workCheck').prop('checked', state);
+        });
+
+        $(document).on('click', '.deleteAllWork', function(){
+            var ids = [];
+            $('.workCheck').each(function(){
+                ids.push($(this).attr('value'));
+            });
+            deleteWorkTasksByIds(ids);
+        });
+
+        $(document).on('click', '.deleteSelectedWork', function(){
+            var ids = [];
+            $('.workCheck:checked').each(function(){
+                ids.push($(this).attr('value'));
+            });
+            deleteWorkTasksByIds(ids);
+        });
+
+        function deleteWorkTasksByIds(ids_tasks) {
+            if (ids_tasks.length == 0){
+                console.log('vfgsfgs');
+                return;
+            }
+            $.ajax({
+                type : 'POST',
+                url : module_dir+'ebay/ajax/deleteTasks.php',
+                data : {
+                    ids_tasks : ids_tasks
+                },
+                success : function(data){
+                    $('.workCheck').each(function(){
+                        if (ids_tasks.indexOf($(this).attr('value')) != -1){
+                            $(this).closest('tr').remove();
+                        }
+
+                    });
+                }
+            })
+        }
+
 	</script>
 {/literal}
 

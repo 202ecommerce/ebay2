@@ -41,7 +41,6 @@ class EbayOrdersTab extends EbayTab
                     'total' => $order_er['total'],
                     'error' => $order_er['error'],
                     'date_import' => $order_er['date_add'],
-                    'id_error' => $order_er['id_ebay_order_error']
                 );
             }
         }
