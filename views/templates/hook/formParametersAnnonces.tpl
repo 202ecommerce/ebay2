@@ -172,7 +172,11 @@
 				<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
 						{foreach from=$sizes item='size'}
-							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
+							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}
+							data-width="{$size.width|escape:'htmlall':'UTF-8'}"
+							data-height="{$size.height|escape:'htmlall':'UTF-8'}">
+								{$size.name|escape:'htmlall':'UTF-8'}
+							</option>
 						{/foreach}
 					{/if}
 				</select>
@@ -187,7 +191,11 @@
 				<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
 						{foreach from=$sizes item='size'}
-							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
+							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}
+									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
+									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
+								{$size.name|escape:'htmlall':'UTF-8'}
+							</option>
 						{/foreach}
 					{/if}
 				</select>
@@ -204,7 +212,11 @@
 				<select name="sizesmall" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
 						{foreach from=$sizes item='size'}
-							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
+							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}
+									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
+									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
+								{$size.name|escape:'htmlall':'UTF-8'}
+							</option>
 						{/foreach}
 					{/if}
 				</select>
@@ -345,6 +357,27 @@
 			if (stock.val() < 0){
                 $('#limitEbayStock').val('0');
 			}
+		}
+
+		$('select[name = \'sizebig\'], select[name = \'sizedefault\']').change(checkSizeImage);
+
+        checkSizeImage();
+
+		function checkSizeImage(){
+            var width;
+            var height;
+            var warning;
+
+            $('select[name = \'sizebig\'], select[name = \'sizedefault\']').each(function(){
+                width = $(this).find('option:selected').attr('data-width');
+                height = $(this).find('option:selected').attr('data-height');
+
+                if (+width < 800 || +height < 800){
+                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>x</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
+                    $('#annoncestab1').closest('.panel').before(warning);
+                }
+			});
+
 		}
 
 	});
