@@ -314,7 +314,7 @@
 		$('.add_categories_ps li').live('click', function() {
 			$('.category_ps_list').append($( this ));
             $('.category_ps_list').children().last().children('button').remove();
-			$('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button>');
+			$('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="{/literal}{l s='remove category' mod='ebay'}{literal}"><i class="icon-trash"></i></button>');
 			$('#divPsCategories').html('');
 			$('.js-next-popin').removeAttr('disabled');
 		});

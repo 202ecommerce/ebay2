@@ -290,6 +290,7 @@ $_MODULE['<{ebay}prestashop>formebaysync_b54ebc45d5968196122274ca0d93d849'] = 'A
 $_MODULE['<{ebay}prestashop>formebaysync_63d5049791d9d79d86e9a108b0a999ca'] = 'Référence';
 $_MODULE['<{ebay}prestashop>formebaysync_1a5cfa5d07a7c36cc9d95215a81fcc59'] = 'EAN';
 $_MODULE['<{ebay}prestashop>formebaysync_fbd99ad01b92dbafc686772a39e3d065'] = 'UPC';
+$_MODULE['<{ebay}prestashop>formebaysync_eee5f57bd8ff1cdd9703d937dc082ad3'] = 'supprimer la catégorie';
 $_MODULE['<{ebay}prestashop>formebaysync_ec211f7c20af43e742bf2570c3cb84f9'] = 'Ajouter';
 $_MODULE['<{ebay}prestashop>formebaysync_6150ebdcb8b659f303acdb8987934536'] = 'Vous pouvez maintenant exportez vos produits sur eBay';
 $_MODULE['<{ebay}prestashop>formebaysync_54ddae5296edbde1d28aa3dc0c775155'] = 'Mettre tous vos produits sur eBay';
