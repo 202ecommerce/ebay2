@@ -26,9 +26,9 @@
 
 <div id="ebayOrphanReListing">
     <p class="center">
-        <button class="button loadListOrphan">{l s='Refresh Listing' mod='ebay'}</button>
-        <button class="delete_all_orphans">{l s='Delete all' mod='ebay'}</button>
-        <button class="delete_several_orphans">{l s='Delete selected products' mod='ebay'}</button>
+        <button class="button loadListOrphan btn btn-md btn-default">{l s='Refresh Listing' mod='ebay'}</button>
+        <button class="delete_all_orphans btn btn-md btn-default">{l s='Delete all' mod='ebay'}</button>
+        <button class="delete_several_orphans btn btn-md btn-default">{l s='Delete selected products' mod='ebay'}</button>
     </p>
 </div>
 
@@ -220,6 +220,28 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        $('.navPaginationListOrphanProductTab .pagination span').click(function () {
+            var page = $(this).attr('value');
+            if (page) {
+                $.ajax({
+                    type: "POST",
+                    url: module_dir + 'ebay/ajax/loadTableOrphanListings.php',
+                    data: "token=" + ebay_token + "&id_employee=" + id_employee + "&profile=" + id_ebay_profile + "&page=" + page,
+                    beforeSend: function () {
+                        $('#ebayOrphanListing').empty();
+                        var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                        $('#ebayOrphanListing').append(html);
+                    },
+                    success: function (data) {
+                        $('#ebayOrphanListing').fadeOut(400, function () {
+                            $(this).html(data).fadeIn();
+                        })
+                    }
+                });
+            }
+        });
+    });
 
 
 </script>

@@ -26,10 +26,8 @@
 
 class EbayOrdersTab extends EbayTab
 {
-
     public function getContent($id_ebay_profile)
     {
-
         $orders_error = EbayOrderErrors::getAll($id_ebay_profile);
         $orders = EbayOrder::getOrders();
         $vars = array();
@@ -48,17 +46,15 @@ class EbayOrdersTab extends EbayTab
         }
         if (!empty($orders)) {
             foreach ($orders as $ord) {
-                $order = new Order($ord['id_order']);
-
                 $vars['orders_tab'][] = array(
-                    'date_ebay' => $order->date_add,
+                    'date_ebay' => $ord['date_add'],
                     'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),
-                    'referance_marchand' => $order->payment,
-                    'email' => $order->getCustomer()->email,
-                    'total' => $order->total_paid,
-                    'id_prestashop' => $order->id,
-                    'reference_ps' => $order->reference,
-                    'date_import' => $order->date_add,
+                    'referance_marchand' => $ord['payment'],
+                    'email' => $ord['email'],
+                    'total' => $ord['total_paid'],
+                    'id_prestashop' => $ord['id_order'],
+                    'reference_ps' => $ord['reference'],
+                    'date_import' => $ord['date_add'],
                 );
             }
         }

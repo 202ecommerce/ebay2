@@ -50,14 +50,14 @@ if ($ebay_category) {
         $date = date('Y-m-d H:i:s');
         if ($percent['value'] != '') {
             //$percent_sign_type = explode(':', $percent['sign']);
-            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').round($percent['value']).($percent['type'] == 'percent' ? '%' : '');
+            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').round($percent['value'], 2).($percent['type'] == 'percent' ? '%' : '');
         } else {
             $percentValue = null;
         }
 
         $data = array(
             'id_ebay_profile' => (int) $id_ebay_profile,
-            'id_country' => 8,
+            'id_country' => (int) $ebay_profile->ebay_site_id,
             'id_ebay_category' => (int) $ebay_category,
             'id_category' => (int) $id_category,
             'percent' => pSQL($percentValue),

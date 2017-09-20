@@ -24,25 +24,20 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__).'/../../../config/config.inc.php';
-require_once dirname(__FILE__).'/../../../init.php';
-require_once dirname(__FILE__).'/../ebay.php';
-require_once dirname(__FILE__).'/../classes/tabs/EbayFormEbaySyncTab.php';
+/**
+ * @param Ebay $module
+ * @return bool
+ */
+function upgrade_module_2_3_0($module)
+{
+    $sql = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
+            `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+            `id_country` INT(11),
+            `name` VARCHAR(250),
+            `value` VARCHAR(250)
+            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
 
-if (!Configuration::get('EBAY_SECURITY_TOKEN')
-    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    return Tools::safeOutput(Tools::getValue('not_logged_str'));
+
+    return DB::getInstance()->Execute($sql);
 }
-$page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
-$length = Tools::getValue('length') ? Tools::getValue('length') : 20;
-$searche = Tools::getValue('searche');
-$filter = array(
-    'id_product' => Tools::getValue('id_product'),
-    'name_product' => Tools::getValue('name_product'),
-);
-
-$ebay = new Ebay;
-$context = Context::getContext();
-$form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
-die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche, $filter));

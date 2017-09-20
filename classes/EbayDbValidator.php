@@ -77,7 +77,7 @@ class EbayDbValidator
             'id_country' => array('type' => 'int', 'length' => 11),
             'id_ebay_category' => array('type' => 'int', 'length' => 11),
             'id_category' => array('type' => 'int', 'length' => 11),
-            'percent' => array('type' => 'varchar', 'length' => 4),
+            'percent' => array('type' => 'varchar', 'length' => 6),
             'sync' => array('type' => 'tinyint', 'length' => 1),
             'date_add' => array('type' => 'datetime', 'length' => null),
             'date_upd' => array('type' => 'datetime', 'length' => null),
@@ -348,6 +348,12 @@ class EbayDbValidator
             'date_upd' => array('type' => 'TIMESTAMP', 'length' => null),
             'retry' => array('type' => 'int', 'length' => 30),
             'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true)
+        ),
+        'ebay_catalog_configuration' => array(
+            'id' => array('type' => 'INT', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'id_country' => array('type' => 'INT', 'length' => 11),
+            'name' => array('type' => 'VARCHAR', 'length' => 250),
+            'value' => array('type' => 'VARCHAR', 'length' => 250)
         ),
     );
 

@@ -159,7 +159,7 @@ class EbayCategory
 
             $this->items_specific_values = Db::getInstance()->executeS($sql);
         }
-
+       
         return $this->items_specific_values;
     }
 

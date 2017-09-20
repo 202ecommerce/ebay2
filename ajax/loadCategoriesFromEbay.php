@@ -75,7 +75,8 @@ if (Module::isInstalled('ebay')) {
                 die(Tools::jsonEncode('error'));
             }
         } elseif ($step == 3) {
-            Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
+            //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
+            $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 1);
         }
     }
 }

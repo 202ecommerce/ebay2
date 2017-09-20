@@ -43,3 +43,9 @@ $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD UNIQUE (`id_ca
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` ADD `id_ebay_profile` INT( 16 ) NOT NULL';
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` DROP INDEX `id_product`';
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` ADD UNIQUE (`id_product`, `id_ebay_profile`)';
+$sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
+            `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+            `id_country` INT(11),
+            `name` VARCHAR(250),
+            `value` VARCHAR(250)
+            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';

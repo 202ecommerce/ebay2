@@ -568,4 +568,45 @@ class EbayProfile extends ObjectModel
 
         return true;
     }
+
+    //return value from table ebay_catalog_configuration
+
+    public function getCatalogConfiguration($name_configuration)
+    {
+        $sql = "SELECT `value` FROM "._DB_PREFIX_."ebay_catalog_configuration 
+                WHERE `name` = '".$name_configuration."' 
+                AND `id_country` = " . $this->ebay_site_id;
+        $result = DB::getInstance()->getValue($sql);
+        return $result;
+    }
+
+    public function setCatalogConfiguration($name_configuration, $value_configuration)
+    {
+        $name_exists = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_catalog_configuration 
+                                                    WHERE `name`= '" . $name_configuration . "' 
+                                                    AND `id_country` = " . $this->ebay_site_id);
+        if ($name_exists) {
+            $data = array(
+                'value' => pSQL($value_configuration)
+            );
+            return DB::getInstance()->update('ebay_catalog_configuration', $data, ' `name` = \'' . pSQL($name_configuration) . '\' AND `id_country` = ' . $this->ebay_site_id);
+        } else {
+            $data = array(
+                'value' => pSQL($value_configuration),
+                'id_country' => $this->ebay_site_id,
+                'name' => pSQL($name_configuration)
+            );
+            DB::getInstance()->insert('ebay_catalog_configuration', $data);
+        }
+    }
+
+    //return array containing all id of profile
+
+    public static function getAllProfile()
+    {
+        $sql = "SELECT * FROM " . _DB_PREFIX_ . "ebay_profile";
+        $list_ids = DB::getInstance()->ExecuteS($sql);
+
+        return $list_ids;
+    }
 }

@@ -1059,9 +1059,11 @@ class EbayOrder
 
     public static function getOrders()
     {
-        return Db::getInstance()->executeS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_order_order`
-			WHERE `id_order` > 0');
+        return Db::getInstance()->executeS('SELECT eoo.*, o.date_add, o.payment, c.email, o.total_paid, o.reference
+			FROM `'._DB_PREFIX_.'ebay_order_order` eoo
+			LEFT JOIN '._DB_PREFIX_.'orders o ON eoo.id_order=o.id_order
+			LEFT JOIN '._DB_PREFIX_.'customer c ON o.id_customer=c.id_customer
+			WHERE eoo.`id_order` > 0 ORDER BY o.date_add DESC');
     }
     public static function getOrderByOrderRef($id_order_ref)
     {
@@ -1072,9 +1074,11 @@ class EbayOrder
 			WHERE eo.`id_order_ref` = '.(int) $id_order_ref);
     }
 
-    public static function getSumOrders($period = '-30 days')
+    public static function getSumOrders($count_days = 'P30D')
     {
-        $period = strtotime($period);
+        $now = new DateTime();
+        $necessary_date = $now->sub(new DateInterval($count_days));
+        $period = $necessary_date->format('Y-m-d H:i:s');
         return Db::getInstance()->executeS('SELECT ROUND(SUM(o.`total_paid`), 2) as sum
 			FROM `'._DB_PREFIX_.'ebay_order_order` eo
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON eo.`id_order` = o.`id_order`

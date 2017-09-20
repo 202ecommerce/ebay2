@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = true;
+    private $dev = false;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -843,7 +843,7 @@ class EbayRequest
                 );
                 $name_shipping = EbayBussinesPolicies::addShipPolicies($dataNewShipp, $this->ebay_profile->id);
 
-                $vars = array(
+                $vars = array_merge($vars, array(
                     'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
                     'excluded_zones' => $data['shipping']['excludedZone'],
                     'national_services' => $data['shipping']['nationalShip'],
@@ -852,7 +852,7 @@ class EbayRequest
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
                     'shipping_name' => 'Prestashop-Ebay-'.$name_shipping,
                     'description' => 'PrestaShop_' . $namedesc,
-                );
+                ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
                 $this->_logApiCall('addSellerProfile', $vars, $response, $data['id_product']);
@@ -897,7 +897,7 @@ class EbayRequest
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
             if (!empty($seller_ship_prof) && EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RESYNCHBP') == 1) {
-                $vars = array(
+                $vars = array_merge($vars, array(
                     'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
                     'excluded_zones' => $data['shipping']['excludedZone'],
                     'national_services' => $data['shipping']['nationalShip'],
@@ -907,7 +907,7 @@ class EbayRequest
                     'shipping_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
                     'description' => 'PrestaShop_' . $namedesc,
                     'shipping_id' => $shippingPolicies[0]['id_bussines_Policie'],
-                );
+                ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
                 $this->_logApiCall('setSellerProfile', $vars, $response, $data['id_product']);
@@ -915,14 +915,14 @@ class EbayRequest
 
             DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
 
-            $vars = array(
+            $vars = array_merge($vars, array(
                 'payment_profile_id' => $policies_config[0]['id_payment'],
                 'payment_profile_name' => $payement_name[0]['name'],
                 'return_profile_id' => $policies_config[0]['id_return'],
                 'return_profile_name' => $return_name[0]['name'],
                 'shipping_profile_id' => $shippingPolicies[0]['id_bussines_Policie'],
                 'shipping_profile_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
-            );
+            ));
         }
 
         Ebay::addSmartyModifiers();
@@ -934,7 +934,7 @@ class EbayRequest
 
     private function _getBuyerRequirementDetails($datas)
     {
-        $vars = array('has_excluded_zones' => (boolean)count($datas['shipping']['excludedZone']));
+        $vars = array('has_excluded_zones' => isset($datas['shipping']) ? (boolean)count($datas['shipping']['excludedZone']) : false);
         $this->smarty->assign($vars);
 
         return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetBuyerRequirementDetails.tpl');

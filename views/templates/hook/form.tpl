@@ -154,60 +154,93 @@
                                                 {l s='Profiles' mod='ebay'} :
                                             </label>
 
-                                            {* Custom dropdown with table inside *}
-                                            <div class="pull-left">
-                                                <div class="dropdown js-user-dropdown">
-                                                    <button class="form-control dropdown-toggle" type="button" data-toggle="dropdown">
-                                                        {$current_profile->ebay_user_identifier}<span class="caret"></span>
-                                                    </button>
+                            {* Custom dropdown with table inside *}
+                            <div class="pull-left">
+                                <div class="dropdown js-user-dropdown">
+                                    <button class="form-control dropdown-toggle" type="button" data-toggle="dropdown">
+                                        {$current_profile->ebay_user_identifier}<span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu profile-beautify-wrapper">
+                                        <table class="profiles-beautify">
+                                            <tr class="head">
+                                                <td><span class="nowrap">{l s='User' mod='ebay'}</span></td>
+                                                <td><span class="nowrap">{l s='Site ebay' mod='ebay'}</span></td>
+                                                <td><small>{l s='Listings' mod='ebay'}</small></td>
+                                                <td><small>{l s='Listing errors' mod='ebay'}</small></td>
+                                                <td><small>{l s='Order errors' mod='ebay'}</small></td>
+                                                <td><small>{l s='Tasks' mod='ebay'}</small></td>
+                                            </tr>
 
-                                                    <ul class="dropdown-menu">
-                                                        <li class="clearfix head">
-                                                            <span class="col-xs-5">{l s='User' mod='ebay'}</span>
-                                                            <span class="col-xs-2">{l s='Site ebay' mod='ebay'}</span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='Listings' mod='ebay'}</small></span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='Listing errors' mod='ebay'}</small></span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='Order errors' mod='ebay'}</small></span>
-                                                            <span class="col-xs-1 text-right"><small>{l s='Tasks' mod='ebay'}</small></span>
-                                                        </li>
-                                                        {foreach from=$profiles item=profile}
+                                            {foreach from=$profiles item=profile}
+                                                <tr>
+                                                    <td class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                        <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                            <span id = 'name'>{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                            <span>{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
+                                                        </a>
+                                                    </td>
+                                                    {if $profile.token == 0 }
+                                                        <td colspan="4" class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                                <span class="text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
+                                                            </a>
+                                                        </td>
+                                                    {elseif $profile.category == 0}
+                                                        <td colspan="4" class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                                <span class="text-right">{l s='No category configured' mod='ebay'}</span>
+                                                            </a>
+                                                        </td>
+                                                    {else}
+                                                        <td class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                            <span class="badge badge-success">{$profile.nb_products}</span>
 
-                                                            <li>
-                                                                <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if} clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                                                                    <span id = 'name' class="col-xs-5">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
-                                                                    <span class="col-xs-2">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
-                                                                    {if $profile.token == 0 }
-                                                                        <span class="col-xs-5 text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
-                                                                    {elseif $profile.category == 0}
-                                                                        <span class="col-xs-5 text-right">{l s='No category configured' mod='ebay'}</span>
-                                                                    {else}
-                                                                        <span class="col-xs-1 text-right"><span class="badge badge-success">{$profile.nb_products}</span></span>
-                                                                        <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
-                                                                        <span class="col-xs-1 text-right"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                                                                        <span class="col-xs-1 text-right"><span class="badge badge-primary">{$profile.nb_tasks}</span></span>
-                                                                    {/if}
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                            <span class="badge badge-danger">{$profile.count_product_errors}</span>
 
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                            <span class="badge badge-danger">{$profile.count_order_errors}</span>
+                                                            </a>
 
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                                <span class="badge badge-primary">{$profile.nb_tasks}</span>
+                                                            </a>
+                                                        </td>
+                                                    {/if}
+                                                </tr>
+                                            {/foreach}
 
-                                                                </a>
-                                                            </li>
-                                                        {/foreach}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
 
-                                                    </ul>
-                                                </div>
-                                            </div>
+                            <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}">
+                                <button type="button" class="btn btn-default pull-left" title="{l s='Add profile' mod='ebay'}">
+                                    <i class="icon-plus"></i>
+                                </button>
+                            </a>
 
-                                            <button type="button" class="btn btn-default pull-left" title="{l s='Add profile' mod='ebay'}">
-                                               <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}"> <i class="icon-plus"></i></a>
-                                            </button>
-
-                                            <button type="button" class="btn btn-default pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
-                                                <i class="icon-trash"></i>
-                                            </button>
-                                            {if $debug == 1}
-                                                <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
-                                            {/if}
-                                            <span class="nb_tasks_in_work">
+                            <button type="button" class="btn btn-default pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
+                                <i class="icon-trash"></i>
+                            </button>
+                            {if $debug == 1}
+                                <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
+                            {/if}
+                            <span class="nb_tasks_in_work">
                                                 {l s='In work ' mod='ebay'}<b></b>{l s=' tasks' mod='ebay'} <span class="btn btn-default refreshNbTasksInWork">{l s='Refresh' mod='ebay'}</span>
                                             </span>
 
@@ -481,8 +514,8 @@
     <script>
         var module_dir = "{$_module_dir_|escape:'htmlall':'UTF-8'}";
         // Select item from user dropdown
-        $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
-            $(this).parents('.dropdown').find('.dropdown-menu li a').removeClass('selected');
+        $(document).on('click', '.js-user-dropdown .dropdown-menu td a', function() {
+            $(this).parents('.dropdown').find('.dropdown-menu td a').removeClass('selected');
             $(this).addClass('selected');
             $(this).parents('.dropdown').find('.dropdown-toggle').html($(this).find('#name').html() + ' <span class="caret"></span>');
             $(this).parents('.dropdown').find('.dropdown-toggle').val($(this).find('#name').html());

@@ -68,6 +68,25 @@
                 </thead>
 
                 <tbody>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="text" class="form-control" id="id_product_search"
+                               value="{if isset($search.id_product)}{$search.id_product}{/if}">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="name_product_search"
+                               value="{if isset($search.name_product)}{$search.name_product}{/if}">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-default" id="searchBtnErrors">{l s='Search' mod='ebay'}</button>
+                    </td>
+                </tr>
                 {if isset($task_errors)}
                     {foreach from=$task_errors item="task_error"}
                         <tr>
@@ -145,15 +164,15 @@
 
 {literal}
 <script>
-    $(document).on('click', '#popin-product-corige', function(){
+    $('#popin-product-corige').click(function(){
         $(this).hide();
     });
 
-    $(document).on('click', '#popin-product-corige .panel', function(e){
+    $('#popin-product-corige .panel').click(function(e){
         e.stopPropagation();
     });
 
-    $(document).on('click', '.exclure_product', function (e) {
+    $('.exclure_product').click(function (e) {
         e.preventDefault();
         $('.if_anonnces_exist').attr('id', $(this).attr('id'));
         if($(this).parent().parent().find('.item_id_error').html()){
@@ -162,26 +181,26 @@
         $('#popin-product-exclu').show();
 
     });
-    $(document).on('click', '.corige_product', function (e) {
+    $('.corige_product').click(function (e) {
         e.preventDefault();
         $('.url_product_info').attr('href', $(this).attr('href'));
         $('.error_product').html($(this).parent().parent().find('.error_description').text());
         $('#popin-product-corige').show();
 
     });
-    $(document).on('click', '.js-exclu-confirm', function (e) {
+    $('.js-exclu-confirm').click(function (e) {
         e.preventDefault();
         exclureProduct($('.if_anonnces_exist').attr('id'));
         $('#popin-product-exclu').hide();
         $('.if_anonnces_exist').hide();
         location.reload();
     });
-    $(document).on('click', '.js-notexclu', function (e) {
+    $('.js-notexclu').click(function (e) {
         e.preventDefault();
         $('#popin-product-exclu').hide();
         $('.if_anonnces_exist').hide();
     });
-    $(document).on('click', '.js-corige-ok', function (e) {
+    $('.js-corige-ok').click(function (e) {
         e.preventDefault();
         $('#popin-product-corige').hide();
     });
@@ -189,20 +208,34 @@
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/exclureProductAjax.php',
-            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_product="+id_product,
+            data: "token={/literal}{if isset($ebay_token)}{$ebay_token}{/if}{literal}&id_ebay_profile={/literal}{if isset($id_ebay_profile)}{$id_ebay_profile}{/if}{literal}&id_product="+id_product,
             success: function (data) {
                 $(this).parent().parent().remove();
             }
         });
     }
 
-    $(document).on('click', '.navPaginationListProducErrorsTab .pagination span', function(){
+    $('.navPaginationListProducErrorsTab .pagination span').click(function(){
         var page = $(this).attr('value');
         if(page){
+            var id_product;
+            var name_product;
+
+            id_product = $('#id_product_search').attr('value');
+            name_product = $('#name_product_search').attr('value');
+
+            var data = {
+                id_product: id_product,
+                name_product: name_product,
+                token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}''{/if}{literal},
+                profile: id_ebay_profile,
+                page: page,
+            };
+
             $.ajax({
                 type: "POST",
                 url: module_dir+'ebay/ajax/paginationProductErrors.php',
-                data: "token_for_product={/literal}{if isset($token_for_product)}{$token_for_product}{/if}{literal}&profile=" + id_ebay_profile + "&page=" + page,
+                data: data,
                 beforeSend : function(){
                     var html = '<div style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
                     $('#menuTab80Sheet .panel').empty();
@@ -214,8 +247,38 @@
                 }
             });
         }
+    });
 
 
+    $('#searchBtnErrors').click(function(){
+        var id_product;
+        var name_product;
+
+        id_product = $('#id_product_search').attr('value');
+        name_product = $('#name_product_search').attr('value');
+
+        var data = {
+            id_product: id_product,
+            name_product: name_product,
+            token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
+            profile: id_ebay_profile,
+            page: 1,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: module_dir+'ebay/ajax/paginationProductErrors.php',
+            data: data,
+            beforeSend : function(){
+                var html = '<div style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                $('#menuTab80Sheet .panel').empty();
+                $('#menuTab80Sheet .panel').append(html);
+            },
+            success: function(data)
+            {
+                $('#menuTab80Sheet .panel').html(data)
+            }
+        });
     });
 
     {/literal}

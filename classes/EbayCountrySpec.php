@@ -308,7 +308,7 @@ class EbayCountrySpec
             'documentation' => 'en',
             'language' => 'en_AU',
             'currency' => 'AUD',
-            'site_name' => 'AU',
+            'site_name' => 'Australia',
             'site_extension' => 'com.au',
             'img_stats' => null,
             'iso_code' => 'au',

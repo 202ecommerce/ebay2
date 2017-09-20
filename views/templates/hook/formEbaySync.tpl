@@ -565,7 +565,7 @@
 
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
-<fieldset style="border: 0">
+<fieldset style="border: 0; margin: 0 0 10px;">
 	<a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span>{l s='Add' mod='ebay'} </a>
 	{if isset($img_alert) && !empty($img_alert)}
 		<div class="warning big">
@@ -580,6 +580,7 @@
             {$category_alerts|escape:'htmlall':'UTF-8'}
         </div>
     {/if}
+</fieldset>
 	{*<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 	<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
 	<div class="margin-form">
@@ -601,9 +602,15 @@
 	<div class="margin-form">
 		<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode_1" value="1" {if $ebay_sync_mode == 1}checked="checked"{/if}/> <span data-inlinehelp="{l s='This will only synchronisze products that are not yet listed on eBay.' mod='ebay'}">{l s='Only sync new products' mod='ebay'}</span>
 	</div>*}
-	<div style="display: block;" id="catSync">
-		<div id="searcheEbaySync" style="display:flex; justify-content: flex-end;">
-			<input type="text" style="width:200px" class="name_cat" placeholder="{l s='Searche categories Prestashop' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+<fieldset>
+	<h4>{l s='Search categories Prestashop' mod='ebay'}</h4>
+	<div id="catSync">
+		<div id="searcheEbaySync">
+			<input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+			<input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
+				   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
+			<input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
+				   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
 			<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
 			<button class="researcheBtn btn btn-warning">{l s='Reset' mod='ebay'}</button>
 		</div>
@@ -728,22 +735,15 @@
 							{l s='Impact on price :' mod='ebay'}
 						</label>
 						<div class="input-group col-md-6">
-							<div class="row">
-
-
-									<select name="impact_prix[sign]" class="ebay_select">
-										<option value="+">+</option>
-										<option value="-">-</option>
-									</select>
-									<input type="text" id="impact_prix" name="impact_prix[value]" >
-									<select name="impact_prix[type]" class="ebay_select">
-										<option value="currency">€</option>
-										<option value="percent">%</option>
-									</select>
-
-
-
-							</div>
+							<select name="impact_prix[sign]" class="ebay_select">
+								<option value="+">+</option>
+								<option value="-">-</option>
+							</select>
+							<input type="text" id="impact_prix" name="impact_prix[value]" >
+							<select name="impact_prix[type]" class="ebay_select">
+								<option value="currency">€</option>
+								<option value="percent">%</option>
+							</select>
 						</div>
 					</div>
 
@@ -753,7 +753,7 @@
 					</label>
 					{if $storeCategories}
 					<div class="input-group col-md-6">
-						<select name="store_category" style="width: 200px;">
+						<select name="store_category">
 							{if empty($storeCategories)}
 								<option disabled="disabled"  value="">{l s='Please create a return policy in the Sell section of My eBay' mod='ebay'}</option>
 							{else}
@@ -769,7 +769,7 @@
 				{if $bp_active}
 				<div class="form-group">
 					<label for="" class="control-label col-md-6">
-						{l s='Business Policies* :' mod='ebay'}
+						{l s='Return Policies* :' mod='ebay'}
 					</label>
 					<select name="return_policies" style="width: 200px;">
 						{if empty($RETURN_POLICY)}
@@ -783,7 +783,7 @@
 					</select>
 
 						<label for="" class="control-label col-md-6">
-							{l s='Business Policies* :' mod='ebay'}
+							{l s='Payement  Policies* :' mod='ebay'}
 						</label>
 						<select name="payement_policies" style="width: 200px;">
 						{if empty($PAYEMENTS)}
@@ -902,7 +902,7 @@
 				<button class="js-prev-popin btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
 			</div>
 			<div style="display: none">
-				<select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px; width: 160px;" onchange="changeCategoryMatch(1,0);">
+				<select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px;" onchange="changeCategoryMatch(1,0);">
 					<option value="0">no category selected</option>
 					{foreach from=$ebayCategories item=ebayCategory}
 						<option value="{$ebayCategory.id_ebay_category}" >{$ebayCategory.name}</option>
@@ -917,8 +917,8 @@
 		<div class="panel-heading">
 			<i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
 		</div>
-		<p>{l s='Souhaitez-vous supprimer la synchronisation de la categorie' mod='ebay'} <span class="name_categorie"></span>?</p>
-		<p>{l s='Les annonces eBay apparaitront dans la liste des annonces orphelines ou vous pourrez les supprimer definitivement' mod='ebay'}</p>
+		<p>{l s='Do you want to stop and delete the synchronization of the category' mod='ebay'} <span class="name_categorie"></span>?</p>
+		<p>{l s='Then you can find the eBay products of this category in the orphan listing, where you can delete them definitevely.' mod='ebay'}</p>
 
 		<div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
 			<button class="cancel-delete btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
