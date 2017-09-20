@@ -884,14 +884,15 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, false, $ebay_profile->id_shop);
         if (empty($item_id)) {
-            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, 0);
+           // EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, 0);
             $res = $ebay->addFixedPriceItemMultiSku($data);
             if (isset($res->Errors) && !isset($res->ItemID)) {
                 foreach ($res->Errors as $error) {
                     if ($error->ErrorCode == 21919067) {
-                        $res->ItemID = $res->Errors->ErrorParameters[1];
+                        $res->ItemID = $res->Errors->ErrorParameters[1]->Value;
                         if ($res->ItemID > 0) {
-                            EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, 0);
+                            //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
                         } else {
                             EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, 0);
                         }
@@ -901,7 +902,8 @@ class EbaySynchronizer
                 }
             }
             if ($res->ItemID > 0) {
-                EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, 0);
             } else {
                 EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, 0);
             }
@@ -940,7 +942,7 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $item_id = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop);
         if (empty($item_id)) {
-            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, $id_attribute);
+           // EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_category_ps, $id_attribute);
 
             $data['id_for_sku'] = $id_attribute;
 
@@ -948,9 +950,10 @@ class EbaySynchronizer
             if (isset($res->Errors) && !isset($res->ItemID)) {
                 foreach ($res->Errors as $error) {
                     if ($error->ErrorCode == 21919067) {
-                        $res->ItemID = $res->Errors->ErrorParameters[1];
+                        $res->ItemID = $res->Errors->ErrorParameters[1]->Value;
                         if ($res->ItemID > 0) {
-                            EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
+                            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, $id_attribute);
+                            //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
                         } else {
                             EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, $id_attribute);
                         }
@@ -960,7 +963,8 @@ class EbaySynchronizer
                 }
             }
             if ($res->ItemID > 0) {
-                EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile, $id_attribute);
+                EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, $id_attribute);
+                //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile, $id_attribute);
             } else {
                 EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, $id_attribute);
             }

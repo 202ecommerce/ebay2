@@ -875,8 +875,10 @@ class Ebay extends Module
         $current_date = date('Y-m-d\TH:i:s').'.000Z';
 
         if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
-            foreach ($orders['refund'][0]['cancellations'] as $refund) {
-                $this->importCanceletions($refund);
+            if (isset($orders['return'][0]['cancellations'])) {
+                foreach ($orders['refund'][0]['cancellations'] as $refund) {
+                    $this->importCanceletions($refund);
+                }
             }
             if (isset($orders['return'][0]['members'])) {
                 foreach ($orders['return'][0]['members'] as $return) {
@@ -901,6 +903,11 @@ class Ebay extends Module
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
             if (!$request->getDev()) {
+                if (!$order->checkStatus()) {
+                    $message = $this->l("Payment status '".$order->getStatus()."'");
+                    $order->checkError($message, $ebay_user_identifier);
+                    continue;
+                }
                 if (!$order->isCompleted()) {
                     $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
                     $order->checkError($message, $ebay_user_identifier);

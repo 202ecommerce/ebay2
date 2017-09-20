@@ -174,6 +174,7 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             LEFT OUTER JOIN `'._DB_PREFIX_.'ebay_category_configuration` AS ecc
             ON ec.`id_ebay_category` = ecc.`id_ebay_category`
             AND ecc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
+            AND ecc.`id_category` = '.(int) $id_categori_ps.'
             WHERE ec.`id_country` = '.(int) $ebay_profile->ebay_site_id.'
             
             ORDER BY `level`';

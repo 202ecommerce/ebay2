@@ -246,13 +246,13 @@ class EbayTaskManager
         if ($search && $id_lang) {
             $profile = new EbayProfile($id_ebay_profile);
             $query = "SELECT COUNT(*) as `count` FROM "._DB_PREFIX_."ebay_task_manager etm
-                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".$id_lang." AND pl.id_shop = ".$profile->id_shop."
-                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = $id_ebay_profile";
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".(int) $id_lang." AND pl.id_shop = ".(int) $profile->id_shop."
+                       WHERE etm.error_code NOT IN('0') AND etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".(int) $id_ebay_profile;
             if ($search['id_product']) {
-                $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
+                $query .= " AND pl.id_product LIKE '%".(int) $search['id_product']."%'";
             }
             if ($search['name_product']) {
-                $query .= " AND pl.name LIKE '%".$search['name_product']."%'";
+                $query .= " AND pl.name LIKE '%".pSQL($search['name_product'])."%'";
             }
 
             $result = DB::getInstance()->ExecuteS($query);
@@ -270,15 +270,15 @@ class EbayTaskManager
             $limit = (int) $length;
             $offset = $limit * ( (int) $page_current - 1 );
             $query = "SELECT * FROM "._DB_PREFIX_."ebay_task_manager etm
-                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".$id_lang." AND pl.id_shop = ".$profile->id_shop."
-                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".$id_ebay_profile;
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".(int) $id_lang." AND pl.id_shop = ".(int) $profile->id_shop."
+                       WHERE etm.error_code NOT IN('0') AND etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".(int) $id_ebay_profile;
             if ($search['id_product']) {
-                $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
+                $query .= " AND pl.id_product LIKE '%".(int) $search['id_product']."%'";
             }
             if ($search['name_product']) {
-                $query .= " AND pl.name LIKE '%".$search['name_product']."%'";
+                $query .= " AND pl.name LIKE '%".pSQL($search['name_product'])."%'";
             }
-            $query .=  " ORDER BY `date_add` LIMIT $limit  OFFSET $offset";
+            $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
             //var_dump($query); die();
             return DB::getInstance()->ExecuteS($query);
         }
@@ -289,7 +289,7 @@ class EbayTaskManager
     public static function getErrorsCount($id_ebay_profile)
     {
 
-        return DB::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
+        return DB::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE error_code NOT IN(\'0\') AND `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }
 
     public static function deleteErrorsForProduct($id_product)
@@ -301,7 +301,7 @@ class EbayTaskManager
     public static function getNbTasks($id_ebay_profile)
     {
 
-        $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE `error_code` IS NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
+        $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL) and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
         return count($tasks);
     }
 

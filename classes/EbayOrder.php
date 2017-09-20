@@ -135,6 +135,10 @@ class EbayOrder
         && !empty($this->product_list);
     }
 
+    public function checkStatus()
+    {
+        return $this->status == 'Complete';
+    }
     /**
      * Define if order has a country active in Prestashop configuration.
      * @return bool

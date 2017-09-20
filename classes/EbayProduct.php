@@ -254,7 +254,7 @@ class EbayProduct
                 $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
             }
             $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
-            $sql .= ' ORDER BY ep.`id_product` LIMIT '.$length.' OFFSET '.$offset;
+            $sql .= ' ORDER BY ep.`id_product` LIMIT '.(int) $length.' OFFSET '.(int) $offset;
 
             return Db::getInstance()->ExecuteS($sql, false);
         } else {
