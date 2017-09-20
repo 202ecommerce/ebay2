@@ -292,11 +292,11 @@
             $('#popin-delete-productSync span.name_categorie').html($name_categorie);
 		});
 
-        $(document).on('click', '#popin-delete-productSync .cancel-delete', function(){
+        $('#popin-delete-productSync .cancel-delete').click(function(){
             $('#popin-delete-productSync').hide();
         });
 
-        $(document).on('click', '#popin-delete-productSync .ok-delete', function(){
+        $('#popin-delete-productSync .ok-delete').click(function(){
             $('#popin-delete-productSync').hide();
             var tr = $(product_sync_for_delete).parent().parent();
             var id_category = $(product_sync_for_delete).data('id');
@@ -313,6 +313,7 @@
 
 		$('.add_categories_ps li').live('click', function() {
 			$('.category_ps_list').append($( this ));
+            $('.category_ps_list').children().last().children('button').remove();
 			$('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button>');
 			$('#divPsCategories').html('');
 			$('.js-next-popin').removeAttr('disabled');
