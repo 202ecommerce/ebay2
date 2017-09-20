@@ -91,6 +91,9 @@
                     <i class="icon-refresh"></i>
                     <span>{l s='Réessayer' mod='ebay'}</span>
                 </a>
+                <button class="btn btn-default btn-xs deleteOrderError" data-error="{$error.reference_ebay}">
+                    {l s='Delete' mod='ebay'}
+                </button>
             </td>
         </tr>
     {/foreach}
@@ -137,5 +140,28 @@
            }
        });
    });
+
+   $('.deleteOrderError').click(deleteOrderError);
+
+   function deleteOrderError() {
+       var reference_ebay;
+       var tr;
+
+       reference_ebay = $(this).attr('data-error');
+       tr = $(this).closest('tr');
+        $.ajax({
+            type: 'POST',
+            url : module_dir + 'ebay/ajax/deleteOrderError.php',
+            data : {
+                reference_ebay : reference_ebay,
+                token : '{/literal}{$ebay_token}{literal}',
+            },
+            success : function(data){
+                console.log(data);
+                $(tr).remove();
+            },
+        });
+
+   }
     {/literal}
 </script>
