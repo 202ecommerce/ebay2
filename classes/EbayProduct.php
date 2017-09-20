@@ -186,7 +186,7 @@ class EbayProduct
 			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');
     }
 
-    public static function getCountProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
+    public static function getCountProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $search)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $sql = 'SELECT COUNT(*) as `count`
@@ -194,41 +194,65 @@ class EbayProduct
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
+			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON cl.id_category = p.id_category_default AND cl.id_lang = '.(int) $id_lang.' 
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang;
 
-        $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
+        $sql .= ' AND pl.id_shop = '.(int)$ebay_profile->id_shop;
 
         $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
-
+        if ($search['id_product']) {
+            $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
+        }
+        if ($search['id_product_ebay']) {
+            $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
+        }
+        if ($search['name_product']) {
+            $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
+        }
+        if ($search['name_cat']) {
+            $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
+        }
         $sql .= ' GROUP BY ep.id_product, ep.id_attribute, ep.id_product_ref) AS T';
 
         return Db::getInstance()->ExecuteS($sql);
     }
 
-    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20)
+    public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20, $search = array())
     {
         if ($page_current) {
             $offset = ((int) $page_current - 1) * (int) $length;
             $ebay_profile = new EbayProfile($id_ebay_profile);
             $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
-			pl.`name`, m.`name` as manufacturer_name
+			pl.`name`, m.`name` as manufacturer_name, cl.name as name_cat
 			FROM `'._DB_PREFIX_.'ebay_product` ep
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON cl.id_category = p.id_category_default AND cl.id_lang = '.(int) $id_lang.'
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
 
-            $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
+            $sql .= 'AND pl.id_shop = '.(int)$ebay_profile->id_shop;
 
             $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
             if ($no_blacklisted) {
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
-
+            if ($search['id_product']) {
+                $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
+            }
+            if ($search['id_product_ebay']) {
+                $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
+            }
+            if ($search['name_product']) {
+                $sql .= ' AND pl.`name` LIKE \'%'.pSQL($search['name_product']).'%\'';
+            }
+            if ($search['name_cat']) {
+                $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
+            }
             $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
             $sql .= ' ORDER BY ep.`id_product` LIMIT '.$length.' OFFSET '.$offset;
 
@@ -255,6 +279,16 @@ class EbayProduct
 
             return Db::getInstance()->ExecuteS($sql, false);
         }
+    }
+
+    public static function getProductsIdForSync($id_ebay_profile)
+    {
+        $sql = "SELECT p.id_product 
+                FROM "._DB_PREFIX_."product p
+                LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc ON p.id_product = epc.id_product
+                WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
+                AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
+        return DB::getInstance()->ExecuteS($sql, false);
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)

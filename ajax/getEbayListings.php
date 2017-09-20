@@ -35,5 +35,14 @@ if (Tools::getValue('id_shop')) {
     $context->shop = new Shop((int) Tools::getValue('id_shop'));
 }
 $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
+$length = Tools::getValue('length') ? Tools::getValue('length') : 20;
+
+$search = array(
+    'id_product' =>  Tools::getValue('id_prod'),
+    'id_product_ebay' =>  Tools::getValue('id_prod_ebay'),
+    'name_product' => Tools::getValue('name_prod'),
+    'name_cat' => Tools::getValue('name_cat'),
+);
+
 $ebay = new eBay();
-$ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), (int) Tools::getValue('id_employee'), $page_current);
+$ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), $search, (int) Tools::getValue('id_employee'), $page_current, $length);

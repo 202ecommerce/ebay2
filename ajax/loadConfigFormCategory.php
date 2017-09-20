@@ -209,7 +209,7 @@ if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             $category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).$ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/form_select_change_category_match_input.tpl');
 
             if ($category['percent']) {
-                preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category['percent'], $temp);
+                preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $category['percent'], $temp);
 
                 $category['percent'] = array('sign' => $temp[1], 'value' => $temp[2], 'type' => ($temp[3]==''?'€':$temp[3]));
             } else {

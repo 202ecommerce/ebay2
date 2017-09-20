@@ -51,15 +51,38 @@
     $(document).on('click', '.navPaginationListProductTab .pagination span', function(){
         var page = $(this).attr('value');
         if(page){
+            var id_prod;
+            var id_prod_ebay;
+            var name_cat;
+            var name_prod;
+
+            id_prod = $('#id_prod_search').attr('value');
+            id_prod_ebay = $('#id_prod_ebay_search').attr('value');
+            name_cat = $('#name_cat_search').attr('value');
+            name_prod = $('#name_prod_search').attr('value');
+
+            var data = {
+                token: ebay_token,
+                id_employee: {$id_employee|escape:'htmlall':'UTF-8'},
+                id_shop: id_shop,
+                admin_path: "{$admin_path|escape:'htmlall':'UTF-8'}",
+                page: page,
+                id_prod: id_prod,
+                id_prod_ebay: id_prod_ebay,
+                name_cat: name_cat,
+                name_prod: name_prod,
+			}
+
             $.ajax({
                 type: "POST",
                 url: module_dir+'ebay/ajax/getEbayListings.php',
-                data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}&id_shop="+id_shop+"&admin_path={$admin_path|escape:'htmlall':'UTF-8'}&page="+page,
+                data: data,
                 success: function(data)
                 {
                     $('#ebayListings').fadeOut(400, function(){
                         $(this).html(data).fadeIn();
                     })
+                   
                 }
             });
         }

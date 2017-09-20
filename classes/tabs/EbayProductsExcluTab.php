@@ -26,7 +26,6 @@
 
 class EbayProductsExcluTab extends EbayTab
 {
-
     public function getContent($ebay_profile)
     {
         /*$url_vars = array(

@@ -33,7 +33,7 @@ class EbayProductImage
         $db = Db::getInstance();
 
         $ebay_url = $db->getValue('SELECT `ebay_image_url` from `'._DB_PREFIX_.'ebay_product_image`
-			WHERE `'._DB_PREFIX_.'image_url` = \''.pSQL($ps_url).'\'');
+			WHERE `ps_image_url` = \''.pSQL($ps_url).'\'');
 
         if (!$ebay_url) {
             $ebay_request = new EbayRequest();

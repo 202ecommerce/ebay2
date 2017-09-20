@@ -968,7 +968,7 @@ margin-bottom: 3px;
 	margin-bottom: 18px;
 }
 
-#content .alert { text-align: left; width: 100%; box-sizing: border-box;}
+#content .alert { text-align: left; max-width: 100%; box-sizing: border-box;}
 
 textarea[name='ebay_returns_description']{
 	width:100%;
@@ -1005,3 +1005,156 @@ div.popin_ship_cost {
 	padding: 4px 4px 4px 6px;
 	position: relative;
 }
+
+/* Listings */
+.bootstrap .modifier_cat.btn,
+.bootstrap .delete_cat.btn {
+	margin: 5px 0;
+}
+
+#searcheEbaySync > * + * {
+	margin-left: 15px;
+}
+
+#ebayOrphanReListing .center {
+	display: table;
+}
+
+#ebayOrphanReListing button + button {
+	margin-left: 15px;
+}
+
+.bootstrap #ebayListings .table>tbody>tr>th {
+	border-top: 0;
+	border-bottom: 1px solid #eaedef;
+}
+
+
+.category_product_list_ebay {
+	overflow: auto;
+	max-height: 400px;
+	display: block !important;
+}
+
+#searcheEbaySync {
+	display: flex;
+	justify-content: space-between;
+	margin: 0 0 20px;
+}
+
+#searcheEbaySync > * + * {
+	margin: 0 0 0 15px;
+}
+
+@media all and (max-width: 640px) {
+	#searcheEbaySync {
+		flex-direction: column;
+	}
+
+	#searcheEbaySync > * + * {
+		margin: 15px 0 0;
+	}
+}
+
+/* Profiles */
+.totebay .form-horizontal > a > button {
+	margin-right: 10px;
+}
+
+.bootstrap .open > .dropdown-menu .profiles-beautify .badge {
+
+}
+.bootstrap .open > .dropdown-menu .profiles-beautify {
+	width: 100%;
+}
+.bootstrap .open > .dropdown-menu .profiles-beautify .head td,
+.bootstrap .open > .dropdown-menu .profiles-beautify td a {
+	padding: 5px 10px;
+}
+.bootstrap .open > .dropdown-menu .profiles-beautify td a {
+	display: block;
+}
+.bootstrap .open > .dropdown-menu .profiles-beautify .head {
+	vertical-align: top;
+}
+.bootstrap .open > .dropdown-menu .profiles-beautify tr + tr:hover {
+	background: #00aff0;
+}
+.bootstrap .open > .dropdown-menu .profiles-beautify tr + tr:hover a {
+	color: #fff;
+	text-decoration: none;
+}
+.bootstrap .open> .dropdown-menu .profiles-beautify td > a.selected > span:before {
+	position: absolute;
+	left: 4px;
+	content: '\f00c';
+	font-family: "fontAwesome";
+	color: #3c763d;
+}
+.bootstrap .open> .dropdown-menu .profiles-beautify tr td:first-child > * {
+padding-left: 20px;
+}
+
+.bootstrap .open> .dropdown-menu .profiles-beautify tr td:last-child > * {
+padding-right: 20px;
+}
+
+tr.head td:first-child > * {
+	padding-left: 10px !important;
+}
+
+tr.head td:last-child > * {
+	padding-right: 10px !important;
+}
+
+/*.bootstrap .open > .dropdown-menu .profiles-beautify {*/
+	/*display: table;*/
+	/*padding-left: 0;*/
+	/*margin-bottom: 0;*/
+/*}*/
+
+/*.bootstrap .open > .dropdown-menu .profiles-beautify > li {*/
+	/*display: table-row;*/
+/*}*/
+
+/*.bootstrap .open > .dropdown-menu .profiles-beautify > li:hover a {*/
+	/*text-decoration: none;*/
+	/*color: #fff;*/
+	/*background-color: #00aff0;*/
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a.selected > span:before {*/
+	/*position: absolute;*/
+	/*left: 4px;*/
+	/*content: '\f00c';*/
+	/*font-family: "fontAwesome";*/
+	/*color: #3c763d;*/
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span,*/
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a {*/
+	/*display: table-cell;*/
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span,*/
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a {*/
+	/*padding: 5px !important;*/
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span:first-child,*/
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a:first-child {*/
+	/*padding-left: 20px !important;*/
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span:last-child,*/
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a:last-child {*/
+	/*padding-right: 20px !important;*/
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span {*/
+
+/*}*/
+
+/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span > span {*/
+	/*display: inline-block;*/
+/*}*/

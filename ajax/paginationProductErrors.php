@@ -35,9 +35,15 @@ $token_for_product = Tools::getValue('token_for_product');
 $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
 $length = Tools::getValue('length') ? Tools::getValue('length') : 20;
 $id_ebay_profile = Tools::getValue('profile');
+
+$search = array(
+    'id_product' => Tools::getValue('id_product'),
+    'name_product' => Tools::getValue('name_product'),
+);
+
 $ebay = new Ebay();
 $context = Context::getContext();
 $ebayErrorsProducts = new EbayListErrorsProductsTab($ebay, $context->smarty, $context);
-$response = $ebayErrorsProducts->getContent($id_ebay_profile, $page_current, $length, $token_for_product);
+$response = $ebayErrorsProducts->getContent($id_ebay_profile, $page_current, $length, $token_for_product, $search);
 echo $response;
 die();

@@ -25,6 +25,18 @@
 <form action="{$formUrl|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel">
 	<script type="text/javascript">
 		// <![CDATA[
+
+		function checkCountShippingInternational(){
+			var shipping = $('#internationalShipping table');
+			if (shipping.length >= 5){
+				$('#internationalShippingButton').hide();
+				$('#transportInterWarning').show();
+			}
+		}
+
+        checkCountShippingInternational();
+
+
 		function addInterShipping(currentName, idPSCarrier, idEbayCarrier, additionalFee, nbSelect, id_zone, zone) {
 			var lastId = 0;
 			var current = $("#"+currentName);
@@ -384,8 +396,11 @@
 			$('#internationalShippingButton').unbind().click(function(){
 				addInterShipping($(this).attr('id').replace('Button', ''));
 				checkGlobalShippingConfiguration();
+				checkCountShippingInternational();
 				return false;
 			});
+
+
 
 			{literal}
 			$('.shipping_destinations input').unbind().click(function(el){
@@ -549,6 +564,10 @@
 				{l s='Add new international carrier' mod='ebay'}
 			</span>
 		</a>
+		<div class="alert alert-warning" style="display: none;" id="transportInterWarning">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+            {l s='Maximum transporteur reached' mod='ebay'}
+		</div>
 	</fieldset>
 
 	<fieldset style="margin-top: 20px">
