@@ -90,11 +90,7 @@
     });
 
     $(document).on('click', '.deleteAllLog', function(){
-        var ids = [];
-        $('.logCheck').each(function(){
-            ids.push($(this).attr('value'));
-        });
-        deleteTasksByIds(ids);
+        deleteTasksByIds('all');
     });
 
     $(document).on('click', '.deleteSelectedLog', function(){
@@ -106,25 +102,29 @@
     });
 
     function deleteTasksByIds(ids_tasks) {
-        if (ids_tasks.length == 0){
-            console.log('vfgsfgs');
-            return;
-        }
-        $.ajax({
-            type : 'POST',
-            url : module_dir+'ebay/ajax/deleteTasks.php',
-            data : {
-                ids_tasks : ids_tasks
-            },
-            success : function(data){
-                $('.logCheck').each(function(){
-                    if (ids_tasks.indexOf($(this).attr('value')) != -1){
-                        $(this).closest('tr').remove();
+        if (ids_tasks == 'all' || ids_tasks.length != 0){
+            $.ajax({
+                type : 'POST',
+                url : module_dir+'ebay/ajax/deleteTasks.php',
+                data : {
+                    ids_tasks : ids_tasks,
+                    type : 'log'
+                },
+                success : function(data){
+                    if (ids_tasks == 'all'){
+                        $('#contentLogJobsTab').empty();
+                    } else{
+                        $('.logCheck').each(function(){
+                            if (ids_tasks.indexOf($(this).attr('value')) != -1){
+                                $(this).closest('tr').remove();
+                            }
+                        });
                     }
 
-                });
-            }
-        })
+                }
+            })
+        }
+
     }
 
 </script>

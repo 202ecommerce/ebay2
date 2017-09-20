@@ -32,8 +32,16 @@ require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'confi
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
 $ids_tasks = Tools::getValue('ids_tasks');
-$ids_tasks = pSQL(implode(', ', $ids_tasks));
+if ($ids_tasks == 'all'){
+    if (Tools::getValue('type') == 'work'){
+        DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE `locked` != 0");
+    } else{
+        DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager");
+    }
+} else{
+    $ids_tasks = pSQL(implode(', ', $ids_tasks));
+    DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE id IN ($ids_tasks)");
+}
 
-DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE id IN ($ids_tasks)");
 die();
 
