@@ -228,7 +228,7 @@
 				{l s='Number of additional pictures' mod='ebay'}
 			</label>
 			<div class="col-sm-9">
-				<input type="number" class="form-control" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
+				<input type="number" class="form-control width-num" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
@@ -323,8 +323,8 @@
 				<a class="kb-help" data-errorcode="{$help_limit_of_stock.error_code}" data-module="ebay" data-lang="{$help_limit_of_stock.lang}" module_version="{$help_limit_of_stock.module_version}" prestashop_version="{$help_limit_of_stock.ps_version}" href="" target="_blank"></a>
 			</label>
 			<div class="col-sm-9">
-				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control" id="limitEbayStock"
-					   value="{if $limitEbayStock || $limitEbayStock === '0'}{$limitEbayStock}{else}50{/if}" style="width:50px">
+				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control width-num" id="limitEbayStock"
+					   value="{if $limitEbayStock || $limitEbayStock === '0'}{$limitEbayStock}{else}50{/if}">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
@@ -373,7 +373,7 @@
                 height = $(this).find('option:selected').attr('data-height');
 
                 if (+width < 800 || +height < 800){
-                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>x</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
+                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>×</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
                     $('#annoncestab1').closest('.panel').before(warning);
                 }
 			});

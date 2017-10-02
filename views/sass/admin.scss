@@ -10,7 +10,7 @@
 
 .totebay {
   // Helpers
-.d-b {
+  .d-b {
     display: block;
   }
 
@@ -28,6 +28,26 @@
 
   .pos-a {
     position: absolute;
+  }
+
+  .width-num {
+    width: 60px !important;
+  }
+
+  // Rewrite styles
+  .js-popin-help {
+    text-decoration: none !important;
+  }
+
+  .alert,
+  #carrier_wizard .wizard_error {
+    padding: 7px;
+    margin-bottom: 10px;
+    padding-left: 10px !important;
+  }
+
+  .alert:before {
+    content: '' !important;
   }
 
   // General styling
@@ -80,7 +100,7 @@
     &.popin-sm > .panel {
       max-width: 500px;
     }
-  }  
+  }
 
   // Item list (eg. category selection)
   .item-list {
@@ -114,12 +134,12 @@
   // Colored badge in panel-heading
   .panel-heading .badge {
     &.badge-success {
-      border-color: #72C279 !important; 
+      border-color: #72C279 !important;
       color: #fff !important;
       background-color: #72C279 !important;
     }
   }
-  
+
   // Custom dropdown for user selection menu
   .js-user-dropdown {
     .dropdown-menu {
@@ -166,6 +186,148 @@
     }
     .navbar-header &.open .dropdown-toggle {
       background-color: #000 !important;
+    }
+  }
+
+  // KB
+  .kb-help {
+    display: none;
+
+    .active {
+      display: inline-block;
+
+      [class^="icon-"] {
+        font-size: 16px;
+      }
+    }
+  }
+
+  // Table block
+  .table-block-below { /* removes margin-top:-20px in .table-block if there is some tag above it */
+    margin: 0 0 15px;
+
+    + .table-block h4 {
+      margin-top: 0;
+    }
+  }
+
+  .table-block {
+    margin: 0 -20px;
+
+    > * + * {
+      border-top: 1px solid #d3d8db;
+    }
+
+    .table-block-holder {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+
+    .table-block-title {
+      margin: -20px 0 0;
+      padding: 15px 0;
+    }
+
+    .search-ebay-sync {
+      padding: 20px 0;
+      background: #f0f0f0;
+
+      input {
+        background: #fff;
+      }
+      
+      .searcheBtn,
+      .researcheBtn {
+        &:hover {
+          background: #1e94ab;
+        }
+      }
+    }
+
+    .table-wrapper {
+      overflow: auto;
+
+      .table {
+        border-collapse: collapse;
+        tr {
+          th, td {
+            border: 1px solid #eaedef;
+
+            &:first-child {
+              padding-left: 20px;
+            }
+            &:last-child {
+              padding-right: 20px;
+            }
+
+            &:hover {
+              td {
+                background: #fff;
+              }
+            }
+          }
+
+          th {
+            border-bottom: 1px solid #ddd;
+          }
+        }
+
+        tbody {
+          tr {
+            &:nth-child(odd) {
+              td {
+                background: #f8f8f8;
+              }
+
+              &:hover {
+                td {
+                  background: #f4f8fb;
+                }
+              }
+            }
+          }
+        }
+
+        .action {
+          white-space: nowrap;
+
+          .delete_cat {
+            &:hover {
+              background-color: #d9534f;
+              border-color: #d9534f;
+            }
+          }
+        }
+
+        // Status inputs
+        input {
+          &.categorySync[type="checkbox"] {
+            display: none;
+
+            + label {
+              width: 35px;
+
+              &:before {
+                font-family: 'fontawesome', sans-serif;
+                color: #d9534f;
+                content: "\f00d";
+                font-size: 13px;
+              }
+
+              &:hover {
+                background: #fff;
+                border-color: #ccc;
+                box-shadow: inset 0 0 1px #ccc;
+              }
+            }
+
+            &:checked + label:before{
+              color: #5cb85c;
+              content:"\f00c";
+            }
+          }
+        }
+      }
     }
   }
 }

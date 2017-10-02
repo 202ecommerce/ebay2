@@ -28,6 +28,7 @@
 
 <br>
 <h4>{l s='Products' mod='ebay'}</h4>
+    <i class="fa fa-address-book" aria-hidden="true"></i>
     {l s='Number of PrestaShop categories :' mod='ebay'} {$nb_categories}<br>
     {l s='Number of excluded products :' mod='ebay'} {$nb_products_exclu}<br>
    

@@ -1,453 +1,491 @@
-
-#tabList .margin-form > p > a {
-	text-decoration: underline;
-}
-
-select.ebay_select {
-	color:#000 !important;
-}
-
-.mceIframeContainer iframe {
-	width: 800px !important;
-}
-
-.ebay_center {
-	text-align: center !important;
-}
-
-#statsForm div.label {
-	width: 100%;
-	margin-bottom: 10px;
-	font-weight: bold;
-}
-
-#statsForm div.input {
-	margin-bottom: 5px;
-}
-
-#statsForm div.input input {
-	margin-right: 3px;
-}
-
-#statsForm div.input:last-child {
-	margin-bottom: 10px;
-}
-
-#statsForm .primary {
-	margin-top: 10px;
-}
-
-
-#fancybox-loading {
-	display: none;
-}
-
-input.primary {
-	text-shadow: none;
-	background-image: none;
-	background-color: #0055AA;
-	background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
-	background: -moz-linear-gradient(center top, #0055FF, #0055AA) repeat scroll 0 0 transparent;
-	color: white;
-}
-
-.tooltip {
-	vertical-align: middle;
-	display: inline-block;
-	margin-left: 3px;
-}
-
-textarea + .tooltip {
-	vertical-align: top;
-}
-
-/* Tips */
-
-
-/* This is the 	 Tooltipster theme (feel free to modify or duplicate and create multiple themes!): */
-.tooltipster-default {
-	border-radius: 5px; 
-	border: 1px solid #000;
-	background: #4c4c4c;
-	color: #fff;
-}
-
-/* Use this next selector to style things like font-size and line-height: */
-.tooltipster-default .tooltipster-content {
-	font-family: inherit;
-	font-size: 11px;
-	line-height: 16px;
-	padding: 4px 5px;
-	overflow: hidden;
-}
-
-/* This next selector defines the color of the border on the outside of the arrow. This will automatically match the color and size of the border set on the main tooltip styles. Set display: none; if you would like a border around the tooltip but no border around the arrow */
-.tooltipster-default .tooltipster-arrow .tooltipster-arrow-border {
-	/* border-color: ... !important; */
-}
-
-
-/* If you're using the icon option, use this next selector to style them */
-.tooltipster-icon {
-	cursor: help;
-	margin-left: 4px;
-}
-
-/* This is the base styling required to make all Tooltipsters work */
-.tooltipster-base {
-	padding: 0;
-	font-size: 0;
-	line-height: 0;
-	position: absolute;
-	z-index: 9999999;
-	pointer-events: none;
-	width: auto;
-	overflow: visible;
-}
-.tooltipster-base .tooltipster-content {
-	overflow: hidden;
-}
-
-
-/* These next classes handle the styles for the little arrow attached to the tooltip. By default, the arrow will inherit the same colors and border as what is set on the main tooltip itself. */
-.tooltipster-arrow {
-	display: block;
-	text-align: center;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: -1;
-}
-.tooltipster-arrow span, .tooltipster-arrow-border {
-	display: block;
-	width: 0; 
-	height: 0;
-	position: absolute;
-}
-.tooltipster-arrow-top span, .tooltipster-arrow-top-right span, .tooltipster-arrow-top-left span {
-	border-left: 8px solid transparent !important;
-	border-right: 8px solid transparent !important;
-	border-top: 8px solid;
-	bottom: -8px;
-}
-.tooltipster-arrow-top .tooltipster-arrow-border, .tooltipster-arrow-top-right .tooltipster-arrow-border, .tooltipster-arrow-top-left .tooltipster-arrow-border {
-	border-left: 9px solid transparent !important;
-	border-right: 9px solid transparent !important;
-	border-top: 9px solid;
-	bottom: -8px;
-}
-
-.tooltipster-arrow-bottom span, .tooltipster-arrow-bottom-right span, .tooltipster-arrow-bottom-left span {
-	border-left: 8px solid transparent !important;
-	border-right: 8px solid transparent !important;
-	border-bottom: 8px solid;
-	top: -8px;
-}
-.tooltipster-arrow-bottom .tooltipster-arrow-border, .tooltipster-arrow-bottom-right .tooltipster-arrow-border, .tooltipster-arrow-bottom-left .tooltipster-arrow-border {
-	border-left: 9px solid transparent !important;
-	border-right: 9px solid transparent !important;
-	border-bottom: 9px solid;
-	top: -8px;
-}
-.tooltipster-arrow-top span, .tooltipster-arrow-top .tooltipster-arrow-border, .tooltipster-arrow-bottom span, .tooltipster-arrow-bottom .tooltipster-arrow-border {
-	left: 0;
-	right: 0;
-	margin: 0 auto;
-}
-.tooltipster-arrow-top-left span, .tooltipster-arrow-bottom-left span {
-	left: 6px;
-}
-.tooltipster-arrow-top-left .tooltipster-arrow-border, .tooltipster-arrow-bottom-left .tooltipster-arrow-border {
-	left: 5px;
-}
-.tooltipster-arrow-top-right span,  .tooltipster-arrow-bottom-right span {
-	right: 6px;
-}
-.tooltipster-arrow-top-right .tooltipster-arrow-border, .tooltipster-arrow-bottom-right .tooltipster-arrow-border {
-	right: 5px;
-}
-.tooltipster-arrow-left span, .tooltipster-arrow-left .tooltipster-arrow-border {
-	border-top: 8px solid transparent !important;
-	border-bottom: 8px solid transparent !important; 
-	border-left: 8px solid;
-	top: 50%;
-	margin-top: -7px;
-	right: -8px;
-}
-.tooltipster-arrow-left .tooltipster-arrow-border {
-	border-top: 9px solid transparent !important;
-	border-bottom: 9px solid transparent !important; 
-	border-left: 9px solid;
-	margin-top: -8px;
-}
-.tooltipster-arrow-right span, .tooltipster-arrow-right .tooltipster-arrow-border {
-	border-top: 8px solid transparent !important;
-	border-bottom: 8px solid transparent !important; 
-	border-right: 8px solid;
-	top: 50%;
-	margin-top: -7px;
-	left: -8px;
-}
-.tooltipster-arrow-right .tooltipster-arrow-border {
-	border-top: 9px solid transparent !important;
-	border-bottom: 9px solid transparent !important; 
-	border-right: 9px solid;
-	margin-top: -8px;
-}
-
-
-/* Some CSS magic for the awesome animations - feel free to make your own custom animations and reference it in your Tooltipster settings! */
-
-.tooltipster-fade {
-	opacity: 0;
-	-webkit-transition-property: opacity;
-	-moz-transition-property: opacity;
-	-o-transition-property: opacity;
-	-ms-transition-property: opacity;
-	transition-property: opacity;
-}
-.tooltipster-fade-show {
-	opacity: 1;
-}
-
-.tooltipster-grow {
-	-webkit-transform: scale(0,0);
-	-moz-transform: scale(0,0);
-	-o-transform: scale(0,0);
-	-ms-transform: scale(0,0);
-	transform: scale(0,0);
-	-webkit-transition-property: -webkit-transform;
-	-moz-transition-property: -moz-transform;
-	-o-transition-property: -o-transform;
-	-ms-transition-property: -ms-transform;
-	transition-property: transform;
-	-webkit-backface-visibility: hidden;
-}
-.tooltipster-grow-show {
-	-webkit-transform: scale(1,1);
-	-moz-transform: scale(1,1);
-	-o-transform: scale(1,1);
-	-ms-transform: scale(1,1);
-	transform: scale(1,1);
-	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
-	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
-}
-
-.tooltipster-swing {
-	opacity: 0;
-	-webkit-transform: rotateZ(4deg);
-	-moz-transform: rotateZ(4deg);
-	-o-transform: rotateZ(4deg);
-	-ms-transform: rotateZ(4deg);
-	transform: rotateZ(4deg);
-	-webkit-transition-property: -webkit-transform, opacity;
-	-moz-transition-property: -moz-transform;
-	-o-transition-property: -o-transform;
-	-ms-transition-property: -ms-transform;
-	transition-property: transform;
-}
-.tooltipster-swing-show {
-	opacity: 1;
-	-webkit-transform: rotateZ(0deg);
-	-moz-transform: rotateZ(0deg);
-	-o-transform: rotateZ(0deg);
-	-ms-transform: rotateZ(0deg);
-	transform: rotateZ(0deg);
-	-webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 1);
-	-webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-	-moz-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-	-ms-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-	-o-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-	transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
-}
-
-.tooltipster-fall {
-	top: 0;
-	-webkit-transition-property: top;
-	-moz-transition-property: top;
-	-o-transition-property: top;
-	-ms-transition-property: top;
-	transition-property: top;
-	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
-	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-}
-.tooltipster-fall-show {
-}
-.tooltipster-fall.tooltipster-dying {
-	-webkit-transition-property: all;
-	-moz-transition-property: all;
-	-o-transition-property: all;
-	-ms-transition-property: all;
-	transition-property: all;
-	top: 0px !important;
-	opacity: 0;
-}
-
-.tooltipster-slide {
-	left: -40px;
-	-webkit-transition-property: left;
-	-moz-transition-property: left;
-	-o-transition-property: left;
-	-ms-transition-property: left;
-	transition-property: left;
-	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
-	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	-o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-	transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
-}
-.tooltipster-slide.tooltipster-slide-show {
-}
-.tooltipster-slide.tooltipster-dying {
-	-webkit-transition-property: all;
-	-moz-transition-property: all;
-	-o-transition-property: all;
-	-ms-transition-property: all;
-	transition-property: all;
-	left: 0px !important;
-	opacity: 0;
-}
-
-
-/* CSS transition for when contenting is changing in a tooltip that is still open. The only properties that will NOT transition are: width, height, top, and left */
-.tooltipster-content-changing {
-	opacity: 0.5;
-	-webkit-transform: scale(1.1, 1.1);
-	-moz-transform: scale(1.1, 1.1);
-	-o-transform: scale(1.1, 1.1);
-	-ms-transform: scale(1.1, 1.1);
-	transform: scale(1.1, 1.1);
-}
-
-.warning
-{
-	background : url('../img/warning.png') no-repeat 2px 50%;
-}
-#content .warning.big.tips {
-	background : url('../img/tips.png') no-repeat 2px 50% #fff;
-}
-#content .warning.big, #content .ebay_mind.big, #content .ebay_wrong{
-	padding: 20px 20px 20px 60px;
-	border-top: 1px solid #fff;
-	border-bottom: 1px solid #fff;
-	width: 100%;
-	background: url('../img/big-warning.png') no-repeat 17px 50% #fff;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-o-box-sizing: border-box;
-	font-weight:bold;
-	margin-bottom:10px;
-}
-
-#content .ebay_wrong.big{
-	background : url('../img/big-error.png') no-repeat 17px 50% #fff;
-}
-
-.menu-msg { display: none; }
-
-
-
-.pagination
-{
-	overflow: hidden;
-	margin-bottom: 5px;
-	list-style: none;
-}
-
-.pagination li
-{
-	width: 15px;
-	height: 15px;
-	text-align: center;
-	cursor: pointer;
-	float: left;
-	margin-left: 5px;
-}
-
-.pagination li:hover
-{
-	color: #0055FF;
-}
-
-.pagination li:first-child
-{
-	margin-left: 0;
-}
-
-
-.pagination li.prev,
-.pagination li.next
-{
-	background: #ffffff;
-	border: 1px solid #585A69;
-}
-
-.pagination li.current
-{
-	border: 1px solid #585A69;
-	color: #0055FF;
-}
-
-#domesticShipping td.linked, #internationalShipping td.linked
-{
-	/*background : url('../img/link.png') no-repeat 0 15px;*/
-	padding-left: 45px;
-	position: relative;
-}
-
-#domesticShipping td.linked::before, #internationalShipping td.linked::before {
-	position: absolute;
-	left: 12px;
-	content: '\f0c1';
-	font-size: 20px;
-	font-family: 'Fontawesome';
-}
-
-.shipping_destinations ul, .shipping_destinations ul li{
-	list-style:none;
-}
-
-#ebay_trash
-{
-	cursor:pointer;
-}
-
-.ebay_shipping_text, .presta_shipping_text
-{
-	text-decoration:underline;cursor:pointer;
-}
-
-.shipping_configured
-{
-	width: 100%; 
-	margin-bottom: 20px; 
-	background-color: rgb(221, 242, 219) !important;
-}
-
-.shipping_not_configured
-{
-	width:100%;
-	margin-bottom:20px;
-	background-color:#FFF;
-}
-
-#domesticShipping td.big-linked, #internationalShipping td.big-linked
-{
-	background-position: left center;
-}
-
-fieldset.new {
+/**
+ * Ebay specific styling
+ *
+ * Every rule should be incapsulated in the .totebay selector
+ * to prevent styling elements outside the module container.
+ */
+.totebay {
+  /* Tips */
+  /* This is the 	 Tooltipster theme (feel free to modify or duplicate and create multiple themes!): */
+  /* Use this next selector to style things like font-size and line-height: */
+  /* This next selector defines the color of the border on the outside of the arrow. This will automatically match the color and size of the border set on the main tooltip styles. Set display: none; if you would like a border around the tooltip but no border around the arrow */
+  /* If you're using the icon option, use this next selector to style them */
+  /* This is the base styling required to make all Tooltipsters work */
+  /* These next classes handle the styles for the little arrow attached to the tooltip. By default, the arrow will inherit the same colors and border as what is set on the main tooltip itself. */
+  /* Some CSS magic for the awesome animations - feel free to make your own custom animations and reference it in your Tooltipster settings! */
+  /* CSS transition for when contenting is changing in a tooltip that is still open. The only properties that will NOT transition are: width, height, top, and left */
+  /* welcome boxes */
+  /* override PrestaShop css */
+  /* from formConfig.tpl */
+  /*Tab 4 - Category*/
+  /*KB*/
+  /*FORM REGISTER*/
+  /*SYNCHRONIZATION > TAB 1*/
+  /* Listings */
+  /* Profiles */
+  /*.bootstrap .open > .dropdown-menu .profiles-beautify {*/
+  /*display: table;*/
+  /*padding-left: 0;*/
+  /*margin-bottom: 0;*/
+  /*}*/
+  /*.bootstrap .open > .dropdown-menu .profiles-beautify > li {*/
+  /*display: table-row;*/
+  /*}*/
+  /*.bootstrap .open > .dropdown-menu .profiles-beautify > li:hover a {*/
+  /*text-decoration: none;*/
+  /*color: #fff;*/
+  /*background-color: #00aff0;*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > a.selected > span:before {*/
+  /*position: absolute;*/
+  /*left: 4px;*/
+  /*content: '\f00c';*/
+  /*font-family: "fontAwesome";*/
+  /*color: #3c763d;*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > span,*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > a {*/
+  /*display: table-cell;*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > span,*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > a {*/
+  /*padding: 5px !important;*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > span:first-child,*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > a:first-child {*/
+  /*padding-left: 20px !important;*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > span:last-child,*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > a:last-child {*/
+  /*padding-right: 20px !important;*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > span {*/
+  /*}*/
+  /*.bootstrap .open> .dropdown-menu .profiles-beautify li > span > span {*/
+  /*display: inline-block;*/
+  /*}*/
+}
+.totebay #tabList .margin-form > p > a {
+  text-decoration: underline;
+}
+.totebay select.ebay_select {
+  color: #000 !important;
+}
+.totebay .mceIframeContainer iframe {
+  width: 800px !important;
+}
+.totebay .ebay_center {
+  text-align: center !important;
+}
+.totebay #statsForm div.label {
+  width: 100%;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.totebay #statsForm div.input {
+  margin-bottom: 5px;
+}
+.totebay #statsForm div.input input {
+  margin-right: 3px;
+}
+.totebay #statsForm div.input:last-child {
+  margin-bottom: 10px;
+}
+.totebay #statsForm .primary {
+  margin-top: 10px;
+}
+.totebay #fancybox-loading {
+  display: none;
+}
+.totebay input.primary {
+  text-shadow: none;
+  background-image: none;
+  background-color: #0055AA;
+  background: -webkit-gradient(linear, center top, center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(center top, #0055FF, #0055AA) repeat scroll 0 0 transparent;
+  color: white;
+}
+.totebay .tooltip {
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 3px;
+}
+.totebay textarea + .tooltip {
+  vertical-align: top;
+}
+.totebay .tooltipster-default {
+  border-radius: 5px;
+  border: 1px solid #000;
+  background: #4c4c4c;
+  color: #fff;
+}
+.totebay .tooltipster-default .tooltipster-content {
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 4px 5px;
+  overflow: hidden;
+}
+.totebay .tooltipster-default .tooltipster-arrow .tooltipster-arrow-border {
+  /* border-color: ... !important; */
+}
+.totebay .tooltipster-icon {
+  cursor: help;
+  margin-left: 4px;
+}
+.totebay .tooltipster-base {
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  z-index: 9999999;
+  pointer-events: none;
+  width: auto;
+  overflow: visible;
+}
+.totebay .tooltipster-base .tooltipster-content {
+  overflow: hidden;
+}
+.totebay .tooltipster-arrow {
+  display: block;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.totebay .tooltipster-arrow span {
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.totebay .tooltipster-arrow-border {
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.totebay .tooltipster-arrow-top span, .totebay .tooltipster-arrow-top-right span, .totebay .tooltipster-arrow-top-left span {
+  border-left: 8px solid transparent !important;
+  border-right: 8px solid transparent !important;
+  border-top: 8px solid;
+  bottom: -8px;
+}
+.totebay .tooltipster-arrow-top .tooltipster-arrow-border, .totebay .tooltipster-arrow-top-right .tooltipster-arrow-border, .totebay .tooltipster-arrow-top-left .tooltipster-arrow-border {
+  border-left: 9px solid transparent !important;
+  border-right: 9px solid transparent !important;
+  border-top: 9px solid;
+  bottom: -8px;
+}
+.totebay .tooltipster-arrow-bottom span, .totebay .tooltipster-arrow-bottom-right span, .totebay .tooltipster-arrow-bottom-left span {
+  border-left: 8px solid transparent !important;
+  border-right: 8px solid transparent !important;
+  border-bottom: 8px solid;
+  top: -8px;
+}
+.totebay .tooltipster-arrow-bottom .tooltipster-arrow-border, .totebay .tooltipster-arrow-bottom-right .tooltipster-arrow-border, .totebay .tooltipster-arrow-bottom-left .tooltipster-arrow-border {
+  border-left: 9px solid transparent !important;
+  border-right: 9px solid transparent !important;
+  border-bottom: 9px solid;
+  top: -8px;
+}
+.totebay .tooltipster-arrow-top span, .totebay .tooltipster-arrow-top .tooltipster-arrow-border {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+.totebay .tooltipster-arrow-bottom span, .totebay .tooltipster-arrow-bottom .tooltipster-arrow-border {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+.totebay .tooltipster-arrow-top-left span, .totebay .tooltipster-arrow-bottom-left span {
+  left: 6px;
+}
+.totebay .tooltipster-arrow-top-left .tooltipster-arrow-border, .totebay .tooltipster-arrow-bottom-left .tooltipster-arrow-border {
+  left: 5px;
+}
+.totebay .tooltipster-arrow-top-right span, .totebay .tooltipster-arrow-bottom-right span {
+  right: 6px;
+}
+.totebay .tooltipster-arrow-top-right .tooltipster-arrow-border, .totebay .tooltipster-arrow-bottom-right .tooltipster-arrow-border {
+  right: 5px;
+}
+.totebay .tooltipster-arrow-left span {
+  border-top: 8px solid transparent !important;
+  border-bottom: 8px solid transparent !important;
+  border-left: 8px solid;
+  top: 50%;
+  margin-top: -7px;
+  right: -8px;
+}
+.totebay .tooltipster-arrow-left .tooltipster-arrow-border {
+  border-top: 8px solid transparent !important;
+  border-bottom: 8px solid transparent !important;
+  border-left: 8px solid;
+  top: 50%;
+  margin-top: -7px;
+  right: -8px;
+  border-top: 9px solid transparent !important;
+  border-bottom: 9px solid transparent !important;
+  border-left: 9px solid;
+  margin-top: -8px;
+}
+.totebay .tooltipster-arrow-right span {
+  border-top: 8px solid transparent !important;
+  border-bottom: 8px solid transparent !important;
+  border-right: 8px solid;
+  top: 50%;
+  margin-top: -7px;
+  left: -8px;
+}
+.totebay .tooltipster-arrow-right .tooltipster-arrow-border {
+  border-top: 8px solid transparent !important;
+  border-bottom: 8px solid transparent !important;
+  border-right: 8px solid;
+  top: 50%;
+  margin-top: -7px;
+  left: -8px;
+  border-top: 9px solid transparent !important;
+  border-bottom: 9px solid transparent !important;
+  border-right: 9px solid;
+  margin-top: -8px;
+}
+.totebay .tooltipster-fade {
+  opacity: 0;
+  -webkit-transition-property: opacity;
+  -moz-transition-property: opacity;
+  -o-transition-property: opacity;
+  -ms-transition-property: opacity;
+  transition-property: opacity;
+}
+.totebay .tooltipster-fade-show {
+  opacity: 1;
+}
+.totebay .tooltipster-grow {
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  transform: scale(0, 0);
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -o-transition-property: -o-transform;
+  -ms-transition-property: -ms-transform;
+  transition-property: transform;
+  -webkit-backface-visibility: hidden;
+}
+.totebay .tooltipster-grow-show {
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+}
+.totebay .tooltipster-swing {
+  opacity: 0;
+  -webkit-transform: rotateZ(4deg);
+  -moz-transform: rotateZ(4deg);
+  -o-transform: rotateZ(4deg);
+  -ms-transform: rotateZ(4deg);
+  transform: rotateZ(4deg);
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform;
+  -o-transition-property: -o-transform;
+  -ms-transition-property: -ms-transform;
+  transition-property: transform;
+}
+.totebay .tooltipster-swing-show {
+  opacity: 1;
+  -webkit-transform: rotateZ(0deg);
+  -moz-transform: rotateZ(0deg);
+  -o-transform: rotateZ(0deg);
+  -ms-transform: rotateZ(0deg);
+  transform: rotateZ(0deg);
+  -webkit-transition-timing-function: cubic-bezier(0.23, 0.635, 0.495, 1);
+  -webkit-transition-timing-function: cubic-bezier(0.23, 0.635, 0.495, 2.4);
+  -moz-transition-timing-function: cubic-bezier(0.23, 0.635, 0.495, 2.4);
+  -ms-transition-timing-function: cubic-bezier(0.23, 0.635, 0.495, 2.4);
+  -o-transition-timing-function: cubic-bezier(0.23, 0.635, 0.495, 2.4);
+  transition-timing-function: cubic-bezier(0.23, 0.635, 0.495, 2.4);
+}
+.totebay .tooltipster-fall {
+  top: 0;
+  -webkit-transition-property: top;
+  -moz-transition-property: top;
+  -o-transition-property: top;
+  -ms-transition-property: top;
+  transition-property: top;
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+}
+.totebay .tooltipster-fall.tooltipster-dying {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  -ms-transition-property: all;
+  transition-property: all;
+  top: 0px !important;
+  opacity: 0;
+}
+.totebay .tooltipster-slide {
+  left: -40px;
+  -webkit-transition-property: left;
+  -moz-transition-property: left;
+  -o-transition-property: left;
+  -ms-transition-property: left;
+  transition-property: left;
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+}
+.totebay .tooltipster-slide.tooltipster-dying {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  -ms-transition-property: all;
+  transition-property: all;
+  left: 0px !important;
+  opacity: 0;
+}
+.totebay .tooltipster-content-changing {
+  opacity: 0.5;
+  -webkit-transform: scale(1.1, 1.1);
+  -moz-transform: scale(1.1, 1.1);
+  -o-transform: scale(1.1, 1.1);
+  -ms-transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);
+}
+.totebay .warning {
+  background: url("../img/warning.png") no-repeat 2px 50%;
+}
+.totebay #content .warning.big {
+  padding: 20px 20px 20px 60px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  width: 100%;
+  background: url("../img/big-warning.png") no-repeat 17px 50% #fff;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.totebay #content .warning.big.tips {
+  background: url("../img/tips.png") no-repeat 2px 50% #fff;
+}
+.totebay #content .ebay_mind.big {
+  padding: 20px 20px 20px 60px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  width: 100%;
+  background: url("../img/big-warning.png") no-repeat 17px 50% #fff;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.totebay #content .ebay_wrong {
+  padding: 20px 20px 20px 60px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  width: 100%;
+  background: url("../img/big-warning.png") no-repeat 17px 50% #fff;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.totebay #content .ebay_wrong.big {
+  background: url("../img/big-error.png") no-repeat 17px 50% #fff;
+}
+.totebay .menu-msg {
+  display: none;
+}
+.totebay .pagination {
+  overflow: hidden;
+  margin-bottom: 5px;
+  list-style: none;
+}
+.totebay .pagination li {
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  cursor: pointer;
+  float: left;
+  margin-left: 5px;
+}
+.totebay .pagination li:hover {
+  color: #0055FF;
+}
+.totebay .pagination li:first-child {
+  margin-left: 0;
+}
+.totebay .pagination li.prev, .totebay .pagination li.next {
+  background: #ffffff;
+  border: 1px solid #585A69;
+}
+.totebay .pagination li.current {
+  border: 1px solid #585A69;
+  color: #0055FF;
+}
+.totebay #domesticShipping td.linked, .totebay #internationalShipping td.linked {
+  /*background : url('../img/link.png') no-repeat 0 15px;*/
+  padding-left: 45px;
+  position: relative;
+}
+.totebay #domesticShipping td.linked::before, .totebay #internationalShipping td.linked::before {
+  position: absolute;
+  left: 12px;
+  content: '\f0c1';
+  font-size: 20px;
+  font-family: 'Fontawesome';
+}
+.totebay .shipping_destinations ul {
+  list-style: none;
+}
+.totebay .shipping_destinations ul li {
+  list-style: none;
+}
+.totebay #ebay_trash {
+  cursor: pointer;
+}
+.totebay .ebay_shipping_text, .totebay .presta_shipping_text {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.totebay .shipping_configured {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #ddf2db !important;
+}
+.totebay .shipping_not_configured {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #FFF;
+}
+.totebay #domesticShipping td.big-linked, .totebay #internationalShipping td.big-linked {
+  background-position: left center;
+}
+.totebay fieldset.new {
   box-sizing: border-box;
   border: 1px solid #e0e0e0;
   background: #f2f2f2;
@@ -456,74 +494,59 @@ fieldset.new {
   position: relative;
   padding-top: 3.5rem;
 }
-
-fieldset.new legend {
+.totebay fieldset.new legend {
   background: #ffffff;
   font-size: 1.2em;
   font-weight: 600;
   margin-left: -1rem;
   border-left: none;
-  
   position: absolute;
   top: 0.35em;
 }
-
-/* welcome boxes */
-
-.ebay-welcome {
+.totebay .ebay-welcome {
   color: #7f7f7f;
 }
-
-#ebay-logo {
+.totebay #ebay-logo {
   padding-left: 2%;
 }
-
-#ebay-welcome-left-content {
+.totebay #ebay-welcome-left-content {
   width: 92%;
   padding-left: 4%;
   padding-right: 4%;
 }
-
-#ebay-welcome p.title {
+.totebay #ebay-welcome p.title {
   font-weight: bold;
 }
-
-.ebay-bullet-points {
-  list-style-type:square;
+.totebay .ebay-bullet-points {
+  list-style-type: square;
 }
-
-.ebay-bullet-points li {
+.totebay .ebay-bullet-points li {
   margin-left: 15px;
   text-indent: -8px;
 }
-
-#ebay-welcome-right {
-  position: relative; 
+.totebay #ebay-welcome-right {
+  position: relative;
 }
-
-.ebay-dark-gray-box-container
-{
-	margin-top:15px;
-	background-color:#f2f2f2;
-	padding:10px;
+.totebay .ebay-dark-gray-box-container {
+  margin-top: 15px;
+  background-color: #f2f2f2;
+  padding: 10px;
 }
-
-.ebay-dark-gray-box-title
-{
-	font-size:15px;
-	font-weight:bold;
+.totebay .ebay-dark-gray-box-title {
+  font-size: 15px;
+  font-weight: bold;
 }
-
-.ebay-dark-gray-box-content
-{
-	width: 210px;
-	float: left;
-	margin-right: 20px;
+.totebay .ebay-dark-gray-box-content {
+  width: 210px;
+  float: left;
+  margin-right: 20px;
 }
-
-.ebay-light-gray-box {
+.totebay .ebay-light-gray-box {
   box-sizing: border-box;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   border: 1px solid #d9d9d9;
   background-color: white;
   width: 98%;
@@ -534,48 +557,40 @@ fieldset.new legend {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-
-.ebay-light-gray-box-content-outer {
-  display: table;  
+.totebay .ebay-light-gray-box-content-outer {
+  display: table;
   width: 100%;
   height: 100%;
 }
-
-.ebay-light-gray-box-content {
+.totebay .ebay-light-gray-box-content {
   display: table-cell;
   vertical-align: middle;
 }
-
-.ebay-light-gray-box-title {
+.totebay .ebay-light-gray-box-title {
   font-size: 1.2em;
   font-weight: bold;
 }
-
-.ebay-light-gray-box-ul li {
+.totebay .ebay-light-gray-box-ul li {
   margin-bottom: 0.5em;
   padding-left: 0.5em;
   color: #7f7f7f;
 }
-
-.ebay-light-gray-box-number {
+.totebay .ebay-light-gray-box-number {
   margin-right: 1em;
   font-size: 1em;
 }
-
-#ebay-welcome-top {
+.totebay #ebay-welcome-top {
   padding-bottom: 1em;
   border-bottom: 1px solid #d9d9d9;
   margin-bottom: 1em;
 }
-
-.ebay-boxes-2-col-table {
+.totebay .ebay-boxes-2-col-table {
   display: table;
   width: 100%;
-  border-collapse: separate; 
-  margin-bottom: 2em; 
+  border-collapse: separate;
+  margin-bottom: 2em;
 }
-
-.ebay-boxes-2-col-cell {
+.totebay .ebay-boxes-2-col-cell {
   margin: 0;
   padding: 0;
   width: 50%;
@@ -584,155 +599,127 @@ fieldset.new legend {
   text-align: left;
   position: relative;
 }
-
-.ebay-boxes-2-col-cell-content {
-  box-sizing: border-box;  
-  width: 98%; 
+.totebay .ebay-boxes-2-col-cell-content {
+  box-sizing: border-box;
+  width: 98%;
   height: 100%;
 }
-
-.ebay-boxes-2-col-cell-content.absolute.right {
-  
-  top: 0; right: 0; bottom: 0;
+.totebay .ebay-boxes-2-col-cell-content.absolute.right {
+  top: 0;
+  right: 0;
+  bottom: 0;
 }
-
-.ebay-boxes-2-col-cell-content fieldset {
+.totebay .ebay-boxes-2-col-cell-content fieldset {
   width: 100%;
   height: 100%;
 }
-
-.ebay-boxes-2-col-cell-content.left {
+.totebay .ebay-boxes-2-col-cell-content.left {
   float: left;
-  text-align: left;  
+  text-align: left;
 }
-
-.ebay-boxes-2-col-cell-content.right {
+.totebay .ebay-boxes-2-col-cell-content.right {
   float: right;
-  text-align: left;  
+  text-align: left;
 }
-
-#ebay-no-profile {
+.totebay #ebay-no-profile {
   font-size: 1.2em;
   line-height: 69px;
   text-align: center;
 }
-
-#ebay-install-pict {
+.totebay #ebay-install-pict {
   float: left;
   margin-right: 1em;
 }
-
-#ebay-install-title {
+.totebay #ebay-install-title {
   margin-top: 0;
   font-size: 1.4em;
   font-weight: bold;
 }
-
-#ebay-install-ul {
-  list-style-type:square;
+.totebay #ebay-install-ul {
+  list-style-type: square;
   font-size: 0.8em;
   line-height: 1.65em;
 }
-
-#ebay-install-ul li {
+.totebay #ebay-install-ul li {
   margin-left: 15px;
   list-style-position: inside;
 }
-
-#ebay-register-content {
+.totebay #ebay-register-content {
   width: 100%;
   display: table;
 }
-
-#ebay-register-content .txt-right
-{
-	text-align: right;
+.totebay #ebay-register-content .txt-right {
+  text-align: right;
 }
-
-#ebay-register-left-col {
+.totebay #ebay-register-left-col {
   display: table-cell;
   width: 50%;
-  color: #7f7f7f;    
+  color: #7f7f7f;
 }
-
-#ebay-register-left-col-content {
-    padding: 1em;
-    padding-right: 3em;
+.totebay #ebay-register-left-col-content {
+  padding: 1em;
+  padding-right: 3em;
 }
-
-#ebay-register-left-col p, #ebay-register-left-col label {
-  color: #7f7f7f;  
+.totebay #ebay-register-left-col p, .totebay #ebay-register-left-col label {
+  color: #7f7f7f;
 }
-
-#ebay-register-right-col {
+.totebay #ebay-register-right-col {
   display: table-cell;
   width: 50%;
   vertical-align: middle;
 }
-
-#ebay-register-right-col-content {
+.totebay #ebay-register-right-col-content {
   padding: 1em;
   padding-left: 3em;
   border-left: 1px solid #a6a6a6;
   overflow: hidden;
 }
-
-a.ebay-primary {
+.totebay a.ebay-primary {
   text-shadow: none;
-  background-image:none;
-	background-color:#0055AA;
-	
-  background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;  
-  background: -moz-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
+  background-image: none;
+  background-color: #0055AA;
+  background: -webkit-gradient(linear, center top, center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
+  background: -moz-gradient(linear, center top, center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
   color: white;
   text-shadow: none;
-  background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
+  background: -webkit-gradient(linear, center top, center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
   background: -moz-linear-gradient(center top, #0055FF, #0055AA) repeat scroll 0 0 transparent;
   color: white;
 }
-
-#ebay-register-div {
+.totebay #ebay-register-div {
   width: 60%;
   margin-bottom: 2em;
 }
-
-#ebay-register-link {
+.totebay #ebay-register-link {
   float: left;
-  width: 160px
+  width: 160px;
 }
-
-#ebay-register-subtitle {
+.totebay #ebay-register-subtitle {
   padding-bottom: 1em;
 }
-
-.ebay-register-p {
+.totebay .ebay-register-p {
   color: #a6a6a6;
   font-size: 0.9em;
   width: 100%;
   padding-bottom: 1em;
 }
-
-#ebay-register-title {
-  margin-bottom:2em;
-  width:100%;
-  display:inline-block;
+.totebay #ebay-register-title {
+  margin-bottom: 2em;
+  width: 100%;
+  display: inline-block;
   color: #7f7f7f;
 }
-
-.ebay-register-p {
+.totebay .ebay-register-p {
   margin-bottom: 0.5em;
 }
-
-.ebay-label {
+.totebay .ebay-label {
   text-align: left;
   width: auto;
 }
-
-.ebay-float-right {
+.totebay .ebay-float-right {
   float: right;
 }
-
-#ebay-seller-tips-link {
+.totebay #ebay-seller-tips-link {
   color: #7f7f7f;
   font-size: 0.9em;
   line-height: 1em;
@@ -740,24 +727,20 @@ a.ebay-primary {
   top: 1em;
   right: 1em;
 }
-
-.ebay-title {
+.totebay .ebay-title {
   font-weight: bold;
   color: #7F7F7F;
 }
-
-#ebay-tips {
+.totebay #ebay-tips {
   padding-top: 3em;
   padding-bottom: 1em;
   border-top: 1px solid #d9d9d9;
   margin-bottom: 1em;
 }
-
-#eBayUsernameInput {
+.totebay #eBayUsernameInput {
   margin: 0;
 }
-
-.ebay_gray_title_box {
+.totebay .ebay_gray_title_box {
   color: #7f7f7f;
   background-color: #f2f2f2;
   font-size: 1.2em;
@@ -765,27 +748,21 @@ a.ebay-primary {
   padding: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
-  width:60%;
+  width: 60%;
 }
-
-.ebay_gray_title_box:first-child {
-	width:40%;
+.totebay .ebay_gray_title_box:first-child {
+  width: 40%;
 }
-
-/* override PrestaShop css */
-
-.nobootstrap {
+.totebay .nobootstrap {
   min-width: 0 !important;
 }
-
-#ebay_main_menu {
+.totebay #ebay_main_menu {
   float: right;
   list-style: none;
   margin-top: 3px;
-margin-bottom: 3px;
+  margin-bottom: 3px;
 }
-
-#ebay_main_menu li {
+.totebay #ebay_main_menu li {
   float: left;
   padding: 0 5px 0 5px;
   border: 1px solid black;
@@ -793,368 +770,263 @@ margin-bottom: 3px;
   margin-left: 10px;
   border-radius: 5px;
   font-weight: normal;
-  opacity:0.5;
+  opacity: 0.5;
   margin-bottom: 3px;
   margin-top: 3px;
 }
-
-#ebay_main_menu li.selected {
- opacity:1;
+.totebay #ebay_main_menu li.selected {
+  opacity: 1;
 }
-
-/* from formConfig.tpl */
-
-
-.menuTab li {cursor: pointer;}
-
-.tabItem { display: none; }
-.tabItem.active {display: block;}
-.tabItem.selected { display: block; }
-.menuTab #menuTab7.menuTabButton.selected, .menuTab #menuTab6.menuTabButton.selected { }
-
-.ebay_hidden {
+.totebay .menuTab li {
+  cursor: pointer;
+}
+.totebay .tabItem {
   display: none;
 }
-
-#configFormStoreCategories
-{
-	margin-bottom:15px;
+.totebay .tabItem.active, .totebay .tabItem.selected {
+  display: block;
 }
-
-.module_confirmation
-{
-	background: #DFF2BF url('../../../../img/admin/icon-valid.png') no-repeat scroll 6px 6px;
-	border: 1px solid #4F8A10;
-	color: #4F8A10;
-	border-radius: 3px;
-	padding: 13px 5px 5px 40px;
-	min-height: 28px;
-	margin:0 0 10px 0;
+.totebay .ebay_hidden {
+  display: none;
 }
-.module_confirmation.alert {
-	background-image: inherit;
+.totebay #configFormStoreCategories {
+  margin-bottom: 15px;
 }
-
-.red {
+.totebay .module_confirmation {
+  background: #DFF2BF url("../../../../img/admin/icon-valid.png") no-repeat scroll 6px 6px;
+  border: 1px solid #4F8A10;
+  color: #4F8A10;
+  border-radius: 3px;
+  padding: 13px 5px 5px 40px;
+  min-height: 28px;
+  margin: 0 0 10px 0;
+}
+.totebay .module_confirmation.alert {
+  background-image: inherit;
+}
+.totebay .red {
   color: red !important;
 }
-
-.left-padded-name {
+.totebay .left-padded-name {
   padding-left: 13px;
 }
-
-/*Tab 4 - Category*/
-#load_cat_ebay tr td:nth-child(1){
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-size: contain;
+.totebay #load_cat_ebay tr td:nth-child(1) {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
 }
-#load_cat_ebay tr.wait td{
-	font-weight: normal;
-	color: orange;
+.totebay #load_cat_ebay tr.wait td {
+  font-weight: normal;
+  color: orange;
 }
-#load_cat_ebay tr.load td{
-	font-weight: bold;
+.totebay #load_cat_ebay tr.load td {
+  font-weight: bold;
 }
-#load_cat_ebay tr.load td:nth-child(1){
-	background-image: url('../img/ajax-loader-small.gif');
+.totebay #load_cat_ebay tr.load td:nth-child(1) {
+  background-image: url("../img/ajax-loader-small.gif");
 }
-#load_cat_ebay tr.error td:nth-child(1){
-	background-image: url('../img/big-error.png');
+.totebay #load_cat_ebay tr.error td:nth-child(1) {
+  background-image: url("../img/big-error.png");
 }
-#load_cat_ebay tr.success td:nth-child(1){
-	background-image: url('../img/bg-li-tabs-finished.png');
-	background-size: 14px 12px;
+.totebay #load_cat_ebay tr.success td:nth-child(1) {
+  background-image: url("../img/bg-li-tabs-finished.png");
+  background-size: 14px 12px;
 }
-#load_cat_ebay tr.error td{
-	font-weight: bold;
-	color: red;
+.totebay #load_cat_ebay tr.error td {
+  font-weight: bold;
+  color: red;
 }
-#load_cat_ebay tr.success td{
-	color: green;
+.totebay #load_cat_ebay tr.success td {
+  color: green;
 }
-.hidden.importCatEbay{
-	display: none;
+.totebay .hidden.importCatEbay {
+  display: none;
 }
-
-
-
-/*KB*/
-.kb-help{
-	display: none;
+.totebay .kb-help {
+  display: none;
 }
-.kb-help.active{
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	background-image: url('../img/help.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-size: contain;
-	vertical-align: middle;
+.totebay .kb-help.active {
+  display: inline-block;
+  text-decoration: none;
 }
-
-#content .conf.info{
-	background-color: #d3f1f7;
-	border: 1px solid rgb(23, 119, 182);
+.totebay .kb-help.active [class^="icon-"] {
+  font-size: 16px;
+  color: #959595;
 }
-
-#check_database_logs tr.success{
-	background: #DFF2BF;
+.totebay #content .conf.info {
+  background-color: #d3f1f7;
+  border: 1px solid #1777b6;
 }
-#check_database_logs td{
-	color: #333;
+.totebay #check_database_logs tr.success {
+  background: #DFF2BF;
 }
-#check_database_logs tr.success td:nth-child(1){
-	background-image: url('../img/bg-li-tabs-finished.png');
-    background-size: 14px 12px;
-    background-repeat: no-repeat;
-    background-position: center center;
-
+.totebay #check_database_logs td {
+  color: #333;
 }
-
-
-/*FORM REGISTER*/
-#eBayUsernameInput, #ebay_countries, #ebay_languages, #ebayRegisterButton, #eBayUsernamesList, #ebay_stats{
-	width: 160px;
-	box-sizing:border-box;
-	color: #000;
+.totebay #check_database_logs tr.success td:nth-child(1) {
+  background-image: url("../img/bg-li-tabs-finished.png");
+  background-size: 14px 12px;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
-
-#register_table{
-	width:100%;
-	border-collapse:collapse;
+.totebay #eBayUsernameInput, .totebay #ebay_countries, .totebay #ebay_languages, .totebay #ebayRegisterButton, .totebay #eBayUsernamesList, .totebay #ebay_stats {
+  width: 160px;
+  box-sizing: border-box;
+  color: #000;
 }
-
-#register_table tbody tr td:nth-child(2){
-	width:160px;
+.totebay #register_table {
+  width: 100%;
+  border-collapse: collapse;
 }
-#register_table tbody tr td:nth-child(1) label{
-	width: 95%;
-	display: block;
-	text-align: right;
+.totebay #register_table tbody tr td:nth-child(2) {
+  width: 160px;
 }
-#ebay-register-left-col .margin-bottom td{
-	padding-bottom: 12px;
+.totebay #register_table tbody tr td:nth-child(1) label {
+  width: 95%;
+  display: block;
+  text-align: right;
 }
-#register_table caption p strong{
-	float: left;
+.totebay #ebay-register-left-col .margin-bottom td {
+  padding-bottom: 12px;
 }
-#title_register{
-	width: 100%;
-	overflow: hidden;
-	padding-bottom: 20px;
+.totebay #register_table caption p strong {
+  float: left;
 }
-#title_register strong{
-	display: block;
-	width: 48%;
-	padding: 0 0 0 2%;
-	margin:0;
-	float: left;
+.totebay #title_register {
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 20px;
 }
-#ebay-register-right-col, #ebay-register-left-col{
-	float: left;
+.totebay #title_register strong {
+  display: block;
+  width: 48%;
+  padding: 0 0 0 2%;
+  margin: 0;
+  float: left;
 }
-
-
-
-
-/*SYNCHRONIZATION > TAB 1*/
-.box_sync_ajax{
-	width: 100%;
-	min-height: 120px;
-	line-height: 120px;
-	background: #ebedf4;
-	margin-bottom: 18px;
+.totebay #ebay-register-right-col, .totebay #ebay-register-left-col {
+  float: left;
 }
-
-#content .alert { text-align: left; max-width: 100%; box-sizing: border-box;}
-
-textarea[name='ebay_returns_description']{
-	width:100%;
+.totebay .box_sync_ajax {
+  width: 100%;
+  min-height: 120px;
+  line-height: 120px;
+  background: #ebedf4;
+  margin-bottom: 18px;
 }
-
-div.popin_ship_cost {
-	display: none;
-	position: absolute;
-	bottom: 30px;
-
-	z-index: 999;
-	width: 230px;
-
-	padding: 10px;
-	border: 2px solid #ccc;
-
-	background-color: #ddd;
-	background-image: -webkit-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
-	background-image: -moz-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
-	background-image: -ms-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
-	background-image: -o-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
-	background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
-	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
-	box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
-	text-shadow: 0 1px 0 rgba(255,255,255,.4);
+.totebay #content .alert {
+  text-align: left;
+  max-width: 100%;
+  box-sizing: border-box;
 }
-.nobootstrap .table tr td {
-	border-bottom: 1px solid #ccc;
-	color: #333;
-	font-size: 12px;
-	padding: 4px 4px 4px 6px;
-	position: relative;
+.totebay textarea[name='ebay_returns_description'] {
+  width: 100%;
 }
-
-/* Listings */
-.bootstrap .modifier_cat.btn,
-.bootstrap .delete_cat.btn {
-	margin: 5px 0;
+.totebay div.popin_ship_cost {
+  display: none;
+  position: absolute;
+  bottom: 30px;
+  z-index: 999;
+  width: 230px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  background-color: #ddd;
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: -ms-linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: -o-linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-
-#searcheEbaySync > * + * {
-	margin-left: 15px;
+.totebay .nobootstrap .table tr td {
+  border-bottom: 1px solid #ccc;
+  color: #333;
+  font-size: 12px;
+  padding: 4px 4px 4px 6px;
+  position: relative;
 }
-
-#ebayOrphanReListing .center {
-	display: table;
+.totebay .bootstrap .modifier_cat.btn, .totebay .bootstrap .delete_cat.btn {
+  margin: 5px 0;
 }
-
-#ebayOrphanReListing button + button {
-	margin-left: 15px;
+.totebay #searcheEbaySync > * + * {
+  margin-left: 15px;
 }
-
-.bootstrap #ebayListings .table>tbody>tr>th {
-	border-top: 0;
-	border-bottom: 1px solid #eaedef;
+.totebay #ebayOrphanReListing .center {
+  display: table;
 }
-
-
-.category_product_list_ebay {
-	overflow: auto;
-	max-height: 400px;
-	display: block !important;
+.totebay #ebayOrphanReListing button + button {
+  margin-left: 15px;
 }
-
-#searcheEbaySync {
-	display: flex;
-	justify-content: space-between;
-	margin: 0 0 20px;
+.totebay .bootstrap #ebayListings .table > tbody > tr > th {
+  border-top: 0;
+  border-bottom: 1px solid #eaedef;
 }
-
-#searcheEbaySync > * + * {
-	margin: 0 0 0 15px;
+.totebay .category_product_list_ebay {
+  overflow: auto;
+  max-height: 400px;
+  display: block !important;
 }
-
+.totebay #searcheEbaySync {
+  display: flex;
+  justify-content: space-between;
+}
+.totebay #searcheEbaySync > * + * {
+  margin: 0 0 0 15px;
+}
 @media all and (max-width: 640px) {
-	#searcheEbaySync {
-		flex-direction: column;
-	}
-
-	#searcheEbaySync > * + * {
-		margin: 15px 0 0;
-	}
+  .totebay #searcheEbaySync {
+    flex-direction: column;
+  }
+  .totebay #searcheEbaySync > * + * {
+    margin: 15px 0 0;
+  }
+}
+.totebay .totebay .form-horizontal > a > button {
+  margin-right: 10px;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify {
+  width: 100%;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify .head td {
+  padding: 5px 10px;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify td a {
+  padding: 5px 10px;
+  display: block;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify .head {
+  vertical-align: top;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify tr + tr:hover {
+  background: #00aff0;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify tr + tr:hover a {
+  color: #fff;
+  text-decoration: none;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify td > a.selected > span:before {
+  position: absolute;
+  left: 4px;
+  content: '\f00c';
+  font-family: "fontAwesome";
+  color: #3c763d;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify tr td:first-child > * {
+  padding-left: 20px;
+}
+.totebay .bootstrap .open > .dropdown-menu .profiles-beautify tr td:last-child > * {
+  padding-right: 20px;
+}
+.totebay tr.head td:first-child > * {
+  padding-left: 10px !important;
+}
+.totebay tr.head td:last-child > * {
+  padding-right: 10px !important;
 }
 
-/* Profiles */
-.totebay .form-horizontal > a > button {
-	margin-right: 10px;
-}
-
-.bootstrap .open > .dropdown-menu .profiles-beautify .badge {
-
-}
-.bootstrap .open > .dropdown-menu .profiles-beautify {
-	width: 100%;
-}
-.bootstrap .open > .dropdown-menu .profiles-beautify .head td,
-.bootstrap .open > .dropdown-menu .profiles-beautify td a {
-	padding: 5px 10px;
-}
-.bootstrap .open > .dropdown-menu .profiles-beautify td a {
-	display: block;
-}
-.bootstrap .open > .dropdown-menu .profiles-beautify .head {
-	vertical-align: top;
-}
-.bootstrap .open > .dropdown-menu .profiles-beautify tr + tr:hover {
-	background: #00aff0;
-}
-.bootstrap .open > .dropdown-menu .profiles-beautify tr + tr:hover a {
-	color: #fff;
-	text-decoration: none;
-}
-.bootstrap .open> .dropdown-menu .profiles-beautify td > a.selected > span:before {
-	position: absolute;
-	left: 4px;
-	content: '\f00c';
-	font-family: "fontAwesome";
-	color: #3c763d;
-}
-.bootstrap .open> .dropdown-menu .profiles-beautify tr td:first-child > * {
-padding-left: 20px;
-}
-
-.bootstrap .open> .dropdown-menu .profiles-beautify tr td:last-child > * {
-padding-right: 20px;
-}
-
-tr.head td:first-child > * {
-	padding-left: 10px !important;
-}
-
-tr.head td:last-child > * {
-	padding-right: 10px !important;
-}
-
-/*.bootstrap .open > .dropdown-menu .profiles-beautify {*/
-	/*display: table;*/
-	/*padding-left: 0;*/
-	/*margin-bottom: 0;*/
-/*}*/
-
-/*.bootstrap .open > .dropdown-menu .profiles-beautify > li {*/
-	/*display: table-row;*/
-/*}*/
-
-/*.bootstrap .open > .dropdown-menu .profiles-beautify > li:hover a {*/
-	/*text-decoration: none;*/
-	/*color: #fff;*/
-	/*background-color: #00aff0;*/
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a.selected > span:before {*/
-	/*position: absolute;*/
-	/*left: 4px;*/
-	/*content: '\f00c';*/
-	/*font-family: "fontAwesome";*/
-	/*color: #3c763d;*/
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span,*/
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a {*/
-	/*display: table-cell;*/
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span,*/
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a {*/
-	/*padding: 5px !important;*/
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span:first-child,*/
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a:first-child {*/
-	/*padding-left: 20px !important;*/
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span:last-child,*/
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > a:last-child {*/
-	/*padding-right: 20px !important;*/
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span {*/
-
-/*}*/
-
-/*.bootstrap .open> .dropdown-menu .profiles-beautify li > span > span {*/
-	/*display: inline-block;*/
-/*}*/
+/*# sourceMappingURL=ebay_back.css.map */

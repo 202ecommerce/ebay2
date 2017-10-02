@@ -39,22 +39,6 @@
 		font-size: 25px;
 	}
 
-	input.categorySync[type="checkbox"] {
-		display:none;
-	}
-
-	input.categorySync[type="checkbox"] + label::before{
-		color:red;
-		content:"\2716";
-		font-size:18px;
-	}
-
-	input.categorySync[type="checkbox"]:checked + label::before{
-		color:green;
-		content:"\2714";
-		font-size:20px;
-	}
-
 	#button_ebay_sync2{
 		background-image: url({/literal}{$path}{literal}views/img/ebay.png);
 		background-repeat: no-repeat;
@@ -566,8 +550,8 @@
 
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
-<fieldset style="border: 0; margin: 0 0 10px;">
-	<a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span>{l s='Add' mod='ebay'} </a>
+<fieldset class="table-block-below">
+	<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> {l s='Add products' mod='ebay'} </a>
 	{if isset($img_alert) && !empty($img_alert)}
 		<div class="warning big">
             {$img_alert['message']|escape:'htmlall':'UTF-8'}
@@ -603,18 +587,18 @@
 	<div class="margin-form">
 		<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode_1" value="1" {if $ebay_sync_mode == 1}checked="checked"{/if}/> <span data-inlinehelp="{l s='This will only synchronisze products that are not yet listed on eBay.' mod='ebay'}">{l s='Only sync new products' mod='ebay'}</span>
 	</div>*}
-<fieldset>
-	<h4>{l s='Search categories Prestashop' mod='ebay'}</h4>
-	<div id="catSync">
-		<div id="searcheEbaySync">
-			<input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
-			<input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
-				   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
-			<input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
-				   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
-			<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
-			<button class="researcheBtn btn btn-warning">{l s='Reset' mod='ebay'}</button>
-		</div>
+<fieldset class="table-block">
+	<h4 class="table-block-title table-block-holder">{l s='Search categories Prestashop' mod='ebay'}</h4>
+	<div id="searcheEbaySync" class="search-ebay-sync table-block-holder">
+		<input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
+		<input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
+			   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
+		<input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
+			   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
+		<button class="searcheBtn btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+		<button class="researcheBtn btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+	</div>
+	<div id="catSync" class="table-wrapper">
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
 			<thead>
 				<tr class="nodrag nodrop">
@@ -625,7 +609,13 @@
 					<th>{l s='EBay category' mod='ebay'}</th>
 					<th>{l s='Multi var' mod='ebay'}</th>
 					<th>{l s='Listing' mod='ebay'}</th>
-					<th>{l s='Status' mod='ebay'}</th>
+					<th>
+						<label for="activate_resynchBP" class="control-label">
+							<span class="label-tooltip" title="{l s='TODO: edit tooltip status.' mod='ebay'}" data-toggle="tooltip">
+								{l s='Status' mod='ebay'}
+							</span>
+						</label>
+					</th>
 					<th>{l s='Action' mod='ebay'}</th>
 				</tr>
 			</thead>
@@ -642,9 +632,14 @@
 							<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
 							<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
 							<td>{$category.annonces|escape:'htmlall':'UTF-8'}/{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
-							<td><input type="checkbox" class="categorySync" id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} /><label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}"></label>
-							<td><a href="#popin-add-cat" style="width:100%" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Modify' mod='ebay'}</a>
-								<a href="#" style="width:100%" class="delete_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Delete' mod='ebay'}</a></td>
+							<td><input type="checkbox" class="categorySync" id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
+								<label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"></label>
+							<td>
+								<div class="action">
+									<a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"><span ></span><span class="icon-pencil"></span></a>
+									<a href="#" class="delete_cat btn btn-sm btn-default" data-id="{$category.value}"><span ><span class="icon-trash"></span></a>
+								</div>
+							</td>
 						</tr>
 					{/foreach}
 				{/if}
@@ -685,7 +680,7 @@
 <div id="popin-add-cat" class="popin popin-lg" style="display: none;">
 	<div class="panel">
 		<div  class="panel-heading">
-			<i class="icon-plus"></i>{l s='ADD A PRODUCT' mod='ebay'}
+			<i class="icon-plus"></i> {l s='ADD A PRODUCT' mod='ebay'}
 			<span class="badge badge-success"><span class="page_popin" id="1">1</span> / 4</span>
 		</div>
 
@@ -927,3 +922,10 @@
 		</div>
 	</div>
 </div>
+
+{* Bootstrap tooltip *}
+<script>
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>

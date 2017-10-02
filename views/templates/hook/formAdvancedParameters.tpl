@@ -69,7 +69,7 @@
 				{l s='Logs Conservation Duration' mod='ebay'}
 			</label>
 			<div class="col-sm-9">
-				<input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall':'UTF-8'}">
+				<input type="text" name="logs_conservation_duration" class="width-num" value="{$logs_conservation_duration|escape:'htmlall':'UTF-8'}">
 			</div>
 		</div>
 	</fieldset>

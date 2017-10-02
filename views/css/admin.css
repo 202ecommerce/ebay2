@@ -19,6 +19,21 @@
 .totebay .pos-a {
   position: absolute;
 }
+.totebay .width-num {
+  width: 60px !important;
+}
+.totebay .js-popin-help {
+  text-decoration: none !important;
+}
+.totebay .alert,
+.totebay #carrier_wizard .wizard_error {
+  padding: 7px;
+  margin-bottom: 10px;
+  padding-left: 10px !important;
+}
+.totebay .alert:before {
+  content: '' !important;
+}
 .totebay .menuTab {
   margin-bottom: 15px;
 }
@@ -131,6 +146,102 @@
 }
 .navbar-header .totebay .js-user-dropdown.open .dropdown-toggle {
   background-color: #000 !important;
+}
+.totebay .kb-help {
+  display: none;
+}
+.totebay .kb-help .active {
+  display: inline-block;
+}
+.totebay .kb-help .active [class^="icon-"] {
+  font-size: 16px;
+}
+.totebay .table-block-below {
+  /* removes margin-top:-20px in .table-block if there is some tag above it */
+  margin: 0 0 15px;
+}
+.totebay .table-block-below + .table-block h4 {
+  margin-top: 0;
+}
+.totebay .table-block {
+  margin: 0 -20px;
+}
+.totebay .table-block > * + * {
+  border-top: 1px solid #d3d8db;
+}
+.totebay .table-block .table-block-holder {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+.totebay .table-block .table-block-title {
+  margin: -20px 0 0;
+  padding: 15px 0;
+}
+.totebay .table-block .search-ebay-sync {
+  padding: 20px 0;
+  background: #f0f0f0;
+}
+.totebay .table-block .search-ebay-sync input {
+  background: #fff;
+}
+.totebay .table-block .search-ebay-sync .searcheBtn:hover,
+.totebay .table-block .search-ebay-sync .researcheBtn:hover {
+  background: #1e94ab;
+}
+.totebay .table-block .table-wrapper {
+  overflow: auto;
+}
+.totebay .table-block .table-wrapper .table {
+  border-collapse: collapse;
+}
+.totebay .table-block .table-wrapper .table tr th, .totebay .table-block .table-wrapper .table tr td {
+  border: 1px solid #eaedef;
+}
+.totebay .table-block .table-wrapper .table tr th:first-child, .totebay .table-block .table-wrapper .table tr td:first-child {
+  padding-left: 20px;
+}
+.totebay .table-block .table-wrapper .table tr th:last-child, .totebay .table-block .table-wrapper .table tr td:last-child {
+  padding-right: 20px;
+}
+.totebay .table-block .table-wrapper .table tr th:hover td, .totebay .table-block .table-wrapper .table tr td:hover td {
+  background: #fff;
+}
+.totebay .table-block .table-wrapper .table tr th {
+  border-bottom: 1px solid #ddd;
+}
+.totebay .table-block .table-wrapper .table tbody tr:nth-child(odd) td {
+  background: #f8f8f8;
+}
+.totebay .table-block .table-wrapper .table tbody tr:nth-child(odd):hover td {
+  background: #f4f8fb;
+}
+.totebay .table-block .table-wrapper .table .action {
+  white-space: nowrap;
+}
+.totebay .table-block .table-wrapper .table .action .delete_cat:hover {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] {
+  display: none;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] + label {
+  width: 35px;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] + label:before {
+  font-family: 'fontawesome', sans-serif;
+  color: #d9534f;
+  content: "\f00d";
+  font-size: 13px;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] + label:hover {
+  background: #fff;
+  border-color: #ccc;
+  box-shadow: inset 0 0 1px #ccc;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"]:checked + label:before {
+  color: #5cb85c;
+  content: "\f00c";
 }
 
 /*# sourceMappingURL=admin.css.map */

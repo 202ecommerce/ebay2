@@ -83,7 +83,7 @@
 				{l s='Since when fetch orders' mod='ebay'}
 			</label>
 			<div class="col-sm-9">
-				<input type="number" class="form-control" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
+				<input type="number" class="form-control width-num" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
