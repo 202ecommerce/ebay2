@@ -46,7 +46,7 @@
     </p>
     
     <form id="products-form-view" action="{$show_products_url|escape:'htmlall':'UTF-8'}" method="post" class="form">
-        <p class="center">
+        <p class="text-center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='Load Products' mod='ebay'}" />
         </p>
     </form>
@@ -81,30 +81,30 @@
                     <span data-inlinehelp="{l s='Configured in the \'Parameter > 2.Categories and pricing\' tab' mod='ebay'}">{l s='Associated eBay category' mod='ebay'}</span>
                 </th>
                 
-                <th class="center">
+                <th class="text-center">
                     <span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation enabled' mod='ebay'}</span>
                 </th>
                 
-                <th class="center">
+                <th class="text-center">
                     <span data-inlinehelp="{l s='If this column is set to \'no\', product has been unselected in the \'Parameters > 2.Categories and pricing\' tab' mod='ebay'}">{l s='Product selected' mod='ebay'}</span>
                 </th>
 
-                <th class="center">
+                <th class="text-center">
                     <span data-inlinehelp="{l s='If this column is set to \'Yes\', product has been disabled' mod='ebay'}">{l s='Product disable' mod='ebay'}</span>
                 </th>
 
-                <th class="center">
+                <th class="text-center">
                     <span data-inlinehelp="{l s='Display link to associated eBay listing' mod='ebay'}">{l s='eBay listing' mod='ebay'}</span>
                 </th>
                 
-                <th class="center">{l s='Help' mod='ebay'}</th>
+                <th class="text-center">{l s='Help' mod='ebay'}</th>
                 
             </tr>
         </thead>
         
         <tbody>
             <tr id="removeRow">
-                <td class="center" colspan="10">
+                <td class="text-center" colspan="10">
                     <img src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/img/loading-small.gif" alt="" />
                 </td>
             </tr>

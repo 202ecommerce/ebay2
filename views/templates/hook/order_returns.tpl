@@ -48,24 +48,24 @@
                 <span>{l s='EBay Order' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Description' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Status' mod='ebay'}</span>
             </th>
 
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Type' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Date' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Id Product' mod='ebay'}</span>
             </th>
 
@@ -76,7 +76,7 @@
         <tbody>
         {if empty($returns)}
         <tr id="removeRow">
-            <td class="center" colspan="7">
+            <td class="text-center" colspan="7">
                 {l s='No returns' mod='ebay'}
             </td>
         </tr>

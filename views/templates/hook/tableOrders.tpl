@@ -46,11 +46,11 @@
                 <span>{l s='eBay reference' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Reference' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span >{l s='Email' mod='ebay'}</span>
             </th>
 
@@ -59,19 +59,19 @@
             </th>
 
 
-            <th class="center">
+            <th class="text-center">
                 <span >{l s='ID PrestaShop' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='PrestaShop Reference' mod='ebay'}</span>
             </th>
 
-            <th class="center">
+            <th class="text-center">
                 <span>{l s='Date Import' mod='ebay'}</span>
             </th>
 
-            <th class="center">{l s='Actions' mod='ebay'}</th>
+            <th class="text-center">{l s='Actions' mod='ebay'}</th>
 
     </tr>
     </thead

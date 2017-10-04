@@ -34,6 +34,9 @@
 .totebay .alert:before {
   content: '' !important;
 }
+.totebay .tooltip-inner {
+  padding: 5px 10px;
+}
 .totebay .menuTab {
   margin-bottom: 15px;
 }
@@ -157,11 +160,24 @@
   font-size: 16px;
 }
 .totebay .table-block-below {
-  /* removes margin-top:-20px in .table-block if there is some tag above it */
-  margin: 0 0 15px;
+  /* special styles if there is some block above .table-block */
+  margin: 0 0 20px;
 }
 .totebay .table-block-below + .table-block h4 {
   margin-top: 0;
+  border-top: 1px solid #d3d8db;
+}
+.totebay .button-apply,
+.totebay .button-reset,
+.totebay .button-refresh {
+  min-width: 80px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.totebay .button-apply:hover,
+.totebay .button-reset:hover,
+.totebay .button-refresh:hover {
+  background: #00aff0 !important;
 }
 .totebay .table-block {
   margin: 0 -20px;
@@ -169,39 +185,87 @@
 .totebay .table-block > * + * {
   border-top: 1px solid #d3d8db;
 }
-.totebay .table-block .table-block-holder {
+.totebay .table-block__holder {
   padding-left: 20px !important;
   padding-right: 20px !important;
 }
-.totebay .table-block .table-block-title {
+.totebay .table-block__title {
+  display: flex;
+  justify-content: space-between;
   margin: -20px 0 0;
   padding: 15px 0;
 }
-.totebay .table-block .search-ebay-sync {
+.totebay .table-block__title .button-refresh {
+  margin: -8px 0;
+}
+.totebay .table-block__search {
+  display: flex;
+  justify-content: space-between;
   padding: 20px 0;
   background: #f0f0f0;
 }
-.totebay .table-block .search-ebay-sync input {
+@media all and (max-width: 640px) {
+  .totebay .table-block__search {
+    flex-direction: column;
+  }
+}
+.totebay .table-block__search > * + * {
+  margin: 0 0 0 10px;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__search > * + * {
+    margin: 15px 0 0;
+  }
+}
+.totebay .table-block__search:last-child {
+  margin-bottom: -20px;
+  border-radius: 0 0 5px 5px;
+}
+.totebay .table-block__search input {
   background: #fff;
 }
-.totebay .table-block .search-ebay-sync .searcheBtn:hover,
-.totebay .table-block .search-ebay-sync .researcheBtn:hover {
-  background: #1e94ab;
+.totebay .table-block__search_message {
+  max-width: 200px;
+  margin: 0 auto;
+  padding: 10px 0;
+  text-align: center;
+}
+.totebay .table-block__footer-buttons {
+  display: flex;
+  padding-top: 20px;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__footer-buttons {
+    flex-direction: column;
+  }
+}
+.totebay .table-block__footer-buttons > * + * {
+  margin: 0 0 0 10px;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__footer-buttons > * + * {
+    margin: 15px 0 0;
+  }
 }
 .totebay .table-block .table-wrapper {
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 .totebay .table-block .table-wrapper .table {
+  margin-bottom: 0;
   border-collapse: collapse;
 }
 .totebay .table-block .table-wrapper .table tr th, .totebay .table-block .table-wrapper .table tr td {
+  height: 40px;
   border: 1px solid #eaedef;
 }
 .totebay .table-block .table-wrapper .table tr th:first-child, .totebay .table-block .table-wrapper .table tr td:first-child {
   padding-left: 20px;
+  border-left: 0;
 }
 .totebay .table-block .table-wrapper .table tr th:last-child, .totebay .table-block .table-wrapper .table tr td:last-child {
   padding-right: 20px;
+  border-right: 0;
 }
 .totebay .table-block .table-wrapper .table tr th:hover td, .totebay .table-block .table-wrapper .table tr td:hover td {
   background: #fff;
@@ -218,9 +282,29 @@
 .totebay .table-block .table-wrapper .table .action {
   white-space: nowrap;
 }
-.totebay .table-block .table-wrapper .table .action .delete_cat:hover {
-  background-color: #d9534f;
-  border-color: #d9534f;
+.totebay .table-block .table-wrapper .table .action .active {
+  line-height: 1.4;
+  background: #fff;
+  box-shadow: none;
+  border-color: #dedede;
+}
+.totebay .table-block .table-wrapper .table .action .active:hover {
+  color: #fff;
+  background-color: #00aff0;
+  border-color: #008abd !important;
+}
+.totebay .table-block .table-wrapper .table .action .active:hover i {
+  color: #fff;
+}
+.totebay .table-block .table-wrapper .table .action .active i {
+  color: #555;
+}
+.totebay .table-block .table-wrapper .table .action .delete_cat:hover,
+.totebay .table-block .table-wrapper .table .action .exclure_product:hover,
+.totebay .table-block .table-wrapper .table .action .out_of_stock_orphan:hover,
+.totebay .table-block .table-wrapper .table .action .delete-orphan:hover {
+  background-color: #d5676f;
+  border-color: #cd4b55;
 }
 .totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] {
   display: none;

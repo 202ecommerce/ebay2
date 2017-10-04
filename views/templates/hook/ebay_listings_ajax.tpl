@@ -24,57 +24,60 @@
 *}
 
 
-	<button  id="refresh_list" class="btn btn-default">
-		{l s='Refresh list' mod='ebay'}
-	</button>
-	<button class="btn btn-default" id="searchBtnListing">{l s='Search' mod='ebay'}</button>
-    <table class="table" cellpadding="0" cellspacing="0">
-    	<tr>
-    		<th>{l s='Id product' mod='ebay'}</th>
-    		<th>{l s='Quantity' mod='ebay'}</th>
-			<th>{l s='Category' mod='ebay'}</th>
-    		<th>{l s='Product on Prestashop' mod='ebay'}</th>
-    		<th>{l s='Product on eBay (reference)' mod='ebay'}</th>
-    	</tr>
-		<tr>
-			<td>
-				<input type="text" class="form-control" id="id_prod_search" value="{$search.id_product}">
-			</td>
-			<td></td>
-			<td>
-				<input type="text" class="form-control" id="name_cat_search" value="{$search.name_cat}">
-			</td>
-			<td>
-				<input type="text" class="form-control" id="name_prod_search"  value="{$search.name_product}">
-			</td>
-			<td>
-				<input type="text" class="form-control" id="id_prod_ebay_search" value="{$search.id_product_ebay}">
-			</td>
-		</tr>
-{if $products_ebay_listings}
-    		{foreach from=$products_ebay_listings item=product name=loop}
-    			<tr class="row_hover{if $smarty.foreach.loop.index % 2} alt_row{/if}">
-    				<td style="text-align:center">{$product.id_product|escape:'htmlall':'UTF-8'}</td>
-    				<td style="text-align:center">{$product.quantity|escape:'htmlall':'UTF-8'}</td>
-					<td style="text-align:center">{$product.category|escape:'htmlall':'UTF-8'}</td>
-    				<td><a href="{$product.link|escape:'htmlall':'UTF-8'}" target="_blank">{$product.prestashop_title|escape:'htmlall':'UTF-8'}</a></td>
-    				<td><a href="{$product.link_ebay|escape:'htmlall':'UTF-8'}"  target="_blank">{$product.ebay_title|escape:'htmlall':'UTF-8'} ({$product.reference_ebay|escape:'htmlall':'UTF-8'})</a></td>
-    			</tr>
-    		{/foreach}
-{/if}
-    </table>
+<div class="table-block">
+    <h4 class="table-block__title table-block__holder">{l s='Ebay listings' mod='ebay'}
+        <button class="button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+    </h4>
+    <div class="table-block__search table-block__holder">
+        <input type="text" class="form-control" id="id_prod_search" value="{$search.id_product}"
+               placeholder="{l s='by ID product' mod='ebay'}"
+               title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip">
+        <input type="text" class="form-control" id="name_cat_search" value="{$search.name_cat}"
+               placeholder="{l s='by Category' mod='ebay'}"
+               title="{l s='by Category' mod='ebay'}" data-toggle="tooltip">
+        <input type="text" class="form-control" id="name_prod_search"  value="{$search.name_product}"
+               placeholder="{l s='by Product on Prestashop' mod='ebay'}"
+               title="{l s='by Product on Prestashop' mod='ebay'}" data-toggle="tooltip">
+        <input type="text" class="form-control" id="id_prod_ebay_search" value="{$search.id_product_ebay}"
+               placeholder="{l s='by Product on eBay (reference)' mod='ebay'}"
+               title="{l s='by Product on eBay (reference)' mod='ebay'}" data-toggle="tooltip">
+        <button  id="refresh_list" class="button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+        <button class="button-reset btn btn-default" id="searchBtnListing"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+    </div>
+    <div class="table-wrapper">
+        <table class="table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>{l s='Id product' mod='ebay'}</th>
+                <th>{l s='Quantity' mod='ebay'}</th>
+                <th>{l s='Category' mod='ebay'}</th>
+                <th>{l s='Product on Prestashop' mod='ebay'}</th>
+                <th>{l s='Product on eBay (reference)' mod='ebay'}</th>
+            </tr>
+            {if $products_ebay_listings}
+                {foreach from=$products_ebay_listings item=product name=loop}
+                    <tr class="row_hover{if $smarty.foreach.loop.index % 2} alt_row{/if}">
+                        <td>{$product.id_product|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$product.quantity|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$product.category|escape:'htmlall':'UTF-8'}</td>
+                        <td><a href="{$product.link|escape:'htmlall':'UTF-8'}" target="_blank">{$product.prestashop_title|escape:'htmlall':'UTF-8'}</a></td>
+                        <td><a href="{$product.link_ebay|escape:'htmlall':'UTF-8'}"  target="_blank">{$product.ebay_title|escape:'htmlall':'UTF-8'} ({$product.reference_ebay|escape:'htmlall':'UTF-8'})</a></td>
+                    </tr>
+                {/foreach}
+            {/if}
+        </table>
 
-	{if $pages_all >1}
-		<div class="navPaginationListProductTab" style="display:flex; justify-content:center">
-            {include file=$tpl_include}
-		</div>
-	{/if}
-
+        {if $pages_all >1}
+            <div class="navPaginationListProductTab" style="display:flex; justify-content:center">
+                {include file=$tpl_include}
+            </div>
+        {/if}
+    </div>
+</div>
 
 
 
 <script>
-	$('#refresh_list').click(refreshList);
+    $('#refresh_list').click(refreshList);
 
     $('#searchBtnListing').click(search);
 
@@ -90,9 +93,9 @@
                 })
             }
         });
-	}
+    }
 
-	function search() {
+    function search() {
         var id_prod;
         var id_prod_ebay;
         var name_cat;
@@ -127,6 +130,13 @@
             }
         });
     }
+</script>
 
 
+
+{* Bootstrap tooltip *}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>

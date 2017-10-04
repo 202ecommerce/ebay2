@@ -25,41 +25,60 @@
 
 
 
-<div id="contentLogJobsTab">
-    <div class="buttonContainer">
-        <button class="btn btn-default deleteAllLog">{l s='Delete all'}</button>
-        <button class="btn btn-default deleteSelectedLog">{l s='Delete selected'}</button>
+<div id="contentLogJobsTab" class="table-block">
+    <h4 class="table-block__title table-block__holder">{l s='Jobs to be done' mod='ebay'}
+        <button class="loadListOrphan button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+    </h4>
+
+    <div class="table-wrapper">
+        <table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
+            <thead>
+            <tr class="nodrag nodrop">
+                <th style="width:30px";>
+                    <label for="checkAll" title="Check all" data-toggle="tooltip">
+                        <input id="checkAll" type="checkbox" class="logAllCheck">
+                    </label>
+                </th>
+                <th>{l s='ID' mod='ebay'}</th>
+                <th>{l s='Date' mod='ebay'}</th>
+                <th>{l s='ID Product' mod='ebay'}</th>
+                <th>{l s='ID Attribute' mod='ebay'}</th>
+                <th style="width:61px;"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {if $tasks}
+                {foreach from=$tasks item='task'}
+                    <tr>
+                        <td><input id="checkbox" type="checkbox" class="logCheck" value="{$task.id|escape:'htmlall':'UTF-8'}"></td>
+                        <td>{$task.id|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$task.date_add|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-sm btn-danger"
+                               title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
+                                <span class="icon-close"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {/foreach}
+            {/if}
+            <tr></tr>
+            </tbody>
+        </table>
+
+        {if $pages_all >1}
+            <div class="navPaginationListLogJobsTab" style="display:flex; justify-content:center">
+                {include file=$tpl_include}
+            </div>
+        {/if}
     </div>
-	<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
-		<thead>
-		<tr class="nodrag nodrop">
-            <th><input type="checkbox" class="logAllCheck"></th>
-			<th>{l s='ID' mod='ebay'}</th>
-			<th>{l s='Date' mod='ebay'}</th>
-			<th>{l s='ID Product' mod='ebay'}</th>
-			<th>{l s='ID Attribute' mod='ebay'}</th>
-		</tr>
-		</thead>
-		<tbody>
-		{if $tasks}
-			{foreach from=$tasks item='task'}
-				<tr>
-                    <td><input type="checkbox" class="logCheck" value="{$task.id|escape:'htmlall':'UTF-8'}"></td>
-					<td>{$task.id|escape:'htmlall':'UTF-8'}</td>
-					<td>{$task.date_add|escape:'htmlall':'UTF-8'}</td>
-					<td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
-					<td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
-				</tr>
-			{/foreach}
-		{/if}
-		<tr></tr>
-		</tbody>
-	</table>
-    {if $pages_all >1}
-		<div class="navPaginationListLogJobsTab" style="display:flex; justify-content:center">
-            {include file=$tpl_include}
-		</div>
-    {/if}
+
+    <div class="buttonContainer table-block__holder table-block__footer-buttons">
+        <button class="btn btn-danger deleteAllLog">{l s='Delete all'}</button>
+        <button class="btn btn-danger deleteSelectedLog">{l s='Delete selected'}</button>
+    </div>
 </div>
 
 {literal}
@@ -129,3 +148,12 @@
 
 </script>
 {/literal}
+
+
+
+{* Bootstrap tooltip *}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
