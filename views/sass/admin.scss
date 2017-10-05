@@ -267,20 +267,35 @@
         }
       }
 
+      input {
+        background: #fff;
+      }
+    }
+
+    &__message {
+      @extend .table-block__search;
+
+      &-holder {
+        max-width: 200px;
+        margin: 0 auto;
+        padding: 10px 0;
+        text-align: center;
+      }
+
+      &_green {
+        background: #ddf0de;
+        color: #00aa2b;
+      }
+
       &:last-child {
         margin-bottom: -20px;
         border-radius: 0 0 5px 5px;
       }
 
-      input {
-        background: #fff;
-      }
-
-      &_message {
-        max-width: 200px;
-        margin: 0 auto;
-        padding: 10px 0;
-        text-align: center;
+      p {
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -372,10 +387,7 @@
             }
           }
 
-          .delete_cat,
-          .exclure_product,
-          .out_of_stock_orphan,
-          .delete-orphan {
+          .hover-danger {
             &:hover {
               background-color: #d5676f;
               border-color: #cd4b55;

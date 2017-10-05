@@ -82,7 +82,7 @@
                                    target="_blank"
                                    title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><i class="icon-pencil"></i>
                                 </a>
-                                <a class="btn btn-sm btn-default exclure_product"
+                                <a class="exclure_product hover-danger btn btn-sm btn-default"
                                    id="{$task_error.real_id}"
                                    title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><i class="icon-close"></i>
                                 </a>

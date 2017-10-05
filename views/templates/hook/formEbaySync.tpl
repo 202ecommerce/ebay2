@@ -592,9 +592,10 @@
 		<button class="button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
 	</h4>
 	{if $categories|@count == 0}
-        <div class="table-block__search table-block__holder">
-			<div class="table-block__search_message">
-            	{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}
+        <div class="table-block__message table-block__holder">
+			<div class="table-block__message-holder">
+				<p>{l s='No list products' mod='ebay'}</p>
+            	<p>{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}</p>
 			</div>
         </div>
 	{else}
@@ -647,7 +648,7 @@
                         <td>
                             <div class="action">
                                 <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span ></span><span class="icon-pencil"></span></a>
-                                <a href="#" class="delete_cat btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span ><span class="icon-trash"></span></a>
+                                <a href="#" class="delete_cat hover-danger btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span ><span class="icon-trash"></span></a>
                             </div>
                         </td>
                     </tr>

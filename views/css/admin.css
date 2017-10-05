@@ -198,37 +198,44 @@
 .totebay .table-block__title .button-refresh {
   margin: -8px 0;
 }
-.totebay .table-block__search {
+.totebay .table-block__search, .totebay .table-block__message {
   display: flex;
   justify-content: space-between;
   padding: 20px 0;
   background: #f0f0f0;
 }
 @media all and (max-width: 640px) {
-  .totebay .table-block__search {
+  .totebay .table-block__search, .totebay .table-block__message {
     flex-direction: column;
   }
 }
-.totebay .table-block__search > * + * {
+.totebay .table-block__search > * + *, .totebay .table-block__message > * + * {
   margin: 0 0 0 10px;
 }
 @media all and (max-width: 640px) {
-  .totebay .table-block__search > * + * {
+  .totebay .table-block__search > * + *, .totebay .table-block__message > * + * {
     margin: 15px 0 0;
   }
 }
-.totebay .table-block__search:last-child {
-  margin-bottom: -20px;
-  border-radius: 0 0 5px 5px;
-}
-.totebay .table-block__search input {
+.totebay .table-block__search input, .totebay .table-block__message input {
   background: #fff;
 }
-.totebay .table-block__search_message {
+.totebay .table-block__message-holder {
   max-width: 200px;
   margin: 0 auto;
   padding: 10px 0;
   text-align: center;
+}
+.totebay .table-block__message_green {
+  background: #ddf0de;
+  color: #00aa2b;
+}
+.totebay .table-block__message:last-child {
+  margin-bottom: -20px;
+  border-radius: 0 0 5px 5px;
+}
+.totebay .table-block__message p:last-child {
+  margin-bottom: 0;
 }
 .totebay .table-block__footer-buttons {
   display: flex;
@@ -299,10 +306,7 @@
 .totebay .table-block .table-wrapper .table .action .active i {
   color: #555;
 }
-.totebay .table-block .table-wrapper .table .action .delete_cat:hover,
-.totebay .table-block .table-wrapper .table .action .exclure_product:hover,
-.totebay .table-block .table-wrapper .table .action .out_of_stock_orphan:hover,
-.totebay .table-block .table-wrapper .table .action .delete-orphan:hover {
+.totebay .table-block .table-wrapper .table .action .hover-danger:hover {
   background-color: #d5676f;
   border-color: #cd4b55;
 }

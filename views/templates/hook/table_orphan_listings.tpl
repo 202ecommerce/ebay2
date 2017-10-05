@@ -34,136 +34,130 @@
         <button class="loadListOrphan button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
-    <div class="table-wrapper">
-        <table id="OrphanListings" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
-            <thead>
-            <tr class="nodrag nodrop">
-                <th></th>
-                <th style="width:110px;"><span>{l s='eBay Listing' mod='ebay'}</span></th>
-                <th><span>{l s='PrestaShop Product' mod='ebay'}</span></th>
-                <th class="text-center"><span data-inlinehelp="{l s='Product has been disabled in the PrestaShop product page' mod='ebay'}">{l s='Deactivated product' mod='ebay'}</span></th>
-                <th class="text-center"><span data-inlinehelp="{l s='Product has been disabled in the PrestaShop product page' mod='ebay'}">{l s='Excluded product' mod='ebay'}</span></th>
-                <th class="text-center"><span data-inlinehelp="{l s='Does PrestaShop product have combinations' mod='ebay'}">{l s='Product Combinations' mod='ebay'}</span></th>
-                <th><span data-inlinehelp="{l s='PrestaShop product default category' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span></th>
-                <th class="text-center"><span data-inlinehelp="{l s='eBay category associated with PrestaShop product\'s default category' mod='ebay'}">{l s='eBay Category' mod='ebay'}</span></th>
-                <th class="text-center"><span data-inlinehelp="{l s='Does eBay category support multivariation listings ?' mod='ebay'}">{l s='Category Multi-sku' mod='ebay'}</span></th>
-                <th class="text-center"><span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span></th>
-                <th class="text-center"><span>{l s='Action' mod='ebay'}</span></th>
-                <th class="text-center">{l s='Help' mod='ebay'}</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            {if $ads === false || sizeof($ads) === 0}
-                <tr>
-                    <td colspan="10" class="text-center">{l s='No orphan listing' mod='ebay'}</td>
-                </tr>
-            {else}
-
-                {foreach from=$ads key=k  item=a}
-                    {if $a.id_task == 14}
-                            {continue}
-                        {/if}
-                    <tr{if $k % 2 !== 0} class="alt_row"{/if}>
-
-                    <td>
-                        <input type="checkbox" class="checkboxfordelete">
-                    </td>
-
-                    <td>
-                        {if $a.id_product_ref}
-                            <a style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-                               href="{$a.link|escape:'htmlall':'UTF-8'}"
-                               target="_blank">{$a.id_product_ref|escape:'htmlall':'UTF-8'}</a>
-                        {/if}
-                    </td>
-
-                    <td>{if $a.exists}{$a.psProductName|escape:'htmlall':'UTF-8'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product|escape:'htmlall':'UTF-8'}{/if}</td>
-
-                    {if $a.exists}
-                        <td class="text-center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}<span
-                                    style="color: red;">{l s='-' mod='ebay'}</span>{/if}</td>
-                        <td class="text-center">{if $a.active && !$a.blacklisted}{l s='-' mod='ebay'}{else}<span
-                                    style="color: red;">{l s='Yes' mod='ebay'}</span>{/if}</td>
-                    {else}
-                        <td class="text-center">-</td>
-                    {/if}
-
-                    {if $a.exists}
-                        <td class="text-center">{if $a.isMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
-                    {else}
-                        <td class="text-center">-</td>
-                    {/if}
-
-                    {if $a.exists}
-                        <td>{$a.category_full_name|escape:'htmlall':'UTF-8'}</td>
-                    {else}
-                        <td class="text-center">-</td>
-                    {/if}
-
-                    {if $a.exists && $a.id_category_ref}
-                        <td>{$a.ebay_category_full_name|escape:'htmlall':'UTF-8'}</td>
-                    {else}
-                        <td class="text-center">-</td>
-                    {/if}
-
-                    {if $a.exists && $a.id_category_ref}
-                        <td class="text-center">{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
-                    {else}
-                        <td class="text-center">-</td>
-                    {/if}
-
-                    {if $a.exists && $a.id_category_ref}
-                        <td class="text-center">{if $a.sync}{l s='Yes' mod='ebay'}{else}<span
-                                    style="color: red;">{l s='No' mod='ebay'}</span>{/if}</td>
-                    {else}
-                        <td class="text-center">-</td>
-                    {/if}
-
-                    <td class="text-center">
-                        <div class="action">
-                            <a href="#" class="delete-orphan btn btn-sm btn-default" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
-                               title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
-                                <i class="icon-trash"></i>
-                            </a>
-                            {**}
-                            <a href="#" class="out_of_stock_orphan btn btn-sm btn-default"
-                               ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
-                               title="{l s='Out of stock' mod='ebay'}" data-toggle="tooltip">
-                                <i class="icon-ban"></i>
-                            </a>
-                            {**}
-                            {if $a.exists && $a.id_category_ref && $a.sync && !$a.active}
-                                <a href="#" class="out_of_stock_orphan btn btn-sm btn-default"
-                                   ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
-                                   title="{l s='Out of stock' mod='ebay'}" data-toggle="tooltip">
-                                   <i class="icon-ban"></i>
-                                </a>
-                            {/if}
-                        </div>
-                    </td>
-
-                    <td>
-                        {if !$a.exists}
-                            {l s='PrestaShop Product does not exists' mod='ebay'}
-                        {/if}
-                    </td>
-                {/foreach}
-            {/if}
-            </tbody>
-        </table>
-
-        {if isset($pages_all) and $pages_all >1}
-            <div class="navPaginationListOrphanProductTab" style="display:flex; justify-content:center">
-                {include file=$tpl_include}
+    {if $ads === false || sizeof($ads) === 0}
+        <div class="table-block__message table-block__message_green table-block__holder">
+            <div class="table-block__message-holder">
+                <p>{l s='No orphan listings' mod='ebay'}</p>
             </div>
-        {/if}
-    </div>
+        </div>
+    {else}
+        <div class="table-wrapper">
+            <table id="OrphanListings" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+                <thead>
+                <tr class="nodrag nodrop">
+                    <th></th>
+                    <th style="width:110px;"><span>{l s='eBay Listing' mod='ebay'}</span></th>
+                    <th><span>{l s='PrestaShop Product' mod='ebay'}</span></th>
+                    <th class="text-center"><span data-inlinehelp="{l s='Product has been disabled in the PrestaShop product page' mod='ebay'}">{l s='Deactivated product' mod='ebay'}</span></th>
+                    <th class="text-center"><span data-inlinehelp="{l s='Product has been disabled in the PrestaShop product page' mod='ebay'}">{l s='Excluded product' mod='ebay'}</span></th>
+                    <th class="text-center"><span data-inlinehelp="{l s='Does PrestaShop product have combinations' mod='ebay'}">{l s='Product Combinations' mod='ebay'}</span></th>
+                    <th><span data-inlinehelp="{l s='PrestaShop product default category' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span></th>
+                    <th class="text-center"><span data-inlinehelp="{l s='eBay category associated with PrestaShop product\'s default category' mod='ebay'}">{l s='eBay Category' mod='ebay'}</span></th>
+                    <th class="text-center"><span data-inlinehelp="{l s='Does eBay category support multivariation listings ?' mod='ebay'}">{l s='Category Multi-sku' mod='ebay'}</span></th>
+                    <th class="text-center"><span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span></th>
+                    <th class="text-center"><span>{l s='Action' mod='ebay'}</span></th>
+                    <th class="text-center">{l s='Help' mod='ebay'}</th>
+                </tr>
+                </thead>
 
-    <div id="ebayOrphanReListing" class="table-block__holder table-block__footer-buttons">
-        <button class="delete_all_orphans btn btn-md btn-danger">{l s='Delete all' mod='ebay'}</button>
-        <button class="delete_several_orphans btn btn-md btn-danger">{l s='Delete selected' mod='ebay'}</button>
-    </div>
+                <tbody>
+                    {foreach from=$ads key=k  item=a}
+                        {if $a.id_task == 14}
+                                {continue}
+                            {/if}
+                        <tr{if $k % 2 !== 0} class="alt_row"{/if}>
+
+                        <td>
+                            <input type="checkbox" class="checkboxfordelete">
+                        </td>
+
+                        <td>
+                            {if $a.id_product_ref}
+                                <a style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+                                   href="{$a.link|escape:'htmlall':'UTF-8'}"
+                                   target="_blank">{$a.id_product_ref|escape:'htmlall':'UTF-8'}</a>
+                            {/if}
+                        </td>
+
+                        <td>{if $a.exists}{$a.psProductName|escape:'htmlall':'UTF-8'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product|escape:'htmlall':'UTF-8'}{/if}</td>
+
+                        {if $a.exists}
+                            <td class="text-center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}<span
+                                        style="color: red;">{l s='-' mod='ebay'}</span>{/if}</td>
+                            <td class="text-center">{if $a.active && !$a.blacklisted}{l s='-' mod='ebay'}{else}<span
+                                        style="color: red;">{l s='Yes' mod='ebay'}</span>{/if}</td>
+                        {else}
+                            <td class="text-center">-</td>
+                        {/if}
+
+                        {if $a.exists}
+                            <td class="text-center">{if $a.isMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+                        {else}
+                            <td class="text-center">-</td>
+                        {/if}
+
+                        {if $a.exists}
+                            <td>{$a.category_full_name|escape:'htmlall':'UTF-8'}</td>
+                        {else}
+                            <td class="text-center">-</td>
+                        {/if}
+
+                        {if $a.exists && $a.id_category_ref}
+                            <td>{$a.ebay_category_full_name|escape:'htmlall':'UTF-8'}</td>
+                        {else}
+                            <td class="text-center">-</td>
+                        {/if}
+
+                        {if $a.exists && $a.id_category_ref}
+                            <td class="text-center">{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+                        {else}
+                            <td class="text-center">-</td>
+                        {/if}
+
+                        {if $a.exists && $a.id_category_ref}
+                            <td class="text-center">{if $a.sync}{l s='Yes' mod='ebay'}{else}<span
+                                        style="color: red;">{l s='No' mod='ebay'}</span>{/if}</td>
+                        {else}
+                            <td class="text-center">-</td>
+                        {/if}
+
+                        <td class="text-center">
+                            <div class="action">
+                                <a href="#" class="delete-orphan hover-danger btn btn-sm btn-default" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
+                                   title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
+                                    <i class="icon-trash"></i>
+                                </a>
+                                {if $a.exists && $a.id_category_ref && $a.sync && !$a.active}
+                                    <a href="#" class="out_of_stock_orphan hover-danger btn btn-sm btn-default"
+                                       ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
+                                       title="{l s='Out of stock' mod='ebay'}" data-toggle="tooltip">
+                                       <i class="icon-ban"></i>
+                                    </a>
+                                {/if}
+                            </div>
+                        </td>
+
+                        <td>
+                            {if !$a.exists}
+                                {l s='PrestaShop Product does not exists' mod='ebay'}
+                            {/if}
+                        </td>
+                    {/foreach}
+                </tbody>
+            </table>
+
+            {if isset($pages_all) and $pages_all >1}
+                <div class="navPaginationListOrphanProductTab" style="display:flex; justify-content:center">
+                    {include file=$tpl_include}
+                </div>
+            {/if}
+        </div>
+
+        <div id="ebayOrphanReListing" class="table-block__holder table-block__footer-buttons">
+            <button class="delete_all_orphans btn btn-md btn-danger">{l s='Delete all' mod='ebay'}</button>
+            <button class="delete_several_orphans btn btn-md btn-danger">{l s='Delete selected' mod='ebay'}</button>
+        </div>
+    {/if}
 </div>
 
 
