@@ -123,12 +123,12 @@
 
                         <td class="text-center">
                             <div class="action">
-                                <a href="#" class="delete-orphan hover-danger btn btn-sm btn-default" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
+                                <a href="#" class="delete-orphan btn-hover-danger  btn btn-sm btn-default" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
                                    title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
                                     <i class="icon-trash"></i>
                                 </a>
                                 {if $a.exists && $a.id_category_ref && $a.sync && !$a.active}
-                                    <a href="#" class="out_of_stock_orphan hover-danger btn btn-sm btn-default"
+                                    <a href="#" class="out_of_stock_orphan btn-hover-danger  btn btn-sm btn-default"
                                        ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"
                                        title="{l s='Out of stock' mod='ebay'}" data-toggle="tooltip">
                                        <i class="icon-ban"></i>
@@ -145,13 +145,13 @@
                     {/foreach}
                 </tbody>
             </table>
-
-            {if isset($pages_all) and $pages_all >1}
-                <div class="navPaginationListOrphanProductTab" style="display:flex; justify-content:center">
-                    {include file=$tpl_include}
-                </div>
-            {/if}
         </div>
+
+        {if isset($pages_all) and $pages_all >1}
+            <div class="navPaginationListOrphanProductTab" style="display:flex; justify-content:center">
+                {include file=$tpl_include}
+            </div>
+        {/if}
 
         <div id="ebayOrphanReListing" class="table-block__holder table-block__footer-buttons">
             <button class="delete_all_orphans btn btn-md btn-danger">{l s='Delete all' mod='ebay'}</button>

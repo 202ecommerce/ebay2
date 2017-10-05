@@ -40,6 +40,11 @@
 .totebay .menuTab {
   margin-bottom: 15px;
 }
+.totebay .menuTab.nav-pills > li {
+  float: none;
+  display: inline-block;
+  margin-left: 0;
+}
 .totebay .sidebar.navigation i,
 .totebay .panel-heading i {
   margin-right: 5px;
@@ -101,6 +106,9 @@
 .totebay .item-list .item .badge {
   line-height: 15px;
   vertical-align: middle;
+}
+.totebay .badge {
+  padding: 0 5px;
 }
 .totebay .panel-heading .badge.badge-success {
   border-color: #72C279 !important;
@@ -306,7 +314,7 @@
 .totebay .table-block .table-wrapper .table .action .active i {
   color: #555;
 }
-.totebay .table-block .table-wrapper .table .action .hover-danger:hover {
+.totebay .table-block .table-wrapper .table .action .btn-hover-danger:hover {
   background-color: #d5676f;
   border-color: #cd4b55;
 }

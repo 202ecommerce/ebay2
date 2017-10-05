@@ -66,13 +66,13 @@
             <tr></tr>
             </tbody>
         </table>
-
-        {if $pages_all >1}
-            <div class="navPaginationListLogWorkersTab" style="display:flex; justify-content:center">
-                {include file=$tpl_include}
-            </div>
-        {/if}
     </div>
+
+    {if $pages_all >1}
+        <div class="navPaginationListLogWorkersTab" style="display:flex; justify-content:center">
+            {include file=$tpl_include}
+        </div>
+    {/if}
 
     <div class="buttonContainer table-block__holder table-block__footer-buttons">
         <button class="btn btn-danger deleteAllWork">{l s='Delete all'}</button>

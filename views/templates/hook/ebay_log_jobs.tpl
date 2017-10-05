@@ -56,7 +56,7 @@
                         <td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-default"
+                            <a href="#" class="btn-hover-danger   btn btn-sm btn-default"
                                title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
                                 <span class="icon-close"></span>
                             </a>
@@ -67,13 +67,13 @@
             <tr></tr>
             </tbody>
         </table>
-
-        {if $pages_all >1}
-            <div class="navPaginationListLogJobsTab" style="display:flex; justify-content:center">
-                {include file=$tpl_include}
-            </div>
-        {/if}
     </div>
+
+    {if $pages_all >1}
+        <div class="navPaginationListLogJobsTab" style="display:flex; justify-content:center">
+            {include file=$tpl_include}
+        </div>
+    {/if}
 
     <div class="buttonContainer table-block__holder table-block__footer-buttons">
         <button class="btn btn-danger deleteAllLog">{l s='Delete all'}</button>

@@ -28,38 +28,46 @@
         <button class="button-refresh button btn btn-md btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
-    <div class="table-wrapper">
-        <table id="ProductsExclu" class="table" >
-            <thead>
-            <tr >
-                <th><span>{l s='ID' mod='ebay'}</span></th>
-                <th><span>{l s='Nom' mod='ebay'}</span></th>
-                <th><span>{l s='Category PrestaShop' mod='ebay'}</span></th>
-                <th><span>{l s='Category Ebay' mod='ebay'}</span></th>
-                <th class="text-center">{l s='Actions' mod='ebay'}</th>
-            </tr>
-            </thead>
+    {if empty($products)}
+        <div class="table-block__message table-block__holder">
+            <div class="table-block__message-holder">
+                <p>{l s='No excluded products' mod='ebay'}</p>
+            </div>
+        </div>
+    {else}
+        <div class="table-wrapper">
+            <table id="ProductsExclu" class="table" >
+                <thead>
+                <tr >
+                    <th><span>{l s='ID' mod='ebay'}</span></th>
+                    <th><span>{l s='Nom' mod='ebay'}</span></th>
+                    <th><span>{l s='Category PrestaShop' mod='ebay'}</span></th>
+                    <th><span>{l s='Category Ebay' mod='ebay'}</span></th>
+                    <th class="text-center">{l s='Actions' mod='ebay'}</th>
+                </tr>
+                </thead>
 
-            <tbody>
-            {if isset($products)}
-                {foreach from=$products item="product"}
-                    <tr>
-                        <td>{$product.id_product|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$product.name|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$product.category_ps|escape:'htmlall':'UTF-8'}</td>
-                        <td> {$product.category_ebay|escape:'htmlall':'UTF-8'}</td>
-                        <td class="text-center">
-                            <a href="#" id="{$product.id_product}" class="btn btn-sm btn-default" name="incluProduct"
-                               title="{l s='Include' mod='ebay'}" data-toggle="tooltip">
-                                <span class="icon-rotate-left"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {/foreach}
-            {/if}
-            </tbody>
-        </table>
-    </div>
+                <tbody>
+                {if isset($products)}
+                    {foreach from=$products item="product"}
+                        <tr>
+                            <td>{$product.id_product|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$product.name|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$product.category_ps|escape:'htmlall':'UTF-8'}</td>
+                            <td> {$product.category_ebay|escape:'htmlall':'UTF-8'}</td>
+                            <td class="text-center">
+                                <a href="#" id="{$product.id_product}" class="btn btn-sm btn-default" name="incluProduct"
+                                   title="{l s='Include' mod='ebay'}" data-toggle="tooltip">
+                                    <span class="icon-rotate-left"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {/foreach}
+                {/if}
+                </tbody>
+            </table>
+        </div>
+    {/if}
 </div>
 
 {literal}
@@ -68,7 +76,7 @@
     $('a[name="incluProduct"]').click(function (e) {
         var tr = $(this).parent().parent();
         e.preventDefault();
-        if (confirm(header_ebay_l['Are you sure you want to inclure this product?'])) {
+        if (confirm(header_ebay_l['Are you sure you want to include this product?'])) {
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/inclureProductAjax.php',

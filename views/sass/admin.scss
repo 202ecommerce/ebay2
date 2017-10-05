@@ -57,6 +57,14 @@
   // General styling
   .menuTab {
     margin-bottom: 15px;
+
+    &.nav-pills {
+      > li {
+        float: none;
+        display: inline-block;
+        margin-left: 0;
+      }
+    }
   }
 
   // Adds spacing after icons
@@ -133,6 +141,10 @@
         vertical-align: middle;
       }
     }
+  }
+
+  .badge {
+    padding: 0 5px;
   }
 
   // Colored badge in panel-heading
@@ -387,7 +399,7 @@
             }
           }
 
-          .hover-danger {
+          .btn-hover-danger   {
             &:hover {
               background-color: #d5676f;
               border-color: #cd4b55;

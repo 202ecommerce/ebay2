@@ -648,43 +648,43 @@
                         <td>
                             <div class="action">
                                 <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span ></span><span class="icon-pencil"></span></a>
-                                <a href="#" class="delete_cat hover-danger btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span ><span class="icon-trash"></span></a>
+                                <a href="#" class="delete_cat btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span ><span class="icon-trash"></span></a>
                             </div>
                         </td>
                     </tr>
                 {/foreach}
                 </tbody>
             </table>
-
-            {if isset($pagination) && $pagination}
-                <div class="navPaginationSyncTab" style="display:flex; justify-content:center">
-                    {include file=$tpl_include}
-                </div>
-            {/if}
-
-            {if $sync_1}
-                <script>
-                    $(document).ready(function() {ldelim}
-                        eBaySync(1);
-                    {rdelim});
-                </script>
-            {/if}
-            {if $sync_2}
-                <script>
-                    $(document).ready(function() {ldelim}
-                        eBaySync(2);
-                    {rdelim});
-                </script>
-            {/if}
-            {if $is_sync_mode_b}
-                <script>
-                    $(document).ready(function() {ldelim}
-                        $("#catSync").show("slow");
-                        $("#ebay_sync_products_mode2").attr("checked", true);
-                    {rdelim});
-                </script>
-            {/if}
         </div>
+
+		{if isset($pagination) && $pagination}
+			<div class="navPaginationSyncTab" style="display:flex; justify-content:center">
+				{include file=$tpl_include}
+			</div>
+		{/if}
+
+		{if $sync_1}
+			<script>
+				$(document).ready(function() {ldelim}
+					eBaySync(1);
+					{rdelim});
+			</script>
+		{/if}
+		{if $sync_2}
+			<script>
+				$(document).ready(function() {ldelim}
+					eBaySync(2);
+					{rdelim});
+			</script>
+		{/if}
+		{if $is_sync_mode_b}
+			<script>
+				$(document).ready(function() {ldelim}
+					$("#catSync").show("slow");
+					$("#ebay_sync_products_mode2").attr("checked", true);
+					{rdelim});
+			</script>
+		{/if}
     {/if}
 </div>
 
