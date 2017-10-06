@@ -190,6 +190,7 @@
   height: 100%;
   background: #72c279;
   border-radius: 10px;
+  transition: width 0.5s ease-out;
 }
 .totebay #popin-mode_boost .big {
   margin: 0 0 20px;
