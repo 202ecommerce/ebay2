@@ -57,13 +57,13 @@
 
 				<ul class="nav nav-pills annonces-menu menuTab ebay_hidden " role="tablist">
 
-					<li role="presentation" id="menuTab5" class="menuTabButton "><a href="javascript:void(0);">{l s='List products' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab5" class="menuTabButton "><a href="#">{l s='List products' mod='ebay'}</a></li>
 
-					<li role="presentation" id="menuTab80" class="menuTabButton "><a href="javascript:void(0);">{l s='List Errors Products' mod='ebay'}{if $count_product_errors > 0}<span class="badge">{$count_product_errors}</span>{/if}</a></li>
+					<li role="presentation" id="menuTab80" class="menuTabButton "><a href="#">{l s='List Errors Products' mod='ebay'}{if $count_product_errors > 0}<span class="badge">{$count_product_errors}</span>{/if}</a></li>
 
-					<li role="presentation" id="menuTab9" class="menuTabButton"><a href="javascript:void(0);">{l s='Ebay Listings' mod='ebay'}</a></li>
-					<li role="presentation" id="menuTab16" class="menuTabButton"><a href="javascript:void(0);">{l s='Orphan Listings' mod='ebay'}<span class="badge orhan_badge">{if $count_orphan_listing > 0}{$count_orphan_listing}{/if}</span></a></li>
-					<li role="presentation" id="menuTab106" class="menuTabButton"><a href="javascript:void(0);">{l s='Excluded products' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab9" class="menuTabButton"><a href="#">{l s='Ebay Listings' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab16" class="menuTabButton"><a href="#">{l s='Orphan Listings' mod='ebay'}<span class="badge orhan_badge">{if $count_orphan_listing > 0}{$count_orphan_listing}{/if}</span></a></li>
+					<li role="presentation" id="menuTab106" class="menuTabButton"><a href="#">{l s='Excluded products' mod='ebay'}</a></li>
 				</ul>
 
 				<ul class=" nav nav-pills orders-menu menuTab ebay_hidden" role="tablist">

@@ -142,5 +142,8 @@ $(document).ready(function () {
     }
 
 
-
+    // Stop default behavior for links <a href="#">
+    $(document).on('click', 'a[href="#"]', function (event) {
+        event.preventDefault();
+    });
 });
