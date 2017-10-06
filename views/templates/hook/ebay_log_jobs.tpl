@@ -56,10 +56,12 @@
                         <td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
                         <td class="text-center">
-                            <a href="#" class="btn-hover-danger btn btn-sm btn-default"
-                               title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
-                                <span class="icon-close"></span>
-                            </a>
+                            <div class="action">
+                                <a href="#" class="btn-hover-danger btn btn-sm btn-default"
+                                   title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
+                                    <span class="icon-close"></span>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 {/foreach}
