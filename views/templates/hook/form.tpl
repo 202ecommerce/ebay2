@@ -244,7 +244,7 @@
                                                 {l s='In work ' mod='ebay'}<b></b>{l s=' tasks' mod='ebay'} <span class="btn btn-default refreshNbTasksInWork">{l s='Refresh' mod='ebay'}</span>
                             </span>
                             <span class="mode_boost">
-                                <a href="#popin-mode_boost" class="js-popin btn btn-lg btn-success"><span class="icon-plus" ></span> {l s='Boost' mod='ebay'} </a>
+                                <a href="#popin-mode_boost" class="js-popin btn btn-md btn-default">{l s='Boost' mod='ebay'} </a>
                             </span>
 
                                             <div class="pull-right">
