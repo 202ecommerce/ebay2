@@ -226,8 +226,17 @@
   // Progress bar
   .progressbar {
     .tasks {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
       display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -moz-box-pack: justify;
+      -ms-flex-pack: justify;
       justify-content: space-between;
+
       overflow: hidden;
 
       .percentages {
@@ -242,7 +251,8 @@
       border-radius: 10px;
       overflow: hidden;
       
-      .line {
+      .percentages_line {
+        width: 0;
         height: 100%;
         background: #72c279;
         border-radius: 10px;
@@ -251,7 +261,7 @@
     }
   }
 
-  // Popin Mode Boost
+  // Mode Boost
   #popin-mode_boost {
     .big {
       margin: 0 0 20px;
@@ -263,6 +273,17 @@
       .tasks {
         margin: 0 0 3px;
       }
+    }
+  }
+
+  .warning-message {
+    margin-bottom: 0 !important;
+    line-height: 1.3;
+    color: darken(#fbbb22, 5%);
+
+    small {
+      font-weight: 400;
+      font-size: 11px;
     }
   }
 
@@ -300,8 +321,17 @@
     }
 
     &__title {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
       display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -moz-box-pack: justify;
+      -ms-flex-pack: justify;
       justify-content: space-between;
+
       margin: -20px 0 0;
       padding: 15px 0;
 
@@ -311,8 +341,17 @@
     }
 
     &__search {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
       display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -moz-box-pack: justify;
+      -ms-flex-pack: justify;
       justify-content: space-between;
+
       padding: 20px 0;
       background: #f0f0f0;
       @media all and (max-width: 640px) {
@@ -359,7 +398,12 @@
     }
 
     &__footer-buttons {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
       display: flex;
+
       padding-top: 20px;
 
       @media all and (max-width: 640px) {

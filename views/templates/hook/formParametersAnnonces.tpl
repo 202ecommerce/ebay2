@@ -373,7 +373,7 @@
                 height = $(this).find('option:selected').attr('data-height');
 
                 if (+width < 800 || +height < 800){
-                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>×</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
+                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
                     $('#annoncestab1').closest('.panel').before(warning);
                 }
 			});

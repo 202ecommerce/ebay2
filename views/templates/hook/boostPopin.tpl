@@ -7,9 +7,9 @@
 
         <form action="" class="form-horizontal" method="post" id="category_config">
             <div id="1" class="page_boost selected first_page_popin">
-                <p>{l s="Boost mode allow for 5 task to be proceeded simultaneously. It's suited when you have a large amount of tasks."}</p>
+                <p>{l s="Boost mode allows for 5 tasks to be proceeded simultaneously. It's suited when you have a large amount of tasks."}</p>
                 <div class='alert alert-warning'>
-                    <button class='close' data-dismiss='alert'>�</button>
+                    <button class='close' data-dismiss='alert'>&#215;</button>
                     {l s="After launching boost mode, you must keep your browser window open." mod="ebay"}
                 </div>
             </div>
@@ -22,12 +22,12 @@
                         <strong class="percentages">{l s="loading..."}</strong>
                     </div>
                     <div class="line-wrapper">
-                        <div class="line percentages_line" style="width: 0%;"></div>
+                        <div class="percentages_line"></div>
                     </div>
                 </div>
 
                 <div class='alert alert-warning'>
-                    <button class='close' data-dismiss='alert'>x</button>
+                    <button class='close' data-dismiss='alert'>&#215;</button>
                     {l s="You must keep your browser window open else synchronisation will stop." mod="ebay"}
                 </div>
             </div>
