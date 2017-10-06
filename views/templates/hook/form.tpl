@@ -242,7 +242,10 @@
                             {/if}
                             <span class="nb_tasks_in_work">
                                                 {l s='In work ' mod='ebay'}<b></b>{l s=' tasks' mod='ebay'} <span class="btn btn-default refreshNbTasksInWork">{l s='Refresh' mod='ebay'}</span>
-                                            </span>
+                            </span>
+                            <span class="mode_boost">
+                                <a href="#popin-mode_boost" class="js-popin btn btn-lg btn-success"><span class="icon-plus" ></span> {l s='Boost' mod='ebay'} </a>
+                            </span>
 
                                             <div class="pull-right">
                                                 <span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
@@ -251,52 +254,6 @@
                                             </div>
 
                                             <div id="popin-container-help">
-                                                {* Category add modal *}
-
-                                                {*<div class="popin popin-lg" id="popin-help" style="display: none; width: 700px;overflow-x: hidden;">
-
-                                                    <div class="new new_aide" style="width: 100%;text-align: center;  margin: 35px;">
-                                                        <span><b>{l s='Help for module eBay' mod='ebay'}</b></span></br>
-                                                        </br></br>
-                                                        <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/views/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
-                                                        <div id="" style=" float: right; width: 45%; display: inline-block; text-align: left;">
-                                                        <p ><b>{l s='Known issues' mod='ebay'}</b></p>
-                                                            {l s='Rejected listings' mod='ebay'}<a class="kb-help" data-errorcode="{$help_listing_rejection.errorcode}" data-module="ebay" data-lang="{$help_listing_rejection.lang}" module_version="{$help_listing_rejection.module_version}" prestashop_version="{$help_listing_rejection.prestashop_version}">
-                                                            </a></br>
-                                                            {l s='Order import issue' mod='ebay'}<a class="kb-help" data-errorcode="{$help_order_import.errorcode}" data-module="ebay" data-lang="{$help_order_import.lang}" module_version="{$help_order_import.module_version}" prestashop_version="{$help_order_import.prestashop_version}">
-                                                            </a>
-
-                                                        <p id=><b>{l s='Usefull links' mod='ebay'}</b></p>
-
-                                                            <a href="https://help.202-ecommerce.com" target="_blank">{l s='User guide' mod='ebay'}</a></br>
-                                                            <a href="https://support.202-ecommerce.com" target="_blank">{l s='Support' mod='ebay'}</a></br>
-                                                            <b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Module evolutions' mod='ebay'}</a></b>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="new new_aide" style="width: 100%; display: inline-block;text-align: center; margin: 35px;">
-                                                        <span  style="text-align: center"><b>{l s='Help for eBay' mod='ebay'}</b></span></br>
-                                                        </br></br>
-                                                        <div id="" style="padding-bottom: 3em; float: left; width: 45%;">
-                                                            <img id="ebay-logo" src="../modules/ebay/views/img/ebay.png" />
-                                                            <p>{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
-                                                            <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}
-                                                                {l s='eBay represents a great opportunity for you to reach millions of new customers and help you to  grow your business.' mod='ebay'}</p>
-                                                        </div>
-                                                        <div id="" style=" float: right; width: 45%;text-align: left;">
-                                                        <p id=""><b>{l s='Usefull links' mod='ebay'}</b></p>
-
-                                                            {l s='eBay Seller center' mod='ebay'}<a class="kb-help" data-errorcode="{$help_ebay_seller.errorcode}" data-module="ebay" data-lang="{$help_ebay_seller.lang}" module_version="{$help_ebay_seller.module_version}" prestashop_version="{$help_ebay_seller.prestashop_version}">
-                                                            </a></br>
-                                                            <a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/informations-generales/support-marchand-ebay/" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></br>
-                                                            <a href="{$pro_url|escape:'htmlall':'UTF-8'}" target="_blank">{l s='Contact eBay merchant support' mod='ebay'}</a>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer" style="text-align: center">
-                                                        <button class="close_popin_help btn btn-default">OK</button>
-                                                    </div>
-                                                </div>*}
                                             </div>
                                         </form>
                                         <form class="change_profile" method="post">
@@ -307,31 +264,6 @@
                                 </div>
                             </div>
 
-
-
-
-                {*<div class="panel-body well">
-                            <select class="ebay_profils">
-                                {foreach from=$profiles item=profile}
-                                <option {if $current_profile->id == $profile.id_ebay_profile}selected{/if} id="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                                    {$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'} | {$profile.site_name|escape:'htmlall':'UTF-8'}
-                                </option>
-
-                                {/foreach}
-                            </select>
-                            <a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                                <img src="../img/admin/delete.gif" /></a>
-                            <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}"><img src="../img/admin/add.gif">{l s='Add a New Profile' mod='ebay'}</a>
-                            <form class="change_profile" method="post">
-                                <input type="hidden" name="ebay_profile" value="" />
-                                <input type="hidden" name="action" value="logged" />
-                            </form>
-
-                </div>*}
-
-                            {* <br>
-                             {l s='The bold profile is your current profile. To change the profile you are currently working with, click on the desired profile' mod='ebay'}
-                             <br><br>*}
                         {else}
                             <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='Status of your eBay Add-on' mod='ebay'}</legend>
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
@@ -399,17 +331,6 @@
             <a id="log-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#log" data-sub="log"><i class="icon-exclamation-circle"></i> {l s='Log' mod='ebay'}</a>
         </ul>
     </div>
-      {*  <div class="ebay-boxes-2-col-table">
-
-            <div class="ebay-boxes-2-col-cell right ebay_gray_title_box">
-                <ul class="nav nav-pills" role="tablist">
-                    <li role="presentation" class="active"><a id="dashbord-menu-link" class="main-menu-a" href data-sub="dashbord">{l s='Dashbord' mod='ebay'}</a></li>
-                    <li role="presentation" ><a id="orders-menu-link" class="main-menu-a" href data-sub="orders">{l s='Orders' mod='ebay'}<span class="badge">42</span></a></li>
-                    <li role="presentation" ><a id="annonces-menu-link" class="main-menu-a" href data-sub="annonces">{l s='Annonces' mod='ebay'}<span class="badge">42</span></a></li>
-                    <li role="presentation" ><a id="settings-menu-menu-link" class="main-menu-a" href data-sub="settings">{l s='Settings' mod='ebay'}</a></li>
-                </ul>
-            </div>
-        </div>*}
 
     {/if}
 {/if}
@@ -463,6 +384,7 @@
             </div>
         </div>
     </div>
+    {include file="./boostPopin.tpl"}
     {if $ebay_shipping_config_tab > 0 && $count_category == 0}
     <script>
         $(document).ready(function() {
@@ -529,6 +451,46 @@
                 event.preventDefault();
                 window.open("{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/help/help.pdf", 'pdf');
             });
+
+
+            $('.js-next-popin_boost').on('click', function() {
+
+                var courant_page = $('.page_boost.selected');
+
+
+                var new_id =  parseInt(courant_page.attr('id'))+1;
+
+
+                    $('.page_popin_boost').html(''+new_id);
+                    courant_page.removeClass('selected').hide();
+                    courant_page.parent().find('div#'+new_id).addClass('selected').show();
+
+                if (new_id == 2) {
+                        $('.js-prev-popin_boost').show();
+                    $('.js-next-popin_boost').hide();
+                    $('.js-close-popin').hide();
+                }
+
+
+            });
+            $('.js-prev-popin_boost').on('click', function() {
+                $('.js-next-popin_boost').show();
+                var courant_page = $('.page_boost.selected');
+                courant_page.removeClass('selected').hide();
+
+                var new_id =  parseInt(courant_page.attr('id'))-1;
+                $('.page_popin_boost').html(''+new_id);
+
+                if(new_id == 1){
+                    $('.js-prev-popin_boost').hide();
+                    $('.js-close-popin').show();
+                }
+                $('.js-save-popin_boost').hide();
+
+                courant_page.parent().find('div#'+new_id).addClass('selected').show();
+
+            });
+
         });
 
        /* $('.ebay_profils').change(function() {
