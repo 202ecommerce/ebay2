@@ -24,6 +24,7 @@
  */
 
 var profileId ;
+var boost;
 $(document).ready(function () {
     $('#ebay-seller-tips-link').click(function (event) {
         event.preventDefault();
@@ -64,6 +65,12 @@ $(document).ready(function () {
         });
     });
 
+    $('.star_boost').click(function (event) {
+        event.preventDefault();
+
+        boost = window.setInterval(function(){startBoost(boost_url)}, 3000);
+    });
+
 
 
 
@@ -78,9 +85,14 @@ $(document).ready(function () {
         $('#impact_prix').val('');
         var courant_page = $('.page_config_category.selected');
         courant_page.removeClass('selected').hide();
+        var courant_page = $('.page_boost.selected');
+        courant_page.removeClass('selected').hide();
         $('.page_popin').html('1');
+        $('.page_popin_boost').html('1');
         $('.first_page_popin').addClass('selected').show();
         $('.js-prev-popin').hide();
+        $('.js-prev-popin_boost').hide();
+        $('.js-next-popin_boost').show();
         $('#ps_category_list').show();
         $('#item_spec').html('');
         $('div .category_ebay').html('');
@@ -103,6 +115,40 @@ $(document).ready(function () {
         $('.' + menu_name + '-menu').show();
 
         menu.children(":first").trigger('click');
+
+    }
+
+    function startBoost(url) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: url,
+            success: function (data) {
+               if (typeof $('.valueMax').data('val') === 'undefined'){
+                   $('.valueMax').data('val', data);
+                   $('.valueMax').html(data);
+               }
+               var complited = $('.valueMax').data('val') - data;
+                console.log(complited);
+                $('.valueDone').html(complited);
+                var complitedPercent = 0;
+                if(complited > 0) {
+                     complitedPercent = Math.round(complited/($('.valueMax').data('val')/100));
+
+                }
+                if(complited == $('.valueMax').data('val')) {
+                    complitedPercent = 100;
+                    $('.percentages').html(complitedPercent+'%');
+                    $('.percentages_line').css('width', complitedPercent+'%');
+                    //event.preventDefault();
+                    clearInterval(boost);
+                    window.location.reload();
+                } else{
+                    $('.percentages').html(complitedPercent+'%');
+                    $('.percentages_line').css('width', complitedPercent+'%');
+                }
+            }
+        });
 
     }
 

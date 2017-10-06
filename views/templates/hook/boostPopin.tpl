@@ -9,7 +9,7 @@
             <div id="1" class="page_boost selected first_page_popin">
                 <p>{l s="Boost mode allow for 5 task to be proceeded simultaneously. It's suited when you have a large amount of tasks."}</p>
                 <div class='alert alert-warning'>
-                    <button class='close' data-dismiss='alert'>×</button>
+                    <button class='close' data-dismiss='alert'>�</button>
                     {l s="After launching boost mode, you must keep your browser window open." mod="ebay"}
                 </div>
             </div>
@@ -18,16 +18,16 @@
 
                 <div class="progressbar">
                     <div class="tasks">
-                        <strong><span class="value valueDone">23123</span> / <span class="value valueMax">54890</span> {l s="tasks"}</strong>
-                        <strong class="percentages">22%</strong>
+                        <strong><span class="value valueDone">0</span> / <span class="value valueMax">{l s="loading..."}</span> {l s="tasks"}</strong>
+                        <strong class="percentages">{l s="loading..."}</strong>
                     </div>
                     <div class="line-wrapper">
-                        <div class="line" style="width: 22%;"></div>
+                        <div class="line percentages_line" style="width: 0%;"></div>
                     </div>
                 </div>
 
                 <div class='alert alert-warning'>
-                    <button class='close' data-dismiss='alert'>×</button>
+                    <button class='close' data-dismiss='alert'>x</button>
                     {l s="You must keep your browser window open else synchronisation will stop." mod="ebay"}
                 </div>
             </div>
@@ -35,7 +35,7 @@
 
         <div class="panel-footer">
             <button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
-            <button class="js-next-popin_boost btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}</button>
+            <button class="js-next-popin_boost btn btn-primary pull-right star_boost"><i class="process-icon-next"></i>{l s='Start' mod='ebay'}</button>
 
             <button class="js-prev-popin_boost btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
         </div>

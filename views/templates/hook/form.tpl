@@ -417,6 +417,7 @@
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
         var nb_tasks_in_work_url = '{$nb_tasks_in_work_url}';
+        var boost_url = '{$boost_url}';
         function loadNbTasksInWork(e){
             $.ajax({
                 url : nb_tasks_in_work_url,
@@ -468,7 +469,7 @@
                 if (new_id == 2) {
                         $('.js-prev-popin_boost').show();
                     $('.js-next-popin_boost').hide();
-                    $('.js-close-popin').hide();
+                    $('.js-close-popin').show();
                 }
 
 

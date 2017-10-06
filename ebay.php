@@ -1635,9 +1635,10 @@ class Ebay extends Module
         }
 
 
-
+        $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
         $this->smarty->assign(array(
             'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
+            'boost_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/boostMode.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&cron_url='.$cron_url,
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),

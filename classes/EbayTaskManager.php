@@ -139,6 +139,7 @@ class EbayTaskManager
             'id_product_attribute' => $id_product_atttibute,
             'id_task' => $id_task,
             'id_ebay_profile' => $id_ebay_profile,
+            'date_add' =>  pSQL(date("Y-m-d H:i:s")),
             'retry' => 0,
             'locked' => 0,
         );
@@ -196,9 +197,11 @@ class EbayTaskManager
 
     public static function getJob()
     {
-        $unidId = uniqid();
-        if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0', 500)) {
-            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "'.$unidId.'" ORDER BY `date_add`');
+        if (self::nbTaskInwork() < 1500) {
+            $unidId = uniqid();
+            if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0', 150)) {
+                return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "' . $unidId . '" ORDER BY `date_add`');
+            }
         }
         return false;
     }
@@ -238,7 +241,7 @@ class EbayTaskManager
 
     public static function cleanTasks()
     {
-        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 40 MINUTE');
+        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 10 MINUTE');
     }
 
     public static function getCountErrors($id_ebay_profile, $search = false, $id_lang = null)
@@ -311,5 +314,12 @@ class EbayTaskManager
 										SET `error_code` = null, `error` = "", `retry` = 0
 										WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
         return  Db::getInstance()->execute($sql);
+    }
+
+    public static function nbTaskInwork()
+    {
+        $sql_select = "SELECT COUNT(*) AS nb  FROM `"._DB_PREFIX_."ebay_task_manager` WHERE `locked` != 0";
+        $res_select = DB::getInstance()->executeS($sql_select);
+        return $res_select[0]['nb'];
     }
 }
