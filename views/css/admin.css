@@ -4,6 +4,9 @@
  * Every rule should be incapsulated in the .totebay selector
  * to prevent styling elements outside the module container.
  */
+.totebay {
+  overflow: hidden;
+}
 .totebay .d-b {
   display: block;
 }
@@ -47,6 +50,11 @@
   float: none;
   display: inline-block;
   margin-left: 0;
+}
+@media all and (max-width: 480px) {
+  .totebay .menuTab.nav-pills > li {
+    width: 100%;
+  }
 }
 .totebay .sidebar.navigation i,
 .totebay .panel-heading i {
