@@ -896,7 +896,7 @@ class EbayRequest
                 }
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
-            if (!empty($seller_ship_prof) && EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RESYNCHBP') == 1) {
+            if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1) {
                 $vars = array_merge($vars, array(
                     'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
                     'excluded_zones' => $data['shipping']['excludedZone'],

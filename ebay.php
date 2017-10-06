@@ -909,7 +909,7 @@ class Ebay extends Module
                     continue;
                 }
                 if (!$order->isCompleted()) {
-                    $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
+                    $message = $this->l('Amount less than 0.1 or no matching product');
                     $order->checkError($message, $ebay_user_identifier);
                     continue;
                 }
@@ -1415,8 +1415,8 @@ class Ebay extends Module
                 $profile_count_product_errors = EbayTaskManager::getErrorsCount($profile['id_ebay_profile']);
                 $ebay_profile_hook = new EbayProfile($profile['id_ebay_profile']);
                 $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-                $profile['count_order_errors'] = (isset($profile_count_order_errors['nb']) ? $profile_count_order_errors['nb']:0);
-                $profile['count_product_errors'] = (isset($profile_count_product_errors['nb']) ?$profile_count_product_errors['nb']:0);
+                $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb']:0);
+                $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ?$profile_count_product_errors[0]['nb']:0);
                 $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
                 $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
                 $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);

@@ -30,6 +30,7 @@
 		<ItemID>{$item_id|escape:'htmlall':'UTF-8'}</ItemID>
 		{if isset($country)}
 			<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
+			<Location>{$country|escape:'htmlall':'UTF-8'}</Location>
 		{/if}
 
 		{if isset($country_currency)}

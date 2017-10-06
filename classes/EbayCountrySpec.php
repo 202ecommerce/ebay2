@@ -288,7 +288,7 @@ class EbayCountrySpec
             'documentation' => 'en',
             'language' => 'en_IE',
             'currency' => 'EUR',
-            'site_name' => 'IE',
+            'site_name' => 'Ireland',
             'site_extension' => 'ie',
             'img_stats' => null,
             'iso_code' => 'ie',

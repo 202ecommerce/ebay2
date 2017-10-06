@@ -58,6 +58,9 @@
 		{/if}
 		<CategoryMappingAllowed>true</CategoryMappingAllowed>
 		<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
+	
+		<Location>{$country|escape:'htmlall':'UTF-8'}</Location>
+		
 		<Currency>{$country_currency|escape:'htmlall':'UTF-8'}</Currency>
 		<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
