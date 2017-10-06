@@ -212,7 +212,6 @@
 .totebay .button-apply,
 .totebay .button-reset,
 .totebay .button-refresh {
-  min-width: 80px;
   padding-left: 15px;
   padding-right: 15px;
 }
