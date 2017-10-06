@@ -56,7 +56,7 @@
                         <td>{$task.id_product|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-danger">
+                            <a href="#" class="btn-hover-danger btn btn-sm btn-default">
                                 <span class="icon-close"></span>
                             </a>
                         </td>

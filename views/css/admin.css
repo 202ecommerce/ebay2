@@ -22,6 +22,9 @@
 .totebay .width-num {
   width: 60px !important;
 }
+.totebay .big {
+  font-size: large;
+}
 .totebay .js-popin-help {
   text-decoration: none !important;
 }
@@ -167,6 +170,35 @@
 }
 .totebay .kb-help .active [class^="icon-"] {
   font-size: 16px;
+}
+.totebay .progressbar .tasks {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.totebay .progressbar .tasks .percentages {
+  color: #d2d8db;
+}
+.totebay .progressbar .line-wrapper {
+  width: 100%;
+  height: 15px;
+  background: #d2d8db;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.totebay .progressbar .line-wrapper .line {
+  height: 100%;
+  background: #72c279;
+  border-radius: 10px;
+}
+.totebay #popin-mode_boost .big {
+  margin: 0 0 20px;
+}
+.totebay #popin-mode_boost .progressbar {
+  margin: 0 0 35px;
+}
+.totebay #popin-mode_boost .progressbar .tasks {
+  margin: 0 0 3px;
 }
 .totebay .table-block-below {
   /* special styles if there is some block above .table-block */
@@ -316,8 +348,8 @@
   color: #555;
 }
 .totebay .table-block .table-wrapper .table .action .btn-hover-danger:hover {
-  background-color: #d5676f;
-  border-color: #cd4b55;
+  background-color: #d5676f !important;
+  border-color: #cd4b55 !important;
 }
 .totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] {
   display: none;

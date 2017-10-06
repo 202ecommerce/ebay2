@@ -34,6 +34,10 @@
     width: 60px !important;
   }
 
+  .big {
+    font-size: large;
+  }
+
   // Rewrite styles
   .js-popin-help {
     text-decoration: none !important;
@@ -215,6 +219,48 @@
 
       [class^="icon-"] {
         font-size: 16px;
+      }
+    }
+  }
+
+  // Progress bar
+  .progressbar {
+    .tasks {
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden;
+
+      .percentages {
+        color: #d2d8db;
+      }
+    }
+
+    .line-wrapper {
+      width: 100%;
+      height: 15px;
+      background: #d2d8db;
+      border-radius: 10px;
+      overflow: hidden;
+      
+      .line {
+        height: 100%;
+        background: #72c279;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  // Popin Mode Boost
+  #popin-mode_boost {
+    .big {
+      margin: 0 0 20px;
+    }
+
+    .progressbar {
+      margin: 0 0 35px;
+
+      .tasks {
+        margin: 0 0 3px;
       }
     }
   }
@@ -402,8 +448,8 @@
 
           .btn-hover-danger   {
             &:hover {
-              background-color: #d5676f;
-              border-color: #cd4b55;
+              background-color: #d5676f !important;
+              border-color: #cd4b55 !important;
             }
           }
         }

@@ -1,17 +1,35 @@
 <div id="popin-mode_boost" class="popin popin-lg" style="display: none;">
     <div class="panel">
         <div  class="panel-heading">
-            <i class="icon-plus"></i> {l s='Mode Boost' mod='ebay'}
+            <i class="icon-rocket"></i> {l s="Mode Boost" mod="ebay"}
             <span class="badge badge-success"><span class="page_popin_boost" id="1">1</span> / 2</span>
         </div>
 
         <form action="" class="form-horizontal" method="post" id="category_config">
             <div id="1" class="page_boost selected first_page_popin">
-                icicici
-
+                <p>{l s="Boost mode allow for 5 task to be proceeded simultaneously. It's suited when you have a large amount of tasks."}</p>
+                <div class='alert alert-warning'>
+                    <button class='close' data-dismiss='alert'>×</button>
+                    {l s="After launching boost mode, you must keep your browser window open." mod="ebay"}
+                </div>
             </div>
             <div id="2" class="page_boost" style="display: none">
-                aaaaaa
+                <p class="big">{l s="Synchronisation in progress"}</p>
+
+                <div class="progressbar">
+                    <div class="tasks">
+                        <strong><span class="value valueDone">23123</span> / <span class="value valueMax">54890</span> {l s="tasks"}</strong>
+                        <strong class="percentages">22%</strong>
+                    </div>
+                    <div class="line-wrapper">
+                        <div class="line" style="width: 22%;"></div>
+                    </div>
+                </div>
+
+                <div class='alert alert-warning'>
+                    <button class='close' data-dismiss='alert'>×</button>
+                    {l s="You must keep your browser window open else synchronisation will stop." mod="ebay"}
+                </div>
             </div>
         </form>
 
