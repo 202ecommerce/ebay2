@@ -37,7 +37,7 @@
 						{$alert.message|escape:'htmlall':'UTF-8'}
 					{/if}
 					{if isset($alert.kb)}
-						<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}"></a>
+						<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}">&nbsp;<i class="icon-info-circle"></i></a>
 					{/if}
 				</div>
 			{/foreach}

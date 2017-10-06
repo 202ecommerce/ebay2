@@ -211,6 +211,7 @@
 
     .active {
       display: inline-block;
+      text-decoration: none !important;
 
       [class^="icon-"] {
         font-size: 16px;

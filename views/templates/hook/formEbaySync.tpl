@@ -556,7 +556,7 @@
 		<div class="warning big">
             {$img_alert['message']|escape:'htmlall':'UTF-8'}
             {if isset($img_alert.kb)}
-				<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}"></a>
+				<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
 			{/if}
         </div>
 	{/if}
