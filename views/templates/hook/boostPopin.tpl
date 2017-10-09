@@ -5,7 +5,7 @@
             <span class="badge badge-success"><span class="page_popin_boost" id="1">1</span> / 2</span>
         </div>
 
-        <form action="" class="form-horizontal" method="post" id="category_config">
+        <form action="" class="form-horizontal" method="post" >
             <div id="1" class="page_boost selected first_page_popin">
                 <p>{l s="Boost mode allows for 5 tasks to be proceeded simultaneously. It's suited when you have a large amount of tasks."}</p>
                 <div class='alert alert-warning'>
@@ -22,7 +22,7 @@
                         <strong class="percentages">{l s="loading..."}</strong>
                     </div>
                     <div class="line-wrapper">
-                        <div class="percentages_line"></div>
+                        <div class="line percentages_line" style="width: 0%;"></div>
                     </div>
                 </div>
 
