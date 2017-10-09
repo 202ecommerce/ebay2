@@ -332,6 +332,28 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="checkbox">
+					<label for="restrictSync">
+						<input type="checkbox" id="restrictSync" name="restrictSync" value="1" {if isset($restrictSync) && $restrictSync} checked="checked" {/if} />
+                        {l s='Synchronization only price and quantity' mod='ebay'}
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="checkbox">
+					<label for="syncNewProd">
+						<input type="checkbox" id="syncNewProd" name="syncNewProd" value="1" {if isset($syncNewProd) && $syncNewProd} checked="checked" {/if} />
+                        {l s='Synchronization only new product' mod='ebay'}
+					</label>
+				</div>
+			</div>
+		</div>
 	</fieldset>
 		
 	<div class="panel-footer id="buttonEbayParameters" style="margin-top:5px;">

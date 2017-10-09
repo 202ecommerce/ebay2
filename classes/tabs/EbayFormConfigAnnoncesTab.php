@@ -77,6 +77,8 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         $limitEbayStock = $limitEbayStock ? $limitEbayStock : '50';
         $limitEbayStock = $limitEbayStock == '1000000' ? '0' : $limitEbayStock;
         $smarty_vars = array(
+            'syncNewProd'         => (int) EbayConfiguration::get($this->ebay_profile->id, 'SYNC_ONLY_NEW_PRODUCTS'),
+            'restrictSync'        => (int)EbayConfiguration::get($this->ebay_profile->id, 'RESTRICT_SYNC'),
             'limitEbayStock'            => $limitEbayStock,
             'url'                       => $url,
             // pictures
@@ -148,6 +150,12 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         $limitEbayStock = $limitEbayStock > 50 ? 50 : $limitEbayStock;
         $limitEbayStock = $limitEbayStock <= 0 ? 1000000 : $limitEbayStock;
         EbayConfiguration::set($this->ebay_profile->id, 'LIMIT_EBAY_STOCK', $limitEbayStock);
+
+        $restrictSync = (int)Tools::getValue('restrictSync');
+        EbayConfiguration::set($this->ebay_profile->id, 'RESTRICT_SYNC', $restrictSync);
+
+        $syncNewProd = (int) Tools::getValue('syncNewProd');
+        EbayConfiguration::set($this->ebay_profile->id, 'SYNC_ONLY_NEW_PRODUCTS', $syncNewProd);
 
         // Saving new configurations
         $picture_per_listing = (int) Tools::getValue('picture_per_listing');

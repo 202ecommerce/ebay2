@@ -287,7 +287,11 @@ class EbayProduct
                 FROM "._DB_PREFIX_."product p
                 LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc ON p.id_product = epc.id_product
                 WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
+                AND p.active=1
                 AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
+        if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')){
+            $sql .= " AND epc.id_product is NULL";
+        }
         return DB::getInstance()->ExecuteS($sql, false);
     }
 

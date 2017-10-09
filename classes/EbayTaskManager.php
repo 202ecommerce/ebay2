@@ -96,6 +96,7 @@ class EbayTaskManager
                         }
 
                         $ebay_profile = new EbayProfile($product_ebay['id_ebay_profile']);
+                        $restrictSync = (int) $ebay_profile->getConfiguration('RESTRICT_SYNC');
                         $id_attributes = array();
 
                         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
@@ -112,7 +113,12 @@ class EbayTaskManager
                         foreach ($id_attributes as $id_attribute) {
                             $id_tasks = array(10);
                             if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop)) {
-                                $id_tasks = array(13, 11);
+                                if ($restrictSync){
+                                    $id_tasks = array(13);
+                                } else{
+                                    $id_tasks = array(13, 11);
+                                }
+
                                 if ($type == 'stock') {
                                     $id_tasks = array(13);
                                 }

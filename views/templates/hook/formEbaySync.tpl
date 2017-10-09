@@ -589,7 +589,7 @@
 	</div>*}
 <div class="table-block">
 	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
-		<button class="button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+		<button class="btn btn-default button-resync"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
 	</h4>
 	{if $categories|@count == 0}
         <div class="table-block__message table-block__holder">
