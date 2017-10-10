@@ -211,8 +211,8 @@
 
 		});
 
-		$('.js-save-category').on('click', function(e) {
 
+		$('.js-save-category').on('click', function() {
 			var data = $('form#category_config').serialize();
 			var ps_categories = new Array();
 			$('#last_page_categorie_ps').find('li').each(function( index ) {
