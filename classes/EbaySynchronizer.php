@@ -746,6 +746,11 @@ class EbaySynchronizer
             } else {
                 $value = $item_specific['specific_value'];
             }
+            if (stripos($item_specific['name'], 'OE/OEM')){
+                $value = str_replace(';', ',', $value);
+                $value = str_replace(' ', '', $value);
+                $value = explode(',', $value);
+            }
             if ($value) {
                 $item_specifics_pairs[$item_specific['name']] = $value;
             }
@@ -1172,6 +1177,7 @@ class EbaySynchronizer
             $address->id_country = $country_address;
             $address->save();
         }
+
         return $data_for_stock;
     }
 
