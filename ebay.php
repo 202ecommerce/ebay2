@@ -441,7 +441,8 @@ class Ebay extends Module
          `'._DB_PREFIX_.'ebay_order_return_detail`,
          `'._DB_PREFIX_.'ebay_logs`,
           `'._DB_PREFIX_.'ebay_task_manager`,
-         `'._DB_PREFIX_.'ebay_order_errors`;
+         `'._DB_PREFIX_.'ebay_order_errors`,
+         `'._DB_PREFIX_.'ebay_catalog_configuration`;
          ');
     }
 
