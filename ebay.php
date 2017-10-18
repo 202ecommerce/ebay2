@@ -755,7 +755,7 @@ class Ebay extends Module
     public function hookHeader($params)
     {
         self::addSmartyModifiers();
-
+        
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
             return false;

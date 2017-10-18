@@ -122,7 +122,7 @@ class EbayTaskManager
                                 if ($type == 'stock') {
                                     $id_tasks = array(13);
                                 }
-                                if (StockAvailable::getQuantityAvailableByProduct($product->id, $id_attribute, $ebay_profile->id_shop) == 0 &&
+                                if (StockAvailable::getQuantityAvailableByProduct($product->id, $id_attribute, $ebay_profile->id_shop) <= 0 &&
                                     !(bool)$ebay_profile->getConfiguration('EBAY_OUT_OF_STOCK')) {
                                     $id_tasks = array(14);
                                 }
