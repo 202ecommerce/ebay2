@@ -187,7 +187,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS', (int)Tools::getValue('picture_charact_variations'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SKIP_VARIATIONS', (bool)Tools::getValue('picture_skip_variations'))
             && $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
-            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
+            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', (bool)Tools::getValue('automaticallyrelist'))
             && $this->ebay_profile->setReturnsPolicyConfiguration(
                 pSQL(Tools::getValue('returnswithin')),
                 pSQL(Tools::getValue('returnswhopays')),

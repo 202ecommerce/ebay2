@@ -1640,6 +1640,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
             'boost_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/boostMode.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&cron_url='.$cron_url,
+            'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
@@ -2122,7 +2123,7 @@ class Ebay extends Module
     private function __relistItems()
     {
         if ($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC'
-            && $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST') == 'on') {
+            && $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
             //We do relist automatically each day
             $this->ebay_profile->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));
 

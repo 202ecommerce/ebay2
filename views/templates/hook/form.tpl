@@ -241,20 +241,26 @@
                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                             {/if}
 
-                            <button class="nb_tasks_in_work btn btn-md btn-warning pull-left">
-                                <strong class="nb_tasks_in_work_amount">0</strong> {l s='tasks left' mod='ebay'} <i class="icon-circle-o-notch icon-spin"></i>
-                            </button>
+                            <span class="nb_tasks_in_work refreshNbTasksInWork btn btn-md {if $task_total_todo < 500}btn-success {else}btn-warning{/if} pull-left" style="display: none">
+                                <strong class="nb_tasks_in_work_amount">0</strong> {l s='tasks left' mod='ebay'}
+                                <i class="icon-circle-o-notch icon-spin"></i>
+                            </span>
 
-                            <label class="mode_boost pull-left">
-                                <a href="#popin-mode_boost" class="js-popin btn btn-md btn-default">{l s='Boost' mod='ebay'} </a>
-                            </label>
+                            <span class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
+                                {l s='Last CRON' mod='ebay'}
+                            </span>
 
-                            <label class="warning-message nb_tasks_in_work_message pull-left">
-                                <small>{l s="You have a large amount of task to proceed." mod="ebay"}</small><br>
-                                <small>{l s="You may want to use boost mode." mod="ebay"}</small>
-                            </label>
+                                            <div class=" mode_boost" style="{if $task_total_todo < 500}display: none;{/if}float:left !important;">
+                                <label class="mode_boost pull-left">
+                                    <a href="#popin-mode_boost" class="js-popin btn btn-md btn-default">{l s='Boost' mod='ebay'} </a>
+                                </label>
 
-                            <div class="pull-right">
+                                <label class="warning-message nb_tasks_in_work_message pull-left">
+                                    <small>{l s="You have a large amount of task to proceed." mod="ebay"}</small><br>
+                                    <small>{l s="You may want to use boost mode." mod="ebay"}</small>
+                                </label>
+                            </div>
+                                            <div class="pull-right">
                                                 <span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
                                                   <a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>
                                                 </span>
@@ -430,15 +436,21 @@
                 url : nb_tasks_in_work_url,
                 success : function(data) {
                     if (data != '0'){
-                        $('.nb_tasks_in_work, .nb_tasks_in_work_message').show();
+                        $('.nb_tasks_in_work').show();
+                        $('.nb_tasks_in_work_success').hide();
                         $('.nb_tasks_in_work_amount').html(data);
                     } else{
-                        $('.nb_tasks_in_work, .nb_tasks_in_work_message').hide();
+                        $('.nb_tasks_in_work').hide();
+                        $('.nb_tasks_in_work_success').html('<i class="icon-check"></i> {l s='sync done' mod='ebay'}');
+                        $('.nb_tasks_in_work_success').show();
                     }
                 }
             });
         };
-        loadNbTasksInWork();
+        window.setInterval(function(){
+            loadNbTasksInWork();
+        }, 3000);
+
         $(document).on('click', '.refreshNbTasksInWork', loadNbTasksInWork);
     </script>
     <script>

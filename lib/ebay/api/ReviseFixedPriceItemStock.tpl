@@ -68,7 +68,9 @@
 					<Name><![CDATA[{$name}]]></Name>
 					{if $value|is_array}
 						{foreach $value as $item}
-							<Value><![CDATA[{$item}]]></Value>
+							{if $item != ""}
+								<Value><![CDATA[{$item}]]></Value>
+							{/if}
 						{/foreach}
 					{else}
 						<Value><![CDATA[{$value}]]></Value>

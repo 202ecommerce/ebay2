@@ -77,11 +77,13 @@
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
 					<Name><![CDATA[{$name}]]></Name>
-                    {if $value|is_array}
-                        {foreach $value as $item}
-							<Value><![CDATA[{$item}]]></Value>
-                        {/foreach}
-                    {else}
+					{if $value|is_array}
+						{foreach $value as $item}
+							{if $item != ""}
+								<Value><![CDATA[{$item}]]></Value>
+							{/if}
+						{/foreach}
+					{else}
 						<Value><![CDATA[{$value}]]></Value>
                     {/if}
 				</NameValueList>

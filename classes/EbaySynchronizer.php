@@ -1160,7 +1160,15 @@ class EbaySynchronizer
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
-
+        if (isset($data_for_stock['item_specifics']['K-type'])) {
+            //$value = explode(" ", $data['item_specifics']['K-type']);
+            //$data['ktype'] = $value;
+            $str = str_replace(';', ',', $data_for_stock['item_specifics']['K-type']);
+            $str = str_replace(' ', '', $str);
+            $value = explode(",", $str);
+            $data_for_stock['ktype'] = $value;
+            unset($data_for_stock['item_specifics']['K-type']);
+        }
         // Fix hook update product
         if (Tools::getValue('id_product_attribute')) {
             $id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');

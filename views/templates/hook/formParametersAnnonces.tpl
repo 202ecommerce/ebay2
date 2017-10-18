@@ -300,7 +300,7 @@
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="checkbox">
 					<label for="automaticallyrelist">
-						<input type="checkbox" id="automaticallyrelist" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} />
+						<input type="checkbox" id="automaticallyrelist" name="automaticallyrelist" {if isset($automaticallyRelist) && $automaticallyRelist} checked="checked" {/if} />
 						{l s='Automatic relist' mod='ebay'}
 					</label>
 				</div>

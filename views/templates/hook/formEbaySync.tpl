@@ -91,7 +91,9 @@
 
 	var possible_attributes = new Array();
 	{foreach from=$possible_attributes item=attribute}
+	{if isset($attribute.id_attribute_group) && $attribute.id_attribute_group != ""}
 	possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
+	{/if}
 	{/foreach}
 
 	var possible_features = new Array();

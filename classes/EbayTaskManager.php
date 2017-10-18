@@ -309,8 +309,13 @@ class EbayTaskManager
 
     public static function getNbTasks($id_ebay_profile)
     {
-
         $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL) and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
+        return count($tasks);
+    }
+
+    public static function getNbTasksTotal()
+    {
+        $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL) GROUP BY `id_product_attribute`, `id_product` ');
         return count($tasks);
     }
 

@@ -37,7 +37,6 @@
             <button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
             <button class="js-next-popin_boost btn btn-primary pull-right star_boost"><i class="process-icon-next"></i>{l s='Start' mod='ebay'}</button>
 
-            <button class="js-prev-popin_boost btn btn-primary pull-right" style="display: none"><i class="process-icon-next"  style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
         </div>
     </div>
 </div>
