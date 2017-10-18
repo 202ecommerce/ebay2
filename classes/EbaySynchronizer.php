@@ -1025,7 +1025,10 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
-            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+                $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
+            }
+
         }
 
         return $res;
@@ -1055,7 +1058,9 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_attribute);
-            EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps'], $id_attribute);
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+                EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps'], $id_attribute);
+            }
         }
 
         return $ebay;
@@ -1209,7 +1214,9 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
-            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+                $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
+            }
         }
 
         return $res;
@@ -1233,7 +1240,9 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_product_attribute);
-            $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+                $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
+            }
         }
 
         return $res;
