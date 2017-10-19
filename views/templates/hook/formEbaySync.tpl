@@ -938,6 +938,20 @@
 	</div>
 </div>
 
+<div id="popin-cofirm-resync" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+	<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+		<div class="panel-heading">
+			<i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
+		</div>
+		<p>{l s='Do you want resync the products?' mod='ebay'}</p>
+
+		<div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
+			<button class="cancel-resyncProducts btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+			<button class="ok-resyncProducts btn btn-success pull-right" style="padding:15px">OK</button>
+		</div>
+	</div>
+</div>
+
 {* Bootstrap tooltip *}
 <script>
 	$(document).ready(function(){

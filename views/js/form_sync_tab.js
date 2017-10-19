@@ -115,6 +115,19 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.button-resync', function(){
+        $('#popin-cofirm-resync').show();
+    });
+
+    $(document).on('click', '.cancel-resyncProducts', function(){
+        $('#popin-cofirm-resync').hide();
+    });
+
+    $(document).on('click', '.ok-resyncProducts', function(){
+        $('#popin-cofirm-resync').hide();
+        resyncProducts();
+    });
+
+    function resyncProducts(){
         $.ajax({
             type: "POST",
             url: module_dir+'ebay/ajax/buttonResyncProducts.php',
@@ -133,7 +146,8 @@ $(document).ready(function(){
                 $('.button-resync').prop('disabled', false);
             }
         });
-    })
+    }
+
 });
 
 
