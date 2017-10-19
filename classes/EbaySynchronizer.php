@@ -894,7 +894,7 @@ class EbaySynchronizer
             if (isset($res->Errors) && !isset($res->ItemID)) {
                 foreach ($res->Errors as $error) {
                     if ($error->ErrorCode == 21919067) {
-                        $res->ItemID = $res->Errors->ErrorParameters[1]->Value;
+                        $res->ItemID = $error->ErrorParameters[1]->Value;
                         if ($res->ItemID > 0) {
                             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, 0);
                             //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
@@ -955,7 +955,7 @@ class EbaySynchronizer
             if (isset($res->Errors) && !isset($res->ItemID)) {
                 foreach ($res->Errors as $error) {
                     if ($error->ErrorCode == 21919067) {
-                        $res->ItemID = $res->Errors->ErrorParameters[1]->Value;
+                        $res->ItemID = $error->ErrorParameters[1]->Value;
                         if ($res->ItemID > 0) {
                             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, $id_attribute);
                             //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
