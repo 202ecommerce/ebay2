@@ -49,7 +49,7 @@
             <tbody>
             {if $tasks}
                 {foreach from=$tasks item='task'}
-                    <tr>
+                    <tr data-id_task="{$task.id|escape:'htmlall':'UTF-8'}">
                         <td><input id="checkbox" type="checkbox" class="logCheck" value="{$task.id|escape:'htmlall':'UTF-8'}"></td>
                         <td>{$task.id|escape:'htmlall':'UTF-8'}</td>
                         <td>{$task.date_add|escape:'htmlall':'UTF-8'}</td>
@@ -57,7 +57,7 @@
                         <td>{$task.id_product_attribute|escape:'htmlall':'UTF-8'}</td>
                         <td class="text-center">
                             <div class="action">
-                                <a href="#" class="btn-hover-danger btn btn-sm btn-default"
+                                <a href="#" class="btn-hover-danger btn btn-sm btn-default delete-task-job"
                                    title="{l s='Remove' mod='ebay'}" data-toggle="tooltip">
                                     <span class="icon-close"></span>
                                 </a>
@@ -83,8 +83,38 @@
     </div>
 </div>
 
+<div id="popin-cofirm-delete-task-job" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+    <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+        <div class="panel-heading">
+            <i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
+        </div>
+        <p>{l s='Do you want delete task?' mod='ebay'}</p>
+
+        <div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
+            <button class="cancel-delete-task-job btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+            <button class="ok-delete-task-job btn btn-success pull-right" style="padding:15px">OK</button>
+        </div>
+    </div>
+</div>
+
 {literal}
 <script>
+    var row_for_delete;
+    $(document).on('click', '.delete-task-job', function(){
+        $('#popin-cofirm-delete-task-job').show();
+        row_for_delete = $(this).closest('tr');
+    });
+
+    $(document).on('click', '.cancel-delete-task-job', function(){
+        $('#popin-cofirm-delete-task-job').hide();
+    });
+
+    $(document).on('click', '.ok-delete-task-job', function(){
+        $('#popin-cofirm-delete-task-job').hide();
+        var id_task = [$(row_for_delete).attr('data-id_task')];
+        deleteTasksByIds(id_task);
+    });
+
     $(document).on('click', '.navPaginationListLogJobsTab .pagination span', function(){
         var page = $(this).attr('value');
         if(page){
