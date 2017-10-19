@@ -241,14 +241,14 @@
                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                             {/if}
 
-                            <span class="nb_tasks_in_work refreshNbTasksInWork btn btn-md {if $task_total_todo < 500}btn-success {else}btn-warning{/if} pull-left" style="display: none">
+                            <label class="nb_tasks_in_work refreshNbTasksInWork btn btn-md {if $task_total_todo < 500}btn-success {else}btn-warning{/if} pull-left" style="display: none">
                                 <strong class="nb_tasks_in_work_amount">0</strong> {l s='tasks left' mod='ebay'}
                                 <i class="icon-circle-o-notch icon-spin"></i>
-                            </span>
+                            </label>
 
-                            <span class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
+                            <label class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
                                 {l s='Last CRON' mod='ebay'}
-                            </span>
+                            </label>
 
                                             <div class=" mode_boost" style="{if $task_total_todo < 500}display: none;{/if}float:left !important;">
                                 <label class="mode_boost pull-left">
