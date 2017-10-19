@@ -247,19 +247,19 @@
                             </label>
 
                             <label class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
-                                {l s='Last CRON' mod='ebay'}
+                                {l s='Last SYNC :' mod='ebay'}{$last_sync_prod}
                             </label>
 
-                                            <div class=" mode_boost" style="{if $task_total_todo < 500}display: none;{/if}float:left !important;">
+
                                 <label class="mode_boost pull-left">
                                     <a href="#popin-mode_boost" class="js-popin btn btn-md btn-default">{l s='Boost' mod='ebay'} </a>
                                 </label>
 
-                                <label class="warning-message nb_tasks_in_work_message pull-left">
+                                <label class="warning-message nb_tasks_in_work_message pull-left" {if $task_total_todo < 500}style="display: none;"{/if}>
                                     <small>{l s="You have a large amount of task to proceed." mod="ebay"}</small><br>
                                     <small>{l s="You may want to use boost mode." mod="ebay"}</small>
                                 </label>
-                            </div>
+
                                             <div class="pull-right">
                                                 <span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
                                                   <a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>
@@ -424,9 +424,9 @@
             'Are you sure you want to inclure this product?' : "{l s='Are you sure you want to inclure this product?' mod='ebay'}",
             'Are you sure you want to delete this category?' : "{l s='Are you sure you want to delete this category?' mod='ebay'}"
         };
-
+        var first = false;
         var delete_profile_url = '{$delete_profile_url|escape:'htmlall':'UTF-8'}';
-
+        var boost = null;
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
         var nb_tasks_in_work_url = '{$nb_tasks_in_work_url}';
@@ -436,18 +436,21 @@
                 url : nb_tasks_in_work_url,
                 success : function(data) {
                     if (data != '0'){
+                        first = true;
                         $('.nb_tasks_in_work').show();
                         $('.nb_tasks_in_work_success').hide();
                         $('.nb_tasks_in_work_amount').html(data);
                     } else{
                         $('.nb_tasks_in_work').hide();
-                        $('.nb_tasks_in_work_success').html('<i class="icon-check"></i> {l s='sync done' mod='ebay'}');
+                        if(first){
+                            $('.nb_tasks_in_work_success').html('<i class="icon-check"></i> {l s='sync done' mod='ebay'}');
+                        }
                         $('.nb_tasks_in_work_success').show();
                     }
                 }
             });
         };
-        window.setInterval(function(){
+        boost = setInterval(function(){
             loadNbTasksInWork();
         }, 3000);
 

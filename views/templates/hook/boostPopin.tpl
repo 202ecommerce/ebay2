@@ -34,7 +34,7 @@
         </form>
 
         <div class="panel-footer">
-            <button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
+            <button class="js-close-popin_boost btn btn-default"><i class="process-icon-cancel"></i>{l s='Stop Boost' mod='ebay'}</button>
             <button class="js-next-popin_boost btn btn-primary pull-right star_boost"><i class="process-icon-next"></i>{l s='Start' mod='ebay'}</button>
 
         </div>
