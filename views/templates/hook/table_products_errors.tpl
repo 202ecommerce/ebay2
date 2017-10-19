@@ -27,7 +27,7 @@
 <div class="table-block">
     {*<p>{l s='The following products has been refused from eBay. Pay attention: if an listing is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>*}
     <h4 class="table-block__title table-block__holder">{l s='Product errors' mod='ebay'}
-        <button class="button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        <button class="button-refresh btn btn-default" id="refreshErrors"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
     {if empty($task_errors)}
@@ -274,6 +274,20 @@
             }
         });
     });
+
+    $('#refreshErrors').click(refreshErrors);
+
+    function refreshErrors(){
+        $('#menuTab80Sheet .panel').empty();
+        var url = module_dir + 'ebay/ajax/refreshErrors.php';
+        var data = {
+            id_ebay_profile : id_ebay_profile,
+            token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
+        };
+        $.post(url, data, function(response){
+            $('#menuTab80Sheet .panel').html(response);
+        });
+    };
 
     {/literal}
 </script>
