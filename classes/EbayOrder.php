@@ -51,6 +51,7 @@ class EbayOrder
     private $date_add;
     private $id_currency;
     private $id_transaction;
+    private $CODCost;
 
     private $error_messages = array();
 
@@ -89,11 +90,13 @@ class EbayOrder
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
 
+
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
 
         if ($order_xml->CheckoutStatus->PaymentMethod == 'COD' && isset($order_xml->ShippingDetails->CODCost)) {
             $this->shippingServiceCost += $order_xml->ShippingDetails->CODCost;
+            $this->CODCost = (float) $order_xml->ShippingDetails->CODCost;
         }
 
         if (count($order_xml->TransactionArray->Transaction)) {
@@ -594,24 +597,40 @@ class EbayOrder
         $total_shipping_tax_incl += (float)$this->shippingServiceCost;
         $total_shipping_tax_excl += $this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
 
-        $data = array(
-            'total_paid' => (float) $this->amount,
-            'total_paid_real' => (float) $this->amount,
-            'total_products' => (float) $total_price_tax_excl,
-            'total_products_wt' => (float) ($this->amount - $this->shippingServiceCost),
-            'total_shipping' => (float) $total_shipping_tax_incl,
+        if ($this->payment_method == 'COD'){
+            $data = array(
+                'total_paid' => (float) $this->amount + $this->CODCost,
+                'total_paid_real' => (float) $this->amount + $this->CODCost,
+                'total_products' => (float) $total_price_tax_excl,
+                'total_products_wt' => (float) ($this->amount - $this->shippingServiceCost) + $this->CODCost,
+                'total_shipping' => (float) $total_shipping_tax_incl,
 
-        );
+            );
+        } else{
+            $data = array(
+                'total_paid' => (float) $this->amount,
+                'total_paid_real' => (float) $this->amount,
+                'total_products' => (float) $total_price_tax_excl,
+                'total_products_wt' => (float) ($this->amount - $this->shippingServiceCost),
+                'total_shipping' => (float) $total_shipping_tax_incl,
+
+            );
+        }
+
         $order = new Order((int) $this->id_orders[$ebay_profile->id_shop]);
         $data = array_merge(
             $data,
             array(
-                'total_paid_tax_incl' => (float) $this->amount,
                 'total_paid_tax_excl' => (float) ($total_price_tax_excl + $total_shipping_tax_excl),
                 'total_shipping_tax_incl' => (float) $total_shipping_tax_incl,
                 'total_shipping_tax_excl' => (float) $total_shipping_tax_excl,
                 )
         );
+        if ($this->payment_method == 'COD'){
+            $data['total_paid_tax_incl'] = (float) $this->amount + $this->CODCost;
+        } else{
+            $data['total_paid_tax_incl'] = (float) $this->amount;
+        }
 
         if ((float) $this->shippingServiceCost == 0) {
             $data = array_merge(
