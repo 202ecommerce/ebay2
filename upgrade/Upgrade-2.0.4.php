@@ -28,7 +28,7 @@
  * @param Ebay $module
  * @return bool
  */
-function upgrade_module_2_3_0($module)
+function upgrade_module_2_0_4($module)
 {
     $sql = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
             `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -36,8 +36,6 @@ function upgrade_module_2_3_0($module)
             `name` VARCHAR(250),
             `value` VARCHAR(250)
             ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
-
-
 
     return DB::getInstance()->Execute($sql);
 }
