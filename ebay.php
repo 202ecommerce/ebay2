@@ -138,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.3';
+        $this->version = '2.0.4';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -755,7 +755,7 @@ class Ebay extends Module
     public function hookHeader($params)
     {
         self::addSmartyModifiers();
-        
+
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
             return false;
@@ -1567,7 +1567,6 @@ class Ebay extends Module
             'id_lang' => (int) $this->context->language->id,
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
             'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
-
         );
         $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
 

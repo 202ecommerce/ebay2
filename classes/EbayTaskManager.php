@@ -113,9 +113,9 @@ class EbayTaskManager
                         foreach ($id_attributes as $id_attribute) {
                             $id_tasks = array(10);
                             if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop)) {
-                                if ($restrictSync){
+                                if ($restrictSync) {
                                     $id_tasks = array(13);
-                                } else{
+                                } else {
                                     $id_tasks = array(13, 11);
                                 }
 
