@@ -137,8 +137,8 @@
 					<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
 					<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
 					<div id="menuTab106Sheet" class="tabItem tab-pane"><div class="panel">{$ebayProductsExcluTab}</div></div>
-					<div id="menuTab17Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogJobs nofilter}</div></div>
-					<div id="menuTab18Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogWorkers nofilter}</div></div>
+					<div id="menuTab17Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogJobs}</div></div>
+					<div id="menuTab18Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogWorkers}</div></div>
 				</div>
 
 				{*

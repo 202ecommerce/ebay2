@@ -78,8 +78,8 @@
     {/if}
 
     <div class="buttonContainer table-block__holder table-block__footer-buttons">
-        <button class="btn btn-danger deleteAllLog">{l s='Delete all'}</button>
-        <button class="btn btn-danger deleteSelectedLog">{l s='Delete selected'}</button>
+        <button class="btn btn-danger deleteAllLog">{l s='Delete all' mod='ebay'}</button>
+        <button class="btn btn-danger deleteSelectedLog">{l s='Delete selected' mod='ebay'}</button>
     </div>
 </div>
 

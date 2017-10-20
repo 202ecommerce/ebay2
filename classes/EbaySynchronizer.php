@@ -437,8 +437,8 @@ class EbaySynchronizer
         } else {
             $combination_imagesAll = $product->getCombinationImages($ebay_profile->id_lang);
             if (isset($combination_imagesAll[$id_product_atributte])) {
-	    	$combination_images[] = $combination_imagesAll[$id_product_atributte];
-	    }
+                $combination_images[] = $combination_imagesAll[$id_product_atributte];
+            }
         }
 
 
@@ -746,7 +746,7 @@ class EbaySynchronizer
             } else {
                 $value = $item_specific['specific_value'];
             }
-            if (stripos($item_specific['name'], 'OE/OEM')){
+            if (stripos($item_specific['name'], 'OE/OEM')) {
                 $value = str_replace(';', ',', $value);
                 $value = str_replace(' ', '', $value);
                 $value = explode(',', $value);
@@ -1025,10 +1025,9 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
                 $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
             }
-
         }
 
         return $res;
@@ -1058,7 +1057,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_attribute);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
                 EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps'], $id_attribute);
             }
         }
@@ -1147,6 +1146,7 @@ class EbaySynchronizer
         $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
         $conditions = $ebay_category->getConditionsValues($id_ebay_profile);
         // Generate array and try insert in database
+
         $data_for_stock = array(
             'quantity' => $quantity_product,
             'categoryId' => $ebay_category->getIdCategoryRef(),
@@ -1190,7 +1190,6 @@ class EbaySynchronizer
             $address->id_country = $country_address;
             $address->save();
         }
-
         return $data_for_stock;
     }
 
@@ -1214,7 +1213,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
                 $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
             }
         }
@@ -1240,7 +1239,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_product_attribute);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')){
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
                 $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
             }
         }

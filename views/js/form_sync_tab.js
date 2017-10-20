@@ -147,7 +147,6 @@ $(document).ready(function(){
             }
         });
     }
-
 });
 
 

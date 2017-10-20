@@ -85,7 +85,7 @@
 						{/foreach}
 					{else}
 						<Value><![CDATA[{$value}]]></Value>
-                    {/if}
+					{/if}
 				</NameValueList>
 			{/foreach}
 		</ItemSpecifics>

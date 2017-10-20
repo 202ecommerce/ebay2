@@ -213,7 +213,6 @@
 
 		});
 
-
 		$('.js-save-category').on('click', function() {
 			var data = $('form#category_config').serialize();
 			var ps_categories = new Array();

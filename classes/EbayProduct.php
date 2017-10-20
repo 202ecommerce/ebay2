@@ -289,7 +289,7 @@ class EbayProduct
                 WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
                 AND p.active=1
                 AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
-        if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')){
+        if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')) {
             $sql .= " AND epc.id_product is NULL";
         }
         return DB::getInstance()->ExecuteS($sql, false);
