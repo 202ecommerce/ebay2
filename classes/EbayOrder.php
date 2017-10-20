@@ -597,7 +597,7 @@ class EbayOrder
         $total_shipping_tax_incl += (float)$this->shippingServiceCost;
         $total_shipping_tax_excl += $this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
 
-        if ($this->payment_method == 'COD'){
+        if ($this->payment_method == 'COD') {
             $data = array(
                 'total_paid' => (float) $this->amount + $this->CODCost,
                 'total_paid_real' => (float) $this->amount + $this->CODCost,
@@ -626,7 +626,7 @@ class EbayOrder
                 'total_shipping_tax_excl' => (float) $total_shipping_tax_excl,
                 )
         );
-        if ($this->payment_method == 'COD'){
+        if ($this->payment_method == 'COD') {
             $data['total_paid_tax_incl'] = (float) $this->amount + $this->CODCost;
         } else{
             $data['total_paid_tax_incl'] = (float) $this->amount;
