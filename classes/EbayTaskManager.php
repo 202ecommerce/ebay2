@@ -151,7 +151,7 @@ class EbayTaskManager
         );
 
         if ($id_task == 14) {
-            self::deleteTaskForPorduct($id_product);
+            self::deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile, $id_product_atttibute);
         }
         self::deleteErrorsForProduct($id_product);
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)) {
