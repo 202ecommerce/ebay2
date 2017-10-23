@@ -415,7 +415,7 @@ class EbayProduct
     FROM `'._DB_PREFIX_.'ebay_product` ep
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_task_manager` etm 
-    ON ep.`id_product` = etm.`id_product`
+    ON ep.`id_product` = etm.`id_product` AND ep.`id_attribute` = etm.`id_product_attribute`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`
