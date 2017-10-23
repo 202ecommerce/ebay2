@@ -41,7 +41,7 @@
                    title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
                    value="{if isset($search.name_product)}{$search.name_product}{/if}">
             <button class="button-apply btn btn-info" id="searchBtnErrors"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
-            <button class="button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+            <button class="button-reset btn btn-default" id="resetErrors"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
         </div>
     {if empty($task_errors)}
         <div class="table-block__message table-block__message_green table-block__holder">
@@ -277,6 +277,8 @@
     });
 
     $('#refreshErrors').click(refreshErrors);
+
+    $('#resetErrors').click(refreshErrors);
 
     function refreshErrors(){
         $('#menuTab80Sheet .panel').empty();
