@@ -90,7 +90,6 @@ class EbayOrder
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
 
-
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
 
@@ -606,7 +605,7 @@ class EbayOrder
                 'total_shipping' => (float) $total_shipping_tax_incl,
 
             );
-        } else{
+        } else {
             $data = array(
                 'total_paid' => (float) $this->amount,
                 'total_paid_real' => (float) $this->amount,
@@ -628,7 +627,7 @@ class EbayOrder
         );
         if ($this->payment_method == 'COD') {
             $data['total_paid_tax_incl'] = (float) $this->amount + $this->CODCost;
-        } else{
+        } else {
             $data['total_paid_tax_incl'] = (float) $this->amount;
         }
 

@@ -27,7 +27,7 @@
 
 <div id="contentLogWorkersTab" class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Workers' mod='ebay'}
-        <button class="loadListOrphan button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        <button class="loadListWorker button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
     <div class="table-wrapper">
@@ -94,16 +94,30 @@
                     beforeSend : function(){
                         $('#contentLogWorkersTab').empty();
                         var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
-                        $('#ebayOrphanListing').append(html);
+                        $('#contentLogWorkersTab').append(html);
                     },
                     success: function(data)
                     {
-                        $('#contentLogWorkersTab').html(data);
+                        $('#contentLogWorkersTab').parent().html(data);
                     }
                 });
             }
-
-
+        });
+        $(document).on('click', '.loadListWorker', function(){
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/paginationLogWorkersTab.php',
+                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=1",
+                beforeSend : function(){
+                    $('#contentLogWorkersTab').empty();
+                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                    $('#contentLogWorkersTab').append(html);
+                },
+                success: function(data)
+                {
+                    $('#contentLogWorkersTab').parent().html(data);
+                }
+            });
         });
 
         $(document).on('click', '.workAllCheck', function(){

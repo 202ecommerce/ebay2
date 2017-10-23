@@ -30,13 +30,7 @@
         <button class="button-refresh btn btn-default" id="refreshErrors"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
-    {if empty($task_errors)}
-        <div class="table-block__message table-block__message_green table-block__holder">
-            <div class="table-block__message-holder">
-                <p>{l s='No errors listings' mod='ebay'}</p>
-            </div>
-        </div>
-    {else}
+
         <div class="table-block__search table-block__holder">
             <input type="text" class="form-control" id="id_product_search"
                    placeholder="{l s='by ID product' mod='ebay'}"
@@ -49,6 +43,13 @@
             <button class="button-apply btn btn-info" id="searchBtnErrors"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
             <button class="button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
         </div>
+    {if empty($task_errors)}
+        <div class="table-block__message table-block__message_green table-block__holder">
+            <div class="table-block__message-holder">
+                <p>{l s='No errors listings' mod='ebay'}</p>
+            </div>
+        </div>
+    {else}
         <div id="contentProductErrors" class="table-wrapper">
             <table id="AnnoncesErrorsListings" class="table">
                 <thead>

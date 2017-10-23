@@ -29,14 +29,7 @@
         <button class="button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
-    {if empty($products_ebay_listings)}
-        <div class="table-block__message table-block__holder">
-            <div class="table-block__message-holder">
-                <p>{l s='No ebay listings' mod='ebay'}</p>
-                <p>{l s='To send products on eBay, please configure "Product synch" tab.' mod='ebay'}</p>
-            </div>
-        </div>
-    {else}
+
         <div class="table-block__search table-block__holder">
             <input type="text" class="form-control" id="id_prod_search" value="{$search.id_product}"
                    placeholder="{l s='by ID product' mod='ebay'}"
@@ -50,9 +43,17 @@
             <input type="text" class="form-control" id="id_prod_ebay_search" value="{$search.id_product_ebay}"
                    placeholder="{l s='by Product on eBay (reference)' mod='ebay'}"
                    title="{l s='by Product on eBay (reference)' mod='ebay'}" data-toggle="tooltip">
-            <button  id="refresh_list" class="button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
-            <button class="button-reset btn btn-default" id="searchBtnListing"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+            <button  id="searchBtnListing" class="button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+            <button class="button-reset btn btn-default" id="refresh_list"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
         </div>
+    {if empty($products_ebay_listings)}
+        <div class="table-block__message table-block__holder">
+            <div class="table-block__message-holder">
+                <p>{l s='No ebay listings' mod='ebay'}</p>
+                <p>{l s='To send products on eBay, please configure "Product synch" tab.' mod='ebay'}</p>
+            </div>
+        </div>
+    {else}
         <div class="table-wrapper">
             <table class="table" cellpadding="0" cellspacing="0">
                 <tr>
@@ -126,7 +127,7 @@
             id_prod_ebay: id_prod_ebay,
             name_cat: name_cat,
             name_prod: name_prod,
-        }
+        };
 
         $.ajax({
             type: "POST",

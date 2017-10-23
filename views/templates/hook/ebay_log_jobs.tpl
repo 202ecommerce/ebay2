@@ -27,7 +27,7 @@
 
 <div id="contentLogJobsTab" class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Jobs to be done' mod='ebay'}
-        <button class="loadListOrphan button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        <button class="loadListjob button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
     <div class="table-wrapper">
@@ -115,7 +115,7 @@
         deleteTasksByIds(id_task);
     });
 
-    $(document).on('click', '.loadListOrphan', function(){
+    $(document).on('click', '.loadListjob', function(){
         $.ajax({
             type: "POST",
             url: module_dir+'ebay/ajax/paginationLogJobsTab.php',
@@ -123,11 +123,11 @@
             beforeSend : function(){
                 $('#contentLogJobsTab').empty();
                 var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
-                $('#ebayOrphanListing').append(html);
+                $('#contentLogJobsTab').append(html);
             },
             success: function(data)
             {
-                $('#contentLogJobsTab').html(data);
+                $('#contentLogJobsTab').parent().html(data);
             }
         });
     });
@@ -142,11 +142,11 @@
                 beforeSend : function(){
                     $('#contentLogJobsTab').empty();
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
-                    $('#ebayOrphanListing').append(html);
+                    $('#contentLogJobsTab').append(html);
                 },
                 success: function(data)
                 {
-                    $('#contentLogJobsTab').html(data);
+                    $('#contentLogJobsTab').parent().html(data);
                 }
             });
         }

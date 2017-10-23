@@ -593,14 +593,7 @@
 	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
 		<button class="btn btn-default button-resync"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
 	</h4>
-	{if $categories|@count == 0}
-        <div class="table-block__message table-block__holder">
-			<div class="table-block__message-holder">
-				<p>{l s='No list products' mod='ebay'}</p>
-            	<p>{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}</p>
-			</div>
-        </div>
-	{else}
+
         <div id="searcheEbaySync" class="table-block__search table-block__holder">
             <input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}
                    title="{l s='by category name' mod='ebay'}" data-toggle="tooltip">
@@ -613,6 +606,14 @@
             <button class="searcheBtn button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
             <button class="researcheBtn button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
         </div>
+	{if $categories|@count == 0}
+		<div class="table-block__message table-block__holder">
+			<div class="table-block__message-holder">
+				<p>{l s='No list products' mod='ebay'}</p>
+				<p>{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}</p>
+			</div>
+		</div>
+	{else}
         <div id="catSync" class="table-wrapper">
             <table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
                 <thead>
