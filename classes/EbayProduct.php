@@ -204,7 +204,7 @@ class EbayProduct
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
         if ($search['id_product']) {
-            $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
+            $sql .= ' AND p.`id_product` = '.(int)pSQL($search['id_product']);
         }
         if ($search['id_product_ebay']) {
             $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
@@ -242,7 +242,7 @@ class EbayProduct
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
             if ($search['id_product']) {
-                $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
+                $sql .= ' AND p.`id_product` = '.(int)pSQL($search['id_product']);
             }
             if ($search['id_product_ebay']) {
                 $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
