@@ -110,7 +110,7 @@
     {literal}
     $('.reSynchOrder').live('click', function (e) {
         e.preventDefault();
-        var tr = $(this).parent().parent();
+        var tr = $(this).closest('tr');
         $.ajax({
             type: 'POST',
             url: module_dir + 'ebay/ajax/reSynchOrder.php',
