@@ -368,7 +368,7 @@
 						<label for="activate_resynchBP" class="control-label">
 							<input type="checkbox" id="activate_resynchBP" name="activate_resynchBP" value="1"{if $activate_resynchBP == 1} checked="checked"{/if}>
 							<span class="label-tooltip" title="{l s='If activiated, Business Policies created by PrestaShop will be overriden at every product synchronisation.' mod='ebay'}" data-toggle="tooltip">
-								{l s='Always override Business Policies' mod='ebay'}
+								{l s='Always override Shipping Policies' mod='ebay'}
 							</span>
 						</label>
 					</div>
