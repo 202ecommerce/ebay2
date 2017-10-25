@@ -26,7 +26,7 @@
 
 <div class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Ebay listings' mod='ebay'}
-        <button class="button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        <button class="button-refresh btn btn-default" id="refresh_list_productEbay"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
 
@@ -44,7 +44,7 @@
                    placeholder="{l s='by Product on eBay (reference)' mod='ebay'}"
                    title="{l s='by Product on eBay (reference)' mod='ebay'}" data-toggle="tooltip">
             <button  id="searchBtnListing" class="button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
-            <button class="button-reset btn btn-default" id="refresh_list"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+            <button class="button-reset btn btn-default" id="reset_list_productEbay"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
         </div>
     {if empty($products_ebay_listings)}
         <div class="table-block__message table-block__holder">
@@ -88,8 +88,8 @@
 
 
 <script>
-    $('#refresh_list').click(refreshList);
-
+    $('#refresh_list_productEbay').click(refreshList);
+    $('#reset_list_productEbay').click(refreshList);
     $('#searchBtnListing').click(search);
 
     function refreshList(){

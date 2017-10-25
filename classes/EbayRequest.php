@@ -772,7 +772,6 @@ class EbayRequest
         $product = new Product($data['real_id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
         $features = Feature::getFeatures(Configuration::get('PS_LANG_DEFAULT'));
         $features_product = $product->getFrontFeatures(Configuration::get('PS_LANG_DEFAULT'));
-	
         $tags = array(
             '{TITLE}',
             '{BRAND}',
@@ -787,16 +786,14 @@ class EbayRequest
         );
 
         foreach ($features as $feature) {
-
             foreach ($features_product as $features_prod) {
                 if ($feature['id_feature'] == $features_prod['id_feature']) {
                     $tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_' . $feature['name'] . '}')));
                     $values[] = $features_prod['value'];
-                } 
+                }
             }
         }
-	
-	
+
         return EbaySynchronizer::fillTemplateTitle($tags, $values, $data['titleTemplate']);
     }
 
