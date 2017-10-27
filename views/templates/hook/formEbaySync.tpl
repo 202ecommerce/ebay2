@@ -627,7 +627,7 @@
                         <th>{l s='Listing' mod='ebay'}</th>
                         <th class="text-center">
                             <label for="activate_resynchBP" class="control-label">
-                                <span class="label-tooltip" title="{l s='TODO: edit tooltip status.' mod='ebay'}" data-toggle="tooltip">
+                                <span class="label-tooltip"  data-toggle="tooltip">
                                     {l s='Status' mod='ebay'}
                                 </span>
                             </label>

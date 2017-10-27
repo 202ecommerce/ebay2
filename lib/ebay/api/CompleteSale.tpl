@@ -25,7 +25,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CompleteSaleRequest xmlns="urn:ebay:apis:eBLBaseComponents">
   <OrderID>{$id_order_ref|escape:'htmlall':'UTF-8'}</OrderID>
-  {if isset($tracking_number)}
+  {if isset($tracking_number) && $tracking_number}
       <Shipment>
         <ShipmentTrackingDetails>
           <ShipmentTrackingNumber>{$tracking_number|escape:'htmlall':'UTF-8'}</ShipmentTrackingNumber>

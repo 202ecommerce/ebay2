@@ -1274,6 +1274,18 @@ class Ebay extends Module
 
         if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state) {
             $this->__orderHasShipped((int)$params['id_order']);
+            $id_ebay_profile = EbayOrder::getIdProfilebyIdOrder($params['id_order']);
+            $order = new Order($params['id_order']);
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            if ($ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE')) {
+                $id_order_ref = EbayOrder::getIdOrderRefByIdOrder((int)$params['id_order']);
+                $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
+                $ebay_request = new EbayRequest($id_ebay_profile);
+                $numero_sv =  $order->getWsShippingNumber();
+                if ($numero_sv != '') {
+                    $ebay_request->updateOrderTracking($id_order_ref, $numero_sv, $carrier->name);
+                }
+            }
         }
         if ($this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE') == $id_order_state) {
            //changer state of order

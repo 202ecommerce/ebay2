@@ -786,11 +786,16 @@ class EbayRequest
         );
 
         foreach ($features as $feature) {
+            $tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_' . $feature['name'] . '}')));
+            $insert_value = false;
             foreach ($features_product as $features_prod) {
                 if ($feature['id_feature'] == $features_prod['id_feature']) {
-                    $tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_' . $feature['name'] . '}')));
                     $values[] = $features_prod['value'];
+                    $insert_value = true;
                 }
+            }
+            if (!$insert_value) {
+                $values[]='';
             }
         }
 

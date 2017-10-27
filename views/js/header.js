@@ -67,7 +67,8 @@ $(document).ready(function () {
 
     $('.star_boost').click(function (event) {
         event.preventDefault();
-
+        $('.js-close-popin_boost').show();
+        $('.close_boost').hide();
         boost = window.setInterval(function(){startBoost(boost_url)}, 3000);
     });
 
@@ -120,6 +121,8 @@ $(document).ready(function () {
         $('.valueDone').html('0');
         $('.valueMax').removeData('val');
         clearInterval(boost);
+        $('.js-close-popin_boost').hide();
+        $('.close_boost').show();
     });
 
     function selectMainTab(menu_name) {

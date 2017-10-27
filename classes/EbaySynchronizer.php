@@ -130,7 +130,7 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         if ($itemID = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop)) {
             $ebay = $ebay_request->endFixedPriceItem($itemID);
-            EbayProduct::deleteByIdProductRef($itemID);
+            EbayProduct::deleteByIdProductRef($itemID, $id_ebay_profile);
             return $ebay;
         }
     }
@@ -1025,7 +1025,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST') && $ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC') {
                 $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
             }
         }
@@ -1057,7 +1057,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_attribute);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST') && $ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC') {
                 EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps'], $id_attribute);
             }
         }
@@ -1213,7 +1213,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST') && $ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC') {
                 $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
             }
         }
@@ -1239,7 +1239,7 @@ class EbaySynchronizer
             $data['shipping'] = EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile);
             EbayProduct::deleteByIdProductRef($data['itemID'], $id_ebay_profile);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $id_ebay_profile, $id_product_attribute);
-            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
+            if ($ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST') && $ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC') {
                 $res = $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date, $data['id_category_ps']);
             }
         }
