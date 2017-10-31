@@ -1649,7 +1649,7 @@ class EbayRequest
         if (!$picture_url || !$picture_name) {
             return false;
         }
-
+        $picture_url = str_replace('https://', 'http://', $picture_url);
         $vars = array(
             'picture_url' => $picture_url,
             'picture_name' => $picture_name,

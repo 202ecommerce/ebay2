@@ -513,8 +513,9 @@ class EbaySynchronizer
     {
         //Fix for payment modules validating orders out of context, $link will not  generate fatal error.
         $link = is_object($context_link) ? $context_link : new Link();
-        $prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true) . '/' : '');
-        return str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
+        $prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomainSsl(true) . '/' : '');
+        //return str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
+        return $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size);
     }
 
     /**
