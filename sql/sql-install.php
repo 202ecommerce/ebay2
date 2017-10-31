@@ -403,3 +403,10 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_task_manager` (
     `retry` INT(30),
     `locked` VARCHAR(125)
 )ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
+            `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
+            `id_country` INT(11),
+            `name` VARCHAR(250),
+            `value` VARCHAR(250)
+            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';

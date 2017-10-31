@@ -64,7 +64,7 @@ class EbayConfiguration
         return Db::getInstance()->getValue('SELECT `value`
 			FROM `'._DB_PREFIX_.'ebay_configuration`
 			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
-			AND `name` = "'.pSQL($name).'"');
+			AND `name` = "'.pSQL($name).'" ORDER BY id_configuration DESC');
     }
 
     public static function set($id_ebay_profile, $name, $value, $html = false)

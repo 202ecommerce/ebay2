@@ -24,12 +24,12 @@
 *}
 
 <div id="ebayOrphanListing">
-    <p class="center">
+    <div class="text-center">
         <button class="btn btn-default loadListOrphan">
             <i class="icon-eye"></i>
             <span>{l s='See orphan listings' mod='ebay'}</span>
         </button>
-    </p>
+    </div>
 </div>
 
 

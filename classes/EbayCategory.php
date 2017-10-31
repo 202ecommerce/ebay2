@@ -210,7 +210,7 @@ class EbayCategory
             $sql = 'SELECT e.condition_type, e.id_condition_ref as condition_id
 				FROM '._DB_PREFIX_.'ebay_category_condition_configuration e
 				WHERE e.`id_ebay_profile` = '.(int)$id_ebay_profile.'
-				AND e.id_category_ref = '.(int)$this->id/*id_category_ref*/;
+				AND e.id_category_ref = '.(int)$this->id_category_ref;
 
             $res = Db::getInstance()->executeS($sql);
 

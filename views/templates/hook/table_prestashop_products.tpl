@@ -25,7 +25,7 @@
 
 {if $products === false || sizeof($products) === 0}
     <tr>
-        <td colspan="10" class="center">{$noProductFound|escape:'htmlall':'UTF-8'}</td>
+        <td colspan="10" class="text-center">{$noProductFound|escape:'htmlall':'UTF-8'}</td>
     </tr>
 {else}
 
@@ -71,13 +71,13 @@
             {if $p.id_category_ref}
                 <td>{$p.ebay_category_full_name|escape:'htmlall':'UTF-8'}</td>
             {else}
-                <td class="center">-</td>
+                <td class="text-center">-</td>
             {/if}
 
-            <td class="center">{if $p.sync}{l s='Yes' mod='ebay'}{else}<span
+            <td class="text-center">{if $p.sync}{l s='Yes' mod='ebay'}{else}<span
                         class="red">{l s='No' mod='ebay'}</span>{/if}</td>
 
-            <td class="center">{if $p.id_category_ref && !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span
+            <td class="text-center">{if $p.id_category_ref && !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span
                         class="red">{l s='No' mod='ebay'}</span>{/if}</td>
 
             <td>{if $p.active == 1}{l s='No' mod='ebay'}{else}<span class="red">{l s='Yes' mod='ebay'}</span>{/if}</td>

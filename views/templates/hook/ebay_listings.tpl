@@ -24,12 +24,12 @@
 *}
 
 <div id="ebayListings">
-	<p class="center">
+	<div class="text-center">
 		<button class="btn btn-default">
 			<i class="icon-eye"></i>
 			<span>{l s='See eBay listings' mod='ebay'}</span>
 		</button>
-	</p>
+	</div>
 </div>
 <script type="text/javascript">
 	// <![CDATA[

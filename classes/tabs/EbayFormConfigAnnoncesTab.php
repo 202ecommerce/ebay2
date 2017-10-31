@@ -77,6 +77,8 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         $limitEbayStock = $limitEbayStock ? $limitEbayStock : '50';
         $limitEbayStock = $limitEbayStock == '1000000' ? '0' : $limitEbayStock;
         $smarty_vars = array(
+            'syncNewProd'         => (int) EbayConfiguration::get($this->ebay_profile->id, 'SYNC_ONLY_NEW_PRODUCTS'),
+            'restrictSync'        => (int)EbayConfiguration::get($this->ebay_profile->id, 'RESTRICT_SYNC'),
             'limitEbayStock'            => $limitEbayStock,
             'url'                       => $url,
             // pictures
@@ -149,6 +151,12 @@ class EbayFormConfigAnnoncesTab extends EbayTab
         $limitEbayStock = $limitEbayStock <= 0 ? 1000000 : $limitEbayStock;
         EbayConfiguration::set($this->ebay_profile->id, 'LIMIT_EBAY_STOCK', $limitEbayStock);
 
+        $restrictSync = (int)Tools::getValue('restrictSync');
+        EbayConfiguration::set($this->ebay_profile->id, 'RESTRICT_SYNC', $restrictSync);
+
+        $syncNewProd = (int) Tools::getValue('syncNewProd');
+        EbayConfiguration::set($this->ebay_profile->id, 'SYNC_ONLY_NEW_PRODUCTS', $syncNewProd);
+
         // Saving new configurations
         $picture_per_listing = (int) Tools::getValue('picture_per_listing');
         if ($picture_per_listing < 0) {
@@ -179,7 +187,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS', (int)Tools::getValue('picture_charact_variations'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SKIP_VARIATIONS', (bool)Tools::getValue('picture_skip_variations'))
             && $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
-            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
+            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', (bool)Tools::getValue('automaticallyrelist'))
             && $this->ebay_profile->setReturnsPolicyConfiguration(
                 pSQL(Tools::getValue('returnswithin')),
                 pSQL(Tools::getValue('returnswhopays')),

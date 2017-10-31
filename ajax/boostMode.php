@@ -24,20 +24,16 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-/**
- * @param Ebay $module
- * @return bool
- */
-function upgrade_module_2_3_0($module)
-{
-    $sql = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
-            `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
-            `id_country` INT(11),
-            `name` VARCHAR(250),
-            `value` VARCHAR(250)
-            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+include dirname(__FILE__).'/../../../config/config.inc.php';
+include_once dirname(__FILE__).'/../../../init.php';
+include '../ebay.php';
 
-
-
-    return DB::getInstance()->Execute($sql);
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR: Invalid Token');
 }
+
+    //EbayTaskManager::toJob();
+Tools::file_get_contents(Tools::getValue('cron_url'));
+$nb_tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL)');
+
+echo($nb_tasks[0]['nb']);

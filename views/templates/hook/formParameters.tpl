@@ -209,7 +209,7 @@
 
 				<div class="col-sm-9 col-sm-push-3">
 					<div class="help-block">
-						{l s='You have to set your PayPal e-mail account, this is the only payment solution available with this module.' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank"></a>
+						{l s='You have to set your PayPal e-mail account, this is the only payment solution available with this module.' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
 					</div>
 				</div>
 			</div>
@@ -365,10 +365,10 @@
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-push-3">
 					<div class="checkbox">
-						<label for="activate_resynchBP">
+						<label for="activate_resynchBP" class="control-label">
 							<input type="checkbox" id="activate_resynchBP" name="activate_resynchBP" value="1"{if $activate_resynchBP == 1} checked="checked"{/if}>
 							<span class="label-tooltip" title="{l s='If activiated, Business Policies created by PrestaShop will be overriden at every product synchronisation.' mod='ebay'}" data-toggle="tooltip">
-								{l s='Always override Business Policies' mod='ebay'}
+								{l s='Always override Shipping Policies' mod='ebay'}
 							</span>
 						</label>
 					</div>

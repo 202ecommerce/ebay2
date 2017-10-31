@@ -30,6 +30,7 @@
 		<ItemID>{$item_id|escape:'htmlall':'UTF-8'}</ItemID>
 		{if isset($country)}
 			<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
+			<Location>{$country|escape:'htmlall':'UTF-8'}</Location>
 		{/if}
 
 		{if isset($country_currency)}
@@ -65,11 +66,20 @@
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
 					<Name><![CDATA[{$name}]]></Name>
-					<Value><![CDATA[{$value}]]></Value>
+					{if $value|is_array}
+						{foreach $value as $item}
+							{if $item != ""}
+								<Value><![CDATA[{$item}]]></Value>
+							{/if}
+						{/foreach}
+					{else}
+						<Value><![CDATA[{$value}]]></Value>
+					{/if}
 				</NameValueList>
 			{/foreach}
 		</ItemSpecifics>
 {/if}
+
         {if isset($variations) && $variations}
             {$variations nofilter}
         {/if}

@@ -557,7 +557,7 @@
 			</span>
 		</a>
 		<div class="alert alert-warning" style="display: none;" id="transportDomesticWarning">
-			<button type="button" class="close" data-dismiss="alert">×</button>
+			<button type="button" class="close" data-dismiss="alert">&#215;</button>
 			{l s='Maximum transporteur reached' mod='ebay'}
 		</div>
 	</fieldset>
