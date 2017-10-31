@@ -138,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.3';
+        $this->version = '2.0.4';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -441,7 +441,8 @@ class Ebay extends Module
          `'._DB_PREFIX_.'ebay_order_return_detail`,
          `'._DB_PREFIX_.'ebay_logs`,
           `'._DB_PREFIX_.'ebay_task_manager`,
-         `'._DB_PREFIX_.'ebay_order_errors`;
+         `'._DB_PREFIX_.'ebay_order_errors`,
+         `'._DB_PREFIX_.'ebay_catalog_configuration`;
          ');
     }
 
@@ -875,8 +876,10 @@ class Ebay extends Module
         $current_date = date('Y-m-d\TH:i:s').'.000Z';
 
         if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
-            foreach ($orders['refund'][0]['cancellations'] as $refund) {
-                $this->importCanceletions($refund);
+            if (isset($orders['return'][0]['cancellations'])) {
+                foreach ($orders['refund'][0]['cancellations'] as $refund) {
+                    $this->importCanceletions($refund);
+                }
             }
             if (isset($orders['return'][0]['members'])) {
                 foreach ($orders['return'][0]['members'] as $return) {
@@ -901,8 +904,13 @@ class Ebay extends Module
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
             if (!$request->getDev()) {
+                if (!$order->checkStatus()) {
+                    $message = $this->l("Payment status '".$order->getStatus()."'");
+                    $order->checkError($message, $ebay_user_identifier);
+                    continue;
+                }
                 if (!$order->isCompleted()) {
-                    $message = $this->l('Status not complete, amount less than 0.1 or no matching product');
+                    $message = $this->l('Amount less than 0.1 or no matching product');
                     $order->checkError($message, $ebay_user_identifier);
                     continue;
                 }
@@ -1266,6 +1274,18 @@ class Ebay extends Module
 
         if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state) {
             $this->__orderHasShipped((int)$params['id_order']);
+            $id_ebay_profile = EbayOrder::getIdProfilebyIdOrder($params['id_order']);
+            $order = new Order($params['id_order']);
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            if ($ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE')) {
+                $id_order_ref = EbayOrder::getIdOrderRefByIdOrder((int)$params['id_order']);
+                $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
+                $ebay_request = new EbayRequest($id_ebay_profile);
+                $numero_sv =  $order->getWsShippingNumber();
+                if ($numero_sv != '') {
+                    $ebay_request->updateOrderTracking($id_order_ref, $numero_sv, $carrier->name);
+                }
+            }
         }
         if ($this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE') == $id_order_state) {
            //changer state of order
@@ -1363,7 +1383,13 @@ class Ebay extends Module
         $profiles = EbayProfile::getAllProfile();
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
-            $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            if ($profile['ebay_site_id'] == 123) {
+                $profile['site_name'] = 'ebay.benl';
+            } elseif ($profile['ebay_site_id'] == 23) {
+                $profile['site_name'] = 'ebay.befr';
+            } else {
+                $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            }
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
         if (Configuration::get('EBAY_VERSION') != $this->version) {
@@ -1408,8 +1434,8 @@ class Ebay extends Module
                 $profile_count_product_errors = EbayTaskManager::getErrorsCount($profile['id_ebay_profile']);
                 $ebay_profile_hook = new EbayProfile($profile['id_ebay_profile']);
                 $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-                $profile['count_order_errors'] = (isset($profile_count_order_errors['nb']) ? $profile_count_order_errors['nb']:0);
-                $profile['count_product_errors'] = (isset($profile_count_product_errors['nb']) ?$profile_count_product_errors['nb']:0);
+                $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb']:0);
+                $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ?$profile_count_product_errors[0]['nb']:0);
                 $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
                 $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
                 $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
@@ -1559,7 +1585,6 @@ class Ebay extends Module
             'id_lang' => (int) $this->context->language->id,
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
             'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
-
         );
         $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
 
@@ -1575,7 +1600,14 @@ class Ebay extends Module
         $profiles = EbayProfile::getProfilesByIdShop($id_shop);
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
-            $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            if ($profile['ebay_site_id'] == 123) {
+                $profile['site_name'] = 'ebay.benl';
+            } elseif ($profile['ebay_site_id'] == 23) {
+                $profile['site_name'] = 'ebay.befr';
+            } else {
+                $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            }
+
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
 
@@ -1628,9 +1660,12 @@ class Ebay extends Module
         }
 
 
-
+        $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
         $this->smarty->assign(array(
             'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
+            'boost_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/boostMode.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&cron_url='.$cron_url,
+            'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
+            'last_sync_prod' => date('Y-m-d H:i:s', strtotime(Configuration::get('DATE_LAST_SYNC_PRODUCTS'))),
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
@@ -2113,7 +2148,7 @@ class Ebay extends Module
     private function __relistItems()
     {
         if ($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC'
-            && $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST') == 'on') {
+            && $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
             //We do relist automatically each day
             $this->ebay_profile->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));
 
@@ -2487,7 +2522,7 @@ class Ebay extends Module
         $backtrace = debug_backtrace();
         $date = date("<Y-m-d(H:i:s)>");
         $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
-        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug_'.date('Y-m-d').'.log', 'a');
         fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
         fclose($stderr);
     }

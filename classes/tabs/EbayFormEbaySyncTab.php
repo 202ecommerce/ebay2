@@ -321,7 +321,7 @@ class EbayFormEbaySyncTab extends EbayTab
                   LEFT JOIN "._DB_PREFIX_."product_lang pl ON pl.id_product=p.id_product AND pl.id_lang=$id_lang WHERE 1 ";
         if ($filter['id_product']) {
             $id_product = pSQL($filter['id_product']);
-            $query .= " AND p.id_product=$id_product";
+            $query .= " AND p.id_product=" . (int) $id_product;
         }
         if ($filter['name_product']) {
             $name_product = pSQL($filter['name_product']);

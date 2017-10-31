@@ -113,6 +113,40 @@ $(document).ready(function(){
             });
 
     });
+
+    $(document).on('click', '.button-resync', function(){
+        $('#popin-cofirm-resync').show();
+    });
+
+    $(document).on('click', '.cancel-resyncProducts', function(){
+        $('#popin-cofirm-resync').hide();
+    });
+
+    $(document).on('click', '.ok-resyncProducts', function(){
+        $('#popin-cofirm-resync').hide();
+        resyncProducts();
+    });
+
+    function resyncProducts(){
+        $.ajax({
+            type: "POST",
+            url: module_dir+'ebay/ajax/buttonResyncProducts.php',
+            data: "token=" + ebay_token + "&id_ebay_profile=" + id_ebay_profile,
+            beforeSend:function(){
+                var html = '<img src="../modules/ebay/views/img/ajax-loader-small.gif" style="height:14px; width:auto;">';
+                $('.button-resync span').remove();
+                $('.button-resync').prepend(html);
+                $('.button-resync').prop('disabled', true);
+            },
+            success: function(data)
+            {
+                var html = '<span class="icon-refresh"></span>';
+                $('.button-resync img').remove();
+                $('.button-resync').prepend(html);
+                $('.button-resync').prop('disabled', false);
+            }
+        });
+    }
 });
 
 

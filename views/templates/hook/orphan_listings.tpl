@@ -31,7 +31,7 @@
 	</p>
     
     <form id="orphans-form-view" action="{$show_orphan_listings_url|escape:'htmlall':'UTF-8'}" method="post" class="form">
-        <p class="center">
+        <p class="text-center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='Load orphan listings' mod='ebay'}" />
     	</p>
     </form>
@@ -50,11 +50,11 @@
 					<span>{l s='PrestaShop Product' mod='ebay'}</span>
 				</th>
                 
-				<th class="center">
+				<th class="text-center">
 					<span data-inlinehelp="{l s='Product has been excluded from synchronisation' mod='ebay'}">{l s='Product excluded' mod='ebay'}</span>
 				</th>
 				
-                <th class="center">
+                <th class="text-center">
 					<span data-inlinehelp="{l s='Does PrestaShop product have combinations' mod='ebay'}">{l s='Product Combinations' mod='ebay'}</span>
 				</th>
                 
@@ -62,30 +62,30 @@
 					<span data-inlinehelp="{l s='PrestaShop product default category' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span>
 				</th>
                 
-                <th class="center">
+                <th class="text-center">
 					<span data-inlinehelp="{l s='eBay category associated with PrestaShop product\'s default category' mod='ebay'}">{l s='eBay Category' mod='ebay'}</span>
 				</th>
                 
-                <th class="center">
+                <th class="text-center">
 					<span data-inlinehelp="{l s='Does eBay category support multivariation listings ?' mod='ebay'}">{l s='Category Multi-sku' mod='ebay'}</span>
 				</th>                
 
-                <th class="center">
+                <th class="text-center">
 					<span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span>
 				</th>
                 
-                <th class="center">
+                <th class="text-center">
 					<span>{l s='Action' mod='ebay'}</span>
 				</th>                
                 
-                <th class="center">{l s='Help' mod='ebay'}</th>
+                <th class="text-center">{l s='Help' mod='ebay'}</th>
                 
 			</tr>
 		</thead>
         
 		<tbody>
 			<tr id="removeRow">
-				<td class="center" colspan="10">
+				<td class="text-center" colspan="10">
 					<img src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>

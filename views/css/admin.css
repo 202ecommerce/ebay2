@@ -4,6 +4,9 @@
  * Every rule should be incapsulated in the .totebay selector
  * to prevent styling elements outside the module container.
  */
+.totebay {
+  overflow: hidden;
+}
 .totebay .d-b {
   display: block;
 }
@@ -19,8 +22,39 @@
 .totebay .pos-a {
   position: absolute;
 }
+.totebay .width-num {
+  width: 60px !important;
+}
+.totebay .big {
+  font-size: large;
+}
+.totebay .js-popin-help {
+  text-decoration: none !important;
+}
+.totebay .alert,
+.totebay #carrier_wizard .wizard_error {
+  padding: 7px;
+  margin-bottom: 10px;
+  padding-left: 10px !important;
+}
+.totebay .alert:before {
+  content: '' !important;
+}
+.totebay .tooltip-inner {
+  padding: 5px 10px;
+}
 .totebay .menuTab {
   margin-bottom: 15px;
+}
+.totebay .menuTab.nav-pills > li {
+  float: none;
+  display: inline-block;
+  margin-left: 0;
+}
+@media all and (max-width: 480px) {
+  .totebay .menuTab.nav-pills > li {
+    width: 100%;
+  }
 }
 .totebay .sidebar.navigation i,
 .totebay .panel-heading i {
@@ -84,6 +118,9 @@
   line-height: 15px;
   vertical-align: middle;
 }
+.totebay .badge {
+  padding: 0 5px;
+}
 .totebay .panel-heading .badge.badge-success {
   border-color: #72C279 !important;
   color: #fff !important;
@@ -131,6 +168,256 @@
 }
 .navbar-header .totebay .js-user-dropdown.open .dropdown-toggle {
   background-color: #000 !important;
+}
+.totebay .kb-help {
+  display: none;
+}
+.totebay .kb-help .active {
+  display: inline-block;
+  text-decoration: none !important;
+}
+.totebay .kb-help .active [class^="icon-"] {
+  font-size: 16px;
+}
+.totebay .progressbar .tasks {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.totebay .progressbar .tasks .percentages {
+  color: #d2d8db;
+}
+.totebay .progressbar .line-wrapper {
+  width: 100%;
+  height: 15px;
+  background: #d2d8db;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.totebay .progressbar .line-wrapper .percentages_line {
+  width: 0;
+  height: 100%;
+  background: #72c279;
+  border-radius: 10px;
+  transition: width 0.5s ease-out;
+}
+.totebay #popin-mode_boost .big {
+  margin: 0 0 20px;
+}
+.totebay #popin-mode_boost .progressbar {
+  margin: 0 0 35px;
+}
+.totebay #popin-mode_boost .progressbar .tasks {
+  margin: 0 0 3px;
+}
+.totebay .warning-message {
+  margin-bottom: 0 !important;
+  margin-left: 10px;
+  line-height: 1.3;
+  color: #fbb309;
+}
+.totebay .warning-message small {
+  font-weight: 400;
+  font-size: 11px;
+}
+.totebay .table-block-below {
+  /* special styles if there is some block above .table-block */
+  margin: 0 0 20px;
+}
+.totebay .table-block-below + .table-block h4 {
+  margin-top: 0;
+  border-top: 1px solid #d3d8db;
+}
+.totebay .button-apply,
+.totebay .button-reset,
+.totebay .button-refresh {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.totebay .button-apply:hover,
+.totebay .button-reset:hover,
+.totebay .button-refresh:hover {
+  background: #00aff0 !important;
+}
+.totebay .table-block {
+  margin: 0 -20px;
+}
+.totebay .table-block > * + * {
+  border-top: 1px solid #d3d8db;
+}
+.totebay .table-block__holder {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+.totebay .table-block__title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin: -20px 0 0;
+  padding: 15px 0;
+}
+.totebay .table-block__title .button-refresh {
+  margin: -8px 0;
+}
+.totebay .table-block__search, .totebay .table-block__message {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 20px 0;
+  background: #f0f0f0;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__search, .totebay .table-block__message {
+    flex-direction: column;
+  }
+}
+.totebay .table-block__search > * + *, .totebay .table-block__message > * + * {
+  margin: 0 0 0 10px;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__search > * + *, .totebay .table-block__message > * + * {
+    margin: 15px 0 0;
+  }
+}
+.totebay .table-block__search input, .totebay .table-block__message input {
+  background: #fff;
+}
+.totebay .table-block__message-holder {
+  max-width: 200px;
+  margin: 0 auto;
+  padding: 10px 0;
+  text-align: center;
+}
+.totebay .table-block__message_green {
+  background: #ddf0de;
+  color: #00aa2b;
+}
+.totebay .table-block__message:last-child {
+  margin-bottom: -20px;
+  border-radius: 0 0 5px 5px;
+}
+.totebay .table-block__message p:last-child {
+  margin-bottom: 0;
+}
+.totebay .table-block__footer-buttons {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-top: 20px;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__footer-buttons {
+    flex-direction: column;
+  }
+}
+.totebay .table-block__footer-buttons > * + * {
+  margin: 0 0 0 10px;
+}
+@media all and (max-width: 640px) {
+  .totebay .table-block__footer-buttons > * + * {
+    margin: 15px 0 0;
+  }
+}
+.totebay .table-block .table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.totebay .table-block .table-wrapper .table {
+  margin-bottom: 0;
+  border-collapse: collapse;
+}
+.totebay .table-block .table-wrapper .table tr th, .totebay .table-block .table-wrapper .table tr td {
+  height: 40px;
+  border: 1px solid #eaedef;
+}
+.totebay .table-block .table-wrapper .table tr th:first-child, .totebay .table-block .table-wrapper .table tr td:first-child {
+  padding-left: 20px;
+  border-left: 0;
+}
+.totebay .table-block .table-wrapper .table tr th:last-child, .totebay .table-block .table-wrapper .table tr td:last-child {
+  padding-right: 20px;
+  border-right: 0;
+}
+.totebay .table-block .table-wrapper .table tr th:hover td, .totebay .table-block .table-wrapper .table tr td:hover td {
+  background: #fff;
+}
+.totebay .table-block .table-wrapper .table tr th {
+  border-bottom: 1px solid #ddd;
+}
+.totebay .table-block .table-wrapper .table tbody tr:nth-child(odd) td {
+  background: #f8f8f8;
+}
+.totebay .table-block .table-wrapper .table tbody tr:nth-child(odd):hover td {
+  background: #f4f8fb;
+}
+.totebay .table-block .table-wrapper .table .action {
+  white-space: nowrap;
+}
+.totebay .table-block .table-wrapper .table .action .active {
+  line-height: 1.4;
+  background: #fff;
+  box-shadow: none;
+  border-color: #dedede;
+}
+.totebay .table-block .table-wrapper .table .action .active:hover {
+  color: #fff;
+  background-color: #00aff0;
+  border-color: #008abd !important;
+}
+.totebay .table-block .table-wrapper .table .action .active:hover i {
+  color: #fff;
+}
+.totebay .table-block .table-wrapper .table .action .active i {
+  color: #555;
+}
+.totebay .table-block .table-wrapper .table .action .btn-hover-danger:hover {
+  background-color: #d5676f !important;
+  border-color: #cd4b55 !important;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] {
+  display: none;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] + label {
+  width: 35px;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] + label:before {
+  font-family: 'fontawesome', sans-serif;
+  color: #d9534f;
+  content: "\f00d";
+  font-size: 13px;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] + label:hover {
+  background: #fff;
+  border-color: #ccc;
+  box-shadow: inset 0 0 1px #ccc;
+}
+.totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"]:checked + label:before {
+  color: #5cb85c;
+  content: "\f00c";
 }
 
 /*# sourceMappingURL=admin.css.map */

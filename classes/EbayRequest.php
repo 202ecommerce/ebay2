@@ -787,10 +787,15 @@ class EbayRequest
 
         foreach ($features as $feature) {
             $tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_' . $feature['name'] . '}')));
+            $insert_value = false;
             foreach ($features_product as $features_prod) {
                 if ($feature['id_feature'] == $features_prod['id_feature']) {
                     $values[] = $features_prod['value'];
+                    $insert_value = true;
                 }
+            }
+            if (!$insert_value) {
+                $values[]='';
             }
         }
 
@@ -896,7 +901,7 @@ class EbayRequest
                 }
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
-            if (!empty($seller_ship_prof) && EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RESYNCHBP') == 1) {
+            if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1) {
                 $vars = array_merge($vars, array(
                     'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
                     'excluded_zones' => $data['shipping']['excludedZone'],
@@ -1094,7 +1099,7 @@ class EbayRequest
             'price_update' => !isset($data['noPriceUpdate']),
             'category_id' => $data['categoryId'],
             'start_price' => $data['price'],
-            'resynchronize' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC') != 1),
+            'resynchronize' => 1,
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'description' => $data['description'],
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
@@ -1442,7 +1447,7 @@ class EbayRequest
             'category_id' => $data['categoryId'],
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
-            'resynchronize' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC') != 1),
+            'resynchronize' => 1,
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'description' => $data['description'],
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
@@ -1572,6 +1577,7 @@ class EbayRequest
 
         $vars = array(
             'id_order_ref' => $id_order_ref,
+            'tracking_number' => false,
         );
 
         $response = $this->_makeRequest('CompleteSale', $vars);
@@ -1644,7 +1650,7 @@ class EbayRequest
         if (!$picture_url || !$picture_name) {
             return false;
         }
-
+        $picture_url = str_replace('https://', 'http://', $picture_url);
         $vars = array(
             'picture_url' => $picture_url,
             'picture_name' => $picture_name,

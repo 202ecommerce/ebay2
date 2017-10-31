@@ -29,20 +29,18 @@ if (!defined('TMP_DS')) {
 }
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR: Invalid Token');
+$ids_tasks = Tools::getValue('ids_tasks');
+if ($ids_tasks == 'all') {
+    if (Tools::getValue('type') == 'work') {
+        DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE `locked` != 0");
+    } else {
+        DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager");
+    }
+} else {
+    $ids_tasks = pSQL(implode(', ', $ids_tasks));
+    DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE id IN ($ids_tasks)");
 }
 
-include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-
-$id_profile = Tools::getValue('id_profile');
-if ($id_profile) {
-    $table = _DB_PREFIX_.'ebay_task_manager';
-    $sql_select = "SELECT COUNT(DISTINCT(id_product)) AS nb  FROM `".pSQL($table)."` WHERE `locked` != 0 AND `id_ebay_profile` = ".pSQL($id_profile);
-    $res_select = DB::getInstance()->executeS($sql_select);
-    $nb_tasks_in_work = $res_select[0]['nb'];
-    die($nb_tasks_in_work);
-}
-
-die('0');
+die();

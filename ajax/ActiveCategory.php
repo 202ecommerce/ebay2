@@ -74,5 +74,5 @@ if ($value) {
         EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
     }
 }
-
-echo count(EbayProduct::getOrphanListing(Tools::getValue('profile')));
+$count_orphans_product = EbayProduct::getCountOrphanListing(Tools::getValue('profile'));
+echo $count_orphans_product[0]['number'];

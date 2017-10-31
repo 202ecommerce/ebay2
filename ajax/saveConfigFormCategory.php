@@ -156,8 +156,9 @@ if (Tools::getValue('specific')) {
 // save conditions
 if (Tools::getValue('condition')) {
     foreach (Tools::getValue('condition') as $category_id => $condition) {
+        $ebay_category_id_ref = EbayCategory::getIdCategoryRefById($category_id, $ebay_profile->ebay_site_id);
         foreach ($condition as $type => $condition_ref) {
-            EbayCategoryConditionConfiguration::replace(array('id_ebay_profile' => $id_ebay_profile, 'id_condition_ref' => $condition_ref, 'id_category_ref' => $category_id, 'condition_type' => $type));
+            EbayCategoryConditionConfiguration::replace(array('id_ebay_profile' => $id_ebay_profile, 'id_condition_ref' => $condition_ref, 'id_category_ref' => $ebay_category_id_ref, 'condition_type' => $type));
         }
     }
 }

@@ -24,25 +24,20 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS')) {
-    define('TMP_DS', DIRECTORY_SEPARATOR);
+require_once dirname(__FILE__).'/../../../config/config.inc.php';
+require_once dirname(__FILE__).'/../../../init.php';
+require_once '../ebay.php';
+
+if (!Configuration::get('EBAY_SECURITY_TOKEN')
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR: Invalid Token');
+$ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile'));
+$products = EbayProduct::getProductsIdForSync($ebay_profile->id);
+while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
+    $product = new Product($product_id['id_product'], false, $ebay_profile->id_lang);
+    EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id['id_product'], $ebay_profile->id);
+    EbayTaskManager::addTask('update', $product, null, $ebay_profile->id);
 }
-
-include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-
-$id_profile = Tools::getValue('id_profile');
-if ($id_profile) {
-    $table = _DB_PREFIX_.'ebay_task_manager';
-    $sql_select = "SELECT COUNT(DISTINCT(id_product)) AS nb  FROM `".pSQL($table)."` WHERE `locked` != 0 AND `id_ebay_profile` = ".pSQL($id_profile);
-    $res_select = DB::getInstance()->executeS($sql_select);
-    $nb_tasks_in_work = $res_select[0]['nb'];
-    die($nb_tasks_in_work);
-}
-
-die('0');
+die();

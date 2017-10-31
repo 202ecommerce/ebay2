@@ -29,20 +29,14 @@ if (!defined('TMP_DS')) {
 }
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR: Invalid Token');
-}
-
 include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
+include '../ebay.php';
 
-$id_profile = Tools::getValue('id_profile');
-if ($id_profile) {
-    $table = _DB_PREFIX_.'ebay_task_manager';
-    $sql_select = "SELECT COUNT(DISTINCT(id_product)) AS nb  FROM `".pSQL($table)."` WHERE `locked` != 0 AND `id_ebay_profile` = ".pSQL($id_profile);
-    $res_select = DB::getInstance()->executeS($sql_select);
-    $nb_tasks_in_work = $res_select[0]['nb'];
-    die($nb_tasks_in_work);
+if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('INVALID TOKEN');
 }
 
-die('0');
+$reference_ebay = Tools::getValue('reference_ebay') ? Tools::getValue('reference_ebay') : '';
+EbayOrderErrors::deleteByOrderRef($reference_ebay);
+
+die();

@@ -39,22 +39,6 @@
 		font-size: 25px;
 	}
 
-	input.categorySync[type="checkbox"] {
-		display:none;
-	}
-
-	input.categorySync[type="checkbox"] + label::before{
-		color:red;
-		content:"\2716";
-		font-size:18px;
-	}
-
-	input.categorySync[type="checkbox"]:checked + label::before{
-		color:green;
-		content:"\2714";
-		font-size:20px;
-	}
-
 	#button_ebay_sync2{
 		background-image: url({/literal}{$path}{literal}views/img/ebay.png);
 		background-repeat: no-repeat;
@@ -107,7 +91,9 @@
 
 	var possible_attributes = new Array();
 	{foreach from=$possible_attributes item=attribute}
+	{if isset($attribute.id_attribute_group) && $attribute.id_attribute_group != ""}
 	possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
+	{/if}
 	{/foreach}
 
 	var possible_features = new Array();
@@ -228,7 +214,7 @@
 		});
 
 		$('.js-save-category').on('click', function() {
-			var data = $('#category_config').serialize();
+			var data = $('form#category_config').serialize();
 			var ps_categories = new Array();
 			$('#last_page_categorie_ps').find('li').each(function( index ) {
 				ps_categories.push($( this ).attr('id'));
@@ -292,11 +278,11 @@
             $('#popin-delete-productSync span.name_categorie').html($name_categorie);
 		});
 
-        $(document).on('click', '#popin-delete-productSync .cancel-delete', function(){
+        $('#popin-delete-productSync .cancel-delete').click(function(){
             $('#popin-delete-productSync').hide();
         });
 
-        $(document).on('click', '#popin-delete-productSync .ok-delete', function(){
+        $('#popin-delete-productSync .ok-delete').click(function(){
             $('#popin-delete-productSync').hide();
             var tr = $(product_sync_for_delete).parent().parent();
             var id_category = $(product_sync_for_delete).data('id');
@@ -313,7 +299,8 @@
 
 		$('.add_categories_ps li').live('click', function() {
 			$('.category_ps_list').append($( this ));
-			$('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="remove category"><i class="icon-trash"></i></button>');
+            $('.category_ps_list').children().last().children('button').remove();
+			$('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="{/literal}{l s='remove category' mod='ebay'}{literal}"><i class="icon-trash"></i></button>');
 			$('#divPsCategories').html('');
 			$('.js-next-popin').removeAttr('disabled');
 		});
@@ -565,13 +552,13 @@
 
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
-<fieldset style="border: 0; margin: 0 0 10px;">
-	<a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span>{l s='Add' mod='ebay'} </a>
+<fieldset class="table-block-below">
+	<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> {l s='Add products' mod='ebay'} </a>
 	{if isset($img_alert) && !empty($img_alert)}
 		<div class="warning big">
             {$img_alert['message']|escape:'htmlall':'UTF-8'}
             {if isset($img_alert.kb)}
-				<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}"></a>
+				<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
 			{/if}
         </div>
 	{/if}
@@ -602,56 +589,80 @@
 	<div class="margin-form">
 		<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode_1" value="1" {if $ebay_sync_mode == 1}checked="checked"{/if}/> <span data-inlinehelp="{l s='This will only synchronisze products that are not yet listed on eBay.' mod='ebay'}">{l s='Only sync new products' mod='ebay'}</span>
 	</div>*}
-<fieldset>
-	<h4>{l s='Search categories Prestashop' mod='ebay'}</h4>
-	<div id="catSync">
-		<div id="searcheEbaySync">
-			<input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}>
-			<input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
-				   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
-			<input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
-				   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
-			<button class="searcheBtn btn btn-success">{l s='Searche' mod='ebay'}</button>
-			<button class="researcheBtn btn btn-warning">{l s='Reset' mod='ebay'}</button>
+<div class="table-block">
+	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
+		<button class="btn btn-default button-resync"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
+	</h4>
+
+        <div id="searcheEbaySync" class="table-block__search table-block__holder">
+            <input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}
+                   title="{l s='by category name' mod='ebay'}" data-toggle="tooltip">
+            <input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
+                   title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip"
+                   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
+            <input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
+                   title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
+                   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
+            <button class="searcheBtn button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+            <button class="researcheBtn button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+        </div>
+	{if $categories|@count == 0}
+		<div class="table-block__message table-block__holder">
+			<div class="table-block__message-holder">
+				<p>{l s='No list products' mod='ebay'}</p>
+				<p>{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}</p>
+			</div>
 		</div>
-		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
-			<thead>
-				<tr class="nodrag nodrop">
-					<th>{l s='PrestaShop Category' mod='ebay'}</th>
-					<th>{l s='Products / variations' mod='ebay'}</th>
-					<th>{l s='Manual Exclusions' mod='ebay'}</th>
-					<th>{l s='Price impact' mod='ebay'}</th>
-					<th>{l s='EBay category' mod='ebay'}</th>
-					<th>{l s='Multi var' mod='ebay'}</th>
-					<th>{l s='Listing' mod='ebay'}</th>
-					<th>{l s='Status' mod='ebay'}</th>
-					<th>{l s='Action' mod='ebay'}</th>
-				</tr>
-			</thead>
-			<tbody>
-				{if $categories|@count == 0}
-					<tr><td colspan="2">{l s='No category found.' mod='ebay'}</td></tr>
-				{else}
-					{foreach from=$categories item=category}
-						<tr class="{$category.row_class|escape:'htmlall':'UTF-8'}">
-							<td>{$category.name|escape:'htmlall':'UTF-8'}</td>
-							<td>{if $category.category_multi == 'yes'}<b>{$category.nb_products|escape:'htmlall':'UTF-8'}</b>/{$category.nb_products_variations|escape:'htmlall':'UTF-8'}{else}{$category.nb_products|escape:'htmlall':'UTF-8'}/<b>{$category.nb_products_variations|escape:'htmlall':'UTF-8'}</b>{/if} </td>
-							<td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
-							<td>{$category.price|escape:'htmlall':'UTF-8'}</td>
-							<td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
-							<td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
-							<td>{$category.annonces|escape:'htmlall':'UTF-8'}/{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
-							<td><input type="checkbox" class="categorySync" id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} /><label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}"></label>
-							<td><a href="#popin-add-cat" style="width:100%" class="modifier_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Modify' mod='ebay'}</a>
-								<a href="#" style="width:100%" class="delete_cat btn btn-lg btn-success" data-id="{$category.value}"><span ></span>{l s='Delete' mod='ebay'}</a></td>
-						</tr>
-					{/foreach}
-				{/if}
-			</tbody>
-		</table>
+	{else}
+        <div id="catSync" class="table-wrapper">
+            <table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
+                <thead>
+                    <tr class="nodrag nodrop">
+                        <th>{l s='PrestaShop Category' mod='ebay'}</th>
+                        <th>{l s='Products / variations' mod='ebay'}</th>
+                        <th>{l s='Manual Exclusions' mod='ebay'}</th>
+                        <th>{l s='Price impact' mod='ebay'}</th>
+                        <th>{l s='EBay category' mod='ebay'}</th>
+                        <th>{l s='Multi var' mod='ebay'}</th>
+                        <th>{l s='Listing' mod='ebay'}</th>
+                        <th class="text-center">
+                            <label for="activate_resynchBP" class="control-label">
+                                <span class="label-tooltip"  data-toggle="tooltip">
+                                    {l s='Status' mod='ebay'}
+                                </span>
+                            </label>
+                        </th>
+                        <th class="text-center">{l s='Action' mod='ebay'}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {foreach from=$categories item=category}
+                    <tr class="{$category.row_class|escape:'htmlall':'UTF-8'}">
+                        <td>{$category.name|escape:'htmlall':'UTF-8'}</td>
+                        <td>{if $category.category_multi == 'yes'}<b>{$category.nb_products|escape:'htmlall':'UTF-8'}</b>/{$category.nb_products_variations|escape:'htmlall':'UTF-8'}{else}{$category.nb_products|escape:'htmlall':'UTF-8'}/<b>{$category.nb_products_variations|escape:'htmlall':'UTF-8'}</b>{/if} </td>
+                        <td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$category.price|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$category.annonces|escape:'htmlall':'UTF-8'}/{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
+                        <td class="text-center"><input type="checkbox" class="categorySync" id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
+                            <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"  title="{l s='Activate/Deactivate' mod='ebay'}" data-toggle="tooltip"></label>
+                        </td>
+                        <td>
+                            <div class="action">
+                                <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span ></span><span class="icon-pencil"></span></a>
+                                <a href="#" class="delete_cat btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}" title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span ><span class="icon-trash"></span></a>
+                            </div>
+                        </td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
 		{if isset($pagination) && $pagination}
 			<div class="navPaginationSyncTab" style="display:flex; justify-content:center">
-                {include file=$tpl_include}
+				{include file=$tpl_include}
 			</div>
 		{/if}
 
@@ -659,14 +670,14 @@
 			<script>
 				$(document).ready(function() {ldelim}
 					eBaySync(1);
-				{rdelim});
+					{rdelim});
 			</script>
 		{/if}
 		{if $sync_2}
 			<script>
 				$(document).ready(function() {ldelim}
 					eBaySync(2);
-				{rdelim});
+					{rdelim});
 			</script>
 		{/if}
 		{if $is_sync_mode_b}
@@ -674,17 +685,17 @@
 				$(document).ready(function() {ldelim}
 					$("#catSync").show("slow");
 					$("#ebay_sync_products_mode2").attr("checked", true);
-				{rdelim});
+					{rdelim});
 			</script>
 		{/if}
-	</div>
-</fieldset>
+    {/if}
+</div>
 
 {* Category add modal *}
 <div id="popin-add-cat" class="popin popin-lg" style="display: none;">
 	<div class="panel">
 		<div  class="panel-heading">
-			<i class="icon-plus"></i>{l s='ADD A PRODUCT' mod='ebay'}
+			<i class="icon-plus"></i> {l s='ADD A PRODUCT' mod='ebay'}
 			<span class="badge badge-success"><span class="page_popin" id="1">1</span> / 4</span>
 		</div>
 
@@ -926,3 +937,24 @@
 		</div>
 	</div>
 </div>
+
+<div id="popin-cofirm-resync" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+	<div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
+		<div class="panel-heading">
+			<i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
+		</div>
+		<p>{l s='Do you want resync the products?' mod='ebay'}</p>
+
+		<div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">
+			<button class="cancel-resyncProducts btn btn-default"><i class="process-icon-cancel"></i>Annuler</button>
+			<button class="ok-resyncProducts btn btn-success pull-right" style="padding:15px">OK</button>
+		</div>
+	</div>
+</div>
+
+{* Bootstrap tooltip *}
+<script>
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>

@@ -204,7 +204,7 @@ class EbayProduct
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
         if ($search['id_product']) {
-            $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
+            $sql .= ' AND p.`id_product` = '.(int)pSQL($search['id_product']);
         }
         if ($search['id_product_ebay']) {
             $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
@@ -242,7 +242,7 @@ class EbayProduct
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
             if ($search['id_product']) {
-                $sql .= ' AND p.`id_product` = '.pSQL($search['id_product']);
+                $sql .= ' AND p.`id_product` = '.(int)pSQL($search['id_product']);
             }
             if ($search['id_product_ebay']) {
                 $sql .= ' AND ep.`id_product_ref` = "'.pSQL($search['id_product_ebay']).'"';
@@ -254,7 +254,7 @@ class EbayProduct
                 $sql .= ' AND cl.`name` LIKE \'%'.pSQL($search['name_cat']).'%\'';
             }
             $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
-            $sql .= ' ORDER BY ep.`id_product` LIMIT '.$length.' OFFSET '.$offset;
+            $sql .= ' ORDER BY ep.`id_product` LIMIT '.(int) $length.' OFFSET '.(int) $offset;
 
             return Db::getInstance()->ExecuteS($sql, false);
         } else {
@@ -287,7 +287,11 @@ class EbayProduct
                 FROM "._DB_PREFIX_."product p
                 LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc ON p.id_product = epc.id_product
                 WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
+                AND p.active=1
                 AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
+        if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')) {
+            $sql .= " AND epc.id_product is NULL";
+        }
         return DB::getInstance()->ExecuteS($sql, false);
     }
 
@@ -305,6 +309,9 @@ class EbayProduct
         $site_extension = EbayCountrySpec::getSiteExtensionBySiteId($ebay_site_id);
         if ($ebay_site_id== 23) {
             return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.befr.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
+        }
+        if ($ebay_site_id== 123) {
+            return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.benl.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
         }
         return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
     }
@@ -411,7 +418,7 @@ class EbayProduct
     FROM `'._DB_PREFIX_.'ebay_product` ep
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_task_manager` etm 
-    ON ep.`id_product` = etm.`id_product`
+    ON ep.`id_product` = etm.`id_product` AND ep.`id_attribute` = etm.`id_product_attribute`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`

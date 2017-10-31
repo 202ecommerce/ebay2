@@ -24,70 +24,49 @@
 *}
 
 
-        <p>{l s='The following products has been refused from eBay. Pay attention: if an listing is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>
-        <div id = 'contentProductErrors'>
-            <table id="AnnoncesErrorsListings" class="table" >
+<div class="table-block">
+    {*<p>{l s='The following products has been refused from eBay. Pay attention: if an listing is already on eBay, it will be no more upgraded. You will need to manually correct the eBay refusal, or you can delete the product from your synchronization.' mod='ebay'}</p>*}
+    <h4 class="table-block__title table-block__holder">{l s='Product errors' mod='ebay'}
+        <button class="button-refresh btn btn-default" id="refreshErrors"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+    </h4>
+
+
+        <div class="table-block__search table-block__holder">
+            <input type="text" class="form-control" id="id_product_search"
+                   placeholder="{l s='by ID product' mod='ebay'}"
+                   title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip"
+                   value="{if isset($search.id_product)}{$search.id_product}{/if}">
+            <input type="text" class="form-control" id="name_product_search"
+                   placeholder="{l s='by product name' mod='ebay'}"
+                   title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
+                   value="{if isset($search.name_product)}{$search.name_product}{/if}">
+            <button class="button-apply btn btn-info" id="searchBtnErrors"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+            <button class="button-reset btn btn-default" id="resetErrors"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+        </div>
+    {if empty($task_errors)}
+        <div class="table-block__message table-block__message_green table-block__holder">
+            <div class="table-block__message-holder">
+                <p>{l s='No errors listings' mod='ebay'}</p>
+            </div>
+        </div>
+    {else}
+        <div id="contentProductErrors" class="table-wrapper">
+            <table id="AnnoncesErrorsListings" class="table">
                 <thead>
                 <tr>
-
-                    <th style="width:110px;">
-                        <span>{l s='Date' mod='ebay'}</span>
-                    </th>
-
-                    <th>
-                        <span>{l s='ID' mod='ebay'}</span>
-                    </th>
-
-                    <th class="center">
-                        <span>{l s='Nom' mod='ebay'}</span>
-                    </th>
-
-                    <th>
-                        <span >{l s='eBay listings' mod='ebay'}</span>
-                    </th>
-
-                    <th class="center">
-                        <span >{l s='Error' mod='ebay'}</span>
-                    </th>
-
-                    <th class="center">
-                        <span >{l s='Description' mod='ebay'}</span>
-                    </th>
-
-                    <th class="center">
-                        <span>{l s='Stock' mod='ebay'}</span>
-                    </th>
-
-                    <th class="center">
-                        <span>{l s='Help' mod='ebay'}</span>
-                    </th>
-
-                    <th class="center">{l s='Actions' mod='ebay'}</th>
-
+                    <th style="width:110px;"><span>{l s='Date' mod='ebay'}</span></th>
+                    <th><span>{l s='ID' mod='ebay'}</span></th>
+                    <th class="text-center"><span>{l s='Nom' mod='ebay'}</span></th>
+                    <th><span >{l s='eBay listings' mod='ebay'}</span></th>
+                    <th class="text-center"><span >{l s='Error' mod='ebay'}</span></th>
+                    <th class="text-center"><span >{l s='Description' mod='ebay'}</span></th>
+                    <th class="text-center"><span>{l s='Stock' mod='ebay'}</span></th>
+                    <th class="text-center">{l s='Actions' mod='ebay'}</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type="text" class="form-control" id="id_product_search"
-                               value="{if isset($search.id_product)}{$search.id_product}{/if}">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" id="name_product_search"
-                               value="{if isset($search.name_product)}{$search.name_product}{/if}">
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <button class="btn btn-default" id="searchBtnErrors">{l s='Search' mod='ebay'}</button>
-                    </td>
-                </tr>
-                {if isset($task_errors)}
+                {if isset($task_errors) && !empty($task_errors)}
                     {foreach from=$task_errors item="task_error"}
                         <tr>
                             <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
@@ -96,27 +75,43 @@
                             <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                             <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
                             <td class="error_description">{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>
-                            <td ></td>
-                            <td ><a class="kb-help"
-                                    data-errorcode="{$task_error.error_code}"
-                                    data-module="ebay"
-                                    data-lang="{$task_error.lang_iso}"
-                                    module_version="1.11.0"
-                                    prestashop_version="{$task_error.ps_version}"></a></td>
-                            <td ><a class="btn btn-xs btn-block btn-warning corige_product" id="{$task_error.real_id}" href="{$task_error.product_url}" target="_blank"><i class="icon-gavel"></i>{l s='Corriger' mod='ebay'}</a>
-                                <a class="btn btn-xs btn-block btn-danger exclure_product" id="{$task_error.real_id}"><i class="icon-ban"></i>{l s='Exclure' mod='ebay'}</a></td>
+                            <td></td>
+                            <td>
+                                <div class="action">
+                                    <a class="btn btn-sm btn-default kb-help"
+                                       data-errorcode="{$task_error.error_code}"
+                                       data-module="ebay"
+                                       data-lang="{$task_error.lang_iso}"
+                                       module_version="1.11.0"
+                                       prestashop_version="{$task_error.ps_version}"
+                                       title="{l s='Help' mod='ebay'}" data-toggle="tooltip"><i class="icon-question"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-default corige_product"
+                                       id="{$task_error.real_id}" href="{$task_error.product_url}"
+                                       target="_blank"
+                                       title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><i class="icon-pencil"></i>
+                                    </a>
+                                    <a class="exclure_product btn-hover-danger  btn btn-sm btn-default"
+                                       id="{$task_error.real_id}"
+                                       title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><i class="icon-close"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     {/foreach}
                 {/if}
                 </tbody>
 
             </table>
-            {if isset($pages_all) and $pages_all >1}
-                <div class="navPaginationListProducErrorsTab" style="display:flex; justify-content:center">
-                    {include file=$tpl_include}
-                </div>
-            {/if}
         </div>
+
+        {if isset($pages_all) and $pages_all >1}
+            <div class="navPaginationListProducErrorsTab" style="display:flex; justify-content:center">
+                {include file=$tpl_include}
+            </div>
+        {/if}
+    {/if}
+</div>
 
 <div id="popin-product-exclu" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
     <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
@@ -281,5 +276,29 @@
         });
     });
 
+    $('#refreshErrors').click(refreshErrors);
+
+    $('#resetErrors').click(refreshErrors);
+
+    function refreshErrors(){
+        $('#menuTab80Sheet .panel').empty();
+        var url = module_dir + 'ebay/ajax/refreshErrors.php';
+        var data = {
+            id_ebay_profile : id_ebay_profile,
+            token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
+        };
+        $.post(url, data, function(response){
+            $('#menuTab80Sheet .panel').html(response);
+        });
+    };
+
     {/literal}
+</script>
+
+
+{* Bootstrap tooltip *}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>

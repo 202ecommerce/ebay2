@@ -96,6 +96,7 @@ class EbayTaskManager
                         }
 
                         $ebay_profile = new EbayProfile($product_ebay['id_ebay_profile']);
+                        $restrictSync = (int) $ebay_profile->getConfiguration('RESTRICT_SYNC');
                         $id_attributes = array();
 
                         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
@@ -112,12 +113,17 @@ class EbayTaskManager
                         foreach ($id_attributes as $id_attribute) {
                             $id_tasks = array(10);
                             if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop)) {
-                                $id_tasks = array(13, 11);
+                                if ($restrictSync) {
+                                    $id_tasks = array(13);
+                                } else {
+                                    $id_tasks = array(13, 11);
+                                }
+
                                 if ($type == 'stock') {
                                     $id_tasks = array(13);
                                 }
-                                if (StockAvailable::getQuantityAvailableByProduct($product->id, null, $ebay_profile->id_shop) == 0 &&
-                                    !(bool)EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                                if (StockAvailable::getQuantityAvailableByProduct($product->id, $id_attribute, $ebay_profile->id_shop) <= 0 &&
+                                    !(bool)$ebay_profile->getConfiguration('EBAY_OUT_OF_STOCK')) {
                                     $id_tasks = array(14);
                                 }
                             }
@@ -139,12 +145,13 @@ class EbayTaskManager
             'id_product_attribute' => $id_product_atttibute,
             'id_task' => $id_task,
             'id_ebay_profile' => $id_ebay_profile,
+            'date_add' =>  pSQL(date("Y-m-d H:i:s")),
             'retry' => 0,
             'locked' => 0,
         );
 
         if ($id_task == 14) {
-            self::deleteTaskForPorduct($id_product);
+            self::deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile, $id_product_atttibute);
         }
         self::deleteErrorsForProduct($id_product);
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)) {
@@ -196,9 +203,11 @@ class EbayTaskManager
 
     public static function getJob()
     {
-        $unidId = uniqid();
-        if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0', 500)) {
-            return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "'.$unidId.'" ORDER BY `date_add`');
+        if (self::nbTaskInwork() < 1500) {
+            $unidId = uniqid();
+            if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0', 150)) {
+                return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "' . $unidId . '" ORDER BY `date_add`');
+            }
         }
         return false;
     }
@@ -238,7 +247,7 @@ class EbayTaskManager
 
     public static function cleanTasks()
     {
-        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 40 MINUTE');
+        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 10 MINUTE');
     }
 
     public static function getCountErrors($id_ebay_profile, $search = false, $id_lang = null)
@@ -246,13 +255,13 @@ class EbayTaskManager
         if ($search && $id_lang) {
             $profile = new EbayProfile($id_ebay_profile);
             $query = "SELECT COUNT(*) as `count` FROM "._DB_PREFIX_."ebay_task_manager etm
-                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".$id_lang." AND pl.id_shop = ".$profile->id_shop."
-                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = $id_ebay_profile";
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".(int) $id_lang." AND pl.id_shop = ".(int) $profile->id_shop."
+                       WHERE etm.error_code NOT IN('0') AND etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".(int) $id_ebay_profile;
             if ($search['id_product']) {
-                $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
+                $query .= " AND pl.id_product LIKE '%".(int) $search['id_product']."%'";
             }
             if ($search['name_product']) {
-                $query .= " AND pl.name LIKE '%".$search['name_product']."%'";
+                $query .= " AND pl.name LIKE '%".pSQL($search['name_product'])."%'";
             }
 
             $result = DB::getInstance()->ExecuteS($query);
@@ -270,15 +279,15 @@ class EbayTaskManager
             $limit = (int) $length;
             $offset = $limit * ( (int) $page_current - 1 );
             $query = "SELECT * FROM "._DB_PREFIX_."ebay_task_manager etm
-                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".$id_lang." AND pl.id_shop = ".$profile->id_shop."
-                       WHERE etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".$id_ebay_profile;
+                       LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".(int) $id_lang." AND pl.id_shop = ".(int) $profile->id_shop."
+                       WHERE etm.error_code NOT IN('0') AND etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".(int) $id_ebay_profile;
             if ($search['id_product']) {
-                $query .= " AND pl.id_product LIKE '%".$search['id_product']."%'";
+                $query .= " AND pl.id_product LIKE '%".(int) $search['id_product']."%'";
             }
             if ($search['name_product']) {
-                $query .= " AND pl.name LIKE '%".$search['name_product']."%'";
+                $query .= " AND pl.name LIKE '%".pSQL($search['name_product'])."%'";
             }
-            $query .=  " ORDER BY `date_add` LIMIT $limit  OFFSET $offset";
+            $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
             //var_dump($query); die();
             return DB::getInstance()->ExecuteS($query);
         }
@@ -289,7 +298,7 @@ class EbayTaskManager
     public static function getErrorsCount($id_ebay_profile)
     {
 
-        return DB::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
+        return DB::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE error_code NOT IN(\'0\') AND `error_code` IS NOT NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }
 
     public static function deleteErrorsForProduct($id_product)
@@ -300,8 +309,13 @@ class EbayTaskManager
 
     public static function getNbTasks($id_ebay_profile)
     {
+        $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL) and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
+        return count($tasks);
+    }
 
-        $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE `error_code` IS NULL and `id_ebay_profile` = '.(int)$id_ebay_profile.' GROUP BY `id_product_attribute`, `id_product` ');
+    public static function getNbTasksTotal()
+    {
+        $tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL) GROUP BY `id_product_attribute`, `id_product` ');
         return count($tasks);
     }
 
@@ -311,5 +325,12 @@ class EbayTaskManager
 										SET `error_code` = null, `error` = "", `retry` = 0
 										WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
         return  Db::getInstance()->execute($sql);
+    }
+
+    public static function nbTaskInwork()
+    {
+        $sql_select = "SELECT COUNT(*) AS nb  FROM `"._DB_PREFIX_."ebay_task_manager` WHERE `locked` != 0";
+        $res_select = DB::getInstance()->executeS($sql_select);
+        return $res_select[0]['nb'];
     }
 }

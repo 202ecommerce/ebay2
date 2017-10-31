@@ -28,7 +28,7 @@
 
 	<fieldset>
 		<div class="panel-heading">
-			{l s='EAN Sync' mod='ebay'} <a class="kb-help" data-errorcode="{$help_ean.error_code}" data-module="ebay" data-lang="{$help_ean.lang}" module_version="{$help_ean.module_version}" prestashop_version="{$help_ean.ps_version}" href="" target="_blank"></a>
+			{l s='EAN Sync' mod='ebay'} <a class="kb-help" data-errorcode="{$help_ean.error_code}" data-module="ebay" data-lang="{$help_ean.lang}" module_version="{$help_ean.module_version}" prestashop_version="{$help_ean.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
 		</div>
 
 		<div class="form-group">
@@ -172,7 +172,11 @@
 				<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
 						{foreach from=$sizes item='size'}
-							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
+							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}
+							data-width="{$size.width|escape:'htmlall':'UTF-8'}"
+							data-height="{$size.height|escape:'htmlall':'UTF-8'}">
+								{$size.name|escape:'htmlall':'UTF-8'}
+							</option>
 						{/foreach}
 					{/if}
 				</select>
@@ -187,7 +191,11 @@
 				<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
 						{foreach from=$sizes item='size'}
-							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
+							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}
+									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
+									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
+								{$size.name|escape:'htmlall':'UTF-8'}
+							</option>
 						{/foreach}
 					{/if}
 				</select>
@@ -204,7 +212,11 @@
 				<select name="sizesmall" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
 						{foreach from=$sizes item='size'}
-							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
+							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}
+									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
+									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
+								{$size.name|escape:'htmlall':'UTF-8'}
+							</option>
 						{/foreach}
 					{/if}
 				</select>
@@ -216,7 +228,7 @@
 				{l s='Number of additional pictures' mod='ebay'}
 			</label>
 			<div class="col-sm-9">
-				<input type="number" class="form-control" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
+				<input type="number" class="form-control width-num" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
@@ -273,7 +285,7 @@
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				{l s='Listing duration' mod='ebay'}
-				<a class="kb-help" data-errorcode="{$help_gtc.error_code}" data-module="ebay" data-lang="{$help_gtc.lang}" module_version="{$help_gtc.module_version}" prestashop_version="{$help_gtc.ps_version}" href="" target="_blank"></a>
+				<a class="kb-help" data-errorcode="{$help_gtc.error_code}" data-module="ebay" data-lang="{$help_gtc.lang}" module_version="{$help_gtc.module_version}" prestashop_version="{$help_gtc.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
 			</label>
 			<div class="col-sm-9">
 				<select name="listingdurations" class="form-control">
@@ -288,7 +300,7 @@
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="checkbox">
 					<label for="automaticallyrelist">
-						<input type="checkbox" id="automaticallyrelist" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} />
+						<input type="checkbox" id="automaticallyrelist" name="automaticallyrelist" {if isset($automaticallyRelist) && $automaticallyRelist} checked="checked" {/if} />
 						{l s='Automatic relist' mod='ebay'}
 					</label>
 				</div>
@@ -298,7 +310,7 @@
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				{l s='Out of Stock status ' mod='ebay'}
-				<a class="kb-help" data-errorcode="{$help_out_of_stock.error_code}" data-module="ebay" data-lang="{$help_out_of_stock.lang}" module_version="{$help_out_of_stock.module_version}" prestashop_version="{$help_out_of_stock.ps_version}" href="" target="_blank"></a>
+				<a class="kb-help" data-errorcode="{$help_out_of_stock.error_code}" data-module="ebay" data-lang="{$help_out_of_stock.lang}" module_version="{$help_out_of_stock.module_version}" prestashop_version="{$help_out_of_stock.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
 			</label>
 			<div class="col-sm-9">
 				<input type="text" readonly value="{if $out_of_stock_value}{l s='Activated' mod='ebay'}{else}{l s='Deactivated' mod='ebay'}{/if}" class="d-ib" style="text-align: center;">
@@ -308,15 +320,37 @@
 		<div class="form-group">
 			<label class="control-label col-sm-3">
                 {l s='Limit of ebay stock' mod='ebay'}
-				<a class="kb-help" data-errorcode="{$help_limit_of_stock.error_code}" data-module="ebay" data-lang="{$help_limit_of_stock.lang}" module_version="{$help_limit_of_stock.module_version}" prestashop_version="{$help_limit_of_stock.ps_version}" href="" target="_blank"></a>
+				<a class="kb-help" data-errorcode="{$help_limit_of_stock.error_code}" data-module="ebay" data-lang="{$help_limit_of_stock.lang}" module_version="{$help_limit_of_stock.module_version}" prestashop_version="{$help_limit_of_stock.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
 			</label>
 			<div class="col-sm-9">
-				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control" id="limitEbayStock"
-					   value="{if $limitEbayStock || $limitEbayStock === '0'}{$limitEbayStock}{else}50{/if}" style="width:50px">
+				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control width-num" id="limitEbayStock"
+					   value="{if $limitEbayStock || $limitEbayStock === '0'}{$limitEbayStock}{else}50{/if}">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
 					{l s='0 - unlimited, 1 min - 50 max to limit stock' mod='ebay'}
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="checkbox">
+					<label for="restrictSync">
+						<input type="checkbox" id="restrictSync" name="restrictSync" value="1" {if isset($restrictSync) && $restrictSync} checked="checked" {/if} />
+                        {l s='Synchronization only price and quantity' mod='ebay'}
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				<div class="checkbox">
+					<label for="syncNewProd">
+						<input type="checkbox" id="syncNewProd" name="syncNewProd" value="1" {if isset($syncNewProd) && $syncNewProd} checked="checked" {/if} />
+                        {l s='Synchronization only new product' mod='ebay'}
+					</label>
 				</div>
 			</div>
 		</div>
@@ -345,6 +379,27 @@
 			if (stock.val() < 0){
                 $('#limitEbayStock').val('0');
 			}
+		}
+
+		$('select[name = \'sizebig\'], select[name = \'sizedefault\']').change(checkSizeImage);
+
+        checkSizeImage();
+
+		function checkSizeImage(){
+            var width;
+            var height;
+            var warning;
+
+            $('select[name = \'sizebig\'], select[name = \'sizedefault\']').each(function(){
+                width = $(this).find('option:selected').attr('data-width');
+                height = $(this).find('option:selected').attr('data-height');
+
+                if (+width < 800 || +height < 800){
+                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
+                    $('#annoncestab1').closest('.panel').before(warning);
+                }
+			});
+
 		}
 
 	});

@@ -59,7 +59,7 @@
     </thead>
     <tbody>
     <tr id="removeRow">
-        <td class="center" colspan="9">
+        <td class="text-center" colspan="9">
             <img src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/img/loading-small.gif" alt=""/>
         </td>
     </tr>

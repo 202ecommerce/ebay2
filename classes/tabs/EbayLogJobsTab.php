@@ -55,7 +55,7 @@ class EbayLogJobsTab extends EbayTab
         $limit = $length;
         $offset = (int) $length * ( (int) $page_current - 1 );
 
-        $sql_select = "SELECT * FROM `$table` WHERE `locked` = 0 AND `retry` = 0 AND  `id_ebay_profile` = $id_profile ORDER BY `date_add` LIMIT $limit OFFSET $offset";
+        $sql_select = "SELECT * FROM `".pSQL($table)."` WHERE `locked` = 0 AND `retry` = 0 AND  `id_ebay_profile` = ".pSQL($id_profile)." ORDER BY `date_add` LIMIT ".pSQL($limit)." OFFSET ".pSQL($offset);
         $tasks = DB::getInstance()->executeS($sql_select);
         $this->smarty->assign(array('tasks' => $tasks));
         $this->smarty->assign(array(
