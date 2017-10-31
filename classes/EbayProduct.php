@@ -310,6 +310,9 @@ class EbayProduct
         if ($ebay_site_id== 23) {
             return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.befr.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
         }
+        if ($ebay_site_id== 123) {
+            return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.benl.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
+        }
         return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
     }
 

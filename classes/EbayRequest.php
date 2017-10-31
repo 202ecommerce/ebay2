@@ -1577,6 +1577,7 @@ class EbayRequest
 
         $vars = array(
             'id_order_ref' => $id_order_ref,
+            'tracking_number' => false,
         );
 
         $response = $this->_makeRequest('CompleteSale', $vars);

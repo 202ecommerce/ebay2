@@ -751,6 +751,7 @@ class EbaySynchronizer
                 $value = str_replace(';', ',', $value);
                 $value = str_replace(' ', '', $value);
                 $value = explode(',', $value);
+                $value = array_slice($value, 0, 30);
             }
             if ($value) {
                 $item_specifics_pairs[$item_specific['name']] = $value;

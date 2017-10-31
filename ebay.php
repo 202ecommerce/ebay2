@@ -1383,7 +1383,13 @@ class Ebay extends Module
         $profiles = EbayProfile::getAllProfile();
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
-            $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            if ($profile['ebay_site_id'] == 123) {
+                $profile['site_name'] = 'ebay.benl';
+            } elseif ($profile['ebay_site_id'] == 23) {
+                $profile['site_name'] = 'ebay.befr';
+            } else {
+                $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            }
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
         if (Configuration::get('EBAY_VERSION') != $this->version) {
@@ -1594,7 +1600,14 @@ class Ebay extends Module
         $profiles = EbayProfile::getProfilesByIdShop($id_shop);
         $id_ebay_profiles = array();
         foreach ($profiles as &$profile) {
-            $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            if ($profile['ebay_site_id'] == 123) {
+                $profile['site_name'] = 'ebay.benl';
+            } elseif ($profile['ebay_site_id'] == 23) {
+                $profile['site_name'] = 'ebay.befr';
+            } else {
+                $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+            }
+
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
 
@@ -2509,7 +2522,7 @@ class Ebay extends Module
         $backtrace = debug_backtrace();
         $date = date("<Y-m-d(H:i:s)>");
         $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
-        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug_'.date('Y-m-d').'.log', 'a');
         fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
         fclose($stderr);
     }
