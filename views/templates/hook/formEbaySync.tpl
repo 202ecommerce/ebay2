@@ -284,7 +284,7 @@
 
         $('#popin-delete-productSync .ok-delete').click(function(){
             $('#popin-delete-productSync').hide();
-            var tr = $(product_sync_for_delete).parent().parent();
+            var tr = $(product_sync_for_delete).closest('tr');
             var id_category = $(product_sync_for_delete).data('id');
             $.ajax({
                     cache: false,
