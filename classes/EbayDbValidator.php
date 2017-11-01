@@ -98,6 +98,7 @@ class EbayDbValidator
             'is_reference' => array('type' => 'tinyint', 'length' => 1),
             'is_ean' => array('type' => 'tinyint', 'length' => 1),
             'is_upc' => array('type' => 'tinyint', 'length' => 1),
+            'max_values' => array('type' => 'int', 'length' => 2),
         ),
 
         'ebay_category_specific_value' => array(
