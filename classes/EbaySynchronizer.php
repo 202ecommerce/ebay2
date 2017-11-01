@@ -747,11 +747,16 @@ class EbaySynchronizer
             } else {
                 $value = $item_specific['specific_value'];
             }
-            if (stripos($item_specific['name'], 'OE/OEM')) {
+            if (stripos($item_specific['name'], 'OE/OEM') || (int) $item_specific['max_values'] > 1) {
                 $value = str_replace(';', ',', $value);
                 $value = str_replace(' ', '', $value);
                 $value = explode(',', $value);
-                $value = array_slice($value, 0, 30);
+                if ($item_specific['max_values']){
+                    $value = array_slice($value, 0, (int) $item_specific['max_values']);
+                } else{
+                    $value = array_slice($value, 0, 30);
+                }
+
             }
             if ($value) {
                 $item_specifics_pairs[$item_specific['name']] = $value;
