@@ -536,6 +536,10 @@
 
 	function loadPsCategories(search) {
 		var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop  +'&s=' + search;
+		var selected_cat = new Array();
+		$('.category_ps_list li').each(function(){
+		    selected_cat.push($(this).text());
+		});
 
 		$.ajax({
 			type: "POST",
@@ -544,7 +548,9 @@
 				var data = jQuery.parseJSON(data);
 				var str = '<ul class="add_categories_ps">';
 				$.each(data.categoryList, function( index, value ) {
-					str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
+				    if (selected_cat.indexOf(value.name) == -1){
+                        str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
+					}
 				});
 				str += '</ul>';
 				$('#divPsCategories').html('').append(str);
