@@ -377,7 +377,13 @@
 			for (var i in specifics)
 			{
 				var specific = specifics[i];
-				var tds = '<td>' + specific.name + '</td><td>';
+				var count_specific_values;
+				if (specific.max_values && +specific.max_values > 1){
+                    count_specific_values = '(max values = ' + specific.max_values + ')';
+				} else{
+                    count_specific_values = '';
+				}
+				var tds = '<td>' + specific.name + ' ' + count_specific_values + '</td><td>';
 				tds += '<select name="specific[' + specific.id + ']">';
 
 				if (!parseInt(specific.required)) {
