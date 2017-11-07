@@ -145,6 +145,7 @@
                     data : {
                         ids_tasks : ids_tasks,
                         type : 'work',
+                        token : token,
                     },
                     success : function(data){
                         if(ids_tasks == 'all'){
