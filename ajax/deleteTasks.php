@@ -31,6 +31,9 @@ if (!defined('TMP_DS')) {
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR : INVALID TOKEN');
+}
 $ids_tasks = Tools::getValue('ids_tasks');
 if ($ids_tasks == 'all') {
     if (Tools::getValue('type') == 'work') {
