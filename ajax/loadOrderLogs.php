@@ -28,6 +28,10 @@ include_once dirname(__FILE__).'/../../../config/config.inc.php';
 include_once dirname(__FILE__).'/../../../init.php';
 include_once dirname(__FILE__).'/../ebay.php';
 
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR : INVALID TOKEN');
+}
+
 class EbayLoadOrderLogs extends EbayLoadLogs
 {
 

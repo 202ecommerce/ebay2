@@ -30,7 +30,9 @@ include_once dirname(__FILE__).'/../ebay.php';
 include_once dirname(__FILE__).'/../classes/tabs/EbayListErrorsProductsTab.php';
 
 
-
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR : INVALID TOKEN');
+}
 $token_for_product = Tools::getValue('token_for_product');
 $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
 $length = Tools::getValue('length') ? Tools::getValue('length') : 20;

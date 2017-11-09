@@ -131,7 +131,9 @@ class EbayCategory
      */
     public function getItemsSpecifics()
     {
-        $sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, e.`is_brand`, e.`can_variation`, e.`is_reference`, e.`is_ean`, e.`is_upc`
+        $sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, 
+                e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, 
+                e.`is_brand`, e.`can_variation`, e.`is_reference`, e.`is_ean`, e.`is_upc`, e.`max_values`
 			FROM `'._DB_PREFIX_.'ebay_category_specific` e
 			WHERE e.`id_category_ref` = '.(int)$this->id_category_ref.'
 			AND e.`ebay_site_id` = '.(int)$this->id_country;
@@ -149,7 +151,7 @@ class EbayCategory
                 $this->_loadFromDb();
             }
 
-            $sql = 'SELECT e.`name`, e.`can_variation`, e.`id_attribute_group`, e.`id_feature`,
+            $sql = 'SELECT e.`name`, e.`can_variation`, e.`id_attribute_group`, e.`id_feature`, e.`max_values`,
                 ec.`value` AS specific_value, e.`is_brand`, e.`is_reference`, e.`is_ean`, e.`is_upc`
 				FROM `'._DB_PREFIX_.'ebay_category_specific` e
 				LEFT JOIN `'._DB_PREFIX_.'ebay_category_specific_value` ec
