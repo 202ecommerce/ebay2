@@ -176,7 +176,8 @@
                 url : module_dir+'ebay/ajax/deleteTasks.php',
                 data : {
                     ids_tasks : ids_tasks,
-                    type : 'log'
+                    type : 'log',
+                    token : token
                 },
                 success : function(data){
                     if (ids_tasks == 'all'){
