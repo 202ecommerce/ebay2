@@ -130,7 +130,7 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         if ($itemID = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop)) {
             $ebay = $ebay_request->endFixedPriceItem($itemID);
-            EbayProduct::deleteByIdProductRef($itemID, $id_ebay_profile);
+            EbayProduct::deleteByIdProductRef($itemID);
             return $ebay;
         }
     }
@@ -393,7 +393,7 @@ class EbaySynchronizer
                 'upc' => $combinaison['upc'],
                 'quantity' => (int)$combinaison['quantity'] > $limitEbayStock ? $limitEbayStock : $combinaison['quantity'],
                 'price_static' => $price,
-                'variation_specifics' => EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
+                'variation_specifics' => EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, false),
                 'variations' => array(
                     array(
                         'name' => $combinaison['group_name'],
@@ -514,8 +514,8 @@ class EbaySynchronizer
         //Fix for payment modules validating orders out of context, $link will not  generate fatal error.
         $link = is_object($context_link) ? $context_link : new Link();
         $prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomainSsl(true) . '/' : '');
-        //return str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
-        return $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size);
+        return str_replace('http://', 'https://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
+        //return $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size);
     }
 
     /**
@@ -747,16 +747,11 @@ class EbaySynchronizer
             } else {
                 $value = $item_specific['specific_value'];
             }
-            if (stripos($item_specific['name'], 'OE/OEM') || (int) $item_specific['max_values'] > 1) {
+            if (stripos($item_specific['name'], 'OE/OEM')) {
                 $value = str_replace(';', ',', $value);
                 $value = str_replace(' ', '', $value);
                 $value = explode(',', $value);
-                if ($item_specific['max_values']){
-                    $value = array_slice($value, 0, (int) $item_specific['max_values']);
-                } else{
-                    $value = array_slice($value, 0, 30);
-                }
-
+                $value = array_slice($value, 0, 30);
             }
             if ($value) {
                 $item_specifics_pairs[$item_specific['name']] = $value;
@@ -1153,7 +1148,6 @@ class EbaySynchronizer
         $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
         $conditions = $ebay_category->getConditionsValues($id_ebay_profile);
         // Generate array and try insert in database
-
         $data_for_stock = array(
             'quantity' => $quantity_product,
             'categoryId' => $ebay_category->getIdCategoryRef(),

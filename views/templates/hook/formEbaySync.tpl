@@ -284,7 +284,7 @@
 
         $('#popin-delete-productSync .ok-delete').click(function(){
             $('#popin-delete-productSync').hide();
-            var tr = $(product_sync_for_delete).closest('tr');
+            var tr = $(product_sync_for_delete).parent().parent();
             var id_category = $(product_sync_for_delete).data('id');
             $.ajax({
                     cache: false,
@@ -377,13 +377,7 @@
 			for (var i in specifics)
 			{
 				var specific = specifics[i];
-				var count_specific_values;
-				if (specific.max_values && +specific.max_values > 1){
-                    count_specific_values = '(max values = ' + specific.max_values + ')';
-				} else{
-                    count_specific_values = '';
-				}
-				var tds = '<td>' + specific.name + ' ' + count_specific_values + '</td><td>';
+				var tds = '<td>' + specific.name + '</td><td>';
 				tds += '<select name="specific[' + specific.id + ']">';
 
 				if (!parseInt(specific.required)) {
@@ -536,10 +530,6 @@
 
 	function loadPsCategories(search) {
 		var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop  +'&s=' + search;
-		var selected_cat = new Array();
-		$('.category_ps_list li').each(function(){
-		    selected_cat.push($(this).text());
-		});
 
 		$.ajax({
 			type: "POST",
@@ -548,9 +538,7 @@
 				var data = jQuery.parseJSON(data);
 				var str = '<ul class="add_categories_ps">';
 				$.each(data.categoryList, function( index, value ) {
-				    if (selected_cat.indexOf(value.name) == -1){
-                        str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
-					}
+					str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
 				});
 				str += '</ul>';
 				$('#divPsCategories').html('').append(str);
