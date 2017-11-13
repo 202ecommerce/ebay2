@@ -1056,9 +1056,9 @@ class Ebay extends Module
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
             }
-            foreach ($order->getProducts() as $product) {
-                $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
-            }
+            //foreach ($order->getProducts() as $product) {
+               // $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
+            //}
 
 
             foreach ($customer_ids as $id_customer) {
@@ -2522,7 +2522,7 @@ class Ebay extends Module
         $backtrace = debug_backtrace();
         $date = date("<Y-m-d(H:i:s)>");
         $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
-        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug_'.date('Y-m-d').'.log', 'a');
         fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
         fclose($stderr);
     }

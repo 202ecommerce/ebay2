@@ -60,7 +60,7 @@ if (Module::isInstalled('ebay')) {
 
         if ($step == 1) {
             EbayCategory::deleteCategoriesByIdCountry($ebay_profile->ebay_site_id);
-            Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 0);
+            $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
             if ($cat_root = $ebay_request->getCategories(false)) {
                 die(Tools::jsonEncode($cat_root));
             } else {

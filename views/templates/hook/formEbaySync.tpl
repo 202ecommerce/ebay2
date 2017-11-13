@@ -80,7 +80,8 @@
 		'Reference'							: "{l s='Reference' mod='ebay'}",
 		'EAN'								: "{l s='EAN' mod='ebay'}",
 		'UPC'								: "{l s='UPC' mod='ebay'}",
-
+		'message_multi_1'    				: "{l s='This item specific is multi-value on eBay, limited to ' mod='ebay'}",
+		'message_multi_2'    				: "{l s=' values. In PrestaShop attribute value, you can use , (coma) and ; (semicolon) to seperate values. For example : \'value 1 , value 2 , value 3 \'' mod='ebay'}",
 		{rdelim};
 
 
@@ -284,7 +285,7 @@
 
         $('#popin-delete-productSync .ok-delete').click(function(){
             $('#popin-delete-productSync').hide();
-            var tr = $(product_sync_for_delete).parent().parent();
+            var tr = $(product_sync_for_delete).closest('tr');
             var id_category = $(product_sync_for_delete).data('id');
             $.ajax({
                     cache: false,
@@ -377,7 +378,13 @@
 			for (var i in specifics)
 			{
 				var specific = specifics[i];
-				var tds = '<td>' + specific.name + '</td><td>';
+				var count_specific_values;
+				if (specific.max_values && +specific.max_values > 1){
+					count_specific_values = '<label class="control-label"><span class ="label-tooltip" data-toggle="tooltip" title="'+l['message_multi_1'] + specific.max_values + l['message_multi_2'] +'"><i class ="icon-list-ul"></i></span></label>';
+				} else{
+                    count_specific_values = '';
+				}
+				var tds = '<td>' + specific.name + ' ' + count_specific_values + '</td><td>';
 				tds += '<select name="specific[' + specific.id + ']">';
 
 				if (!parseInt(specific.required)) {
@@ -451,7 +458,7 @@
 			row.children('td:nth-child(1)').attr('rowspan', $(trs).length + 1);
 
 			row.html('').append(trs + trs_optionals);
-
+			$('[data-toggle="tooltip"]').tooltip({placement:'right'});
 		}
 
 		function writeOptions(value_prefix, options, selected_id) {
@@ -530,6 +537,10 @@
 
 	function loadPsCategories(search) {
 		var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop  +'&s=' + search;
+		var selected_cat = new Array();
+		$('.category_ps_list li').each(function(){
+		    selected_cat.push($(this).text());
+		});
 
 		$.ajax({
 			type: "POST",
@@ -538,7 +549,9 @@
 				var data = jQuery.parseJSON(data);
 				var str = '<ul class="add_categories_ps">';
 				$.each(data.categoryList, function( index, value ) {
-					str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
+				    if (selected_cat.indexOf(value.name) == -1){
+                        str += '<li id="'+ value.id_category +'">'+ value.name +'</li>';
+					}
 				});
 				str += '</ul>';
 				$('#divPsCategories').html('').append(str);

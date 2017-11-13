@@ -784,6 +784,7 @@ class EbayRequest
             $data['reference'],
             $data['ean13'],
         );
+
         foreach ($features as $feature) {
             $tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_' . $feature['name'] . '}')));
             $insert_value = false;
@@ -1697,7 +1698,7 @@ class EbayRequest
                         $data = (array)$data;
                         $var = array(
                             'type' => $data['ProfileType'],
-                            'name' => $data['ProfileName'],
+                            'name' => pSQL($data['ProfileName']),
                             'id_bussines_Policie' => $data['ProfileID'],
                             'id_ebay_profile' => $this->ebay_profile->id
                         );

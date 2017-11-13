@@ -40,7 +40,7 @@ class EbayProductImage
             $ebay_url = $ebay_request->uploadSiteHostedPicture($ps_url, $ebay_image_name);
 
             if (!$ebay_url) {
-                return $ps_url;
+                return false;
             }
 
             $data = array(
