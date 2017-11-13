@@ -24,19 +24,13 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include_once dirname(__FILE__).'/../../../config/config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
-include_once dirname(__FILE__).'/../ebay.php';
-include_once dirname(__FILE__).'/../classes/tabs/EbayListErrorsProductsTab.php';
+/**
+ * @param Ebay $module
+ * @return bool
+ */
+function upgrade_module_2_0_5($module)
+{
+    $sql = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_specific` ADD COLUMN `max_values` INT(2)';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR : INVALID TOKEN');
+    return DB::getInstance()->Execute($sql);
 }
-$id_ebay_profile = Tools::getValue('id_ebay_profile');
-$token_for_product = Tools::getValue('token_for_product');
-$ebay = new Ebay();
-$context = Context::getContext();
-$ebayErrorsProducts = new EbayListErrorsProductsTab($ebay, $context->smarty, $context);
-$response = $ebayErrorsProducts->getContent($id_ebay_profile, 1, 20, $token_for_product);
-echo $response;
-die();

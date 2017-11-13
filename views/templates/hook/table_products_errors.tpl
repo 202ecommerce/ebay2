@@ -225,6 +225,7 @@
                 token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}''{/if}{literal},
                 profile: id_ebay_profile,
                 page: page,
+                token : token,
             };
 
             $.ajax({
@@ -258,6 +259,7 @@
             token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
             profile: id_ebay_profile,
             page: 1,
+            token : token,
         };
 
         $.ajax({
@@ -286,6 +288,7 @@
         var data = {
             id_ebay_profile : id_ebay_profile,
             token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
+            token : token,
         };
         $.post(url, data, function(response){
             $('#menuTab80Sheet .panel').html(response);
