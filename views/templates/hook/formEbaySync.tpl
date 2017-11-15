@@ -638,13 +638,7 @@
                         <th>{l s='EBay category' mod='ebay'}</th>
                         <th>{l s='Multi var' mod='ebay'}</th>
                         <th>{l s='Listing' mod='ebay'}</th>
-                        <th class="text-center">
-                            <label for="activate_resynchBP" class="control-label">
-                                <span class="label-tooltip"  data-toggle="tooltip">
-                                    {l s='Status' mod='ebay'}
-                                </span>
-                            </label>
-                        </th>
+                        <th class="text-center">{l s='Status' mod='ebay'}</th>
                         <th class="text-center">{l s='Action' mod='ebay'}</th>
                     </tr>
                 </thead>
