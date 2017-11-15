@@ -566,20 +566,21 @@
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
 <fieldset class="table-block-below">
-	<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> {l s='Add' mod='ebay'} </a>
-	{if isset($img_alert) && !empty($img_alert)}
-		<div class="warning big">
-            {$img_alert['message']|escape:'htmlall':'UTF-8'}
-            {if isset($img_alert.kb)}
-				<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
-			{/if}
-        </div>
-	{/if}
-    {if isset($category_alerts) && !empty($category_alerts)}
-        <div class="warning big">
-            {$category_alerts|escape:'htmlall':'UTF-8'}
-        </div>
-    {/if}
+  {if isset($img_alert) && !empty($img_alert)}
+    <div class="warning big">
+      {$img_alert['message']|escape:'htmlall':'UTF-8'}
+      {if isset($img_alert.kb)}
+        <a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay"
+           data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}"
+           prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
+      {/if}
+    </div>
+  {/if}
+  {if isset($category_alerts) && !empty($category_alerts)}
+    <div class="warning big">
+      {$category_alerts|escape:'htmlall':'UTF-8'}
+    </div>
+  {/if}
 </fieldset>
 	{*<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 	<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
@@ -604,7 +605,10 @@
 	</div>*}
 <div class="table-block">
 	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
-		<button class="btn btn-default button-resync"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
+    <div>
+      <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus"></span> {l s='Add' mod='ebay'} </a>
+      <button class="btn btn-default button-resync" style="margin-left:7px;"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
+    </div>
 	</h4>
 
         <div id="searcheEbaySync" class="table-block__search table-block__holder">
