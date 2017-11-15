@@ -165,9 +165,11 @@
 		<div class="panel-heading"><span data-dialoghelp="http://sellerupdate.ebay.co.uk/autumn2013/picture-standards" data-inlinehelp="{l s='Select the size of your main photo and any photos you want to include in your description. Go to Preferences > images. Your images must comply with eBay’s photo standards.' mod='ebay'}">{l s='Photo sizes' mod='ebay'}</span></div>
 
 		<div class="form-group">
-			<label class="control-label col-sm-3">
-				{l s='Default photo' mod='ebay'}
-			</label>
+      <label class="control-label col-sm-3">
+				<span class="label-tooltip" title="{l s='This photo will appear as main photo in your listing.' mod='ebay'}">
+					{l s='Default photo' mod='ebay'}
+				</span>
+      </label>
 			<div class="col-sm-9">
 				<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
@@ -189,9 +191,11 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label col-sm-3">
-				{l s='Main photo' mod='ebay'}
-			</label>
+      <label class="control-label col-sm-3">
+				<span class="label-tooltip" title="{l s='This photo will appear as main photo in your listing’s description.' mod='ebay'}">
+					{l s='Main photo' mod='ebay'}
+				</span>
+      </label>
 			<div class="col-sm-9">
 				<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
