@@ -98,7 +98,7 @@
 		</div> *}
 		<div class="clearfix"></div>
 	</fieldset>
-		
+
    <fieldset style="margin-top:10px;">
 		<div class="panel-heading">{l s='Returns policy' mod='ebay'}</div>
 
@@ -112,7 +112,7 @@
 				<select name="ebay_returns_accepted_option" class="form-control">
 				{foreach from=$policies item=policy}
 					<option value="{$policy.value|escape:'htmlall':'UTF-8'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall':'UTF-8'}</option>
-				{/foreach}							   
+				{/foreach}
 				</select>
 			</div>
 		</div>
@@ -281,7 +281,7 @@
 	<!-- Listing Durations -->
 	<fieldset style="margin-top:10px;">
 		<div class="panel-heading">{l s='Listing Duration' mod='ebay'}</div>
-		
+
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				{l s='Listing duration' mod='ebay'}
@@ -295,7 +295,7 @@
 				</select>
 			</div>
 		</div>
-		
+
 		<div class="form-group">
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="checkbox">
@@ -355,7 +355,7 @@
 			</div>
 		</div>
 	</fieldset>
-		
+
 	<div class="panel-footer id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
