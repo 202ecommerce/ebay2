@@ -181,6 +181,11 @@
 					{/if}
 				</select>
 			</div>
+      <div class="col-sm-9 col-sm-push-3">
+        <div class="help-block">
+          {l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}
+        </div>
+      </div>
 		</div>
 
 		<div class="form-group">
@@ -394,10 +399,12 @@
                 width = $(this).find('option:selected').attr('data-width');
                 height = $(this).find('option:selected').attr('data-height');
 
-                if (+width < 800 || +height < 800){
-                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
-                    $('#annoncestab1').closest('.panel').before(warning);
-                }
+                {*if (+width < 800 || +height < 800){*}
+                  {*warning = "<div class='alert alert-warning alert_image_size'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";*}
+                  {*if ($('.alert_image_size').length == 0) {*}
+                    {*$('#annoncestab1').closest('.panel').before(warning);*}
+                  {*}*}
+                {*}*}
 			});
 
 		}
