@@ -566,7 +566,7 @@
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
 <fieldset class="table-block-below">
-	<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> {l s='Add products' mod='ebay'} </a>
+	<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> {l s='Add' mod='ebay'} </a>
 	{if isset($img_alert) && !empty($img_alert)}
 		<div class="warning big">
             {$img_alert['message']|escape:'htmlall':'UTF-8'}
@@ -622,8 +622,8 @@
 	{if $categories|@count == 0}
 		<div class="table-block__message table-block__holder">
 			<div class="table-block__message-holder">
-				<p>{l s='No list products' mod='ebay'}</p>
-				<p>{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}</p>
+				<p>{l s='No list categories' mod='ebay'}</p>
+				<p>{l s='To send categories on eBay, click on button "+ Add".' mod='ebay'}</p>
 			</div>
 		</div>
 	{else}
@@ -702,7 +702,7 @@
 <div id="popin-add-cat" class="popin popin-lg" style="display: none;">
 	<div class="panel">
 		<div  class="panel-heading">
-			<i class="icon-plus"></i> {l s='ADD A PRODUCT' mod='ebay'}
+			<i class="icon-plus"></i> {l s='ADD A CATEGORY' mod='ebay'}
 			<span class="badge badge-success"><span class="page_popin" id="1">1</span> / 4</span>
 		</div>
 

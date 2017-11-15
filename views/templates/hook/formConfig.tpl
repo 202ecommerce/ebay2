@@ -57,7 +57,7 @@
 
 				<ul class="nav nav-pills annonces-menu menuTab ebay_hidden " role="tablist">
 
-					<li role="presentation" id="menuTab5" class="menuTabButton "><a href="#">{l s='List products' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab5" class="menuTabButton "><a href="#">{l s='List categories' mod='ebay'}</a></li>
 
 					<li role="presentation" id="menuTab80" class="menuTabButton "><a href="#">{l s='List Errors Products' mod='ebay'}{if $count_product_errors > 0}<span class="badge">{$count_product_errors}</span>{/if}</a></li>
 
