@@ -76,9 +76,6 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label col-sm-3">
-				{l s='Ebay product template' mod='ebay'}
-			</label>
 			<div class="col-sm-9">
 				<textarea style="width: 100%" class="rte" cols="100" rows="100" name="ebay_product_template">{$ebay_product_template|ebayHtml}</textarea>
 			</div>
