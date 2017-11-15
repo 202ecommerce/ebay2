@@ -76,7 +76,7 @@
 		</div>
 
 		<div class="form-group">
-			<div class="col-sm-9">
+			<div class="col-sm-12">
 				<textarea style="width: 100%" class="rte" cols="100" rows="100" name="ebay_product_template">{$ebay_product_template|ebayHtml}</textarea>
 			</div>
 		</div>
