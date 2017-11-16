@@ -607,22 +607,30 @@
 	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
     <div>
       <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus"></span> {l s='Add' mod='ebay'} </a>
-      <button class="btn btn-default button-resync" style="margin-left:7px;"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
+      <div class="dropdown js-user-dropdown button-sync">
+        <button class="btn btn-default button-resync dropdown-toggle" type="button" data-toggle="dropdown">
+          <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#">{l s='Update all products sending new images' mod='ebay'}</a></li>
+          <li><a href="#">{l s='Update all products' mod='ebay'}</a></li>
+        </ul>
+      </div>
     </div>
 	</h4>
 
-        <div id="searcheEbaySync" class="table-block__search table-block__holder">
-            <input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}
-                   title="{l s='by category name' mod='ebay'}" data-toggle="tooltip">
-            <input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
-                   title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip"
-                   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
-            <input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
-                   title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
-                   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
-            <button class="searcheBtn button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
-            <button class="researcheBtn button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
-        </div>
+  <div id="searcheEbaySync" class="table-block__search table-block__holder">
+      <input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}
+             title="{l s='by category name' mod='ebay'}" data-toggle="tooltip">
+      <input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
+             title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip"
+             {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
+      <input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
+             title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
+             {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
+      <button class="searcheBtn button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+      <button class="researcheBtn button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+  </div>
 	{if $categories|@count == 0}
 		<div class="table-block__message table-block__holder">
 			<div class="table-block__message-holder">
