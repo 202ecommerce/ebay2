@@ -163,7 +163,7 @@
                             language : iso,
                             setup: function (ed) {
                                 ed.on('init', function(args) {
-                                    $('#selectTagTemplate').insertAfter('#mce_36-body');
+                                  $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
                                 });
                             }
                         });
