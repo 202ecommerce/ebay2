@@ -63,6 +63,7 @@ if (Module::isInstalled('ebay')) {
                     die(Tools::jsonEncode('error'));
                 }
             } else if ($step == 2) {
+                ini_set('max_execution_time', 300);
                 $cat = Tools::getValue('id_categories');
                 $cats = $ebay_request->getCategories((int) $cat);
                 foreach ($cats as $cat) {

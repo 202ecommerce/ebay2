@@ -33,6 +33,10 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
+if (Tools::getValue('mode') == 'deleteImages') {
+    Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
+}
+
 $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile'));
 $products = EbayProduct::getProductsIdForSync($ebay_profile->id);
 while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {

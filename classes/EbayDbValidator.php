@@ -731,7 +731,10 @@ class EbayDbValidator
 			ON ec2.`id_categories_ref_parent` = ec3.`id_categories`
 			AND ec2.`id_categories_ref_parent` <> \'1\'
 			AND ec2.level <> 1
-			WHERE ec1.`id_categories` is not null';
+			WHERE ec1.`id_categories` is not null
+			AND ec1.id_categories in (SELECT ec.id_category_ref FROM ' . _DB_PREFIX_ . 'ebay_category_configuration ecc
+			    LEFT JOIN ' . _DB_PREFIX_ . 'ebay_category ec 
+			    ON ecc.id_ebay_category = ec.id_ebay_category)';
 
         return Db::getInstance()->executeS($sql);
     }

@@ -731,7 +731,8 @@ class EbaySynchronizer
         $item_specifics = $ebay_category->getItemsSpecificValues();
 
         $item_specifics_pairs = array();
-
+	
+	
         foreach ($item_specifics as $item_specific) {
             $value = null;
             if ($item_specific['id_feature']) {
