@@ -273,7 +273,9 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				{l s='Select attribute used for variation image' mod='ebay'}
+        <span title="{l s='Choose which variation’s details do you want to see in the default photo.' mod='ebay'}" class="label-tooltip" data-toggle="tooltip">
+					{l s='Select attribute used for variation image' mod='ebay'}
+				</span>
 			</label>
 			<div class="col-sm-9">
 				<select name="picture_charact_variations" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="form-control">
