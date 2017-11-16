@@ -290,15 +290,17 @@
 .totebay .table-block__title .button-sync .dropdown-menu li + li {
   border-top: 1px solid #dedede;
 }
-.totebay .table-block__title .button-sync .dropdown-menu li a {
+.totebay .table-block__title .button-sync .dropdown-menu li {
   display: block;
   padding: 0 10px;
   color: #363a41;
   font-size: 13px;
   line-height: 2.5;
+  cursor : pointer;
 }
-.totebay .table-block__title .button-sync .dropdown-menu li a:hover {
+.totebay .table-block__title .button-sync .dropdown-menu li:hover {
   color: #fff;
+  background : #00aff0;
 }
 .totebay .table-block__search, .totebay .table-block__message {
   display: -webkit-box;

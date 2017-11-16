@@ -33,7 +33,7 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
-if (Tools::getValue('mode') == 'deleteImages') {
+if (Tools::getValue('modeResync') == 'resyncProductsAndImages') {
     Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
 }
 

@@ -608,12 +608,12 @@
     <div>
       <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus"></span> {l s='Add' mod='ebay'} </a>
       <div class="dropdown js-user-dropdown button-sync">
-        <button class="btn btn-default button-resync dropdown-toggle" type="button" data-toggle="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
           <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li><a href="#">{l s='Update all products sending new images' mod='ebay'}</a></li>
-          <li><a href="#">{l s='Update all products' mod='ebay'}</a></li>
+          <li data-action="resyncProductsAndImages">{l s='Update all products sending new images' mod='ebay'}</li>
+          <li data-action="resyncProducts">{l s='Update all products' mod='ebay'}</li>
         </ul>
       </div>
     </div>
@@ -962,6 +962,7 @@
 		<div class="panel-heading">
 			<i class="icon-trash"></i> {l s='Synchronization product' mod='ebay'}
 		</div>
+		<input hidden data-role="modeResync">
 		<p>{l s='Do you want resync the products?' mod='ebay'}</p>
 
 		<div class="panel-footer" style="display: flex; justify-content: space-between; align-items: center">

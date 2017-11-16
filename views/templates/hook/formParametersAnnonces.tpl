@@ -245,7 +245,7 @@
 				</div>
 			</div>
 		</div>
-
+			{*
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				{l s='Send new product images on the next synchronization' mod='ebay'}
@@ -259,7 +259,7 @@
 		</div>
 
 		<div id="reset-image-result" class="col-sm-9 col-sm-push-3"></div>
-
+			*}
 		<div class="form-group">
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="checkbox">
