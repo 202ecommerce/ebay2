@@ -177,7 +177,7 @@
 							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}
 							data-width="{$size.width|escape:'htmlall':'UTF-8'}"
 							data-height="{$size.height|escape:'htmlall':'UTF-8'}">
-								{$size.name|escape:'htmlall':'UTF-8'}
+                {$size.name|escape:'htmlall':'UTF-8'} ({$size.width|escape:'htmlall':'UTF-8'}x{$size.height|escape:'htmlall':'UTF-8'}px)
 							</option>
 						{/foreach}
 					{/if}
@@ -203,7 +203,7 @@
 							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}
 									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
 									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
-								{$size.name|escape:'htmlall':'UTF-8'}
+								{$size.name|escape:'htmlall':'UTF-8'} ({$size.width|escape:'htmlall':'UTF-8'}x{$size.height|escape:'htmlall':'UTF-8'}px)
 							</option>
 						{/foreach}
 					{/if}
@@ -224,7 +224,7 @@
 							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}
 									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
 									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
-								{$size.name|escape:'htmlall':'UTF-8'}
+                {$size.name|escape:'htmlall':'UTF-8'} ({$size.width|escape:'htmlall':'UTF-8'}x{$size.height|escape:'htmlall':'UTF-8'}px)
 							</option>
 						{/foreach}
 					{/if}
