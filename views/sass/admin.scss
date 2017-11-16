@@ -10,7 +10,7 @@
 
 .totebay {
   overflow: hidden;
-  
+
   // Helpers
   .d-b {
     display: block;
@@ -255,7 +255,7 @@
       background: #d2d8db;
       border-radius: 10px;
       overflow: hidden;
-      
+
       .percentages_line {
         width: 0;
         height: 100%;
@@ -343,6 +343,46 @@
 
       .button-refresh {
         margin: -8px 0;
+      }
+
+      .button-sync {
+        display: inline-block;
+        margin-left: 7px;
+        //
+        //&:hover {
+        //  .dropdown-menu {
+        //    display: block;
+        //  }
+        //}
+
+        .dropdown-menu {
+          list-style-type: none;
+          padding: 0;
+
+          width: 250px;
+          min-width: unset;
+          right: 0;
+          left: auto;
+          overflow: hidden;
+
+          li {
+            & + li {
+              border-top: 1px solid #dedede;
+            }
+
+            a {
+              display: block;
+              padding: 0 10px;
+              color: #363a41;
+              font-size: 13px;
+              line-height: 2.5;
+
+              &:hover {
+                color: #fff;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -496,7 +536,7 @@
             }
           }
 
-          .btn-hover-danger   {
+          .btn-hover-danger {
             &:hover {
               background-color: #d5676f !important;
               border-color: #cd4b55 !important;
@@ -526,9 +566,9 @@
               }
             }
 
-            &:checked + label:before{
+            &:checked + label:before {
               color: #5cb85c;
-              content:"\f00c";
+              content: "\f00c";
             }
           }
         }

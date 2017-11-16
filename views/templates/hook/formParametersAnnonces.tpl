@@ -98,7 +98,7 @@
 		</div> *}
 		<div class="clearfix"></div>
 	</fieldset>
-		
+
    <fieldset style="margin-top:10px;">
 		<div class="panel-heading">{l s='Returns policy' mod='ebay'}</div>
 
@@ -112,7 +112,7 @@
 				<select name="ebay_returns_accepted_option" class="form-control">
 				{foreach from=$policies item=policy}
 					<option value="{$policy.value|escape:'htmlall':'UTF-8'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall':'UTF-8'}</option>
-				{/foreach}							   
+				{/foreach}
 				</select>
 			</div>
 		</div>
@@ -165,9 +165,11 @@
 		<div class="panel-heading"><span data-dialoghelp="http://sellerupdate.ebay.co.uk/autumn2013/picture-standards" data-inlinehelp="{l s='Select the size of your main photo and any photos you want to include in your description. Go to Preferences > images. Your images must comply with eBay’s photo standards.' mod='ebay'}">{l s='Photo sizes' mod='ebay'}</span></div>
 
 		<div class="form-group">
-			<label class="control-label col-sm-3">
-				{l s='Default photo' mod='ebay'}
-			</label>
+      <label class="control-label col-sm-3">
+				<span class="label-tooltip" title="{l s='This photo will appear as main photo in your listing.' mod='ebay'}">
+					{l s='Default photo' mod='ebay'}
+				</span>
+      </label>
 			<div class="col-sm-9">
 				<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
@@ -175,18 +177,25 @@
 							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}
 							data-width="{$size.width|escape:'htmlall':'UTF-8'}"
 							data-height="{$size.height|escape:'htmlall':'UTF-8'}">
-								{$size.name|escape:'htmlall':'UTF-8'}
+                {$size.name|escape:'htmlall':'UTF-8'} ({$size.width|escape:'htmlall':'UTF-8'}x{$size.height|escape:'htmlall':'UTF-8'}px)
 							</option>
 						{/foreach}
 					{/if}
 				</select>
 			</div>
+      <div class="col-sm-9 col-sm-push-3">
+        <div class="help-block">
+          {l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}
+        </div>
+      </div>
 		</div>
 
 		<div class="form-group">
-			<label class="control-label col-sm-3">
-				{l s='Main photo' mod='ebay'}
-			</label>
+      <label class="control-label col-sm-3">
+				<span class="label-tooltip" title="{l s='This photo will appear as main photo in your listing’s description.' mod='ebay'}">
+					{l s='Main photo' mod='ebay'}
+				</span>
+      </label>
 			<div class="col-sm-9">
 				<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="form-control">
 					{if isset($sizes) && $sizes && sizeof($sizes)}
@@ -194,7 +203,7 @@
 							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}
 									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
 									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
-								{$size.name|escape:'htmlall':'UTF-8'}
+								{$size.name|escape:'htmlall':'UTF-8'} ({$size.width|escape:'htmlall':'UTF-8'}x{$size.height|escape:'htmlall':'UTF-8'}px)
 							</option>
 						{/foreach}
 					{/if}
@@ -215,7 +224,7 @@
 							<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}
 									data-width="{$size.width|escape:'htmlall':'UTF-8'}"
 									data-height="{$size.height|escape:'htmlall':'UTF-8'}">
-								{$size.name|escape:'htmlall':'UTF-8'}
+                {$size.name|escape:'htmlall':'UTF-8'} ({$size.width|escape:'htmlall':'UTF-8'}x{$size.height|escape:'htmlall':'UTF-8'}px)
 							</option>
 						{/foreach}
 					{/if}
@@ -264,7 +273,9 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				{l s='Select attribute used for variation image' mod='ebay'}
+        <span title="{l s='Choose which variation’s details do you want to see in the default photo.' mod='ebay'}" class="label-tooltip" data-toggle="tooltip">
+					{l s='Select attribute used for variation image' mod='ebay'}
+				</span>
 			</label>
 			<div class="col-sm-9">
 				<select name="picture_charact_variations" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="form-control">
@@ -281,7 +292,7 @@
 	<!-- Listing Durations -->
 	<fieldset style="margin-top:10px;">
 		<div class="panel-heading">{l s='Listing Duration' mod='ebay'}</div>
-		
+
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				{l s='Listing duration' mod='ebay'}
@@ -295,7 +306,7 @@
 				</select>
 			</div>
 		</div>
-		
+
 		<div class="form-group">
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="checkbox">
@@ -355,7 +366,7 @@
 			</div>
 		</div>
 	</fieldset>
-		
+
 	<div class="panel-footer id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
@@ -394,10 +405,12 @@
                 width = $(this).find('option:selected').attr('data-width');
                 height = $(this).find('option:selected').attr('data-height');
 
-                if (+width < 800 || +height < 800){
-                    warning = "<div class='alert alert-warning'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";
-                    $('#annoncestab1').closest('.panel').before(warning);
-                }
+                {*if (+width < 800 || +height < 800){*}
+                  {*warning = "<div class='alert alert-warning alert_image_size'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";*}
+                  {*if ($('.alert_image_size').length == 0) {*}
+                    {*$('#annoncestab1').closest('.panel').before(warning);*}
+                  {*}*}
+                {*}*}
 			});
 
 		}

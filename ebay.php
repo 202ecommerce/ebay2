@@ -138,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.4';
+        $this->version = '2.0.5';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -1056,9 +1056,9 @@ class Ebay extends Module
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
             }
-            foreach ($order->getProducts() as $product) {
-                $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
-            }
+            //foreach ($order->getProducts() as $product) {
+               // $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
+            //}
 
 
             foreach ($customer_ids as $id_customer) {

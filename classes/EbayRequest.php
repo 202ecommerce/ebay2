@@ -713,7 +713,7 @@ class EbayRequest
         }
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
-
+        $data['description'] = str_replace('http://', 'https://', $data['description']);
         $vars = array(
             'sku' => 'prestashop-' . $data['id_product'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -1088,6 +1088,7 @@ class EbayRequest
             return $this->error = $return_policy['error'];
         }
         $ebay_category = new EbayCategory($this->ebay_profile, $data['categoryId']);
+        $data['description'] = str_replace('http://', 'https://', $data['description']);
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
@@ -1263,7 +1264,7 @@ class EbayRequest
         }
 
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
-
+        $data['description'] = str_replace('http://', 'https://', $data['description']);
         // Build the request Xml string
         $vars = array(
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
@@ -1432,7 +1433,7 @@ class EbayRequest
 
         // Set Api Call
         $this->apiCall = 'ReviseFixedPriceItem';
-
+        $data['description'] = str_replace('http://', 'https://', $data['description']);
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $ebay_category = new EbayCategory($this->ebay_profile, $data['categoryId']);
         $vars = array(
@@ -1697,7 +1698,7 @@ class EbayRequest
                         $data = (array)$data;
                         $var = array(
                             'type' => $data['ProfileType'],
-                            'name' => $data['ProfileName'],
+                            'name' => pSQL($data['ProfileName']),
                             'id_bussines_Policie' => $data['ProfileID'],
                             'id_ebay_profile' => $this->ebay_profile->id
                         );

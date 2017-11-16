@@ -274,6 +274,32 @@
 .totebay .table-block__title .button-refresh {
   margin: -8px 0;
 }
+.totebay .table-block__title .button-sync {
+  display: inline-block;
+  margin-left: 7px;
+}
+.totebay .table-block__title .button-sync .dropdown-menu {
+  list-style-type: none;
+  padding: 0;
+  width: 250px;
+  min-width: unset;
+  right: 0;
+  left: auto;
+  overflow: hidden;
+}
+.totebay .table-block__title .button-sync .dropdown-menu li + li {
+  border-top: 1px solid #dedede;
+}
+.totebay .table-block__title .button-sync .dropdown-menu li a {
+  display: block;
+  padding: 0 10px;
+  color: #363a41;
+  font-size: 13px;
+  line-height: 2.5;
+}
+.totebay .table-block__title .button-sync .dropdown-menu li a:hover {
+  color: #fff;
+}
 .totebay .table-block__search, .totebay .table-block__message {
   display: -webkit-box;
   display: -webkit-flex;

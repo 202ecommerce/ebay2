@@ -80,7 +80,8 @@
 		'Reference'							: "{l s='Reference' mod='ebay'}",
 		'EAN'								: "{l s='EAN' mod='ebay'}",
 		'UPC'								: "{l s='UPC' mod='ebay'}",
-
+		'message_multi_1'    				: "{l s='This item specific is multi-value on eBay, limited to ' mod='ebay'}",
+		'message_multi_2'    				: "{l s=' values. In PrestaShop attribute value, you can use , (coma) and ; (semicolon) to seperate values. For example : \'value 1 , value 2 , value 3 \'' mod='ebay'}",
 		{rdelim};
 
 
@@ -379,7 +380,7 @@
 				var specific = specifics[i];
 				var count_specific_values;
 				if (specific.max_values && +specific.max_values > 1){
-                    count_specific_values = '(max values = ' + specific.max_values + ')';
+					count_specific_values = '<label class="control-label"><span class ="label-tooltip" data-toggle="tooltip" title="'+l['message_multi_1'] + specific.max_values + l['message_multi_2'] +'"><i class ="icon-list-ul"></i></span></label>';
 				} else{
                     count_specific_values = '';
 				}
@@ -457,7 +458,7 @@
 			row.children('td:nth-child(1)').attr('rowspan', $(trs).length + 1);
 
 			row.html('').append(trs + trs_optionals);
-
+			$('[data-toggle="tooltip"]').tooltip({placement:'right'});
 		}
 
 		function writeOptions(value_prefix, options, selected_id) {
@@ -565,20 +566,21 @@
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
 
 <fieldset class="table-block-below">
-	<a href="#popin-add-cat" class="js-popin btn btn-lg btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus" ></span> {l s='Add products' mod='ebay'} </a>
-	{if isset($img_alert) && !empty($img_alert)}
-		<div class="warning big">
-            {$img_alert['message']|escape:'htmlall':'UTF-8'}
-            {if isset($img_alert.kb)}
-				<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
-			{/if}
-        </div>
-	{/if}
-    {if isset($category_alerts) && !empty($category_alerts)}
-        <div class="warning big">
-            {$category_alerts|escape:'htmlall':'UTF-8'}
-        </div>
-    {/if}
+  {if isset($img_alert) && !empty($img_alert)}
+    <div class="warning big">
+      {$img_alert['message']|escape:'htmlall':'UTF-8'}
+      {if isset($img_alert.kb)}
+        <a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay"
+           data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}"
+           prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
+      {/if}
+    </div>
+  {/if}
+  {if isset($category_alerts) && !empty($category_alerts)}
+    <div class="warning big">
+      {$category_alerts|escape:'htmlall':'UTF-8'}
+    </div>
+  {/if}
 </fieldset>
 	{*<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 	<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
@@ -603,26 +605,37 @@
 	</div>*}
 <div class="table-block">
 	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
-		<button class="btn btn-default button-resync"><span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'}</button>
+    <div>
+      <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus"></span> {l s='Add' mod='ebay'} </a>
+      <div class="dropdown js-user-dropdown button-sync">
+        <button class="btn btn-default button-resync dropdown-toggle" type="button" data-toggle="dropdown">
+          <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#">{l s='Update all products sending new images' mod='ebay'}</a></li>
+          <li><a href="#">{l s='Update all products' mod='ebay'}</a></li>
+        </ul>
+      </div>
+    </div>
 	</h4>
 
-        <div id="searcheEbaySync" class="table-block__search table-block__holder">
-            <input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}
-                   title="{l s='by category name' mod='ebay'}" data-toggle="tooltip">
-            <input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
-                   title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip"
-                   {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
-            <input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
-                   title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
-                   {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
-            <button class="searcheBtn button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
-            <button class="researcheBtn button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
-        </div>
+  <div id="searcheEbaySync" class="table-block__search table-block__holder">
+      <input type="text" class="name_cat" placeholder="{l s='by category name' mod='ebay'}" {if $searche}value="{$searche}"{/if}
+             title="{l s='by category name' mod='ebay'}" data-toggle="tooltip">
+      <input type="text" class="id_prod" placeholder="{l s='by ID product' mod='ebay'}"
+             title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip"
+             {if isset($filter.id_product)}value="{$filter.id_product}"{/if}>
+      <input type="text" class="name_prod" placeholder="{l s='by product name' mod='ebay'}"
+             title="{l s='by product name' mod='ebay'}" data-toggle="tooltip"
+             {if isset($filter.name_product)}value="{$filter.name_product}"{/if}>
+      <button class="searcheBtn button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+      <button class="researcheBtn button-reset btn btn-default"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
+  </div>
 	{if $categories|@count == 0}
 		<div class="table-block__message table-block__holder">
 			<div class="table-block__message-holder">
-				<p>{l s='No list products' mod='ebay'}</p>
-				<p>{l s='To send products on eBay, click on button "+ Add products".' mod='ebay'}</p>
+				<p>{l s='No list categories' mod='ebay'}</p>
+				<p>{l s='To send categories on eBay, click on button "+ Add".' mod='ebay'}</p>
 			</div>
 		</div>
 	{else}
@@ -637,13 +650,7 @@
                         <th>{l s='EBay category' mod='ebay'}</th>
                         <th>{l s='Multi var' mod='ebay'}</th>
                         <th>{l s='Listing' mod='ebay'}</th>
-                        <th class="text-center">
-                            <label for="activate_resynchBP" class="control-label">
-                                <span class="label-tooltip"  data-toggle="tooltip">
-                                    {l s='Status' mod='ebay'}
-                                </span>
-                            </label>
-                        </th>
+                        <th class="text-center">{l s='Status' mod='ebay'}</th>
                         <th class="text-center">{l s='Action' mod='ebay'}</th>
                     </tr>
                 </thead>
@@ -707,7 +714,7 @@
 <div id="popin-add-cat" class="popin popin-lg" style="display: none;">
 	<div class="panel">
 		<div  class="panel-heading">
-			<i class="icon-plus"></i> {l s='ADD A PRODUCT' mod='ebay'}
+			<i class="icon-plus"></i> {l s='ADD A CATEGORY' mod='ebay'}
 			<span class="badge badge-success"><span class="page_popin" id="1">1</span> / 4</span>
 		</div>
 
