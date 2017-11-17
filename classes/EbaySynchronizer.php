@@ -234,7 +234,6 @@ class EbaySynchronizer
             $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute, $limitEbayStock);
         }
 
-
         $pictures = EbaySynchronizer::__getPictures($product, $ebay_profile, $id_lang, $context, $variations);
 
         // Load basic price

@@ -56,6 +56,7 @@ class EbayProductImage
 
     public static function removeAllProductImage()
     {
+
         return Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
     }
 }

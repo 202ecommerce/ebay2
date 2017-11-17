@@ -34,7 +34,7 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
 }
 
 if (Tools::getValue('modeResync') == 'resyncProductsAndImages') {
-    Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
+    EbayProductImage::removeAllProductImage();
 }
 
 $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile'));

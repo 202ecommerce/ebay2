@@ -135,7 +135,7 @@ $(document).ready(function(){
             type: "POST",
             url: module_dir+'ebay/ajax/buttonResyncProducts.php',
             data: "token=" + ebay_token + "&id_ebay_profile=" + id_ebay_profile + '&modeResync=' + modeResync,
-            
+
         });
         location.reload();
     }
