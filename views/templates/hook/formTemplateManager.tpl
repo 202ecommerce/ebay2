@@ -130,14 +130,26 @@
 
 		<script type="text/javascript">
 			$(window).load(function(){
-			   
-                setTimeout(function() {		 
+
+                checkLoadTinyMce();
+
+                function checkLoadTinyMce(){
+                    setTimeout(function(){
+                        if (typeof tinyMCE == 'undefined'){
+                            checkLoadTinyMce();
+                        } else{
+                            initTinyMce();
+                        }
+                    } ,100);
+				}
+
+                function initTinyMce(){
                     {literal}
                     if(tinyMCE.majorVersion == 4)
-                    {                        
+                    {
                         tinyMCE.init({
                             mode : "specific_textareas",
-                            theme : "advanced",
+                            //theme : "advanced",
                             skin:"cirkuit",
                             editor_selector : "rte",
                             editor_deselector : "noEditor",
@@ -163,7 +175,7 @@
                             language : iso,
                             setup: function (ed) {
                                 ed.on('init', function(args) {
-                                  $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
+                                    $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
                                 });
                             }
                         });
@@ -171,11 +183,11 @@
                     else
                         tinyMCE.init({
                             mode : "specific_textareas",
-                            theme : "advanced",
+                            //theme : "advanced",
                             skin:"cirkuit",
                             editor_selector : "rte",
                             editor_deselector : "noEditor",
-                            plugins : "safari,pagebreak,style,table,advimage,advlink,inlinepopups,media,contextmenu,paste,fullscreen,xhtmlxtras,preview",
+                            plugins : "safari,pagebreak,style,table,advlink,inlinepopups,media,contextmenu,paste,fullscreen,xhtmlxtras,preview",
                             // Theme options
                             theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
                             theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
@@ -228,7 +240,7 @@
                         });
                     }
                     {/literal}
-                },1000);
+                }
 			});
 
 		</script>
