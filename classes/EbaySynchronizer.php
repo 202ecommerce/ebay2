@@ -130,7 +130,11 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         if ($itemID = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop)) {
             $ebay = $ebay_request->endFixedPriceItem($itemID);
-            EbayProduct::deleteByIdProductRef($itemID, $id_ebay_profile);
+            if ($ebay) {
+                EbayProduct::deleteByIdProductRef($itemID, $id_ebay_profile);
+            } else{
+                EbayTaskManager::insertTask((int)$product_id, (int)$id_product_attribute,14,  $id_ebay_profile, true);
+            }
             return $ebay;
         }
     }

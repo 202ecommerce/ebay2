@@ -112,7 +112,8 @@ class EbayTaskManager
 
                         foreach ($id_attributes as $id_attribute) {
                             $id_tasks = array(10);
-                            if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop)) {
+                            $ebay_product = EbayProduct::getProductById($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute, $ebay_profile->id_shop);
+                            if ($ebay_product['id_product']) {
                                 if ($restrictSync) {
                                     $id_tasks = array(13);
                                 } else {
@@ -138,7 +139,7 @@ class EbayTaskManager
         }
     }
 
-    public static function insertTask($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)
+    public static function insertTask($id_product, $id_product_atttibute, $id_task, $id_ebay_profile, $ingnore = false)
     {
         $vars = array(
             'id_product' => $id_product,
@@ -154,7 +155,7 @@ class EbayTaskManager
             self::deleteTaskForPorductAndEbayProfile($id_product, $id_ebay_profile, $id_product_atttibute);
         }
         self::deleteErrorsForProduct($id_product);
-        if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile)) {
+        if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile) || $ingnore) {
             Db::getInstance()->insert('ebay_task_manager', $vars);
         }
     }
