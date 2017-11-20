@@ -162,7 +162,7 @@
 	</fieldset>
 
 	<fieldset style="margin-top:10px;">
-		<div class="panel-heading"><span data-dialoghelp="http://sellerupdate.ebay.co.uk/autumn2013/picture-standards" data-inlinehelp="{l s='Select the size of your main photo and any photos you want to include in your description. Go to Preferences > images. Your images must comply with eBay’s photo standards.' mod='ebay'}">{l s='Photo sizes' mod='ebay'}</span></div>
+		<div class="panel-heading"><span data-dialoghelp="http://sellerupdate.ebay.co.uk/autumn2013/picture-standards" data-inlinehelp="{l s='Select the size of your main photo and any photos you want to include in your description. Go to Preferences > images. Your images must comply with eBay’s photo standards.' mod='ebay'}">{l s='Photo options' mod='ebay'}</span></div>
 
 		<div class="form-group">
       <label class="control-label col-sm-3">

@@ -612,8 +612,8 @@
           <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li data-action="resyncProductsAndImages">{l s='Update all products sending new images' mod='ebay'}</li>
-          <li data-action="resyncProducts">{l s='Update all products' mod='ebay'}</li>
+          <li data-action="resyncProductsAndImages">{l s='Synchronize all products sending new images' mod='ebay'}</li>
+          <li data-action="resyncProducts">{l s='Synchronize all products' mod='ebay'}</li>
         </ul>
       </div>
     </div>
@@ -660,7 +660,7 @@
                         <td>{$category.name|escape:'htmlall':'UTF-8'}</td>
                         <td>{if $category.category_multi == 'yes'}<b>{$category.nb_products|escape:'htmlall':'UTF-8'}</b>/{$category.nb_products_variations|escape:'htmlall':'UTF-8'}{else}{$category.nb_products|escape:'htmlall':'UTF-8'}/<b>{$category.nb_products_variations|escape:'htmlall':'UTF-8'}</b>{/if} </td>
                         <td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$category.price|escape:'htmlall':'UTF-8'}</td>
+                        <td>{if $category.price}{$category.price|escape:'htmlall':'UTF-8'}{else}0{/if}</td>
                         <td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
                         <td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
                         <td>{$category.annonces|escape:'htmlall':'UTF-8'}/{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
@@ -677,6 +677,7 @@
                 {/foreach}
                 </tbody>
             </table>
+{debug}
         </div>
 
 		{if isset($pagination) && $pagination}
