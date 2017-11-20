@@ -612,8 +612,8 @@
           <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li data-action="resyncProductsAndImages">{l s='Update all products sending new images' mod='ebay'}</li>
-          <li data-action="resyncProducts">{l s='Update all products' mod='ebay'}</li>
+          <li data-action="resyncProductsAndImages">{l s='Synchronize all products sending new images' mod='ebay'}</li>
+          <li data-action="resyncProducts">{l s='Synchronize all products' mod='ebay'}</li>
         </ul>
       </div>
     </div>
