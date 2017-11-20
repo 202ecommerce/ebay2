@@ -141,7 +141,7 @@ class EbayFormShippingTab extends EbayTab
                     if ($ship_cost == false) {
                         $ship_cost = 0;
                     }
-                    if (isset($extra_fees) && (int)$ship_cost < $extra_fees[0]) {
+                    if (isset($extra_fees) && (int)$ship_cost < $extra_fees[$key]) {
                         return false;
                     }
 
