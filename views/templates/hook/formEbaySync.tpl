@@ -677,7 +677,6 @@
                 {/foreach}
                 </tbody>
             </table>
-{debug}
         </div>
 
 		{if isset($pagination) && $pagination}
