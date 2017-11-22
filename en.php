@@ -37,7 +37,6 @@ $_MODULE['<{ebay}prestashop>ebayalert_27a6bc63e925081ef4f0df4154685dd7'] = 'You 
 $_MODULE['<{ebay}prestashop>ebayalert_ff815ee6687b94fe4806020459cc3007'] = 'You must enable the following countries :';
 $_MODULE['<{ebay}prestashop>ebayalert_cfca27d0080849b56af42310ae2c1383'] = '. In order to import this eBay order(s) :';
 $_MODULE['<{ebay}prestashop>ebayalert_779fe9c0b9576da73eb530e97ed6884f'] = 'You are currently connected to the Prestashop Back Office using a different URL than set up, this module will not work properly. Please log in using @link@this url.@/link@';
-$_MODULE['<{ebay}prestashop>ebayalert_5f2b515eb4d0ac5a72b0c29467dcfcef'] = 'Last product synchronization has been done the';
 $_MODULE['<{ebay}prestashop>ebayalert_c5695dc13d5eda9a308e85363c549c70'] = 'at';
 $_MODULE['<{ebay}prestashop>ebayalert_739b4c5f1600064e46ec1e1fb581db7a'] = 'and it tried to synchronize';
 $_MODULE['<{ebay}prestashop>ebayalert_4bd0f51551ea145989b5283f3f8c6bf3'] = 'The product cron job has never been run.';
