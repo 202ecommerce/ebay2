@@ -758,6 +758,7 @@ class Ebay extends Module
 
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
+            Configuration::deleteByName('DATE_LAST_SYNC_PRODUCTS');
             return false;
         }
 
