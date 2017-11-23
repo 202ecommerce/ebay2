@@ -606,7 +606,7 @@
 <div class="table-block">
 	<h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
     <div>
-      <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus"></span> {l s='Add' mod='ebay'} </a>
+      <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span class="icon-plus"></span> {l s='Add a category' mod='ebay'} </a>
       <div class="dropdown js-user-dropdown button-sync">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
           <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
@@ -635,7 +635,7 @@
 		<div class="table-block__message table-block__holder">
 			<div class="table-block__message-holder">
 				<p>{l s='No list categories' mod='ebay'}</p>
-				<p>{l s='To send categories on eBay, click on button "+ Add".' mod='ebay'}</p>
+				<p>{l s='To send categories on eBay, click on button "+ Add a category".' mod='ebay'}</p>
 			</div>
 		</div>
 	{else}

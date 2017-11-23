@@ -83,7 +83,7 @@
 
 			if (currentName == 'internationalShipping')
 			{
-				createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><label class='d-b'>{l s='Select the countries you will ship to:' mod='ebay'}</label>";
+				createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><label class='d-b'>{l s='Select the countries you will ship to' mod='ebay'}</label>";
 				createSelecstShipping += "<ul style='float:left'>";
 				{foreach from=$internationalShippingLocations item=shippingLocation name=loop}
 					{if $smarty.foreach.loop.index%4 == 0 && $smarty.foreach.loop.index != 0}

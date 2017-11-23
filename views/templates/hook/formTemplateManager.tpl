@@ -24,7 +24,7 @@
 *}
 <form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel" id="configForm3">
 	<fieldset>
-		<h4>{l s='Optimise your listing titles with tags:' mod='ebay'}</h4>
+		<h4>{l s='Optimise your listing titles with tags' mod='ebay'}</h4>
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
@@ -63,7 +63,7 @@
 
 	<fieldset>
 		<hr>
-		<h4><span data-dialoghelp="#tagsTemplate" data-inlinehelp="{l s='View the list of tags.' mod='ebay'}">{l s='Design an eye-catching template to attract buyers.' mod='ebay'} :</span></h4>
+		<h4><span data-dialoghelp="#tagsTemplate" data-inlinehelp="{l s='View the list of tags.' mod='ebay'}">{l s='Design an eye-catching template to attract buyers' mod='ebay'}</span></h4>
 
 		<div class="alert alert-info alert-no-icon">
 			<p><b>{l s='Use this template to choose how you’d like your products to appear on eBay.' mod='ebay'}</b></p>

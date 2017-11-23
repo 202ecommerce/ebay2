@@ -28,24 +28,24 @@
 
 <br>
 <h4>{l s='Products' mod='ebay'}</h4>
-    {l s='Number of PrestaShop categories :' mod='ebay'} {$nb_categories}<br>
-    {l s='Number of excluded products :' mod='ebay'} {$nb_products_exclu}<br>
+    {l s='Number of PrestaShop categories:' mod='ebay'} {$nb_categories}<br>
+    {l s='Number of excluded products:' mod='ebay'} {$nb_products_exclu}<br>
    
-    {l s='Number of eBay listings :' mod='ebay'} {$nb_products}<br>
-    {l s='Numbers of errors :' mod='ebay'} {$count_product_errors}<br>
-    {l s='Synchronization :' mod='ebay'} {$type_sync_product}<br>
-    {l s='Updates to send :' mod='ebay'}  {$nb_tasks}<br>
+    {l s='Number of eBay listings:' mod='ebay'} {$nb_products}<br>
+    {l s='Numbers of errors:' mod='ebay'} {$count_product_errors}<br>
+    {l s='Synchronization:' mod='ebay'} {$type_sync_product}<br>
+    {l s='Updates to send:' mod='ebay'}  {$nb_tasks}<br>
 <br>
-<h4>{l s='International passive sales' mod='ebay'} : {if $country_shipping}{l s='YES' mod='ebay'}{else}{l s='NO' mod='ebay'}{/if}</h4>
+<h4>{l s='International passive sales' mod='ebay'}: {if $country_shipping}{l s='YES' mod='ebay'}{else}{l s='NO' mod='ebay'}{/if}</h4>
     {if $country_shipping}
-        {l s='Countries :' mod='ebay'}<br>
+        {l s='Countries:' mod='ebay'}<br>
         {foreach from=$country_shipping item=country}
             {$country['description']} <br>
         {/foreach}
     {/if}
 <br>
 <h4>{l s='Orders' mod='ebay'}</h4>
-    {l s='CA eBay 30 last days :' mod='ebay'} {$ca_total} <br>
-    {l s='Errors orders :' mod='ebay'} {$count_order_errors}<br>
-    {l s='Last import :' mod='ebay'} {$date_last_import} par {$type_sync_order}<br>
+    {l s='CA eBay 30 last days:' mod='ebay'} {$ca_total} <br>
+    {l s='Errors orders:' mod='ebay'} {$count_order_errors}<br>
+    {l s='Last import:' mod='ebay'} {$date_last_import} par {$type_sync_order}<br>
 </div>
