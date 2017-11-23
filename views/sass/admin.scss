@@ -45,15 +45,15 @@
     text-decoration: none !important;
   }
 
-  .alert,
+  .bootstrap .alert,
   #carrier_wizard .wizard_error {
     padding: 7px;
     margin-bottom: 10px;
-    padding-left: 10px !important;
+    padding-left: 10px;
   }
 
-  .alert:before {
-    content: '' !important;
+  .bootstrap .alert:before {
+    display: none;
   }
 
   .tooltip-inner {
@@ -103,10 +103,12 @@
   }
 
   // Uniformize spacing in horizontal-form
-  .form-horizontal > div:not(.pull-right):not(.panel-footer),
-  .form-horizontal > label,
-  .form-horizontal > button {
-    margin-right: 10px;
+  .panel-info {
+    .form-horizontal > div:not(.pull-right):not(.panel-footer),
+    .form-horizontal > label,
+    .form-horizontal > button {
+      margin-right: 10px;
+    }
   }
 
   .popin {
@@ -126,7 +128,6 @@
   // Item list (eg. category selection)
   .item-list {
     max-height: 66px;
-    margin-top: 15px;
     margin-bottom: 0;
     padding-left: 0;
     line-height: 22px;
@@ -576,6 +577,127 @@
             }
           }
         }
+      }
+    }
+  }
+
+  #popin-container {
+
+    .text-danger {
+      color: red;
+
+      sup {
+        top: 0;
+        font-size: 15px;
+      }
+    }
+
+    .popin {
+      min-width: 530px;
+      max-width: 530px;
+      @media(max-width: 991px) {
+        min-width: initial;
+      }
+    }
+
+    .panel-heading {
+      .steps {
+        margin-right: 7px;
+        > * {
+          position: relative;
+
+          &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            border-color: transparent;
+            border-style: solid;
+            margin: -1px;
+          }
+        }
+
+        $line: 6px;
+        .page_popin {
+          margin-left: 0;
+          padding-right: 3px;
+          color: #555 !important;
+          border-top-right-radius: 0 !important;
+          border-bottom-right-radius: 0 !important;
+
+          &:before {
+            right: -$line;
+            border-width: 20px $line 0 0;
+            border-top-color: #72c279;
+          }
+        }
+
+        .total-steps {
+          margin-left: 8px;
+          padding-left: 3px;
+          background: #c6d6dc;
+          border-top-left-radius: 0 !important;
+          border-bottom-left-radius: 0 !important;
+
+          &:before {
+            left: -$line;
+            border-width: 20px $line 0 0;
+            border-right-color: #c6d6dc;
+          }
+        }
+      }
+
+      i {
+        margin: 0;
+        padding: 7px 5px;
+        cursor: pointer;
+      }
+    }
+
+    #category_config {
+      .add_categories_ps {
+        padding: 0;
+        margin: 0 -5px 15px;
+        list-style-type: none;
+        max-height: 135px;
+        overflow: auto;
+
+        li {
+          padding: 3px 7px;
+          border: 1px solid #c7d6d8;
+          border-radius: 3px;
+          margin-bottom: 2px;
+        }
+      }
+
+      .alert-info {
+        &:before {
+          top: auto;
+        }
+      }
+
+      //.category_ps_list {
+      //  max-height: 105px;
+      //  border: 1px solid #c7d6d8;
+      //  border-radius: 5px;
+      //
+      //  li {
+      //    padding: 6px 10px;
+      //
+      //    & + li {
+      //      margin-top: -1px;
+      //      border-top: 1px solid #c7d6d8;
+      //    }
+      //  }
+      //}
+
+      .ebay_select {
+        width: 50px;
+        display: inline-block;
+      }
+
+      #impact_prix {
+        width: 80px;
+        margin: 0 -1px;
       }
     }
   }
