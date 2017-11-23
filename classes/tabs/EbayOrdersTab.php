@@ -71,6 +71,7 @@ class EbayOrdersTab extends EbayTab
         $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
 
         $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+        $vars['currency'] = $this->context->currency;
         $vars['url'] = $this->_getUrl($url_vars);
         return $this->display('tableOrders.tpl', $vars);
     }
