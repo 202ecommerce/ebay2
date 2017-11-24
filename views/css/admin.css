@@ -28,6 +28,9 @@
 .totebay .big {
   font-size: large;
 }
+.totebay .bdrs-3 {
+  border-radius: 3px;
+}
 .totebay .js-popin-help {
   text-decoration: none !important;
 }
@@ -518,6 +521,10 @@
   border: 1px solid #c7d6d8;
   border-radius: 3px;
   margin-bottom: 2px;
+  cursor: pointer;
+}
+.totebay #popin-container #category_config .add_categories_ps li:hover {
+  background: #f5f8f9;
 }
 .totebay #popin-container #category_config .alert-info:before {
   top: auto;

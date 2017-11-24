@@ -737,7 +737,7 @@
             <span class="label-tooltip">{l s='PrestaShop category' mod='ebay'} <strong class="text-danger"><sup>*</sup></strong></span>
           </label>
 
-          <div class="input-group col-xs-12 col-md-7" id="ps_category_list">
+          <div class="col-xs-12 col-md-7" id="ps_category_list">
             <div id="ajax_choose_category">
               <div class="input-group">
                 <input type="text" id="ps_category_autocomplete_input" name="ps_category_autocomplete_input"
@@ -763,7 +763,7 @@
           <label for="" class="control-label col-xs-12 col-md-5">
             {l s='eBay category' mod='ebay'} <strong class="text-danger"><sup>*</sup></strong>
           </label>
-          <div class="input-group col-xs-12 col-md-7 category_ebay"></div>
+          <div class="col-xs-12 col-md-7 category_ebay"></div>
           <input type="hidden" name="category[0]" value="0">
         </div>
 
@@ -772,7 +772,7 @@
             {l s='eBay shop category' mod='ebay'}
           </label>
           {if $storeCategories}
-            <div class="input-group col-xs-12 col-md-7">
+            <div class="col-xs-12 col-md-7">
               <select name="store_category">
                 {if empty($storeCategories)}
                   <option disabled="disabled"
@@ -793,16 +793,18 @@
                  title="Impact on price.">
             <span class="label-tooltip">{l s='Impact on price' mod='ebay'}</span>
           </label>
-          <div class="input-group col-xs-12 col-md-7">
-            <select name="impact_prix[sign]" class="ebay_select">
-              <option value="+">+</option>
-              <option value="-">-</option>
-            </select>
-            <input type="text" id="impact_prix" name="impact_prix[value]" placeholder="0,00">
-            <select name="impact_prix[type]" class="ebay_select">
-              <option value="currency">€</option>
-              <option value="percent">%</option>
-            </select>
+          <div class="col-xs-12 col-md-7">
+            <div class="input-group">
+              <select name="impact_prix[sign]" class="ebay_select">
+                <option value="+">+</option>
+                <option value="-">-</option>
+              </select>
+              <input type="text" id="impact_prix" name="impact_prix[value]" placeholder="0,00">
+              <select name="impact_prix[type]" class="ebay_select">
+                <option value="currency">€</option>
+                <option value="percent">%</option>
+              </select>
+            </div>
           </div>
         </div>
 

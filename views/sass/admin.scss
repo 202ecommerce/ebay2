@@ -40,6 +40,10 @@
     font-size: large;
   }
 
+  .bdrs-3 {
+    border-radius: 3px;
+  }
+
   // Rewrite styles
   .js-popin-help {
     text-decoration: none !important;
@@ -666,6 +670,11 @@
           border: 1px solid #c7d6d8;
           border-radius: 3px;
           margin-bottom: 2px;
+          cursor: pointer;
+
+          &:hover {
+            background: #f5f8f9;
+          }
         }
       }
 
