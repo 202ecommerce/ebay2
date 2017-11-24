@@ -771,7 +771,8 @@ class EbayRequest
     {
         $product = new Product($data['real_id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
         $features = Feature::getFeatures(Configuration::get('PS_LANG_DEFAULT'));
-        $features_product = $product->getFrontFeatures(Configuration::get('PS_LANG_DEFAULT'));
+        $ebay = new Ebay();
+        $features_product = $product->getFrontFeatures($ebay->ebay_profile->id_lang);
         $tags = array(
             '{TITLE}',
             '{BRAND}',
