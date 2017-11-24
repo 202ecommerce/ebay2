@@ -658,6 +658,14 @@
     }
 
     #category_config {
+      .select-holder {
+        & + .select-holder {
+          select {
+            margin-top: 4px;
+          }
+        }
+      }
+
       .add_categories_ps {
         padding: 0;
         margin: 0 -5px 15px;
@@ -684,20 +692,22 @@
         }
       }
 
-      //.category_ps_list {
-      //  max-height: 105px;
-      //  border: 1px solid #c7d6d8;
-      //  border-radius: 5px;
-      //
-      //  li {
-      //    padding: 6px 10px;
-      //
-      //    & + li {
-      //      margin-top: -1px;
-      //      border-top: 1px solid #c7d6d8;
-      //    }
-      //  }
-      //}
+      .category_ps_list {
+        display: none;
+        max-height: 102px;
+        margin: 0 0 15px;
+        border: 1px solid #c7d6d8;
+        border-radius: 3px;
+
+        li {
+          padding: 6px 10px;
+
+          & + li {
+            margin-top: -1px;
+            border-top: 1px solid #c7d6d8;
+          }
+        }
+      }
 
       .ebay_select {
         width: 50px;

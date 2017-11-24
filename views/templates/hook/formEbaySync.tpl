@@ -133,7 +133,7 @@
       });
       $('.product_sync_info').hide();
       $('.select_category_default').clone().appendTo($('div .category_ebay'));
-      if ($('ul.category_ps_list li').length == 0) {
+      if ($('.category_ps_list li').length == 0) {
         $('.js-next-popin').attr('disabled', 'disabled');
       }
     });
@@ -237,8 +237,9 @@
 
     $('.js-remove-item').live('click', function () {
       $(this).parent().remove();
-      if ($('ul.category_ps_list li').length == 0) {
+      if ($('.category_ps_list li').length == 0) {
         $('.js-next-popin').attr('disabled', 'disabled');
+        $('.category_ps_list').hide();
       }
     });
 
@@ -297,6 +298,7 @@
     });
 
     $('.add_categories_ps li').live('click', function () {
+      $('.category_ps_list').show();
       $('.category_ps_list').append($(this));
       $('.category_ps_list').children().last().children('button').remove();
       $('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="{/literal}{l s='remove category' mod='ebay'}{literal}"><i class="icon-trash"></i></button>');
@@ -749,7 +751,7 @@
         </div>
 
         <div id="divPsCategories"></div>
-        <ul class="col-md-6 col-md-6 item-list category_ps_list"></ul>
+        <ul class="item-list category_ps_list form-group"></ul>
 
         <div class="clearfix">
           <div class="form-group alert alert-info alert-no-icon product_sync_info">
@@ -790,8 +792,8 @@
 
         <div class="form-group">
           <label for="" class="control-label col-xs-12 col-md-5" data-toggle="tooltip"
-                 title="Impact on price.">
-            <span class="label-tooltip">{l s='Impact on price' mod='ebay'}</span>
+                 title="Price impact can be set to percentage. You can also set a negative impact.">
+            <span class="label-tooltip">{l s='Impact on price.' mod='ebay'}</span>
           </label>
           <div class="col-xs-12 col-md-7">
             <div class="input-group">

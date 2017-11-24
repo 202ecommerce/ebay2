@@ -509,6 +509,9 @@
   padding: 7px 5px;
   cursor: pointer;
 }
+.totebay #popin-container #category_config .select-holder + .select-holder select {
+  margin-top: 4px;
+}
 .totebay #popin-container #category_config .add_categories_ps {
   padding: 0;
   margin: 0 -5px 15px;
@@ -528,6 +531,20 @@
 }
 .totebay #popin-container #category_config .alert-info:before {
   top: auto;
+}
+.totebay #popin-container #category_config .category_ps_list {
+  display: none;
+  max-height: 102px;
+  margin: 0 0 15px;
+  border: 1px solid #c7d6d8;
+  border-radius: 3px;
+}
+.totebay #popin-container #category_config .category_ps_list li {
+  padding: 6px 10px;
+}
+.totebay #popin-container #category_config .category_ps_list li + li {
+  margin-top: -1px;
+  border-top: 1px solid #c7d6d8;
 }
 .totebay #popin-container #category_config .ebay_select {
   width: 50px;
