@@ -44,6 +44,12 @@
     border-radius: 3px;
   }
 
+  // Additional icons
+  .process-icon-check-circle:before{
+    content:"\E86C";
+    font-family: "Material Icons";
+  };
+
   // Rewrite styles
   .js-popin-help {
     text-decoration: none !important;
