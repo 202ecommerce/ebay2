@@ -133,9 +133,9 @@
       });
       $('.product_sync_info').hide();
       $('.select_category_default').clone().appendTo($('div .category_ebay'));
-      if ($('.category_ps_list li').length == 0) {
-        $('.js-next-popin').attr('disabled', 'disabled');
-      }
+//      if ($('.category_ps_list li').length == 0) {
+//        $('.js-next-popin').attr('disabled', 'disabled');
+//      }
     });
 
     $('.reset_bp').on('click', function () {
@@ -158,7 +158,7 @@
         $('.page_popin').html('' + new_id);
         courant_page.removeClass('selected').hide();
         courant_page.parent().find('div#' + new_id).addClass('selected').show();
-        $('.js-close-popin').hide();
+        $('.js-close-popin.js-close-popin-bottom').hide();
       }
       if (new_id == 2) {
         if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
@@ -204,6 +204,7 @@
 
       if (new_id == 1) {
         $('.js-prev-popin').hide();
+        $('.js-close-popin.js-close-popin-bottom').show();
       }
       $('.js-save-popin').hide();
       $('.js-save1-popin').hide();
@@ -238,7 +239,7 @@
     $('.js-remove-item').live('click', function () {
       $(this).parent().remove();
       if ($('.category_ps_list li').length == 0) {
-        $('.js-next-popin').attr('disabled', 'disabled');
+//        $('.js-next-popin').attr('disabled', 'disabled');
         $('.category_ps_list').hide();
       }
     });
@@ -303,7 +304,7 @@
       $('.category_ps_list').children().last().children('button').remove();
       $('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="{/literal}{l s='remove category' mod='ebay'}{literal}"><i class="icon-trash"></i></button>');
       $('#divPsCategories').html('');
-      $('.js-next-popin').removeAttr('disabled');
+//      $('.js-next-popin').removeAttr('disabled');
     });
 
 
@@ -335,7 +336,7 @@
           }
 
           $('select[name="store_category"]').children('option[value="' + data.storeCategoryId + '"]').attr('selected', 'selected');
-          $('.js-next-popin').removeAttr('disabled');
+//          $('.js-next-popin').removeAttr('disabled');
 
         }
       });
@@ -423,7 +424,7 @@
         if (parseInt(specific.required))
           trs += '<tr ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
         else {
-          trs_optionals += '<tr class="optional" ' + (parseInt(specific.required) ? '' : 'style="display:none"') + ' ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
+          trs_optionals += '<tr class="optional somesome"' + (parseInt(specific.required) ? '' : 'style="display:none"') + ' ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
 
           if (!has_optionals)
             has_optionals = true;
@@ -480,13 +481,13 @@
               var product = products[i];
 
               str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
-							<td>' + product.id + '</td> \
-							<td>' + product.name + '</td> \
-							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
 							<td class="ebay_center"> \
 								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
 								<input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
 							</td> \
+							<td>' + product.id + '</td> \
+							<td>' + product.name + '</td> \
+							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
 						</tr>';
             }
             if (str != '') {
@@ -858,13 +859,13 @@
       <div id="2" class="page_config_category" style="display: none">
         <div class="form-group">
           <div class="input-group col-md-12 category_spec_ebay">
-            <span for="" class="col-md-6 text-left">
+            <label for="" class="control-label no-padding">
               {l s='Match the PrestaShop characteristics' mod='ebay'}
-            </span>
+            </label>
             <table class="table tableDnD" cellpadding="0" cellspacing="0">
               <thead>
               <tr class="nodrag nodrop">
-                <th class="text-right">
+                <th class="text-right" style="width:50%;">
                   <strong>{l s='Prestashop characteristics' mod='ebay'}</strong>
                 </th>
                 <th>
@@ -883,17 +884,17 @@
       </div>
       <div id="3" class="page_config_category" style="display: none">
         <div class="form-group">
-          <label for="" class="control-label col-md-6">
-            {l s='Choose products to exclude from eBay' mod='ebay'}
+          <label for="" class="control-label no-padding">
+            {l s='Deselect products you don’t want to synchronise with eBay.' mod='ebay'}
           </label>
           <div class="input-group col-md-12 category_product_list_ebay">
             <table class="table tableDnD" width="80%" style="margin: auto">
               <thead>
               <tr class="product-row" category="5">
-                <th class="">{l s='ID Product' mod='ebay'}</th>
-                <th class="">{l s='Name' mod='ebay'}</th>
-                <th class="ebay_center ">{l s='Stock' mod='ebay'}</th>
-                <th class="ebay_center ">{l s='Deselect products you do not want to sell on eBay' mod='ebay'}
+                <th class="ebay_center "><i class="icon icon-check-sign">
+                <th class="nowrap"><strong>{l s='Product ID' mod='ebay'}</strong></th>
+                <th><strong>{l s='Name' mod='ebay'}</strong></th>
+                <th class="ebay_center "><strong>{l s='Stock' mod='ebay'}</strong></th>
                 </th>
               </tr>
               </thead>
@@ -958,7 +959,7 @@
     </form>
 
     <div class="panel-footer">
-      <button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
+      <button class="js-close-popin js-close-popin-bottom btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
       <button class="js-prev-popin btn btn-default pull-left" style="display: none"><i class="process-icon-next" style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
       <button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}</button>
       <a href="#popin-categorie-save" style="display: none;" class=" js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
