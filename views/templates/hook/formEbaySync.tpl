@@ -75,7 +75,7 @@
     'Features': "{l s='Features' mod='ebay'}",
     'eBay Specifications': "{l s='eBay Specifications' mod='ebay'}",
     'Brand': "{l s='Brand' mod='ebay'}",
-    '-- You have to select a value --': "{l s='-- You have to select a value --' mod='ebay'}",
+    'Select a characteristic': "{l s='Select a characteristic' mod='ebay'}",
     'Product Attributes': "{l s='Product Attributes' mod='ebay'}",
     'Reference': "{l s='Reference' mod='ebay'}",
     'EAN': "{l s='EAN' mod='ebay'}",
@@ -185,7 +185,11 @@
         $('#last_page_categorie_ps').html('').append($('.category_ps_list').children().clone());
         $('#last_page_categorie_ebay').html('').append($('.category_ebay').children().find('option:selected').last().text());
         $('#last_page_categorie_boutique').html('').append($('select[name="store_category"]').find('option:selected').text());
-        $('#last_page_categorie_prix').html('').append($('#impact_prix').val());
+        $('#last_page_categorie_prix').html('').append($('#impact_prix').val() || 0);
+        if ($('#impact_prix').val() != 0) {
+          $('#last_page_categorie_sign').html('').append($('select[name="impact_prix[sign]"]').find('option:selected').text());
+          $('#last_page_categorie_type').html('').append($('select[name="impact_prix[type]"]').find('option:selected').text());
+        }
         $('#last_page_business_p').html('').append($('select[name="payement_policies"]').find('option:selected').text());
         $('#last_page_business_r').html('').append($('select[name="return_policies"]').find('option:selected').text());
         $('.js-next-popin').hide();
@@ -391,7 +395,7 @@
         } else if (specific.name == 'K-type') {
           tds += '<option value="">Do not synchronise</option>';
         } else {
-          tds += '<option value="">' + l['-- You have to select a value --'] + '</option>';
+          tds += '<option value="">' + l['Select a characteristic'] + '</option>';
         }
         if (specific.selection_mode == 0 && specific.name != 'K-type') {
           if (!data.is_multi_sku || specific.can_variation) {
@@ -808,7 +812,7 @@
                 <option value="+">+</option>
                 <option value="-">-</option>
               </select>
-              <input type="text" id="impact_prix" name="impact_prix[value]" placeholder="0,00">
+              <input type="text" id="impact_prix" name="impact_prix[value]" placeholder="0.00">
               <select name="impact_prix[type]" class="ebay_select">
                 <option value="currency">€</option>
                 <option value="percent">%</option>
@@ -858,7 +862,7 @@
       </div>
       <div id="2" class="page_config_category" style="display: none">
         <div class="form-group">
-          <div class="input-group col-md-12 category_spec_ebay">
+          <div class="col-md-12 category_spec_ebay">
             <label for="" class="control-label no-padding">
               {l s='Match the PrestaShop characteristics' mod='ebay'}
             </label>
@@ -884,42 +888,58 @@
       </div>
       <div id="3" class="page_config_category" style="display: none">
         <div class="form-group">
-          <label for="" class="control-label no-padding">
-            {l s='Deselect products you don’t want to synchronise with eBay.' mod='ebay'}
-          </label>
-          <div class="input-group col-md-12 category_product_list_ebay">
-            <table class="table tableDnD" width="80%" style="margin: auto">
-              <thead>
-              <tr class="product-row" category="5">
-                <th class="ebay_center "><i class="icon icon-check-sign">
-                <th class="nowrap"><strong>{l s='Product ID' mod='ebay'}</strong></th>
-                <th><strong>{l s='Name' mod='ebay'}</strong></th>
-                <th class="ebay_center "><strong>{l s='Stock' mod='ebay'}</strong></th>
-                </th>
-              </tr>
-              </thead>
-              <tbody>
+          <div class="col-md-12">
+            <label for="" class="control-label no-padding">
+              {l s='Deselect products you don’t want to synchronise with eBay.' mod='ebay'}
+            </label>
+            <div class="input-group col-md-12 category_product_list_ebay">
+              <table class="table tableDnD" width="80%" style="margin: auto">
+                <thead>
+                <tr class="product-row" category="5">
+                  <th class="ebay_center "><i class="icon icon-check-sign">
+                  <th class="nowrap"><strong>{l s='Product ID' mod='ebay'}</strong></th>
+                  <th><strong>{l s='Name' mod='ebay'}</strong></th>
+                  <th class="ebay_center "><strong>{l s='Stock' mod='ebay'}</strong></th>
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
-
         </div>
       </div>
       <div id="4" class="page_config_category" style="display: none">
-        <div class="form-group">
-          <label for="" class="control-label col-md-6">
-            {l s='Confirm configuration' mod='ebay'}
-          </label>
-        </div>
         <div class="input-group col-md-12 total_config_list_ebay">
           <div class="col-md-12">
-            <br>
-            <b>{l s='PrestaShop categories' mod='ebay'} </b><span id="last_page_categorie_ps"> </span><br>
-            <b>{l s='EBay Category' mod='ebay'} </b><span id="last_page_categorie_ebay"></span><br>
-            <b>{l s='Impact price' mod='ebay'} </b><span id="last_page_categorie_prix"> </span><br>
-            <b>{l s='Category of your eBay Store' mod='ebay'} </b><span id="last_page_categorie_boutique"></span><br>
-            <br>
+            <div class="form-group">
+              <label for="" class="control-label no-padding">
+                {l s='Please conﬁrm your conﬁguration.' mod='ebay'}
+              </label>
+            </div>
+            <div class="form-group">
+              <p>{l s='PrestaShop categories' mod='ebay'} </p>
+              <ul id="last_page_categorie_ps"> </ul>
+            </div>
+            <div class="form-group">
+              <p>{l s='eBay Category' mod='ebay'} </p>
+              <div id="last_page_categorie_ebay"></div>
+            </div>
+            <div class="form-group">
+              <p>{l s='Impact price' mod='ebay'} </p>
+              <div>
+                <span id="last_page_categorie_sign"></span>
+                <span id="last_page_categorie_prix"></span>
+                <span id="last_page_categorie_type"></span>
+              </div>
+            </div>
+            {*<div class="form-group">*}
+              {*<p>{l s='Category of your eBay Store' mod='ebay'} </p>*}
+              {*<div id="last_page_categorie_boutique"></div>*}
+            {*</div>*}
+
             {if $bp_active}
               <h4>{l s='Business Policies' mod='ebay'}</h4>
               <b>{l s='Payement Policies' mod='ebay'} </b>
@@ -931,29 +951,40 @@
               <br>
               <br>
             {/if}
-            {l s='The addition of these products is done automatically in the next few minutes.' mod='ebay'}
-          </div>
-        </div>
-
-        <div id="popin-categorie-save" class="popin popin-sm"
-             style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
-          <div class="panel"
-               style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
-            <div class="panel-heading">
-              <i class="icon-save"></i> {l s='Save Categories' mod='ebay'}
-            </div>
-            <p>{l s='This action will add/modify ' mod='ebay'} <span
-                      class="nb_annonces"></span> {l s='listings on eBay.' mod='ebay'}</p>
-
-            <div class="panel-footer">
-              <button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}
-              </button>
-              <button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>
-              <div class="ajaxLoading pull-right" style="display:none; margin-top:10px"><img
-                        src="../modules/ebay/views/img/ajax-loader-small.gif"></div>
+            <div class="info-block">
+              <hr>
+              <p class="form-group"><big><strong>{l s='this configuration will create:' mod=''}</strong></big></p>
+              <div class="row">
+                <div class="col-xs-12 col-sm-6 no-padding">
+                  <p class="badge badge-success"><big><strong class="nb_annonces"></strong></big> {l s='products' mod='ebay'}</p><br>
+                  <p class="badge badge-success"><big><strong>12</strong></big> {l s='variations' mod='ebay'}</p>
+                </div>
+                <div class="col-xs-12 col-sm-6 no-padding">
+                  <div class="alert alert-info">{l s='The addition of these products is done automatically in the next few minutes.' mod='ebay'}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        {*<div id="popin-categorie-save" class="popin popin-sm"*}
+             {*style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">*}
+          {*<div class="panel"*}
+               {*style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">*}
+            {*<div class="panel-heading">*}
+              {*<i class="icon-save"></i> {l s='Save Categories' mod='ebay'}*}
+            {*</div>*}
+            {*<p>{l s='This action will add/modify ' mod='ebay'} <span class="nb_annonces"></span> {l s='listings on eBay.' mod='ebay'}</p>*}
+
+            {*<div class="panel-footer">*}
+              {*<button class="js-notsave btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}*}
+              {*</button>*}
+              {*<button class="js-save-category btn btn-success pull-right"><i class="process-icon-save"></i>OK</button>*}
+              {*<div class="ajaxLoading pull-right" style="display:none; margin-top:10px"><img*}
+                        {*src="../modules/ebay/views/img/ajax-loader-small.gif"></div>*}
+            {*</div>*}
+          {*</div>*}
+        {*</div>*}
 
       </div>
     </form>
@@ -962,7 +993,7 @@
       <button class="js-close-popin js-close-popin-bottom btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
       <button class="js-prev-popin btn btn-default pull-left" style="display: none"><i class="process-icon-next" style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
       <button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}</button>
-      <a href="#popin-categorie-save" style="display: none;" class=" js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
+      <a href="#popin-categorie-save" style="display: none;" class="js-save-category js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
     </div>
     <div style="display: none">
       <select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px;"

@@ -25,6 +25,12 @@
 .totebay .no-padding {
   padding: 0 !important;
 }
+.totebay .list-reset, .totebay #popin-container #category_config .category_ps_list,
+.totebay #popin-container #category_config #last_page_categorie_ps {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
 .totebay .width-num {
   width: 60px !important;
 }
@@ -33,6 +39,16 @@
 }
 .totebay .bdrs-3 {
   border-radius: 3px;
+}
+.totebay .bordered-block, .totebay #popin-container #category_config .category_ps_list,
+.totebay #popin-container #category_config #last_page_categorie_ps, .totebay #popin-container #category_config .total_config_list_ebay .form-group p + div {
+  border: 1px solid #c7d6d8;
+  border-radius: 3px;
+  line-height: 1.5;
+}
+.totebay .bordered-block-padding, .totebay #popin-container #category_config .category_ps_list li,
+.totebay #popin-container #category_config #last_page_categorie_ps li, .totebay #popin-container #category_config .total_config_list_ebay .form-group p + div {
+  padding: 8px 10px;
 }
 .totebay .process-icon-check-circle:before {
   content: "\E86C";
@@ -465,19 +481,22 @@
   font-size: 15px;
 }
 .totebay #popin-container .popin {
-  min-width: 530px;
-  max-width: 530px;
+  min-width: 550px;
 }
 @media (max-width: 991px) {
   .totebay #popin-container .popin {
     min-width: initial;
   }
 }
+.totebay #popin-container .popin .panel {
+  max-width: 550px;
+}
 .totebay #popin-container .panel-heading .steps {
   margin-right: 7px;
 }
 .totebay #popin-container .panel-heading .steps > * {
   position: relative;
+  color: #000 !important;
 }
 .totebay #popin-container .panel-heading .steps > *:before {
   content: '';
@@ -490,7 +509,6 @@
 .totebay #popin-container .panel-heading .steps .page_popin {
   margin-left: 0;
   padding-right: 3px;
-  color: #555 !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
@@ -521,7 +539,6 @@
 }
 .totebay #popin-container #category_config .add_categories_ps {
   padding: 0;
-  margin: 0 -5px 15px;
   list-style-type: none;
   max-height: 135px;
   overflow: auto;
@@ -539,19 +556,30 @@
 .totebay #popin-container #category_config .alert-info:before {
   top: auto;
 }
-.totebay #popin-container #category_config .category_ps_list {
+.totebay #popin-container #category_config .category_ps_list,
+.totebay #popin-container #category_config #last_page_categorie_ps {
   display: none;
-  max-height: 102px;
+  max-height: 106px;
   margin: 0 0 15px;
-  border: 1px solid #c7d6d8;
-  border-radius: 3px;
+  overflow: auto;
 }
-.totebay #popin-container #category_config .category_ps_list li {
-  padding: 6px 10px;
+.totebay #popin-container #category_config .category_ps_list li,
+.totebay #popin-container #category_config #last_page_categorie_ps li {
+  position: relative;
+  padding-right: 43px;
 }
-.totebay #popin-container #category_config .category_ps_list li + li {
-  margin-top: -1px;
+.totebay #popin-container #category_config .category_ps_list li + li,
+.totebay #popin-container #category_config #last_page_categorie_ps li + li {
   border-top: 1px solid #c7d6d8;
+}
+.totebay #popin-container #category_config .category_ps_list li button,
+.totebay #popin-container #category_config #last_page_categorie_ps li button {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+}
+.totebay #popin-container #category_config #last_page_categorie_ps {
+  display: block;
 }
 .totebay #popin-container #category_config .ebay_select {
   width: 50px;
@@ -560,6 +588,24 @@
 .totebay #popin-container #category_config #impact_prix {
   width: 80px;
   margin: 0 -1px;
+}
+.totebay #popin-container #category_config .total_config_list_ebay .panel-footer {
+  font-size: 14px;
+  font-weight: bolder;
+  color: #55595c;
+}
+.totebay #popin-container #category_config .total_config_list_ebay .info-block hr {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.totebay #popin-container #category_config .total_config_list_ebay .info-block .badge {
+  padding: 1px 10px;
+}
+.totebay #popin-container #category_config .total_config_list_ebay .info-block .alert-info {
+  padding: 15px;
+}
+.totebay #popin-container #category_config .total_config_list_ebay .info-block .alert-info:before {
+  content: none;
 }
 
 /*# sourceMappingURL=admin.css.map */

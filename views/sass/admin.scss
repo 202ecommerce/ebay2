@@ -36,6 +36,12 @@
     padding: 0 !important;
   }
 
+  .list-reset {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
   .width-num {
     width: 60px !important;
   }
@@ -46,6 +52,16 @@
 
   .bdrs-3 {
     border-radius: 3px;
+  }
+
+  .bordered-block {
+    border: 1px solid #c7d6d8;
+    border-radius: 3px;
+    line-height: 1.5;
+  }
+
+  .bordered-block-padding {
+    padding: 8px 10px;
   }
 
   // Additional icons
@@ -607,10 +623,13 @@
     }
 
     .popin {
-      min-width: 530px;
-      max-width: 530px;
+      min-width: 550px;
       @media(max-width: 991px) {
         min-width: initial;
+      }
+
+      .panel {
+        max-width: 550px;
       }
     }
 
@@ -619,6 +638,7 @@
         margin-right: 7px;
         > * {
           position: relative;
+          color: #000 !important;
 
           &:before {
             content: '';
@@ -634,7 +654,6 @@
         .page_popin {
           margin-left: 0;
           padding-right: 3px;
-          color: #555 !important;
           border-top-right-radius: 0 !important;
           border-bottom-right-radius: 0 !important;
 
@@ -678,7 +697,6 @@
 
       .add_categories_ps {
         padding: 0;
-        margin: 0 -5px 15px;
         list-style-type: none;
         max-height: 135px;
         overflow: auto;
@@ -702,21 +720,34 @@
         }
       }
 
-      .category_ps_list {
+      .category_ps_list,
+      #last_page_categorie_ps {
+        @extend .bordered-block;
+        @extend .list-reset;
         display: none;
-        max-height: 102px;
+        max-height: 106px;
         margin: 0 0 15px;
-        border: 1px solid #c7d6d8;
-        border-radius: 3px;
+        overflow: auto;
 
         li {
-          padding: 6px 10px;
+          @extend .bordered-block-padding;
+          position: relative;
+          padding-right: 43px;
 
           & + li {
-            margin-top: -1px;
             border-top: 1px solid #c7d6d8;
           }
+
+          button {
+            position: absolute;
+            right: 10px;
+            top: 7px;
+          }
         }
+      }
+
+      #last_page_categorie_ps {
+        display: block;
       }
 
       .ebay_select {
@@ -727,6 +758,40 @@
       #impact_prix {
         width: 80px;
         margin: 0 -1px;
+      }
+
+      .total_config_list_ebay {
+        .form-group {
+          p + div {
+            @extend .bordered-block;
+            @extend .bordered-block-padding;
+          }
+        }
+
+        .panel-footer {
+          font-size: 14px;
+          font-weight: bolder;
+          color: #55595c;
+        }
+
+        .info-block {
+          hr {
+            margin-left: -20px;
+            margin-right: -20px;
+          }
+
+          .badge {
+            padding: 1px 10px;
+          }
+
+          .alert-info {
+            padding: 15px;
+
+            &:before {
+              content: none;
+            }
+          }
+        }
       }
     }
   }
