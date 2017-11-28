@@ -133,9 +133,9 @@
       });
       $('.product_sync_info').hide();
       $('.select_category_default').clone().appendTo($('div .category_ebay'));
-      if ($('.category_ps_list li').length == 0) {
-        $('.js-next-popin').attr('disabled', 'disabled');
-      }
+//      if ($('.category_ps_list li').length == 0) {
+//        $('.js-next-popin').attr('disabled', 'disabled');
+//      }
     });
 
     $('.reset_bp').on('click', function () {
@@ -151,16 +151,14 @@
     });
 
     $('.js-next-popin').on('click', function () {
-
       var courant_page = $('.page_config_category.selected');
-
-
       var new_id = parseInt(courant_page.attr('id')) + 1;
 
       if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
         $('.page_popin').html('' + new_id);
         courant_page.removeClass('selected').hide();
         courant_page.parent().find('div#' + new_id).addClass('selected').show();
+        $('.js-close-popin.js-close-popin-bottom').hide();
       }
       if (new_id == 2) {
         if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
@@ -192,6 +190,7 @@
         $('#last_page_business_r').html('').append($('select[name="return_policies"]').find('option:selected').text());
         $('.js-next-popin').hide();
         $('.js-save-popin').show();
+        $('.js-save1-popin').show();
       }
 
     });
@@ -205,8 +204,10 @@
 
       if (new_id == 1) {
         $('.js-prev-popin').hide();
+        $('.js-close-popin.js-close-popin-bottom').show();
       }
       $('.js-save-popin').hide();
+      $('.js-save1-popin').hide();
 
       courant_page.parent().find('div#' + new_id).addClass('selected').show();
 
@@ -238,7 +239,7 @@
     $('.js-remove-item').live('click', function () {
       $(this).parent().remove();
       if ($('.category_ps_list li').length == 0) {
-        $('.js-next-popin').attr('disabled', 'disabled');
+//        $('.js-next-popin').attr('disabled', 'disabled');
         $('.category_ps_list').hide();
       }
     });
@@ -303,7 +304,7 @@
       $('.category_ps_list').children().last().children('button').remove();
       $('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="{/literal}{l s='remove category' mod='ebay'}{literal}"><i class="icon-trash"></i></button>');
       $('#divPsCategories').html('');
-      $('.js-next-popin').removeAttr('disabled');
+//      $('.js-next-popin').removeAttr('disabled');
     });
 
 
@@ -335,7 +336,7 @@
           }
 
           $('select[name="store_category"]').children('option[value="' + data.storeCategoryId + '"]').attr('selected', 'selected');
-          $('.js-next-popin').removeAttr('disabled');
+//          $('.js-next-popin').removeAttr('disabled');
 
         }
       });
@@ -383,8 +384,7 @@
         } else {
           count_specific_values = '';
         }
-        var tds = '<td>' + specific.name + ' ' + count_specific_values + '</td><td>';
-        tds += '<select name="specific[' + specific.id + ']">';
+        var tds = '<td>' + '<select name="specific[' + specific.id + ']">';
 
         if (!parseInt(specific.required)) {
           tds += '<option value=""></option>';
@@ -419,11 +419,12 @@
           tds += '</optgroup>';
         }
         tds += '</select></td>';
+        tds += '<td>' + specific.name + ' ' + count_specific_values + '</td>';
 
         if (parseInt(specific.required))
           trs += '<tr ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
         else {
-          trs_optionals += '<tr class="optional" ' + (parseInt(specific.required) ? '' : 'style="display:none"') + ' ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
+          trs_optionals += '<tr class="optional somesome"' + (parseInt(specific.required) ? '' : 'style="display:none"') + ' ' + (i % 2 == 0 ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
 
           if (!has_optionals)
             has_optionals = true;
@@ -436,12 +437,13 @@
       if (Object.keys(ebay_conditions).length > 0) {
         for (var condition_type in conditions_data) {
           var condition_data = conditions_data[condition_type];
-          var tds = '<td><select name="condition[' + category_id + '][' + condition_type + ']">';
+
+          var tds = '<td class="text-right">' + condition_data + '</td><td><select name="condition[' + category_id + '][' + condition_type + ']">';
 
           for (var id in ebay_conditions)
             tds += '<option value="' + id + '" ' + ($.inArray(condition_type, ebay_conditions[id].types) >= 0 ? 'selected' : '') + '>' + ebay_conditions[id].name + '</option>';
 
-          tds += '</td><td>' + condition_data + '</td>';
+          tds += '</td>';
           trs += '<tr ' + (alt_row ? 'class="alt_row"' : '') + 'category="' + category_id + '">' + tds + '</tr>';
 
           alt_row = !alt_row;
@@ -479,13 +481,13 @@
               var product = products[i];
 
               str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
-							<td>' + product.id + '</td> \
-							<td>' + product.name + '</td> \
-							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
 							<td class="ebay_center"> \
 								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
 								<input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
 							</td> \
+							<td>' + product.id + '</td> \
+							<td>' + product.name + '</td> \
+							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
 						</tr>';
             }
             if (str != '') {
@@ -524,9 +526,14 @@
 
     $.ajax({
       type: "POST",
-      url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=no category selected&profile=' + id_ebay_profile,
+      url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=Select a category&profile=' + id_ebay_profile,
       success: function (data) {
         $(".category_ebay").html(data);
+        $(".category_ebay select").change(function () {
+          if($(".category_ebay select option[value=0]")) {
+            console.log(1)
+          }
+        });
       }
     });
   }
@@ -851,19 +858,20 @@
       </div>
       <div id="2" class="page_config_category" style="display: none">
         <div class="form-group">
-          <label for="" class="control-label col-md-6">
-            {l s='Match the PrestaShop characteristics' mod='ebay'}
-          </label>
           <div class="input-group col-md-12 category_spec_ebay">
-            <table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+            <label for="" class="control-label no-padding">
+              {l s='Match the PrestaShop characteristics' mod='ebay'}
+            </label>
+            <table class="table tableDnD" cellpadding="0" cellspacing="0">
               <thead>
               <tr class="nodrag nodrop">
-                <th style="width:20%">
-                  <span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">{l s='Item specifics' mod='ebay'}</span><a
-                          class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
+                <th class="text-right" style="width:50%;">
+                  <strong>{l s='Prestashop characteristics' mod='ebay'}</strong>
                 </th>
-                <th style="width:50%">
-                  {l s='Prestashop characteristics' mod='ebay'}
+                <th>
+                  <span data-inlinehelp="Les premieres caractéristiques de produits sont obligatoires, et vous ne pourrez pas exporter vos produits sans les ajouter. Vous pouvez aussi ajouter des caractéristiques optionneles qui aideront l'acheteur à trouver vos objets. Dans le deuxième encart, renseignez l'état de vos objets">
+                    <strong>{l s='Ebay characteristics' mod='ebay'}</strong></span>
+                    <a class=" tooltip" target="_blank"> <img src="../img/admin/help.png" alt=""></a>
                 </th>
               </tr>
               </thead>
@@ -876,17 +884,17 @@
       </div>
       <div id="3" class="page_config_category" style="display: none">
         <div class="form-group">
-          <label for="" class="control-label col-md-6">
-            {l s='Choose products to exclude from eBay' mod='ebay'}
+          <label for="" class="control-label no-padding">
+            {l s='Deselect products you don’t want to synchronise with eBay.' mod='ebay'}
           </label>
           <div class="input-group col-md-12 category_product_list_ebay">
             <table class="table tableDnD" width="80%" style="margin: auto">
               <thead>
               <tr class="product-row" category="5">
-                <th class="">{l s='ID Product' mod='ebay'}</th>
-                <th class="">{l s='Name' mod='ebay'}</th>
-                <th class="ebay_center ">{l s='Stock' mod='ebay'}</th>
-                <th class="ebay_center ">{l s='Deselect products you do not want to sell on eBay' mod='ebay'}
+                <th class="ebay_center "><i class="icon icon-check-sign">
+                <th class="nowrap"><strong>{l s='Product ID' mod='ebay'}</strong></th>
+                <th><strong>{l s='Name' mod='ebay'}</strong></th>
+                <th class="ebay_center "><strong>{l s='Stock' mod='ebay'}</strong></th>
                 </th>
               </tr>
               </thead>
@@ -924,11 +932,6 @@
               <br>
             {/if}
             {l s='The addition of these products is done automatically in the next few minutes.' mod='ebay'}
-            <br>
-            <br>
-            <a href="#popin-categorie-save"
-               class="js-save1-popin btn btn-lg btn-success pull-right">{l s='Save' mod='ebay'}</a>
-
           </div>
         </div>
 
@@ -956,14 +959,10 @@
     </form>
 
     <div class="panel-footer">
-      <button class="js-close-popin btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}
-      </button>
-      <button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}
-      </button>
-
-      <button class="js-prev-popin btn btn-primary pull-right" style="display: none"><i class="process-icon-next"
-                                                                                        style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}
-      </button>
+      <button class="js-close-popin js-close-popin-bottom btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
+      <button class="js-prev-popin btn btn-default pull-left" style="display: none"><i class="process-icon-next" style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
+      <button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}</button>
+      <a href="#popin-categorie-save" style="display: none;" class=" js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
     </div>
     <div style="display: none">
       <select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px;"
