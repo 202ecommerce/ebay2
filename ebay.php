@@ -1682,6 +1682,8 @@ class Ebay extends Module
             'tips202' => $this->_path.'views/js/202tips.js',
             'noConflicts' => $this->_path.'views/js/jquery.noConflict.php?version=1.7.2',
             'ebayjquery' => $this->_path.'views/js/jquery-1.7.2.min.js',
+            'bootstrapselect' => $this->_path.'views/js/bootstrap-select.js',
+            'bootstrapselectcss' => $this->_path.'views/css/bootstrap-select.min.css',
             'fancybox' => $this->_path.'views/js/jquery.fancybox.min.js',
             'fancyboxCss' => $this->_path.'views/css/jquery.fancybox.css',
             'parametersValidator' => ($this->ebay_profile ? EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id) : ''),

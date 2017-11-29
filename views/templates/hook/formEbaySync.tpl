@@ -163,16 +163,16 @@
       if (new_id == 2) {
         if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
           $('.js-prev-popin').show();
-          $('#item_spec').html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
+          $('#item_spec').html("<tr class='img-loader text-center'><td colspan=4><img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" /></td></tr>");
           loadCategoryItemsSpecifics($('#id_ebay_categories_real').val());
         }
       }
       if (new_id == 3) {
-        $('.category_product_list_ebay').find('tbody').html("<tr><td><img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" /></td></tr>");
+        $('.category_product_list_ebay').find('tbody').html("<tr class='img-loader text-center'><td colspan=4><img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" /></td></tr>");
         $('.category_ps_list').find('li').each(function (index) {
           showProducts($(this).attr('id'));
         });
-        $('.category_product_list_ebay').find('img').remove();
+        $('.category_product_list_ebay').find('.img-loader').remove();
       }
       if (new_id == 4) {
         var nb_annonces_to_job = 0;
@@ -740,6 +740,44 @@
       {l s='ADD A CATEGORY' mod='ebay'}
       <i class="process-icon-cancel js-close-popin pull-right"></i>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="basic" class="col-lg-2 control-label">"Basic" (liveSearch enabled)</label>
+
+        <div class="col-lg-10">
+          <select id="basic" class="selectpicker show-tick form-control" data-live-search="true">
+            <option>cow</option>
+            <option data-subtext="option subtext">bull</option>
+            <option class="get-class" disabled>ox</option>
+            <optgroup label="test" data-subtext="optgroup subtext">
+              <option>ASD</option>
+              <option selected>Bla</option>
+              <option>Ble</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+    </form>
+
+
+
+
+
+
+
+
+
 
     <form action="" class="form-horizontal" method="post" id="category_config">
       <div id="1" class="page_config_category selected first_page_popin">

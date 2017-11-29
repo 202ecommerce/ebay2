@@ -36,6 +36,7 @@
 
 <link rel="stylesheet" href="{$css_file|escape:'htmlall':'UTF-8'}" />
 <link rel="stylesheet" href="{$font_awesome_css_file|escape:'htmlall':'UTF-8'}" />
+<link rel="stylesheet" href="{$bootstrapselectcss|escape:'htmlall':'UTF-8'}" />
 <script>
     var $j = $;
 </script>
@@ -51,8 +52,9 @@
     </script>
     <script src="{$fancybox|escape:'htmlall':'UTF-8'}"></script>
 {/if}
-<script src="{$tooltip|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
-<script src="{$tips202|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
+  <script src="{$bootstrapselect|escape:'htmlall':'UTF-8'}"></script>
+  <script src="{$tooltip|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
+  <script src="{$tips202|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
 
 {literal}
 
