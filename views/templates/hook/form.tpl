@@ -52,9 +52,9 @@
     </script>
     <script src="{$fancybox|escape:'htmlall':'UTF-8'}"></script>
 {/if}
-  <script src="{$bootstrapselect|escape:'htmlall':'UTF-8'}"></script>
-  <script src="{$tooltip|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
-  <script src="{$tips202|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
+<script src="{$bootstrapselect|escape:'htmlall':'UTF-8'}"></script>
+<script src="{$tooltip|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
+<script src="{$tips202|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
 
 {literal}
 

@@ -741,44 +741,6 @@
       <i class="process-icon-cancel js-close-popin pull-right"></i>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-    <form class="form-horizontal" role="form">
-      <div class="form-group">
-        <label for="basic" class="col-lg-2 control-label">"Basic" (liveSearch enabled)</label>
-
-        <div class="col-lg-10">
-          <select id="basic" class="selectpicker show-tick form-control" data-live-search="true">
-            <option>cow</option>
-            <option data-subtext="option subtext">bull</option>
-            <option class="get-class" disabled>ox</option>
-            <optgroup label="test" data-subtext="optgroup subtext">
-              <option>ASD</option>
-              <option selected>Bla</option>
-              <option>Ble</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-    </form>
-
-
-
-
-
-
-
-
-
-
     <form action="" class="form-horizontal" method="post" id="category_config">
       <div id="1" class="page_config_category selected first_page_popin">
         <div class="alert alert-info">{l s='Associate a Prestashop category with an eBay category. Optionally you can select multiple categories to associate with a single eBay category.' mod='ebay'}</div>
@@ -789,13 +751,27 @@
           </label>
 
           <div class="col-xs-12 col-md-7" id="ps_category_list">
-            <div id="ajax_choose_category">
-              <div class="input-group">
-                <input type="text" id="ps_category_autocomplete_input" name="ps_category_autocomplete_input"
-                       autocomplete="off" class="ac_input" placeholder="{l s='Type a category...' mod='ebay'}">
-                <span class="input-group-addon"><i class="icon-search"></i></span>
-              </div>
-            </div>
+            {*<div id="ajax_choose_category">*}
+              {*<div class="input-group">*}
+                {*<input type="text" id="ps_category_autocomplete_input" name="ps_category_autocomplete_input"*}
+                       {*autocomplete="off" class="ac_input" placeholder="{l s='Type a category...' mod='ebay'}">*}
+                {*<span class="input-group-addon"><i class="icon-search"></i></span>*}
+              {*</div>*}
+            {*</div>*}
+            <select class="selectpicker" multiple data-live-search="true" data-live-search-placeholder="Search a category">
+              <option>option1</option>
+              <option>option2</option>
+              <option>option3</option>
+              <option>option5</option>
+              <option>option5</option>
+              <option>option5</option>
+              <option>option6</option>
+              <option>option7</option>
+              <option>option8</option>
+              <option>option9</option>
+              <option>option10</option>
+              <option>option11</option>
+            </select>
           </div>
         </div>
 
@@ -1084,5 +1060,8 @@
   $(document).ready(function () {
     {* Bootstrap tooltip *}
     $('[data-toggle="tooltip"]').tooltip();
+
+    {* Bootstrap Live Search *}
+    $('.selectpicker').selectpicker();
   });
 </script>

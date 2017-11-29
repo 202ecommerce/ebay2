@@ -70,7 +70,12 @@
     font-family: "Material Icons";
   };
 
-  // Rewrite styles
+  .glyphicon-ok:before {
+    content: "\E5CA";
+    font-family: "Material Icons";
+  }
+
+    // Rewrite styles
   .js-popin-help {
     text-decoration: none !important;
   }
@@ -717,6 +722,94 @@
       .alert-info {
         &:before {
           top: auto;
+        }
+      }
+
+      .first_page_popin {
+        .bootstrap-select {
+          width: 100%;
+
+          .dropdown-toggle {
+            padding: 6px 12px;
+            background-color: #f5f8f9;
+            color: #555;
+            border: 1px solid #C7D6DB;
+
+            &:focus {
+              border-color: #66afe9;
+              outline: 0 !important;
+              -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
+              box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
+            }
+
+            .caret {
+              right: 7px;
+              border-top-color: #555 !important;
+              border-top: 6px solid;
+              border-right: 3px solid transparent;
+              border-left: 3px solid transparent;
+            }
+          }
+
+          .form-control {
+            width: 100%;
+          }
+
+          .dropdown-menu.open {
+            max-height: 255px !important;
+
+            .bs-searchbox {
+              position: relative;
+              
+              &:before {
+                content: '\E8B6';
+                position: absolute;
+                right: 14px;
+                top: 50%;
+                margin-top: -11px;
+                font-size: 22px;
+                font-family: "Material Icons";
+                line-height: 1;
+              }
+
+              input:focus {
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 20px rgba(102, 175, 233, 0.6) !important;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 20px rgba(102, 175, 233, 0.6) !important;
+              }
+            }
+
+            .dropdown-menu.inner {
+              max-height: 204px !important;
+              margin-top: 5px;
+              border-top: 1px solid #eee;
+
+              a:hover  {
+                background-color: #eee;
+                color: #555;
+              }
+
+              .active a,
+              a:hover  {
+                color: #fff;
+                background-color: #45cdf8;
+              }
+
+              //.active {
+              //  a,
+              //  a:hover,
+              //  a:focus {
+              //    background-color: #45cdf8;
+              //  }
+              //}
+            }
+
+            .glyphicon-ok {
+              margin: 0;
+              font-size: 18px;
+              line-height: 0.8;
+              font-weight: bold;
+            }
+          }
         }
       }
 
