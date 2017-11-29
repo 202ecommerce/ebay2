@@ -388,7 +388,7 @@
         } else {
           count_specific_values = '';
         }
-        var tds = '<td>' + '<select name="specific[' + specific.id + ']">';
+        var tds = '<td>' + '<select placeholder="Select a category" name="specific[' + specific.id + ']">';
 
         if (!parseInt(specific.required)) {
           tds += '<option value=""></option>';
@@ -758,7 +758,9 @@
                 {*<span class="input-group-addon"><i class="icon-search"></i></span>*}
               {*</div>*}
             {*</div>*}
-            <select class="selectpicker" multiple data-live-search="true" data-live-search-placeholder="Search a category">
+            <select class="selectpicker" multiple data-live-search="true"
+                    title="Select a category"
+                    data-live-search-placeholder="Search a category">
               <option>option1</option>
               <option>option2</option>
               <option>option3</option>

@@ -729,6 +729,12 @@
         .bootstrap-select {
           width: 100%;
 
+          &.open {
+            .caret {
+              transform: rotate(180deg);
+            }
+          }
+
           .dropdown-toggle {
             padding: 6px 12px;
             background-color: #f5f8f9;
@@ -760,7 +766,7 @@
 
             .bs-searchbox {
               position: relative;
-              
+
               &:before {
                 content: '\E8B6';
                 position: absolute;
@@ -783,24 +789,20 @@
               margin-top: 5px;
               border-top: 1px solid #eee;
 
+              .active a {
+                color: #fff;
+                background-color: #45cdf8;
+
+                &:hover  {
+                  color: #fff;
+                  background-color: #45cdf8;
+                }
+              }
+
               a:hover  {
                 background-color: #eee;
                 color: #555;
               }
-
-              .active a,
-              a:hover  {
-                color: #fff;
-                background-color: #45cdf8;
-              }
-
-              //.active {
-              //  a,
-              //  a:hover,
-              //  a:focus {
-              //    background-color: #45cdf8;
-              //  }
-              //}
             }
 
             .glyphicon-ok {
