@@ -785,19 +785,11 @@ class EbayOrder
 
     private function _parseSku($sku, $id_product, $id_product_attribute, $id_ebay_profile)
     {
-        $data = explode('-', (string) $sku);
-
-        if (isset($data[1])) {
-            $id_product = $data[1];
-        }
-
-        if (isset($data[2])) {
-            $data2 = explode('_', $data[2]);
-            $id_product_attribute = $data2[0];
-            if (isset($data2[1])) {
-                $id_ebay_profile = (int) $data2[1];
-            }
-        }
+        $result = array();
+        preg_match('/.-([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
+        $id_product = isset($result[1]) ? $result[1] : 0;
+        $id_product_attribute = isset($result[2]) ? $result[2] : 0;
+        $id_ebay_profile = isset($result[3]) ? $result[3] : 0;
 
         return array($id_product, $id_product_attribute, $id_ebay_profile);
     }
