@@ -321,7 +321,7 @@ class EbayProduct
 			INNER JOIN `'._DB_PREFIX_.'ebay_product` ep1
 			ON ep.`id_ebay_profile` = ep1.`id_ebay_profile`
 			AND ep1.`id_product_ref` = \''.pSQL($reference).'\'');
-        if (!$ebay_site_id) {
+        if ($ebay_site_id === false) {
             return '';
         }
 

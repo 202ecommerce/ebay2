@@ -302,7 +302,7 @@
       });
     });
 
-    $('.add_categories_ps li').live('click', function () {
+    $('div.cat_list ul li').live('click', function () {
       $('.category_ps_list').show();
       $('.category_ps_list').append($(this));
       $('.category_ps_list').children().last().children('button').remove();
@@ -507,7 +507,8 @@
 
     }
 
-    $('#ps_category_autocomplete_input').keyup(function () {
+    //$('#ps_category_list input').keyup(function () {
+      $(document).on('keyup','#ps_category_list input',function () {
       loadPsCategories($(this).val());
     });
 
@@ -544,24 +545,24 @@
 
   function loadPsCategories(search) {
     var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&s=' + search;
-    var selected_cat = new Array();
-    $('.category_ps_list li').each(function () {
-      selected_cat.push($(this).text());
-    });
+   // var selected_cat = new Array();
+    //$('.category_ps_list li').each(function () {
+      //selected_cat.push($(this).text());
+    //});
 
     $.ajax({
       type: "POST",
       url: url,
       success: function (data) {
         var data = jQuery.parseJSON(data);
-        var str = '<ul class="add_categories_ps">';
+        var str = '';
         $.each(data.categoryList, function (index, value) {
-          if (selected_cat.indexOf(value.name) == -1) {
+          //if (selected_cat.indexOf(value.name) == -1) {
             str += '<li id="' + value.id_category + '">' + value.name + '</li>';
-          }
+          //}
         });
-        str += '</ul>';
-        $('#divPsCategories').html('').append(str);
+
+        $('div.cat_list ul').html('').append(str);
       }
     });
 
@@ -758,7 +759,7 @@
                 {*<span class="input-group-addon"><i class="icon-search"></i></span>*}
               {*</div>*}
             {*</div>*}
-            <select class="selectpicker" multiple data-live-search="true"
+            <select class="selectpicker cat_list" multiple data-live-search="true"
                     title="Select a category"
                     data-live-search-placeholder="Search a category">
               <option>option1</option>

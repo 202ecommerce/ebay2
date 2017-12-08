@@ -323,6 +323,26 @@ class EbayCountrySpec
             'top_rated_url' => 'http://pages.ebay.com.au/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.com.au/help/sell/business-policies.html',
         ),
+        'us' => array(
+            'site_id' => 0,
+            'documentation' => 'en',
+            'language' => 'en_EN',
+            'currency' => 'USD',
+            'site_name' => 'US',
+            'site_extension' => 'com',
+            'img_stats' => null,
+            'iso_code' => 'US',
+            'signin' => 'https://signin.ebay.com/ws/eBayISAPI.dll',
+            'signin_pro_url' => 'https://scgi.ebay.com/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.com/ws/eBayISAPI.dll',
+            'pro_url' => 'http://sellercentre.ebay.com/',
+            'fee_url' => 'http://sellercentre.ebay.com/fees-business-sellers-0',
+            'title_desc_url' => 'http://pages.ebay.com/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.com/research-items-similar-yours',
+            'picture_url' => 'http://sellercentre.ebay.com/new-picture-standards',
+            'top_rated_url' => 'http://pages.ebay.com/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.com/help/sell/business-policies.html',
+        ),
 
 
     );
