@@ -627,6 +627,10 @@
       }
     }
 
+    .form-error {
+      border-color: red !important;
+    }
+
     .popin {
       min-width: 550px;
       @media(max-width: 991px) {

@@ -155,14 +155,21 @@
       var new_id = parseInt(courant_page.attr('id')) + 1;
 
       if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
-        $('.page_popin').html('' + new_id);
-        courant_page.removeClass('selected').hide();
-        courant_page.parent().find('div#' + new_id).addClass('selected').show();
-        $('.js-close-popin.js-close-popin-bottom').hide();
+        if (!$('.category_ps_list li').length) {
+          $('#ps_category_list .cat_list button').addClass('form-error');
+          $('#ps_category_list .text-error').show();
+//      } else if () {
+
+        } else {
+          $('.page_popin').html('' + new_id);
+          courant_page.removeClass('selected').hide();
+          courant_page.parent().find('div#' + new_id).addClass('selected').show();
+          $('.js-close-popin.js-close-popin-bottom').hide();
+          $('.js-prev-popin').show();
+        }
       }
       if (new_id == 2) {
         if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
-          $('.js-prev-popin').show();
           $('#item_spec').html("<tr class='img-loader text-center'><td colspan=4><img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" /></td></tr>");
           loadCategoryItemsSpecifics($('#id_ebay_categories_real').val());
         }
@@ -308,7 +315,10 @@
       $('.category_ps_list').children().last().children('button').remove();
       $('.category_ps_list').children().last().append('<button type="button" class="js-remove-item  btn btn-xs btn-danger pull-right" title="{/literal}{l s='remove category' mod='ebay'}{literal}"><i class="icon-trash"></i></button>');
       $('#divPsCategories').html('');
-//      $('.js-next-popin').removeAttr('disabled');
+      if ($('#ps_category_list .cat_list button').hasClass('form-error')) {
+        $('#ps_category_list .cat_list button').removeClass('form-error');
+        $('#ps_category_list .text-error').hide();
+      }
     });
 
 
@@ -485,14 +495,14 @@
               var product = products[i];
 
               str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
-							<td class="ebay_center"> \
-								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
-								<input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
-							</td> \
-							<td>' + product.id + '</td> \
-							<td>' + product.name + '</td> \
-							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
-						</tr>';
+                        <td class="ebay_center"> \
+                            <input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
+                            <input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
+                        </td> \
+                        <td>' + product.id + '</td> \
+                        <td>' + product.name + '</td> \
+                        <td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
+                    </tr>';
             }
             if (str != '') {
               str += '</table></td></tr>';
@@ -759,10 +769,11 @@
                 {*<span class="input-group-addon"><i class="icon-search"></i></span>*}
               {*</div>*}
             {*</div>*}
-            <select class="selectpicker cat_list" multiple data-live-search="true"
+            <select class="selectpicker cat_list" required multiple data-live-search="true"
                     title="Select a category"
                     data-live-search-placeholder="Search a category">
             </select>
+            <span class="text-danger text-error" style="display: none;">{l s="You need to select at least one category." mod="ebay"}</span>
           </div>
         </div>
 

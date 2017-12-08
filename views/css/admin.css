@@ -484,6 +484,9 @@
   top: 0;
   font-size: 15px;
 }
+.totebay #popin-container .form-error {
+  border-color: red !important;
+}
 .totebay #popin-container .popin {
   min-width: 550px;
 }
