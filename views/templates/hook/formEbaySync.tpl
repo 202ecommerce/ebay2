@@ -762,18 +762,6 @@
             <select class="selectpicker cat_list" multiple data-live-search="true"
                     title="Select a category"
                     data-live-search-placeholder="Search a category">
-              <option>option1</option>
-              <option>option2</option>
-              <option>option3</option>
-              <option>option5</option>
-              <option>option5</option>
-              <option>option5</option>
-              <option>option6</option>
-              <option>option7</option>
-              <option>option8</option>
-              <option>option9</option>
-              <option>option10</option>
-              <option>option11</option>
             </select>
           </div>
         </div>
