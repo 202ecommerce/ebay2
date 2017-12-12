@@ -41,10 +41,10 @@ class EbayTools
             return false;
         }
 
-        $ret = (isset($_POST[$key]) ? $_POST[$key] : (isset($_GET[$key]) ? $_GET[$key] : $default_value));
+        $ret = Tools::getIsset($key) ? Tools::getValue($key) : $default_value;
 
         if (is_string($ret)) {
-            return stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($ret))));
+            return Tools::stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($ret))));
         }
 
         return $ret;
@@ -56,6 +56,6 @@ class EbayTools
             return false;
         }
 
-        return isset($_POST[$key]) ? true : (isset($_GET[$key]) ? true : false);
+        return Tools::getIsset($key);
     }
 }

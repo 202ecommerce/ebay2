@@ -245,9 +245,9 @@ class EbayCategory
             $one .= ',' . pSQL($category['CategoryParentID']);
             $one .= ',' . pSQL($ebay_site_id);
             $one .= ',' . pSQL($category['CategoryLevel']);
-            if (array_key_exists($category['CategoryID'], $categories_multi_sku)){
+            if (array_key_exists($category['CategoryID'], $categories_multi_sku)) {
                 $one .= ',' . $categories_multi_sku[$category['CategoryID']];
-            } else{
+            } else {
                 $one .= ',NULL';
             }
             $one .= ', \'' . pSQL($category['CategoryName']) . '\')';
@@ -260,7 +260,7 @@ class EbayCategory
         $result = DB::getInstance()->Execute($insert);
         if ($result) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }

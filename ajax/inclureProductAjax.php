@@ -18,14 +18,14 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include dirname(__FILE__).'/../../../config/config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
+include dirname(__FILE__) . '/../../../config/config.inc.php';
+include_once dirname(__FILE__) . '/../../../init.php';
 include '../ebay.php';
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
@@ -34,9 +34,9 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 
 
 EbayProductConfiguration::insertOrUpdate(Tools::getValue('id_product'), array(
-'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
-'blacklisted' =>  0,
-'extra_images' => 0,
+    'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
+    'blacklisted' => 0,
+    'extra_images' => 0,
 ));
 $product = new Product(Tools::getValue('id_product'));
 EbayTaskManager::addTask('mod', $product, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'));

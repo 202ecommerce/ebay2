@@ -76,7 +76,7 @@ class EbayCategorySpecific
                 foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
                     $required = isset($recommendation->ValidationRules->MinValues) && ((int)$recommendation->ValidationRules->MinValues >= 1);
                     $max_values = 1;
-                    if (isset($recommendation->ValidationRules->MaxValues)){
+                    if (isset($recommendation->ValidationRules->MaxValues)) {
                         $max_values = (int) $recommendation->ValidationRules->MaxValues;
                     }
                     // if true can be used either in Item Specifics or VariationSpecifics

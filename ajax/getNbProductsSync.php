@@ -28,9 +28,9 @@ if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
 }
 
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include dirname(__FILE__).'/../classes/EbayProductConfiguration.php';
-include dirname(__FILE__).'/../classes/EbayProfile.php';
+require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'config' . TMP_DS . 'config.inc.php';
+include dirname(__FILE__) . '/../classes/EbayProductConfiguration.php';
+include dirname(__FILE__) . '/../classes/EbayProfile.php';
 include(dirname(__FILE__) . '/../classes/EbaySynchronizer.php');
 include(dirname(__FILE__) . '/../classes/DbEbay.php');
 
@@ -45,10 +45,10 @@ $dbEbay = new DbEbay();
 $dbEbay->setDb(Db::getInstance());
 
 $dbEbay->autoExecute(
-    _DB_PREFIX_.'ebay_category_configuration',
+    _DB_PREFIX_ . 'ebay_category_configuration',
     array('sync' => (int)Tools::getValue('action')),
     'UPDATE',
-    '`id_category` = '.(int)Tools::getValue('id_category').' AND `id_ebay_profile` = '.(int)$ebay_profile->id
+    '`id_category` = ' . (int)Tools::getValue('id_category') . ' AND `id_ebay_profile` = ' . (int)$ebay_profile->id
 );
 
 echo EbaySynchronizer::getNbProductsSync($id_ebay_profile, "B");

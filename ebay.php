@@ -138,7 +138,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.5';
+        $this->version = '2.0.6';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -1045,12 +1045,12 @@ class Ebay extends Module
                 }
 
                 // Validate order
-                
-		if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
-		 	$order->update($this->ebay_profile->id);
-		} else {
-		 	$this->delete(); 
-		 }
+
+                if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
+                    $order->update($this->ebay_profile->id);
+                } else {
+                    $this->delete();
+                }
                 
 
                 // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??

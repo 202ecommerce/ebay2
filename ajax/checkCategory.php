@@ -28,9 +28,9 @@ if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
 }
 
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-include dirname(__FILE__).'/../classes/EbayDbValidator.php';
+require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'config' . TMP_DS . 'config.inc.php';
+include_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'init.php';
+include dirname(__FILE__) . '/../classes/EbayDbValidator.php';
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('INVALID TOKEN');
@@ -48,7 +48,7 @@ if (Module::isInstalled('ebay')) {
             $step = Tools::getValue('step');
             $ebay_request = new EbayRequest();
             if ($step == 1) {
-                $sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_tmp` (
+                $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_category_tmp` (
             id INT(11) NOT NULL AUTO_INCREMENT,
             name VARCHAR(45) DEFAULT NULL,
             id_categories int,
@@ -65,7 +65,7 @@ if (Module::isInstalled('ebay')) {
             } else if ($step == 2) {
                 ini_set('max_execution_time', 300);
                 $cat = Tools::getValue('id_categories');
-                $cats = $ebay_request->getCategories((int) $cat);
+                $cats = $ebay_request->getCategories((int)$cat);
                 foreach ($cats as $cat) {
                     Db::getInstance()->insert('ebay_category_tmp', array(
                         'id_categories' => pSQL($cat['CategoryID']),
@@ -73,16 +73,16 @@ if (Module::isInstalled('ebay')) {
                         'id_categories_ref_parent' => pSQL($cat['CategoryParentID']),
                         'level' => pSQL($cat['CategoryLevel'])
                     ));
-                    Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES ("'.pSQL($cat['CategoryName']).'", 
-                    '.pSQL($cat['CategoryID']).', 
-                    '.pSQL($cat['CategoryParentID']).', 
-                    '.pSQL($cat['CategoryLevel']).')');
+                    Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES ("' . pSQL($cat['CategoryName']) . '", 
+                    ' . pSQL($cat['CategoryID']) . ', 
+                    ' . pSQL($cat['CategoryParentID']) . ', 
+                    ' . pSQL($cat['CategoryLevel']) . ')');
                 };
-                    die(Tools::jsonEncode($cat));
+                die(Tools::jsonEncode($cat));
             } elseif ($step == 3) {
                 $id_profile_ebay = Tools::getValue('id_profile_ebay');
                 ini_set('max_execution_time', 300);
-                $res=$validator->comparationCategories($id_profile_ebay);
+                $res = $validator->comparationCategories($id_profile_ebay);
                 $validator->deleteTmp();
                 echo Tools::jsonEncode($res);
             }

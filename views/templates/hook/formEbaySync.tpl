@@ -773,7 +773,7 @@
                     title="Select a category"
                     data-live-search-placeholder="Search a category">
             </select>
-            <span class="text-danger text-error" style="display: none;">{l s="You need to select at least one category." mod="ebay"}</span>
+            <span class="text-danger text-error" style="display: none;">{l s='You need to select at least one category.' mod='ebay'}</span>
           </div>
         </div>
 
@@ -969,7 +969,7 @@
             {/if}
             <div class="info-block">
               <hr>
-              <p class="form-group"><big><strong>{l s='this configuration will create:' mod=''}</strong></big></p>
+              <p class="form-group"><big><strong>{l s='this configuration will create:' mod='ebay'}</strong></big></p>
               <div class="row">
                 <div class="col-xs-12 col-sm-6 no-padding">
                   <p class="badge badge-success"><big><strong class="nb_annonces"></strong></big> {l s='products' mod='ebay'}</p><br>

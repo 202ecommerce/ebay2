@@ -132,8 +132,8 @@ class EbaySynchronizer
             $ebay = $ebay_request->endFixedPriceItem($itemID);
             if ($ebay) {
                 EbayProduct::deleteByIdProductRef($itemID, $id_ebay_profile);
-            } else{
-                EbayTaskManager::insertTask((int)$product_id, (int)$id_product_attribute,14,  $id_ebay_profile, true);
+            } else {
+                EbayTaskManager::insertTask((int)$product_id, (int)$id_product_attribute, 14, $id_ebay_profile, true);
             }
             return $ebay;
         }
@@ -732,10 +732,7 @@ class EbaySynchronizer
     private static function __getProductItemSpecifics($ebay_category, $product, $id_lang)
     {
         $item_specifics = $ebay_category->getItemsSpecificValues();
-
         $item_specifics_pairs = array();
-	
-	
         foreach ($item_specifics as $item_specific) {
             $value = null;
             if ($item_specific['id_feature']) {
@@ -754,12 +751,11 @@ class EbaySynchronizer
             if (stripos($item_specific['name'], 'OE/OEM') || (int) $item_specific['max_values'] > 1) {
                 $value = str_replace(';', ',', $value);
                 $value = explode(',', $value);
-                if ($item_specific['max_values']){
+                if ($item_specific['max_values']) {
                     $value = array_slice($value, 0, (int) $item_specific['max_values']);
-                } else{
+                } else {
                     $value = array_slice($value, 0, 30);
                 }
-
             }
             if ($value) {
                 $item_specifics_pairs[$item_specific['name']] = $value;

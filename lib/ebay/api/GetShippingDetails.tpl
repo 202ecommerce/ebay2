@@ -31,7 +31,7 @@
 		{if $service.serviceCosts !== false}
 			<ShippingServiceOptions>
 				<ShippingServicePriority>{$service.servicePriority|escape:'htmlall':'UTF-8'}</ShippingServicePriority>
-				<ShippingService>{$service_name nofilter}</ShippingService>
+				<ShippingService>{$service_name|escape:'htmlall':'UTF-8'}</ShippingService>
 				<FreeShipping>false</FreeShipping>
 				<ShippingServiceCost currencyID="{$currency_id|escape:'htmlall':'UTF-8'}">{$service.serviceCosts|escape:'htmlall':'UTF-8'}</ShippingServiceCost>
 				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts|escape:'htmlall':'UTF-8'}</ShippingServiceAdditionalCost>
@@ -44,7 +44,7 @@
 		{if $service.serviceCosts !== false}
 			<InternationalShippingServiceOption>
 				<ShippingServicePriority>{$service.servicePriority|escape:'htmlall':'UTF-8'}</ShippingServicePriority>
-				<ShippingService>{$service_name nofilter}</ShippingService>
+				<ShippingService>{$service_name|escape:'htmlall':'UTF-8'}</ShippingService>
 				<ShippingServiceCost currencyID="{$currency_id|escape:'htmlall':'UTF-8'}">{$service.serviceCosts|escape:'htmlall':'UTF-8'}</ShippingServiceCost>
 				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts|escape:'htmlall':'UTF-8'}</ShippingServiceAdditionalCost>
 				{foreach from=$service.locationsToShip item=location}
