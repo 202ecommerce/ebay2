@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2017 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -28,8 +28,8 @@ if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
 }
 
-require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'config' . TMP_DS . 'config.inc.php';
-include dirname(__FILE__) . '/../classes/EbayConfiguration.php';
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+include dirname(__FILE__).'/../classes/EbayConfiguration.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
 }
@@ -50,16 +50,16 @@ if ($ebay_category) {
         $date = date('Y-m-d H:i:s');
         if ($percent['value'] != '') {
             //$percent_sign_type = explode(':', $percent['sign']);
-            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+') . round($percent['value'], 2) . ($percent['type'] == 'percent' ? '%' : '');
+            $percentValue = ($percent_sign_type == '-' ? $percent_sign_type : '+').round($percent['value'], 2).($percent['type'] == 'percent' ? '%' : '');
         } else {
             $percentValue = null;
         }
 
         $data = array(
-            'id_ebay_profile' => (int)$id_ebay_profile,
-            'id_country' => (int)$ebay_profile->ebay_site_id,
-            'id_ebay_category' => (int)$ebay_category,
-            'id_category' => (int)$id_category,
+            'id_ebay_profile' => (int) $id_ebay_profile,
+            'id_country' => (int) $ebay_profile->ebay_site_id,
+            'id_ebay_category' => (int) $ebay_category,
+            'id_category' => (int) $id_category,
             'percent' => pSQL($percentValue),
             'date_upd' => pSQL($date),
             'sync' => 1,
@@ -121,8 +121,8 @@ if (Tools::getValue('payement_policies') || Tools::getValue('return_policies')) 
     $return = Tools::getValue('return_policies');
     $ebay_category_id_ref = EbayCategory::getIdCategoryRefById($ebay_category, $ebay_profile->ebay_site_id);
     $data = array(
-        'id_ebay_profile' => (int)$id_ebay_profile,
-        'id_category' => (int)$ebay_category_id_ref,
+        'id_ebay_profile' => (int) $id_ebay_profile,
+        'id_category' => (int) $ebay_category_id_ref,
         'id_return' => pSQl($return),
         'id_payment' => pSQL($payment),
     );
@@ -149,7 +149,7 @@ if (Tools::getValue('specific')) {
             $data[$field_names[$data_type]] = pSQL($value);
         }
 
-        Db::getInstance()->update('ebay_category_specific', $data, 'id_ebay_category_specific = ' . (int)$specific_id);
+        Db::getInstance()->update('ebay_category_specific', $data, 'id_ebay_category_specific = '.(int) $specific_id);
     }
 }
 
@@ -168,6 +168,7 @@ if ($store_categories = Tools::getValue('store_category')) {
     // insert rows
     EbayStoreCategoryConfiguration::update($id_ebay_profile, $store_categories, Tools::getValue('ps_categories'));
 }
+
 
 
 if (Tools::getValue('ajax')) {

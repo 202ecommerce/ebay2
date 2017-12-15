@@ -762,7 +762,6 @@ class EbaySynchronizer
             }
         }
 
-
         return $item_specifics_pairs;
     }
 

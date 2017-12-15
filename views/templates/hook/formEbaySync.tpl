@@ -558,6 +558,7 @@
       loadPsCategories($(this).val());
     });
 
+
     $(document).on('click', '*:not(#ps_category_list)', function () {
       if ($('#ps_category_autocomplete_input').is(':visible')) {
         $('#divPsCategories').html('');
@@ -833,6 +834,8 @@
             <span class="text-danger text-error" style="display: none;">{l s='You need to select .' mod='ebay'}</span>
           </div>
           <input type="hidden" name="category[0]" value="0">
+
+
         </div>
 
         <div class="form-group">

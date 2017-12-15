@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2017 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -28,15 +28,15 @@ if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
 }
 
-require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'config' . TMP_DS . 'config.inc.php';
-include dirname(__FILE__) . '/../classes/EbayCategorySpecific.php';
-include dirname(__FILE__) . '/../classes/EbayCategoryCondition.php';
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+include dirname(__FILE__).'/../classes/EbayCategorySpecific.php';
+include dirname(__FILE__).'/../classes/EbayCategoryCondition.php';
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
 }
 
-$id_ebay_profile = (int)Tools::getValue('profile');
+$id_ebay_profile = (int) Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
 
 function loadItemsMap($row)
@@ -46,9 +46,9 @@ function loadItemsMap($row)
 
 /* Fix for limit db sql request in time */
 sleep(1);
-$sql = 'SELECT `id_category_ref` FROM `' . _DB_PREFIX_ . 'ebay_category` WHERE `id_ebay_category` = ' . (int)Tools::getValue('ebay_category');
+$sql = 'SELECT `id_category_ref` FROM `'._DB_PREFIX_.'ebay_category` WHERE `id_ebay_category` = '.(int) Tools::getValue('ebay_category');
 $id_category = DB::getInstance()->getValue($sql);
-$category = new EbayCategory($ebay_profile, (int)$id_category);
+$category = new EbayCategory($ebay_profile, (int) $id_category);
 
 $last_upd = $ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE');
 
@@ -61,7 +61,7 @@ if (Tools::jsonDecode($last_upd) === null) {
     $last_update = get_object_vars(Tools::jsonDecode($last_upd));
 
     if (!isset($last_update[$category->getIdCategoryRef()])
-        || ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')) . '.000Z')) {
+        || ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z')) {
         $update = true;
     }
 }
@@ -82,8 +82,8 @@ $item_specifics_ids = array_map('loadItemsMap', $item_specifics);
 
 if (count($item_specifics_ids)) {
     $sql = 'SELECT `id_ebay_category_specific_value` as id, `id_ebay_category_specific` as specific_id, `value`
-        FROM `' . _DB_PREFIX_ . 'ebay_category_specific_value`
-        WHERE `id_ebay_category_specific` in (' . implode(',', $item_specifics_ids) . ')';
+        FROM `'._DB_PREFIX_.'ebay_category_specific_value`
+        WHERE `id_ebay_category_specific` in ('.implode(',', $item_specifics_ids).')';
 
     $item_specifics_values = DB::getInstance()->executeS($sql);
 } else {

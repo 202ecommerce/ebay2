@@ -18,24 +18,24 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2017 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
 }
-require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'config' . TMP_DS . 'config.inc.php';
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . 'classes' . TMP_DS . 'EbayTools.php';
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'classes'.TMP_DS.'EbayTools.php';
 
 if (EbayTools::getValue('admin_path')) {
-    define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS) . TMP_DS . EbayTools::getValue('admin_path') . TMP_DS);
+    define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.EbayTools::getValue('admin_path').TMP_DS);
 }
 
-include_once _PS_ADMIN_DIR_ . 'init.php';
+include_once _PS_ADMIN_DIR_.'init.php';
 
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
@@ -50,17 +50,17 @@ if (Module::isInstalled('ebay')) {
 
     if ($enable) {
         $context = Context::getContext();
-        $context->shop = new Shop((int)Tools::getValue('id_shop'));
+        $context->shop = new Shop((int) Tools::getValue('id_shop'));
 
-        $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+        $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
 
         $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
-
+        
         $offset = 20;
-        $page = (int)Tools::getValue('p', 0);
+        $page = (int) Tools::getValue('p', 0);
         if ($page < 2) {
             $page = 1;
         }
@@ -68,25 +68,25 @@ if (Module::isInstalled('ebay')) {
         $nb_categories = count($category_list);
         $category_list = array_slice($category_list, $limit, $offset);
         $ebay_category_list = Db::getInstance()->executeS('SELECT *
-            FROM `' . _DB_PREFIX_ . 'ebay_category`
+            FROM `'._DB_PREFIX_.'ebay_category`
             WHERE `id_category_ref` = `id_category_ref_parent`
-            AND `id_country` = ' . (int)$ebay_profile->ebay_site_id);
+            AND `id_country` = '.(int) $ebay_profile->ebay_site_id);
         $rq_products = '
                 SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,
                     COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts,
                     ps.`id_category_default`
-                FROM `' . _DB_PREFIX_ . 'product` AS p
+                FROM `'._DB_PREFIX_.'product` AS p
 
-                INNER JOIN `' . _DB_PREFIX_ . 'product_shop` AS ps
+                INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps
                 ON p.`id_product` = ps.`id_product`
 
-                LEFT JOIN `' . _DB_PREFIX_ . 'ebay_product_configuration` AS epc
+                LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc
                 ON p.`id_product` = epc.`id_product`
-                AND epc.`id_ebay_profile` = ' . (int)$ebay_profile->id . '
+                AND epc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
                 AND epc.blacklisted = 1
 
-                WHERE 1 ' . $ebay->addSqlRestrictionOnLang('ps') . '
-                AND ps.`id_shop` = ' . (int)$ebay_profile->id_shop . '
+                WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
+                AND ps.`id_shop` = '.(int)$ebay_profile->id_shop.'
                 GROUP BY ps.`id_category_default`';
 
 
@@ -94,8 +94,8 @@ if (Module::isInstalled('ebay')) {
         $get_cat_nb_products = array();
         $get_cat_nb_sync_products = array();
         foreach ($get_products as $data) {
-            $get_cat_nb_products[$data['id_category_default']] = (int)$data['nbProducts'];
-            $get_cat_nb_sync_products[$data['id_category_default']] = (int)$data['nbProducts'] - (int)$data['nbNotSyncProducts'];
+            $get_cat_nb_products[$data['id_category_default']] = (int) $data['nbProducts'];
+            $get_cat_nb_sync_products[$data['id_category_default']] = (int) $data['nbProducts'] - (int) $data['nbNotSyncProducts'];
         }
         /* Loading categories */
         $category_config_list = array();
@@ -106,11 +106,11 @@ if (Module::isInstalled('ebay')) {
         /* init selects */
         $sql = '
             SELECT *, ec.`id_ebay_category` AS id_ebay_category
-            FROM `' . _DB_PREFIX_ . 'ebay_category` AS ec
-            LEFT OUTER JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` AS ecc
+            FROM `'._DB_PREFIX_.'ebay_category` AS ec
+            LEFT OUTER JOIN `'._DB_PREFIX_.'ebay_category_configuration` AS ecc
             ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-            AND ecc.`id_ebay_profile` = ' . (int)$ebay_profile->id . '
-            WHERE ec.`id_country` = ' . (int)$ebay_profile->ebay_site_id . '
+            AND ecc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
+            WHERE ec.`id_country` = '.(int) $ebay_profile->ebay_site_id.'
             ORDER BY `level`';
 
         $datas = Db::getInstance()->executeS($sql);
@@ -144,7 +144,7 @@ if (Module::isInstalled('ebay')) {
             }
         }
         $smarty = Context::getContext()->smarty;
-        $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
+        $currency = new Currency((int) $ebay_profile->getConfiguration('EBAY_CURRENCY'));
         /* Smarty datas */
         $template_vars = array(
             'tabHelp' => '&id_tab=7',
@@ -161,10 +161,10 @@ if (Module::isInstalled('ebay')) {
             'currencySign' => $currency->sign,
             'p' => $page,
         );
-
+        
         $smarty->assign($template_vars);
         Ebay::addSmartyModifiers();
-        echo $ebay->display(realpath(dirname(__FILE__) . '/../'), '/views/templates/hook/table_categories.tpl');
+        echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_categories.tpl');
     }
 }
 

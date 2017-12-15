@@ -18,16 +18,16 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2017 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__) . '/../../../config/config.inc.php';
-require_once dirname(__FILE__) . '/../../../init.php';
-require_once dirname(__FILE__) . '/../ebay.php';
-require_once dirname(__FILE__) . '/../classes/tabs/EbayFormEbaySyncTab.php';
+require_once dirname(__FILE__).'/../../../config/config.inc.php';
+require_once dirname(__FILE__).'/../../../init.php';
+require_once dirname(__FILE__).'/../ebay.php';
+require_once dirname(__FILE__).'/../classes/tabs/EbayFormEbaySyncTab.php';
 
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN')
@@ -45,4 +45,4 @@ $filter = array(
 $ebay = new Ebay;
 $context = Context::getContext();
 $form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
-die($form_ebay_sync_tab->getContent((int)$page_current, $length, $searche, $filter));
+die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche, $filter));
