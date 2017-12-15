@@ -149,25 +149,57 @@
         }
       });
     });
+    function validationFields() {
+      var res = true;
+      if ($('.category_ps_list li').length == 0) {
+        $('#ps_category_list .cat_list button').addClass('form-error');
+        $('#ps_category_list .text-error').show();
+        res = false;
+      }
+      $('#ebay_category_list select').each(function (index) {
+        if ($(this).find(":selected").val() == 0) {
+          $(this).addClass('form-error');
+          $('#ebay_category_list .text-error').show();
+          res = false;
+        }
+      });
+
+      if (bp_active && $('select[name="payement_policies"] option:selected').val() == "") {
+        $('select[name="payement_policies"]').addClass('form-error');
+        $('#bussines_policies .text-error').show();
+        res = false;
+      }
+
+      if (bp_active && $('select[name="return_policies"] option:selected').val() == "") {
+        $('select[name="return_policies"]').addClass('form-error');
+        $('#bussines_policies .text-error').show();
+        res = false;
+      }
+
+      if (res) {
+        $('div.first_page_popin select').each(function () {
+          $(this).removeClass('form-error');
+        });
+        $('div.first_page_popin .text-error').each(function () {
+          $(this).hide();
+        });
+      }
+      return res;
+    }
 
     $('.js-next-popin').on('click', function () {
       var courant_page = $('.page_config_category.selected');
       var new_id = parseInt(courant_page.attr('id')) + 1;
 
-      if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
-        if (!$('.category_ps_list li').length) {
-          $('#ps_category_list .cat_list button').addClass('form-error');
-          $('#ps_category_list .text-error').show();
-//      } else if () {
 
-        } else {
+       if (validationFields()) {
           $('.page_popin').html('' + new_id);
           courant_page.removeClass('selected').hide();
           courant_page.parent().find('div#' + new_id).addClass('selected').show();
           $('.js-close-popin.js-close-popin-bottom').hide();
           $('.js-prev-popin').show();
         }
-      }
+
       if (new_id == 2) {
         if (!bp_active || bp_active && $('select[name="payement_policies"] option:selected').val() != "" && $('select[name="return_policies"] option:selected').val() != "") {
           $('#item_spec').html("<tr class='img-loader text-center'><td colspan=4><img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" /></td></tr>");
@@ -321,6 +353,9 @@
       }
     });
 
+    $('div.first_page_popin select').live('change', function () {
+      $(this).removeClass('form-error');
+    });
 
     function loadCategoriesConfig(id_category) {
       var url = module_dir + "ebay/ajax/loadConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&id_category_ps=' + id_category;
@@ -335,6 +370,7 @@
 
           $('#ps_category_list').hide();
           $('.category_ps_list').html('<li class="item" id="' + data.categoryList['id_category'] + '">' + data.categoryList['name'] + '</b> </li>');
+          $('.category_ps_list').show();
           $('#form_product_to_sync').html(data.getNbSyncProducts);
           $('#form_variations_to_sync').html(data.getNbSyncProductsVariations);
           if (data.percent.type == '%') {
@@ -555,10 +591,10 @@
 
   function loadPsCategories(search) {
     var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&s=' + search;
-   // var selected_cat = new Array();
-    //$('.category_ps_list li').each(function () {
-      //selected_cat.push($(this).text());
-    //});
+    var selected_cat = new Array();
+    $('.category_ps_list li').each(function () {
+      selected_cat.push($(this).text());
+    });
 
     $.ajax({
       type: "POST",
@@ -567,9 +603,9 @@
         var data = jQuery.parseJSON(data);
         var str = '';
         $.each(data.categoryList, function (index, value) {
-          //if (selected_cat.indexOf(value.name) == -1) {
+          if (selected_cat.indexOf(value.name) == -1) {
             str += '<li id="' + value.id_category + '">' + value.name + '</li>';
-          //}
+          }
         });
 
         $('div.cat_list ul').html('').append(str);
@@ -788,11 +824,14 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="ebay_category_list">
           <label for="" class="control-label col-xs-12 col-md-5">
             {l s='eBay category' mod='ebay'} <strong class="text-danger"><sup>*</sup></strong>
           </label>
-          <div class="col-xs-12 col-md-7 category_ebay"></div>
+          <div class="col-xs-12 col-md-7">
+            <div class="category_ebay"></div>
+            <span class="text-danger text-error" style="display: none;">{l s='You need to select .' mod='ebay'}</span>
+          </div>
           <input type="hidden" name="category[0]" value="0">
         </div>
 
@@ -837,12 +876,12 @@
           </div>
         </div>
 
-        <div class="text-danger"><strong><sup>*</sup></strong> {l s='Required fields' mod='ebay'}</div>
+
 
         {if $bp_active}
-          <div class="form-group">
+          <div class="form-group" id="bussines_policies">
             <label for="" class="control-label col-xs-12 col-md-6">
-              {l s='Return Policies*' mod='ebay'}
+              {l s='Return Policies' mod='ebay'}<strong class="text-danger"><sup>*</sup></strong>
             </label>
             <select name="return_policies" style="width: 200px;">
               {if empty($RETURN_POLICY)}
@@ -857,7 +896,7 @@
             </select>
 
             <label for="" class="control-label col-md-6">
-              {l s='Payement  Policies*' mod='ebay'}
+              {l s='Payement  Policies' mod='ebay'}<strong class="text-danger"><sup>*</sup></strong>
             </label>
             <select name="payement_policies" style="width: 200px;">
               {if empty($PAYEMENTS)}
@@ -871,10 +910,15 @@
                 <option value="{$PAYEMENT.id_bussines_Policie}">{$PAYEMENT.name}</option>
               {/foreach}
             </select>
+
+            <span class="text-danger text-error" style="display: none;">{l s='You need to select Bussines Policies.' mod='ebay'}</span>
+
           </div>
+          <div class="text-danger pull-right"><strong><sup>*</sup></strong> {l s='Required fields' mod='ebay'}</div>
           <a href="#" class="reset_bp btn btn-lg btn-success"><span></span> {l s='Reset BP' mod='ebay'}</a>
         {/if}
-
+        {if !$bp_active}
+        <div class="text-danger"><strong><sup>*</sup></strong> {l s='Required fields' mod='ebay'}</div>{/if}
       </div>
       <div id="2" class="page_config_category" style="display: none">
         <div class="form-group">

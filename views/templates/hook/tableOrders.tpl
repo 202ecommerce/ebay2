@@ -27,7 +27,7 @@
     <h4 class="table-block__title table-block__holder">{l s='Add desctiption in ' mod='ebay'} {$type_sync_order}
         <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"
            class="button-refresh btn btn-default"
-           title="{l s='Sync refunds and returns from eBay' mod='ebay'}"
+           title="{l s='Sync orders from eBay' mod='ebay'}"
            data-toggle="tooltip">
             <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
         </a>
