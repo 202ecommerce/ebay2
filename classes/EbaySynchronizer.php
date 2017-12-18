@@ -626,13 +626,15 @@ class EbaySynchronizer
         $specific_price_output = null;
         $price = null;
         $price = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context);
-
+        $price = round($price, 2);
         $specific_price_output = null;
         $price_original = null;
         $price_original = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
+        $price_original = round($price_original, 2);
 
-        if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $percent)) {
-            $price *= (1 + ($percent / 100));
+        preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
+        if ($temp[3] != '') {
+            $price *= (1 + ($temp[2] / 100));
         } else {
             $price += $percent;
         }

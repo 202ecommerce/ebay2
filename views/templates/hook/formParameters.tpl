@@ -186,7 +186,7 @@
 	</fieldset>	
 	{/if}
 		
-	<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel" id="configForm1">
+	<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel">
 		<fieldset>
 			<div class="panel-heading">{l s='Account details' mod='ebay'}</div>
 

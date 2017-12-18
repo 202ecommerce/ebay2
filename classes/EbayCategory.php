@@ -115,7 +115,7 @@ class EbayCategory
             $this->_loadFromDb();
         }
 
-        return (int) $this->percent;
+        return $this->percent;
     }
 
     /**
