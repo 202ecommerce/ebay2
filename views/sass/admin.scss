@@ -398,28 +398,25 @@
         .dropdown-menu {
           list-style-type: none;
           padding: 0;
-
-          width: 250px;
-          min-width: unset;
+          min-width: 300px;
           right: 0;
           left: auto;
           overflow: hidden;
 
           li {
+            display: block;
+            padding: 0 10px;
+            color: #363a41;
+            font-size: 13px;
+            line-height: 2.5;
+            cursor: pointer;
+
             & + li {
               border-top: 1px solid #dedede;
             }
 
-            a {
-              display: block;
-              padding: 0 10px;
-              color: #363a41;
-              font-size: 13px;
-              line-height: 2.5;
-
-              &:hover {
-                color: #fff;
-              }
+            &:hover {
+              background: #f5f5f5;
             }
           }
         }

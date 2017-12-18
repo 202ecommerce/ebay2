@@ -89,7 +89,8 @@
                                     <a class="btn btn-sm btn-default corige_product"
                                        id="{$task_error.real_id}" href="{$task_error.product_url}"
                                        target="_blank"
-                                       title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><i class="icon-pencil"></i>
+                                       {*title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><i class="icon-pencil"></i>*}
+                                       title="{l s='Help' mod='ebay'}" data-toggle="tooltip"><i class="icon-question"></i>
                                     </a>
                                     <a class="exclure_product btn-hover-danger  btn btn-sm btn-default"
                                        id="{$task_error.real_id}"
