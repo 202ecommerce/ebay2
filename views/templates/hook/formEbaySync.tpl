@@ -256,7 +256,8 @@
 
     });
 
-    $('.js-save-category').on('click', function () {
+    $('.js-save-category').on('click', function (event) {
+
       var data = $('form#category_config').serialize();
       var ps_categories = new Array();
       $('#last_page_categorie_ps').find('li').each(function (index) {
@@ -558,14 +559,15 @@
       loadPsCategories($(this).val());
     });
 
+    $(document).on('focus','#ps_category_list input',function () {
+      loadPsCategories($(this).val());
+    });
 
     $(document).on('click', '*:not(#ps_category_list)', function () {
       if ($('#ps_category_autocomplete_input').is(':visible')) {
         $('#divPsCategories').html('');
       }
     });
-
-
   });
 
   function changeCategoryMatch(level, id_categoris) {
