@@ -66,13 +66,13 @@
 
   // Additional icons
   .process-icon-check-circle:before{
-    content:"\E86C";
-    font-family: "Material Icons";
+    content:"\f058";
+    font-family: "FontAwesome";
   };
 
   .glyphicon-ok:before {
-    content: "\E5CA";
-    font-family: "Material Icons";
+    content: "\f00c";
+    font-family: "FontAwesome";
   }
 
     // Rewrite styles
@@ -785,13 +785,13 @@
               position: relative;
 
               &:before {
-                content: '\E8B6';
+                content: '\f002';
                 position: absolute;
-                right: 14px;
+                right: 20px;
                 top: 50%;
-                margin-top: -11px;
-                font-size: 22px;
-                font-family: "Material Icons";
+                margin-top: -10px;
+                font-size: 18px;
+                font-family: "FontAwesome";
                 line-height: 1;
               }
 

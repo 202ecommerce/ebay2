@@ -51,12 +51,12 @@
   padding: 8px 10px;
 }
 .totebay .process-icon-check-circle:before {
-  content: "\E86C";
-  font-family: "Material Icons";
+  content: "\f058";
+  font-family: "FontAwesome";
 }
 .totebay .glyphicon-ok:before {
-  content: "\E5CA";
-  font-family: "Material Icons";
+  content: "\f00c";
+  font-family: "FontAwesome";
 }
 .totebay .js-popin-help {
   text-decoration: none !important;
@@ -607,13 +607,13 @@
   position: relative;
 }
 .totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .bs-searchbox:before {
-  content: '\E8B6';
+  content: '\f002';
   position: absolute;
-  right: 14px;
+  right: 20px;
   top: 50%;
-  margin-top: -11px;
-  font-size: 22px;
-  font-family: "Material Icons";
+  margin-top: -10px;
+  font-size: 18px;
+  font-family: "FontAwesome";
   line-height: 1;
 }
 .totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .bs-searchbox input:focus {

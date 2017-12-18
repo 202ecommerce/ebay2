@@ -187,6 +187,14 @@
       return res;
     }
 
+    $('.category_ebay').on('focusout', function() {
+      validationFields();
+    });
+
+    $('.category_product_list_ebay [name="select_all"]').on('click', function() {
+      $('.category_product_list_ebay input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+    });
+
     $('.js-next-popin').on('click', function () {
       var courant_page = $('.page_config_category.selected');
       var new_id = parseInt(courant_page.attr('id')) + 1;
@@ -235,8 +243,8 @@
         $('.js-save-popin').show();
         $('.js-save1-popin').show();
       }
-
     });
+
     $('.js-prev-popin').on('click', function () {
       $('.js-next-popin').show();
       var courant_page = $('.page_config_category.selected');
@@ -253,7 +261,6 @@
       $('.js-save1-popin').hide();
 
       courant_page.parent().find('div#' + new_id).addClass('selected').show();
-
     });
 
     $('.js-save-category').on('click', function (event) {
@@ -583,11 +590,11 @@
       url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=Select a category&profile=' + id_ebay_profile,
       success: function (data) {
         $(".category_ebay").html(data);
-        $(".category_ebay select").change(function () {
-          if($(".category_ebay select option[value=0]")) {
-            console.log(1)
-          }
-        });
+//        $(".category_ebay select").change(function () {
+//          if($(".category_ebay select option[value=0]")) {
+//            console.log(1)
+//          }
+//        });
       }
     });
   }
@@ -833,7 +840,7 @@
           </label>
           <div class="col-xs-12 col-md-7">
             <div class="category_ebay"></div>
-            <span class="text-danger text-error" style="display: none;">{l s='You need to select .' mod='ebay'}</span>
+            <span class="text-danger text-error" style="display: none;">{l s='eBay category is required.' mod='ebay'}</span>
           </div>
           <input type="hidden" name="category[0]" value="0">
 
@@ -961,7 +968,7 @@
               <table class="table tableDnD" width="80%" style="margin: auto">
                 <thead>
                 <tr class="product-row" category="5">
-                  <th class="ebay_center "><i class="icon icon-check-sign">
+                  <th class="ebay_center "><input name="select_all" type="checkbox" checked></th>
                   <th class="nowrap"><strong>{l s='Product ID' mod='ebay'}</strong></th>
                   <th><strong>{l s='Name' mod='ebay'}</strong></th>
                   <th class="ebay_center "><strong>{l s='Stock' mod='ebay'}</strong></th>
