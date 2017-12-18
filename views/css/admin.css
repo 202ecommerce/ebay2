@@ -6,6 +6,7 @@
  */
 .totebay {
   overflow: hidden;
+  /* Popin */
 }
 .totebay .d-b {
   display: block;
@@ -101,6 +102,10 @@
 }
 .totebay .btn [class^='icon-'] + span {
   margin-left: 5px;
+}
+.totebay .btn.btn-hover-danger:hover {
+  background-color: #d5676f !important;
+  border-color: #cd4b55 !important;
 }
 .totebay .panel-info .form-horizontal > div:not(.pull-right):not(.panel-footer),
 .totebay .panel-info .form-horizontal > label,
@@ -452,10 +457,6 @@
 .totebay .table-block .table-wrapper .table .action .active i {
   color: #555;
 }
-.totebay .table-block .table-wrapper .table .action .btn-hover-danger:hover {
-  background-color: #d5676f !important;
-  border-color: #cd4b55 !important;
-}
 .totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] {
   display: none;
 }
@@ -486,6 +487,10 @@
 }
 .totebay #popin-container .form-error {
   border-color: red !important;
+}
+.totebay #popin-container .table input[type="checkbox"] {
+  vertical-align: middle;
+  cursor: pointer;
 }
 .totebay #popin-container .popin {
   min-width: 550px;

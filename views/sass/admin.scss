@@ -135,6 +135,13 @@
     [class^='icon-'] + span {
       margin-left: 5px;
     }
+
+    &.btn-hover-danger {
+      &:hover {
+        background-color: #d5676f !important;
+        border-color: #cd4b55 !important;
+      }
+    }
   }
 
   // Uniformize spacing in horizontal-form
@@ -572,13 +579,6 @@
               color: #555;
             }
           }
-
-          .btn-hover-danger {
-            &:hover {
-              background-color: #d5676f !important;
-              border-color: #cd4b55 !important;
-            }
-          }
         }
 
         // Status inputs
@@ -613,6 +613,8 @@
     }
   }
 
+
+  /* Popin */
   #popin-container {
 
     .text-danger {
@@ -626,6 +628,13 @@
 
     .form-error {
       border-color: red !important;
+    }
+
+    .table {
+      input[type="checkbox"] {
+        vertical-align: middle;
+        cursor: pointer;
+      }
     }
 
     .popin {

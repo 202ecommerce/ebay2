@@ -242,11 +242,13 @@
         $('.js-next-popin').hide();
         $('.js-save-popin').show();
         $('.js-save1-popin').show();
+        $('.js-remove-item').hide();
       }
     });
 
     $('.js-prev-popin').on('click', function () {
       $('.js-next-popin').show();
+      $('.js-remove-item').show();
       var courant_page = $('.page_config_category.selected');
       courant_page.removeClass('selected').hide();
 
