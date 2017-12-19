@@ -864,6 +864,23 @@
         }
       }
 
+      .page_config_category.selected {
+        ul#last_page_categorie_ps {
+          margin-bottom: 0;
+
+          li {
+            @extend .glyphicon-ok;
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            margin-top: -8px;
+            font-size: 16px;
+            line-height: 1;
+            color: #ccc;
+          }
+        }
+      }
+
       #last_page_categorie_ps {
         display: block;
       }

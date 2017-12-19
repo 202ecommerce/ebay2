@@ -55,7 +55,7 @@
   content: "\f058";
   font-family: "FontAwesome";
 }
-.totebay .glyphicon-ok:before {
+.totebay .glyphicon-ok:before, .totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps li:before {
   content: "\f00c";
   font-family: "FontAwesome";
 }
@@ -625,7 +625,7 @@
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 20px rgba(102, 175, 233, 0.6) !important;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 20px rgba(102, 175, 233, 0.6) !important;
 }
-.totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .glyphicon-ok {
+.totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .glyphicon-ok, .totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .page_config_category.selected ul#last_page_categorie_ps li, .totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps .first_page_popin .bootstrap-select .dropdown-menu.open li {
   margin: 0;
   font-size: 18px;
   line-height: 0.8;
@@ -652,6 +652,18 @@
   position: absolute;
   right: 10px;
   top: 7px;
+}
+.totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps {
+  margin-bottom: 0;
+}
+.totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps li {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -8px;
+  font-size: 16px;
+  line-height: 1;
+  color: #ccc;
 }
 .totebay #popin-container #category_config #last_page_categorie_ps {
   display: block;
