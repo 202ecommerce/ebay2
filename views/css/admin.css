@@ -656,7 +656,7 @@
 .totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps {
   margin-bottom: 0;
 }
-.totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps li {
+.totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps li:before {
   position: absolute;
   top: 50%;
   right: 10px;
