@@ -223,12 +223,15 @@
       }
       if (new_id == 4) {
         var nb_annonces_to_job = 0;
+        var nb_annonces_variation_to_job = 0;
         $('.category_product_list_ebay').find('.sync-product').each(function () {
           if ($(this).prop('checked')) {
             nb_annonces_to_job++;
+            nb_annonces_variation_to_job += parseInt($(this).attr('nb_variation'));
           }
         });
         $('.nb_annonces').html(nb_annonces_to_job);
+        $('#form_variations_to_sync_final').html(nb_annonces_variation_to_job);
         $('#last_page_categorie_ps').html('').append($('.category_ps_list').children().clone());
         $('#last_page_categorie_ebay').html('').append($('.category_ebay').children().find('option:selected').last().text());
         $('#last_page_categorie_boutique').html('').append($('select[name="store_category"]').find('option:selected').text());
@@ -543,7 +546,7 @@
               str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
                         <td class="ebay_center"> \
                             <input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
-                            <input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
+                            <input onchange="toggleSyncProduct(' + id_category + ')" class="sync-product" category="' + id_category + '" name="to_synchronize[' + product.id + ']" type="checkbox" nb_variation="'+ product.nb_variation +'" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
                         </td> \
                         <td>' + product.id + '</td> \
                         <td>' + product.name + '</td> \
@@ -600,7 +603,29 @@
       }
     });
   }
+  function toggleSyncProduct(category_id) {
 
+    var nbSelected = 0;
+
+    var hasNotSelected = false;
+
+    $('.sync-product[category=' + category_id + ']').each(function () {
+
+      if ($(this).attr('checked'))
+        nbSelected++;
+      else if (!hasNotSelected)
+        hasNotSelected = true;
+
+    });
+
+    var str = '';
+    if (hasNotSelected)
+      str = '<span class="bold">' + nbSelected + '</span>';
+    else
+      str = nbSelected;
+
+    $('.cat-nb-products[category=' + category_id + ']').html(str);
+  }
   function loadPsCategories(search) {
     var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&s=' + search;
     var selected_cat = new Array();
@@ -1031,7 +1056,7 @@
               <div class="row">
                 <div class="col-xs-12 col-sm-6 no-padding">
                   <p class="badge badge-success"><big><strong class="nb_annonces"></strong></big> {l s='products' mod='ebay'}</p><br>
-                  <p class="badge badge-success"><big><strong>12</strong></big> {l s='variations' mod='ebay'}</p>
+                  <p class="badge badge-success"><big><strong id="form_variations_to_sync_final">12</strong></big> {l s='variations' mod='ebay'}</p>
                 </div>
                 <div class="col-xs-12 col-sm-6 no-padding">
                   <div class="alert alert-info">{l s='The addition of these products is done automatically in the next few minutes.' mod='ebay'}</div>
