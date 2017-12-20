@@ -793,7 +793,7 @@ class EbayOrder
     private function _parseSku($sku, $id_product, $id_product_attribute, $id_ebay_profile)
     {
         $result = array();
-        preg_match('/.-([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
+        preg_match('/[a-zA-Z_-]*([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
         $id_product = isset($result[1]) ? $result[1] : 0;
         $id_product_attribute = isset($result[2]) ? $result[2] : 0;
         $id_ebay_profile = isset($result[3]) ? $result[3] : 0;
