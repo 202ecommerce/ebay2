@@ -898,10 +898,14 @@ class Ebay extends Module
         $dbEbay->setDb(Db::getInstance());
         $request = new EbayRequest();
         $errors_email = array();
-        $ebay_user_identifier = $ebay_profile->ebay_user_identifier;
+
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
             $errors = array();
+            $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
+            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite);
+            $ebayProfileOrder = new EbayProfile($idProfileOrder);
+            $ebay_user_identifier = $ebayProfileOrder->ebay_user_identifier;
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
             if (!$request->getDev()) {
@@ -920,7 +924,7 @@ class Ebay extends Module
             if ($order->exists()) {
                 continue;
             }
-            $order->add($this->ebay_profile->id);
+            $order->add($ebayProfileOrder->id);
             // no order in ebay order table with this order_ref
             if (!$order->hasValidContact()) {
                 $message = $this->l('Invalid e-mail');
@@ -982,7 +986,7 @@ class Ebay extends Module
                     $shop_data = reset($shops_data);
                     $ebay_profile = new EbayProfile($shop_data['id_ebay_profiles'][0]);
                 } else {
-                    $ebay_profile = EbayProfile::getCurrent();
+                    $ebay_profile = $ebayProfileOrder;
                 }
 
                 $id_customer = $order->getOrAddCustomer($ebay_profile);
@@ -1002,7 +1006,7 @@ class Ebay extends Module
                     $id_ebay_profile = (int) $shops_data[$id_shop]['id_ebay_profiles'][0];
                     $ebay_profile = new EbayProfile($id_ebay_profile);
                 } else {
-                    $ebay_profile = EbayProfile::getCurrent();
+                    $ebay_profile = $ebayProfileOrder;
                 }
 
                 if (!$has_shared_customers) {

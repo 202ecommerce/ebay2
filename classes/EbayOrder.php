@@ -52,6 +52,7 @@ class EbayOrder
     private $id_currency;
     private $id_transaction;
     private $CODCost;
+    private $ebaySiteName;
 
     private $error_messages = array();
 
@@ -89,6 +90,7 @@ class EbayOrder
         $this->shippingServiceCost = (string) $order_xml->ShippingServiceSelected->ShippingServiceCost;
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
+        $this->ebaySiteName = $order_xml->TransactionArray->Transaction->Item->Site;
 
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
@@ -122,6 +124,11 @@ class EbayOrder
         }
 
         $this->write_logs = (bool) Configuration::get('EBAY_ACTIVATE_LOGS');
+    }
+
+    public function getEbaySiteName()
+    {
+        return $this->ebaySiteName;
     }
 
     /**
@@ -594,7 +601,7 @@ class EbayOrder
         }
 
         $total_shipping_tax_incl += (float)$this->shippingServiceCost;
-        $total_shipping_tax_excl += $this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
+        $total_shipping_tax_excl += (float)$this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
 
         if ($this->payment_method == 'COD') {
             $data = array(
