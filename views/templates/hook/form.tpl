@@ -236,7 +236,7 @@
                                 </button>
                             </a>
 
-                            <button type="button" class="btn btn-default pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
+                            <button type="button" class="btn btn-default btn-hover-danger pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                 <i class="icon-trash"></i>
                             </button>
                             {if $debug == 1}

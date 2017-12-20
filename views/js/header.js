@@ -78,7 +78,12 @@ $(document).ready(function () {
     // Close modal on click on cancel button
     $(document).on('click', '.js-close-popin', function() {
         $.fancybox.close();
-
+        $('div.first_page_popin select').each(function () {
+            $(this).removeClass('form-error');
+        });
+        $('div.first_page_popin .text-error').each(function () {
+            $(this).hide();
+        });
         $('.js-next-popin').show();
         $('.category_ps_list').html('');
         $('#form_product_to_sync').html('');

@@ -1049,13 +1049,11 @@ class Ebay extends Module
                 }
 
                 // Validate order
-
                 if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
                     $order->update($this->ebay_profile->id);
                 } else {
                     $this->delete();
                 }
-                
 
                 // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
                 // we now disable the carrier if required

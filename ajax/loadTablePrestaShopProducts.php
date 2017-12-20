@@ -24,13 +24,14 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__) . '/../../../config/config.inc.php';
-require_once dirname(__FILE__) . '/../ebay.php';
+require_once dirname(__FILE__).'/../../../config/config.inc.php';
+require_once dirname(__FILE__).'/../ebay.php';
 
 $ebay = new Ebay();
 
-$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+$ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 $ebay_request = new EbayRequest();
+
 
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
@@ -42,7 +43,7 @@ $shop = new Shop(1);
 /** @var ShopGroup $shopGroup */
 $shopGroup = $shop->getGroup();
 
-$page = (int)Tools::getValue('p', 0);
+$page = (int) Tools::getValue('p', 0);
 if ($page < 2) {
     $page = 1;
 }
@@ -69,67 +70,67 @@ $query = 'SELECT p.`id_product`,
                 ec.`id_category_ref`,';
 
 
-$query .= ' ps.`active` AS active ';
+    $query .= ' ps.`active` AS active ';
 
 
-$query .= ' FROM `' . _DB_PREFIX_ . 'product` p';
+$query .= ' FROM `'._DB_PREFIX_.'product` p';
 
 
-$query .= '
-        INNER JOIN  `' . _DB_PREFIX_ . 'product_shop` AS ps
+    $query .= '
+        INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
         ON p.id_product = ps.id_product
-        AND ps.id_shop = ' . (int)$ebay_profile->id_shop;
+        AND ps.id_shop = '.(int) $ebay_profile->id_shop;
 
 
-$query .= ' INNER JOIN `' . _DB_PREFIX_ . 'product_lang` pl
+$query .= ' INNER JOIN `'._DB_PREFIX_.'product_lang` pl
     ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = ' . (int)$ebay_profile->id_lang . '
+    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
-    LEFT JOIN `' . _DB_PREFIX_ . 'product_attribute` pa
+    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
     AND pa.default_on = 1
     ';
 
-$query .= ' LEFT JOIN `' . _DB_PREFIX_ . 'stock_available` s
+    $query .= ' LEFT JOIN `'._DB_PREFIX_.'stock_available` s
     ON p.`id_product` = s.`id_product`
     AND s.`id_product_attribute` = 0';
 
 
-$query .= ' INNER JOIN `' . _DB_PREFIX_ . 'category_lang` cl
+$query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
     ON cl.`id_category` = p.`id_category_default`
-    AND cl.`id_lang` = ' . (int)$ebay_profile->id_lang . '
+    AND cl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
-    ' . ($on_ebay_only ? 'INNER' : 'LEFT') . ' JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
+    '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
-    AND ecc.`id_ebay_profile` = ' . (int)$ebay_profile->id . '
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
-    ' . ($on_ebay_only ? 'INNER' : 'LEFT') . ' JOIN `' . _DB_PREFIX_ . 'ebay_category` ec
+    '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    LEFT JOIN `' . _DB_PREFIX_ . 'ebay_product_configuration` epc
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = p.`id_product`
-    AND epc.`id_ebay_profile` = ' . (int)$ebay_profile->id . '
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
-    LEFT JOIN `' . _DB_PREFIX_ . 'ebay_product` ep
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
     ON ep.`id_product` = p.`id_product`
-    AND ep.`id_ebay_profile` = ' . (int)$ebay_profile->id . '
+    AND ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
     AND ep.`id_ebay_product` = (
         SELECT MIN(ep2.`id_ebay_product`)
-        FROM `' . _DB_PREFIX_ . 'ebay_product` ep2
+        FROM `'._DB_PREFIX_.'ebay_product` ep2
         WHERE ep2.`id_product` = ep.`id_product`
         AND ep2.`id_ebay_profile` = ep.`id_ebay_profile`
-    )' .// With this inner query we ensure to only return one row of ebay_product. The id_product_ref is only relevant for products having only one correspondant product on eBay
+    )'.// With this inner query we ensure to only return one row of ebay_product. The id_product_ref is only relevant for products having only one correspondant product on eBay
     '
-    WHERE 1' . $ebay->addSqlRestrictionOnLang('pl') . $ebay->addSqlRestrictionOnLang('cl');
+    WHERE 1'.$ebay->addSqlRestrictionOnLang('pl').$ebay->addSqlRestrictionOnLang('cl');
 
 if ($shopGroup->share_stock) {
-    $query .= 'AND s.id_shop_group = ' . (int)$shopGroup->id;
+    $query .= 'AND s.id_shop_group = '.(int)$shopGroup->id;
 } else {
     $query .= $ebay->addSqlRestrictionOnLang('s');
 }
 
 if ($search) {
-    $query .= ' AND pl.`name` LIKE \'%' . pSQL($search) . '%\'';
+    $query .= ' AND pl.`name` LIKE \'%'.pSQL($search).'%\'';
 }
 
 //$query .= ' GROUP BY s.`id_product`';
@@ -137,7 +138,7 @@ if ($search) {
 $queryCount = preg_replace('/SELECT ([a-zA-Z.,` ]+) FROM /', 'SELECT COUNT(*) FROM ', $query);
 $nbProducts = Db::getInstance()->getValue($queryCount);
 
-$res = Db::getInstance()->executeS($query . ' ORDER BY p.`id_product` ASC LIMIT ' . $offset . ', ' . $limit);
+$res = Db::getInstance()->executeS($query.' ORDER BY p.`id_product` ASC LIMIT '.$offset.', '.$limit);
 
 // categories
 $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang, false), 1);
@@ -148,7 +149,7 @@ $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->i
 $context = Context::getContext();
 /** @var LinkCore $link */
 $link = $context->link;
-$employee = new Employee((int)Tools::getValue('id_employee'));
+$employee = new Employee((int) Tools::getValue('id_employee'));
 $context->employee = $employee;
 
 foreach ($res as &$row) {
@@ -174,19 +175,19 @@ foreach ($res as &$row) {
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
-        $row['sync'] = (bool)$row['id_category_ref'];
+        $row['sync'] = (bool) $row['id_category_ref'];
     }
     // only true if category synced with an eBay category
 
     if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-        require_once _PS_MODULE_DIR_ . '/../app/AppKernel.php';
-        $kernel = new AppKernel(_PS_MODE_DEV_ ? 'dev' : 'prod', _PS_MODE_DEV_);
+        require_once _PS_MODULE_DIR_.'/../app/AppKernel.php';
+        $kernel = new AppKernel(_PS_MODE_DEV_?'dev':'prod', _PS_MODE_DEV_);
         $kernel->loadClassCache();
         $kernel->boot();
         $router = $kernel->getContainer()->get('router');
-        $row['link'] = $link->getAdminLink('AdminProducts') . "/" . Tools::getValue('admin_path') . $router->generate('admin_product_form', array('id' => $row['id_product']));
+        $row['link'] = $link->getAdminLink('AdminProducts')."/".Tools::getValue('admin_path').$router->generate('admin_product_form', array('id' => $row['id_product']));
     } else {
-        $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts') . '&id_product=' . (int)$row['id_product'] . '&updateproduct') : $link->getProductLink((int)$row['id_product']));
+        $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $row['id_product'].'&updateproduct') : $link->getProductLink((int) $row['id_product']));
     }
 }
 
@@ -202,4 +203,4 @@ $template_vars = array(
 
 $smarty->assign($template_vars);
 
-echo $ebay->display(realpath(dirname(__FILE__) . '/../'), '/views/templates/hook/table_prestashop_products.tpl');
+echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_prestashop_products.tpl');

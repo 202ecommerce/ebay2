@@ -6,6 +6,7 @@
  */
 .totebay {
   overflow: hidden;
+  /* Popin */
 }
 .totebay .d-b {
   display: block;
@@ -51,12 +52,12 @@
   padding: 8px 10px;
 }
 .totebay .process-icon-check-circle:before {
-  content: "\E86C";
-  font-family: "Material Icons";
+  content: "\f058";
+  font-family: "FontAwesome";
 }
-.totebay .glyphicon-ok:before {
-  content: "\E5CA";
-  font-family: "Material Icons";
+.totebay .glyphicon-ok:before, .totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps li:before {
+  content: "\f00c";
+  font-family: "FontAwesome";
 }
 .totebay .js-popin-help {
   text-decoration: none !important;
@@ -101,6 +102,10 @@
 }
 .totebay .btn [class^='icon-'] + span {
   margin-left: 5px;
+}
+.totebay .btn.btn-hover-danger:hover {
+  background-color: #d5676f !important;
+  border-color: #cd4b55 !important;
 }
 .totebay .panel-info .form-horizontal > div:not(.pull-right):not(.panel-footer),
 .totebay .panel-info .form-horizontal > label,
@@ -313,24 +318,24 @@
 .totebay .table-block__title .button-sync .dropdown-menu {
   list-style-type: none;
   padding: 0;
-  width: 250px;
-  min-width: unset;
+  min-width: 300px;
   right: 0;
   left: auto;
   overflow: hidden;
 }
-.totebay .table-block__title .button-sync .dropdown-menu li + li {
-  border-top: 1px solid #dedede;
-}
-.totebay .table-block__title .button-sync .dropdown-menu li a {
+.totebay .table-block__title .button-sync .dropdown-menu li {
   display: block;
   padding: 0 10px;
   color: #363a41;
   font-size: 13px;
   line-height: 2.5;
+  cursor: pointer;
 }
-.totebay .table-block__title .button-sync .dropdown-menu li a:hover {
-  color: #fff;
+.totebay .table-block__title .button-sync .dropdown-menu li + li {
+  border-top: 1px solid #dedede;
+}
+.totebay .table-block__title .button-sync .dropdown-menu li:hover {
+  background: #f5f5f5;
 }
 .totebay .table-block__search, .totebay .table-block__message {
   display: -webkit-box;
@@ -452,10 +457,6 @@
 .totebay .table-block .table-wrapper .table .action .active i {
   color: #555;
 }
-.totebay .table-block .table-wrapper .table .action .btn-hover-danger:hover {
-  background-color: #d5676f !important;
-  border-color: #cd4b55 !important;
-}
 .totebay .table-block .table-wrapper .table input.categorySync[type="checkbox"] {
   display: none;
 }
@@ -486,6 +487,10 @@
 }
 .totebay #popin-container .form-error {
   border-color: red !important;
+}
+.totebay #popin-container .table input[type="checkbox"] {
+  vertical-align: middle;
+  cursor: pointer;
 }
 .totebay #popin-container .popin {
   min-width: 550px;
@@ -607,20 +612,20 @@
   position: relative;
 }
 .totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .bs-searchbox:before {
-  content: '\E8B6';
+  content: '\f002';
   position: absolute;
-  right: 14px;
+  right: 20px;
   top: 50%;
-  margin-top: -11px;
-  font-size: 22px;
-  font-family: "Material Icons";
+  margin-top: -10px;
+  font-size: 18px;
+  font-family: "FontAwesome";
   line-height: 1;
 }
 .totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .bs-searchbox input:focus {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 20px rgba(102, 175, 233, 0.6) !important;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 20px rgba(102, 175, 233, 0.6) !important;
 }
-.totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .glyphicon-ok {
+.totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .glyphicon-ok, .totebay #popin-container #category_config .first_page_popin .bootstrap-select .dropdown-menu.open .page_config_category.selected ul#last_page_categorie_ps li, .totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps .first_page_popin .bootstrap-select .dropdown-menu.open li {
   margin: 0;
   font-size: 18px;
   line-height: 0.8;
@@ -647,6 +652,18 @@
   position: absolute;
   right: 10px;
   top: 7px;
+}
+.totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps {
+  margin-bottom: 0;
+}
+.totebay #popin-container #category_config .page_config_category.selected ul#last_page_categorie_ps li:before {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -8px;
+  font-size: 16px;
+  line-height: 1;
+  color: #ccc;
 }
 .totebay #popin-container #category_config #last_page_categorie_ps {
   display: block;

@@ -66,13 +66,13 @@
 
   // Additional icons
   .process-icon-check-circle:before{
-    content:"\E86C";
-    font-family: "Material Icons";
+    content:"\f058";
+    font-family: "FontAwesome";
   };
 
   .glyphicon-ok:before {
-    content: "\E5CA";
-    font-family: "Material Icons";
+    content: "\f00c";
+    font-family: "FontAwesome";
   }
 
     // Rewrite styles
@@ -134,6 +134,13 @@
   .btn {
     [class^='icon-'] + span {
       margin-left: 5px;
+    }
+
+    &.btn-hover-danger {
+      &:hover {
+        background-color: #d5676f !important;
+        border-color: #cd4b55 !important;
+      }
     }
   }
 
@@ -398,28 +405,25 @@
         .dropdown-menu {
           list-style-type: none;
           padding: 0;
-
-          width: 250px;
-          min-width: unset;
+          min-width: 300px;
           right: 0;
           left: auto;
           overflow: hidden;
 
           li {
+            display: block;
+            padding: 0 10px;
+            color: #363a41;
+            font-size: 13px;
+            line-height: 2.5;
+            cursor: pointer;
+
             & + li {
               border-top: 1px solid #dedede;
             }
 
-            a {
-              display: block;
-              padding: 0 10px;
-              color: #363a41;
-              font-size: 13px;
-              line-height: 2.5;
-
-              &:hover {
-                color: #fff;
-              }
+            &:hover {
+              background: #f5f5f5;
             }
           }
         }
@@ -575,13 +579,6 @@
               color: #555;
             }
           }
-
-          .btn-hover-danger {
-            &:hover {
-              background-color: #d5676f !important;
-              border-color: #cd4b55 !important;
-            }
-          }
         }
 
         // Status inputs
@@ -616,6 +613,8 @@
     }
   }
 
+
+  /* Popin */
   #popin-container {
 
     .text-danger {
@@ -629,6 +628,13 @@
 
     .form-error {
       border-color: red !important;
+    }
+
+    .table {
+      input[type="checkbox"] {
+        vertical-align: middle;
+        cursor: pointer;
+      }
     }
 
     .popin {
@@ -785,13 +791,13 @@
               position: relative;
 
               &:before {
-                content: '\E8B6';
+                content: '\f002';
                 position: absolute;
-                right: 14px;
+                right: 20px;
                 top: 50%;
-                margin-top: -11px;
-                font-size: 22px;
-                font-family: "Material Icons";
+                margin-top: -10px;
+                font-size: 18px;
+                font-family: "FontAwesome";
                 line-height: 1;
               }
 
@@ -854,6 +860,25 @@
             position: absolute;
             right: 10px;
             top: 7px;
+          }
+        }
+      }
+
+      .page_config_category.selected {
+        ul#last_page_categorie_ps {
+          margin-bottom: 0;
+
+          li {
+            @extend .glyphicon-ok;
+            &:before {
+              position: absolute;
+              top: 50%;
+              right: 10px;
+              margin-top: -8px;
+              font-size: 16px;
+              line-height: 1;
+              color: #ccc;
+            }
           }
         }
       }
