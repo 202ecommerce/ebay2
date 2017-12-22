@@ -80,6 +80,7 @@
     'Reference': "{l s='Reference' mod='ebay'}",
     'EAN': "{l s='EAN' mod='ebay'}",
     'UPC': "{l s='UPC' mod='ebay'}",
+    'Select a category': "{l s='Select a category' mod='ebay'}",
     'message_multi_1': "{l s='This item specific is multi-value on eBay, limited to ' mod='ebay'}",
     'message_multi_2': "{l s=' values. In PrestaShop attribute value, you can use , (coma) and ; (semicolon) to seperate values. For example : \'value 1 , value 2 , value 3 \'' mod='ebay'}",
     {rdelim};
@@ -389,7 +390,7 @@
           if (data.percent.type == '%') {
             data.percent.type = "percent";
           }
-          $('select[name="impact_prix[sing]"]').children('option[value="' + data.percent.sign + '"]').attr('selected', 'selected');
+          $('select#priceImpactSign').children('option[value="' + data.percent.sign + '"]').attr('selected', 'selected');
           $('select[name="impact_prix[type]"]').children('option[value="' + data.percent.type + '"]').attr('selected', 'selected');
           $('#impact_prix').val(data.percent.value);
           $('.category_ebay').html(data.categoryConfigList.var);
@@ -447,7 +448,7 @@
         } else {
           count_specific_values = '';
         }
-        var tds = '<td>' + '<select placeholder="Select a category" name="specific[' + specific.id + ']">';
+        var tds = '<td>' + '<select placeholder="' + l['Select a category'] + '" name="specific[' + specific.id + ']">';
 
         if (!parseInt(specific.required)) {
           tds += '<option value=""></option>';
@@ -843,8 +844,8 @@
               {*</div>*}
             {*</div>*}
             <select class="selectpicker cat_list" required multiple data-live-search="true"
-                    title="Select a category"
-                    data-live-search-placeholder="Search a category">
+                    title="{l s='Select a category' mod='ebay'}"
+                    data-live-search-placeholder="{l s='Search a category' mod='ebay'}">
             </select>
             <span class="text-danger text-error" style="display: none;">{l s='You need to select at least one category.' mod='ebay'}</span>
           </div>
@@ -902,7 +903,7 @@
           </label>
           <div class="col-xs-12 col-md-7">
             <div class="input-group">
-              <select name="impact_prix[sign]" class="ebay_select">
+              <select name="impact_prix[sign]" id="priceImpactSign" class="ebay_select">
                 <option value="+">+</option>
                 <option value="-">-</option>
               </select>
@@ -1097,7 +1098,7 @@
     <div style="display: none">
       <select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px;"
               onchange="changeCategoryMatch(1,0);">
-        <option value="0">Select a category</option>
+        <option value="0">{l s='Select a category' mod='ebay'}</option>
         {foreach from=$ebayCategories item=ebayCategory}
           <option value="{$ebayCategory.id_ebay_category}">{$ebayCategory.name}</option>
         {/foreach}

@@ -293,8 +293,10 @@ class EbaySynchronizer
         }
 
 
-
-
+// Price Update
+        if (isset($p['noPriceUpdate'])) {
+            $data['noPriceUpdate'] = $p['noPriceUpdate'];
+        }
 
         $clean_percent = $ebay_category->getCleanPercent();
         // Save percent and price discount
@@ -376,19 +378,19 @@ class EbaySynchronizer
         foreach ($combinations as $combinaison) {
             $context_correct_shop = $context->cloneContext();
             $context_correct_shop->shop = new Shop($ebay_profile->id_shop);
-
+            $context = Context::getContext()->cloneContext();
             $specific_price_output = null;
+            $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context);
 
-            $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
-
-            $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
+            $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
 
 
             // convert price to destination currency
             $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
             $price *= $currency->conversion_rate;
             $price_original *= $currency->conversion_rate;
-
+            $price = round($price, 2);
+            $price_original = round($price_original, 2);
             $variation = array(
                 'id_attribute' => $combinaison['id_product_attribute'],
                 'reference' => $combinaison['reference'],
@@ -408,16 +410,18 @@ class EbaySynchronizer
             $quantity = (int) $quantity > $limitEbayStock ? $limitEbayStock : $quantity;
             $variation['quantity'] = $quantity;
 
-
-            if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $ebay_category->getPercent())) {
-                $price *= (1 + ($ebay_category->getPercent() / 100));
+            preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $ebay_category->getPercent(), $temp);
+            if ($temp[3] != '') {
+                $price *= (1 + ($temp[1].$temp[2] / 100));
+                $price_original *= (1 + ($temp[1].$temp[2] / 100));
             } else {
-                $price += $ebay_category->getPercent();
+                $price +=  $temp[1].$temp[2];
+                $price_original +=  $temp[1].$temp[2];
             }
 
-            $variation['price'] = round($price, 2);
+            $variation['price'] = $price;
 
-            if ($ebay_category->getPercent() < 0) {
+            if ($temp[2] < 0) {
                 $variation['price_original'] = round($price_original, 2);
             } elseif ($price_original > $price) {
                 $variation['price_original'] = round($price_original, 2);
@@ -634,12 +638,15 @@ class EbaySynchronizer
 
         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
         if ($temp[3] != '') {
-            $price *= (1 + ($temp[2] / 100));
+            $price *= (1 + ($temp[1].$temp[2] / 100));
+            $price_original *= (1 + ($temp[1].$temp[2] / 100));
         } else {
-            $price += $percent;
+            $price += $temp[1].$temp[2];
+            $price_original += $temp[1].$temp[2];
         }
 
         $price = round($price, 2);
+        $price_original = round($price_original, 2);
 
         return array($price, $price_original);
     }
