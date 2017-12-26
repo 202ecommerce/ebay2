@@ -87,6 +87,7 @@
 				<ul class="nav nav-pills log-menu menuTab ebay_hidden " role="tablist">
 					<li role="presentation" id="menuTab17" class="menuTabButton"><a href="#">1. {l s='Jobs to be done' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab18" class="menuTabButton"><a href="#">2. {l s='Workers' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab19" class="menuTabButton"><a href="#">3. {l s='Api Logs' mod='ebay'}</a></li>
 				</ul>
 
 
@@ -139,6 +140,7 @@
 					<div id="menuTab106Sheet" class="tabItem tab-pane"><div class="panel">{$ebayProductsExcluTab}</div></div>
 					<div id="menuTab17Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogJobs}</div></div>
 					<div id="menuTab18Sheet" class="tabItem tab-pane"><div class="panel">{$ebayLogWorkers}</div></div>
+					<div id="menuTab19Sheet" class="tabItem tab-pane"><div class="panel">{$ebayApiLogs}</div></div>
 				</div>
 
 				{*

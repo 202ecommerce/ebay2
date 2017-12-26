@@ -205,7 +205,7 @@ class EbayRequest
      * @param bool $shoppingEndPoint
      * @return bool|SimpleXMLElement
      */
-    private function _makeRequest($apiCall, $vars = array(), $shoppingEndPoint = false, $lifeTimeCache = 0)
+    private function _makeRequest($apiCall, $vars = array(), $shoppingEndPoint = false, $lifeTimeCache = 0, $data = false)
     {
        
         $request = null;
@@ -283,21 +283,30 @@ class EbayRequest
 
         $result = false;
         // Send the request and get response
-        if (stristr($response, 'HTTP 404') || !$response) {
-            $this->error = 'Error sending ' . $apiCall . ' request';
 
-            return $result;
-        }
         if ($shoppingEndPoint === 'post-order') {
             $result = $response;
         } else {
             $result = simplexml_load_string($response);
         }
+        if (stristr($response, 'HTTP 404') || !$response) {
+            $this->error = 'Error sending ' . $apiCall . ' request';
+            $result = false;
+            return $result;
+        }
+        $status = 'KO';
+        if ($result->Ack != 'Failure') {
+            $status = 'OK';
+        }
+
+        $this->_logApiCall($apiCall, $data, $request, $response, $status);
+
 
         if ($lifeTimeCache && $result->Ack != 'Failure') {
             $date = new DateTime();
             $this->storeRequestToCache($apiCall, $result, $date->modify('+ '.$lifeTimeCache.' hours'));
         }
+
         unset($vars);
         return $result;
     }
@@ -756,9 +765,8 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('AddFixedPriceItem', $vars);
+        $response = $this->_makeRequest('AddFixedPriceItem', $vars, false, 0, $data);
 
-        $this->_logApiCall('addFixedPriceItem', $vars, $response, $data['id_product']);
 
         if ($response === false) {
             return false;
@@ -861,7 +869,7 @@ class EbayRequest
                 ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
-                $this->_logApiCall('addSellerProfile', $vars, $response, $data['id_product']);
+
 
                 if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
                     if ($response->errorMessage->error->errorId == '178149') {
@@ -916,7 +924,7 @@ class EbayRequest
                 ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
-                $this->_logApiCall('setSellerProfile', $vars, $response, $data['id_product']);
+
             }
 
             DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
@@ -1021,8 +1029,35 @@ class EbayRequest
         return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetShippingDetails.tpl');
     }
 
-    private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null)
+    private function _logApiCall($type, $data_sent, $request, $response, $status)
     {
+        $typeRequestToLOgs = array('addFixedPriceItem', 'addFixedPriceItemMultiSku', 'ReviseFixedPriceItem', 'ReviseFixedPriceItemStock', 'endFixedPriceItem');
+        ebay::debug(in_array($type, $typeRequestToLOgs));
+        ebay::debug($type);
+        if (!$this->write_api_logs || !in_array($type, $typeRequestToLOgs)) {
+            return;
+        }
+        ebay::debug('ici');
+        $log = new EbayApiLog();
+
+        $log->id_ebay_profile = $this->ebay_profile->id;
+        $log->type = $type;
+
+        $log->data_sent = Tools::jsonEncode($data_sent);
+        $log->request = $request;
+        $log->response = $response;
+
+        if ($data_sent && isset($data_sent['id_product'])) {
+            $log->id_product = (int)$data_sent['id_product'];
+        }
+        if ($data_sent && isset($data_sent['id_product_attribute'])) {
+            $log->id_product_attribute = (int)$data_sent['id_product_attribute'];
+        }
+
+        $log->status = $status;
+
+        return $log->save();
+
     }
 
     /**
@@ -1132,8 +1167,8 @@ class EbayRequest
             $vars['price_original'] = $data['price_original'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
-        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars, false, 0, $data);
+
 
         if ($response === false) {
             return false;
@@ -1147,16 +1182,15 @@ class EbayRequest
         if (!$ebay_item_id) {
             return false;
         }
-
+        $data = array();
         $response_vars = array('item_id' => $ebay_item_id);
 
         if ($id_product) {
             $response_vars['sku'] = 'prestashop-' . $id_product;
+            $data['id_product'] = $id_product;
         }
 
-        $response = $this->_makeRequest('EndFixedPriceItem', $response_vars);
-
-        $this->_logApiCall('endFixedPriceItem', $response_vars, $response, $id_product);
+        $response = $this->_makeRequest('EndFixedPriceItem', $response_vars, false, 0, $data);
 
         if ($response === false) {
             return false;
@@ -1196,8 +1230,8 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars);
-        $this->_logApiCall('ReviseFixedPriceItemStock', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars, false, 0, $data);
+
 
         if ($response === false) {
             return false;
@@ -1240,9 +1274,7 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars);
-
-        $this->_logApiCall('ReviseFixedPriceItemStock', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars, false, 0, $data);
 
         if ($response === false) {
             return false;
@@ -1302,9 +1334,9 @@ class EbayRequest
         }
 
         // Send the request and get response
-        $response = $this->_makeRequest('AddFixedPriceItem', $vars);
+        $response = $this->_makeRequest('AddFixedPriceItem', $vars, false, 0, $data);
 
-        $this->_logApiCall('addFixedPriceItemMultiSku', $vars, $response);
+
 
         if ($response === false) {
             return false;
@@ -1476,9 +1508,9 @@ class EbayRequest
         }
 
 
-        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
+        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars, false, 0, $data);
 
-        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+
 
         if ($response === false) {
             return false;
@@ -1585,7 +1617,7 @@ class EbayRequest
 
         $response = $this->_makeRequest('CompleteSale', $vars);
 
-        $this->_logApiCall('completeSale', $vars, $response);
+
 
         return ($response === false) ? false : $this->_checkForErrors($response);
     }
@@ -1606,7 +1638,7 @@ class EbayRequest
         );
         $response = $this->_makeRequest('checkCancelation', $vars, 'post-order');
 
-        $this->_logApiCall('checkCancelation', $vars, $response);
+
         return ($response === false) ? false : $this->_checkForErrors($response);
     }
 
@@ -1636,7 +1668,7 @@ class EbayRequest
 
         $response = $this->_makeRequest('CompleteSale', $vars);
         $this->context = 'ORDER_BACKOFFICE';
-        $this->_logApiCall('completeSale', $vars, $response);
+
 
         return ($response === false) ? false : $this->_checkForErrors($response);
     }

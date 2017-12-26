@@ -39,8 +39,10 @@ class EbayDbValidator
             'context' => array('type' => 'varchar', 'length' => 40),
             'data_sent' => array('type' => 'text', 'length' => null),
             'response' => array('type' => 'text', 'length' => null),
+            'request' => array('type' => 'text', 'length' => null),
             'id_product' => array('type' => 'int', 'length' => 11),
-            'id_order' => array('type' => 'int', 'length' => 11),
+            'id_product_attribute' => array('type' => 'int', 'length' => 11),
+            'status' => array('type' => 'int', 'length' => 11),
             'date_add' => array('type' => 'datetime', 'length' => 11),
         ),
 

@@ -90,6 +90,7 @@ $classes_to_load = array(
     'tabs/EbayProductsExcluTab',
     'tabs/EbayLogJobsTab',
     'tabs/EbayLogWorkersTab',
+    'tabs/EbayApiLogsTab',
     'EbayAlert',
     'EbayOrderErrors',
     'EbayDbValidator',
@@ -1982,6 +1983,7 @@ class Ebay extends Module
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
+        $apiLogs = new EbayApiLogsTab($this, $this->smarty, $this->context);
         // test if everything is green
         if ($this->ebay_profile && $this->ebay_profile->isAllSettingsConfigured()) {
             if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
@@ -2043,6 +2045,7 @@ class Ebay extends Module
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
             'ebayLogJobs' => $log_jobs->getContent($this->ebay_profile->id),
             'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
+            'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id),
             );
 
 
