@@ -721,7 +721,7 @@ class EbayRequest
             'description' => $data['description'],
             'category_id' => $data['categoryId'],
             'condition_id' => $data['condition'],
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'start_price' => $data['price'],
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'country_currency' => $currency->iso_code,
@@ -1098,7 +1098,7 @@ class EbayRequest
             'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'quantity' => $data['quantity'],
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'category_id' => $data['categoryId'],
             'start_price' => $data['price'],
             'resynchronize' => 1,
@@ -1179,7 +1179,7 @@ class EbayRequest
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'category_id' => $data['categoryId'],
@@ -1225,7 +1225,7 @@ class EbayRequest
             'condition_id' => (isset($data['condition']))?$data['condition']:null,
             'listing_type' => 'FixedPriceItem',
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -1279,7 +1279,7 @@ class EbayRequest
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'variations' => $this->_getVariations($data),
             'product_listing_details' => $this->_getProductListingDetails($data),
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
@@ -1384,11 +1384,11 @@ class EbayRequest
                 }
             }
         }
-
+      
         $vars = array(
             'variations' => isset($data['variations']) ? $data['variations'] : array(),
             'variations_pictures' => $variation_pictures,
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'variation_specifics_set' => $variation_specifics_set,
             'ean_not_applicable' => 1,
             'synchronize_ean' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
@@ -1474,6 +1474,7 @@ class EbayRequest
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
+
 
         $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
 

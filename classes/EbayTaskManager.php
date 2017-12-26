@@ -337,7 +337,6 @@ class EbayTaskManager
 
     public static function getTaskByErrorCode($error_code, $id_ebay_profile)
     {
-        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` ='.$error_code.' AND `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
-
+        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` ='.pSQL($error_code).' AND `id_ebay_profile` = '.(int)$id_ebay_profile.' ORDER BY `date_add`');
     }
 }

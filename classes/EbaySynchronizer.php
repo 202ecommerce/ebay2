@@ -293,11 +293,6 @@ class EbaySynchronizer
         }
 
 
-// Price Update
-        if (isset($p['noPriceUpdate'])) {
-            $data['noPriceUpdate'] = $p['noPriceUpdate'];
-        }
-
         $clean_percent = $ebay_category->getCleanPercent();
         // Save percent and price discount
         if ($clean_percent < 0) {
@@ -310,7 +305,6 @@ class EbaySynchronizer
         if (isset($data['price_original'])) {
             $data['price_percent'] = round(($price_original - $price) / $price_original * 100.0);
         }
-
         $data['description'] = EbaySynchronizer::__getEbayDescription($product, $ebay_profile, $id_lang);
         
         if (count($data['variations'])) {
@@ -384,7 +378,6 @@ class EbaySynchronizer
 
             $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
 
-
             // convert price to destination currency
             $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
             $price *= $currency->conversion_rate;
@@ -430,6 +423,7 @@ class EbaySynchronizer
             if (isset($variation['price_original'])) {
                 $variation['price_percent'] = round(($price_original - $price) / $price_original * 100.0);
             }
+
             if ($id_product_atributte == 0) {
                 $variation_key = $combinaison['id_product'] . '-' . $combinaison['id_product_attribute'] . '_' . $ebay_profile->id;
                 $variations[$variation_key] = $variation;
