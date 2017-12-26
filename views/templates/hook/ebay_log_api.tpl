@@ -61,7 +61,7 @@
                             <div class="action">
                                 <a href="#" class="btn-hover-danger btn btn-sm btn-default view-api-log"
                                    title="{l s='View' mod='ebay'}" data-toggle="tooltip">
-                                    <span class="icon-view"></span>
+                                    <span class="icon-file-text"></span>
                                 </a>
                                 <a href="#" class="btn-hover-danger btn btn-sm btn-default delete-api-log"
                                    title="{l s='delete' mod='ebay'}" data-toggle="tooltip">
@@ -108,7 +108,7 @@
         <div class="panel-heading">
             <i class="icon-trash"></i> {l s='Log Details' mod='ebay'}
         </div>
-        <div style=""overflow: auto;>
+        <div style="overflow: auto;">
             <span class="h4">{l s='Date :' mod='ebay'}</span>
             <span id="api_request_date"></span></br>
             <span class="h4">{l s='Status :' mod='ebay'}</span>
