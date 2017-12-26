@@ -241,7 +241,7 @@
                 $('#api_request_date').html(data.date_add);
                 $('#api_request_status').html(data.status);
                 $('#api_request').text(data.request);
-                $('#api_response').append(data.response);
+                $('#api_response').text(data.response);
                 $('#popin-api-log-dateils').show();
             }
         })
