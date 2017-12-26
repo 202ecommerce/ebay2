@@ -283,25 +283,23 @@ class EbayRequest
 
         $result = false;
         // Send the request and get response
+        if (stristr($response, 'HTTP 404') || !$response) {
+            $this->error = 'Error sending ' . $apiCall . ' request';
 
+            return $result;
+        }
         if ($shoppingEndPoint === 'post-order') {
             $result = $response;
         } else {
             $result = simplexml_load_string($response);
         }
-        if (stristr($response, 'HTTP 404') || !$response) {
-            $this->error = 'Error sending ' . $apiCall . ' request';
-            $result = false;
-            return $result;
-        }
+        
         $status = 'KO';
         if ($result->Ack != 'Failure') {
             $status = 'OK';
         }
 
         $this->_logApiCall($apiCall, $data, $request, $response, $status);
-
-
         if ($lifeTimeCache && $result->Ack != 'Failure') {
             $date = new DateTime();
             $this->storeRequestToCache($apiCall, $result, $date->modify('+ '.$lifeTimeCache.' hours'));
