@@ -39,7 +39,17 @@ $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
 $length = Tools::getValue('length') ? Tools::getValue('length') : 20;
 $ebay = new Ebay();
 $context = Context::getContext();
+
+$search = array(
+    'id_product' =>  Tools::getValue('id_prod'),
+    'id_product_attribute' =>  Tools::getValue('id_prod_attr'),
+    'status' => Tools::getValue('status'),
+    'type' => Tools::getValue('type'),
+    'date' => Tools::getValue('date'),
+);
+
+
 $logApiTab = new EbayApiLogsTab($ebay, $context->smarty, $context);
-$response = $logApiTab->getContent($id_ebay_profile, $page_current, $length);
+$response = $logApiTab->getContent($id_ebay_profile, $page_current, $length, $search);
 
 die($response);

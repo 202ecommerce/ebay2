@@ -132,4 +132,36 @@ class EbayApiLog extends ObjectModel
 			WHERE id_ebay_profile = '.(int) $id_ebay_profile.'
 			ORDER BY `id_ebay_api_log` DESC');
     }
+
+    public static function getApilogs($id_ebay_profile, $page_current = false, $length = false, $search = false)
+    {
+        if ($page_current && $length) {
+            $limit = (int) $length;
+            $offset = $limit * ( (int) $page_current - 1 );
+            $query = "SELECT * FROM "._DB_PREFIX_."ebay_api_log 
+                       WHERE id_ebay_profile = ".(int) $id_ebay_profile;
+            if ($search['id_product']) {
+                $query .= " AND id_product LIKE '%".(int) $search['id_product']."%'";
+            }
+            if ($search['id_product_attribute']) {
+                $query .= " AND id_product_attribute LIKE '%".(int) $search['id_product_attribute']."%'";
+            }
+            if ($search['status']) {
+                $query .= " AND status LIKE '%".pSQL($search['status'])."%'";
+            }
+            if ($search['type']) {
+                $query .= " AND type LIKE '%".pSQL($search['type'])."%'";
+            }
+            if ($search['date']) {
+                $query .= " AND date_add LIKE '%".pSQL($search['date'])."%'";
+            }
+
+            $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
+            //var_dump($query); die();
+            return DB::getInstance()->ExecuteS($query);
+        } else {
+            $sql_select = "SELECT * FROM `"._DB_PREFIX_."ebay_api_log` WHERE `id_ebay_profile` = ".pSQL($id_ebay_profile)." ORDER BY `date_add`";
+            return DB::getInstance()->executeS($sql_select);
+        }
+    }
 }

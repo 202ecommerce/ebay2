@@ -293,7 +293,7 @@ class EbayRequest
         } else {
             $result = simplexml_load_string($response);
         }
-        
+
         $status = 'KO';
         if ($result->Ack != 'Failure') {
             $status = 'OK';
@@ -922,7 +922,6 @@ class EbayRequest
                 ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
-
             }
 
             DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
@@ -1029,13 +1028,12 @@ class EbayRequest
 
     private function _logApiCall($type, $data_sent, $request, $response, $status)
     {
-        $typeRequestToLOgs = array('addFixedPriceItem', 'addFixedPriceItemMultiSku', 'ReviseFixedPriceItem', 'ReviseFixedPriceItemStock', 'endFixedPriceItem');
-        ebay::debug(in_array($type, $typeRequestToLOgs));
-        ebay::debug($type);
+        $typeRequestToLOgs = array('AddFixedPriceItem', 'AddFixedPriceItemMultiSku', 'ReviseFixedPriceItem', 'ReviseFixedPriceItemStock', 'EndFixedPriceItem');
+
         if (!$this->write_api_logs || !in_array($type, $typeRequestToLOgs)) {
             return;
         }
-        ebay::debug('ici');
+
         $log = new EbayApiLog();
 
         $log->id_ebay_profile = $this->ebay_profile->id;
@@ -1055,7 +1053,6 @@ class EbayRequest
         $log->status = $status;
 
         return $log->save();
-
     }
 
     /**

@@ -27,9 +27,28 @@
 
 <div id="contentLogApiTab" class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Api Logs' mod='ebay'}
-        <button class="loadListApiLog button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+       <button class="loadListApiLog button-refresh btn btn-default"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
+    <div class="table-block__search table-block__holder">
+        <input type="text" class="form-control" id="id_prod_search_logs" value="{$search.id_product}"
+               placeholder="{l s='by ID product' mod='ebay'}"
+               title="{l s='by ID product' mod='ebay'}" data-toggle="tooltip">
+        <input type="text" class="form-control" id="id_prod_atrr_search_logs" value="{$search.id_product_attribute}"
+               placeholder="{l s='by ID product attribute' mod='ebay'}"
+               title="{l s='by ID product attribute' mod='ebay'}" data-toggle="tooltip">
+        <input type="text" class="form-control" id="status_search_logs" value="{$search.status}"
+               placeholder="{l s='by Status' mod='ebay'}"
+               title="{l s='by Status' mod='ebay'}" data-toggle="tooltip">
+        <input type="text" class="form-control" id="type_search_logs"  value="{$search.type}"
+               placeholder="{l s='by Type' mod='ebay'}"
+               title="{l s='by Type' mod='ebay'}" data-toggle="tooltip">
+        <input type="date" class="form-control" id="date_search_logs" value="{$search.date}"
+               placeholder="{l s='by Date' mod='ebay'}"
+               title="{l s='by Date' mod='ebay'}" data-toggle="tooltip">
+        <button  id="searchBtnLogApi" class="button-apply btn btn-info"><span class="icon-search"></span> {l s='Apply' mod='ebay'}</button>
+        <button class="button-reset btn btn-default" id="reset_apilogs"><span class="icon-close"></span> {l s='Reset' mod='ebay'}</button>
 
+    </div>
     <div class="table-wrapper">
         <table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
             <thead>
@@ -103,7 +122,7 @@
     </div>
 </div>
 
-<div id="popin-api-log-dateils" class="popin popin-sm" style="display: none;position: fixed;z-index: 1;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
+<div id="popin-api-log-dateils" class="popin popin-sm" style="display: none;position: fixed;z-index: 2;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);">
     <div class="panel" style=" background-color: #fefefe;padding: 20px;border: 1px solid #888;width: 80%;margin: 30% auto;">
         <div class="panel-heading">
             <i class="icon-trash"></i> {l s='Log Details' mod='ebay'}
@@ -246,6 +265,65 @@
             }
         })
     });
+
+    $('#searchBtnLogApi').click(search);
+    $('#reset_apilogs').click(function(){
+            $.ajax({
+                type: "POST",
+                url: module_dir+'ebay/ajax/paginationLogApiTab.php',
+                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=1",
+                beforeSend : function(){
+                    $('#contentLogApiTab').empty();
+                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                    $('#contentLogApiTab').append(html);
+                },
+                success: function(data)
+                {
+                    $('#contentLogApiTab').parent().html(data);
+                }
+            });
+    }
+    );
+    function search() {
+        var id_prod;
+        var id_prod_attr;
+        var status;
+        var type;
+        var date;
+
+        id_prod = $('#id_prod_search_logs').attr('value');
+        id_prod_attr = $('#id_prod_atrr_search_logs').attr('value');
+        status = $('#status_search_logs').attr('value');
+        type = $('#type_search_logs').attr('value');
+        date = $('#date_search_logs').attr('value');
+
+        var data = {
+            token: ebay_token,
+            id_shop: id_shop,
+            page: 1,
+            id_prod: id_prod,
+            id_prod_attr: id_prod_attr,
+            status: status,
+            type: type,
+            date: date,
+            profile: id_ebay_profile,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: module_dir+'ebay/ajax/paginationLogApiTab.php',
+            data: data,
+            beforeSend : function(){
+                $('#contentLogApiTab').empty();
+                var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                $('#contentLogApiTab').append(html);
+            },
+            success: function(data)
+            {
+                $('#contentLogApiTab').parent().html(data);
+            }
+        });
+    }
 
 </script>
 {/literal}

@@ -29,7 +29,7 @@ require_once dirname(__FILE__).'/EbayTab.php';
 
 class EbayApiLogsTab extends EbayTab
 {
-    public function getContent($id_profile, $page_current = 1, $length = 20)
+    public function getContent($id_profile, $page_current = 1, $length = 20, $search = false)
     {
         $table = _DB_PREFIX_.'ebay_api_log';
         $sql_count_logs = "SELECT COUNT(*) as `count` FROM `$table` WHERE `id_ebay_profile` = $id_profile";
@@ -54,9 +54,16 @@ class EbayApiLogsTab extends EbayTab
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
         $limit = $length;
         $offset = (int) $length * ( (int) $page_current - 1 );
+        $this->smarty->assign(array('search' => array(
+            'id_product' =>  isset($search['id_product'])?$search['id_product']:'',
+            'id_product_attribute' =>  isset($search['id_product_attribute'])?$search['id_product_attribute']:'',
+            'status' => isset($search['status'])?$search['status']:'',
+            'type' => isset($search['type'])?$search['type']:'',
+            'date' => isset($search['date'])?$search['date']:'',
+        )));
 
-        $sql_select = "SELECT * FROM `".pSQL($table)."` WHERE `id_ebay_profile` = ".pSQL($id_profile)." ORDER BY `date_add` LIMIT ".pSQL($limit)." OFFSET ".pSQL($offset);
-        $logs = DB::getInstance()->executeS($sql_select);
+
+        $logs = EbayApiLog::getApilogs($id_profile, $page_current, $length, $search);
         $this->smarty->assign(array('logs' => $logs));
         $this->smarty->assign(array(
             'prev_page'               => $prev_page,

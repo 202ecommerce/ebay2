@@ -233,6 +233,7 @@
         });
         $('.nb_annonces').html(nb_annonces_to_job);
         $('#form_variations_to_sync_final').html(nb_annonces_variation_to_job);
+
         $('#last_page_categorie_ps').html('').append($('.category_ps_list').children().clone());
         $('#last_page_categorie_ebay').html('').append($('.category_ebay').children().find('option:selected').last().text());
         $('#last_page_categorie_boutique').html('').append($('select[name="store_category"]').find('option:selected').text());
@@ -267,6 +268,7 @@
       $('.js-save1-popin').hide();
 
       courant_page.parent().find('div#' + new_id).addClass('selected').show();
+
     });
 
     $('.js-save-category').on('click', function (event) {
