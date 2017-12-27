@@ -353,7 +353,6 @@ class EbayRequest
 
     private function _buildHeadersPostOrder()
     {
-
         $headers = array(
 
             // Regulates versioning of the XML interface for the API
@@ -393,7 +392,6 @@ class EbayRequest
 
     public function fetchToken($username, $session)
     {
-
         $response = $this->_makeRequest('FetchToken', array(
             'username' => $username,
             'session_id' => $session,
@@ -414,7 +412,6 @@ class EbayRequest
      */
     public function getUserProfile($username)
     {
-
         if (empty(self::$userProfileCache)) {
             //Change API URL
             $apiUrl = $this->apiUrl;
