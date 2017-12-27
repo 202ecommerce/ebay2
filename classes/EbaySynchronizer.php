@@ -405,7 +405,7 @@ class EbaySynchronizer
 
             preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $ebay_category->getPercent(), $temp);
             if ($temp[3] != '') {
-                if($temp[1] == "+") {
+                if ($temp[1] == "+") {
                     $price *= (1 + ((int) $temp[2] / 100));
                     $price_original *= (1 + ((int) $temp[2] / 100));
                 } else {
@@ -413,7 +413,7 @@ class EbaySynchronizer
                     $price_original *= (1 - ((int) $temp[2] / 100));
                 }
             } else {
-                if($temp[1] == "+") {
+                if ($temp[1] == "+") {
                     $price +=  (int) $temp[2];
                     $price_original +=  (int) $temp[2];
                 } else {
@@ -642,7 +642,7 @@ class EbaySynchronizer
 
         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
         if ($temp[3] != '') {
-            if($temp[1] == "+") {
+            if ($temp[1] == "+") {
                 $price *= (1 + ((int) $temp[2] / 100));
                 $price_original *= (1 + ((int) $temp[2] / 100));
             } else {
@@ -650,7 +650,7 @@ class EbaySynchronizer
                 $price_original *= (1 - ((int) $temp[2] / 100));
             }
         } else {
-            if($temp[1] == "+") {
+            if ($temp[1] == "+") {
                 $price +=  (int) $temp[2];
                 $price_original +=  (int) $temp[2];
             } else {
