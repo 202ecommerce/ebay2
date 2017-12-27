@@ -406,25 +406,25 @@ class EbaySynchronizer
             preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $ebay_category->getPercent(), $temp);
             if ($temp[3] != '') {
                 if($temp[1] == "+") {
-                    $price *= (1 + ($temp[2] / 100));
-                    $price_original *= (1 + ($temp[2] / 100));
+                    $price *= (1 + ((int) $temp[2] / 100));
+                    $price_original *= (1 + ((int) $temp[2] / 100));
                 } else {
-                    $price *= (1 - ($temp[2] / 100));
-                    $price_original *= (1 - ($temp[2] / 100));
+                    $price *= (1 - ((int) $temp[2] / 100));
+                    $price_original *= (1 - ((int) $temp[2] / 100));
                 }
             } else {
                 if($temp[1] == "+") {
-                    $price +=  $temp[2];
-                    $price_original +=  $temp[2];
+                    $price +=  (int) $temp[2];
+                    $price_original +=  (int) $temp[2];
                 } else {
-                    $price -=  $temp[2];
-                    $price_original -=  $temp[2];
+                    $price -=  (int) $temp[2];
+                    $price_original -=  (int) $temp[2];
                 }
             }
 
             $variation['price'] = $price;
 
-            if ($temp[2] < 0) {
+            if ((int) $temp[2] < 0) {
                 $variation['price_original'] = round($price_original, 2);
             } elseif ($price_original > $price) {
                 $variation['price_original'] = round($price_original, 2);
@@ -643,19 +643,19 @@ class EbaySynchronizer
         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
         if ($temp[3] != '') {
             if($temp[1] == "+") {
-                $price *= (1 + ($temp[2] / 100));
-                $price_original *= (1 + ($temp[2] / 100));
+                $price *= (1 + ((int) $temp[2] / 100));
+                $price_original *= (1 + ((int) $temp[2] / 100));
             } else {
-                $price *= (1 - ($temp[2] / 100));
-                $price_original *= (1 - ($temp[2] / 100));
+                $price *= (1 - ((int) $temp[2] / 100));
+                $price_original *= (1 - ((int) $temp[2] / 100));
             }
         } else {
             if($temp[1] == "+") {
-                $price +=  $temp[2];
-                $price_original +=  $temp[2];
+                $price +=  (int) $temp[2];
+                $price_original +=  (int) $temp[2];
             } else {
-                $price -=  $temp[2];
-                $price_original -=  $temp[2];
+                $price -=  (int) $temp[2];
+                $price_original -=  (int) $temp[2];
             }
         }
 
