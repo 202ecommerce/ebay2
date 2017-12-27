@@ -24,26 +24,12 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS')) {
-    define('TMP_DS', DIRECTORY_SEPARATOR);
+/**
+ * @param Ebay $module
+ * @return bool
+ */
+function upgrade_module_2_0_7($module)
+{
+    $module->installTabs();
+    return true;
 }
-
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR : INVALID TOKEN');
-}
-$ids_tasks = Tools::getValue('ids_tasks');
-if ($ids_tasks == 'all') {
-    if (Tools::getValue('type') == 'work') {
-        DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE `locked` != 0");
-    } else {
-        DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager");
-    }
-} else {
-    $ids_tasks = pSQL(implode(', ', $ids_tasks));
-    DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE id IN ($ids_tasks)");
-}
-
-die();

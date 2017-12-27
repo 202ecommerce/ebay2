@@ -101,6 +101,7 @@ $classes_to_load = array(
     'DbEbay',
 );
 
+
 foreach ($classes_to_load as $classname) {
     if (file_exists(dirname(__FILE__).'/classes/'.$classname.'.php')) {
         require_once dirname(__FILE__).'/classes/'.$classname.'.php';
@@ -139,7 +140,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.6';
+        $this->version = '2.0.7';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -355,6 +356,45 @@ class Ebay extends Module
         EbayOrderErrors::install();
         EbayKb::install();
 
+        $this->installTabs();
+
+        return true;
+    }
+
+    public function installTabs()
+    {
+        $tabs_to_load = array(
+            'AdminEbayApiLog',
+        );
+        foreach ($tabs_to_load as $tab_name) {
+            $tab = new Tab();
+            $tab->module = $this->name;
+            $tab->active = 0;
+            $tab->class_name = $tab_name;  //AdminCustomProducts e.g.
+            $tab->id_parent = Tab::getIdFromClassName($this->name);
+
+            foreach (Language::getLanguages(true) as $lang)
+            {
+                $tab->name[$lang['id_lang']] = $tab_name;
+            }
+
+            $tab->add();
+        }
+        return true;
+    }
+
+    public function uninstallTabs()
+    {
+        $tabs_to_load = array(
+            'AdminEbayApiLog',
+        );
+        foreach ($tabs_to_load as $tab_name) {
+            $tab  = Tab::getInstanceFromClassName($tab_name);
+
+            if (Validate::isLoadedObject($tab)) {
+                $tab->delete();
+            }
+        }
         return true;
     }
 

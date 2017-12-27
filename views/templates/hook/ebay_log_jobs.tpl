@@ -23,7 +23,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
+<script>
+    var apilogs_ajax_link = '{$apilogs_ajax_link|addslashes}';
+</script>
 
 <div id="contentLogJobsTab" class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Jobs to be done' mod='ebay'}
@@ -117,9 +119,14 @@
 
     $(document).on('click', '.loadListjob', function(){
         $.ajax({
-            type: "POST",
-            url: module_dir+'ebay/ajax/paginationLogJobsTab.php',
-            data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + 1,
+            url: apilogs_ajax_link+'&configure=ebay',
+            data: {
+                ajax: true,
+                action: 'PaginationLogJobsTab',
+                id_employee: id_employee,
+                profile: id_ebay_profile,
+                page: 1
+            },
             beforeSend : function(){
                 $('#contentLogJobsTab').empty();
                 var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -136,9 +143,14 @@
         var page = $(this).attr('value');
         if(page){
             $.ajax({
-                type: "POST",
-                url: module_dir+'ebay/ajax/paginationLogJobsTab.php',
-                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + page,
+                url: apilogs_ajax_link+'&configure=ebay',
+                data: {
+                    ajax: true,
+                    action: 'PaginationLogJobsTab',
+                    id_employee: id_employee,
+                    profile: id_ebay_profile,
+                    page: page
+                },
                 beforeSend : function(){
                     $('#contentLogJobsTab').empty();
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -172,12 +184,12 @@
     function deleteTasksByIds(ids_tasks) {
         if (ids_tasks == 'all' || ids_tasks.length != 0){
             $.ajax({
-                type : 'POST',
-                url : module_dir+'ebay/ajax/deleteTasks.php',
-                data : {
-                    ids_tasks : ids_tasks,
-                    type : 'log',
-                    token : token
+                url: apilogs_ajax_link+'&configure=ebay',
+                data: {
+                    ajax: true,
+                    action: 'DeleteTasks',
+                    ids_tasks: ids_tasks,
+                    type: 'log'
                 },
                 success : function(data){
                     if (ids_tasks == 'all'){

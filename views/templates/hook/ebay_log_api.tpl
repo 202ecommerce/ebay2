@@ -23,6 +23,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+<script>
+    var apilogs_ajax_link = '{$apilogs_ajax_link|addslashes}';
+</script>
 
 
 <div id="contentLogApiTab" class="table-block">
@@ -166,9 +169,14 @@
 
     $(document).on('click', '.loadListApiLog', function(){
         $.ajax({
-            type: "POST",
-            url: module_dir+'ebay/ajax/paginationLogApiTab.php',
-            data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + 1,
+            url: apilogs_ajax_link+'&configure=ebay',
+            data: {
+                ajax: true,
+                action: 'PaginationLogApi',
+                id_employee: id_employee,
+                profile: id_ebay_profile,
+                page: 1
+            },
             beforeSend : function(){
                 $('#contentLogApiTab').empty();
                 var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -185,9 +193,14 @@
         var page = $(this).attr('value');
         if(page){
             $.ajax({
-                type: "POST",
-                url: module_dir+'ebay/ajax/paginationLogApiTab.php',
-                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + page,
+                url: apilogs_ajax_link+'&configure=ebay',
+                data: {
+                    ajax: true,
+                    action: 'PaginationLogApi',
+                    id_employee: id_employee,
+                    profile: id_ebay_profile,
+                    page: page
+                },
                 beforeSend : function(){
                     $('#contentLogApiTab').empty();
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -221,12 +234,12 @@
     function deleteLogsByIds(ids_logs) {
         if (ids_logs == 'all' || ids_logs.length != 0){
             $.ajax({
-                type : 'POST',
-                url : module_dir+'ebay/ajax/deleteApiLogs.php',
-                data : {
+                url: apilogs_ajax_link+'&configure=ebay',
+                data: {
+                    ajax: true,
+                    action: 'deleteApiLogs',
                     ids_logs : ids_logs,
                     type : 'log',
-                    token : token
                 },
                 success : function(data){
                     if (ids_logs == 'all'){
@@ -248,11 +261,11 @@
     $(document).on('click', '.view-api-log', function(){
         var id = $(this).closest('tr').attr('data-id_log');
         $.ajax({
-            type : 'POST',
-            url : module_dir+'ebay/ajax/getApiLogDetails.php',
-            data : {
-                id_log : id,
-                token : token
+            url: apilogs_ajax_link+'&configure=ebay',
+            data: {
+                ajax: true,
+                action: 'getApiLogDetails',
+                id_log: id,
             },
             success : function(data){
                 var data = jQuery.parseJSON(data);
@@ -269,19 +282,24 @@
     $('#searchBtnLogApi').click(search);
     $('#reset_apilogs').click(function(){
             $.ajax({
-                type: "POST",
-                url: module_dir+'ebay/ajax/paginationLogApiTab.php',
-                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=1",
-                beforeSend : function(){
-                    $('#contentLogApiTab').empty();
-                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
-                    $('#contentLogApiTab').append(html);
+                url: apilogs_ajax_link+'&configure=ebay',
+                data: {
+                    ajax: true,
+                    action: 'PaginationLogApi',
+                    id_employee: id_employee,
+                    profile: id_ebay_profile,
+                    page: 1
                 },
-                success: function(data)
-                {
-                    $('#contentLogApiTab').parent().html(data);
-                }
-            });
+            beforeSend : function(){
+                $('#contentLogApiTab').empty();
+                var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
+                $('#contentLogApiTab').append(html);
+            },
+            success: function(data)
+            {
+                $('#contentLogApiTab').parent().html(data);
+            }
+        });
     }
     );
     function search() {
@@ -297,22 +315,20 @@
         type = $('#type_search_logs').attr('value');
         date = $('#date_search_logs').attr('value');
 
-        var data = {
-            token: ebay_token,
-            id_shop: id_shop,
-            page: 1,
-            id_prod: id_prod,
-            id_prod_attr: id_prod_attr,
-            status: status,
-            type: type,
-            date: date,
-            profile: id_ebay_profile,
-        };
-
         $.ajax({
-            type: "POST",
-            url: module_dir+'ebay/ajax/paginationLogApiTab.php',
-            data: data,
+            url: apilogs_ajax_link+'&configure=ebay',
+            data: {
+                ajax: true,
+                action: 'PaginationLogApi',
+                id_shop: id_shop,
+                page: 1,
+                id_prod: id_prod,
+                id_prod_attr: id_prod_attr,
+                status: status,
+                type: type,
+                date: date,
+                profile: id_ebay_profile,
+            },
             beforeSend : function(){
                 $('#contentLogApiTab').empty();
                 var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';

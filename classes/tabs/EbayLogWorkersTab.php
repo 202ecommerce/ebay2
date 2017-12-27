@@ -66,6 +66,7 @@ class EbayLogWorkersTab extends EbayTab
             'page_current'            => $page_current,
             'start'                   => $start,
             'stop'                    => $stop,
+            'apilogs_ajax_link' => $this->context->link->getAdminLink('AdminEbayApiLog')
         ));
         return $this->display('ebay_log_workers.tpl', array());
     }
