@@ -45,6 +45,25 @@ class EbayProduct
         return Db::getInstance()->getValue($query);
     }
 
+    public static function getProductById($id_product, $ebay_identifier, $ebay_site_id, $id_attribute = null, $id_shop = null)
+    {
+        $query = 'SELECT ep.*
+			FROM `'._DB_PREFIX_.'ebay_product` ep
+			INNER JOIN `'._DB_PREFIX_.'ebay_profile` ep1
+			ON ep.`id_ebay_profile` = ep1.`id_ebay_profile`
+			AND ep1.`ebay_user_identifier` = \''.pSQL($ebay_identifier).'\'
+			AND ep1.`ebay_site_id` = '.(int) $ebay_site_id.'
+			WHERE ep.`id_product` = '.(int) $id_product;
+
+        if ($id_attribute) {
+            $query .= ' AND ep.`id_attribute` = '.(int) $id_attribute;
+        }
+        if ($id_shop) {
+            $query .= ' AND ep1.`id_shop` = '.(int) $id_shop;
+        }
+        return Db::getInstance()->getRow($query);
+    }
+
     public static function getPercentOfCatalog($ebay_profile)
     {
 
@@ -302,7 +321,7 @@ class EbayProduct
 			INNER JOIN `'._DB_PREFIX_.'ebay_product` ep1
 			ON ep.`id_ebay_profile` = ep1.`id_ebay_profile`
 			AND ep1.`id_product_ref` = \''.pSQL($reference).'\'');
-        if (!$ebay_site_id) {
+        if ($ebay_site_id === false) {
             return '';
         }
 

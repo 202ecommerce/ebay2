@@ -52,6 +52,7 @@ class EbayOrder
     private $id_currency;
     private $id_transaction;
     private $CODCost;
+    private $ebaySiteName;
 
     private $error_messages = array();
 
@@ -89,6 +90,7 @@ class EbayOrder
         $this->shippingServiceCost = (string) $order_xml->ShippingServiceSelected->ShippingServiceCost;
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
+        $this->ebaySiteName = $order_xml->TransactionArray->Transaction->Item->Site;
 
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
@@ -122,6 +124,11 @@ class EbayOrder
         }
 
         $this->write_logs = (bool) Configuration::get('EBAY_ACTIVATE_LOGS');
+    }
+
+    public function getEbaySiteName()
+    {
+        return $this->ebaySiteName;
     }
 
     /**
@@ -594,7 +601,7 @@ class EbayOrder
         }
 
         $total_shipping_tax_incl += (float)$this->shippingServiceCost;
-        $total_shipping_tax_excl += $this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
+        $total_shipping_tax_excl += (float)$this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
 
         if ($this->payment_method == 'COD') {
             $data = array(
@@ -785,19 +792,11 @@ class EbayOrder
 
     private function _parseSku($sku, $id_product, $id_product_attribute, $id_ebay_profile)
     {
-        $data = explode('-', (string) $sku);
-
-        if (isset($data[1])) {
-            $id_product = $data[1];
-        }
-
-        if (isset($data[2])) {
-            $data2 = explode('_', $data[2]);
-            $id_product_attribute = $data2[0];
-            if (isset($data2[1])) {
-                $id_ebay_profile = (int) $data2[1];
-            }
-        }
+        $result = array();
+        preg_match('/[a-zA-Z_-]*([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
+        $id_product = isset($result[1]) ? $result[1] : 0;
+        $id_product_attribute = isset($result[2]) ? $result[2] : 0;
+        $id_ebay_profile = isset($result[3]) ? $result[3] : 0;
 
         return array($id_product, $id_product_attribute, $id_ebay_profile);
     }

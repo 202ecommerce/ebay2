@@ -75,7 +75,10 @@ class EbayCategorySpecific
             if ($xml_data->Recommendations->NameRecommendation) {
                 foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
                     $required = isset($recommendation->ValidationRules->MinValues) && ((int)$recommendation->ValidationRules->MinValues >= 1);
-
+                    $max_values = 1;
+                    if (isset($recommendation->ValidationRules->MaxValues)) {
+                        $max_values = (int) $recommendation->ValidationRules->MaxValues;
+                    }
                     // if true can be used either in Item Specifics or VariationSpecifics
                     $can_variation = !(isset($recommendation->ValidationRules->VariationSpecifics)
                         && ((string)$recommendation->ValidationRules->VariationSpecifics == 'Disabled'));
@@ -102,9 +105,9 @@ class EbayCategorySpecific
 
                     $db = Db::getInstance();
 
-                    $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`)
-						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$recommendation->Name).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.')
-						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0);
+                    $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
+						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$recommendation->Name).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
+						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values;
 
                     $db->execute($sql);
 

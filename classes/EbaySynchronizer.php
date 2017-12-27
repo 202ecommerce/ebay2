@@ -130,7 +130,11 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         if ($itemID = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_product_attribute, $ebay_profile->id_shop)) {
             $ebay = $ebay_request->endFixedPriceItem($itemID);
-            EbayProduct::deleteByIdProductRef($itemID);
+            if ($ebay) {
+                EbayProduct::deleteByIdProductRef($itemID, $id_ebay_profile);
+            } else {
+                EbayTaskManager::insertTask((int)$product_id, (int)$id_product_attribute, 14, $id_ebay_profile, true);
+            }
             return $ebay;
         }
     }
@@ -234,7 +238,6 @@ class EbaySynchronizer
             $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute, $limitEbayStock);
         }
 
-
         $pictures = EbaySynchronizer::__getPictures($product, $ebay_profile, $id_lang, $context, $variations);
 
         // Load basic price
@@ -290,9 +293,6 @@ class EbaySynchronizer
         }
 
 
-
-
-
         $clean_percent = $ebay_category->getCleanPercent();
         // Save percent and price discount
         if ($clean_percent < 0) {
@@ -305,7 +305,6 @@ class EbaySynchronizer
         if (isset($data['price_original'])) {
             $data['price_percent'] = round(($price_original - $price) / $price_original * 100.0);
         }
-
         $data['description'] = EbaySynchronizer::__getEbayDescription($product, $ebay_profile, $id_lang);
         
         if (count($data['variations'])) {
@@ -373,19 +372,18 @@ class EbaySynchronizer
         foreach ($combinations as $combinaison) {
             $context_correct_shop = $context->cloneContext();
             $context_correct_shop->shop = new Shop($ebay_profile->id_shop);
-
+            $context = Context::getContext()->cloneContext();
             $specific_price_output = null;
+            $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context);
 
-            $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
-
-            $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
-
+            $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
 
             // convert price to destination currency
             $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
             $price *= $currency->conversion_rate;
             $price_original *= $currency->conversion_rate;
-
+            $price = round($price, 2);
+            $price_original = round($price_original, 2);
             $variation = array(
                 'id_attribute' => $combinaison['id_product_attribute'],
                 'reference' => $combinaison['reference'],
@@ -393,7 +391,7 @@ class EbaySynchronizer
                 'upc' => $combinaison['upc'],
                 'quantity' => (int)$combinaison['quantity'] > $limitEbayStock ? $limitEbayStock : $combinaison['quantity'],
                 'price_static' => $price,
-                'variation_specifics' => EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, false),
+                'variation_specifics' => EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
                 'variations' => array(
                     array(
                         'name' => $combinaison['group_name'],
@@ -405,16 +403,28 @@ class EbaySynchronizer
             $quantity = (int) $quantity > $limitEbayStock ? $limitEbayStock : $quantity;
             $variation['quantity'] = $quantity;
 
-
-            if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $ebay_category->getPercent())) {
-                $price *= (1 + ($ebay_category->getPercent() / 100));
+            preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $ebay_category->getPercent(), $temp);
+            if ($temp[3] != '') {
+                if ($temp[1] == "+") {
+                    $price *= (1 + ((int) $temp[2] / 100));
+                    $price_original *= (1 + ((int) $temp[2] / 100));
+                } else {
+                    $price *= (1 - ((int) $temp[2] / 100));
+                    $price_original *= (1 - ((int) $temp[2] / 100));
+                }
             } else {
-                $price += $ebay_category->getPercent();
+                if ($temp[1] == "+") {
+                    $price +=  (int) $temp[2];
+                    $price_original +=  (int) $temp[2];
+                } else {
+                    $price -=  (int) $temp[2];
+                    $price_original -=  (int) $temp[2];
+                }
             }
 
-            $variation['price'] = round($price, 2);
+            $variation['price'] = $price;
 
-            if ($ebay_category->getPercent() < 0) {
+            if ((int) $temp[2] < 0) {
                 $variation['price_original'] = round($price_original, 2);
             } elseif ($price_original > $price) {
                 $variation['price_original'] = round($price_original, 2);
@@ -423,6 +433,7 @@ class EbaySynchronizer
             if (isset($variation['price_original'])) {
                 $variation['price_percent'] = round(($price_original - $price) / $price_original * 100.0);
             }
+
             if ($id_product_atributte == 0) {
                 $variation_key = $combinaison['id_product'] . '-' . $combinaison['id_product_attribute'] . '_' . $ebay_profile->id;
                 $variations[$variation_key] = $variation;
@@ -623,18 +634,33 @@ class EbaySynchronizer
         $specific_price_output = null;
         $price = null;
         $price = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context);
-
+        $price = round($price, 2);
         $specific_price_output = null;
         $price_original = null;
         $price_original = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
+        $price_original = round($price_original, 2);
 
-        if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $percent)) {
-            $price *= (1 + ($percent / 100));
+        preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
+        if ($temp[3] != '') {
+            if ($temp[1] == "+") {
+                $price *= (1 + ((int) $temp[2] / 100));
+                $price_original *= (1 + ((int) $temp[2] / 100));
+            } else {
+                $price *= (1 - ((int) $temp[2] / 100));
+                $price_original *= (1 - ((int) $temp[2] / 100));
+            }
         } else {
-            $price += $percent;
+            if ($temp[1] == "+") {
+                $price +=  (int) $temp[2];
+                $price_original +=  (int) $temp[2];
+            } else {
+                $price -=  (int) $temp[2];
+                $price_original -=  (int) $temp[2];
+            }
         }
 
         $price = round($price, 2);
+        $price_original = round($price_original, 2);
 
         return array($price, $price_original);
     }
@@ -729,9 +755,7 @@ class EbaySynchronizer
     private static function __getProductItemSpecifics($ebay_category, $product, $id_lang)
     {
         $item_specifics = $ebay_category->getItemsSpecificValues();
-
         $item_specifics_pairs = array();
-
         foreach ($item_specifics as $item_specific) {
             $value = null;
             if ($item_specific['id_feature']) {
@@ -747,17 +771,19 @@ class EbaySynchronizer
             } else {
                 $value = $item_specific['specific_value'];
             }
-            if (stripos($item_specific['name'], 'OE/OEM')) {
+            if (stripos($item_specific['name'], 'OE/OEM') || (int) $item_specific['max_values'] > 1) {
                 $value = str_replace(';', ',', $value);
-                $value = str_replace(' ', '', $value);
                 $value = explode(',', $value);
-                $value = array_slice($value, 0, 30);
+                if ($item_specific['max_values']) {
+                    $value = array_slice($value, 0, (int) $item_specific['max_values']);
+                } else {
+                    $value = array_slice($value, 0, 30);
+                }
             }
             if ($value) {
                 $item_specifics_pairs[$item_specific['name']] = $value;
             }
         }
-
 
         return $item_specifics_pairs;
     }
@@ -1148,6 +1174,7 @@ class EbaySynchronizer
         $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
         $conditions = $ebay_category->getConditionsValues($id_ebay_profile);
         // Generate array and try insert in database
+
         $data_for_stock = array(
             'quantity' => $quantity_product,
             'categoryId' => $ebay_category->getIdCategoryRef(),

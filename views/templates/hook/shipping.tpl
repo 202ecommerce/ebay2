@@ -46,6 +46,10 @@
 			var lastId = 0;
 			var current = $("#"+currentName);
 			var hasValues = (typeof(idPSCarrier) != "undefined" && typeof(idEbayCarrier) != "undefined" && typeof(additionalFee) != "undefined");
+            var selected_services = new Array();
+            $('#domesticShipping .linked a').each(function(){
+                selected_services.push($(this).attr('data-id'));
+            });
 			if (current.children('table').length > 0)
 				lastId = parseInt(current.children('table').last().attr('data-nb')) + 1;
 			var createSelecstShipping = '';
@@ -58,7 +62,7 @@
 				 	createSelecstShipping += "<optgroup label='{$zone.name|escape:'htmlall':'UTF-8'}'>";
 						{foreach from=$zone.carriers item=carrier}
 							var testPSCarrier = (typeof(idPSCarrier) != "undefined"  && idPSCarrier == {$carrier.id_carrier|escape:'htmlall':'UTF-8'} && id_zone == {$zone.id_zone|escape:'htmlall':'UTF-8'});
-							createSelecstShipping += "<option "+ (testPSCarrier ? 'selected="selected"' : '')  +" data-realname='{$zone.name|escape:'htmlall':'UTF-8'}, {$carrier.name|escape:'htmlall':'UTF-8'}' value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}-{$zone.id_zone|escape:'htmlall':'UTF-8'}' data-maxprice='{$carrier.price|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
+							createSelecstShipping += "<option  "+ (testPSCarrier ? 'selected="selected"' : '')  +" data-realname='{$zone.name|escape:'htmlall':'UTF-8'}, {$carrier.name|escape:'htmlall':'UTF-8'}' value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}-{$zone.id_zone|escape:'htmlall':'UTF-8'}' data-maxprice='{$carrier.price|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
 							if (testPSCarrier) {
 								var valuePSCarrier = " {$carrier.name|escape:'htmlall':'UTF-8'} ";
 							}
@@ -75,8 +79,9 @@
 			// Carrier eBay
 			createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : '') +"'' style='visibility:hidden'><label data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Linked' mod='ebay'}"+(hasValues ? valuePSCarrier : '')+"{l s='with an eBay carrier' mod='ebay'}</label><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : '') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
 			{foreach from=$eBayCarrier item=carrier}
-				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping'))
-					createSelecstShipping += "<option "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping')
+                    && selected_services.indexOf('{$carrier.id_shipping_service}') == -1)
+					createSelecstShipping += "<option data-id='{$carrier.id_shipping_service}' "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
 			{/foreach}
 			createSelecstShipping += "</select></div></td>";
 			// end carrier eBay
@@ -176,6 +181,7 @@
 		function processEbayCarrier(select)
 		{
 			var div = $(select).parent('div');
+			var id_service = $(select).find('option:selected').attr('data-id');
 			var hasA = div.siblings('a').length;
 			var tr = div.parent('td').parent('tr');
 			var idDivParent = tr.parents('div').attr('id');
@@ -194,7 +200,7 @@
 					}
 					else
 					{
-						var elementA = $('<a class="ebay_shipping_text d-b">');
+						var elementA = $('<a class="ebay_shipping_text d-b" data-id=\'' + id_service + '\' >');
 						elementA.append(contentA);
 						div.after(elementA);
 						elementA.click(function()
@@ -563,8 +569,8 @@
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-		<input class="primary button" name="submitSave" type="hidden" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
-		<button class="btn btn-default pull-right" type="submit" id="save_ebay_shipping">
+		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+		<button class="btn btn-default pull-right" type="submit" >
 			<i class="process-icon-save"></i>
 			{l s='Save' mod='ebay'}
 		</button>

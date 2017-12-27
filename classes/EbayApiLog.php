@@ -31,10 +31,11 @@ class EbayApiLog extends ObjectModel
     public $context;
     public $data_sent;
     public $response;
+    public $request;
 
     public $id_product;
-    public $id_order;
-
+    public $status;
+    public $id_product_attribute;
     public $date_add;
 
     /**
@@ -62,30 +63,32 @@ class EbayApiLog extends ObjectModel
         $fields['type'] = pSQL($this->type);
         $fields['context'] = pSQL($this->context);
         $fields['data_sent'] = pSQL($this->data_sent);
-        $fields['response'] = pSQL($this->response);
+        $fields['response'] = pSQL($this->response, true);
+        $fields['request'] = pSQL($this->request, true);
         $fields['id_product'] = (int) $this->id_product;
-        $fields['id_order'] = (int) $this->id_order;
+        $fields['status'] = pSQL($this->status);
         $fields['date_add'] = pSQL($this->date_add);
+        $fields['id_product_attribute'] = pSQL($this->id_product_attribute);
 
         return $fields;
     }
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)
     {
-
-
             self::$definition = array(
                 'table' => 'ebay_api_log',
-                'primary' => 'id_ebay_log',
+                'primary' => 'id_ebay_api_log',
                 'fields' => array(
                     'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                     'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                     'context' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                     'data_sent' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                     'response' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'request' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                     'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'status' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                     'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+                    'id_product_attribute' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                 ),
             );
 
@@ -120,5 +123,45 @@ class EbayApiLog extends ObjectModel
     public static function clear()
     {
         return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_api_log');
+    }
+
+    public static function getLogsForProfile($id_ebay_profile)
+    {
+        return Db::getInstance()->executeS('SELECT *
+			FROM `'._DB_PREFIX_.'ebay_api_log`
+			WHERE id_ebay_profile = '.(int) $id_ebay_profile.'
+			ORDER BY `id_ebay_api_log` DESC');
+    }
+
+    public static function getApilogs($id_ebay_profile, $page_current = false, $length = false, $search = false)
+    {
+        if ($page_current && $length) {
+            $limit = (int) $length;
+            $offset = $limit * ( (int) $page_current - 1 );
+            $query = "SELECT * FROM "._DB_PREFIX_."ebay_api_log 
+                       WHERE id_ebay_profile = ".(int) $id_ebay_profile;
+            if ($search['id_product']) {
+                $query .= " AND id_product LIKE '%".(int) $search['id_product']."%'";
+            }
+            if ($search['id_product_attribute']) {
+                $query .= " AND id_product_attribute LIKE '%".(int) $search['id_product_attribute']."%'";
+            }
+            if ($search['status']) {
+                $query .= " AND status LIKE '%".pSQL($search['status'])."%'";
+            }
+            if ($search['type']) {
+                $query .= " AND type LIKE '%".pSQL($search['type'])."%'";
+            }
+            if ($search['date']) {
+                $query .= " AND date_add LIKE '%".pSQL($search['date'])."%'";
+            }
+
+            $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
+            //var_dump($query); die();
+            return DB::getInstance()->ExecuteS($query);
+        } else {
+            $sql_select = "SELECT * FROM `"._DB_PREFIX_."ebay_api_log` WHERE `id_ebay_profile` = ".pSQL($id_ebay_profile)." ORDER BY `date_add`";
+            return DB::getInstance()->executeS($sql_select);
+        }
     }
 }

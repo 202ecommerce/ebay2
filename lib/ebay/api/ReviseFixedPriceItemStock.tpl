@@ -79,6 +79,7 @@
 			{/foreach}
 		</ItemSpecifics>
 {/if}
+
         {if isset($variations) && $variations}
             {$variations nofilter}
         {/if}

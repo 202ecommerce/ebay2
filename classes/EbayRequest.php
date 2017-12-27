@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = false;
+    private $dev = true;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -205,7 +205,7 @@ class EbayRequest
      * @param bool $shoppingEndPoint
      * @return bool|SimpleXMLElement
      */
-    private function _makeRequest($apiCall, $vars = array(), $shoppingEndPoint = false, $lifeTimeCache = 0)
+    private function _makeRequest($apiCall, $vars = array(), $shoppingEndPoint = false, $lifeTimeCache = 0, $data = false)
     {
        
         $request = null;
@@ -294,10 +294,17 @@ class EbayRequest
             $result = simplexml_load_string($response);
         }
 
+        $status = 'KO';
+        if (is_object($result) && $result->Ack != 'Failure') {
+            $status = 'OK';
+        }
+
+        $this->_logApiCall($apiCall, $data, $request, $response, $status);
         if ($lifeTimeCache && $result->Ack != 'Failure') {
             $date = new DateTime();
             $this->storeRequestToCache($apiCall, $result, $date->modify('+ '.$lifeTimeCache.' hours'));
         }
+
         unset($vars);
         return $result;
     }
@@ -346,7 +353,6 @@ class EbayRequest
 
     private function _buildHeadersPostOrder()
     {
-
         $headers = array(
 
             // Regulates versioning of the XML interface for the API
@@ -386,7 +392,6 @@ class EbayRequest
 
     public function fetchToken($username, $session)
     {
-
         $response = $this->_makeRequest('FetchToken', array(
             'username' => $username,
             'session_id' => $session,
@@ -407,7 +412,6 @@ class EbayRequest
      */
     public function getUserProfile($username)
     {
-
         if (empty(self::$userProfileCache)) {
             //Change API URL
             $apiUrl = $this->apiUrl;
@@ -721,7 +725,7 @@ class EbayRequest
             'description' => $data['description'],
             'category_id' => $data['categoryId'],
             'condition_id' => $data['condition'],
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'start_price' => $data['price'],
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'country_currency' => $currency->iso_code,
@@ -756,9 +760,8 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('AddFixedPriceItem', $vars);
+        $response = $this->_makeRequest('AddFixedPriceItem', $vars, false, 0, $data);
 
-        $this->_logApiCall('addFixedPriceItem', $vars, $response, $data['id_product']);
 
         if ($response === false) {
             return false;
@@ -771,7 +774,8 @@ class EbayRequest
     {
         $product = new Product($data['real_id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
         $features = Feature::getFeatures(Configuration::get('PS_LANG_DEFAULT'));
-        $features_product = $product->getFrontFeatures(Configuration::get('PS_LANG_DEFAULT'));
+        $ebay = new Ebay();
+        $features_product = $product->getFrontFeatures($ebay->ebay_profile->id_lang);
         $tags = array(
             '{TITLE}',
             '{BRAND}',
@@ -784,6 +788,7 @@ class EbayRequest
             $data['reference'],
             $data['ean13'],
         );
+
         foreach ($features as $feature) {
             $tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_' . $feature['name'] . '}')));
             $insert_value = false;
@@ -859,7 +864,7 @@ class EbayRequest
                 ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
-                $this->_logApiCall('addSellerProfile', $vars, $response, $data['id_product']);
+
 
                 if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
                     if ($response->errorMessage->error->errorId == '178149') {
@@ -914,7 +919,6 @@ class EbayRequest
                 ));
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
-                $this->_logApiCall('setSellerProfile', $vars, $response, $data['id_product']);
             }
 
             DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
@@ -1019,8 +1023,33 @@ class EbayRequest
         return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetShippingDetails.tpl');
     }
 
-    private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null)
+    private function _logApiCall($type, $data_sent, $request, $response, $status)
     {
+        $typeRequestToLOgs = array('AddFixedPriceItem', 'AddFixedPriceItemMultiSku', 'ReviseFixedPriceItem', 'ReviseFixedPriceItemStock', 'EndFixedPriceItem');
+
+        if (!$this->write_api_logs || !in_array($type, $typeRequestToLOgs)) {
+            return;
+        }
+
+        $log = new EbayApiLog();
+
+        $log->id_ebay_profile = $this->ebay_profile->id;
+        $log->type = $type;
+
+        $log->data_sent = Tools::jsonEncode($data_sent);
+        $log->request = $request;
+        $log->response = $response;
+
+        if ($data_sent && isset($data_sent['id_product'])) {
+            $log->id_product = (int)$data_sent['id_product'];
+        }
+        if ($data_sent && isset($data_sent['id_product_attribute'])) {
+            $log->id_product_attribute = (int)$data_sent['id_product_attribute'];
+        }
+
+        $log->status = $status;
+
+        return $log->save();
     }
 
     /**
@@ -1096,7 +1125,7 @@ class EbayRequest
             'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'quantity' => $data['quantity'],
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'category_id' => $data['categoryId'],
             'start_price' => $data['price'],
             'resynchronize' => 1,
@@ -1130,8 +1159,8 @@ class EbayRequest
             $vars['price_original'] = $data['price_original'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
-        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars, false, 0, $data);
+
 
         if ($response === false) {
             return false;
@@ -1145,16 +1174,15 @@ class EbayRequest
         if (!$ebay_item_id) {
             return false;
         }
-
+        $data = array();
         $response_vars = array('item_id' => $ebay_item_id);
 
         if ($id_product) {
             $response_vars['sku'] = 'prestashop-' . $id_product;
+            $data['id_product'] = $id_product;
         }
 
-        $response = $this->_makeRequest('EndFixedPriceItem', $response_vars);
-
-        $this->_logApiCall('endFixedPriceItem', $response_vars, $response, $id_product);
+        $response = $this->_makeRequest('EndFixedPriceItem', $response_vars, false, 0, $data);
 
         if ($response === false) {
             return false;
@@ -1177,7 +1205,7 @@ class EbayRequest
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'category_id' => $data['categoryId'],
@@ -1194,8 +1222,8 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars);
-        $this->_logApiCall('ReviseFixedPriceItemStock', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars, false, 0, $data);
+
 
         if ($response === false) {
             return false;
@@ -1223,7 +1251,7 @@ class EbayRequest
             'condition_id' => (isset($data['condition']))?$data['condition']:null,
             'listing_type' => 'FixedPriceItem',
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -1238,9 +1266,7 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars);
-
-        $this->_logApiCall('ReviseFixedPriceItemStock', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItemStock', $vars, false, 0, $data);
 
         if ($response === false) {
             return false;
@@ -1277,7 +1303,7 @@ class EbayRequest
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'variations' => $this->_getVariations($data),
             'product_listing_details' => $this->_getProductListingDetails($data),
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
@@ -1300,9 +1326,9 @@ class EbayRequest
         }
 
         // Send the request and get response
-        $response = $this->_makeRequest('AddFixedPriceItem', $vars);
+        $response = $this->_makeRequest('AddFixedPriceItem', $vars, false, 0, $data);
 
-        $this->_logApiCall('addFixedPriceItemMultiSku', $vars, $response);
+
 
         if ($response === false) {
             return false;
@@ -1382,11 +1408,11 @@ class EbayRequest
                 }
             }
         }
-
+      
         $vars = array(
             'variations' => isset($data['variations']) ? $data['variations'] : array(),
             'variations_pictures' => $variation_pictures,
-            'price_update' => !isset($data['noPriceUpdate']),
+            'price_update' => true,
             'variation_specifics_set' => $variation_specifics_set,
             'ean_not_applicable' => 1,
             'synchronize_ean' => (string)$this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
@@ -1473,9 +1499,10 @@ class EbayRequest
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }
 
-        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
 
-        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+        $response = $this->_makeRequest('ReviseFixedPriceItem', $vars, false, 0, $data);
+
+
 
         if ($response === false) {
             return false;
@@ -1582,7 +1609,7 @@ class EbayRequest
 
         $response = $this->_makeRequest('CompleteSale', $vars);
 
-        $this->_logApiCall('completeSale', $vars, $response);
+
 
         return ($response === false) ? false : $this->_checkForErrors($response);
     }
@@ -1603,7 +1630,7 @@ class EbayRequest
         );
         $response = $this->_makeRequest('checkCancelation', $vars, 'post-order');
 
-        $this->_logApiCall('checkCancelation', $vars, $response);
+
         return ($response === false) ? false : $this->_checkForErrors($response);
     }
 
@@ -1633,7 +1660,7 @@ class EbayRequest
 
         $response = $this->_makeRequest('CompleteSale', $vars);
         $this->context = 'ORDER_BACKOFFICE';
-        $this->_logApiCall('completeSale', $vars, $response);
+
 
         return ($response === false) ? false : $this->_checkForErrors($response);
     }
@@ -1697,7 +1724,7 @@ class EbayRequest
                         $data = (array)$data;
                         $var = array(
                             'type' => $data['ProfileType'],
-                            'name' => $data['ProfileName'],
+                            'name' => pSQL($data['ProfileName']),
                             'id_bussines_Policie' => $data['ProfileID'],
                             'id_ebay_profile' => $this->ebay_profile->id
                         );

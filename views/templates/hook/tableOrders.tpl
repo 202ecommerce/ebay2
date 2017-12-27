@@ -24,10 +24,10 @@
 *}
 
 <div class="table-block">
-    <h4 class="table-block__title table-block__holder">{l s='Orders imported by ' mod='ebay'} {$type_sync_order}
-        <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"
+    <h4 class="table-block__title table-block__holder">{l s='Add desctiption in ' mod='ebay'} {$type_sync_order}
+        <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"
            class="button-refresh btn btn-default"
-           title="{l s='Sync refunds and returns from eBay' mod='ebay'}"
+           title="{l s='Sync orders from eBay' mod='ebay'}"
            data-toggle="tooltip">
             <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
         </a>
@@ -39,18 +39,18 @@
             </div>
         </div>
     {else}
-        <p class="table-block__holder" style="margin:0;padding: 5px 0;">{l s='Last import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</p>
+        <p class="table-block__holder" style="margin:0;padding: 5px 0;">{l s='Last import:' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</p>
 
         <div class="table-wrapper">
             <table id="OrderListings" class="table ">
                 <thead>
                     <tr>
-                        <th style="width:110px;"><span>{l s='Data eBay' mod='ebay'}</span></th>
+                        <th style="width:110px;"><span>{l s='Data of creation' mod='ebay'}</span></th>
                         <th><span>{l s='eBay reference' mod='ebay'}</span></th>
-                        <th class="text-center"><span>{l s='Reference' mod='ebay'}</span></th>
+                        <th class="text-center"><span>{l s='Payment' mod='ebay'}</span></th>
                         <th class="text-center"><span>{l s='Email' mod='ebay'}</span></th>
                         <th><span>{l s='Total' mod='ebay'}</span></th>
-                        <th class="text-center"><span>{l s='ID PrestaShop' mod='ebay'}</span></th>
+                        <th class="text-center"><span>{l s='ID' mod='ebay'}</span></th>
                         <th class="text-center"><span>{l s='PrestaShop Reference' mod='ebay'}</span></th>
                         <th class="text-center"><span>{l s='Date Import' mod='ebay'}</span></th>
                         <th class="text-center">{l s='Actions' mod='ebay'}</th>
@@ -64,7 +64,7 @@
                             <td>{$error.reference_ebay|escape:'htmlall':'UTF-8'}</td>
                             <td>{$error.referance_marchand|escape:'htmlall':'UTF-8'}</td>
                             <td>{$error.email|escape:'htmlall':'UTF-8'}</td>
-                            <td>{$error.total|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$currency->sign}{$error.total|string_format:"%.2f"|escape:'htmlall':'UTF-8'}</td>
                             <td colspan="2">{$error.error|escape:'htmlall':'UTF-8'}</td>
                             <td>{$error.date_import|escape:'htmlall':'UTF-8'}</td>
                             <td>
@@ -92,7 +92,7 @@
                             <td>{$order.reference_ebay|escape:'htmlall':'UTF-8'}</td>
                             <td>{$order.referance_marchand|escape:'htmlall':'UTF-8'}</td>
                             <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
-                            <td>{$order.total|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$currency->sign}{$order.total|string_format:"%.2f"|escape:'htmlall':'UTF-8'}</td>
                             <td>{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
                             <td>{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
                             <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
