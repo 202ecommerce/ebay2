@@ -295,7 +295,7 @@ class EbayRequest
         }
 
         $status = 'KO';
-        if ($result && $result->Ack != 'Failure') {
+        if (is_object($result) && $result->Ack != 'Failure') {
             $status = 'OK';
         }
 

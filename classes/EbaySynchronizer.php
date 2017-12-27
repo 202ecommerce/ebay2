@@ -405,11 +405,21 @@ class EbaySynchronizer
 
             preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $ebay_category->getPercent(), $temp);
             if ($temp[3] != '') {
-                $price *= (1 + ($temp[1].$temp[2] / 100));
-                $price_original *= (1 + ($temp[1].$temp[2] / 100));
+                if($temp[1] == "+") {
+                    $price *= (1 + ($temp[2] / 100));
+                    $price_original *= (1 + ($temp[2] / 100));
+                } else {
+                    $price *= (1 - ($temp[2] / 100));
+                    $price_original *= (1 - ($temp[2] / 100));
+                }
             } else {
-                $price +=  $temp[1].$temp[2];
-                $price_original +=  $temp[1].$temp[2];
+                if($temp[1] == "+") {
+                    $price +=  $temp[2];
+                    $price_original +=  $temp[2];
+                } else {
+                    $price -=  $temp[2];
+                    $price_original -=  $temp[2];
+                }
             }
 
             $variation['price'] = $price;
@@ -632,11 +642,21 @@ class EbaySynchronizer
 
         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
         if ($temp[3] != '') {
-            $price *= (1 + ($temp[1].$temp[2] / 100));
-            $price_original *= (1 + ($temp[1].$temp[2] / 100));
+            if($temp[1] == "+") {
+                $price *= (1 + ($temp[2] / 100));
+                $price_original *= (1 + ($temp[2] / 100));
+            } else {
+                $price *= (1 - ($temp[2] / 100));
+                $price_original *= (1 - ($temp[2] / 100));
+            }
         } else {
-            $price += $temp[1].$temp[2];
-            $price_original += $temp[1].$temp[2];
+            if($temp[1] == "+") {
+                $price +=  $temp[2];
+                $price_original +=  $temp[2];
+            } else {
+                $price -=  $temp[2];
+                $price_original -=  $temp[2];
+            }
         }
 
         $price = round($price, 2);
