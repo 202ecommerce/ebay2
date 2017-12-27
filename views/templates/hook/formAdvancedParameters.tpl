@@ -227,7 +227,7 @@
 		<a href="#categoriesProgression">
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
 			<input class="primary button" type="hidden" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
-			<button class="btn btn-default pull-right" type="submit" id="save_ebay_advanced_parameters">
+			<button class="btn btn-default pull-right" type="submit" >
 				<i class="process-icon-save"></i>
 				{l s='Save' mod='ebay'}
 			</button>

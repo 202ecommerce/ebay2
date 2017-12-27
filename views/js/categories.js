@@ -90,8 +90,8 @@ function showProducts(id_category) {
 
                     for (var i in products) {
                         var product = products[i];
-
-                        str += '<tr class="product-row ' + (i % 2 == 0 ? 'alt_row' : '') + '" category="' + id_category + '"> \
+                        var alt_row =        (i % 2 == 0 ? 'alt_row' : '');
+                        str += '<tr class="product-row ' + alt_row + '" category="' + id_category + '"> \
 							<td>' + product.name + '</td> \
 							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
 							<td class="ebay_center"> \

@@ -24,39 +24,22 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__).'/EbayRequest.php';
-
-class EbayProductImage
-{
-    public static function getEbayUrl($ps_url, $ebay_image_name)
-    {
-        $db = Db::getInstance();
-
-        $ebay_url = $db->getValue('SELECT `ebay_image_url` from `'._DB_PREFIX_.'ebay_product_image`
-			WHERE `ps_image_url` = \''.pSQL($ps_url).'\'');
-
-        if (!$ebay_url) {
-            $ebay_request = new EbayRequest();
-            $ebay_url = $ebay_request->uploadSiteHostedPicture($ps_url, $ebay_image_name);
-
-            if (!$ebay_url) {
-                return false;
-            }
-
-            $data = array(
-                'ps_image_url' => pSQL($ps_url),
-                'ebay_image_url' => pSQL($ebay_url),
-            );
-
-            $db->insert('ebay_product_image', $data);
-        }
-
-        return $ebay_url;
-    }
-
-    public static function removeAllProductImage()
-    {
-
-        return Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
-    }
+if (!defined('TMP_DS')) {
+    define('TMP_DS', DIRECTORY_SEPARATOR);
 }
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
+
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('ERROR : INVALID TOKEN');
+}
+$ids_logs = Tools::getValue('ids_logs');
+if ($ids_logs == 'all') {
+    DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_api_log");
+} else {
+    $ids_logs = pSQL(implode(', ', $ids_logs));
+    DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_api_log WHERE id_ebay_api_log IN ($ids_logs)");
+}
+
+die();

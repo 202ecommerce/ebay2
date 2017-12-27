@@ -23,12 +23,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
-<select name="category[{$id_category}]" id="categoryLevel{$level + 1}-{$id_category}" rel="{$id_category}"
-			  style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch({$level + 1}, {$id_category});">
-	<option value="0">{$ch_cat_str}</option>;
-	{foreach from=$ebay_category_list_level item="ebay_category"}
-		<option value="{$ebay_category['id_ebay_category']}"{if $select && $select == $ebay_category.id_ebay_category}selected="selected"{/if}>{$ebay_category.name}{if $ebay_category.is_multi_sku == 1}*{/if}</option>
-	{/foreach}
-
-</select>
+<div class="select-holder">
+  <select name="category[{$id_category}]" id="categoryLevel{$level + 1}-{$id_category}" rel="{$id_category}"
+          OnChange="changeCategoryMatch({$level + 1}, {$id_category});">
+    <option value="0">{$ch_cat_str}</option>;
+    {foreach from=$ebay_category_list_level item="ebay_category"}
+      <option value="{$ebay_category['id_ebay_category']}"{if $select && $select == $ebay_category.id_ebay_category}selected="selected"{/if}>{$ebay_category.name}{if $ebay_category.is_multi_sku == 1}*{/if}</option>
+    {/foreach}
+  </select>
+</div>

@@ -90,6 +90,7 @@ $classes_to_load = array(
     'tabs/EbayProductsExcluTab',
     'tabs/EbayLogJobsTab',
     'tabs/EbayLogWorkersTab',
+    'tabs/EbayApiLogsTab',
     'EbayAlert',
     'EbayOrderErrors',
     'EbayDbValidator',
@@ -138,7 +139,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.5';
+        $this->version = '2.0.6';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -758,6 +759,7 @@ class Ebay extends Module
 
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
+            Configuration::deleteByName('DATE_LAST_SYNC_PRODUCTS');
             return false;
         }
 
@@ -897,10 +899,14 @@ class Ebay extends Module
         $dbEbay->setDb(Db::getInstance());
         $request = new EbayRequest();
         $errors_email = array();
-        $ebay_user_identifier = $ebay_profile->ebay_user_identifier;
+
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
             $errors = array();
+            $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
+            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite);
+            $ebayProfileOrder = new EbayProfile($idProfileOrder);
+            $ebay_user_identifier = $ebayProfileOrder->ebay_user_identifier;
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
             if (!$request->getDev()) {
@@ -919,7 +925,7 @@ class Ebay extends Module
             if ($order->exists()) {
                 continue;
             }
-            $order->add($this->ebay_profile->id);
+            $order->add($ebayProfileOrder->id);
             // no order in ebay order table with this order_ref
             if (!$order->hasValidContact()) {
                 $message = $this->l('Invalid e-mail');
@@ -981,7 +987,7 @@ class Ebay extends Module
                     $shop_data = reset($shops_data);
                     $ebay_profile = new EbayProfile($shop_data['id_ebay_profiles'][0]);
                 } else {
-                    $ebay_profile = EbayProfile::getCurrent();
+                    $ebay_profile = $ebayProfileOrder;
                 }
 
                 $id_customer = $order->getOrAddCustomer($ebay_profile);
@@ -1001,7 +1007,7 @@ class Ebay extends Module
                     $id_ebay_profile = (int) $shops_data[$id_shop]['id_ebay_profiles'][0];
                     $ebay_profile = new EbayProfile($id_ebay_profile);
                 } else {
-                    $ebay_profile = EbayProfile::getCurrent();
+                    $ebay_profile = $ebayProfileOrder;
                 }
 
                 if (!$has_shared_customers) {
@@ -1044,8 +1050,11 @@ class Ebay extends Module
                 }
 
                 // Validate order
-                $order->validate($ebay_profile->id_shop, $this->ebay_profile->id);
-                $order->update($this->ebay_profile->id);
+                if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
+                    $order->update($this->ebay_profile->id);
+                } else {
+                    $this->delete();
+                }
 
                 // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
                 // we now disable the carrier if required
@@ -1056,9 +1065,9 @@ class Ebay extends Module
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
             }
-            foreach ($order->getProducts() as $product) {
-                $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
-            }
+            //foreach ($order->getProducts() as $product) {
+               // $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
+            //}
 
 
             foreach ($customer_ids as $id_customer) {
@@ -1681,6 +1690,8 @@ class Ebay extends Module
             'tips202' => $this->_path.'views/js/202tips.js',
             'noConflicts' => $this->_path.'views/js/jquery.noConflict.php?version=1.7.2',
             'ebayjquery' => $this->_path.'views/js/jquery-1.7.2.min.js',
+            'bootstrapselect' => $this->_path.'views/js/bootstrap-select.js',
+            'bootstrapselectcss' => $this->_path.'views/css/bootstrap-select.min.css',
             'fancybox' => $this->_path.'views/js/jquery.fancybox.min.js',
             'fancyboxCss' => $this->_path.'views/css/jquery.fancybox.css',
             'parametersValidator' => ($this->ebay_profile ? EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id) : ''),
@@ -1972,6 +1983,7 @@ class Ebay extends Module
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
+        $apiLogs = new EbayApiLogsTab($this, $this->smarty, $this->context);
         // test if everything is green
         if ($this->ebay_profile && $this->ebay_profile->isAllSettingsConfigured()) {
             if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
@@ -2033,6 +2045,7 @@ class Ebay extends Module
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
             'ebayLogJobs' => $log_jobs->getContent($this->ebay_profile->id),
             'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
+            'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id),
             );
 
 
@@ -2522,7 +2535,7 @@ class Ebay extends Module
         $backtrace = debug_backtrace();
         $date = date("<Y-m-d(H:i:s)>");
         $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
-        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug_'.date('Y-m-d').'.log', 'a');
         fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
         fclose($stderr);
     }

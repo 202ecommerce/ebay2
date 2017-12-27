@@ -52,6 +52,13 @@ class EbayConfiguration
             $request->importBusinessPolicies();
             //Configuration::updateValue('EBAY_API_TOKEN', $token, false, 0, 0);
             Configuration::updateValue('EBAY_TOKEN_REGENERATE', false, false, 0, 0);
+            $errors = EbayTaskManager::getTaskByErrorCode('931', $ebay_profile->id);
+            if (!empty($errors)) {
+                Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` = "931" AND `id_ebay_profile` = '.(int)$ebay_profile->id);
+                foreach ($errors as $error) {
+                    EbayTaskManager::insertTask($error['id_product'], $error['id_product_attribute'], $error['id_task'], $error['id_ebay_profile']);
+                }
+            }
 
             return true;
         }

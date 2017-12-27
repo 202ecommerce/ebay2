@@ -24,39 +24,20 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once dirname(__FILE__).'/EbayRequest.php';
-
-class EbayProductImage
+/**
+ * @param Ebay $module
+ * @return bool
+ */
+function upgrade_module_2_0_6($module)
 {
-    public static function getEbayUrl($ps_url, $ebay_image_name)
-    {
-        $db = Db::getInstance();
-
-        $ebay_url = $db->getValue('SELECT `ebay_image_url` from `'._DB_PREFIX_.'ebay_product_image`
-			WHERE `ps_image_url` = \''.pSQL($ps_url).'\'');
-
-        if (!$ebay_url) {
-            $ebay_request = new EbayRequest();
-            $ebay_url = $ebay_request->uploadSiteHostedPicture($ps_url, $ebay_image_name);
-
-            if (!$ebay_url) {
-                return false;
-            }
-
-            $data = array(
-                'ps_image_url' => pSQL($ps_url),
-                'ebay_image_url' => pSQL($ebay_url),
-            );
-
-            $db->insert('ebay_product_image', $data);
+    $sql = array();
+    $sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `id_product_attribute` INT(11)';
+    $sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `request` TEXT';
+    $sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` CHANGE id_order status VARCHAR(255)';
+    foreach ($sql as $request) {
+        if (!Db::getInstance()->execute($request)) {
+            return false;
         }
-
-        return $ebay_url;
     }
-
-    public static function removeAllProductImage()
-    {
-
-        return Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
-    }
+    return true;
 }

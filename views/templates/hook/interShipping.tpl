@@ -41,6 +41,10 @@
 			var lastId = 0;
 			var current = $("#"+currentName);
 			var hasValues = (typeof(idPSCarrier) != "undefined" && typeof(idEbayCarrier) != "undefined" && typeof(additionalFee) != "undefined");
+			var selected_services = new Array();
+			$('#internationalShipping .linked a').each(function(){
+				selected_services.push($(this).attr('data-id'));
+			});
 			if (current.children('table').length > 0)
 				lastId = parseInt(current.children('table').last().attr('data-nb')) + 1;
 			var createSelecstShipping = '';
@@ -70,15 +74,16 @@
 			// Carrier eBay
 			createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : 'big-linked') +"'' style='visibility:hidden'><label data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Linked' mod='ebay'}"+(hasValues ? valuePSCarrier : '')+"{l s='with an eBay carrier' mod='ebay'}</label><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : 'ebayCarrier_international') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
 			{foreach from=$eBayCarrier item=carrier}
-				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping'))
-					createSelecstShipping += "<option "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping')
+					&& selected_services.indexOf('{$carrier.id_shipping_service}') == -1)
+					createSelecstShipping += "<option data-id='{$carrier.id_shipping_service}' " + ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
 			{/foreach}
 			createSelecstShipping += "</select></div></td>";
 			// end carrier eBay
 
 			if (currentName == 'internationalShipping')
 			{
-				createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><label class='d-b'>{l s='Select the countries you will ship to:' mod='ebay'}</label>";
+				createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><label class='d-b'>{l s='Select the countries you will ship to' mod='ebay'}</label>";
 				createSelecstShipping += "<ul style='float:left'>";
 				{foreach from=$internationalShippingLocations item=shippingLocation name=loop}
 					{if $smarty.foreach.loop.index%4 == 0 && $smarty.foreach.loop.index != 0}
@@ -588,8 +593,8 @@
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-		<input class="primary button" name="submitSave" type="hidden" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
-		<button class="btn btn-default pull-right" type="submit" id="save_ebay_shipping">
+		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+		<button class="btn btn-default pull-right" type="submit" >
 			<i class="process-icon-save"></i>
 			{l s='Save' mod='ebay'}
 		</button>

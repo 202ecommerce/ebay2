@@ -39,8 +39,10 @@ class EbayDbValidator
             'context' => array('type' => 'varchar', 'length' => 40),
             'data_sent' => array('type' => 'text', 'length' => null),
             'response' => array('type' => 'text', 'length' => null),
+            'request' => array('type' => 'text', 'length' => null),
             'id_product' => array('type' => 'int', 'length' => 11),
-            'id_order' => array('type' => 'int', 'length' => 11),
+            'id_product_attribute' => array('type' => 'int', 'length' => 11),
+            'status' => array('type' => 'varchar', 'length' => 255),
             'date_add' => array('type' => 'datetime', 'length' => 11),
         ),
 
@@ -98,6 +100,7 @@ class EbayDbValidator
             'is_reference' => array('type' => 'tinyint', 'length' => 1),
             'is_ean' => array('type' => 'tinyint', 'length' => 1),
             'is_upc' => array('type' => 'tinyint', 'length' => 1),
+            'max_values' => array('type' => 'int', 'length' => 2),
         ),
 
         'ebay_category_specific_value' => array(
@@ -730,7 +733,10 @@ class EbayDbValidator
 			ON ec2.`id_categories_ref_parent` = ec3.`id_categories`
 			AND ec2.`id_categories_ref_parent` <> \'1\'
 			AND ec2.level <> 1
-			WHERE ec1.`id_categories` is not null';
+			WHERE ec1.`id_categories` is not null
+			AND ec1.id_categories in (SELECT ec.id_category_ref FROM ' . _DB_PREFIX_ . 'ebay_category_configuration ecc
+			    LEFT JOIN ' . _DB_PREFIX_ . 'ebay_category ec 
+			    ON ecc.id_ebay_category = ec.id_ebay_category)';
 
         return Db::getInstance()->executeS($sql);
     }

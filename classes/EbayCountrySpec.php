@@ -323,6 +323,26 @@ class EbayCountrySpec
             'top_rated_url' => 'http://pages.ebay.com.au/help/sell/top-rated.html',
             'url_help_business_policies' => 'http://pages.ebay.com.au/help/sell/business-policies.html',
         ),
+        'us' => array(
+            'site_id' => 0,
+            'documentation' => 'en',
+            'language' => 'en_EN',
+            'currency' => 'USD',
+            'site_name' => 'US',
+            'site_extension' => 'com',
+            'img_stats' => null,
+            'iso_code' => 'US',
+            'signin' => 'https://signin.ebay.com/ws/eBayISAPI.dll',
+            'signin_pro_url' => 'https://scgi.ebay.com/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.com/ws/eBayISAPI.dll',
+            'pro_url' => 'http://sellercentre.ebay.com/',
+            'fee_url' => 'http://sellercentre.ebay.com/fees-business-sellers-0',
+            'title_desc_url' => 'http://pages.ebay.com/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.com/research-items-similar-yours',
+            'picture_url' => 'http://sellercentre.ebay.com/new-picture-standards',
+            'top_rated_url' => 'http://pages.ebay.com/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.com/help/sell/business-policies.html',
+        ),
 
 
     );
@@ -503,17 +523,14 @@ class EbayCountrySpec
     {
         $countries = array();
 
-
         foreach (self::$country_data as $iso => $ctry) {
             if (isset($ctry['subdomain']) === false) {
                 $ctry['subdomain'] = null;
             }
-
             if ($dev) {
                 unset($ctry['signin']);
                 $ctry['signin'] = $ctry['signin_sandbox'];
             }
-
             $countries[$iso] = $ctry;
         }
 
@@ -530,7 +547,6 @@ class EbayCountrySpec
      */
     public static function getInstanceByKey($key, $dev = false)
     {
-
         if (isset(self::$country_data[$key])) {
             $iso_code = self::$country_data[$key]['iso_code'];
             $id_country = Country::getByIso($iso_code);
@@ -547,7 +563,6 @@ class EbayCountrySpec
 
     public static function getInstanceByCountryAndLang($iso_country, $iso_lang)
     {
-
         if (isset(self::$country_data[$iso_country])) {
             return self::getInstanceByKey($iso_country);
         } else if (isset(self::$country_data[$iso_country.'-'.$iso_lang])) {
@@ -574,7 +589,6 @@ class EbayCountrySpec
      */
     public static function getKeyForEbayCountry()
     {
-
         $country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
         $default_country = Tools::strtolower($country->iso_code);
@@ -590,52 +604,41 @@ class EbayCountrySpec
 
     public static function getSiteNameBySiteId($site_id = false)
     {
-
-
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['site_name'];
             }
         }
-
         return null;
     }
 
     public static function getSiteExtensionBySiteId($site_id = false)
     {
-
-
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['site_extension'];
             }
         }
-
         return null;
     }
 
     public static function getIsoCodeBySiteId($site_id = false)
     {
-
-
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['iso_code'];
             }
         }
-
         return null;
     }
 
     public static function getProUrlBySiteId($site_id = false)
     {
-
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['pro_url'];
             }
         }
-
         return null;
     }
 
@@ -643,6 +646,16 @@ class EbayCountrySpec
     {
         foreach (self::$country_data as $country) {
             if ($country['iso_code'] == $iso_code) {
+                return $country['site_id'];
+            }
+        }
+        return null;
+    }
+
+    public static function getSiteIDBySiteNAme($site_name = false)
+    {
+        foreach (self::$country_data as $country) {
+            if ($country['site_name'] == $site_name) {
                 return $country['site_id'];
             }
         }

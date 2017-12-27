@@ -41,7 +41,7 @@
             </div>
         </div>
     {else}
-        <p class="table-block__holder" style="margin:0;padding: 5px 0;">{l s='Last import :' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</p>
+        <p class="table-block__holder" style="margin:0;padding: 5px 0;">{l s='Last import:' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</p>
 
         <div class="table-wrapper">
             <table id="OrderReturns" class="table" cellpadding="0" cellspacing="0" style="width: 100%;">

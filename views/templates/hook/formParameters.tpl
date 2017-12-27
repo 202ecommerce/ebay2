@@ -186,7 +186,7 @@
 	</fieldset>	
 	{/if}
 		
-	<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel" id="configForm1">
+	<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel">
 		<fieldset>
 			<div class="panel-heading">{l s='Account details' mod='ebay'}</div>
 
@@ -231,7 +231,7 @@
 			
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-					{l s='Item location' mod='ebay'}
+          <span class="label-tooltip" title="{l s='Here you have to add your shop\'s postal code' mod='ebay'}">{l s='Item location' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall':'UTF-8'}" class="form-control" placeholder="{l s='Your shop\'s postal code' mod='ebay'}" />
@@ -240,7 +240,7 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-					{l s='Item Country' mod='ebay'}
+          <span class="label-tooltip" title="{l s='Here you have to add your shop\'s country' mod='ebay'}">{l s='Item Country' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<select name="ebay_shop_country" class="form-control">

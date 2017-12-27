@@ -131,7 +131,9 @@ class EbayCategory
      */
     public function getItemsSpecifics()
     {
-        $sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, e.`is_brand`, e.`can_variation`, e.`is_reference`, e.`is_ean`, e.`is_upc`
+        $sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, 
+                e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, 
+                e.`is_brand`, e.`can_variation`, e.`is_reference`, e.`is_ean`, e.`is_upc`, e.`max_values`
 			FROM `'._DB_PREFIX_.'ebay_category_specific` e
 			WHERE e.`id_category_ref` = '.(int)$this->id_category_ref.'
 			AND e.`ebay_site_id` = '.(int)$this->id_country;
@@ -149,7 +151,7 @@ class EbayCategory
                 $this->_loadFromDb();
             }
 
-            $sql = 'SELECT e.`name`, e.`can_variation`, e.`id_attribute_group`, e.`id_feature`,
+            $sql = 'SELECT e.`name`, e.`can_variation`, e.`id_attribute_group`, e.`id_feature`, e.`max_values`,
                 ec.`value` AS specific_value, e.`is_brand`, e.`is_reference`, e.`is_ean`, e.`is_upc`
 				FROM `'._DB_PREFIX_.'ebay_category_specific` e
 				LEFT JOIN `'._DB_PREFIX_.'ebay_category_specific_value` ec
@@ -237,31 +239,30 @@ class EbayCategory
 
     public static function insertCategories($ebay_site_id, $categories, $categories_multi_sku)
     {
-        $db = Db::getInstance();
-
-        $dbEbay = new DbEbay();
-        $dbEbay->setDb($db);
-
+        $insert_data = array();
         foreach ($categories as $category) {
-            if (!$dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
-                'id_category_ref'        => pSQL($category['CategoryID']),
-                'id_category_ref_parent' => pSQL($category['CategoryParentID']),
-                'id_country'             => pSQL($ebay_site_id),
-                'level'                  => pSQL($category['CategoryLevel']),
-                'is_multi_sku'           => isset($categories_multi_sku[$category['CategoryID']]) ? (int)$categories_multi_sku[$category['CategoryID']] : null,
-                'name'                   => pSQL($category['CategoryName']),
-            ), 'INSERT', '', 0, true, true)
-            ) {
-                $handle = fopen(dirname(__FILE__).'/../log/import_category_ebay.txt', 'a+');
-                fwrite($handle, print_r($category, true));
-                fwrite($handle, print_r($db->getMsgError(), true));
-                fclose($handle);
-
-                return false;
+            $one = '(' . pSQL($category['CategoryID']);
+            $one .= ',' . pSQL($category['CategoryParentID']);
+            $one .= ',' . pSQL($ebay_site_id);
+            $one .= ',' . pSQL($category['CategoryLevel']);
+            if (array_key_exists($category['CategoryID'], $categories_multi_sku)) {
+                $one .= ',' . $categories_multi_sku[$category['CategoryID']];
+            } else {
+                $one .= ',NULL';
             }
+            $one .= ', \'' . pSQL($category['CategoryName']) . '\')';
+
+            $insert_data[] = $one;
         }
 
-        return true;
+        $insert = 'INSERT INTO ' . _DB_PREFIX_ . 'ebay_category (id_category_ref, 
+                    id_category_ref_parent, id_country, level, is_multi_sku, name) VALUES ' . implode(', ', $insert_data);
+        $result = DB::getInstance()->Execute($insert);
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function updateCategoryTable($categories_multi_sku)

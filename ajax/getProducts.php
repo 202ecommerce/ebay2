@@ -67,6 +67,9 @@ $id_ebay_profile = (int) Tools::getValue('id_ebay_profile');
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) {
+    $product = new Product($row['id']);
+    $variation = $product->getWsCombinations();
+    $row['nb_variation'] = count($variation);
     $row['name'] = Tools::safeOutput($row['name']);
     $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
     $row['extra_images'] = Tools::safeOutput($row['extra_images']);

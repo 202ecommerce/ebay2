@@ -36,6 +36,7 @@
 
 <link rel="stylesheet" href="{$css_file|escape:'htmlall':'UTF-8'}" />
 <link rel="stylesheet" href="{$font_awesome_css_file|escape:'htmlall':'UTF-8'}" />
+<link rel="stylesheet" href="{$bootstrapselectcss|escape:'htmlall':'UTF-8'}" />
 <script>
     var $j = $;
 </script>
@@ -51,6 +52,7 @@
     </script>
     <script src="{$fancybox|escape:'htmlall':'UTF-8'}"></script>
 {/if}
+<script src="{$bootstrapselect|escape:'htmlall':'UTF-8'}"></script>
 <script src="{$tooltip|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
 <script src="{$tips202|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
 
@@ -234,7 +236,7 @@
                                 </button>
                             </a>
 
-                            <button type="button" class="btn btn-default pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
+                            <button type="button" class="btn btn-default btn-hover-danger pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
                                 <i class="icon-trash"></i>
                             </button>
                             {if $debug == 1}
@@ -247,7 +249,12 @@
                             </label>
 
                             <label class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
-                                {l s='Last SYNC :' mod='ebay'}{$last_sync_prod}
+                                {l s='Last SYNC :' mod='ebay'}
+                            {if $last_sync_prod == '1970-01-01 03:00:00'}
+                                {l s='never done' mod='ebay'}
+                            {else}
+                                {$last_sync_prod}
+                            {/if}
                             </label>
 
 
@@ -341,7 +348,7 @@
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
             <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Listings' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>
-            <a id="log-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#log" data-sub="log"><i class="icon-exclamation-circle"></i> {l s='Log' mod='ebay'}</a>
+            <a id="log-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#log" data-sub="log"><i class="icon-file-text"></i> {l s='Log' mod='ebay'}</a>
         </ul>
     </div>
 

@@ -24,7 +24,7 @@
 *}
 <form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" class="form form-horizontal panel" id="configForm3">
 	<fieldset>
-		<h4>{l s='Optimise your listing titles with tags:' mod='ebay'}</h4>
+		<h4>{l s='Optimise your listing titles with tags' mod='ebay'}</h4>
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
@@ -63,7 +63,7 @@
 
 	<fieldset>
 		<hr>
-		<h4><span data-dialoghelp="#tagsTemplate" data-inlinehelp="{l s='View the list of tags.' mod='ebay'}">{l s='Design an eye-catching template to attract buyers.' mod='ebay'} :</span></h4>
+		<h4><span data-dialoghelp="#tagsTemplate" data-inlinehelp="{l s='View the list of tags.' mod='ebay'}">{l s='Design an eye-catching template to attract buyers' mod='ebay'}</span></h4>
 
 		<div class="alert alert-info alert-no-icon">
 			<p><b>{l s='Use this template to choose how you’d like your products to appear on eBay.' mod='ebay'}</b></p>
@@ -76,10 +76,7 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label col-sm-3">
-				{l s='Ebay product template' mod='ebay'}
-			</label>
-			<div class="col-sm-9">
+			<div class="col-sm-12">
 				<textarea style="width: 100%" class="rte" cols="100" rows="100" name="ebay_product_template">{$ebay_product_template|ebayHtml}</textarea>
 			</div>
 		</div>
@@ -133,14 +130,26 @@
 
 		<script type="text/javascript">
 			$(window).load(function(){
-			   
-                setTimeout(function() {		 
+
+                checkLoadTinyMce();
+
+                function checkLoadTinyMce(){
+                    setTimeout(function(){
+                        if (typeof tinyMCE == 'undefined'){
+                            checkLoadTinyMce();
+                        } else{
+                            initTinyMce();
+                        }
+                    } ,100);
+				}
+
+                function initTinyMce(){
                     {literal}
                     if(tinyMCE.majorVersion == 4)
-                    {                        
+                    {
                         tinyMCE.init({
                             mode : "specific_textareas",
-                            theme : "advanced",
+                            //theme : "advanced",
                             skin:"cirkuit",
                             editor_selector : "rte",
                             editor_deselector : "noEditor",
@@ -166,7 +175,7 @@
                             language : iso,
                             setup: function (ed) {
                                 ed.on('init', function(args) {
-                                    $('#selectTagTemplate').insertAfter('#mce_36-body');
+                                    $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
                                 });
                             }
                         });
@@ -174,11 +183,11 @@
                     else
                         tinyMCE.init({
                             mode : "specific_textareas",
-                            theme : "advanced",
+                            //theme : "advanced",
                             skin:"cirkuit",
                             editor_selector : "rte",
                             editor_deselector : "noEditor",
-                            plugins : "safari,pagebreak,style,table,advimage,advlink,inlinepopups,media,contextmenu,paste,fullscreen,xhtmlxtras,preview",
+                            plugins : "safari,pagebreak,style,table,advlink,inlinepopups,media,contextmenu,paste,fullscreen,xhtmlxtras,preview",
                             // Theme options
                             theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
                             theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
@@ -231,15 +240,15 @@
                         });
                     }
                     {/literal}
-                },1000);
+                }
 			});
 
 		</script>
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-		<input class="primary button" name="submitSave" type="hidden" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
-		<button class="btn btn-default pull-right" type="submit" id="save_ebay_shipping">
+		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+		<button class="btn btn-default pull-right" type="submit" >
 			<i class="process-icon-save"></i>
 			{l s='Save' mod='ebay'}
 		</button>
