@@ -26,12 +26,20 @@
 
 <div class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Returns imported by ' mod='ebay'} {$type_sync_returns}
-        <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"
-           class="button-refresh btn btn-default"
-           title="{l s='Sync refunds and returns from eBay' mod='ebay'}"
-           data-toggle="tooltip">
-           <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
-        </a>
+        {if $mode_demo}
+            <p class="button-refresh btn btn-default"
+               title="{l s='This button is disabled in the demo version' mod='ebay'}"
+               data-toggle="tooltip">
+                <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
+            </p>
+        {else}
+            <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"
+               class="button-refresh btn btn-default"
+               title="{l s='Sync refunds and returns from eBay' mod='ebay'}"
+               data-toggle="tooltip">
+                <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
+            </a>
+        {/if}
     </h4>
 
     {if empty($returns)}

@@ -29,9 +29,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-
-
-
 /* Loading eBay Class Request*/
 $classes_to_load = array(
     'EbayRequest',
@@ -129,6 +126,8 @@ class Ebay extends Module
     private $is_multishop;
 
     private $stats_version;
+
+    public $mode_demo = false;
 
     /**
      * Construct Method
@@ -1761,6 +1760,8 @@ class Ebay extends Module
         } else {
             $template = $this->__displayFormConfig();
         }
+
+        $this->smarty->assign("mode_demo", $this->mode_demo);
         return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
     }
 
@@ -2045,9 +2046,8 @@ class Ebay extends Module
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
             'ebayLogJobs' => $log_jobs->getContent($this->ebay_profile->id),
             'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
-            'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id),
-            );
-
+            'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id)
+        );
 
         $this->smarty->assign($smarty_vars);
 

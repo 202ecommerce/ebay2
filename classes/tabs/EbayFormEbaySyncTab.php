@@ -187,6 +187,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
         $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
 
+        $ebay = new Ebay();
         $smarty_vars = array(
             'filter'                  => $filter,
             'searche'                 => $searche,
@@ -227,7 +228,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'date' => pSQL(date('Ymdhis')),
             'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
             'bp_active' => ($this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'))?$this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'):0,
-
+            'mode_demo' => $ebay->mode_demo
         );
 
         return $this->display('formEbaySync.tpl', $smarty_vars);

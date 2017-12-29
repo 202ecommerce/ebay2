@@ -229,16 +229,25 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}">
-                                <button type="button" class="btn btn-default pull-left" title="{l s='Add profile' mod='ebay'}">
+                            {if $mode_demo}
+                                <button type="button" class="btn btn-default pull-left" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip" data-placement="bottom">
                                     <i class="icon-plus"></i>
                                 </button>
-                            </a>
 
-                            <button type="button" class="btn btn-default btn-hover-danger pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
-                                <i class="icon-trash"></i>
-                            </button>
+                                <button type="button" class="btn btn-default pull-left" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip" data-placement="bottom">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            {else}
+                                <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}">
+                                    <button type="button" class="btn btn-default pull-left" title="{l s='Add profile' mod='ebay'}">
+                                        <i class="icon-plus"></i>
+                                    </button>
+                                </a>
+
+                                <button type="button" class="btn btn-default btn-hover-danger pull-left delete-profile" title="{l s='Remove profile' mod='ebay'}" href="#popin-remove-profile" data-profile="{$current_profile->id}">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            {/if}
                             {if $debug == 1}
                                 <small  style="background-color: #fbbb22; color: #FFF; padding: 0 12px; display: inline-block; height: 31px; line-height: 31px; border-radius: 3px;">{l s='in SANDBOX mode !' mod='ebay'}</small>
                             {/if}

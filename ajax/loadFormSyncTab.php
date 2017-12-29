@@ -29,7 +29,6 @@ require_once dirname(__FILE__).'/../../../init.php';
 require_once dirname(__FILE__).'/../ebay.php';
 require_once dirname(__FILE__).'/../classes/tabs/EbayFormEbaySyncTab.php';
 
-
 if (!Configuration::get('EBAY_SECURITY_TOKEN')
     || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
@@ -45,4 +44,5 @@ $filter = array(
 $ebay = new Ebay;
 $context = Context::getContext();
 $form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
+
 die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche, $filter));

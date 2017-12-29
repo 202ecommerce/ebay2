@@ -700,8 +700,31 @@
 <div class="table-block">
   <h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
     <div>
-      <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span
-                class="icon-plus"></span> {l s='Add a category' mod='ebay'} </a>
+      {if $mode_demo}
+        <p class="btn btn-success" title="{l s='This button is disabled in the demo version' mod='ebay'}"
+           data-toggle="tooltip">
+          <span class="icon-plus"></span> {l s='Add a category' mod='ebay'}
+        </p>
+        <div class="button-sync">
+          <button class="btn btn-default" type="button" title="{l s='This button is disabled in the demo version' mod='ebay'}"
+                  data-toggle="tooltip">
+            <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
+          </button>
+        </div>
+      {else}
+        <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}>
+          <span class="icon-plus"></span> {l s='Add a category' mod='ebay'}
+        </a>
+        <div class="dropdown js-user-dropdown button-sync">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li data-action="resyncProductsAndImages">{l s='Synchronize all products sending new images' mod='ebay'}</li>
+            <li data-action="resyncProducts">{l s='Synchronize all products' mod='ebay'}</li>
+          </ul>
+        </div>
+      {/if}
       <div class="dropdown js-user-dropdown button-sync">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
           <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
@@ -766,20 +789,36 @@
             <td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
             <td>{$category.annonces|escape:'htmlall':'UTF-8'}
               /{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
-            <td class="text-center"><input type="checkbox" class="categorySync"
-                                           id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]"
-                                           value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
-              <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"
-                     title="{l s='Activate/Deactivate' mod='ebay'}" data-toggle="tooltip"></label>
-            </td>
-            <td>
-              <div class="action">
-                <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"
-                   title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></a>
-                <a href="#" class="delete_cat btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
-                   title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></a>
-              </div>
-            </td>
+            {if $mode_demo}
+              <td class="text-center"><input type="checkbox" class="categorySync"
+                                             value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
+                <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"
+                       title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"></label>
+              </td>
+              <td>
+                <div class="action">
+                  <p class="btn btn-sm btn-default" data-id="{$category.value}"
+                     title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></p>
+                  <p class="btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
+                     title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></p>
+                </div>
+              </td>
+            {else}
+              <td class="text-center"><input type="checkbox" class="categorySync"
+                                             id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]"
+                                             value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
+                <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"
+                       title="{l s='Activate/Deactivate' mod='ebay'}" data-toggle="tooltip"></label>
+              </td>
+              <td>
+                <div class="action">
+                  <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"
+                     title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></a>
+                  <a href="#" class="delete_cat btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
+                     title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></a>
+                </div>
+              </td>
+            {/if}
           </tr>
         {/foreach}
         </tbody>

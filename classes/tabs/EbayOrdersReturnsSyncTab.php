@@ -26,7 +26,6 @@
 
 class EbayOrdersReturnsSyncTab extends EbayTab
 {
-
     public function getContent()
     {
 

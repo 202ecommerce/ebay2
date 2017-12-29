@@ -73,6 +73,9 @@ class EbayOrdersTab extends EbayTab
         $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         $vars['currency'] = $this->context->currency;
         $vars['url'] = $this->_getUrl($url_vars);
+        $ebay = new Ebay();
+        $vars['mode_demo'] = $ebay->mode_demo;
+
         return $this->display('tableOrders.tpl', $vars);
     }
 }

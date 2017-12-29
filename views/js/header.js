@@ -72,9 +72,6 @@ $(document).ready(function () {
         boost = window.setInterval(function(){startBoost(boost_url)}, 3000);
     });
 
-
-
-
     // Close modal on click on cancel button
     $(document).on('click', '.js-close-popin', function() {
         $.fancybox.close();
