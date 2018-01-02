@@ -593,10 +593,17 @@
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
-		<button class="btn btn-default pull-right" type="submit" >
-			<i class="process-icon-save"></i>
-			{l s='Save' mod='ebay'}
-		</button>
+        {if $mode_demo}
+			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+				<i class="process-icon-save"></i>
+                {l s='Save' mod='ebay'}
+			</p>
+        {else}
+			<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+			<button class="btn btn-default pull-right" type="submit" >
+				<i class="process-icon-save"></i>
+                {l s='Save' mod='ebay'}
+			</button>
+        {/if}
 	</div>
 </form>

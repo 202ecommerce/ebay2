@@ -2468,6 +2468,7 @@ class Ebay extends Module
             'start'                   => $start,
             'stop'                    => $stop,
             'search'                  => $search,
+            'mode_demo'               => $this->mode_demo
         ));
         echo $this->display(__FILE__, 'views/templates/hook/ebay_listings_ajax.tpl');
     }

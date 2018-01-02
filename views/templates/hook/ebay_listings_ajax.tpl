@@ -23,10 +23,13 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
 <div class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Ebay listings' mod='ebay'}
-        <button class="button-refresh btn btn-default" id="refresh_list_productEbay"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        {if $mode_demo}
+            <button class="btn btn-default" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        {else}
+            <button class="button-refresh btn btn-default" id="refresh_list_productEbay"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
+        {/if}
     </h4>
 
 

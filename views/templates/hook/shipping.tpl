@@ -92,13 +92,17 @@
 			// end extrafree
 
 			// trash
-			var atrash = $('<a class="ebay_trash btn btn-default btn-sm pull-right"><i class="icon-trash"></i></a>');
-			// var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
-			// atrash.append(imgtrash);
-			atrash.click(function() {
-				$(this).closest('table').remove();
-				return false;
-			});
+            {if $mode_demo}
+            var atrash = $('<p class="btn btn-default btn-sm pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><i class="icon-trash"></i></p>');
+            {else}
+            var atrash = $('<a class="ebay_trash btn btn-default btn-sm pull-right"><i class="icon-trash"></i></a>');
+            // var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
+            // atrash.append(imgtrash);
+            atrash.click(function() {
+                $(this).closest('table').remove();
+                return false;
+            });
+            {/if}
 			var trash = $("<td style='visibility:hidden'>").append(atrash);
 			// end trash
 
@@ -569,10 +573,17 @@
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
-		<button class="btn btn-default pull-right" type="submit" >
-			<i class="process-icon-save"></i>
-			{l s='Save' mod='ebay'}
-		</button>
+        {if $mode_demo}
+			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+				<i class="process-icon-save"></i>
+                {l s='Save' mod='ebay'}
+			</p>
+        {else}
+			<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+			<button class="btn btn-default pull-right" type="submit" >
+				<i class="process-icon-save"></i>
+                {l s='Save' mod='ebay'}
+			</button>
+        {/if}
 	</div>
 </form>

@@ -204,7 +204,7 @@
 					{l s='Paypal email address' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
+					<input type="text" class="form-control" size="20" name="ebay_paypal_email" value="{if !$mode_demo}{$ebay_paypal_email|escape:'htmlall':'UTF-8'}{/if}"/>
 				</div>
 
 				<div class="col-sm-9 col-sm-push-3">
@@ -264,14 +264,20 @@
 			</div>
 
 			<div class="col-sm-9 col-sm-push-3 pos-r">
-				<span class="regenerate_token_click btn btn-default label-tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
+                {if $mode_demo}
+					<span class="btn btn-default label-tooltip" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
 					<i class="icon-refresh"></i>
 					<span>{l s='Generate a new authentication token' mod='ebay'}</span>
-					{* {l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'} *}
 				</span>
-				<span class="tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
+                {else}
+					<span class="regenerate_token_click btn btn-default label-tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
+					<i class="icon-refresh"></i>
+					<span>{l s='Generate a new authentication token' mod='ebay'}</span>
+				</span>
+					<span class="tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
 					<i class="process-icon-help"></i>
 				</span>
+                {/if}
 			</div>
 
 			<div class="regenerate_token_button" style="display: none;">
@@ -379,12 +385,19 @@
 		</fieldset>
 
 		<div class="panel-footer" id="buttonEbayParameters">
-			<a href="#categoriesEbayProgression" class="load_cat_sync" style="display: none"></a>
-			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-			<button class="btn btn-default pull-right" type="submit" id="save_ebay_parameters">
-				<i class="process-icon-save"></i>
-				{l s='Save' mod='ebay'}
-			</button>
+            {if $mode_demo}
+				<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+					<i class="process-icon-save"></i>
+                    {l s='Save' mod='ebay'}
+				</p>
+            {else}
+				<a href="#categoriesEbayProgression" class="load_cat_sync" style="display: none"></a>
+				<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
+				<button class="btn btn-default pull-right" type="submit" id="save_ebay_parameters">
+					<i class="process-icon-save"></i>
+                    {l s='Save' mod='ebay'}
+				</button>
+            {/if}
 		</div>
 	</form>
 {/if}

@@ -134,6 +134,8 @@ class EbayFormParametersTab extends EbayTab
             'ps_version'            => _PS_VERSION_,
             'code_payment_solution' => 'HELP-SETTINGS-PAYMENT-SOLUTIONS',
         );
+        $ebay = new Ebay();
+        $this->smarty->assign('mode_demo', $ebay->mode_demo);
 
         return $this->display('formParameters.tpl', $smarty_vars);
     }

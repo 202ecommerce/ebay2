@@ -26,7 +26,6 @@
 
 class EbayListingsTab extends EbayTab
 {
-
     public function getContent($id_ebay_profile)
     {
         $template_vars = array(

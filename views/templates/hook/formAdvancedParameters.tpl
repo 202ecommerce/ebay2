@@ -54,12 +54,21 @@
 		{if $log_file_exists}
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-push-3">
-					<a href="#" class ='logs btn btn-default' data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">
-						<i class="icon-download"></i>
-						<span>
+                    {if $mode_demo}
+						<p class="btn btn-warning" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+							<i class="icon-download"></i>
+							<span>
 							{l s='Download' mod='ebay'}
 						</span>
-					</a>
+						</p>
+                    {else}
+						<a href="#" class ='logs btn btn-default' data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">
+							<i class="icon-download"></i>
+							<span>
+							{l s='Download' mod='ebay'}
+						</span>
+						</a>
+                    {/if}
 				</div>
 			</div>
 		{/if}
@@ -176,7 +185,11 @@
 					{l s='Category definition upgrade tool' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-					<a name="resynch" id="ResynchCategories" class="btn btn-warning" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
+                    {if $mode_demo}
+						<p class="btn btn-warning" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">{l s='Start upgrade' mod='ebay'}</p>
+                    {else}
+						<a name="resynch" id="ResynchCategories" class="btn btn-warning" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
+                    {/if}
 				</div>
 			</div>
 		</div>
@@ -188,7 +201,11 @@
 					{l s='Reload store eBay categories tool' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-					<a name="reload_categories_store" id="reload_categories_store" class="btn btn-warning" href ="#">{l s='Reload store categories' mod='ebay'}</a>
+                    {if $mode_demo}
+						<p class="btn btn-warning" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">{l s='Reload store categories' mod='ebay'}</p>
+                    {else}
+						<a name="reload_categories_store" id="reload_categories_store" class="btn btn-warning" href ="#">{l s='Reload store categories' mod='ebay'}</a>
+                    {/if}
 				</div>
 			</div>
 		</div>
@@ -224,14 +241,23 @@
 	</fieldset>
 	
 	<div id="buttonEbayParameters" class="panel-footer">
-		<a href="#categoriesProgression">
-			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-			<input class="primary button" type="hidden" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
-			<button class="btn btn-default pull-right" type="submit" >
+        {if $mode_demo}
+			<p style="margin-top: -10px">
+			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
 				<i class="process-icon-save"></i>
-				{l s='Save' mod='ebay'}
-			</button>
-		</a>
+                {l s='Save' mod='ebay'}
+			</p>
+			</p>
+        {else}
+			<a href="#categoriesProgression">
+				<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
+				<input class="primary button" type="hidden" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
+				<button class="btn btn-default pull-right" type="submit" >
+					<i class="process-icon-save"></i>
+                    {l s='Save' mod='ebay'}
+				</button>
+			</a>
+        {/if}
 	</div>
 </form>
 <form id="reload_categories_store_go" method="post"

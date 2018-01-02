@@ -83,6 +83,7 @@ class EbayFormInterShippingTab extends EbayTab
             }
         }
 
+        $ebay = new Ebay();
         $template_vars = array(
             'eBayCarrier' => EbayShippingService::getCarriers($this->ebay_profile->ebay_site_id),
             'psCarrier' => $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT']),
@@ -103,7 +104,7 @@ class EbayFormInterShippingTab extends EbayTab
                 'ps_version'     => _PS_VERSION_,
                 'error_code'     => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
             ),
-
+            'mode_demo' => $ebay->mode_demo
         );
 
         return $this->display('interShipping.tpl', $template_vars);
