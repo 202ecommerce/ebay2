@@ -797,8 +797,8 @@
               </td>
               <td>
                 <div class="action">
-                  <p class="btn btn-sm btn-default" data-id="{$category.value}"
-                     title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></p>
+                  <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"
+                     title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></a>
                   <p class="btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
                      title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></p>
                 </div>
@@ -1134,7 +1134,11 @@
       <button class="js-close-popin js-close-popin-bottom btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
       <button class="js-prev-popin btn btn-default pull-left" style="display: none"><i class="process-icon-next" style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
       <button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}</button>
-      <a href="#popin-categorie-save" style="display: none;" class="js-save-category js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
+        {if $mode_demo}
+          <p style="display: none;" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip" class="js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</p>
+        {else}
+          <a href="#popin-categorie-save" style="display: none;" class="js-save-category js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
+        {/if}
     </div>
     <div style="display: none">
       <select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px;"
