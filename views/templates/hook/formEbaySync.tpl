@@ -689,7 +689,15 @@
 
     $.ajax({
       type: "POST",
-      url: url,
+      url: formEbaySyncController,  // var formEbaySyncController was defined in form.tpl
+      data: {
+          ajax: true,
+          action: 'LoadAjaxCategories',
+          id_lang: id_lang,
+          profile: id_ebay_profile,
+          id_shop: id_shop,
+          s: search,
+      },
       success: function (data) {
         var data = jQuery.parseJSON(data);
         var str = '';

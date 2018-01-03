@@ -674,4 +674,18 @@ class AdminFormEbaySyncController extends ModuleAdminController
         }
         die($respons);
     }
+
+    public function ajaxProcessLoadAjaxCategories()
+    {
+        $ebay = Module::getInstanceByName('ebay');
+        $root_category = Category::getRootCategory();
+        $categories = Category::getCategories(Tools::getValue('id_lang'));
+        $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+
+        $vars = array(
+            'categoryList' => $category_list,
+        );
+
+        die(Tools::jsonEncode($vars));
+    }
 }
