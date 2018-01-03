@@ -24,34 +24,32 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include dirname(__FILE__).'/../../../config/config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
-include '../ebay.php';
+class AdminFormEbaySyncController extends ModuleAdminController
+{
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR: Invalid Token');
-}
-
-
-$sql = 'SELECT p.`id_product`
+    public function ajaxProcessDeleteConfigCategory()
+    {
+        $sql = 'SELECT p.`id_product`
             FROM `'._DB_PREFIX_.'product` p';
 
-$sql .= Shop::addSqlAssociation('product', 'p');
-$sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+        $sql .= Shop::addSqlAssociation('product', 'p');
+        $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
                 ON (p.`id_product` = pl.`id_product`
                 AND pl.`id_lang` = '.(int) Tools::getValue('ebay_category');
-$sql .= Shop::addSqlRestrictionOnLang('pl');
-$sql .= ')
+        $sql .= Shop::addSqlRestrictionOnLang('pl');
+        $sql .= ')
             LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
                 ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)Tools::getValue('profile').'
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
             WHERE ';
-$sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_category');
-$sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
-$to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
-foreach ($to_synchronize_product_ids as $product_id_to_sync) {
-    EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
+        $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_category');
+        $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+        $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
+        foreach ($to_synchronize_product_ids as $product_id_to_sync) {
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
+        }
+        EbayCategoryConfiguration::deleteByIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'));
+    }
 }
-EbayCategoryConfiguration::deleteByIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'));

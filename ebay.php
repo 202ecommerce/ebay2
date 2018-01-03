@@ -365,6 +365,7 @@ class Ebay extends Module
     {
         $tabs_to_load = array(
             'AdminEbayApiLog',
+            'AdminFormEbaySync',
         );
         foreach ($tabs_to_load as $tab_name) {
             $tab = new Tab();
@@ -387,6 +388,7 @@ class Ebay extends Module
     {
         $tabs_to_load = array(
             'AdminEbayApiLog',
+            'AdminFormEbaySync',
         );
         foreach ($tabs_to_load as $tab_name) {
             $tab  = Tab::getInstanceFromClassName($tab_name);
@@ -1788,6 +1790,7 @@ class Ebay extends Module
                 'prestashop_version'     => _PS_VERSION_,
                 'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
             ),
+            'formEbaySyncController' => $this->context->link->getAdminLink('AdminFormEbaySync'),
 
             ));
 

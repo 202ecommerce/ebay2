@@ -62,6 +62,7 @@
   {/literal}
 </style>
 <script>
+
   var product_sync_for_delete;
   var module_time = "{$date|escape:'htmlall':'UTF-8'}";
   var showOptionals;
@@ -350,7 +351,13 @@
         cache: false,
         dataType: 'json',
         type: "POST",
-        url: module_dir + "ebay/ajax/deleteConfigCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_category,
+        url: formEbaySyncController, //the var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'DeleteConfigCategory',
+            profile: id_ebay_profile,
+            ebay_category: id_category,
+        },
         success: function (data) {
           tr.remove();
         }

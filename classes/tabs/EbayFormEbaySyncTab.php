@@ -227,7 +227,6 @@ class EbayFormEbaySyncTab extends EbayTab
             'date' => pSQL(date('Ymdhis')),
             'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
             'bp_active' => ($this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'))?$this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'):0,
-
         );
 
         return $this->display('formEbaySync.tpl', $smarty_vars);

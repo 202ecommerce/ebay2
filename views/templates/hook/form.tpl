@@ -424,6 +424,7 @@
     </script>
     {/if}
     <script type="text/javascript">
+        var formEbaySyncController = "{$formEbaySyncController|addslashes}";
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
           'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",

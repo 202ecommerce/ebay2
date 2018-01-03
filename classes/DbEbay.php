@@ -40,7 +40,7 @@ class DbEbay
         $type = Tools::strtoupper($type);
         switch ($type) {
             case 'INSERT':
-                return $this->db->insert($table, $data, $use_null, $use_cache, Db::INSERT, false);
+                return $this->db->insert($table, $data, $use_null, $use_cache, Db::REPLACE, false);
 
             case 'INSERT IGNORE':
                 return $this->db->insert($table, $data, $use_null, $use_cache, Db::INSERT_IGNORE, false);
