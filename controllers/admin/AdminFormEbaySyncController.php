@@ -55,8 +55,8 @@ class AdminFormEbaySyncController extends ModuleAdminController
 
     public function ajaxProcessResetBp ()
     {
-        require_once dirname(__FILE__).'/../classes/EbayProfile.php';
-        require_once dirname(__FILE__).'/../classes/EbayRequest.php';
+        require_once dirname(__FILE__).'/../../classes/EbayProfile.php';
+        require_once dirname(__FILE__).'/../../classes/EbayRequest.php';
         if (EbayTools::getValue('admin_path')) {
             define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.EbayTools::getValue('admin_path').TMP_DS);
         }
@@ -75,7 +75,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $ebay = new Ebay();
         $context->smarty->assign($vars);
 
-        echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/bp_selects.tpl');
+        echo $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/bp_selects.tpl');
     }
 
     public function ajaxProcessSaveConfigFormCategory()
@@ -221,5 +221,55 @@ class AdminFormEbaySyncController extends ModuleAdminController
         if (Tools::getValue('ajax')) {
             die('{"valid" : true}');
         }
+    }
+
+    public function ajaxProcessActiveCategory()
+    {
+        require_once dirname(__FILE__).'/../../ebay.php';
+
+        $category_conf = EbayCategoryConfiguration::getConfigByCategoryId(Tools::getValue('profile'), Tools::getValue('ebay_category'));
+
+        if ($category_conf[0]['sync']) {
+            $value =0;
+        } else {
+            $value =1;
+        }
+
+        EbayCategoryConfiguration::updateByIdProfileAndIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'), $data = array('sync' => $value));
+
+        $sql = 'SELECT p.`id_product`
+            FROM `'._DB_PREFIX_.'product` p';
+
+        $sql .= Shop::addSqlAssociation('product', 'p');
+        $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+                ON (p.`id_product` = pl.`id_product`
+                AND pl.`id_lang` = '.(int) Tools::getValue('ebay_category');
+        $sql .= Shop::addSqlRestrictionOnLang('pl');
+        $sql .= ')
+            LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)Tools::getValue('profile').'
+            LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+                ON p.`id_product` = sa.`id_product`
+                AND sa.`id_product_attribute` = 0
+            WHERE ';
+        $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_category');
+        $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+
+        $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
+
+        if ($value) {
+            foreach ($to_synchronize_product_ids as $product_id_to_sync) {
+                if (!EbayProductConfiguration::isblocked(Tools::getValue('profile'), $product_id_to_sync['id_product'])) {
+                    $product = new Product($product_id_to_sync['id_product']);
+                    EbayTaskManager::addTask('add', $product, Tools::getValue('id_employee'), Tools::getValue('profile'));
+                }
+            }
+        } else {
+            foreach ($to_synchronize_product_ids as $product_id_to_sync) {
+                EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
+            }
+        }
+        $count_orphans_product = EbayProduct::getCountOrphanListing(Tools::getValue('profile'));
+        echo $count_orphans_product[0]['number'];
     }
 }

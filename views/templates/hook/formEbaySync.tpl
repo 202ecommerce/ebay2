@@ -315,7 +315,16 @@
         cache: false,
         dataType: 'json',
         type: "POST",
-        url: module_dir + "ebay/ajax/ActiveCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_product + "&id_employee=" + id_employee + "&id_lang=" + id_lang,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'ActiveCategory',
+            profile: id_ebay_profile,
+            ebay_category: id_product,
+            id_employee: id_employee,
+            id_lang: id_lang,
+
+        },
         success: function (data) {
           $('.orhan_badge').html(data);
         }
