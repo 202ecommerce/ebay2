@@ -35,14 +35,15 @@
 
 <script type="text/javascript">
     // <![CDATA[
+    var ebayOrphanListingsController = "{$ebayOrphanListingsController|addslashes}";
     var id_employee={$id_employee|escape:'htmlall':'UTF-8'};
     var profile={$id_ebay_profile|escape:'htmlall':'UTF-8'};
     var content_ebay_listings = $("#ebayOrphanListing button.loadListOrphan");
     content_ebay_listings.bind('click',  function(){
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/loadTableOrphanListings.php',
-            data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile,
+            url: ebayOrphanListingsController,
+            data: "ajax=true&action=LoadTableOrphanListings&id_employee="+ id_employee +"&profile=" + id_ebay_profile,
             success: function(data)
             {
                 $('#ebayOrphanListing').fadeOut(400, function(){

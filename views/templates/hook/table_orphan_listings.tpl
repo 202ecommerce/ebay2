@@ -217,8 +217,14 @@
             if (page) {
                 $.ajax({
                     type: "POST",
-                    url: module_dir + 'ebay/ajax/loadTableOrphanListings.php',
-                    data: "token=" + ebay_token + "&id_employee=" + id_employee + "&profile=" + id_ebay_profile + "&page=" + page,
+                    url: ebayOrphanListingsController,
+                    data: {
+                        id_employee: id_employee,
+                        profile: id_ebay_profile,
+                        page: page,
+                        ajax: true,
+                        action: 'LoadTableOrphanListings',
+                    },
                     beforeSend: function () {
                         $('#ebayOrphanListing').empty();
                         var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';

@@ -34,6 +34,7 @@ class EbayOrphanListingsTab extends EbayTab
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
             '_module_dir_' => _MODULE_DIR_,
+            'ebayOrphanListingsController' => $this->context->link->getAdminLink('AdminEbayOrphanListings')
         );
 
         return $this->display('table_orphan_listings_ajax.tpl', $vars);

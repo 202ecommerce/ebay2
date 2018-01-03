@@ -27,8 +27,13 @@ function loadOrphans() {
 
     $.ajax({
         type: "POST",
-        url: module_dir+'ebay/ajax/loadTableOrphanListings.php',
-        data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile,
+        url: ebayOrphanListingsController,
+        data: {
+            id_employee: id_employee,
+            profile: id_ebay_profile,
+            ajax: true,
+            action: 'LoadTableOrphanListings',
+        },
         success: function(data)
         {
             $('#ebayOrphanListing').fadeOut(400, function(){
@@ -51,9 +56,17 @@ function delete_orphan(index, element) {
 
     $.ajax({
         type: "POST",
-        url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee + "&action=end",
+        url: ebayOrphanListingsController,
+        data: {
+            id_lang: id_lang,
+            id_product_ref: id_product_ref,
+            id_employee: id_employee,
+            listing_action: 'end',
+            ajax: true,
+            action: 'DeleteOrphanListing',
+        },
         success : function(data) {
-
+            console.log(data);
             if (data == '1')
                 lnk.closest('tr').remove(); // remove row
 
@@ -72,9 +85,17 @@ function delete_orphan_by_checkbox(index, element){
 
     $.ajax({
         type: "POST",
-        url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee + "&action=end",
+        url: ebayOrphanListingsController,
+        data: {
+            id_lang: id_lang,
+            id_product_ref: id_product_ref,
+            id_employee: id_employee,
+            listing_action: 'end',
+            ajax: true,
+            action: 'DeleteOrphanListing',
+        },
         success : function(data) {
-
+            console.log(data);
             if (data == '1')
                 lnk.closest('tr').remove(); // remove row
 
@@ -135,43 +156,6 @@ $(document).ready(function () {
         $('#popin-delete-several-products').hide();
     });
 
-    /*$('.delete-orphan').live('click', 'a', function(e) {
-
-        e.preventDefault();
-
-        if (!confirm(orphan_listings_ebay_l['Remove this ad?']))
-            return;
-
-        var lnk = $(this);
-
-        var id_product_ref = $(this).attr('ref');
-
-        $.ajax({
-            type: "POST",
-            url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref + "&id_employee=" + id_employee + "&action=end",
-            success : function(data) {
-
-                if (data == '1')
-                    lnk.parent().parent().remove(); // remove row
-
-            }
-        });
-
-
-    });
-
-    $('.out_of_stock_orphan').live('click', 'a', function(e) {
-        var id_product_ref = $(this).attr('ref');
-        $.ajax({
-            type: 'POST',
-            url: module_dir + 'ebay/ajax/deleteOrphanListing.php',
-            data: "token=" + ebay_token + "&id_ebay_profile="+ id_ebay_profile +"&id_product_ref=" + id_product_ref +"&action=out_of_stock" + "&id_employee=" + id_employee,
-            success: function (data) {
-                $(this).parent().parent().remove();
-            }
-        });
-
-    });*/
 
     var content_ebay_relistings = $("#ebayOrphanReListing button.loadListOrphan");
     content_ebay_relistings.live('click', 'button', function () {
