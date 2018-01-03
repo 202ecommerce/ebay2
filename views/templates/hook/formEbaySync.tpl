@@ -574,7 +574,13 @@
       $.ajax({
         dataType: 'json',
         type: "POST",
-        url: module_dir + 'ebay/ajax/getProducts.php?category=' + id_category + '&token=' + ebay_token + '&id_ebay_profile=' + id_ebay_profile,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'GetProducts',
+            category: id_category,
+            id_ebay_profile: id_ebay_profile,
+        },
         success: function (products) {
 
           var str = '';

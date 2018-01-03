@@ -575,4 +575,51 @@ class AdminFormEbaySyncController extends ModuleAdminController
         ));
         die($respons);
     }
+
+    public function ajaxProcessGetProducts()
+    {
+        include_once dirname(__FILE__).'/../../classes/EbayCountrySpec.php';
+        include_once dirname(__FILE__).'/../../classes/EbayProductConfiguration.php';
+
+        $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
+        $id_lang = $ebay_country->getIdLang();
+        $id_ebay_profile = (int) Tools::getValue('id_ebay_profile');
+
+
+
+
+
+        $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
+            FROM `'._DB_PREFIX_.'product` p';
+
+        $sql .= Shop::addSqlAssociation('product', 'p');
+        $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+                ON (p.`id_product` = pl.`id_product`
+                AND pl.`id_lang` = '.(int) $id_lang;
+        $sql .= Shop::addSqlRestrictionOnLang('pl');
+        $sql .= ')
+            LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$id_ebay_profile.'
+            LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+                ON p.`id_product` = sa.`id_product`
+                AND sa.`id_product_attribute` = 0
+            WHERE ';
+        $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('category');
+        $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+
+
+
+        $res = Db::getInstance()->ExecuteS($sql);
+        foreach ($res as &$row) {
+            $product = new Product($row['id']);
+            $variation = $product->getWsCombinations();
+            $row['nb_variation'] = count($variation);
+            $row['name'] = Tools::safeOutput($row['name']);
+            $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
+            $row['extra_images'] = Tools::safeOutput($row['extra_images']);
+            $row['stock'] = Tools::safeOutput($row['stock']);
+        }
+
+        echo Tools::jsonEncode($res);
+    }
 }
