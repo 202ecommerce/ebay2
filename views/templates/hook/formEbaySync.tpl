@@ -141,11 +141,16 @@
     });
 
     $('.reset_bp').on('click', function () {
-      var url = module_dir + "ebay/ajax/resetBp.php?token=" + ebay_token + "&profile=" + id_ebay_profile;
+      //var url = module_dir + "ebay/ajax/resetBp.php?token=" + ebay_token + "&profile=" + id_ebay_profile;
       $('.bp_group').html("");
       $.ajax({
         type: "POST",
-        url: url,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'ResetBp',
+            profile: id_ebay_profile,
+        },
         success: function (data) {
           $('.bp_group').html(data);
         }
@@ -281,12 +286,12 @@
       });
       event.preventDefault();
 
-      var url = module_dir + "ebay/ajax/saveConfigFormCategory.php";
+      //var url = module_dir + "ebay/ajax/saveConfigFormCategory.php";
 
       $.ajax({
         type: "POST",
-        url: url,
-        data: "token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&ps_categories=' + ps_categories + '&' + data,
+        url: formEbaySyncController,  // var formEbaySyncController was defined in form.tpl
+        data: "ajax=true&action=SaveConfigFormCategory&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&ps_categories=' + ps_categories + '&' + data,
         beforeSend: function () {
           $('.ajaxLoading').show();
         },
