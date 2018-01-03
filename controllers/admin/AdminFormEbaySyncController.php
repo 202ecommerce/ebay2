@@ -585,10 +585,6 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $id_lang = $ebay_country->getIdLang();
         $id_ebay_profile = (int) Tools::getValue('id_ebay_profile');
 
-
-
-
-
         $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -620,6 +616,62 @@ class AdminFormEbaySyncController extends ModuleAdminController
             $row['stock'] = Tools::safeOutput($row['stock']);
         }
 
-        echo Tools::jsonEncode($res);
+        die(Tools::jsonEncode($res));
+    }
+
+    public function ajaxProcessChangeCategoryMatch()
+    {
+        require_once dirname(__FILE__).'/../../ebay.php';
+
+        $id_ebay_profile = (int) Tools::getValue('profile');
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+
+        $levelExists = array();
+        $context = Context::getContext();
+        $ebay = new Ebay();
+        $respons = '';
+        for ($level = 0; $level <= 5; $level++) {
+            if (Tools::getValue('level') >= $level) {
+                if ($level == 0) {
+                    $ebay_category_list_level = Db::getInstance()->executeS('SELECT *
+                FROM `'._DB_PREFIX_.'ebay_category`
+                WHERE `level` = 1
+                AND `id_category_ref` = `id_category_ref_parent`
+                AND `id_country` = '.(int) $ebay_profile->ebay_site_id);
+                } else {
+                    $ebay_category_list_level = Db::getInstance()->executeS('SELECT *
+                FROM `'._DB_PREFIX_.'ebay_category`
+                WHERE `level` = '.(int) ($level + 1).'
+                AND `id_country` = '.(int) $ebay_profile->ebay_site_id.'
+                AND `id_category_ref_parent`
+                IN (
+                    SELECT `id_category_ref`
+                    FROM `'._DB_PREFIX_.'ebay_category`
+                    WHERE `id_ebay_category` = '.(int) (Tools::getValue('level'.$level)).')');
+                }
+
+                if ($ebay_category_list_level) {
+                    $levelExists[$level + 1] = true;
+                    $tpl_var = array(
+                        "level" => $level,
+                        "id_category" => (int) Tools::getValue('id_category'),
+                        "ch_cat_str" => Tools::safeOutput(Tools::getValue('ch_cat_str')),
+                        "ebay_category_list_level" => $ebay_category_list_level,
+                        "select" => Tools::getValue('level'.($level + 1)),
+                    );
+                    $context->smarty->assign($tpl_var);
+                    $respons .= $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_change_category_match.tpl');
+                }
+            }
+        }
+
+        if (!isset($levelExists[(int)Tools::getValue('level') + 1])) {
+            $tpl_var = array(
+                "value" => (int) Tools::getValue('level'.Tools::getValue('level'))
+            );
+            $context->smarty->assign($tpl_var);
+            $respons .= $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_change_category_match_input.tpl');
+        }
+        die($respons);
     }
 }

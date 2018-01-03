@@ -637,7 +637,16 @@
 
     $.ajax({
       type: "POST",
-      url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=Select a category&profile=' + id_ebay_profile,
+      url: formEbaySyncController + levelParams,   //var formEbaySyncController was defined in form.tpl
+      data: {
+          ajax: true,
+          action: 'ChangeCategoryMatch',
+          id_category: id_category,
+          time: module_time,
+          level: level,
+          ch_cat_str: 'Select a category',
+          profile: id_ebay_profile
+      },
       success: function (data) {
         $(".category_ebay").html(data);
 //        $(".category_ebay select").change(function () {
