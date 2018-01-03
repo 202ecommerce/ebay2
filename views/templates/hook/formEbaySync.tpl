@@ -395,11 +395,19 @@
     });
 
     function loadCategoriesConfig(id_category) {
-      var url = module_dir + "ebay/ajax/loadConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&id_category_ps=' + id_category;
+      //var url = module_dir + "ebay/ajax/loadConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&id_category_ps=' + id_category;
 
       $.ajax({
         type: "POST",
-        url: url,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'LoadConfigFromCategory',
+            id_lang: id_lang,
+            profile: id_ebay_profile,
+            id_shop: id_shop,
+            id_category_ps: id_category
+        },
         success: function (data) {
 
           var data = jQuery.parseJSON(data);
@@ -436,7 +444,14 @@
         cache: false,
         dataType: 'json',
         type: "POST",
-        url: module_dir + "ebay/ajax/loadItemsSpecificsAndConditions.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + category_id + "&id_lang=" + id_lang,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'LoadItemsSpecificsAndConditions',
+            profile: id_ebay_profile,
+            ebay_category: category_id,
+            id_lang: id_lang,
+        },
         success: function (data) {
           $('#specifics-' + category_id + '-loader').hide();
           insertCategoryRow(category_id, data);
