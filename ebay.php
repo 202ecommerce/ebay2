@@ -366,6 +366,7 @@ class Ebay extends Module
         $tabs_to_load = array(
             'AdminEbayApiLog',
             'AdminFormEbaySync',
+            'AdminEbayListings',
         );
         foreach ($tabs_to_load as $tab_name) {
             $tab = new Tab();
@@ -389,6 +390,7 @@ class Ebay extends Module
         $tabs_to_load = array(
             'AdminEbayApiLog',
             'AdminFormEbaySync',
+            'AdminEbayListings',
         );
         foreach ($tabs_to_load as $tab_name) {
             $tab  = Tab::getInstanceFromClassName($tab_name);
@@ -2462,7 +2464,7 @@ class Ebay extends Module
                         $data['name'] .= ' '.$variation_specific;
                     }
 
-                    if ($this->isSymfonyProject()) {
+                    if ($this->isSymfonyProject() && false) {
                         $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $combinaison['id_product']));
                     } else {
                         $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
@@ -2480,7 +2482,7 @@ class Ebay extends Module
                     );
                 }
             } else {
-                if ($this->isSymfonyProject()) {
+                if ($this->isSymfonyProject() && false) {
                     $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $data['real_id_product']));
                 } else {
                     $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']);

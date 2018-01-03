@@ -33,6 +33,7 @@ class EbayListingsTab extends EbayTab
             'id_employee' => $this->context->employee->id,
             'id_ebay_profile' => $id_ebay_profile,
             'admin_path'      => basename(_PS_ADMIN_DIR_),
+            'ebayListingsController' => $this->context->link->getAdminLink('AdminEbayListings'),
         );
         return $this->display('ebay_listings.tpl', $template_vars);
     }
