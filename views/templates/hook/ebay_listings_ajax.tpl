@@ -95,8 +95,8 @@
     function refreshList(){
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/getEbayListings.php',
-            data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}&id_shop="+id_shop+"&admin_path={$admin_path|escape:'htmlall':'UTF-8'}",
+            url: ebayListingsController,
+            data: "ajax=true&action=GetEbayListings&id_employee={$id_employee|escape:'htmlall':'UTF-8'}&id_shop="+id_shop+"&admin_path={$admin_path|escape:'htmlall':'UTF-8'}",
             success: function(data)
             {
                 $('#ebayListings').fadeOut(400, function(){
@@ -118,7 +118,6 @@
         name_prod = $('#name_prod_search').attr('value');
 
         var data = {
-            token: ebay_token,
             id_employee: {$id_employee|escape:'htmlall':'UTF-8'},
             id_shop: id_shop,
             admin_path: "{$admin_path|escape:'htmlall':'UTF-8'}",
@@ -127,11 +126,13 @@
             id_prod_ebay: id_prod_ebay,
             name_cat: name_cat,
             name_prod: name_prod,
+            ajax: true,
+            action: 'GetEbayListings',
         };
 
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/getEbayListings.php',
+            url: ebayListingsController,
             data: data,
             success: function(data)
             {
