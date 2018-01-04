@@ -160,6 +160,7 @@
 
 {literal}
 <script>
+    var ebayListErrorsProductsController = {/literal}"{$ebayListErrorsProductsController|addslashes}";{literal}
     $('#popin-product-corige').click(function(){
         $(this).hide();
     });
@@ -203,8 +204,8 @@
     function exclureProduct(id_product) {
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/exclureProductAjax.php',
-            data: "token={/literal}{if isset($ebay_token)}{$ebay_token}{/if}{literal}&id_ebay_profile={/literal}{if isset($id_ebay_profile)}{$id_ebay_profile}{/if}{literal}&id_product="+id_product,
+            url: ebayListErrorsProductsController,
+            data: "ajax=true&action=ExclureProductAjax&id_ebay_profile={/literal}{if isset($id_ebay_profile)}{$id_ebay_profile}{/if}{literal}&id_product="+id_product,
             success: function (data) {
                 $(this).parent().parent().remove();
             }
@@ -226,12 +227,13 @@
                 token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}''{/if}{literal},
                 profile: id_ebay_profile,
                 page: page,
-                token : token,
+                ajax: true,
+                action: 'PaginationProductErrors'
             };
 
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/paginationProductErrors.php',
+                url: ebayListErrorsProductsController,
                 data: data,
                 beforeSend : function(){
                     var html = '<div style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -260,12 +262,13 @@
             token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
             profile: id_ebay_profile,
             page: 1,
-            token : token,
+            ajax: true,
+            action: 'PaginationProductErrors'
         };
 
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/paginationProductErrors.php',
+            url: ebayListErrorsProductsController,
             data: data,
             beforeSend : function(){
                 var html = '<div style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -285,13 +288,13 @@
 
     function refreshErrors(){
         $('#menuTab80Sheet .panel').empty();
-        var url = module_dir + 'ebay/ajax/refreshErrors.php';
         var data = {
             id_ebay_profile : id_ebay_profile,
             token_for_product: {/literal}{if isset($token_for_product)}"{$token_for_product}"{else}""{/if}{literal},
-            token : token,
+            ajax: true,
+            action: 'RefreshErrors',
         };
-        $.post(url, data, function(response){
+        $.post(ebayListErrorsProductsController, data, function(response){
             $('#menuTab80Sheet .panel').html(response);
         });
     };

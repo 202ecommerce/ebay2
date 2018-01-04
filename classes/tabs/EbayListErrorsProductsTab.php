@@ -154,6 +154,7 @@ class EbayListErrorsProductsTab extends EbayTab
         } else {
             $vars['token_for_product'] = Tools::getAdminTokenLite('AdminProducts');
         }
+        $vars['ebayListErrorsProductsController'] = $this->context->link->getAdminLink('AdminEbayListErrorsProducts');
         return $this->display('table_products_errors.tpl', $vars);
     }
 }
