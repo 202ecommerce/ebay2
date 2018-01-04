@@ -60,6 +60,7 @@ class EbayOrdersTab extends EbayTab
         }
         $vars['id_ebay_profile'] = $id_ebay_profile;
         $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
+        $vars['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
 
         $url_vars = array(
             'id_tab' => '6',

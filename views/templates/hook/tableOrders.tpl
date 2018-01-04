@@ -107,14 +107,15 @@
 </div>
 
 <script type="text/javascript">
+    var ebayOrdersController = "{$ebayOrdersController|addslashes}";
     {literal}
     $('.reSynchOrder').live('click', function (e) {
         e.preventDefault();
         var tr = $(this).closest('tr');
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/reSynchOrder.php',
-            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay=" + $(this).attr('id'),
+            url: ebayOrdersController,
+            data: "ajax=true&action=ResyncOrder&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay=" + $(this).attr('id'),
             success: function (data) {
                 var data = jQuery.parseJSON(data);
 
@@ -140,10 +141,11 @@
         tr = $(this).closest('tr');
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/deleteOrderError.php',
+            url: ebayOrdersController,
             data: {
                 reference_ebay: reference_ebay,
-                token: '{/literal}{$ebay_token}{literal}',
+                ajax: true,
+                action: 'DeleteOrderError',
             },
             success: function (data) {
                 console.log(data);
