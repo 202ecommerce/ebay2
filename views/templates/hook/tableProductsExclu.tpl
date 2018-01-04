@@ -51,10 +51,10 @@
                 {if isset($products)}
                     {foreach from=$products item="product"}
                         <tr>
-                            <td>{$product.id_product|escape:'htmlall':'UTF-8'}</td>
-                            <td>{$product.name|escape:'htmlall':'UTF-8'}</td>
-                            <td>{$product.category_ps|escape:'htmlall':'UTF-8'}</td>
-                            <td> {$product.category_ebay|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$product.id_product nofilter}</td>
+                            <td>{$product.name nofilter}</td>
+                            <td>{$product.category_ps nofilter}</td>
+                            <td> {$product.category_ebay nofilter}</td>
                             <td class="text-center">
                                 <a href="#" id="{$product.id_product}" class="btn btn-sm btn-default" name="incluProduct"
                                    title="{l s='Include' mod='ebay'}" data-toggle="tooltip">
@@ -79,19 +79,18 @@
         if (confirm(header_ebay_l['Are you sure you want to include this product?'])) {
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/inclureProductAjax.php',
-            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
+            url: ebayProductExcluController,
+            data: "ajax=true&action=InclureProduct&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
             success: function (data) {
                 //tr.remove();
-                window.location.href = url_tab;
+                //window.location.href = url_tab;
+                console.log(data);
             }
         });
         }
     });
-    var content_ebay_relistings = $("#ProductsExcluRe button");
-    content_ebay_relistings.live('click', 'button', function(){
-        loadProductExclu();
-    });
+
+    $("#ProductsExcluRe button").click(loadProductExclu);
 
     {/literal}
 </script>
