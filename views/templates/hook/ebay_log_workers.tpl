@@ -93,7 +93,7 @@
                     url: apilogs_ajax_link+'&configure=ebay',
                     data: {
                         ajax: true,
-                        action: 'PaginationLogWorkersTab',
+                        action: 'PaginationLogWorkerTab',
                         id_employee: id_employee,
                         profile: id_ebay_profile,
                         page: page
@@ -115,7 +115,7 @@
                 url: apilogs_ajax_link+'&configure=ebay',
                 data: {
                     ajax: true,
-                    action: 'PaginationLogWorkersTab',
+                    action: 'PaginationLogWorkerTab',
                     id_employee: id_employee,
                     profile: id_ebay_profile,
                     page: 1
