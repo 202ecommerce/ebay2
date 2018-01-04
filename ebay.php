@@ -368,6 +368,7 @@ class Ebay extends Module
             'AdminFormEbaySync',
             'AdminEbayListings',
             'AdminEbayOrphanListings',
+            'AdminEbayProductExclu',
         );
         foreach ($tabs_to_load as $tab_name) {
             $tab = new Tab();
@@ -393,6 +394,7 @@ class Ebay extends Module
             'AdminFormEbaySync',
             'AdminEbayListings',
             'AdminEbayOrphanListings',
+            'AdminEbayProductExclu',
         );
         foreach ($tabs_to_load as $tab_name) {
             $tab  = Tab::getInstanceFromClassName($tab_name);

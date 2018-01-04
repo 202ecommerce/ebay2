@@ -24,17 +24,11 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS')) {
-    define('TMP_DS', DIRECTORY_SEPARATOR);
+class AdminEbayProductExcluController extends ModuleAdminController
+{
+    public function ajaxProcessGetProductExclu()
+    {
+        $ebay = Module::getInstanceByName('ebay');
+        die($ebay->displayProductExclu(Tools::getValue('id_employee')));
+    }
 }
-
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include '../../../init.php';
-include '../../../modules/ebay/ebay.php';
-
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR : INVALID TOKEN');
-}
-
-$ebay = new eBay();
-echo $ebay->displayProductExclu(Tools::getValue('id_employee'));

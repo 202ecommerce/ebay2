@@ -40,6 +40,7 @@ class EbayProductsExcluTab extends EbayTab
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
             'url_tab' => $url_vars,
+            'ebayProductExcluController' => $this->context->link->getAdminLink('AdminEbayProductExclu'),
         );
 
         return $this->display('tableProductsExclu_ajax.tpl', $vars);

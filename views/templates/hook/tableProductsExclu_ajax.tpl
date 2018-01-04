@@ -34,12 +34,13 @@
 
 
 <script type="text/javascript">
+    var ebayProductExcluController = "{$ebayProductExcluController|addslashes}";
     var url_tab = "{$url_tab}";
     function loadProductExclu(){
     $.ajax({
         type: "POST",
-        url: module_dir+'ebay/ajax/getProductExclu.php',
-        data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}",
+        url: ebayProductExcluController,
+        data: "ajax=true&action=GetProductExclu&id_employee={$id_employee|escape:'htmlall':'UTF-8'}",
         success: function(data)
         {
             $('#ebayProductExclu').fadeOut(400, function(){
