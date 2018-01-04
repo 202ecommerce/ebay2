@@ -725,15 +725,6 @@
           </ul>
         </div>
       {/if}
-      <div class="dropdown js-user-dropdown button-sync">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-          <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li data-action="resyncProductsAndImages">{l s='Synchronize all products sending new images' mod='ebay'}</li>
-          <li data-action="resyncProducts">{l s='Synchronize all products' mod='ebay'}</li>
-        </ul>
-      </div>
     </div>
   </h4>
 
