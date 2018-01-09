@@ -83,8 +83,7 @@
             data: "ajax=true&action=InclureProduct&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
             success: function (data) {
                 //tr.remove();
-                //window.location.href = url_tab;
-                console.log(data);
+                window.location.href = url_tab;
             }
         });
         }
