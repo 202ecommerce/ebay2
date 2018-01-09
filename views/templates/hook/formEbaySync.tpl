@@ -293,7 +293,15 @@
           $('.ajaxLoading').show();
         },
         success: function (data) {
-          location.reload();
+            var urlReload = location.href.split('?')[0] + "?";
+            var search = 'configure=ebay&controller=AdminModules&'
+            var searchOldArray = location.search.split('&');
+            searchOldArray.forEach(function(element){
+                if (element.indexOf('token') != -1) {
+                    search += element;
+                }
+            });
+          location = urlReload + search;
         }
       });
     });

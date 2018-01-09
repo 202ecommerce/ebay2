@@ -155,7 +155,7 @@ $(document).ready(function () {
                    $('.valueMax').html(data);
                }
                var complited = $('.valueMax').data('val') - data;
-                console.log(complited);
+                
                 $('.valueDone').html(complited);
                 var complitedPercent = 0;
                 if(complited > 0) {
@@ -168,7 +168,15 @@ $(document).ready(function () {
                     $('.percentages_line').css('width', complitedPercent+'%');
                     //event.preventDefault();
                     clearInterval(boost);
-                    window.location.reload();
+                    var urlReload = location.href.split('?')[0] + "?";
+                    var search = 'configure=ebay&controller=AdminModules&'
+                    var searchOldArray = location.search.split('&');
+                    searchOldArray.forEach(function(element){
+                        if (element.indexOf('token') != -1) {
+                            search += element;
+                        }
+                    });
+                    location = urlReload + search;
                 } else{
                     $('.percentages').html(complitedPercent+'%');
                     $('.percentages_line').css('width', complitedPercent+'%');
