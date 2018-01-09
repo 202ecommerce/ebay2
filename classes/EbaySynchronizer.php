@@ -934,7 +934,7 @@ class EbaySynchronizer
                     }
                 }
             }
-            if ($res->ItemID > 0) {
+            if (isset($res->ItemID) && $res->ItemID > 0) {
                 //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
                 EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, 0);
             } else {
