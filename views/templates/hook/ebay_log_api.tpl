@@ -26,7 +26,11 @@
 <script>
     var apilogs_ajax_link = '{$apilogs_ajax_link|addslashes}';
 </script>
-
+<style>
+    #date_search_logs {
+        line-height: inherit;
+    }
+</style>
 
 <div id="contentLogApiTab" class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Api Logs' mod='ebay'}
