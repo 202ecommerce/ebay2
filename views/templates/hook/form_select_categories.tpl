@@ -24,13 +24,13 @@
 *}
 
 {if $level > 1}
-	<select name="category[{$id_category}]" id="categoryLevel{$category.level}-{$id_category}" rel="{$id_category}" OnChange="changeCategoryMatch({$category.level}, {$id_category});">
+	<select name="category[{$id_category}]" id="categoryLevel{$category.level}-0" rel="{$id_category}" OnChange="changeCategoryMatch({$category.level}, {$id_category});">
 		{foreach from=$ref_categories.{$category.id_category_ref_parent}.children item="child"}
 			<option value="{$ref_categories.{$child}.id_ebay_category}"{if $category.id_category_ref == $child}selected{/if}>{$ref_categories.{$child}.name}</option>
 		{/foreach}
 	</select>
 {else}
-	<select name="category[{$id_category}]" id="categoryLevel{$level}-{$id_category}" rel="{$id_category}" OnChange="changeCategoryMatch({$level}, {$id_category});">
+	<select name="category[{$id_category}]" id="categoryLevel{$level}-0" rel="{$id_category}" OnChange="changeCategoryMatch({$level}, {$id_category});">
 		<option value="0">{$ch_cat_str}</option>
 		{foreach from=$ref_categories item="category"}
 			<option value="{$category.id_ebay_category}"{if $category.id_category_ref == $id_category_ref} selected{/if}>{$category.name}</option>
