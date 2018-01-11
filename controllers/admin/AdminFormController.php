@@ -118,4 +118,10 @@ class AdminFormController extends ModuleAdminController
             }
         }
     }
+
+    public function ajaxProcessPreviewTemplate()
+    {
+        $ebay = Module::getInstanceByName('ebay');
+        $ebay->ajaxPreviewTemplate(Tools::getValue('message'), (int) Tools::getValue('id_lang'));
+    }
 }

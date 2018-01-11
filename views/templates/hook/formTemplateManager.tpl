@@ -262,8 +262,13 @@
         $('#previewButton').click(function(){
             $.ajax({
                 type: 'POST',
-                url : module_dir+"ebay/ajax/previewTemplate.php",
-                data :{ message : tinyMCE.activeEditor.getContent(), id_lang : id_lang, token : ebay_token },
+                url : formController,
+                data :{
+                    message : tinyMCE.activeEditor.getContent(),
+					id_lang : id_lang,
+					ajax: true,
+					action: 'PreviewTemplate'
+				},
                 success: function(data) {
                     $.fancybox({
                         'width' : 800,

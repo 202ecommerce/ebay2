@@ -212,8 +212,6 @@ class EbayFormEbaySyncTab extends EbayTab
             'sync_2'                  => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
             'is_sync_mode_b'          => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
             'ebay_sync_mode'          => (int)($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
-            //'admin_path'              => basename(_PS_ADMIN_DIR_),
-            'load_kb_path'            => _MODULE_DIR_ . 'ebay/ajax/loadKB.php',
             'PAYEMENTS' => EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $this->ebay_profile->id),
             'RETURN_POLICY' => EbayBussinesPolicies::getPoliciesbyType('RETURN_POLICY', $this->ebay_profile->id),
             'storeCategories' =>  EbayStoreCategory::getCategoriesWithConfiguration($this->ebay_profile->id),
