@@ -24,21 +24,15 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS')) {
-    define('TMP_DS', DIRECTORY_SEPARATOR);
-}
-
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-
-if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('INVALID TOKEN');
-}
-
-if (Tools::getValue('action') == 'getLogs') {
-    $data = Tools::file_get_contents('../log/request.txt');
-    $text = htmlentities($data);
-    echo '<pre>';
-    echo $text;
-    die;
+class AdminFormAdvancedParametersController extends ModuleAdminController
+{
+    public function init()
+    {
+        if (Tools::getValue('action') == 'getLogs') {
+            $url = dirname(__FILE__) . '/../../log/request.txt';
+            $data = Tools::file_get_contents($url);
+            $text = htmlentities($data);
+            die('<pre>' . $text);
+        }
+    }
 }

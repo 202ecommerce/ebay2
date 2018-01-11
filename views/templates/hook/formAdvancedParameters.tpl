@@ -242,6 +242,7 @@
 	
 {literal}
 	<script>
+		var formAdvancedParametersController = "{/literal}{$formAdvancedParametersController|addslashes}{literal}";
 		var token = "{/literal}{$ebay_token}{literal}";
 		$(document).ready(function() {
 			setTimeout(function() {					
@@ -252,7 +253,7 @@
 
 		$('.logs').click(function(e) {
 			e.preventDefault();
-			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token}{literal}&action=getLogs');
+            window.open(formAdvancedParametersController + '&action=getLogs');
 		});
 
 		$('#reload_categories_store').click(function(e) {
