@@ -72,7 +72,8 @@
         var url_ebay = '{$url_ebay}';
         $(location).attr('href', url_ebay + '&ebay_profile=' + $(this).data('value'));
     });
-
+    {if !$syncProductByCron}
+    console.log('test');
     $(document).ready(function(){
         var cron_url = '{$cron_url}';
         $.ajax({
@@ -84,6 +85,8 @@
             }
         });
     });
+    {/if}
+
 
     /* $('.ebay_profils').change(function() {
      $('.change_profile').find("input[name=ebay_profile]").val($( ".ebay_profils option:selected").attr('id'));

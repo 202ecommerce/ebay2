@@ -435,7 +435,6 @@
             'Are you sure you want to delete this category?' : "{l s='Are you sure you want to delete this category?' mod='ebay'}"
         };
         var first = false;
-        var delete_profile_url = '{$delete_profile_url|escape:'htmlall':'UTF-8'}';
         var boost = null;
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';

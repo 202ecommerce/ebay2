@@ -57,7 +57,12 @@ $(document).ready(function () {
         $('#popin-delete-profile').hide();
         $.ajax({
             type: "POST",
-            url: delete_profile_url + '&profile=' + profileId,
+            url: formController,
+            data: {
+                ajax: true,
+                action: 'DeleteProfile',
+                profile: profileId,
+            },
             cache: false,
             success: function (data) {
                 window.location.replace(window.location.href.replace("&action=logged", ""));

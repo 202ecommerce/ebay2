@@ -45,4 +45,14 @@ class AdminFormController extends ModuleAdminController
         $nb_tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL)');
         echo $nb_tasks[0]['nb'];
     }
+
+    public function ajaxProcessDeleteProfile()
+    {
+        if (Module::isInstalled('ebay')) {
+            $enable = Module::isEnabled('ebay');
+            if ($enable) {
+                die(EbayProfile::deleteById((int) Tools::getValue('profile')));
+            }
+        }
+    }
 }

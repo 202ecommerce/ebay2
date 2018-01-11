@@ -1519,6 +1519,7 @@ class Ebay extends Module
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
                 'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         } else {
             $smarty_vars = array(
@@ -1528,6 +1529,7 @@ class Ebay extends Module
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
                 'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         }
 
@@ -1765,7 +1767,6 @@ class Ebay extends Module
             'profiles' => $profiles,
             'add_profile' => $add_profile,
             'add_profile_url' => $add_profile_url,
-            'delete_profile_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int) Tools::getValue('id_tab'),
             'pro_url' => $this->ebay_country->getProUrl(),
