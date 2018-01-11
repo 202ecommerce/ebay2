@@ -50,7 +50,6 @@ function launchDatabaseChecking(i){
 	$.ajax({
 		type: 'POST',
 		url: formAdvancedParametersController,
-		//data: "token="+token+"&action=checkSpecific&value="+i,
 		data: {
 			ajax: true,
 			action: 'CheckDatabase',

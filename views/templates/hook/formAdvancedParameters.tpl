@@ -333,8 +333,15 @@
 				$.ajax({
 					dataType: 'json',
 					type: 'POST',
-					url: module_dir + 'ebay/ajax/checkCategory.php',
-					data: "token={/literal}{$ebay_token}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay}{literal}&step=" + step + "&id_categories=" + id_categories,
+					url: formAdvancedParametersController,
+					data: {
+					    ajax: true,
+						action: 'checkCategory',
+						actionProcess: 'checkCategories',
+						id_profile_ebay: id_ebay_profile,
+						step: step,
+						id_categories: id_categories,
+                    },
 					beforeSend: function() {
 
 					},
