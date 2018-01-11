@@ -341,9 +341,14 @@
 			{
 				var showcountries = $(this);
 				$.ajax({
-					url: '{/literal}{$module_dir|escape:'htmlall':'UTF-8'}{literal}ajax/getCountriesLocation.php?token={/literal}{$ebay_token|escape:'htmlall':'UTF-8'}{literal}&profile={/literal}{$id_ebay_profile|escape:'htmlall':'UTF-8'}{literal}',
+					url: formController,
 					type: 'POST',
-					data: {region: $(this).attr('data-region')},
+					data: {
+					    region: $(this).attr('data-region'),
+						profile: id_ebay_profile,
+						ajax: true,
+						action: 'GetCountriesLocation',
+					},
 					complete: function(xhr, textStatus) {
 
 					},

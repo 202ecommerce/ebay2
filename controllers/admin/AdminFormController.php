@@ -61,4 +61,31 @@ class AdminFormController extends ModuleAdminController
         $result = EbayConfiguration::updateAPIToken() ? 'OK' : 'KO';
         die($result);
     }
+
+    public function ajaxProcessGetCountriesLocation()
+    {
+        $id_ebay_profile = (int) Tools::getValue('profile');
+        $sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded
+                WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+                AND region = \''.pSQL(Tools::getValue('region')).'\'';
+        $countries = Db::getInstance()->ExecuteS($sql);
+
+        if (count($countries)) {
+            $string = '';
+            $context = Context::getContext();
+            $ebay = new Ebay();
+            foreach ($countries as $country) {
+                $tpl_var = array(
+                    "location" => Tools::safeOutput($country['location']),
+                    "country" => $country,
+                );
+                $context->smarty->assign($tpl_var);
+                $string .= $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_countriesShipping.tpl');
+            }
+
+            echo $string;
+        } else {
+            echo 'No countries were found for this region';
+        }
+    }
 }
