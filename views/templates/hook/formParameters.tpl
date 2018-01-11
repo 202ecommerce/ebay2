@@ -72,7 +72,15 @@
 		$.ajax({
 			type: "POST",
 			dataType: 'json',
-			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step=" + step + "&id_category=" + id_category + "&admin_path=" + admin_path,
+			url: formController,
+			data: {
+			    ajax: true,
+				action: 'LoadCategoriesFromEbay',
+				profile: id_ebay_profile,
+				step: step,
+				id_category: id_category,
+				admin_path: admin_path,
+            },
 			success: function (data) {
 				if (data == "error") {
 					if (step == 1) {
@@ -93,6 +101,7 @@
 						for (var i in data) {
 							output += '<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>' + categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
 						}
+						console.log(data);
 						var count = $.map(data, function (n, i) {
 							return i;
 						}).length;
@@ -133,7 +142,6 @@
                                 if (currentValue.indexOf('resynchCategories') == -1){
 									url.push(currentValue);
 								}
-								console.log(currentValue.indexOf('resynchCategories'));
 							});
 							document.location.search = url.join('&') ;
 							//return loadCategories();

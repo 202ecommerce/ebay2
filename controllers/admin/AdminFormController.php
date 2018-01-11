@@ -124,4 +124,44 @@ class AdminFormController extends ModuleAdminController
         $ebay = Module::getInstanceByName('ebay');
         $ebay->ajaxPreviewTemplate(Tools::getValue('message'), (int) Tools::getValue('id_lang'));
     }
+
+    public function ajaxProcessLoadCategoriesFromEbay()
+    {
+        if (!($id_profile = Tools::getValue('profile')) || !Validate::isInt($id_profile)
+            || !($step = Tools::getValue('step')) || !Validate::isInt($step)
+            || !($cat = Tools::getValue('id_category'))
+        ) {
+            die('ERROR : INVALID DATA');
+        }
+
+        if (Module::isInstalled('ebay')) {
+            $enable = Module::isEnabled('ebay');
+
+            if ($enable) {
+                $ebay_request = new EbayRequest();
+                $ebay_profile = new EbayProfile((int) $id_profile);
+
+                if ($step == 1) {
+                    EbayCategory::deleteCategoriesByIdCountry($ebay_profile->ebay_site_id);
+                    $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
+                    if ($cat_root = $ebay_request->getCategories(false)) {
+                        die(Tools::jsonEncode($cat_root));
+                    } else {
+                        die(Tools::jsonEncode('error'));
+                    }
+                } else if ($step == 2) {
+                    $cat = $ebay_request->getCategories((int) $cat);
+
+                    if (EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
+                        die(Tools::jsonEncode($cat));
+                    } else {
+                        die(Tools::jsonEncode('error'));
+                    }
+                } elseif ($step == 3) {
+                    //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
+                    $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 1);
+                }
+            }
+        }
+    }
 }
