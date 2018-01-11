@@ -152,8 +152,13 @@ $(document).ready(function(){
         var modeResync = $('#popin-cofirm-resync input[data-role="modeResync"]').attr('value');
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/buttonResyncProducts.php',
-            data: "token=" + ebay_token + "&id_ebay_profile=" + id_ebay_profile + '&modeResync=' + modeResync,
+            url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+            data: {
+                ajax: true,
+                action: 'ButtonResyncProducts',
+                id_ebay_profile: id_ebay_profile,
+                modeResync: modeResync,
+            },
 
         });
         location.reload();

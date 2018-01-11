@@ -704,4 +704,20 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
         die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche, $filter));
     }
+
+    public function ajaxProcessButtonResyncProducts()
+    {
+        if (Tools::getValue('modeResync') == 'resyncProductsAndImages') {
+            EbayProductImage::removeAllProductImage();
+        }
+
+        $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile'));
+        $products = EbayProduct::getProductsIdForSync($ebay_profile->id);
+        while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
+            $product = new Product($product_id['id_product'], false, $ebay_profile->id_lang);
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id['id_product'], $ebay_profile->id);
+            EbayTaskManager::addTask('update', $product, null, $ebay_profile->id);
+        }
+        die();
+    }
 }
