@@ -2079,7 +2079,6 @@ class Ebay extends Module
             'alerts' => $alert->getAlerts(),
             'ps_version' => _PS_VERSION_,
             'admin_path' => basename(_PS_ADMIN_DIR_),
-            'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
             'alert_exit_import_categories' => $this->l('Import of eBay category is running.'),
             'order_returns' => $order_returns->getContent($this->ebay_profile->id),
             'orders_returns_sync' => $orders_returns_sync->getContent(),

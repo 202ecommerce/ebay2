@@ -211,13 +211,17 @@
 	var alert_exit_import_categories = "{/literal}{$alert_exit_import_categories}{literal}";
 	function getKb(item) {
 		item = typeof item !== 'undefined' ? item : 0;
-
 		var that = $("a.kb-help:eq("+ item +")");
 
 		$.ajax({
 			type: "POST",
-			url: '{/literal}{$load_kb_path}{literal}',
-			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path}{literal}"},
+			url: formController,
+			data: {
+			    errorcode: $( that ).attr('data-errorcode'),
+				lang: $( that ).attr('data-lang'),
+				ajax: true,
+				action: 'LoadKB'
+			},
 			dataType: "json",
 			success: function(data)
 			{
