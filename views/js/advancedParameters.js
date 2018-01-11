@@ -49,8 +49,14 @@ function launchDatabaseChecking(i){
 	refreshDatabaseProgress();
 	$.ajax({
 		type: 'POST',
-		url: module_dir + 'ebay/ajax/checkDatabase.php',
-		data: "token="+token+"&action=checkSpecific&value="+i,
+		url: formAdvancedParametersController,
+		//data: "token="+token+"&action=checkSpecific&value="+i,
+		data: {
+			ajax: true,
+			action: 'CheckDatabase',
+			actionProcess: 'checkSpecific',
+			value: i,
+		},
 		dataType: 'json',
 		success: function( data ){
 			$.each(data, function( key, value ) {

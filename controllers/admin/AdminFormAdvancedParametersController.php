@@ -35,4 +35,28 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
             die('<pre>' . $text);
         }
     }
+
+    public function ajaxProcessCheckDatabase()
+    {
+        if (Module::isInstalled('ebay')) {
+            $enable = Module::isEnabled('ebay');
+            if ($enable) {
+                $validator = new EbayDbValidator();
+
+                if (Tools::getValue('actionProcess') == 'getNbTable') {
+                    echo (int) $validator->getNbTable();
+                } else if (Tools::getValue('actionProcess') == 'checkSpecific' && Tools::getValue('value')) {
+                    if ($validator->checkSpecificTable((int) Tools::getValue('value'))) {
+                        echo Tools::jsonEncode($validator->getLog());
+                    } else {
+                        echo Tools::jsonEncode(array('finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
+                    }
+                } else if (Tools::getValue('actionProcess') == 'checkAll') {
+                    $validator->checkDatabase();
+                    echo Tools::jsonEncode($validator->getLog());
+                }
+            }
+            die();
+        }
+    }
 }

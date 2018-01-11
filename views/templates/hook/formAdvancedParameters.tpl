@@ -289,26 +289,6 @@
 			}
 		});
 
-		$(function() {
-			$('#reset-image').click(function(e) {
-				e.preventDefault();
-				$.ajax({
-					type: 'POST',
-					url: module_dir + 'ebay/ajax/deleteProductImage.php',
-					data: "token={/literal}{$ebay_token}{literal}&action=delete-all",
-					beforeSend: function() {
-						$('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
-					}
-				}).done(function(data) {
-					if (data == 'success')
-						$('#reset-image-result').html("<div class='alert alert-success'>{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}</div>");
-					else
-						$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-				}).fail(function() {
-					$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-				})
-			});
-		});
 
 			$(function() {
 				$('#check_database').click(function(e){
@@ -317,8 +297,12 @@
 					// Foreach de toutes les tables
 					$.ajax({
 						type: 'POST',
-						url: module_dir + 'ebay/ajax/checkDatabase.php',
-						data: "token={/literal}{$ebay_token}{literal}&action=getNbTable",
+						url: formAdvancedParametersController,
+						data: {
+						    ajax: true,
+							action: 'CheckDatabase',
+							actionProcess: 'getNbTable',
+                        },
 						beforeSend: function() {
 							$('#check_database_logs tbody tr').remove();
 						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
