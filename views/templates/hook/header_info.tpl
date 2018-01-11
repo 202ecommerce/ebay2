@@ -74,13 +74,11 @@
     });
 
     $(document).ready(function(){
-        var _module_ebay_dir_ = '{$_module_ebay_dir_}';
-        var ebay_token = '{$ebay_token}';
         var cron_url = '{$cron_url}';
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: _module_ebay_dir_ + 'ebay/ajax/toJobEbay.php?token=' + ebay_token + '&cron_url=' + cron_url,
+            url: cron_url,
             success: function (data) {
                 // @TODO put something here ?
             }
