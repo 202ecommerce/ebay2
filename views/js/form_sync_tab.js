@@ -29,8 +29,11 @@ $(document).ready(function(){
 
     $.ajax({
         type: "POST",
-        url: module_dir+'ebay/ajax/loadFormSyncTab.php',
-        data: "token="+ebay_token,
+        url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'LoadFormSyncTab'
+        },
         beforeSend:function(){
             var html = '<div class="ajaxLoadingFormSyncTab" style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
             $('#menuTab5Sheet .panel').empty();

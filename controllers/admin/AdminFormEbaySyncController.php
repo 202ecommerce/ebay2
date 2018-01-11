@@ -688,4 +688,20 @@ class AdminFormEbaySyncController extends ModuleAdminController
 
         die(Tools::jsonEncode($vars));
     }
+
+    public function ajaxProcessLoadFormSyncTab()
+    {
+        $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
+        $length = Tools::getValue('length') ? Tools::getValue('length') : 20;
+        $searche = Tools::getValue('searche');
+        $filter = array(
+            'id_product' => Tools::getValue('id_product'),
+            'name_product' => Tools::getValue('name_product'),
+        );
+
+        $ebay = Module::getInstanceByName('ebay');
+        $context = Context::getContext();
+        $form_ebay_sync_tab = new EbayFormEbaySyncTab($ebay, $context->smarty, $context);
+        die($form_ebay_sync_tab->getContent((int) $page_current, $length, $searche, $filter));
+    }
 }
