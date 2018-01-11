@@ -425,6 +425,7 @@
     {/if}
     <script type="text/javascript">
         var formEbaySyncController = "{$formEbaySyncController|addslashes}";
+        var formController = "{$formController|addslashes}";
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
           'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
@@ -438,11 +439,16 @@
         var boost = null;
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
-        var nb_tasks_in_work_url = '{$nb_tasks_in_work_url}';
         var boost_url = '{$boost_url}';
         function loadNbTasksInWork(e){
             $.ajax({
-                url : nb_tasks_in_work_url,
+                type: 'POST',
+                url : formController,
+                data: {
+                    ajax: true,
+                    action: 'LoadNbTasksInWork',
+                    id_profile: id_ebay_profile,
+                },
                 success : function(data) {
 
                     if (data != '0'){
