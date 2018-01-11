@@ -1727,7 +1727,7 @@ class Ebay extends Module
 
         $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
         $this->smarty->assign(array(
-            'boost_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/boostMode.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&cron_url='.$cron_url,
+            'cron_url' => $cron_url,
             'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
             'last_sync_prod' => date('Y-m-d H:i:s', strtotime(Configuration::get('DATE_LAST_SYNC_PRODUCTS'))),
             'img_stats' => ($this->ebay_country->getImgStats()),

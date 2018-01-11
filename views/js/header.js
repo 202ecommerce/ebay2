@@ -69,7 +69,7 @@ $(document).ready(function () {
         event.preventDefault();
         $('.js-close-popin_boost').show();
         $('.close_boost').hide();
-        boost = window.setInterval(function(){startBoost(boost_url)}, 3000);
+        boost = window.setInterval(function(){startBoost(cron_url)}, 3000);
     });
 
 
@@ -147,8 +147,12 @@ $(document).ready(function () {
     function startBoost(url) {
         $.ajax({
             type: 'POST',
-            dataType: 'json',
-            url: url,
+            url: formController,
+            data: {
+                ajax: true,
+                action: 'BoostMode',
+                cron_url: url,
+            },
             success: function (data) {
                if (typeof $('.valueMax').data('val') === 'undefined'){
                    $('.valueMax').data('val', data);

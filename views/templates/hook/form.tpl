@@ -439,7 +439,7 @@
         var boost = null;
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
-        var boost_url = '{$boost_url}';
+        var cron_url = '{$cron_url}';
         function loadNbTasksInWork(e){
             $.ajax({
                 type: 'POST',

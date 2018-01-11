@@ -38,4 +38,11 @@ class AdminFormController extends ModuleAdminController
         }
         die('0');
     }
+
+    public function ajaxProcessBoostMode()
+    {
+        Tools::file_get_contents(Tools::getValue('cron_url'));
+        $nb_tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL)');
+        echo $nb_tasks[0]['nb'];
+    }
 }
