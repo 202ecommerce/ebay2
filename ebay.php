@@ -2027,7 +2027,7 @@ class Ebay extends Module
         $ebayProductsExcluTab = new EbayProductsExcluTab($this, $this->smarty, $this->context);
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
 
-        $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
+
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
 
@@ -2074,7 +2074,6 @@ class Ebay extends Module
             'ps_products' => $ps_products->getContent(),
             'orphan_listings' => $orphan_listings->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
-            'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab'),
             'alerts' => $alert->getAlerts(),
             'ps_version' => _PS_VERSION_,

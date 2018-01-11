@@ -178,8 +178,6 @@ class EbayFormEbaySyncTab extends EbayTab
             }
         }
 
-        //$nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
-        //$sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
         $ebay_category_list = Db::getInstance()->executeS('SELECT *
             FROM `'._DB_PREFIX_.'ebay_category`
             WHERE `id_category_ref` = `id_category_ref_parent`
