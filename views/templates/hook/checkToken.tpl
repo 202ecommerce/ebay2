@@ -26,14 +26,17 @@
 	function checkToken()
 	{ldelim}
 		$.ajax({ldelim}
-			url: '{$url|escape:'htmlall':'UTF-8'}',
+			url: formController,
 			cache: false,
 			type: "POST",
+			data: {
+			    ajax: true,
+				action: 'CheckToken',
+            },
 			success: function(data)
 			{ldelim}
 				if (data == 'OK') {
                     window.location.href = '{$window_location_href}';
-                   
                 } else
 					setTimeout ("checkToken()", 5000);
 			{rdelim}

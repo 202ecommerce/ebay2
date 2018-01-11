@@ -55,4 +55,10 @@ class AdminFormController extends ModuleAdminController
             }
         }
     }
+
+    public function ajaxProcessCheckToken()
+    {
+        $result = EbayConfiguration::updateAPIToken() ? 'OK' : 'KO';
+        die($result);
+    }
 }

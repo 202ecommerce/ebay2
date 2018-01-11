@@ -1990,16 +1990,8 @@ class Ebay extends Module
         $url_vars['controller'] = Tools::getValue('controller');
 
 
-        $url = _MODULE_DIR_.'ebay/ajax/checkToken.php?'.http_build_query(
-            array(
-                'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-                'time' => pSQL(date('Ymdhis')),
-            )
-        );
-
         $smarty_vars = array(
             'window_location_href' => $this->__getUrl($url_vars),
-            'url' => $url,
             'request_uri' => $_SERVER['REQUEST_URI'],
         );
 

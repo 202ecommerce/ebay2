@@ -73,7 +73,6 @@
         $(location).attr('href', url_ebay + '&ebay_profile=' + $(this).data('value'));
     });
     {if !$syncProductByCron}
-    console.log('test');
     $(document).ready(function(){
         var cron_url = '{$cron_url}';
         $.ajax({
