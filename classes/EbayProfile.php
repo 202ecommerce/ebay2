@@ -479,7 +479,7 @@ class EbayProfile extends ObjectModel
 
     public static function getProfilesById($id_ebay_profile)
     {
-        $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`
+        $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
 				,s.`name` 
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)

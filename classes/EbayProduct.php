@@ -302,11 +302,12 @@ class EbayProduct
 
     public static function getProductsIdForSync($id_ebay_profile)
     {
+        $id_shop = Context::getContext()->shop->id;
         $sql = "SELECT p.id_product 
-                FROM "._DB_PREFIX_."product p
+                FROM "._DB_PREFIX_."product_shop p
                 LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc ON p.id_product = epc.id_product
                 WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
-                AND p.active=1
+                AND p.active=1 AND p.id_shop = ".$id_shop."
                 AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
         if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')) {
             $sql .= " AND epc.id_product is NULL";
