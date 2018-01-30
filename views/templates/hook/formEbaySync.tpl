@@ -825,9 +825,13 @@
             <td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
             <td>{if $category.price}{$category.price|escape:'htmlall':'UTF-8'}{else}0{/if}</td>
             <td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
-            <td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
+	    {if $category.category_multi}
+            	<td>{l s='yes' mod='ebay'}</td>
+	    {else}
+	    	<td>{l s='no' mod='ebay'}</td>
+	    {/if}
             <td>{$category.annonces|escape:'htmlall':'UTF-8'}
-              /{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
+              /{if $category.category_multi}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
             <td class="text-center"><input type="checkbox" class="categorySync"
                                            id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]"
                                            value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
