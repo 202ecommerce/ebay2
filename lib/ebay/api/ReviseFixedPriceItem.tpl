@@ -62,7 +62,7 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}
 				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture|escape:'htmlall':'UTF-8'}</PictureURL>
+					<PictureURL>{$picture|replace:'https://':'http://'|escape:'htmlall':'UTF-8'}</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}
