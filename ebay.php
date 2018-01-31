@@ -1109,7 +1109,7 @@ class Ebay extends Module
                 if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
                     $order->update($this->ebay_profile->id);
                 } else {
-                    $this->delete();
+                    $order->delete();
                 }
 
                 // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
