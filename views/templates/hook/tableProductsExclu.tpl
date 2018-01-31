@@ -76,7 +76,7 @@
     $('a[name="incluProduct"]').click(function (e) {
         var tr = $(this).parent().parent();
         e.preventDefault();
-        if (confirm(header_ebay_l['Are you sure you want to include this product?'])) {
+        if (confirm(header_ebay_l['Are you sure you want to inclure this product?'])) {
         $.ajax({
             type: 'POST',
             url: ebayProductExcluController,
