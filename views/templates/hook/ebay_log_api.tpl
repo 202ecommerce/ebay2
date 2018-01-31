@@ -247,7 +247,7 @@
                 },
                 success : function(data){
                     if (ids_logs == 'all'){
-                        $('#contentLogApiTab').empty();
+                        $('#contentLogApiTab .tableDnD tbody').empty();
                     } else{
                         $('.apilogCheck').each(function(){
                             if (ids_logs.indexOf($(this).attr('value')) != -1){

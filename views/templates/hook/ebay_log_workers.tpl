@@ -161,7 +161,7 @@
                     },
                     success : function(data){
                         if(ids_tasks == 'all'){
-                            $('#contentLogWorkersTab').empty();
+                            $('#contentLogWorkersTab .tableDnD tbody').empty();
                         } else{
                             $('.workCheck').each(function(){
                                 if (ids_tasks.indexOf($(this).attr('value')) != -1){
