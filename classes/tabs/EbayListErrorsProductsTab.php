@@ -109,7 +109,7 @@ class EbayListErrorsProductsTab extends EbayTab
                         'ps_version' => _PS_VERSION_,
                         'lang_iso' => $context->language->iso_code,
                         'desc_error' => $desc,
-                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false).'&token='.$token_for_product . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
+                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false, array('id_product' => (int)$product->id)).'&token='.$token_for_product . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
                     );
                 } else {
                     $vars['task_errors'][] = array(
@@ -124,7 +124,7 @@ class EbayListErrorsProductsTab extends EbayTab
                         'ps_version' => _PS_VERSION_,
                         'lang_iso' => $context->language->iso_code,
                         'desc_error' => $desc,
-                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false).'&token='.Tools::getAdminTokenLite('AdminProducts') . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
+                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false, array('id_product' => (int)$product->id)).'&token='.Tools::getAdminTokenLite('AdminProducts') . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
                     );
                 }
             }
