@@ -78,9 +78,7 @@ class EbayRequest
 
         if ($id_ebay_profile) {
             $this->ebay_profile = new EbayProfile($id_ebay_profile);
-            Ebay::debug('getProfile');
         } else {
-            Ebay::debug(EbayProfile::getCurrent());
             $this->ebay_profile = EbayProfile::getCurrent();
         }
 
