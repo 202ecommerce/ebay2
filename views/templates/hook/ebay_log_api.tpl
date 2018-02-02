@@ -248,6 +248,7 @@
                 success : function(data){
                     if (ids_logs == 'all'){
                         $('#contentLogApiTab .tableDnD tbody').empty();
+                        $('#contentLogApiTab .navPaginationListLogApiTab').empty();
                     } else{
                         $('.apilogCheck').each(function(){
                             if (ids_logs.indexOf($(this).attr('value')) != -1){

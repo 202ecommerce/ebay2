@@ -194,6 +194,7 @@
                 success : function(data){
                     if (ids_tasks == 'all'){
                         $('#contentLogJobsTab .tableDnD tbody').empty();
+                        $('#contentLogJobsTab .navPaginationListLogJobsTab').empty();
                     } else{
                         $('.logCheck').each(function(){
                             if (ids_tasks.indexOf($(this).attr('value')) != -1){

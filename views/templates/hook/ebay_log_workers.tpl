@@ -162,6 +162,7 @@
                     success : function(data){
                         if(ids_tasks == 'all'){
                             $('#contentLogWorkersTab .tableDnD tbody').empty();
+                            $('#contentLogWorkersTab .navPaginationListLogWorkersTab').empty();
                         } else{
                             $('.workCheck').each(function(){
                                 if (ids_tasks.indexOf($(this).attr('value')) != -1){
