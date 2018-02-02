@@ -74,7 +74,7 @@
                             <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
                             <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                             <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
-                            <td class="error_description">{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>
+                            <td class="error_description">{$task_error.desc_error nofilter}</td>{*cannot be escaped*}
                             <td></td>
                             <td>
                                 <div class="action">

@@ -1569,7 +1569,7 @@ class Ebay extends Module
             EbayCategory::updateCategoryTable($ebay->getCategoriesSkuCompliancy());
         }
 
-        if (Tools::getValue('refresh_store_cat')) {
+        if ($this->ebay_profile && Tools::getValue('refresh_store_cat')) {
             $ebay = new EbayRequest();
             EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories(), $this->ebay_profile);
         }
@@ -1908,7 +1908,7 @@ class Ebay extends Module
         $smarty_vars = array();
         $smarty_vars['show_send_stats'] = Configuration::get('EBAY_SEND_STATS') === false ? true : false;
 
-        if (Tools::getValue('relogin')) {
+        if ($this->ebay_profile && Tools::getValue('relogin')) {
             $session_id = $ebay->login();
             $this->context->cookie->eBaySession = $session_id;
             Configuration::updateValue('EBAY_API_SESSION', $session_id, false, 0, 0);
@@ -1940,7 +1940,7 @@ class Ebay extends Module
             $smarty_vars['check_token_tpl'] = $this->displayCheckToken();
         } else {
             // not logged yet
-            if (empty($this->context->cookie->eBaySession)) {
+            if ($this->ebay_profile && empty($this->context->cookie->eBaySession)) {
                 $session_id = $ebay->login();
                 $this->context->cookie->eBaySession = $session_id;
                 Configuration::updateValue('EBAY_API_SESSION', $session_id, false, 0, 0);
@@ -2253,13 +2253,16 @@ class Ebay extends Module
 
         $ebay = new EbayRequest();
         //$user_profile = $ebay->getUserProfile(Configuration::get('EBAY_API_USERNAME', null, 0, 0));
-        $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
+        if ($this->ebay_profile->ebay_user_identifier) {
+            $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
-        $this->StoreName = $user_profile['StoreName'];
+            $this->StoreName = $user_profile['StoreName'];
 
-        if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
-            $alerts[] = 'SellerBusinessType';
+            if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
+                $alerts[] = 'SellerBusinessType';
+            }
         }
+
 
         return $alerts;
     }
