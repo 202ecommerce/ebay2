@@ -26,7 +26,7 @@
     <div class="pull-left totebay">
         <div class="dropdown js-user-dropdown">
             <button class="dropdown-toggle" type="button" data-toggle="dropdown" style="height: 35px; overflow: hidden; background-color: transparent !important; border: none; outline: none;">
-                <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px;"/>
+                <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px; width: 29px;"/>
                 <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
             </button>
 
