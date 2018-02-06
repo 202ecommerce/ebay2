@@ -273,93 +273,92 @@ class AdminFormEbaySyncController extends ModuleAdminController
         echo $count_orphans_product[0]['number'];
     }
 
-    public function ajaxProcessLoadConfigFromCategory()
+    public function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $ebay)
     {
-        function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $ebay)
-        {
+        $var = null;
+        $context = Context::getContext();
+        $ebay = new Ebay();
 
-            $var = null;
-            $context = Context::getContext();
-            $ebay = new Ebay();
-
-            if ((int)$level > 1) {
-                foreach ($ref_categories as $ref_id_category_ref => $category) {
-                    if ($ref_id_category_ref == $id_category_ref) {
-                        if (isset($ref_categories[$category['id_category_ref_parent']]['children'])) {
-                            if ((int) $category['id_category_ref'] != (int) $category['id_category_ref_parent']) {
-                                $var .= getSelectors($ref_categories, (int) $category['id_category_ref_parent'], (int) $id_category, (int) ($level - 1), $ebay);
-                            }
-                            $tpl_var = array(
-                                "level" => $level,
-                                "id_category" => $id_category,
-                                "category" => $category,
-                                "ref_categories" => $ref_categories,
-                            );
-                            $context->smarty->assign($tpl_var);
-                            $var .=  $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_categories.tpl');
+        if ((int)$level > 1) {
+            foreach ($ref_categories as $ref_id_category_ref => $category) {
+                if ($ref_id_category_ref == $id_category_ref) {
+                    if (isset($ref_categories[$category['id_category_ref_parent']]['children'])) {
+                        if ((int) $category['id_category_ref'] != (int) $category['id_category_ref_parent']) {
+                            $var .= $this->getSelectors($ref_categories, (int) $category['id_category_ref_parent'], (int) $id_category, (int) ($level - 1), $ebay);
                         }
+                        $tpl_var = array(
+                            "level" => $level,
+                            "id_category" => $id_category,
+                            "category" => $category,
+                            "ref_categories" => $ref_categories,
+                        );
+                        $context->smarty->assign($tpl_var);
+                        $var .=  $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_categories.tpl');
                     }
                 }
-            } else {
-                $valid_categories = array();
-                foreach ($ref_categories as $ref_id_category_ref => $category) {
-                    if (isset($category['id_category_ref']) && (int) $category['id_category_ref'] == (int) $category['id_category_ref_parent'] && !empty($category['id_ebay_category'])) {
-                        $valid_categories[$ref_id_category_ref] = $category;
-                    }
+            }
+        } else {
+            $valid_categories = array();
+            foreach ($ref_categories as $ref_id_category_ref => $category) {
+                if (isset($category['id_category_ref']) && (int) $category['id_category_ref'] == (int) $category['id_category_ref_parent'] && !empty($category['id_ebay_category'])) {
+                    $valid_categories[$ref_id_category_ref] = $category;
                 }
-
-                $tpl_var = array(
-                    "level" => $level,
-                    "id_category" => $id_category,
-                    "ch_cat_str" => Tools::safeOutput(Tools::getValue('ch_cat_str')),
-                    "ref_categories" => $valid_categories,
-                    "id_category_ref" => $id_category_ref
-                );
-                $context->smarty->assign($tpl_var);
-                $var .=  $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_categories.tpl');
             }
 
-            return $var;
+            $tpl_var = array(
+                "level" => $level,
+                "id_category" => $id_category,
+                "ch_cat_str" => Tools::safeOutput(Tools::getValue('ch_cat_str')),
+                "ref_categories" => $valid_categories,
+                "id_category_ref" => $id_category_ref
+            );
+            $context->smarty->assign($tpl_var);
+            $var .=  $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_categories.tpl');
         }
 
-        function getProductsSynchVariations($id_category, $ebay_profile)
-        {
-            $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
+        return $var;
+    }
+
+    public function getProductsSynchVariations($id_category, $ebay_profile)
+    {
+        $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
-            $sql .= Shop::addSqlAssociation('product', 'p');
-            $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+        $sql .= Shop::addSqlAssociation('product', 'p');
+        $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
                 ON (p.`id_product` = pl.`id_product`
                 AND pl.`id_lang` = '.(int) $ebay_profile->id_lang;
-            $sql .= Shop::addSqlRestrictionOnLang('pl');
-            $sql .= ')
+        $sql .= Shop::addSqlRestrictionOnLang('pl');
+        $sql .= ')
             LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
                 ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$ebay_profile->id.'
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
             WHERE ';
-            $sql .= ' product_shop.`id_category_default` = '.(int) $id_category;
-            $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+        $sql .= ' product_shop.`id_category_default` = '.(int) $id_category;
+        $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
 
 
-            $nb_products_blocked = 0;
-            $nb_products_man = Db::getInstance()->ExecuteS($sql);
-            $nb_products_variations = 0;
-            if ($nb_products_man) {
-                foreach ($nb_products_man as $product_ps) {
-                    $product = new Product($product_ps['id']);
-                    $variation = $product->getWsCombinations();
-                    $nb_products_variations += count($variation);
-                    if ($product_ps['blacklisted']) {
-                        $nb_products_blocked += 1;
-                    }
+        $nb_products_blocked = 0;
+        $nb_products_man = Db::getInstance()->ExecuteS($sql);
+        $nb_products_variations = 0;
+        if ($nb_products_man) {
+            foreach ($nb_products_man as $product_ps) {
+                $product = new Product($product_ps['id']);
+                $variation = $product->getWsCombinations();
+                $nb_products_variations += count($variation);
+                if ($product_ps['blacklisted']) {
+                    $nb_products_blocked += 1;
                 }
             }
-
-            return $nb_products_variations;
         }
 
+        return $nb_products_variations;
+    }
+
+    public function ajaxProcessLoadConfigFromCategory()
+    {
         if ($id_categori_ps = Tools::getValue('id_category_ps')) {
             if (Module::isInstalled('ebay')) {
                 /** @var Ebay $ebay */
@@ -449,7 +448,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                     );
                     $context->smarty->assign($tpl_var);
 
-                    $category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).$ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_change_category_match_input.tpl');
+                    $category['var'] = $this->getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).$ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_select_change_category_match_input.tpl');
 
                     if ($category['percent']) {
                         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $category['percent'], $temp);
@@ -488,7 +487,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                     'eBayCategoryList' => $ebay_category_list,
                     'getNbProducts' => $get_cat_nb_products,
                     'getNbSyncProducts' => $get_cat_nb_sync_products,
-                    'getNbSyncProductsVariations' => getProductsSynchVariations($id_categori_ps, $ebay_profile),
+                    'getNbSyncProductsVariations' => $this->getProductsSynchVariations($id_categori_ps, $ebay_profile),
                     'categoryConfigList' => $category_config_list[$id_categori_ps],
                     'currencySign' => $currency->sign,
                     'percent' => $percent,
@@ -501,6 +500,11 @@ class AdminFormEbaySyncController extends ModuleAdminController
         }
     }
 
+    public function loadItemsMap($row)
+    {
+        return $row['id'];
+    }
+
     public function ajaxProcessLoadItemsSpecificsAndConditions()
     {
         require_once dirname(__FILE__).'/../../classes/EbayCategorySpecific.php';
@@ -509,10 +513,6 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $id_ebay_profile = (int) Tools::getValue('profile');
         $ebay_profile = new EbayProfile($id_ebay_profile);
 
-        function loadItemsMap($row)
-        {
-            return $row['id'];
-        }
 
         /* Fix for limit db sql request in time */
         sleep(1);
