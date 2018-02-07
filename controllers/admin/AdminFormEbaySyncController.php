@@ -64,7 +64,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 
         $request = new EbayRequest($ebay_profile->id);
-        $request->importBusinessPolicies(true);
+        $request->importBusinessPolicies();
         $vars = array(
             'PAYEMENTS' =>EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $ebay_profile->id),
             'RETURN_POLICY' => EbayBussinesPolicies::getPoliciesbyType('RETURN_POLICY', $ebay_profile->id),
