@@ -257,8 +257,14 @@ class EbayOrder
         $address->city = $format->formatCityName($this->city);
         
         if (!empty($this->phone)) {
-            $address->phone = $format->formatPhoneNumber($this->phone);
-            $address->phone_mobile = $format->formatPhoneNumber($this->phone);
+            $phone = $format->formatPhoneNumber($this->phone);
+            $phone_mobile = $format->formatPhoneNumber($this->phone);
+            if (Validate::isPhoneNumber($phone)) {
+                $address->phone = $format->formatPhoneNumber($this->phone);
+            }
+            if (Validate::isPhoneNumber($phone_mobile)) {
+                $address->phone_mobile = $format->formatPhoneNumber($this->phone);
+            }
         }
 
         $address->active = 1;

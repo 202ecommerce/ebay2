@@ -1298,6 +1298,7 @@ class Ebay extends Module
             return false;
         }
         $product = isset($params['product']) ? $params['product'] : new Product($id_product);
+
         EbayTaskManager::addTask('update', $product);
     }
 

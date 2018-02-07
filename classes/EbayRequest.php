@@ -234,7 +234,7 @@ class EbayRequest
             if (isset($vars['url'])) {
                 $url .= $vars['url'];
             }
-        
+            
             curl_setopt($connection, CURLOPT_URL, $url);
         } else {
             curl_setopt($connection, CURLOPT_URL, $this->apiUrl);
@@ -254,7 +254,9 @@ class EbayRequest
         } else {
             curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($apiCall));
         }
-        curl_setopt($connection, CURLOPT_POST, 1);
+        if (isset($request)) {
+            curl_setopt($connection, CURLOPT_POST, 1);
+        }
 
         if (isset($request)) {
             curl_setopt($connection, CURLOPT_POSTFIELDS, $request); // Set the XML body of the request
@@ -1715,7 +1717,7 @@ class EbayRequest
                 $config_business_policies = 1;
             }
 
-
+            
             if ($config[0] === 'true') {
                 if ($datas->SupportedSellerProfiles) {
                     Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_business_policies`
