@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -51,10 +51,10 @@
                 {if isset($products)}
                     {foreach from=$products item="product"}
                         <tr>
-                            <td>{$product.id_product nofilter}</td>
-                            <td>{$product.name nofilter}</td>
-                            <td>{$product.category_ps nofilter}</td>
-                            <td> {$product.category_ebay nofilter}</td>
+                            <td>{$product.id_product|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$product.name|escape:'htmlall':'UTF-8'}</td>
+                            <td>{$product.category_ps|escape:'htmlall':'UTF-8'}</td>
+                            <td> {$product.category_ebay|escape:'htmlall':'UTF-8'}</td>
                             <td class="text-center">
                                 <a href="#" id="{$product.id_product}" class="btn btn-sm btn-default" name="incluProduct"
                                    title="{l s='Include' mod='ebay'}" data-toggle="tooltip">

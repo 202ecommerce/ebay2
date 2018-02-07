@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -140,7 +140,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.7';
+        $this->version = '2.1.0';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -381,8 +381,7 @@ class Ebay extends Module
             $tab->class_name = $tab_name;  //AdminCustomProducts e.g.
             $tab->id_parent = Tab::getIdFromClassName($this->name);
 
-            foreach (Language::getLanguages(true) as $lang)
-            {
+            foreach (Language::getLanguages(true) as $lang) {
                 $tab->name[$lang['id_lang']] = $tab_name;
             }
 

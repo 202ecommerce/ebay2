@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -74,7 +74,7 @@
                             <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
                             <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                             <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
-                            <td class="error_description">{$task_error.desc_error nofilter}</td>{*cannot be escaped*}
+                            <td class="error_description">{$task_error.desc_error|escape:'htmlall':'UTF-8'}</td>{*cannot be escaped*}
                             <td></td>
                             <td>
                                 <div class="action">
