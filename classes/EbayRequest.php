@@ -1706,7 +1706,7 @@ class EbayRequest
 
     public function importBusinessPolicies($datas = false)
     {
-        if ($datas) {
+        if (!$datas) {
             $datas = $this->getUserPreferences();
         }
         if ($datas) {
