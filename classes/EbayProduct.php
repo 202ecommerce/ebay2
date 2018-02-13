@@ -113,13 +113,16 @@ class EbayProduct
 			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile);
     }
 
-    public static function getNbProductsByCategory($id_ebay_profile, $id_category)
+    public static function getNbProductsByCategory($id_ebay_profile, $id_category, $id_shop = null)
     {
+    	if (!$id_shop) {
+		$id_shop = Context::getContext()->shop->id;
+	}
         return Db::getInstance()->getValue('SELECT count(*)
 			FROM `'._DB_PREFIX_.'ebay_product` ep
-			INNER JOIN `'._DB_PREFIX_.'product` p
-			ON p.`id_product` = ep.`id_product`
-			WHERE p.`id_category_default` = '.(int)$id_category .' AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile);
+			INNER JOIN `'._DB_PREFIX_.'product_shop` ps
+			ON ps.`id_product` = ep.`id_product`
+			WHERE ps.`id_category_default` = '.(int)$id_category .' AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile . ' AND ps.id_shop = ' . $id_shop);
     }
 
     public static function getNbProductsByIdEbayProfiles($id_ebay_profiles = array())

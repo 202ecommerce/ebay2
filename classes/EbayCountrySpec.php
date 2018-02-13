@@ -448,7 +448,7 @@ class EbayCountrySpec
             'documentation' => 'en',
             'language' => 'en_EN',
             'currency' => 'CAD',
-            'site_name' => 'Canada (Enlish)',
+            'site_name' => 'Canada (English)',
             'site_extension' => 'ca',
             'img_stats' => null,
             'iso_code' => 'CA',
