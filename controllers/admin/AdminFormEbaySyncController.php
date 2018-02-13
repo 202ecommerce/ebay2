@@ -548,7 +548,11 @@ class AdminFormEbaySyncController extends ModuleAdminController
         }
 
         $item_specifics = $category->getItemsSpecifics();
-        $item_specifics_ids = array_map('loadItemsMap', $item_specifics);
+        $item_specifics_ids = array();
+        foreach ($item_specifics as $item_specific) {
+            $item_specifics_ids[] = $item_specific['id'];
+        }
+       // $item_specifics_ids = array_map('loadItemsMap', $item_specifics);
 
         if (count($item_specifics_ids)) {
             $sql = 'SELECT `id_ebay_category_specific_value` as id, `id_ebay_category_specific` as specific_id, `value`
