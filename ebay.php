@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -101,6 +101,7 @@ $classes_to_load = array(
     'DbEbay',
 );
 
+
 foreach ($classes_to_load as $classname) {
     if (file_exists(dirname(__FILE__).'/classes/'.$classname.'.php')) {
         require_once dirname(__FILE__).'/classes/'.$classname.'.php';
@@ -139,7 +140,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.0.6';
+        $this->version = '2.1.0';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -355,6 +356,60 @@ class Ebay extends Module
         EbayOrderErrors::install();
         EbayKb::install();
 
+        $this->installTabs();
+
+        return true;
+    }
+
+    public function installTabs()
+    {
+        $tabs_to_load = array(
+            'AdminEbayApiLog',
+            'AdminFormEbaySync',
+            'AdminEbayListings',
+            'AdminEbayOrphanListings',
+            'AdminEbayProductExclu',
+            'AdminEbayOrders',
+            'AdminEbayListErrorsProducts',
+            'AdminFormAdvancedParameters',
+            'AdminForm',
+        );
+        foreach ($tabs_to_load as $tab_name) {
+            $tab = new Tab();
+            $tab->module = $this->name;
+            $tab->active = 0;
+            $tab->class_name = $tab_name;  //AdminCustomProducts e.g.
+            $tab->id_parent = Tab::getIdFromClassName($this->name);
+
+            foreach (Language::getLanguages(true) as $lang) {
+                $tab->name[$lang['id_lang']] = $tab_name;
+            }
+
+            $tab->add();
+        }
+        return true;
+    }
+
+    public function uninstallTabs()
+    {
+        $tabs_to_load = array(
+            'AdminEbayApiLog',
+            'AdminFormEbaySync',
+            'AdminEbayListings',
+            'AdminEbayOrphanListings',
+            'AdminEbayProductExclu',
+            'AdminEbayOrders',
+            'AdminEbayListErrorsProducts',
+            'AdminFormAdvancedParameters',
+            'AdminForm',
+        );
+        foreach ($tabs_to_load as $tab_name) {
+            $tab  = Tab::getInstanceFromClassName($tab_name);
+
+            if (Validate::isLoadedObject($tab)) {
+                $tab->delete();
+            }
+        }
         return true;
     }
 
@@ -1053,7 +1108,7 @@ class Ebay extends Module
                 if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
                     $order->update($this->ebay_profile->id);
                 } else {
-                    $this->delete();
+                    $order->delete();
                 }
 
                 // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
@@ -1242,6 +1297,7 @@ class Ebay extends Module
             return false;
         }
         $product = isset($params['product']) ? $params['product'] : new Product($id_product);
+
         EbayTaskManager::addTask('update', $product);
     }
 
@@ -1463,6 +1519,7 @@ class Ebay extends Module
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
                 'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         } else {
             $smarty_vars = array(
@@ -1472,6 +1529,7 @@ class Ebay extends Module
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
                 'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         }
 
@@ -1511,7 +1569,7 @@ class Ebay extends Module
             EbayCategory::updateCategoryTable($ebay->getCategoriesSkuCompliancy());
         }
 
-        if (Tools::getValue('refresh_store_cat')) {
+        if ($this->ebay_profile && Tools::getValue('refresh_store_cat')) {
             $ebay = new EbayRequest();
             EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories(), $this->ebay_profile);
         }
@@ -1671,8 +1729,7 @@ class Ebay extends Module
 
         $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
         $this->smarty->assign(array(
-            'nb_tasks_in_work_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/loadNbTasksInWork.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_profile='.$id_profile,
-            'boost_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/boostMode.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&cron_url='.$cron_url,
+            'cron_url' => $cron_url,
             'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
             'last_sync_prod' => date('Y-m-d H:i:s', strtotime(Configuration::get('DATE_LAST_SYNC_PRODUCTS'))),
             'img_stats' => ($this->ebay_country->getImgStats()),
@@ -1710,7 +1767,6 @@ class Ebay extends Module
             'profiles' => $profiles,
             'add_profile' => $add_profile,
             'add_profile_url' => $add_profile_url,
-            'delete_profile_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int) Tools::getValue('id_tab'),
             'pro_url' => $this->ebay_country->getProUrl(),
@@ -1748,6 +1804,8 @@ class Ebay extends Module
                 'prestashop_version'     => _PS_VERSION_,
                 'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
             ),
+            'formEbaySyncController' => $this->context->link->getAdminLink('AdminFormEbaySync'),
+            'formController' => $this->context->link->getAdminLink('AdminForm'),
 
             ));
 
@@ -1850,7 +1908,7 @@ class Ebay extends Module
         $smarty_vars = array();
         $smarty_vars['show_send_stats'] = Configuration::get('EBAY_SEND_STATS') === false ? true : false;
 
-        if (Tools::getValue('relogin')) {
+        if ($this->ebay_profile && Tools::getValue('relogin')) {
             $session_id = $ebay->login();
             $this->context->cookie->eBaySession = $session_id;
             Configuration::updateValue('EBAY_API_SESSION', $session_id, false, 0, 0);
@@ -1882,7 +1940,7 @@ class Ebay extends Module
             $smarty_vars['check_token_tpl'] = $this->displayCheckToken();
         } else {
             // not logged yet
-            if (empty($this->context->cookie->eBaySession)) {
+            if ($this->ebay_profile && empty($this->context->cookie->eBaySession)) {
                 $session_id = $ebay->login();
                 $this->context->cookie->eBaySession = $session_id;
                 Configuration::updateValue('EBAY_API_SESSION', $session_id, false, 0, 0);
@@ -1932,16 +1990,8 @@ class Ebay extends Module
         $url_vars['controller'] = Tools::getValue('controller');
 
 
-        $url = _MODULE_DIR_.'ebay/ajax/checkToken.php?'.http_build_query(
-            array(
-                'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-                'time' => pSQL(date('Ymdhis')),
-            )
-        );
-
         $smarty_vars = array(
             'window_location_href' => $this->__getUrl($url_vars),
-            'url' => $url,
             'request_uri' => $_SERVER['REQUEST_URI'],
         );
 
@@ -1977,7 +2027,7 @@ class Ebay extends Module
         $ebayProductsExcluTab = new EbayProductsExcluTab($this, $this->smarty, $this->context);
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
 
-        $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
+
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
 
@@ -2024,12 +2074,10 @@ class Ebay extends Module
             'ps_products' => $ps_products->getContent(),
             'orphan_listings' => $orphan_listings->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
-            'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab'),
             'alerts' => $alert->getAlerts(),
             'ps_version' => _PS_VERSION_,
             'admin_path' => basename(_PS_ADMIN_DIR_),
-            'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
             'alert_exit_import_categories' => $this->l('Import of eBay category is running.'),
             'order_returns' => $order_returns->getContent($this->ebay_profile->id),
             'orders_returns_sync' => $orders_returns_sync->getContent(),
@@ -2205,13 +2253,16 @@ class Ebay extends Module
 
         $ebay = new EbayRequest();
         //$user_profile = $ebay->getUserProfile(Configuration::get('EBAY_API_USERNAME', null, 0, 0));
-        $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
+        if ($this->ebay_profile->ebay_user_identifier) {
+            $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
-        $this->StoreName = $user_profile['StoreName'];
+            $this->StoreName = $user_profile['StoreName'];
 
-        if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
-            $alerts[] = 'SellerBusinessType';
+            if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
+                $alerts[] = 'SellerBusinessType';
+            }
         }
+
 
         return $alerts;
     }
@@ -2419,7 +2470,7 @@ class Ebay extends Module
                         $data['name'] .= ' '.$variation_specific;
                     }
 
-                    if ($this->isSymfonyProject()) {
+                    if ($this->isSymfonyProject() && false) {
                         $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $combinaison['id_product']));
                     } else {
                         $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
@@ -2437,7 +2488,7 @@ class Ebay extends Module
                     );
                 }
             } else {
-                if ($this->isSymfonyProject()) {
+                if ($this->isSymfonyProject() && false) {
                     $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $data['real_id_product']));
                 } else {
                     $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']);

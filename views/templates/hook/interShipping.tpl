@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -74,9 +74,12 @@
 			// Carrier eBay
 			createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : 'big-linked') +"'' style='visibility:hidden'><label data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Linked' mod='ebay'}"+(hasValues ? valuePSCarrier : '')+"{l s='with an eBay carrier' mod='ebay'}</label><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : 'ebayCarrier_international') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
 			{foreach from=$eBayCarrier item=carrier}
-				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping')
-					&& selected_services.indexOf('{$carrier.id_shipping_service}') == -1)
-					createSelecstShipping += "<option data-id='{$carrier.id_shipping_service}' " + ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+				{if isset($carrier.id_shipping_service)}
+            if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' == 'true' && currentName == 'internationalShipping')
+                && selected_services.indexOf('{$carrier.id_shipping_service}') == -1)
+                createSelecstShipping += "<option data-id='{$carrier.id_shipping_service}' " + ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+				{/if}
+
 			{/foreach}
 			createSelecstShipping += "</select></div></td>";
 			// end carrier eBay
@@ -341,9 +344,14 @@
 			{
 				var showcountries = $(this);
 				$.ajax({
-					url: '{/literal}{$module_dir|escape:'htmlall':'UTF-8'}{literal}ajax/getCountriesLocation.php?token={/literal}{$ebay_token|escape:'htmlall':'UTF-8'}{literal}&profile={/literal}{$id_ebay_profile|escape:'htmlall':'UTF-8'}{literal}',
+					url: formController,
 					type: 'POST',
-					data: {region: $(this).attr('data-region')},
+					data: {
+					    region: $(this).attr('data-region'),
+						profile: id_ebay_profile,
+						ajax: true,
+						action: 'GetCountriesLocation',
+					},
 					complete: function(xhr, textStatus) {
 
 					},

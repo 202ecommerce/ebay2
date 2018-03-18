@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -62,7 +62,7 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}
 				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture|escape:'htmlall':'UTF-8'}</PictureURL>
+					<PictureURL>{$picture|replace:'https://':'http://'|escape:'htmlall':'UTF-8'}</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}

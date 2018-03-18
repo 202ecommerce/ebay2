@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
+ * @copyright 2007-2018 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -57,7 +57,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
 
         $action_url = $this->_getUrl($url_vars);
-
+        $shop_lang_id = (int)Configuration::get('PS_LANG_DEFAULT');
         // Loading categories
         $category_config_list = array();
         //var_dump(Category::getCategories($this->context->language->id, true, true, ' and c.id_category=5')); die();
@@ -76,9 +76,9 @@ class EbayFormEbaySyncTab extends EbayTab
                 $query_filter = " AND 0";
             }
 
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), 0, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($shop_lang_id, true, true, '', $query_filter), 0, array(), '', $searche);
         } else {
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($shop_lang_id), 0);
         }
 
         $categories = array();
@@ -166,8 +166,8 @@ class EbayFormEbaySyncTab extends EbayTab
                     'name' => $category['name'],
                     'price' => $prix['sign'] . $prix['value'] . $prix['type'],
                     'category_ebay' => $category_ebay[0]['name'],
-                    'category_multi' => $ebay_category->isMultiSku() ? $this->ebay->l('yes', 'ebayformebaysynctab') : $this->ebay->l('no', 'ebayformebaysynctab'),
-                    'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category']),
+                    'category_multi' => $ebay_category->isMultiSku() ? true : false,
+                    'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category'], $this->ebay_profile->id_shop),
                     'nb_products' => count($nb_products_man),
                     'nb_products_variations' => $nb_products_variations,
                     'nb_products_blocked' => $nb_products_blocked,
@@ -178,8 +178,6 @@ class EbayFormEbaySyncTab extends EbayTab
             }
         }
 
-        //$nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
-        //$sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
         $ebay_category_list = Db::getInstance()->executeS('SELECT *
             FROM `'._DB_PREFIX_.'ebay_category`
             WHERE `id_category_ref` = `id_category_ref_parent`
@@ -212,8 +210,6 @@ class EbayFormEbaySyncTab extends EbayTab
             'sync_2'                  => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
             'is_sync_mode_b'          => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
             'ebay_sync_mode'          => (int)($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
-            //'admin_path'              => basename(_PS_ADMIN_DIR_),
-            'load_kb_path'            => _MODULE_DIR_ . 'ebay/ajax/loadKB.php',
             'PAYEMENTS' => EbayBussinesPolicies::getPoliciesbyType('PAYMENT', $this->ebay_profile->id),
             'RETURN_POLICY' => EbayBussinesPolicies::getPoliciesbyType('RETURN_POLICY', $this->ebay_profile->id),
             'storeCategories' =>  EbayStoreCategory::getCategoriesWithConfiguration($this->ebay_profile->id),
@@ -227,7 +223,6 @@ class EbayFormEbaySyncTab extends EbayTab
             'date' => pSQL(date('Ymdhis')),
             'shipping_tab_is_conf'      =>  (empty($national_shipping)?1:0),
             'bp_active' => ($this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'))?$this->ebay_profile->getConfiguration('EBAY_BUSINESS_POLICIES'):0,
-
         );
 
         return $this->display('formEbaySync.tpl', $smarty_vars);

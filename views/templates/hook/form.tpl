@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -424,6 +424,8 @@
     </script>
     {/if}
     <script type="text/javascript">
+        var formEbaySyncController = "{$formEbaySyncController|addslashes}";
+        var formController = "{$formController|addslashes}";
         var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
           'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
@@ -433,15 +435,19 @@
             'Are you sure you want to delete this category?' : "{l s='Are you sure you want to delete this category?' mod='ebay'}"
         };
         var first = false;
-        var delete_profile_url = '{$delete_profile_url|escape:'htmlall':'UTF-8'}';
         var boost = null;
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
-        var nb_tasks_in_work_url = '{$nb_tasks_in_work_url}';
-        var boost_url = '{$boost_url}';
+        var cron_url = '{$cron_url}';
         function loadNbTasksInWork(e){
             $.ajax({
-                url : nb_tasks_in_work_url,
+                type: 'POST',
+                url : formController,
+                data: {
+                    ajax: true,
+                    action: 'LoadNbTasksInWork',
+                    id_profile: id_ebay_profile,
+                },
                 success : function(data) {
 
                     if (data != '0'){

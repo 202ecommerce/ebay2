@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
+ * @copyright 2007-2018 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -80,11 +80,13 @@ class EbayTaskManager
         if (isset($product->id)) {
             $sql = array();
             foreach ($ebay_profiles as $profile) {
-                $sql[] = 'SELECT `id_product`, ' . $profile['id_ebay_profile'] . ' AS `id_ebay_profile`, ' . $profile['id_lang'] . ' AS `id_lang`
-            FROM `' . _DB_PREFIX_ . 'product`
-            WHERE `id_product` = ' . $product->id . '
-            AND `active` = 1
-            AND `id_category_default` IN
+                $id_shop = $profile['id_shop'];
+                $sql[] = 'SELECT p.id_product, ' . $profile['id_ebay_profile'] . ' AS `id_ebay_profile`, ' . $profile['id_lang'] . ' AS `id_lang`
+            FROM `' . _DB_PREFIX_ . 'product` p
+	        LEFT JOIN '._DB_PREFIX_.'product_shop ps ON p.id_product = ps.id_product
+            WHERE p.id_product = ' . $product->id . '
+            AND ps.active = 1 AND ps.id_shop = '.$id_shop.'
+            AND ps.id_category_default IN
             (' . EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($profile['id_ebay_profile'])) . ')';
             }
 

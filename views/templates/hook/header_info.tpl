@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,7 +26,7 @@
     <div class="pull-left totebay">
         <div class="dropdown js-user-dropdown">
             <button class="dropdown-toggle" type="button" data-toggle="dropdown" style="height: 35px; overflow: hidden; background-color: transparent !important; border: none; outline: none;">
-                <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px;"/>
+                <img src="{$path|escape:'htmlall':'UTF-8'}logo.png" alt="" style="margin-top: -13px; width: 29px;"/>
                 <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
             </button>
 
@@ -72,20 +72,20 @@
         var url_ebay = '{$url_ebay}';
         $(location).attr('href', url_ebay + '&ebay_profile=' + $(this).data('value'));
     });
-
+    {if !$syncProductByCron}
     $(document).ready(function(){
-        var _module_ebay_dir_ = '{$_module_ebay_dir_}';
-        var ebay_token = '{$ebay_token}';
         var cron_url = '{$cron_url}';
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: _module_ebay_dir_ + 'ebay/ajax/toJobEbay.php?token=' + ebay_token + '&cron_url=' + cron_url,
+            url: cron_url,
             success: function (data) {
                 // @TODO put something here ?
             }
         });
     });
+    {/if}
+
 
     /* $('.ebay_profils').change(function() {
      $('.change_profile').find("input[name=ebay_profile]").val($( ".ebay_profils option:selected").attr('id'));

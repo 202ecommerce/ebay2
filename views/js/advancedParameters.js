@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2017 PrestaShop SA
+*  @copyright  2007-2018 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -49,8 +49,13 @@ function launchDatabaseChecking(i){
 	refreshDatabaseProgress();
 	$.ajax({
 		type: 'POST',
-		url: module_dir + 'ebay/ajax/checkDatabase.php',
-		data: "token="+token+"&action=checkSpecific&value="+i,
+		url: formAdvancedParametersController,
+		data: {
+			ajax: true,
+			action: 'CheckDatabase',
+			actionProcess: 'checkSpecific',
+			value: i,
+		},
 		dataType: 'json',
 		success: function( data ){
 			$.each(data, function( key, value ) {

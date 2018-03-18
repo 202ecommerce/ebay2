@@ -19,26 +19,27 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS')) {
-    define('TMP_DS', DIRECTORY_SEPARATOR);
-}
+class AdminEbayProductExcluController extends ModuleAdminController
+{
+    public function ajaxProcessGetProductExclu()
+    {
+        $ebay = Module::getInstanceByName('ebay');
+        die($ebay->displayProductExclu(Tools::getValue('id_employee')));
+    }
 
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
-
-if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('INVALID TOKEN');
-}
-
-if (Tools::getValue('action') == 'getLogs') {
-    $data = Tools::file_get_contents('../log/request.txt');
-    $text = htmlentities($data);
-    echo '<pre>';
-    echo $text;
-    die;
+    public function ajaxProcessInclureProduct()
+    {
+        EbayProductConfiguration::insertOrUpdate(Tools::getValue('id_product'), array(
+            'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
+            'blacklisted' =>  0,
+            'extra_images' => 0,
+        ));
+        $product = new Product(Tools::getValue('id_product'));
+        EbayTaskManager::addTask('mod', $product, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'));
+    }
 }

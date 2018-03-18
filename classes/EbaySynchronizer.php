@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
+ * @copyright 2007-2018 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -934,7 +934,7 @@ class EbaySynchronizer
                     }
                 }
             }
-            if ($res->ItemID > 0) {
+            if (isset($res->ItemID) && $res->ItemID > 0) {
                 //EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($res->ItemID)), $id_ebay_profile);
                 EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $res->ItemID, $date, $id_category_ps, 0);
             } else {
@@ -1193,6 +1193,22 @@ class EbaySynchronizer
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
+        if (!$data_for_stock['variations']) {
+            list($price, $price_original) = EbaySynchronizer::__getPrices($product->id, $ebay_category->getPercent(), $ebay_profile);
+            $data_for_stock['price'] = $price;
+            $clean_percent = $ebay_category->getCleanPercent();
+            // Save percent and price discount
+            if ($clean_percent < 0) {
+                $data_for_stock['price_original'] = round($price_original, 2);
+//                $data['price_percent'] = round($clean_percent);
+            } elseif ($price_original > $price) {
+                $data_for_stock['price_original'] = round($price_original, 2);
+            }
+
+            if (isset($data_for_stock['price_original'])) {
+                $data_for_stock['price_percent'] = round(($price_original - $price) / $price_original * 100.0);
+            }
+        }
         if (isset($data_for_stock['item_specifics']['K-type'])) {
             //$value = explode(" ", $data['item_specifics']['K-type']);
             //$data['ktype'] = $value;

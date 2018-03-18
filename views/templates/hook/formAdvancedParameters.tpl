@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -242,6 +242,7 @@
 	
 {literal}
 	<script>
+		var formAdvancedParametersController = "{/literal}{$formAdvancedParametersController|addslashes}{literal}";
 		var token = "{/literal}{$ebay_token}{literal}";
 		$(document).ready(function() {
 			setTimeout(function() {					
@@ -252,7 +253,7 @@
 
 		$('.logs').click(function(e) {
 			e.preventDefault();
-			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token}{literal}&action=getLogs');
+            window.open(formAdvancedParametersController + '&action=getLogs');
 		});
 
 		$('#reload_categories_store').click(function(e) {
@@ -288,26 +289,6 @@
 			}
 		});
 
-		$(function() {
-			$('#reset-image').click(function(e) {
-				e.preventDefault();
-				$.ajax({
-					type: 'POST',
-					url: module_dir + 'ebay/ajax/deleteProductImage.php',
-					data: "token={/literal}{$ebay_token}{literal}&action=delete-all",
-					beforeSend: function() {
-						$('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
-					}
-				}).done(function(data) {
-					if (data == 'success')
-						$('#reset-image-result').html("<div class='alert alert-success'>{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}</div>");
-					else
-						$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-				}).fail(function() {
-					$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-				})
-			});
-		});
 
 			$(function() {
 				$('#check_database').click(function(e){
@@ -316,8 +297,12 @@
 					// Foreach de toutes les tables
 					$.ajax({
 						type: 'POST',
-						url: module_dir + 'ebay/ajax/checkDatabase.php',
-						data: "token={/literal}{$ebay_token}{literal}&action=getNbTable",
+						url: formAdvancedParametersController,
+						data: {
+						    ajax: true,
+							action: 'CheckDatabase',
+							actionProcess: 'getNbTable',
+                        },
 						beforeSend: function() {
 							$('#check_database_logs tbody tr').remove();
 						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
@@ -348,8 +333,15 @@
 				$.ajax({
 					dataType: 'json',
 					type: 'POST',
-					url: module_dir + 'ebay/ajax/checkCategory.php',
-					data: "token={/literal}{$ebay_token}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay}{literal}&step=" + step + "&id_categories=" + id_categories,
+					url: formAdvancedParametersController,
+					data: {
+					    ajax: true,
+						action: 'checkCategory',
+						actionProcess: 'checkCategories',
+						id_profile_ebay: id_ebay_profile,
+						step: step,
+						id_categories: id_categories,
+                    },
 					beforeSend: function() {
 
 					},
