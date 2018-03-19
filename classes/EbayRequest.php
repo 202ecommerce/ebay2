@@ -1186,6 +1186,14 @@ class EbayRequest
 
         $response = $this->_makeRequest('EndFixedPriceItem', $response_vars, false, 0, $data);
 
+        if (isset($response->Errors)) {
+            foreach ($response->Errors as $e) {
+                if ((int)$e->ErrorCode == 1047 || (int)$e->ErrorCode == 17) {
+                    return true;
+                }
+            }
+        }
+
         if ($response === false) {
             return false;
         }

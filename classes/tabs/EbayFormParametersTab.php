@@ -87,7 +87,7 @@ class EbayFormParametersTab extends EbayTab
             'hasEbayBoutique'           => isset($user_profile['StoreUrl']) && !empty($user_profile['StoreUrl']) ? true : false,
             'currencies'                => TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop),
             'current_currency'          => (int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'),
-            'ebay_shop_countries'       => EbayCountrySpec::getCountries(false),
+            'ebay_shop_countries'       => EbayCountrySpec::getCountriesSelect(false),
             'current_ebay_shop_country' => $shopCountry,
             'immediate_payment'         => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             // CRON sync

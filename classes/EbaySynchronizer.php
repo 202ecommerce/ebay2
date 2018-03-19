@@ -267,7 +267,7 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
         );
-        $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
+        $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang, $id_product_attribute);
 
         if (isset($data['item_specifics']['K-type'])) {
             //$value = explode(" ", $data['item_specifics']['K-type']);
@@ -642,7 +642,7 @@ class EbaySynchronizer
 
         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
         if ($temp[3] != '') {
-            if ($temp[1] == "+") {
+            if ($temp[1] != "-") {
                 $price *= (1 + ((int) $temp[2] / 100));
                 $price_original *= (1 + ((int) $temp[2] / 100));
             } else {
@@ -650,7 +650,7 @@ class EbaySynchronizer
                 $price_original *= (1 - ((int) $temp[2] / 100));
             }
         } else {
-            if ($temp[1] == "+") {
+            if ($temp[1] != "-") {
                 $price +=  (int) $temp[2];
                 $price_original +=  (int) $temp[2];
             } else {
@@ -752,8 +752,12 @@ class EbaySynchronizer
      * @param int $id_lang
      * @return array
      */
-    private static function __getProductItemSpecifics($ebay_category, $product, $id_lang)
+    private static function __getProductItemSpecifics($ebay_category, $product, $id_lang, $id_product_attribute = 0)
     {
+        $combinations = false;
+        if ($id_product_attribute) {
+            $combinations = $product->getAttributeCombinationsById((int) $id_product_attribute, $id_lang);
+        }
         $item_specifics = $ebay_category->getItemsSpecificValues();
         $item_specifics_pairs = array();
         foreach ($item_specifics as $item_specific) {
@@ -763,11 +767,23 @@ class EbaySynchronizer
             } elseif ($item_specific['is_brand']) {
                 $value = $product->manufacturer_name;
             } elseif ($item_specific['is_reference']) {
-                $value = $product->reference;
+                if ($combinations) {
+                    $value = $combinations[0]['reference'];
+                } else {
+                    $value = $product->reference;
+                }
             } elseif ($item_specific['is_ean']) {
-                $value = $product->ean13;
+                if ($combinations) {
+                    $value = $combinations[0]['ean13'];
+                } else {
+                    $value = $product->ean13;
+                }
             } elseif ($item_specific['is_upc']) {
-                $value = $product->upc;
+                if ($combinations) {
+                    $value = $combinations[0]['upc'];
+                } else {
+                    $value = $product->upc;
+                }
             } else {
                 $value = $item_specific['specific_value'];
             }
@@ -1191,7 +1207,7 @@ class EbaySynchronizer
             'id_category_ps' => $product->id_category_default,
         );
         unset($variations);
-        $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang);
+        $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang, $id_product_attribute);
         $data_for_stock = array_merge($data_for_stock, EbaySynchronizer::__getProductData($product, $ebay_profile));
         if (!$data_for_stock['variations']) {
             list($price, $price_original) = EbaySynchronizer::__getPrices($product->id, $ebay_category->getPercent(), $ebay_profile);

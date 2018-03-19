@@ -140,7 +140,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.1.0';
+        $this->version = '2.1.1';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -539,7 +539,7 @@ class Ebay extends Module
         // Clean Cookie
         $this->context->cookie->eBaySession = '';
         $this->context->cookie->eBayUsername = '';
-
+        $this->uninstallTabs();
         return true;
     }
 
@@ -1121,7 +1121,7 @@ class Ebay extends Module
                 $order->updatePrice($ebay_profile);
             }
             //foreach ($order->getProducts() as $product) {
-               // $this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
+               //$this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
             //}
 
 
@@ -1297,7 +1297,6 @@ class Ebay extends Module
             return false;
         }
         $product = isset($params['product']) ? $params['product'] : new Product($id_product);
-
         EbayTaskManager::addTask('update', $product);
     }
 
@@ -2438,14 +2437,6 @@ class Ebay extends Module
             'titleTemplate' => $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
         );
 
-        if ($this->isSymfonyProject()) {
-            require_once _PS_MODULE_DIR_.'/../app/AppKernel.php';
-            $kernel = new AppKernel(_PS_MODE_DEV_?'dev':'prod', _PS_MODE_DEV_);
-            $kernel->loadClassCache();
-            $kernel->boot();
-            $router = $kernel->getContainer()->get('router');
-        }
-
         while ($p = $products->fetch(PDO::FETCH_ASSOC)) {
             $data['real_id_product'] = (int) $p['id_product'];
             $data['name'] = $p['name'];
@@ -2470,8 +2461,8 @@ class Ebay extends Module
                         $data['name'] .= ' '.$variation_specific;
                     }
 
-                    if ($this->isSymfonyProject() && false) {
-                        $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $combinaison['id_product']));
+                    if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+                        $url = $link->getAdminLink('AdminProducts', true, array('id_product' => $combinaison['id_product']));
                     } else {
                         $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
                     }
@@ -2488,8 +2479,8 @@ class Ebay extends Module
                     );
                 }
             } else {
-                if ($this->isSymfonyProject() && false) {
-                    $url = $link->getAdminLink('AdminProducts')."/".$admin_path.$router->generate('admin_product_form', array('id' => $data['real_id_product']));
+                if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+                    $url = $link->getAdminLink('AdminProducts', true, array('id_product' => (int) $data['real_id_product']));
                 } else {
                     $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']);
                 }

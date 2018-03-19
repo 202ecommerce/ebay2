@@ -253,8 +253,8 @@
 				<div class="col-sm-9">
 					<select name="ebay_shop_country" class="form-control">
 						<option value="" disabled selected>{l s='Your shop\'s country' mod='ebay'}</option>
-						{foreach from=$ebay_shop_countries item=ebay_shop_country}
-							<option value="{$ebay_shop_country.iso_code|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $ebay_shop_country.iso_code} selected="selected"{/if}>{$ebay_shop_country.site_name|escape:'htmlall':'UTF-8'}</option>
+						{foreach from=$ebay_shop_countries  key=k item=ebay_shop_country}
+							<option value="{$k|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $k} selected="selected"{/if}>{$ebay_shop_country|escape:'htmlall':'UTF-8'}</option>
 						{/foreach}
 					</select>
 				</div>

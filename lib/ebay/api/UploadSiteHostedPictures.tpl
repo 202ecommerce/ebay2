@@ -26,7 +26,7 @@
 <UploadSiteHostedPicturesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <!-- Call-specific Input Fields -->
     <ExternalPictureURL>{$picture_url|escape:'htmlall':'UTF-8'}</ExternalPictureURL>
-    <PictureName><![CDATA[{$picture_name|escape:'htmlall':'UTF-8'}]]></PictureName>
+    
 
     <!-- Standard Input Fields -->
     <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>

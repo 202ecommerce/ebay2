@@ -57,7 +57,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
 
         $action_url = $this->_getUrl($url_vars);
-        $shop_lang_id = (int)Configuration::get('PS_LANG_DEFAULT');
+
         // Loading categories
         $category_config_list = array();
         //var_dump(Category::getCategories($this->context->language->id, true, true, ' and c.id_category=5')); die();
@@ -76,9 +76,9 @@ class EbayFormEbaySyncTab extends EbayTab
                 $query_filter = " AND 0";
             }
 
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($shop_lang_id, true, true, '', $query_filter), 0, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), 0, array(), '', $searche);
         } else {
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($shop_lang_id), 0);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
         }
 
         $categories = array();
@@ -167,7 +167,7 @@ class EbayFormEbaySyncTab extends EbayTab
                     'price' => $prix['sign'] . $prix['value'] . $prix['type'],
                     'category_ebay' => $category_ebay[0]['name'],
                     'category_multi' => $ebay_category->isMultiSku() ? true : false,
-                    'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category'], $this->ebay_profile->id_shop),
+                    'annonces' => EbayProduct::getNbProductsByCategory($this->ebay_profile->id, $category['id_category']),
                     'nb_products' => count($nb_products_man),
                     'nb_products_variations' => $nb_products_variations,
                     'nb_products_blocked' => $nb_products_blocked,

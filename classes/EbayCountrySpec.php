@@ -448,7 +448,7 @@ class EbayCountrySpec
             'documentation' => 'en',
             'language' => 'en_EN',
             'currency' => 'CAD',
-            'site_name' => 'Canada (English)',
+            'site_name' => 'Canada',
             'site_extension' => 'ca',
             'img_stats' => null,
             'iso_code' => 'CA',
@@ -468,7 +468,7 @@ class EbayCountrySpec
             'documentation' => 'fr',
             'language' => 'fr_FR',
             'currency' => 'CAD',
-            'site_name' => 'Canada (French)',
+            'site_name' => 'CanadaFrench',
             'site_extension' => 'ca',
             'subdomain' => 'cafr',
             'img_stats' => null,
@@ -675,6 +675,32 @@ class EbayCountrySpec
         }
 
         ksort($countries);
+
+        return $countries;
+    }
+
+
+    /**
+     * Get countries
+     * @param bool $dev
+     * @return array Countries list
+     */
+    public static function getCountriesSelect($dev)
+    {
+        $countries = array();
+
+        foreach (self::$country_data as $iso => $ctry) {
+            if ($ctry['site_name'] == 'CanadaFrench') {
+                $ctry['site_name'] = 'Canada';
+            }
+
+            if ($ctry['site_name'] == 'Belgium_Dutch' || $ctry['site_name'] == 'Belgium_French') {
+                $ctry['site_name'] = 'Belgium';
+            }
+            $countries[$ctry['iso_code']] = $ctry['site_name'];
+        }
+
+        asort($countries);
 
         return $countries;
     }
