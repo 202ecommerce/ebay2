@@ -556,7 +556,7 @@ class EbayProfile extends ObjectModel
             'ebay_profile',
         );
         foreach ($tables as $table) {
-            Db::getInstance()->delete(_DB_PREFIX_.$table, '`id_ebay_profile` = '.(int) $id_ebay_profile);
+            Db::getInstance()->delete($table, '`id_ebay_profile` = '.(int) $id_ebay_profile);
         }
 
         // if the profile deleted is the current one, we reset the EBAY_CURRENT_PROFILE
