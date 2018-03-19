@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -40,6 +40,7 @@ class EbayProductsExcluTab extends EbayTab
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
             'url_tab' => $url_vars,
+            'ebayProductExcluController' => $this->context->link->getAdminLink('AdminEbayProductExclu'),
         );
 
         return $this->display('tableProductsExclu_ajax.tpl', $vars);

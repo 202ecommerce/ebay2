@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -468,7 +468,7 @@ class EbayProfile extends ObjectModel
 
     public static function getProfilesByIdShop($id_shop = 0)
     {
-        $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`
+        $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
 				,s.`name` 
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
@@ -479,7 +479,7 @@ class EbayProfile extends ObjectModel
 
     public static function getProfilesById($id_ebay_profile)
     {
-        $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`
+        $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
 				,s.`name` 
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)

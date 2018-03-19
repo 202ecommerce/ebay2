@@ -18,27 +18,19 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
 <div class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Add desctiption in ' mod='ebay'} {$type_sync_order}
-        {if $mode_demo}
-            <p class="button-refresh btn btn-default"
-               title="{l s='This button is disabled in the demo version' mod='ebay'}"
-               data-toggle="tooltip">
-                <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
-            </p>
-        {else}
-            <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"
-               class="button-refresh btn btn-default"
-               title="{l s='Sync orders from eBay' mod='ebay'}"
-               data-toggle="tooltip">
-                <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
-            </a>
-        {/if}
+        <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"
+           class="button-refresh btn btn-default"
+           title="{l s='Sync orders from eBay' mod='ebay'}"
+           data-toggle="tooltip">
+            <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
+        </a>
     </h4>
     {if empty($orders_tab) && empty($errors)}
         <div class="table-block__message table-block__holder">
@@ -115,14 +107,15 @@
 </div>
 
 <script type="text/javascript">
+    var ebayOrdersController = "{$ebayOrdersController|addslashes}";
     {literal}
     $('.reSynchOrder').live('click', function (e) {
         e.preventDefault();
         var tr = $(this).closest('tr');
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/reSynchOrder.php',
-            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay=" + $(this).attr('id'),
+            url: ebayOrdersController,
+            data: "ajax=true&action=ResyncOrder&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay=" + $(this).attr('id'),
             success: function (data) {
                 var data = jQuery.parseJSON(data);
 
@@ -148,10 +141,11 @@
         tr = $(this).closest('tr');
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/deleteOrderError.php',
+            url: ebayOrdersController,
             data: {
                 reference_ebay: reference_ebay,
-                token: '{/literal}{$ebay_token}{literal}',
+                ajax: true,
+                action: 'DeleteOrderError',
             },
             success: function (data) {
                 console.log(data);

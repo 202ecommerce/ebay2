@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -60,6 +60,7 @@ class EbayOrdersTab extends EbayTab
         }
         $vars['id_ebay_profile'] = $id_ebay_profile;
         $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
+        $vars['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
 
         $url_vars = array(
             'id_tab' => '6',
@@ -73,9 +74,6 @@ class EbayOrdersTab extends EbayTab
         $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         $vars['currency'] = $this->context->currency;
         $vars['url'] = $this->_getUrl($url_vars);
-        $ebay = new Ebay();
-        $vars['mode_demo'] = $ebay->mode_demo;
-
         return $this->display('tableOrders.tpl', $vars);
     }
 }

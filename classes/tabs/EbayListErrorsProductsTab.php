@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
+ * @copyright 2007-2018 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -109,7 +109,7 @@ class EbayListErrorsProductsTab extends EbayTab
                         'ps_version' => _PS_VERSION_,
                         'lang_iso' => $context->language->iso_code,
                         'desc_error' => $desc,
-                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false).'&token='.$token_for_product . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
+                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false, array('id_product' => (int)$product->id)).'&token='.$token_for_product . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
                     );
                 } else {
                     $vars['task_errors'][] = array(
@@ -124,7 +124,7 @@ class EbayListErrorsProductsTab extends EbayTab
                         'ps_version' => _PS_VERSION_,
                         'lang_iso' => $context->language->iso_code,
                         'desc_error' => $desc,
-                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false).'&token='.Tools::getAdminTokenLite('AdminProducts') . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
+                        'product_url' => (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts', false, array('id_product' => (int)$product->id)).'&token='.Tools::getAdminTokenLite('AdminProducts') . '&id_product=' . (int)$product->id . '&updateproduct') : $link->getProductLink((int)$product->id)),
                     );
                 }
             }
@@ -154,6 +154,7 @@ class EbayListErrorsProductsTab extends EbayTab
         } else {
             $vars['token_for_product'] = Tools::getAdminTokenLite('AdminProducts');
         }
+        $vars['ebayListErrorsProductsController'] = $this->context->link->getAdminLink('AdminEbayListErrorsProducts');
         return $this->display('table_products_errors.tpl', $vars);
     }
 }

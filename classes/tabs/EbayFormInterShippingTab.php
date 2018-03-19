@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -83,7 +83,6 @@ class EbayFormInterShippingTab extends EbayTab
             }
         }
 
-        $ebay = new Ebay();
         $template_vars = array(
             'eBayCarrier' => EbayShippingService::getCarriers($this->ebay_profile->ebay_site_id),
             'psCarrier' => $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT']),
@@ -104,7 +103,7 @@ class EbayFormInterShippingTab extends EbayTab
                 'ps_version'     => _PS_VERSION_,
                 'error_code'     => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
             ),
-            'mode_demo' => $ebay->mode_demo
+
         );
 
         return $this->display('interShipping.tpl', $template_vars);

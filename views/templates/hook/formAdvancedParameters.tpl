@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -54,21 +54,12 @@
 		{if $log_file_exists}
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-push-3">
-                    {if $mode_demo}
-						<p class="btn btn-warning" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
-							<i class="icon-download"></i>
-							<span>
+					<a href="#" class ='logs btn btn-default' data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">
+						<i class="icon-download"></i>
+						<span>
 							{l s='Download' mod='ebay'}
 						</span>
-						</p>
-                    {else}
-						<a href="#" class ='logs btn btn-default' data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">
-							<i class="icon-download"></i>
-							<span>
-							{l s='Download' mod='ebay'}
-						</span>
-						</a>
-                    {/if}
+					</a>
 				</div>
 			</div>
 		{/if}
@@ -185,11 +176,7 @@
 					{l s='Category definition upgrade tool' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-                    {if $mode_demo}
-						<p class="btn btn-warning" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">{l s='Start upgrade' mod='ebay'}</p>
-                    {else}
-						<a name="resynch" id="ResynchCategories" class="btn btn-warning" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
-                    {/if}
+					<a name="resynch" id="ResynchCategories" class="btn btn-warning" href ="#div_resynch" data-inlinehelp="{l s='Upgrade category definition with last definition from eBay. You will need to reconfigure all your categories.' mod='ebay'}">{l s='Start upgrade' mod='ebay'}</a>
 				</div>
 			</div>
 		</div>
@@ -201,11 +188,7 @@
 					{l s='Reload store eBay categories tool' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-                    {if $mode_demo}
-						<p class="btn btn-warning" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">{l s='Reload store categories' mod='ebay'}</p>
-                    {else}
-						<a name="reload_categories_store" id="reload_categories_store" class="btn btn-warning" href ="#">{l s='Reload store categories' mod='ebay'}</a>
-                    {/if}
+					<a name="reload_categories_store" id="reload_categories_store" class="btn btn-warning" href ="#">{l s='Reload store categories' mod='ebay'}</a>
 				</div>
 			</div>
 		</div>
@@ -241,23 +224,14 @@
 	</fieldset>
 	
 	<div id="buttonEbayParameters" class="panel-footer">
-        {if $mode_demo}
-			<p style="margin-top: -10px">
-			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+		<a href="#categoriesProgression">
+			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
+			<input class="primary button" type="hidden" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
+			<button class="btn btn-default pull-right" type="submit" >
 				<i class="process-icon-save"></i>
-                {l s='Save' mod='ebay'}
-			</p>
-			</p>
-        {else}
-			<a href="#categoriesProgression">
-				<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-				<input class="primary button" type="hidden" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
-				<button class="btn btn-default pull-right" type="submit" >
-					<i class="process-icon-save"></i>
-                    {l s='Save' mod='ebay'}
-				</button>
-			</a>
-        {/if}
+				{l s='Save' mod='ebay'}
+			</button>
+		</a>
 	</div>
 </form>
 <form id="reload_categories_store_go" method="post"
@@ -268,6 +242,7 @@
 	
 {literal}
 	<script>
+		var formAdvancedParametersController = "{/literal}{$formAdvancedParametersController|addslashes}{literal}";
 		var token = "{/literal}{$ebay_token}{literal}";
 		$(document).ready(function() {
 			setTimeout(function() {					
@@ -278,7 +253,7 @@
 
 		$('.logs').click(function(e) {
 			e.preventDefault();
-			window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token}{literal}&action=getLogs');
+            window.open(formAdvancedParametersController + '&action=getLogs');
 		});
 
 		$('#reload_categories_store').click(function(e) {
@@ -314,26 +289,6 @@
 			}
 		});
 
-		$(function() {
-			$('#reset-image').click(function(e) {
-				e.preventDefault();
-				$.ajax({
-					type: 'POST',
-					url: module_dir + 'ebay/ajax/deleteProductImage.php',
-					data: "token={/literal}{$ebay_token}{literal}&action=delete-all",
-					beforeSend: function() {
-						$('#reset-image-result').html("<div class='alert alert-warning'>{/literal}{l s='Activation in progress...' mod='ebay'}{literal}</div>");
-					}
-				}).done(function(data) {
-					if (data == 'success')
-						$('#reset-image-result').html("<div class='alert alert-success'>{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}</div>");
-					else
-						$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-				}).fail(function() {
-					$('#reset-image-result').html("<div class='alert alert-danger'>{/literal}{l s='An error has occurred.' mod='ebay'}{literal}</div>");
-				})
-			});
-		});
 
 			$(function() {
 				$('#check_database').click(function(e){
@@ -342,8 +297,12 @@
 					// Foreach de toutes les tables
 					$.ajax({
 						type: 'POST',
-						url: module_dir + 'ebay/ajax/checkDatabase.php',
-						data: "token={/literal}{$ebay_token}{literal}&action=getNbTable",
+						url: formAdvancedParametersController,
+						data: {
+						    ajax: true,
+							action: 'CheckDatabase',
+							actionProcess: 'getNbTable',
+                        },
 						beforeSend: function() {
 							$('#check_database_logs tbody tr').remove();
 						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
@@ -374,8 +333,15 @@
 				$.ajax({
 					dataType: 'json',
 					type: 'POST',
-					url: module_dir + 'ebay/ajax/checkCategory.php',
-					data: "token={/literal}{$ebay_token}{literal}&action=checkCategories&id_profile_ebay={/literal}{$id_profile_ebay}{literal}&step=" + step + "&id_categories=" + id_categories,
+					url: formAdvancedParametersController,
+					data: {
+					    ajax: true,
+						action: 'checkCategory',
+						actionProcess: 'checkCategories',
+						id_profile_ebay: id_ebay_profile,
+						step: step,
+						id_categories: id_categories,
+                    },
 					beforeSend: function() {
 
 					},

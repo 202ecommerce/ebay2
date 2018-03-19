@@ -18,15 +18,15 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <?xml version="1.0" encoding="utf-8"?>
-<UploadSiteHostedPictures xmlns="urn:ebay:apis:eBLBaseComponents">
+<UploadSiteHostedPicturesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <!-- Call-specific Input Fields -->
     <ExternalPictureURL>{$picture_url|escape:'htmlall':'UTF-8'}</ExternalPictureURL>
-    <PictureName><![CDATA[{$picture_name|escape:'htmlall':'UTF-8'}]]></PictureName>
+    
 
     <!-- Standard Input Fields -->
     <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
@@ -35,4 +35,4 @@
     <RequesterCredentials>
         <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
-</UploadSiteHostedPictures>
+</UploadSiteHostedPicturesRequest>

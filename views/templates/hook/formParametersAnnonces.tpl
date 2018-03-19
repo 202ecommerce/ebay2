@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -367,21 +367,14 @@
 		</div>
 	</fieldset>
 
-	<div class="panel-footer" id="buttonEbayParameters" style="margin-top:5px;">
-        {if $mode_demo}
-			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+	<div class="panel-footer id="buttonEbayParameters" style="margin-top:5px;">
+		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
+			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
+			<button class="btn btn-default pull-right" type="submit" id="save_ebay_parameters_annonces">
 				<i class="process-icon-save"></i>
-                {l s='Save' mod='ebay'}
-			</p>
-        {else}
-			<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
-				<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-				<button class="btn btn-default pull-right" type="submit" id="save_ebay_parameters_annonces">
-					<i class="process-icon-save"></i>
-                    {l s='Save' mod='ebay'}
-				</button>
-			</a>
-        {/if}
+				{l s='Save' mod='ebay'}
+			</button>
+		</a>
 	</div>
 	<div id="ebayreturnshide" style="display:none;">{$ebayReturns|escape:'htmlall':'UTF-8'}</div>
 </form>

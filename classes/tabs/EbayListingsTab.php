@@ -19,19 +19,21 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayListingsTab extends EbayTab
 {
+
     public function getContent($id_ebay_profile)
     {
         $template_vars = array(
             'id_employee' => $this->context->employee->id,
             'id_ebay_profile' => $id_ebay_profile,
             'admin_path'      => basename(_PS_ADMIN_DIR_),
+            'ebayListingsController' => $this->context->link->getAdminLink('AdminEbayListings'),
         );
         return $this->display('ebay_listings.tpl', $template_vars);
     }

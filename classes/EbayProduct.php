@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -302,14 +302,18 @@ class EbayProduct
 
     public static function getProductsIdForSync($id_ebay_profile)
     {
+        $id_shop = Context::getContext()->shop->id;
         $sql = "SELECT p.id_product 
-                FROM "._DB_PREFIX_."product p
-                LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc ON p.id_product = epc.id_product
-                WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
-                AND p.active=1
+                FROM "._DB_PREFIX_."product_shop p
+		LEFT JOIN "._DB_PREFIX_."ebay_product ep 
+		ON p.id_product=ep.id_product AND ep.id_ebay_profile=".$id_ebay_profile."
+                LEFT JOIN "._DB_PREFIX_."ebay_product_configuration epc 
+		ON p.id_product = epc.id_product AND epc.id_ebay_profile=".$id_ebay_profile."
+                WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)		
+                AND p.active=1 AND p.id_shop = ".$id_shop."
                 AND p.id_category_default IN (".EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)).")";
         if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')) {
-            $sql .= " AND epc.id_product is NULL";
+            $sql .= " AND ep.id_product is NULL";
         }
         return DB::getInstance()->ExecuteS($sql, false);
     }

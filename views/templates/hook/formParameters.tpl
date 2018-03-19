@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -72,7 +72,15 @@
 		$.ajax({
 			type: "POST",
 			dataType: 'json',
-			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step=" + step + "&id_category=" + id_category + "&admin_path=" + admin_path,
+			url: formController,
+			data: {
+			    ajax: true,
+				action: 'LoadCategoriesFromEbay',
+				profile: id_ebay_profile,
+				step: step,
+				id_category: id_category,
+				admin_path: admin_path,
+            },
 			success: function (data) {
 				if (data == "error") {
 					if (step == 1) {
@@ -93,6 +101,7 @@
 						for (var i in data) {
 							output += '<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>' + categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
 						}
+						console.log(data);
 						var count = $.map(data, function (n, i) {
 							return i;
 						}).length;
@@ -133,7 +142,6 @@
                                 if (currentValue.indexOf('resynchCategories') == -1){
 									url.push(currentValue);
 								}
-								console.log(currentValue.indexOf('resynchCategories'));
 							});
 							document.location.search = url.join('&') ;
 							//return loadCategories();
@@ -204,7 +212,7 @@
 					{l s='Paypal email address' mod='ebay'}
 				</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" size="20" name="ebay_paypal_email" value="{if !$mode_demo}{$ebay_paypal_email|escape:'htmlall':'UTF-8'}{/if}"/>
+					<input type="text" class="form-control" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
 				</div>
 
 				<div class="col-sm-9 col-sm-push-3">
@@ -245,8 +253,8 @@
 				<div class="col-sm-9">
 					<select name="ebay_shop_country" class="form-control">
 						<option value="" disabled selected>{l s='Your shop\'s country' mod='ebay'}</option>
-						{foreach from=$ebay_shop_countries item=ebay_shop_country}
-							<option value="{$ebay_shop_country.iso_code|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $ebay_shop_country.iso_code} selected="selected"{/if}>{$ebay_shop_country.site_name|escape:'htmlall':'UTF-8'}</option>
+						{foreach from=$ebay_shop_countries  key=k item=ebay_shop_country}
+							<option value="{$k|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $k} selected="selected"{/if}>{$ebay_shop_country|escape:'htmlall':'UTF-8'}</option>
 						{/foreach}
 					</select>
 				</div>
@@ -264,20 +272,14 @@
 			</div>
 
 			<div class="col-sm-9 col-sm-push-3 pos-r">
-                {if $mode_demo}
-					<span class="btn btn-default label-tooltip" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
+				<span class="regenerate_token_click btn btn-default label-tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
 					<i class="icon-refresh"></i>
 					<span>{l s='Generate a new authentication token' mod='ebay'}</span>
+					{* {l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'} *}
 				</span>
-                {else}
-					<span class="regenerate_token_click btn btn-default label-tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
-					<i class="icon-refresh"></i>
-					<span>{l s='Generate a new authentication token' mod='ebay'}</span>
-				</span>
-					<span class="tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
+				<span class="tooltip" data-toggle="tooltip" title="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">
 					<i class="process-icon-help"></i>
 				</span>
-                {/if}
 			</div>
 
 			<div class="regenerate_token_button" style="display: none;">
@@ -385,19 +387,12 @@
 		</fieldset>
 
 		<div class="panel-footer" id="buttonEbayParameters">
-            {if $mode_demo}
-				<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
-					<i class="process-icon-save"></i>
-                    {l s='Save' mod='ebay'}
-				</p>
-            {else}
-				<a href="#categoriesEbayProgression" class="load_cat_sync" style="display: none"></a>
-				<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
-				<button class="btn btn-default pull-right" type="submit" id="save_ebay_parameters">
-					<i class="process-icon-save"></i>
-                    {l s='Save' mod='ebay'}
-				</button>
-            {/if}
+			<a href="#categoriesEbayProgression" class="load_cat_sync" style="display: none"></a>
+			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
+			<button class="btn btn-default pull-right" type="submit" id="save_ebay_parameters">
+				<i class="process-icon-save"></i>
+				{l s='Save' mod='ebay'}
+			</button>
 		</div>
 	</form>
 {/if}

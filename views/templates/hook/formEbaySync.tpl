@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -62,6 +62,7 @@
   {/literal}
 </style>
 <script>
+
   var product_sync_for_delete;
   var module_time = "{$date|escape:'htmlall':'UTF-8'}";
   var showOptionals;
@@ -101,7 +102,7 @@
   var possible_features = new Array();
   {foreach from=$possible_features item=feature}
   {if isset($feature.id_feature) && $feature.id_feature != ""}
-  possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
+  possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = `{$feature.name|escape:'htmlall':'UTF-8'}`;
   {/if}
   {/foreach}
 
@@ -140,11 +141,15 @@
     });
 
     $('.reset_bp').on('click', function () {
-      var url = module_dir + "ebay/ajax/resetBp.php?token=" + ebay_token + "&profile=" + id_ebay_profile;
       $('.bp_group').html("");
       $.ajax({
         type: "POST",
-        url: url,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'ResetBp',
+            profile: id_ebay_profile,
+        },
         success: function (data) {
           $('.bp_group').html(data);
         }
@@ -280,17 +285,23 @@
       });
       event.preventDefault();
 
-      var url = module_dir + "ebay/ajax/saveConfigFormCategory.php";
-
       $.ajax({
         type: "POST",
-        url: url,
-        data: "token=" + ebay_token + "&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&ps_categories=' + ps_categories + '&' + data,
+        url: formEbaySyncController,  // var formEbaySyncController was defined in form.tpl
+        data: "ajax=true&action=SaveConfigFormCategory&id_employee=" + id_employee + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&ps_categories=' + ps_categories + '&' + data,
         beforeSend: function () {
           $('.ajaxLoading').show();
         },
         success: function (data) {
-          location.reload();
+            var urlReload = location.href.split('?')[0] + "?";
+            var search = 'configure=ebay&controller=AdminModules&'
+            var searchOldArray = location.search.split('&');
+            searchOldArray.forEach(function(element){
+                if (element.indexOf('token') != -1) {
+                    search += element;
+                }
+            });
+          location = urlReload + search;
         }
       });
     });
@@ -309,7 +320,16 @@
         cache: false,
         dataType: 'json',
         type: "POST",
-        url: module_dir + "ebay/ajax/ActiveCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_product + "&id_employee=" + id_employee + "&id_lang=" + id_lang,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'ActiveCategory',
+            profile: id_ebay_profile,
+            ebay_category: id_product,
+            id_employee: id_employee,
+            id_lang: id_lang,
+
+        },
         success: function (data) {
           $('.orhan_badge').html(data);
         }
@@ -350,7 +370,13 @@
         cache: false,
         dataType: 'json',
         type: "POST",
-        url: module_dir + "ebay/ajax/deleteConfigCategory.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + id_category,
+        url: formEbaySyncController, //the var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'DeleteConfigCategory',
+            profile: id_ebay_profile,
+            ebay_category: id_category,
+        },
         success: function (data) {
           tr.remove();
         }
@@ -374,11 +400,18 @@
     });
 
     function loadCategoriesConfig(id_category) {
-      var url = module_dir + "ebay/ajax/loadConfigFormCategory.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&id_category_ps=' + id_category;
 
       $.ajax({
         type: "POST",
-        url: url,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'LoadConfigFromCategory',
+            id_lang: id_lang,
+            profile: id_ebay_profile,
+            id_shop: id_shop,
+            id_category_ps: id_category
+        },
         success: function (data) {
 
           var data = jQuery.parseJSON(data);
@@ -415,7 +448,14 @@
         cache: false,
         dataType: 'json',
         type: "POST",
-        url: module_dir + "ebay/ajax/loadItemsSpecificsAndConditions.php?token=" + ebay_token + "&profile=" + id_ebay_profile + "&ebay_category=" + category_id + "&id_lang=" + id_lang,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'LoadItemsSpecificsAndConditions',
+            profile: id_ebay_profile,
+            ebay_category: category_id,
+            id_lang: id_lang,
+        },
         success: function (data) {
           $('#specifics-' + category_id + '-loader').hide();
           insertCategoryRow(category_id, data);
@@ -538,7 +578,13 @@
       $.ajax({
         dataType: 'json',
         type: "POST",
-        url: module_dir + 'ebay/ajax/getProducts.php?category=' + id_category + '&token=' + ebay_token + '&id_ebay_profile=' + id_ebay_profile,
+        url: formEbaySyncController,  //var formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'GetProducts',
+            category: id_category,
+            id_ebay_profile: id_ebay_profile,
+        },
         success: function (products) {
 
           var str = '';
@@ -595,7 +641,16 @@
 
     $.ajax({
       type: "POST",
-      url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=Select a category&profile=' + id_ebay_profile,
+      url: formEbaySyncController + levelParams,   //var formEbaySyncController was defined in form.tpl
+      data: {
+          ajax: true,
+          action: 'ChangeCategoryMatch',
+          id_category: id_category,
+          time: module_time,
+          level: level,
+          ch_cat_str: 'Select a category',
+          profile: id_ebay_profile
+      },
       success: function (data) {
         $(".category_ebay").html(data);
 //        $(".category_ebay select").change(function () {
@@ -630,7 +685,6 @@
     $('.cat-nb-products[category=' + category_id + ']').html(str);
   }
   function loadPsCategories(search) {
-    var url = module_dir + "ebay/ajax/loadAjaxCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&id_shop=' + id_shop + '&s=' + search;
     var selected_cat = new Array();
     $('.category_ps_list li').each(function () {
       selected_cat.push($(this).text());
@@ -638,7 +692,15 @@
 
     $.ajax({
       type: "POST",
-      url: url,
+      url: formEbaySyncController,  // var formEbaySyncController was defined in form.tpl
+      data: {
+          ajax: true,
+          action: 'LoadAjaxCategories',
+          id_lang: id_lang,
+          profile: id_ebay_profile,
+          id_shop: id_shop,
+          s: search,
+      },
       success: function (data) {
         var data = jQuery.parseJSON(data);
         var str = '';
@@ -700,31 +762,17 @@
 <div class="table-block">
   <h4 class="table-block__title table-block__holder">{l s='Prestashop categories' mod='ebay'}
     <div>
-      {if $mode_demo}
-        <p class="btn btn-success" title="{l s='This button is disabled in the demo version' mod='ebay'}"
-           data-toggle="tooltip">
-          <span class="icon-plus"></span> {l s='Add a category' mod='ebay'}
-        </p>
-        <div class="button-sync">
-          <button class="btn btn-default" type="button" title="{l s='This button is disabled in the demo version' mod='ebay'}"
-                  data-toggle="tooltip">
-            <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
-          </button>
-        </div>
-      {else}
-        <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}>
-          <span class="icon-plus"></span> {l s='Add a category' mod='ebay'}
-        </a>
-        <div class="dropdown js-user-dropdown button-sync">
-          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-            <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li data-action="resyncProductsAndImages">{l s='Synchronize all products sending new images' mod='ebay'}</li>
-            <li data-action="resyncProducts">{l s='Synchronize all products' mod='ebay'}</li>
-          </ul>
-        </div>
-      {/if}
+      <a href="#popin-add-cat" class="js-popin btn btn-success" {if $shipping_tab_is_conf}disabled="disabled"{/if}><span
+                class="icon-plus"></span> {l s='Add a category' mod='ebay'} </a>
+      <div class="dropdown js-user-dropdown button-sync">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+          <span class="icon-refresh"></span> {l s='Manual sync' mod='ebay'} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li data-action="resyncProductsAndImages">{l s='Synchronize all products sending new images' mod='ebay'}</li>
+          <li data-action="resyncProducts">{l s='Synchronize all products' mod='ebay'}</li>
+        </ul>
+      </div>
     </div>
   </h4>
 
@@ -777,39 +825,27 @@
             <td>{$category.nb_products_blocked|escape:'htmlall':'UTF-8'}</td>
             <td>{if $category.price}{$category.price|escape:'htmlall':'UTF-8'}{else}0{/if}</td>
             <td>{$category.category_ebay|escape:'htmlall':'UTF-8'}</td>
-            <td>{$category.category_multi|escape:'htmlall':'UTF-8'}</td>
+	    {if $category.category_multi}
+            	<td>{l s='yes' mod='ebay'}</td>
+	    {else}
+	    	<td>{l s='no' mod='ebay'}</td>
+	    {/if}
             <td>{$category.annonces|escape:'htmlall':'UTF-8'}
-              /{if $category.category_multi == 'yes'}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
-            {if $mode_demo}
-              <td class="text-center"><input type="checkbox" class="categorySync"
-                                             value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
-                <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"
-                       title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"></label>
-              </td>
-              <td>
-                <div class="action">
-                  <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"
-                     title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></a>
-                  <p class="btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
-                     title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></p>
-                </div>
-              </td>
-            {else}
-              <td class="text-center"><input type="checkbox" class="categorySync"
-                                             id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]"
-                                             value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
-                <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"
-                       title="{l s='Activate/Deactivate' mod='ebay'}" data-toggle="tooltip"></label>
-              </td>
-              <td>
-                <div class="action">
-                  <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"
-                     title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></a>
-                  <a href="#" class="delete_cat btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
-                     title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></a>
-                </div>
-              </td>
-            {/if}
+              /{if $category.category_multi}{$category.nb_product_tosync|escape:'htmlall':'UTF-8'}{else}{$category.nb_variations_tosync|escape:'htmlall':'UTF-8'}{/if}</td>
+            <td class="text-center"><input type="checkbox" class="categorySync"
+                                           id="categorySync{$category.value|escape:'htmlall':'UTF-8'}" name="category[]"
+                                           value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} />
+              <label for="categorySync{$category.value|escape:'htmlall':'UTF-8'}" class="btn btn-default btn-sm"
+                     title="{l s='Activate/Deactivate' mod='ebay'}" data-toggle="tooltip"></label>
+            </td>
+            <td>
+              <div class="action">
+                <a href="#popin-add-cat" class="modifier_cat btn btn-sm btn-default" data-id="{$category.value}"
+                   title="{l s='Edit' mod='ebay'}" data-toggle="tooltip"><span></span><span class="icon-pencil"></span></a>
+                <a href="#" class="delete_cat btn-hover-danger  btn btn-sm btn-default" data-id="{$category.value}"
+                   title="{l s='Remove' mod='ebay'}" data-toggle="tooltip"><span><span class="icon-trash"></span></a>
+              </div>
+            </td>
           </tr>
         {/foreach}
         </tbody>
@@ -1125,11 +1161,7 @@
       <button class="js-close-popin js-close-popin-bottom btn btn-default"><i class="process-icon-cancel"></i>{l s='Cancel' mod='ebay'}</button>
       <button class="js-prev-popin btn btn-default pull-left" style="display: none"><i class="process-icon-next" style="transform: rotateZ(180deg);transform-origin: 50% 45%;"></i>{l s='Prev' mod='ebay'}</button>
       <button class="js-next-popin btn btn-primary pull-right"><i class="process-icon-next"></i>{l s='Next' mod='ebay'}</button>
-        {if $mode_demo}
-          <p style="display: none;" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip" class="js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</p>
-        {else}
-          <a href="#popin-categorie-save" style="display: none;" class="js-save-category js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
-        {/if}
+      <a href="#popin-categorie-save" style="display: none;" class="js-save-category js-save1-popin btn btn-success pull-right"><i class="process-icon-check-circle"></i>{l s='Save' mod='ebay'}</a>
     </div>
     <div style="display: none">
       <select class="select_category_default" name="category" id="categoryLevel1-0" rel="0" style="font-size: 12px;"
