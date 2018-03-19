@@ -18,18 +18,15 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+
 <div class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Ebay listings' mod='ebay'}
-        {if $mode_demo}
-            <button class="btn btn-default" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
-        {else}
-            <button class="button-refresh btn btn-default" id="refresh_list_productEbay"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
-        {/if}
+        <button class="button-refresh btn btn-default" id="refresh_list_productEbay"><span class="icon-refresh"></span> {l s='Refresh' mod='ebay'}</button>
     </h4>
 
 
@@ -98,8 +95,8 @@
     function refreshList(){
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/getEbayListings.php',
-            data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}&id_shop="+id_shop+"&admin_path={$admin_path|escape:'htmlall':'UTF-8'}",
+            url: ebayListingsController,
+            data: "ajax=true&action=GetEbayListings&id_employee={$id_employee|escape:'htmlall':'UTF-8'}&id_shop="+id_shop+"&admin_path={$admin_path|escape:'htmlall':'UTF-8'}",
             success: function(data)
             {
                 $('#ebayListings').fadeOut(400, function(){
@@ -121,7 +118,6 @@
         name_prod = $('#name_prod_search').attr('value');
 
         var data = {
-            token: ebay_token,
             id_employee: {$id_employee|escape:'htmlall':'UTF-8'},
             id_shop: id_shop,
             admin_path: "{$admin_path|escape:'htmlall':'UTF-8'}",
@@ -130,11 +126,13 @@
             id_prod_ebay: id_prod_ebay,
             name_cat: name_cat,
             name_prod: name_prod,
+            ajax: true,
+            action: 'GetEbayListings',
         };
 
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/getEbayListings.php',
+            url: ebayListingsController,
             data: data,
             success: function(data)
             {

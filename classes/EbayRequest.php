@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2017 PrestaShop SA
+ * @copyright 2007-2018 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = true;
+    private $dev = false;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -234,7 +234,7 @@ class EbayRequest
             if (isset($vars['url'])) {
                 $url .= $vars['url'];
             }
-        
+            
             curl_setopt($connection, CURLOPT_URL, $url);
         } else {
             curl_setopt($connection, CURLOPT_URL, $this->apiUrl);
@@ -254,7 +254,9 @@ class EbayRequest
         } else {
             curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($apiCall));
         }
-        curl_setopt($connection, CURLOPT_POST, 1);
+        if (isset($request)) {
+            curl_setopt($connection, CURLOPT_POST, 1);
+        }
 
         if (isset($request)) {
             curl_setopt($connection, CURLOPT_POSTFIELDS, $request); // Set the XML body of the request
@@ -1184,6 +1186,14 @@ class EbayRequest
 
         $response = $this->_makeRequest('EndFixedPriceItem', $response_vars, false, 0, $data);
 
+        if (isset($response->Errors)) {
+            foreach ($response->Errors as $e) {
+                if ((int)$e->ErrorCode == 1047 || (int)$e->ErrorCode == 17) {
+                    return true;
+                }
+            }
+        }
+
         if ($response === false) {
             return false;
         }
@@ -1704,7 +1714,7 @@ class EbayRequest
 
     public function importBusinessPolicies($datas = false)
     {
-        if ($datas) {
+        if (!$datas) {
             $datas = $this->getUserPreferences();
         }
         if ($datas) {
@@ -1715,7 +1725,7 @@ class EbayRequest
                 $config_business_policies = 1;
             }
 
-
+            
             if ($config[0] === 'true') {
                 if ($datas->SupportedSellerProfiles) {
                     Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_business_policies`

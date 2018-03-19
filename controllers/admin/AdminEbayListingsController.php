@@ -19,37 +19,31 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS')) {
-    define('TMP_DS', DIRECTORY_SEPARATOR);
-}
-
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
-include_once dirname(__FILE__).'/../ebay.php';
-
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR : INVALID TOKEN');
-}
-
-class EbayLoadAPILogs extends EbayLoadLogs
+class AdminEbayListingsController extends ModuleAdminController
 {
-
-    protected $file = '/views/templates/hook/table_api_logs.tpl';
-    protected function getDatas($offset, $nb_results)
+    public function ajaxProcessGetEbayListings()
     {
-        $logs = EbayApiLog::get($offset, $nb_results);
-        foreach ($logs as &$log) {
-            $log['data_sent'] = nl2br(TotFormat::prettyPrint($log['data_sent']));
-            $log['response'] = nl2br(TotFormat::prettyPrint($log['response']));
+        if (Tools::getValue('id_shop')) {
+            $context = Context::getContext();
+            $context->shop = new Shop((int) Tools::getValue('id_shop'));
         }
-        return $logs;
+        $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
+        $length = Tools::getValue('length') ? Tools::getValue('length') : 20;
+
+        $search = array(
+            'id_product' =>  Tools::getValue('id_prod'),
+            'id_product_ebay' =>  Tools::getValue('id_prod_ebay'),
+            'name_product' => Tools::getValue('name_prod'),
+            'name_cat' => Tools::getValue('name_cat'),
+        );
+
+        $ebay = Module::getInstanceByName('ebay');
+        $ebay->displayEbayListingsAjax(Tools::getValue('admin_path'), $search, (int) Tools::getValue('id_employee'), $page_current, $length);
+        die();
     }
 }
-
-$logs = new EbayLoadAPILogs();
-echo $logs->getLogs();

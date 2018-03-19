@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -247,18 +247,11 @@
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-        {if $mode_demo}
-			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
-				<i class="process-icon-save"></i>
-                {l s='Save' mod='ebay'}
-			</p>
-        {else}
-			<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
-			<button class="btn btn-default pull-right" type="submit" >
-				<i class="process-icon-save"></i>
-                {l s='Save' mod='ebay'}
-			</button>
-        {/if}
+		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+		<button class="btn btn-default pull-right" type="submit" >
+			<i class="process-icon-save"></i>
+			{l s='Save' mod='ebay'}
+		</button>
 	</div>
 </form>
 <script type="text/javascript">
@@ -269,8 +262,13 @@
         $('#previewButton').click(function(){
             $.ajax({
                 type: 'POST',
-                url : module_dir+"ebay/ajax/previewTemplate.php",
-                data :{ message : tinyMCE.activeEditor.getContent(), id_lang : id_lang, token : ebay_token },
+                url : formController,
+                data :{
+                    message : tinyMCE.activeEditor.getContent(),
+					id_lang : id_lang,
+					ajax: true,
+					action: 'PreviewTemplate'
+				},
                 success: function(data) {
                     $.fancybox({
                         'width' : 800,

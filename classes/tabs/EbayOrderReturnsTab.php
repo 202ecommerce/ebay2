@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -41,13 +41,11 @@ class EbayOrderReturnsTab extends EbayTab
         $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile, 'EBAY_ORDER_RETURNS_LAST_UPDATE'));
 
         $date_last_import = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
-        $ebay = new Ebay();
         return $this->display('order_returns.tpl', array(
             'type_sync_returns' => (Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON')?'Cron':'Prestashop'),
             'returns' => $returns,
             'url' => $url,
             'date_last_import' => $date_last_import,
-            'mode_demo' => $ebay->mode_demo
         ));
     }
 }

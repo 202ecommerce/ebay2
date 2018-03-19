@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
+ *  @copyright 2007-2018 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -257,8 +257,14 @@ class EbayOrder
         $address->city = $format->formatCityName($this->city);
         
         if (!empty($this->phone)) {
-            $address->phone = $format->formatPhoneNumber($this->phone);
-            $address->phone_mobile = $format->formatPhoneNumber($this->phone);
+            $phone = $format->formatPhoneNumber($this->phone);
+            $phone_mobile = $format->formatPhoneNumber($this->phone);
+            if (Validate::isPhoneNumber($phone)) {
+                $address->phone = $format->formatPhoneNumber($this->phone);
+            }
+            if (Validate::isPhoneNumber($phone_mobile)) {
+                $address->phone_mobile = $format->formatPhoneNumber($this->phone);
+            }
         }
 
         $address->active = 1;

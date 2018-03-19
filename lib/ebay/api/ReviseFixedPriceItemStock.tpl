@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -57,7 +57,15 @@
 		{if isset($quantity) && !$variations}
 			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
-
+        {if $price_update && isset($price) && $price}
+			<StartPrice>{$price|escape:'htmlall':'UTF-8'}</StartPrice>
+        {/if}
+        {if isset($price_original)}
+			<DiscountPriceInfo>
+				<OriginalRetailPrice>{$price_original|escape:'htmlall':'UTF-8'}</OriginalRetailPrice>
+				<SoldOffeBay>true</SoldOffeBay>
+			</DiscountPriceInfo>
+        {/if}
 		{if isset($site)}
 			<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
 		{/if}

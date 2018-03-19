@@ -18,7 +18,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright  2007-2017 PrestaShop SA
+ * @copyright  2007-2018 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -57,7 +57,12 @@ $(document).ready(function () {
         $('#popin-delete-profile').hide();
         $.ajax({
             type: "POST",
-            url: delete_profile_url + '&profile=' + profileId,
+            url: formController,
+            data: {
+                ajax: true,
+                action: 'DeleteProfile',
+                profile: profileId,
+            },
             cache: false,
             success: function (data) {
                 window.location.replace(window.location.href.replace("&action=logged", ""));
@@ -69,8 +74,11 @@ $(document).ready(function () {
         event.preventDefault();
         $('.js-close-popin_boost').show();
         $('.close_boost').hide();
-        boost = window.setInterval(function(){startBoost(boost_url)}, 3000);
+        boost = window.setInterval(function(){startBoost(cron_url)}, 3000);
     });
+
+
+
 
     // Close modal on click on cancel button
     $(document).on('click', '.js-close-popin', function() {
@@ -144,15 +152,19 @@ $(document).ready(function () {
     function startBoost(url) {
         $.ajax({
             type: 'POST',
-            dataType: 'json',
-            url: url,
+            url: formController,
+            data: {
+                ajax: true,
+                action: 'BoostMode',
+                cron_url: url,
+            },
             success: function (data) {
                if (typeof $('.valueMax').data('val') === 'undefined'){
                    $('.valueMax').data('val', data);
                    $('.valueMax').html(data);
                }
                var complited = $('.valueMax').data('val') - data;
-                console.log(complited);
+                
                 $('.valueDone').html(complited);
                 var complitedPercent = 0;
                 if(complited > 0) {
@@ -165,7 +177,15 @@ $(document).ready(function () {
                     $('.percentages_line').css('width', complitedPercent+'%');
                     //event.preventDefault();
                     clearInterval(boost);
-                    window.location.reload();
+                    var urlReload = location.href.split('?')[0] + "?";
+                    var search = 'configure=ebay&controller=AdminModules&'
+                    var searchOldArray = location.search.split('&');
+                    searchOldArray.forEach(function(element){
+                        if (element.indexOf('token') != -1) {
+                            search += element;
+                        }
+                    });
+                    location = urlReload + search;
                 } else{
                     $('.percentages').html(complitedPercent+'%');
                     $('.percentages_line').css('width', complitedPercent+'%');

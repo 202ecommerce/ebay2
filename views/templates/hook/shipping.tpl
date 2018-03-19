@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -79,9 +79,14 @@
 			// Carrier eBay
 			createSelecstShipping += "<td class='linked "+ (currentName == 'domesticShipping' ? '' : '') +"'' style='visibility:hidden'><label data-validate='{l s='Linked to eBay' mod='ebay'}'>{l s='Linked' mod='ebay'}"+(hasValues ? valuePSCarrier : '')+"{l s='with an eBay carrier' mod='ebay'}</label><div><select name='"+ (currentName == 'domesticShipping' ? 'ebayCarrier' : '') +"[" + lastId + "]' class='eBayCarrier'><option value=''>{l s='Select eBay carrier' mod='ebay'}</option>";
 			{foreach from=$eBayCarrier item=carrier}
-				if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping')
-                    && selected_services.indexOf('{$carrier.id_shipping_service}') == -1)
-					createSelecstShipping += "<option data-id='{$carrier.id_shipping_service}' "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+			{if isset($carrier.id_shipping_service)}
+
+            if (('{$carrier.InternationalService|escape:'htmlall':'UTF-8'}' !== 'true' && currentName == 'domesticShipping')
+                && selected_services.indexOf('{$carrier.id_shipping_service}') == -1)
+                createSelecstShipping += "<option data-id='{$carrier.id_shipping_service}' "+ ((typeof(idEbayCarrier) != "undefined"  && idEbayCarrier == "{$carrier.shippingService|escape:'htmlall':'UTF-8'}")? 'selected="selected"' : '')  +" value='{$carrier.shippingService|escape:'htmlall':'UTF-8'}'>{$carrier.description|escape:'htmlall':'UTF-8'}</option>";
+
+			{/if}
+
 			{/foreach}
 			createSelecstShipping += "</select></div></td>";
 			// end carrier eBay
@@ -92,17 +97,13 @@
 			// end extrafree
 
 			// trash
-            {if $mode_demo}
-            var atrash = $('<p class="btn btn-default btn-sm pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><i class="icon-trash"></i></p>');
-            {else}
-            var atrash = $('<a class="ebay_trash btn btn-default btn-sm pull-right"><i class="icon-trash"></i></a>');
-            // var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
-            // atrash.append(imgtrash);
-            atrash.click(function() {
-                $(this).closest('table').remove();
-                return false;
-            });
-            {/if}
+			var atrash = $('<a class="ebay_trash btn btn-default btn-sm pull-right"><i class="icon-trash"></i></a>');
+			// var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
+			// atrash.append(imgtrash);
+			atrash.click(function() {
+				$(this).closest('table').remove();
+				return false;
+			});
 			var trash = $("<td style='visibility:hidden'>").append(atrash);
 			// end trash
 
@@ -573,17 +574,10 @@
 	</fieldset>
 
 	<div id="buttonEbayShipping" class="panel-footer">
-        {if $mode_demo}
-			<p class="btn btn-default pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip">
-				<i class="process-icon-save"></i>
-                {l s='Save' mod='ebay'}
-			</p>
-        {else}
-			<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
-			<button class="btn btn-default pull-right" type="submit" >
-				<i class="process-icon-save"></i>
-                {l s='Save' mod='ebay'}
-			</button>
-        {/if}
+		<input class="primary button" name="submitSave" type="hidden"  value="{l s='Save and continue' mod='ebay'}"/>
+		<button class="btn btn-default pull-right" type="submit" >
+			<i class="process-icon-save"></i>
+			{l s='Save' mod='ebay'}
+		</button>
 	</div>
 </form>

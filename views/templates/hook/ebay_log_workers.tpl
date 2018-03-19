@@ -18,12 +18,14 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
+<script>
+    var apilogs_ajax_link = '{$apilogs_ajax_link|addslashes}';
+</script>
 
 <div id="contentLogWorkersTab" class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Workers' mod='ebay'}
@@ -88,9 +90,14 @@
             var page = $(this).attr('value');
             if(page){
                 $.ajax({
-                    type: "POST",
-                    url: module_dir+'ebay/ajax/paginationLogWorkersTab.php',
-                    data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=" + page,
+                    url: apilogs_ajax_link+'&configure=ebay',
+                    data: {
+                        ajax: true,
+                        action: 'PaginationLogWorkerTab',
+                        id_employee: id_employee,
+                        profile: id_ebay_profile,
+                        page: page
+                    },
                     beforeSend : function(){
                         $('#contentLogWorkersTab').empty();
                         var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -105,9 +112,14 @@
         });
         $(document).on('click', '.loadListWorker', function(){
             $.ajax({
-                type: "POST",
-                url: module_dir+'ebay/ajax/paginationLogWorkersTab.php',
-                data: "token="+ebay_token+"&id_employee="+ id_employee +"&profile=" + id_ebay_profile + "&page=1",
+                url: apilogs_ajax_link+'&configure=ebay',
+                data: {
+                    ajax: true,
+                    action: 'PaginationLogWorkerTab',
+                    id_employee: id_employee,
+                    profile: id_ebay_profile,
+                    page: 1
+                },
                 beforeSend : function(){
                     $('#contentLogWorkersTab').empty();
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
@@ -140,16 +152,17 @@
         function deleteWorkTasksByIds(ids_tasks) {
             if (ids_tasks == 'all' || ids_tasks.length != 0){
                 $.ajax({
-                    type : 'POST',
-                    url : module_dir+'ebay/ajax/deleteTasks.php',
-                    data : {
-                        ids_tasks : ids_tasks,
-                        type : 'work',
-                        token : token,
+                    url: apilogs_ajax_link+'&configure=ebay',
+                    data: {
+                        ajax: true,
+                        action: 'DeleteTasks',
+                        ids_tasks: ids_tasks,
+                        type: 'work'
                     },
                     success : function(data){
                         if(ids_tasks == 'all'){
-                            $('#contentLogWorkersTab').empty();
+                            $('#contentLogWorkersTab .tableDnD tbody').empty();
+                            $('#contentLogWorkersTab .navPaginationListLogWorkersTab').empty();
                         } else{
                             $('.workCheck').each(function(){
                                 if (ids_tasks.indexOf($(this).attr('value')) != -1){

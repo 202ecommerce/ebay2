@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -128,7 +128,6 @@
 					</div>
 
 					<div id="menuTab9Sheet" class="tabItem tab-pane"><div class="panel">{$ebay_listings}</div></div>
-					<div id="menuTab12Sheet" class="tabItem tab-pane"><div class="panel">{$order_logs}</div></div>
 					<div id="menuTab6Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders}</div></div>
 					<div id="menuTab14Sheet" class="tabItem tab-pane"><div class="panel">{$orders_sync}</div></div>
 					<div id="menuTab79Sheet" class="tabItem tab-pane"><div class="panel">{$orders_returns_sync}</div></div>
@@ -211,13 +210,17 @@
 	var alert_exit_import_categories = "{/literal}{$alert_exit_import_categories}{literal}";
 	function getKb(item) {
 		item = typeof item !== 'undefined' ? item : 0;
-
 		var that = $("a.kb-help:eq("+ item +")");
 
 		$.ajax({
 			type: "POST",
-			url: '{/literal}{$load_kb_path}{literal}',
-			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path}{literal}"},
+			url: formController,
+			data: {
+			    errorcode: $( that ).attr('data-errorcode'),
+				lang: $( that ).attr('data-lang'),
+				ajax: true,
+				action: 'LoadKB'
+			},
 			dataType: "json",
 			success: function(data)
 			{

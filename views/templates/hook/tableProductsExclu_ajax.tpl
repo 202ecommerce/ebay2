@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -34,12 +34,13 @@
 
 
 <script type="text/javascript">
+    var ebayProductExcluController = "{$ebayProductExcluController|addslashes}";
     var url_tab = "{$url_tab}";
     function loadProductExclu(){
     $.ajax({
         type: "POST",
-        url: module_dir+'ebay/ajax/getProductExclu.php',
-        data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}",
+        url: ebayProductExcluController,
+        data: "ajax=true&action=GetProductExclu&id_employee={$id_employee|escape:'htmlall':'UTF-8'}",
         success: function(data)
         {
             $('#ebayProductExclu').fadeOut(400, function(){

@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *	@author    PrestaShop SA <contact@prestashop.com>
-*	@copyright	2007-2017 PrestaShop SA
+*	@copyright	2007-2018 PrestaShop SA
 *	@license   http://opensource.org/licenses/afl-3.0.php	Academic Free License (AFL 3.0)
 *	International Registered Trademark & Property of PrestaShop SA
 */
@@ -29,8 +29,11 @@ $(document).ready(function(){
 
     $.ajax({
         type: "POST",
-        url: module_dir+'ebay/ajax/loadFormSyncTab.php',
-        data: "token="+ebay_token,
+        url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+        data: {
+            ajax: true,
+            action: 'LoadFormSyncTab'
+        },
         beforeSend:function(){
             var html = '<div class="ajaxLoadingFormSyncTab" style=" position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
             $('#menuTab5Sheet .panel').empty();
@@ -52,8 +55,15 @@ $(document).ready(function(){
         if(page){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?page='+page+'&searche='+searche + '&id_product=' + id_prod + "&name_product=" + name_prod,
-                data: "token="+ebay_token,
+                url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+                data: {
+                    ajax: true,
+                    action: 'LoadFormSyncTab',
+                    page: page,
+                    searche: searche,
+                    id_product: id_prod,
+                    name_product: name_prod,
+                },
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
                     $('#menuTab5Sheet .panel').empty();
@@ -76,8 +86,14 @@ $(document).ready(function(){
         if(searche || id_prod || name_prod){
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php?searche=' + searche + '&id_product=' + id_prod + "&name_product=" + name_prod,
-                data: "token="+ebay_token,
+                url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+                data: {
+                    ajax: true,
+                    action: 'LoadFormSyncTab',
+                    searche: searche,
+                    id_product: id_prod,
+                    name_product: name_prod,
+                },
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
                     $('#menuTab5Sheet .panel').empty();
@@ -97,8 +113,11 @@ $(document).ready(function(){
 
             $.ajax({
                 type: "POST",
-                url: module_dir+'ebay/ajax/loadFormSyncTab.php',
-                data: "token="+ebay_token,
+                url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+                data: {
+                    ajax: true,
+                    action: 'LoadFormSyncTab',
+                },
                 beforeSend:function(){
                     var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
                     $('#menuTab5Sheet .panel').empty();
@@ -133,8 +152,13 @@ $(document).ready(function(){
         var modeResync = $('#popin-cofirm-resync input[data-role="modeResync"]').attr('value');
         $.ajax({
             type: "POST",
-            url: module_dir+'ebay/ajax/buttonResyncProducts.php',
-            data: "token=" + ebay_token + "&id_ebay_profile=" + id_ebay_profile + '&modeResync=' + modeResync,
+            url: formEbaySyncController, //formEbaySyncController was defined in form.tpl
+            data: {
+                ajax: true,
+                action: 'ButtonResyncProducts',
+                id_ebay_profile: id_ebay_profile,
+                modeResync: modeResync,
+            },
 
         });
         location.reload();

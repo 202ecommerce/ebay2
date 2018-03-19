@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -76,11 +76,11 @@
     $('a[name="incluProduct"]').click(function (e) {
         var tr = $(this).parent().parent();
         e.preventDefault();
-        if (confirm(header_ebay_l['Are you sure you want to include this product?'])) {
+        if (confirm(header_ebay_l['Are you sure you want to inclure this product?'])) {
         $.ajax({
             type: 'POST',
-            url: module_dir + 'ebay/ajax/inclureProductAjax.php',
-            data: "token={/literal}{$ebay_token}{literal}&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
+            url: ebayProductExcluController,
+            data: "ajax=true&action=InclureProduct&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_employee=" + id_employee + "&id_product="+$(this).attr('id'),
             success: function (data) {
                 //tr.remove();
                 window.location.href = url_tab;
@@ -88,10 +88,8 @@
         });
         }
     });
-    var content_ebay_relistings = $("#ProductsExcluRe button");
-    content_ebay_relistings.live('click', 'button', function(){
-        loadProductExclu();
-    });
+
+    $("#ProductsExcluRe button").click(loadProductExclu);
 
     {/literal}
 </script>

@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,20 +26,12 @@
 
 <div class="table-block">
     <h4 class="table-block__title table-block__holder">{l s='Returns imported by ' mod='ebay'} {$type_sync_returns}
-        {if $mode_demo}
-            <p class="button-refresh btn btn-default"
-               title="{l s='This button is disabled in the demo version' mod='ebay'}"
-               data-toggle="tooltip">
-                <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
-            </p>
-        {else}
-            <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"
-               class="button-refresh btn btn-default"
-               title="{l s='Sync refunds and returns from eBay' mod='ebay'}"
-               data-toggle="tooltip">
-                <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
-            </a>
-        {/if}
+        <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS_RETURNS=1"
+           class="button-refresh btn btn-default"
+           title="{l s='Sync refunds and returns from eBay' mod='ebay'}"
+           data-toggle="tooltip">
+           <span class="icon-refresh"></span> {l s='Sync' mod='ebay'}
+        </a>
     </h4>
 
     {if empty($returns)}

@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -59,15 +59,10 @@
         </form>
 
         <div class="panel-footer">
-            {if !$mode_demo}
-                <button class="js-close-popin_boost btn btn-danger pull-right" style="display: none"><i class="process-icon-cancel"></i>{l s='Stop Boost' mod='ebay'}</button>
-            {/if}
+            <button class="js-close-popin_boost btn btn-danger pull-right" style="display: none"><i class="process-icon-cancel"></i>{l s='Stop Boost' mod='ebay'}</button>
             <button class="js-close-popin btn btn-primary pull-right close_boost"><i class="process-icon-cancel"></i>{l s='Close' mod='ebay'}</button>
-            {if $mode_demo}
-                <button class="btn btn-primary pull-right" title="{l s='This button is disabled in the demo version' mod='ebay'}" data-toggle="tooltip"><i class="process-icon-next"></i>{l s='Start' mod='ebay'}</button>
-            {else}
-                <button class="js-next-popin_boost btn btn-primary pull-right star_boost"><i class="process-icon-next"></i>{l s='Start' mod='ebay'}</button>
-            {/if}
+            <button class="js-next-popin_boost btn btn-primary pull-right star_boost"><i class="process-icon-next"></i>{l s='Start' mod='ebay'}</button>
+
         </div>
     </div>
 </div>
