@@ -106,6 +106,72 @@ class EbayProduct
         }
     }
 
+    public static function getAllOrphanProductsId($id_ebay_profile)
+    {
+        $ebay_profile = new EbayProfile((int) $id_ebay_profile);
+        $is_one_five = version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0;
+        if ($is_one_five) {
+            // to check if a product has attributes (multi-variations),
+            // we check if it has a "default_on" attribute in the product_attribute table
+            $query = 'SELECT DISTINCT(ep.`id_ebay_product`), ep.id_product, ep.id_attribute as id_product_attribute, ep.id_ebay_profile
+    FROM `'._DB_PREFIX_.'ebay_product` ep
+    
+    
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+    ON epc.`id_product` = ep.`id_product`
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'product` p
+    ON p.`id_product` = ep.`id_product`
+    '.Shop::addSqlAssociation('product', 'p').'
+
+
+    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+    ON pa.`id_product` = p.`id_product`
+    AND pa.default_on = 1
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    ON ecc.`id_category` = product_shop.`id_category_default`
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+    ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) ';
+        } else {
+            // to check if a product has attributes (multi-variations),
+            // we check if it has a "default_on" attribute in the product_attribute table
+            $query = 'SELECT DISTINCT(ep.`id_ebay_product`), ep.id_product, ep.id_attribute, ep.id_ebay_profile
+    FROM `'._DB_PREFIX_.'ebay_product` ep
+    
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+    ON epc.`id_product` = ep.`id_product`
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'product` p
+    ON p.`id_product` = ep.`id_product`
+
+
+    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+    ON pa.`id_product` = p.`id_product`
+    AND pa.default_on = 1
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    ON ecc.`id_category` = p.`id_category_default`
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+    ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) ';
+        }
+
+        return  Db::getInstance()->executeS($query);
+    }
+
     public static function getNbProducts($id_ebay_profile)
     {
         return Db::getInstance()->getValue('SELECT count(*)
@@ -556,22 +622,6 @@ class EbayProduct
         
         $final_res = array();
         foreach ($res as &$row) {
-            /*$ret =false;
-            if (!$row['exists']) {
-                $ret = true;
-            } elseif (!$row['EbayCategoryExists']) {
-                $ret = true;
-            } elseif (!$row['active'] || $row['blacklisted']) {
-                $ret = true;
-            } elseif (is_null($row['id_category_ref'])) {
-                $ret = true;
-            } elseif (!$row['sync']) {
-                $ret = true;
-            }
-
-            if ($ret === false) {
-                continue;
-            }*/
 
             if (isset($row['id_product_ref']) && $row['id_product_ref']) {
                 $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());

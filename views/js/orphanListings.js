@@ -104,7 +104,32 @@ function delete_orphan_by_checkbox(index, element){
 }
 
 function delete_all_orphans() {
-    $('a.delete-orphan').each(delete_orphan);
+    $.ajax({
+        type: "POST",
+        url: ebayOrphanListingsController,
+        data: {
+            id_lang: id_lang,
+            id_employee: id_employee,
+            id_ebay_profile: id_ebay_profile,
+            ajax: true,
+            action: 'DeleteAllOrphanListing',
+        },
+        beforeSend: function() {
+            $('.delete_all_orphans').prop('disabled', true);
+            $('.delete_several_orphans').prop('disabled', true);
+        },
+        success : function(data) {
+            console.log(data);
+            if (data == '1') {
+                $('#OrphanListings').remove();
+                $('.navPaginationListOrphanProductTab').remove();
+                $('.delete_all_orphans').prop('disabled', false);
+                $('.delete_several_orphans').prop('disabled', false);
+            }
+
+
+        }
+    });
 }
 
 function delete_several_orphans() {
