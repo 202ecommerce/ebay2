@@ -133,7 +133,6 @@
 					<div id="menuTab79Sheet" class="tabItem tab-pane"><div class="panel">{$orders_returns_sync}</div></div>
 					<div id="menuTab78Sheet" class="tabItem tab-pane"><div class="panel">{$order_returns}</div></div>
 					<div id="menuTab81Sheet" class="tabItem tab-pane">{$dashboard}</div>
-					<div id="menuTab15Sheet" class="tabItem tab-pane"><div class="panel">{$ps_products}</div></div>
 					<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
 					<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
 					<div id="menuTab106Sheet" class="tabItem tab-pane"><div class="panel">{$ebayProductsExcluTab}</div></div>

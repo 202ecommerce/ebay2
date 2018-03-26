@@ -79,7 +79,6 @@ $classes_to_load = array(
     'tabs/EbayOrderLogsTab',
     'tabs/EbayOrdersSyncTab',
     'tabs/EbayOrdersReturnsSyncTab',
-    'tabs/EbayPrestashopProductsTab',
     'tabs/EbayOrphanListingsTab',
     'tabs/EbayOrderReturnsTab',
     'tabs/EbayDashboardTab',
@@ -1549,6 +1548,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
+        
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
@@ -2017,7 +2017,6 @@ class Ebay extends Module
         //$help_tab = new EbayHelpTab($this, $this->smarty, $this->context);
         $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
         $orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
-        $ps_products = new EbayPrestashopProductsTab($this, $this->smarty, $this->context);
         $orphan_listings = new EbayOrphanListingsTab($this, $this->smarty, $this->context);
         $tableOrders = new EbayOrdersTab($this, $this->smarty, $this->context);
         $tableListErrorProduct = new EbayListErrorsProductsTab($this, $this->smarty, $this->context);
@@ -2070,7 +2069,6 @@ class Ebay extends Module
             //'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
             'ebay_listings' => $listings_tab->getContent($this->ebay_profile->id),
             'orders_sync' => $orders_sync->getContent(),
-            'ps_products' => $ps_products->getContent(),
             'orphan_listings' => $orphan_listings->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
             'id_tab' => Tools::getValue('id_tab'),
