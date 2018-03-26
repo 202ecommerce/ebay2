@@ -346,6 +346,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
 	`id_product` int(16),
 	`id_order` int(16),
     `date_add` datetime NOT NULL,
+    `request` text,
+    `status` varchar(255),
 	PRIMARY KEY  (`id_ebay_api_log`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
