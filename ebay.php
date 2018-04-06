@@ -838,11 +838,11 @@ class Ebay extends Module
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
         if (((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
             &&
-            ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
+            (Configuration::get('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS') == 1) {
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
-            $this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
+            Configuration::updateValue('EBAY_ORDER_LAST_UPDATE', $current_date);
 
             if ($orders = $this->__getEbayLastOrders($current_date)) {
                 $this->importOrders($orders, $this->ebay_profile);
@@ -851,11 +851,11 @@ class Ebay extends Module
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
         if (((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 0)
             &&
-            ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
+            (Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS_RETURNS') == 1) {
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
-            $this->ebay_profile->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
+            Configuration::updateValue('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
 
             if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
                 if (isset($orders['refund'][0]['cancellations'])) {
@@ -923,7 +923,7 @@ class Ebay extends Module
         }
 
         // we set the new last update date after retrieving the last orders
-        $this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
+        Configuration::updateValue('EBAY_ORDER_LAST_UPDATE', $current_date);
     }
 
     public function cronOrdersReturnsSync()
@@ -944,7 +944,7 @@ class Ebay extends Module
             }
         }
         // we set the new last update date after retrieving the last orders
-        $this->ebay_profile->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
+        Configuration::updateValue('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
     }
 
     public function importOrders($orders, $ebay_profile)
@@ -958,8 +958,11 @@ class Ebay extends Module
         foreach ($orders as $order) {
             $errors = array();
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
-            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite);
+            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id);
             $ebayProfileOrder = new EbayProfile($idProfileOrder);
+            if (!$ebayProfileOrder->id) {
+                continue;
+            }
             $ebay_user_identifier = $ebayProfileOrder->ebay_user_identifier;
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
@@ -1037,19 +1040,18 @@ class Ebay extends Module
             $customer_ids = array();
             if ($has_shared_customers) {
                 // in case of shared customers in multishop, we take the profile of the first shop
-                if ($this->is_multishop) {
-                    $shop_data = reset($shops_data);
-                    $ebay_profile = new EbayProfile($shop_data['id_ebay_profiles'][0]);
-                } else {
-                    $ebay_profile = $ebayProfileOrder;
-                }
+                
+                $ebay_profile = $ebayProfileOrder;
 
                 $id_customer = $order->getOrAddCustomer($ebay_profile);
                 $order->updateOrAddAddress($ebay_profile);
                 $customer_ids[] = $id_customer;
 
                 // Fix on sending e-mail
-                $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                if (!$order->getEmail()) {
+                    $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                }
+
                 $customer_clear = new Customer();
                 if (method_exists($customer_clear, 'clearCache')) {
                     $customer_clear->clearCache(true);
@@ -1058,8 +1060,8 @@ class Ebay extends Module
 
             foreach ($id_shops as $id_shop) {
                 if ($this->is_multishop) {
-                    $id_ebay_profile = (int) $shops_data[$id_shop]['id_ebay_profiles'][0];
-                    $ebay_profile = new EbayProfile($id_ebay_profile);
+                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop);
+                    $ebayProfileOrder = new EbayProfile($idProfileOrder);
                 } else {
                     $ebay_profile = $ebayProfileOrder;
                 }
@@ -1071,7 +1073,9 @@ class Ebay extends Module
                     $customer_ids[] = $id_customer;
 
                     // Fix on sending e-mail
-                    $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                    if (!$order->getEmail()) {
+                        $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                    }
                     $customer_clear = new Customer();
                     if (method_exists($customer_clear, 'clearCache')) {
                         $customer_clear->clearCache(true);
@@ -1161,7 +1165,7 @@ class Ebay extends Module
         if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
             //If it is more than 30 days that we installed the module
             // check from 30 days before
-            $from_date_ar = explode('T', $this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+            $from_date_ar = explode('T', Configuration::get('EBAY_ORDER_LAST_UPDATE'));
             $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -'.$nb_days_backward.' days'));
             $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         } else {
@@ -1201,7 +1205,7 @@ class Ebay extends Module
         if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
             //If it is more than 30 days that we installed the module
             // check from 30 days before
-            $from_date_ar = explode('T', $this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+            $from_date_ar = explode('T', Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE'));
             $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -'.$nb_days_backward.' days'));
             $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         } else {

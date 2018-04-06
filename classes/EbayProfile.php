@@ -610,8 +610,12 @@ class EbayProfile extends ObjectModel
         return $list_ids;
     }
 
-    public static function getIdProfileBySiteId($siteId)
+    public static function getIdProfileBySiteId($siteId, $id_shop = null)
     {
-        return DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId);
+        if (!$id_shop) {
+              $context = Context::getContext();
+              $id_shop = $context->shop->id;
+        }
+        return DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop);
     }
 }

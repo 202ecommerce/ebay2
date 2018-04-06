@@ -508,7 +508,7 @@ class EbaySynchronizer
         if ($ebay_category !== false) {
             $sql .= '  AND (ecs.id_category_ref = ' . (int)$ebay_category->getIdCategoryRef() . ' OR ecs.id_category_ref IS NULL)';
         }
-
+	
         $attributes_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 
         $variation_specifics_pairs = array();
@@ -681,7 +681,7 @@ class EbaySynchronizer
             $national_ship[$carrier['ebay_carrier']][] = array(
                 'servicePriority' => $service_priority,
                 'serviceAdditionalCosts' => $carrier['extra_fee'],
-                'serviceCosts' => EbaySynchronizer::__getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
+                'serviceCosts' => EbaySynchronizer::__getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'], $ebay_profile),
             );
 
             $service_priority++;
@@ -712,25 +712,27 @@ class EbaySynchronizer
         );
     }
 
-    private static function __getShippingPriceForProduct($product, $zone, $carrier_id)
+    private static function __getShippingPriceForProduct($product, $zone, $carrier_id, $ebay_profile)
     {
         $carrier = new Carrier($carrier_id);
 
+        // Use currency of ebay_profile
+        $currency = new Currency($ebay_profile->getConfiguration('EBAY_CURRENCY'));
         if ($carrier->shipping_method == 0) {
             // Default
             if (Configuration::get('PS_SHIPPING_METHOD') == 1) {
                 // Shipping by weight
-                $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone);
+                $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone) * $currency->conversion_rate;
             } else {
                 // Shipping by price
-                $price = $carrier->getDeliveryPriceByPrice($product->price, $zone);
+                $price = $carrier->getDeliveryPriceByPrice($product->price, $zone, $currency->id);
             }
         } elseif ($carrier->shipping_method == 1) {
             // Shipping by weight
-            $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone);
+            $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone) * $currency->conversion_rate;
         } elseif ($carrier->shipping_method == 2) {
             // Shipping by price
-            $price = $carrier->getDeliveryPriceByPrice($product->price, $zone);
+            $price = $carrier->getDeliveryPriceByPrice($product->price, $zone, $currency->id);
         } else {
             // return 0 if is an other shipping method
             return 0;

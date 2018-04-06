@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = false;
+    private $dev = true;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -1227,6 +1227,9 @@ class EbayRequest
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
         }
+	if (!$data['variations'] && $data['price']) {
+		$vars['price'] = $data['price'];
+	}
 
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
@@ -1270,8 +1273,9 @@ class EbayRequest
             'item_specifics' => $data['item_specifics'],
             'sku' => false,
         );
-
-
+	if (!$data['variations'] && $data['price']) {
+		$vars['price'] = $data['price'];
+	}
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {
             $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         }

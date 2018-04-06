@@ -68,7 +68,7 @@ class EbayOrdersTab extends EbayTab
         );
 
         $url_vars['controller'] = Tools::getValue('controller');
-        $datetime = new DateTime(EbayConfiguration::get($id_ebay_profile, 'EBAY_ORDER_LAST_UPDATE'));
+        $datetime = new DateTime(Configuration::get('EBAY_ORDER_LAST_UPDATE'));
         $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
 
         $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
