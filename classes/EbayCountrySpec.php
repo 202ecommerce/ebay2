@@ -612,8 +612,10 @@ class EbayCountrySpec
         $iso_code = $this->ebay_iso;
 
         if (isset(self::$country_data[$iso_code]) && isset(self::$country_data[$iso_code][$data])) {
+            
             return self::$country_data[$iso_code][$data];
         } else if (isset(self::$country_data['fr'][$data])) {
+            
             return self::$country_data['fr'][$data];
         } else {
             return null;
@@ -713,13 +715,14 @@ class EbayCountrySpec
      */
     public static function getInstanceByKey($key, $dev = false)
     {
+        
         if (isset(self::$country_data[$key])) {
             $iso_code = self::$country_data[$key]['iso_code'];
             $id_country = Country::getByIso($iso_code);
         } else {
             $id_country = Configuration::get('PS_COUNTRY_DEFAULT');
         }
-
+        
         $ebay_country = new EbayCountrySpec(new Country($id_country));
         $ebay_country->setDev($dev);
         $ebay_country->ebay_iso = is_numeric($key) ? self::getKeyForEbayCountry() : $key;

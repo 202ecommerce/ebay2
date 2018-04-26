@@ -1227,7 +1227,7 @@ class EbayRequest
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
         }
-	if (!$data['variations'] && $data['price']) {
+	if ((!isset($data['variations']) && $data['price']) || (!$data['variations'] && $data['price'])) {
 		$vars['price'] = $data['price'];
 	}
 
@@ -1273,7 +1273,7 @@ class EbayRequest
             'item_specifics' => $data['item_specifics'],
             'sku' => false,
         );
-	if (!$data['variations'] && $data['price']) {
+	if ((!isset($data['variations']) && $data['price']) || (!$data['variations'] && $data['price'])) {
 		$vars['price'] = $data['price'];
 	}
         if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id']) {

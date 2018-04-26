@@ -1061,7 +1061,7 @@ class Ebay extends Module
             foreach ($id_shops as $id_shop) {
                 if ($this->is_multishop) {
                     $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop);
-                    $ebayProfileOrder = new EbayProfile($idProfileOrder);
+                    $ebay_profile = new EbayProfile($idProfileOrder);
                 } else {
                     $ebay_profile = $ebayProfileOrder;
                 }
