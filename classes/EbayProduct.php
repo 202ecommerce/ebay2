@@ -210,11 +210,11 @@ class EbayProduct
         return $ret;
     }
 
-    public static function getProducts($not_update_for_days, $limit)
+    public static function getProducts($not_update_for_days, $limit, $id_ebay_profile)
     {
         return Db::getInstance()->ExecuteS('SELECT ep.id_product_ref, ep.id_product
 			FROM '._DB_PREFIX_.'ebay_product AS ep
-			WHERE NOW() > DATE_ADD(ep.date_upd, INTERVAL '.(int) $not_update_for_days.' DAY)
+			WHERE id_ebay_profile = '. (int)$id_ebay_profile .' AND NOW() > DATE_ADD(ep.date_upd, INTERVAL '.(int) $not_update_for_days.' DAY)
 			LIMIT '.(int) $limit);
     }
 

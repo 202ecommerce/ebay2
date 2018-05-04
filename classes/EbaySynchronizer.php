@@ -698,7 +698,7 @@ class EbaySynchronizer
             $international_ship[$carrier['ebay_carrier']][] = array(
                 'servicePriority' => $service_priority,
                 'serviceAdditionalCosts' => $carrier['extra_fee'],
-                'serviceCosts' => EbaySynchronizer::__getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
+                'serviceCosts' => EbaySynchronizer::__getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'], $ebay_profile),
                 'locationsToShip' => EbayShippingInternationalZone::getIdEbayZonesByIdEbayShipping($ebay_profile->id, $carrier['id_ebay_shipping']),
             );
 

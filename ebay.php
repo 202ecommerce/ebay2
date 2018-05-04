@@ -1552,7 +1552,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
-        
+
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
@@ -2217,7 +2217,7 @@ class Ebay extends Module
             $ebay = new EbayRequest();
             $days = Tools::substr($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'), 5);
 
-            foreach (EbayProduct::getProducts($days, 10) as $item) {
+            foreach (EbayProduct::getProducts($days, 10, $this->ebay_profile->id) as $item) {
                 $new_item_id = $ebay->relistFixedPriceItem($item['id_product_ref']);
 
                 if (!$new_item_id) {

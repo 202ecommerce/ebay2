@@ -255,6 +255,10 @@ class EbayOrder
         $address->address2 = $format->formatAddress($this->address2);
         $address->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
         $address->city = $format->formatCityName($this->city);
+        if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state))) {
+            $address->id_state = $id_state;
+        }
+
         
         if (!empty($this->phone)) {
             $phone = $format->formatPhoneNumber($this->phone);
