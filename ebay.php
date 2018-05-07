@@ -144,6 +144,7 @@ class Ebay extends Module
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
         $this->author = '202-ecommerce';
+        $this->author_address = '0x416357AF746680E3B2787841AB0e51d9BB684734';
 
         parent::__construct();
 
