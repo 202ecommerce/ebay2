@@ -109,7 +109,7 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
         die();
     }
 
-    public function ajaxProcessDeleteAllOrphanListing ()
+    public function ajaxProcessDeleteAllOrphanListing()
     {
         $id_profile = Tools::getValue('id_ebay_profile');
         $products = EbayProduct::getAllOrphanProductsId($id_profile);

@@ -610,12 +610,9 @@ class EbayCountrySpec
     private function _getCountryData($data)
     {
         $iso_code = $this->ebay_iso;
-
         if (isset(self::$country_data[$iso_code]) && isset(self::$country_data[$iso_code][$data])) {
-            
             return self::$country_data[$iso_code][$data];
         } else if (isset(self::$country_data['fr'][$data])) {
-            
             return self::$country_data['fr'][$data];
         } else {
             return null;

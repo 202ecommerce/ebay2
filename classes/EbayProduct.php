@@ -181,9 +181,9 @@ class EbayProduct
 
     public static function getNbProductsByCategory($id_ebay_profile, $id_category, $id_shop = null)
     {
-    	if (!$id_shop) {
-		$id_shop = Context::getContext()->shop->id;
-	}
+        if (!$id_shop) {
+            $id_shop = Context::getContext()->shop->id;
+        }
         return Db::getInstance()->getValue('SELECT count(*)
 			FROM `'._DB_PREFIX_.'ebay_product` ep
 			INNER JOIN `'._DB_PREFIX_.'product_shop` ps
@@ -622,7 +622,6 @@ class EbayProduct
         
         $final_res = array();
         foreach ($res as &$row) {
-
             if (isset($row['id_product_ref']) && $row['id_product_ref']) {
                 $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
             }

@@ -616,7 +616,7 @@ class EbayProfile extends ObjectModel
               $context = Context::getContext();
               $id_shop = $context->shop->id;
         }
-	$id_profile = false;
+        $id_profile = false;
         if (!$id_profile = DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop) && $shippingService) {
             $id_profile = self::getIdProfileByEbayShippingService($shippingService);
         }
@@ -635,5 +635,4 @@ class EbayProfile extends ObjectModel
         $select->where('ebay_carrier=\'' . pSQL($shippingService) . '\'');
         return (int) DB::getInstance()->getValue($select);
     }
-
 }
