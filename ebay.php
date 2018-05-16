@@ -959,7 +959,7 @@ class Ebay extends Module
         foreach ($orders as $order) {
             $errors = array();
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
-            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id);
+            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService);
             $ebayProfileOrder = new EbayProfile($idProfileOrder);
             if (!$ebayProfileOrder->id) {
                 continue;
@@ -1061,7 +1061,7 @@ class Ebay extends Module
 
             foreach ($id_shops as $id_shop) {
                 if ($this->is_multishop) {
-                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop);
+                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService);
                     $ebay_profile = new EbayProfile($idProfileOrder);
                 } else {
                     $ebay_profile = $ebayProfileOrder;

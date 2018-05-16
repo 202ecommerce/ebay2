@@ -610,12 +610,30 @@ class EbayProfile extends ObjectModel
         return $list_ids;
     }
 
-    public static function getIdProfileBySiteId($siteId, $id_shop = null)
+    public static function getIdProfileBySiteId($siteId, $id_shop = null, $shippingService = null)
     {
         if (!$id_shop) {
               $context = Context::getContext();
               $id_shop = $context->shop->id;
         }
-        return DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop);
+	$id_profile = false;
+        if (!$id_profile = DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop) && $shippingService) {
+            $id_profile = self::getIdProfileByEbayShippingService($shippingService);
+        }
+        if (!$id_profile) {
+            $currentProfile = self::getCurrent();
+            $id_profile = $currentProfile->id;
+        }
+        return $id_profile;
     }
+
+    public static function getIdProfileByEbayShippingService($shippingService)
+    {
+        $select = new DBQuery();
+        $select->select('id_ebay_profile');
+        $select->from('ebay_shipping');
+        $select->where('ebay_carrier=\'' . pSQL($shippingService) . '\'');
+        return (int) DB::getInstance()->getValue($select);
+    }
+
 }
