@@ -617,8 +617,10 @@ class EbayProfile extends ObjectModel
               $id_shop = $context->shop->id;
         }
         $id_profile = false;
-        if (!$id_profile = DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop) && $shippingService) {
-            $id_profile = self::getIdProfileByEbayShippingService($shippingService);
+        if (!$id_profile = DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop)) {
+            if ($shippingService) {
+                $id_profile = self::getIdProfileByEbayShippingService($shippingService);
+            }
         }
         if (!$id_profile) {
             $currentProfile = self::getCurrent();

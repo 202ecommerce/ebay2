@@ -954,6 +954,7 @@ class Ebay extends Module
         $dbEbay->setDb(Db::getInstance());
         $request = new EbayRequest();
         $errors_email = array();
+        EbayOrder::deletingInjuredOrders();
 
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
@@ -1553,7 +1554,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
-
+        
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
