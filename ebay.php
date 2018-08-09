@@ -1554,7 +1554,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
-        
+
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);

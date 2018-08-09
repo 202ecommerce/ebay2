@@ -1150,7 +1150,7 @@ class EbayRequest
         }
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
-        }
+        }        
 
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
@@ -1208,7 +1208,6 @@ class EbayRequest
             return false;
         }
         //$return_policy = $this->_getReturnPolicy($data);
-
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],

@@ -515,6 +515,10 @@ class EbayOrder
 
         //Change context's currency
         $this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
+        if(Configuration::get('PS_TAX_ADDRESS_TYPE') == 'id_address_delivery') {
+            $this->context->country = new Country((int) Country::getByIso($this->country_iso_code)); //there was adding for fixing error: address country is not active
+        }
+
         try {
             $payment->validateOrder(
                 (int) $this->carts[$id_shop]->id,
@@ -719,8 +723,11 @@ class EbayOrder
     {
         $this->id_ebay_order = EbayOrder::insert(array(
             'id_order_ref' => pSQL($this->id_order_ref),
+	    'id_order' => 0
         ));
-        if ($this->id_ebay_order) {
+
+
+	if (!$this->id_ebay_order) {
             $this->_writeLog($id_ebay_profile, 'add_orders', $this->id_ebay_order);
         }
     }
