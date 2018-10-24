@@ -255,6 +255,10 @@ class EbayOrder
         $address->address2 = $format->formatAddress($this->address2);
         $address->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
         $address->city = $format->formatCityName($this->city);
+        if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
+            $address->id_state = $id_state;
+        }
+
         
         if (!empty($this->phone)) {
             $phone = $format->formatPhoneNumber($this->phone);
@@ -511,6 +515,10 @@ class EbayOrder
 
         //Change context's currency
         $this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
+        if(Configuration::get('PS_TAX_ADDRESS_TYPE') == 'id_address_delivery') {
+            $this->context->country = new Country((int) Country::getByIso($this->country_iso_code)); //there was adding for fixing error: address country is not active
+        }
+
         try {
             $payment->validateOrder(
                 (int) $this->carts[$id_shop]->id,
@@ -715,8 +723,11 @@ class EbayOrder
     {
         $this->id_ebay_order = EbayOrder::insert(array(
             'id_order_ref' => pSQL($this->id_order_ref),
+	    'id_order' => 0
         ));
-        if ($this->id_ebay_order) {
+
+
+	if (!$this->id_ebay_order) {
             $this->_writeLog($id_ebay_profile, 'add_orders', $this->id_ebay_order);
         }
     }
@@ -1110,5 +1121,13 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order_order` eo
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON eo.`id_order` = o.`id_order`
 			WHERE eo.`id_order` > 0 AND o.`date_add`>"'.$period.'"');
+    }
+
+    public static function deletingInjuredOrders()
+    {
+        $delete = 'DELETE eo.* FROM ' . _DB_PREFIX_ . 'ebay_order eo
+                    LEFT JOIN ' . _DB_PREFIX_ . 'ebay_order_order eoo ON eo.id_ebay_order = eoo.id_ebay_order
+                    WHERE eoo.id_ebay_order_order IS NULL';
+        return DB::getInstance()->execute($delete);
     }
 }

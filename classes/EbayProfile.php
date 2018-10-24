@@ -556,7 +556,7 @@ class EbayProfile extends ObjectModel
             'ebay_profile',
         );
         foreach ($tables as $table) {
-            Db::getInstance()->delete(_DB_PREFIX_.$table, '`id_ebay_profile` = '.(int) $id_ebay_profile);
+            Db::getInstance()->delete($table, '`id_ebay_profile` = '.(int) $id_ebay_profile);
         }
 
         // if the profile deleted is the current one, we reset the EBAY_CURRENT_PROFILE
@@ -610,8 +610,31 @@ class EbayProfile extends ObjectModel
         return $list_ids;
     }
 
-    public static function getIdProfileBySiteId($siteId)
+    public static function getIdProfileBySiteId($siteId, $id_shop = null, $shippingService = null)
     {
-        return DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId);
+        if (!$id_shop) {
+              $context = Context::getContext();
+              $id_shop = $context->shop->id;
+        }
+        $id_profile = false;
+        if (!$id_profile = DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop)) {
+            if ($shippingService) {
+                $id_profile = self::getIdProfileByEbayShippingService($shippingService);
+            }
+        }
+        if (!$id_profile) {
+            $currentProfile = self::getCurrent();
+            $id_profile = $currentProfile->id;
+        }
+        return $id_profile;
+    }
+
+    public static function getIdProfileByEbayShippingService($shippingService)
+    {
+        $select = new DBQuery();
+        $select->select('id_ebay_profile');
+        $select->from('ebay_shipping');
+        $select->where('ebay_carrier=\'' . pSQL($shippingService) . '\'');
+        return (int) DB::getInstance()->getValue($select);
     }
 }

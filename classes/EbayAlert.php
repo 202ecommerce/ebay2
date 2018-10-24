@@ -224,8 +224,8 @@ class EbayAlert
 
         // ORDERS
         if ((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1) {
-            if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null) {
-                $datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+            if (Configuration::get('EBAY_ORDER_LAST_UPDATE') != null) {
+                $datetime = new DateTime(Configuration::get('EBAY_ORDER_LAST_UPDATE'));
 
                 $date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s')));
                 $time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
@@ -250,8 +250,8 @@ class EbayAlert
 
         // Returns
         if ((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 1) {
-            if ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') != null) {
-                $datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+            if (Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE') != null) {
+                $datetime = new DateTime(Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE'));
 
                 $date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s')));
                 $time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));

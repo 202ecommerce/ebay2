@@ -36,7 +36,7 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
         $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
         $length = 20;
         $count_orphans_product = EbayProduct::getCountOrphanListing(Tools::getValue('profile'));
-        $final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'), $page_current);
+        $final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'), $page_current, $length);
         $pages_all = ceil(((int)$count_orphans_product[0]['number']) / ((int)$length));
         $range = 3;
         $start = $page_current - $range;
@@ -107,5 +107,17 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
         }
         echo '1';
         die();
+    }
+
+    public function ajaxProcessDeleteAllOrphanListing()
+    {
+        $id_profile = Tools::getValue('id_ebay_profile');
+        $products = EbayProduct::getAllOrphanProductsId($id_profile);
+        foreach ($products as $product) {
+            EbayTaskManager::deleteTaskForPorductAndEbayProfile($product['id_product'], $product['id_ebay_profile']);
+            $product_ps = new Product($product['id_product'], false, Tools::getValue('id_lang'));
+            EbayTaskManager::addTask('end', $product_ps, Tools::getValue('id_employee'), $product['id_ebay_profile'], $product['id_product_attribute']);
+        }
+        die('1');
     }
 }

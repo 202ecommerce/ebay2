@@ -158,7 +158,7 @@ class EbayTaskManager
         }
         self::deleteErrorsForProduct($id_product);
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile) || $ingnore) {
-            Db::getInstance()->insert('ebay_task_manager', $vars);
+            Db::getInstance()->insert('ebay_task_manager', $vars, false, true, DB::INSERT_IGNORE);
         }
     }
 
