@@ -414,11 +414,11 @@ class EbaySynchronizer
                 }
             } else {
                 if ($temp[1] == "+") {
-                    $price +=  (float) $temp[2];
-                    $price_original +=  (float) $temp[2];
+                    $price +=  (int) $temp[2];
+                    $price_original +=  (int) $temp[2];
                 } else {
                     $price -=  (int) $temp[2];
-                    $price_original -=  (float) $temp[2];
+                    $price_original -=  (int) $temp[2];
                 }
             }
 
@@ -650,11 +650,11 @@ class EbaySynchronizer
             }
         } else {
             if ($temp[1] != "-") {
-                $price +=  (float) $temp[2];
-                $price_original +=  (float) $temp[2];
+                $price +=  (int) $temp[2];
+                $price_original +=  (int) $temp[2];
             } else {
-                $price -=  (float) $temp[2];
-                $price_original -=  (float) $temp[2];
+                $price -=  (int) $temp[2];
+                $price_original -=  (int) $temp[2];
             }
         }
 
@@ -731,7 +731,7 @@ class EbaySynchronizer
             $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone) * $currency->conversion_rate;
         } elseif ($carrier->shipping_method == 2) {
             // Shipping by price
-            $price = $carrier->getDeliveryPriceByPrice($product->getPrice(true), $zone, $currency->id);
+            $price = $carrier->getDeliveryPriceByPrice($product->price, $zone, $currency->id);
         } else {
             // return 0 if is an other shipping method
             return 0;

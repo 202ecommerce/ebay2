@@ -267,34 +267,14 @@
                                     <small>{l s='You may want to use boost mode.' mod='ebay'}</small>
                                 </label>
 
-                                          {*<div class="pull-right">*}
-                                                {*<span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">*}
-                                                  {*<a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>*}
-                                                {*</span>*}
-                                          {*</div>*}
-                                            <div class="links-wrapper">
-                                                <div class="pull-right">
-                                                    <a href="#" class="js-popin-help">
-                                                        <i class="icon-question-circle"></i>
-                                                        <span>{l s='Manual' mod='ebay'}</span>
-                                                    </a>
-                                                </div>
-
-                                                <div class="pull-right">
-                                                    <a href="#" class="js-popin-help">
-                                                        <i class="icon-star-half-o"></i>
-                                                        <span>{l s='Feedback' mod='ebay'}</span>
-                                                    </a>
-                                                </div>
-
-                                                <div class="pull-right">
-                                                    <a href="#" class="js-popin-help">
-                                                        <i class="icon-support"></i>
-                                                        <span>{l s='Support' mod='ebay'}</span>
-                                                    </a>
-                                                </div>
+                                            <div class="pull-right">
+                                                <span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">
+                                                  <a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>
+                                                </span>
                                             </div>
-                                            <div id="popin-container-help"></div>
+
+                                            <div id="popin-container-help">
+                                            </div>
                                         </form>
                                         <form class="change_profile" method="post">
                                             <input type="hidden" name="ebay_profile" value="" />

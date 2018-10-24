@@ -75,7 +75,7 @@ class EbayBussinesPolicies
 
     public static function addShipPolicies($data, $id_ebay_profile)
     {
-         Db::getInstance()->execute('INSERT INTO ' . _DB_PREFIX_ . 'ebay_business_policies (`type`, `name`, `id_ebay_profile`, `id_bussines_Policie`) VALUES ("' . pSQl($data['ProfileType']) . '","' . pSQl($data['ProfileName']) . '","' . (int)$id_ebay_profile . '", "")');
+         Db::getInstance()->execute('INSERT INTO ' . _DB_PREFIX_ . 'ebay_business_policies (`type`, `name`, `id_ebay_profile`) VALUES ("' . pSQl($data['ProfileType']) . '","' . pSQl($data['ProfileName']) . '","' . (int)$id_ebay_profile . '")');
 
         return Db::getInstance()->Insert_ID();
     }
