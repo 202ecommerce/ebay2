@@ -127,7 +127,6 @@
 		</script>
 
 		<script type="text/javascript" src="{$base_uri|escape:'htmlall':'UTF-8'}js/tiny_mce/tiny_mce.js"></script>
-
 		<script type="text/javascript">
 			$(window).load(function(){
 
@@ -173,6 +172,7 @@
                             entity_encoding: "raw",
                             convert_urls : false,
                             language : iso,
+                            valid_children : "+body[style], +body[link]",
                             setup: function (ed) {
                                 ed.on('init', function(args) {
                                     $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
@@ -206,6 +206,7 @@
                             entity_encoding: "raw",
                             convert_urls : false,
                             language : iso,
+			    valid_children : "+body[style], +body[link]",
                             setup : function(ed) {
                                 ed.onInit.add(function(ed) {
                                     $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
