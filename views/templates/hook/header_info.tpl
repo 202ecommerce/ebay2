@@ -30,7 +30,7 @@
                 <span class="badge badge-danger" style="vertical-align: top; margin-left: -9px; margin-top: -4px;">{if $nb_errors > 0}{$nb_errors|escape:'htmlall':'UTF-8'}{/if}</span>
             </button>
 
-        <ul class="dropdown-menu dropdown-menu-top" style="min-width: 560px;">
+        <ul class="dropdown-menu dropdown-menu-marker" style="min-width: 560px;">
             <li class="clearfix head">
                 <span class="col-xs-5" style="position: relative; float: left; padding-left: 20px; padding-right: 5px; min-height: 1px; width: 170px; font-weight: 600;">{l s='User' mod='ebay'}</span>
                 <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px; font-weight: 600;">{l s='Site ebay' mod='ebay'}</span>
@@ -86,6 +86,21 @@
     });
     {/if}
 
+    $(document).ready(function () {
+        var $dropdown = $('.dropdown-menu-marker '),
+            width = $dropdown.width(),
+            windowWidth = $(window).width(),
+            $ebayBtn = $('.totebay button.dropdown-toggle'),
+            ebayBtnLeftOffset = $ebayBtn.offset().left;
+
+        if (ebayBtnLeftOffset + width > windowWidth) {
+            $dropdown.addClass('dropdown-menu-right');
+            $dropdown.removeClass('dropdown-menu-left');
+        } else {
+            $dropdown.removeClass('dropdown-menu-left');
+            $dropdown.addClass('dropdown-menu-right');
+        }
+    });
 
     /* $('.ebay_profils').change(function() {
      $('.change_profile').find("input[name=ebay_profile]").val($( ".ebay_profils option:selected").attr('id'));
