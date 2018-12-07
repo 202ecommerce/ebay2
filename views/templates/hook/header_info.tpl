@@ -86,19 +86,19 @@
     });
     {/if}
 
-    $(document).ready(function () {
+    $('.totebay button.dropdown-toggle').on('click', function () {
         var $dropdown = $('.dropdown-menu-marker '),
-            width = $dropdown.width(),
-            windowWidth = $(window).width(),
-            $ebayBtn = $('.totebay button.dropdown-toggle'),
-            ebayBtnLeftOffset = $ebayBtn.offset().left;
+                width = $dropdown.width(),
+                windowWidth = $(window).width(),
+                $ebayBtn = $(this),
+                ebayBtnLeftOffset = $ebayBtn.offset().left;
 
         if (ebayBtnLeftOffset + width > windowWidth) {
             $dropdown.addClass('dropdown-menu-right');
             $dropdown.removeClass('dropdown-menu-left');
         } else {
-            $dropdown.removeClass('dropdown-menu-left');
-            $dropdown.addClass('dropdown-menu-right');
+            $dropdown.removeClass('dropdown-menu-right');
+            $dropdown.addClass('dropdown-menu-left');
         }
     });
 
