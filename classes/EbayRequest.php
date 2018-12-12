@@ -722,7 +722,7 @@ class EbayRequest
         $data['description'] = str_replace('http://', 'https://', $data['description']);
         $vars = array(
             'sku' => 'prestashop-' . $data['id_product'],
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'description' => $data['description'],
             'category_id' => $data['categoryId'],
@@ -772,12 +772,16 @@ class EbayRequest
         return $response;
     }
 
-    public static function prepareTitle($data)
+    public static function prepareTitle($data, $id_lang = null)
     {
+        if (!$id_lang) {
+            $ebay = new Ebay();
+            $id_lang = $ebay->ebay_profile->id_lang;
+        }
+
         $product = new Product($data['real_id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
-        $features = Feature::getFeatures(Configuration::get('PS_LANG_DEFAULT'));
-        $ebay = new Ebay();
-        $features_product = $product->getFrontFeatures($ebay->ebay_profile->id_lang);
+        $features = Feature::getFeatures($id_lang);
+        $features_product = $product->getFrontFeatures($id_lang);
         $tags = array(
             '{TITLE}',
             '{BRAND}',
@@ -1119,6 +1123,7 @@ class EbayRequest
         }
         $ebay_category = new EbayCategory($this->ebay_profile, $data['categoryId']);
         $data['description'] = str_replace('http://', 'https://', $data['description']);
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
@@ -1131,12 +1136,13 @@ class EbayRequest
             'category_id' => $data['categoryId'],
             'start_price' => $data['price'],
             'resynchronize' => 1,
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'description' => $data['description'],
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
             'return_policy' => $return_policy,
             'item_specifics' => $data['item_specifics'],
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'country_currency' => $currency->iso_code,
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
@@ -1207,8 +1213,8 @@ class EbayRequest
         if (!$data) {
             return false;
         }
-        //$return_policy = $this->_getReturnPolicy($data);
-
+        $return_policy = $this->_getReturnPolicy($data);
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
@@ -1216,13 +1222,15 @@ class EbayRequest
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
             'price_update' => true,
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'country_currency' => $currency->iso_code,
             'category_id' => $data['categoryId'],
             'variations' => false,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'site' => $this->ebay_country->getSiteName(),
             'item_specifics' => $data['item_specifics'],
+            'return_policy' => $return_policy,
         );
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
@@ -1251,7 +1259,8 @@ class EbayRequest
         if (!$data) {
             return false;
         }
-
+        
+        $return_policy = $this->_getReturnPolicy($data);
         // Set Api Call
         $this->apiCall = 'ReviseFixedPriceItem';
 
@@ -1267,11 +1276,12 @@ class EbayRequest
             'price_update' => true,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'site' => $this->ebay_country->getSiteName(),
             'variations' => $this->_getVariations($data),
             'item_specifics' => $data['item_specifics'],
             'sku' => false,
+            'return_policy' => $return_policy,
         );
         if ((!isset($data['variations']) && $data['price']) || (!$data['variations'] && $data['price'])) {
             $vars['price'] = $data['price'];
@@ -1314,7 +1324,7 @@ class EbayRequest
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
             'price_update' => true,
@@ -1488,7 +1498,7 @@ class EbayRequest
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
             'resynchronize' => 1,
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'description' => $data['description'],
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
             'site' => $this->ebay_country->getSiteName(),

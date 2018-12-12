@@ -73,7 +73,7 @@
                 name_prod: name_prod,
                 ajax: true,
                 action: 'GetEbayListings'
-			}
+			};
 
             $.ajax({
                 type: "POST",

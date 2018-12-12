@@ -71,16 +71,16 @@ class EbayListErrorsProductsTab extends EbayTab
                 }
                 switch ($task['id_task']) {
                     case 10:
-                        $error = 'Publication refusée';
+                        $error = $this->ebay->l('Publication refusée');
                         break;
                     case 11:
-                        $error = 'Mise à jour refusée';
+                        $error = $this->ebay->l('Mise à jour refusée');
                         break;
                     case 13:
-                        $error = 'Mise à jour du stock refusée';
+                        $error = $this->ebay->l('Mise à jour du stock refusée');
                         break;
                     case 14:
-                        $error = 'Supprimant refusée';
+                        $error = $this->ebay->l('Supprimant refusée');
                         break;
                 }
 

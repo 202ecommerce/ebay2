@@ -76,7 +76,7 @@
 		<ItemSpecifics>
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
-					<Name><![CDATA[{$name}]]></Name>
+					<Name><![CDATA[{$name|unescape:"UTF-8" nofilter}]]></Name>
 					{if $value|is_array}
 						{foreach $value as $item}
 							{if $item != ""}

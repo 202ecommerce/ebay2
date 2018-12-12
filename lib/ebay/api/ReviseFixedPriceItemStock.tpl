@@ -88,6 +88,10 @@
 		</ItemSpecifics>
 {/if}
 
+		{if isset($return_policy) && $return_policy}
+			{$return_policy nofilter}
+		{/if}
+		
         {if isset($variations) && $variations}
             {$variations nofilter}
         {/if}

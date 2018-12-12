@@ -181,6 +181,17 @@
 			loadCategoriesFromEbay();
 		}
 
+		$('.open-btn').click(function () {
+			var $input = $(this).parents('.input-group').first().find('input');
+            window.open($input.val());
+        });
+        $('.copy-btn').click(function () {
+            var $input = $(this).parents('.input-group').first().find('input');
+            $($input).select();
+            document.execCommand('copy');
+        });
+
+
 	});
 
 
@@ -313,7 +324,19 @@
 					</div>
 
 					<div class="help-block">
-						<a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path}</a>
+						<div class="input-group" id="sync_orders_by_cron_url" style="{if $sync_orders_by_cron == false};display:none{/if}">
+							<input type="text" class="form-control" value="{$sync_orders_by_cron_url}" readonly >
+							<div class="input-group-btn">
+								<button class="btn btn-default copy-btn" type="button">
+									<i class="fa fa-copy"></i>
+									<span>{l s='Copy' mod='ebay'}</span>
+								</button>
+								<button class="btn btn-default open-btn" type="button">
+                                    {l s='Open' mod='ebay'}
+								</button>
+							</div>
+						</div>
+						{*<a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path}</a>*}
 					</div>
 				</div>
 			</div>
@@ -338,7 +361,19 @@
 					</div>
 					
 					<div class="help-block">
-						<a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path}</a>
+						<div class="input-group" id="sync_products_by_cron_url" style="{if $sync_products_by_cron == false};display:none{/if}">
+							<input type="text" class="form-control" value="{$sync_products_by_cron_url}" readonly >
+							<div class="input-group-btn">
+								<button class="btn btn-default copy-btn" type="button">
+									<i class="fa fa-copy"></i>
+									<span>{l s='Copy' mod='ebay'}</span>
+								</button>
+								<button class="btn btn-default open-btn" type="button">
+                                    {l s='Open' mod='ebay'}
+								</button>
+							</div>
+						</div>
+						{*<a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path}</a>*}
 					</div>
 				</div>
 			</div>
@@ -364,7 +399,19 @@
 						</div>
 
 						<div class="help-block">
-							<a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url}" target="_blank" style="{if $sync_orders_returns_by_cron == false}display:none{/if}">{$sync_orders_returns_by_cron_path}</a>
+							<div class="input-group" id="sync_orders_returns_by_cron_url" style="{if $sync_orders_returns_by_cron == false};display:none{/if}">
+								<input type="text" class="form-control" value="{$sync_orders_returns_by_cron_url}" readonly >
+								<div class="input-group-btn">
+									<button class="btn btn-default copy-btn" type="button">
+										<i class="fa fa-copy"></i>
+										<span>{l s='Copy' mod='ebay'}</span>
+									</button>
+									<button class="btn btn-default open-btn" type="button">
+										{l s='Open' mod='ebay'}
+									</button>
+								</div>
+							</div>
+							{*<a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url}" target="_blank" style="{if $sync_orders_returns_by_cron == false}display:none{/if}">{$sync_orders_returns_by_cron_path}</a>*}
 						</div>
 					</div>
 				</div>

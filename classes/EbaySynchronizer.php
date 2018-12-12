@@ -414,11 +414,11 @@ class EbaySynchronizer
                 }
             } else {
                 if ($temp[1] == "+") {
-                    $price +=  (int) $temp[2];
-                    $price_original +=  (int) $temp[2];
+                    $price +=  (float) $temp[2];
+                    $price_original +=  (float) $temp[2];
                 } else {
                     $price -=  (int) $temp[2];
-                    $price_original -=  (int) $temp[2];
+                    $price_original -=  (float) $temp[2];
                 }
             }
 
@@ -463,7 +463,9 @@ class EbaySynchronizer
                         // If issue, it's because of https/http in the url
                         $link = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
                         if ($id_product_atributte == 0) {
-                            $variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
+                            if (isset($variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id])) {
+                                $variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
+                            }
                         } else {
                             $variations[0]['pictures'][] = $link;
                         }
@@ -505,9 +507,9 @@ class EbaySynchronizer
             AND ecs.`ebay_site_id` = ' . (int)$ebay_site_id . '
             WHERE pac.id_product_attribute=' . (int)$product_attribute_id;
 
-        if ($ebay_category !== false) {
+        /*if ($ebay_category !== false) {
             $sql .= '  AND (ecs.id_category_ref = ' . (int)$ebay_category->getIdCategoryRef() . ' OR ecs.id_category_ref IS NULL)';
-        }
+        }*/
         $attributes_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 
         $variation_specifics_pairs = array();
@@ -650,11 +652,11 @@ class EbaySynchronizer
             }
         } else {
             if ($temp[1] != "-") {
-                $price +=  (int) $temp[2];
-                $price_original +=  (int) $temp[2];
+                $price +=  (float) $temp[2];
+                $price_original +=  (float) $temp[2];
             } else {
-                $price -=  (int) $temp[2];
-                $price_original -=  (int) $temp[2];
+                $price -=  (float) $temp[2];
+                $price_original -=  (float) $temp[2];
             }
         }
 
@@ -731,7 +733,7 @@ class EbaySynchronizer
             $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone) * $currency->conversion_rate;
         } elseif ($carrier->shipping_method == 2) {
             // Shipping by price
-            $price = $carrier->getDeliveryPriceByPrice($product->price, $zone, $currency->id);
+            $price = $carrier->getDeliveryPriceByPrice($product->getPrice(true), $zone, $currency->id);
         } else {
             // return 0 if is an other shipping method
             return 0;
@@ -1206,6 +1208,7 @@ class EbaySynchronizer
             'synchronize_upc' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
+            'shipping' => EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile),
         );
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang, $id_product_attribute);

@@ -26,54 +26,26 @@
 
 class EbayOrdersTab extends EbayTab
 {
+    private $vars;
     public function getContent($id_ebay_profile)
     {
-        $orders_error = EbayOrderErrors::getAll($id_ebay_profile);
-        $orders = EbayOrder::getOrders();
-        $vars = array();
-        if (!empty($orders_error)) {
-            foreach ($orders_error as $order_er) {
-                $vars['errors'][] = array(
-                    'date_ebay' => $order_er['date_order'],
-                    'reference_ebay' => $order_er['id_order_ebay'],
-                    'referance_marchand' => $order_er['id_order_seller'],
-                    'email' => $order_er['email'],
-                    'total' => $order_er['total'],
-                    'error' => $order_er['error'],
-                    'date_import' => $order_er['date_add'],
-                );
-            }
-        }
-        if (!empty($orders)) {
-            foreach ($orders as $ord) {
-                $vars['orders_tab'][] = array(
-                    'date_ebay' => $ord['date_add'],
-                    'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),
-                    'referance_marchand' => $ord['payment'],
-                    'email' => $ord['email'],
-                    'total' => $ord['total_paid'],
-                    'id_prestashop' => $ord['id_order'],
-                    'reference_ps' => $ord['reference'],
-                    'date_import' => $ord['date_add'],
-                );
-            }
-        }
-        $vars['id_ebay_profile'] = $id_ebay_profile;
-        $vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
-        $vars['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
-
+        $this->vars = array();
+        $pagination_vars = EbayOrder::getPaginatedOrdersErrors($id_ebay_profile);
+        $this->vars = array_merge($this->vars, $pagination_vars);
+        $this->vars['id_ebay_profile'] = $id_ebay_profile;
+        $this->vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
+        $this->vars['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
         $url_vars = array(
             'id_tab' => '6',
             'section' => 'orders',
         );
-
         $url_vars['controller'] = Tools::getValue('controller');
         $datetime = new DateTime(Configuration::get('EBAY_ORDER_LAST_UPDATE'));
-        $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
-
-        $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
-        $vars['currency'] = $this->context->currency;
-        $vars['url'] = $this->_getUrl($url_vars);
-        return $this->display('tableOrders.tpl', $vars);
+        $this->vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
+        $this->vars['tpl_orders_ajax'] = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/tableOrders_ajax.tpl';
+        $this->vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+        $this->vars['currency'] = $this->context->currency;
+        $this->vars['url'] = $this->_getUrl($url_vars);
+        return $this->display('tableOrders.tpl', $this->vars);
     }
 }

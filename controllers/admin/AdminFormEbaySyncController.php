@@ -213,7 +213,9 @@ class AdminFormEbaySyncController extends ModuleAdminController
 // Insert and update categories
         if ($store_categories = Tools::getValue('store_category')) {
             // insert rows
-            EbayStoreCategoryConfiguration::update($id_ebay_profile, $store_categories, Tools::getValue('ps_categories'));
+            foreach (explode(',', Tools::getValue('ps_categories')) as $id_category) {
+                EbayStoreCategoryConfiguration::update($id_ebay_profile, $store_categories, (int)$id_category);
+            }
         }
 
 

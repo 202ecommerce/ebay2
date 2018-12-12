@@ -26,6 +26,22 @@
 
 class AdminEbayOrdersController extends ModuleAdminController
 {
+    public function ajaxProcessLoadOrderHistory()
+    {
+        $pagination = EbayOrder::getPaginatedOrdersErrors(Tools::getValue('id_ebay_profile'), Tools::getValue('page'));
+        $context = Context::getContext();
+        $template_vars = array(
+            'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
+            'id_employee' => Tools::getValue('id_employee'),
+            'currency' => $context->currency,
+            );
+
+        $ebay = Module::getInstanceByName('ebay');
+        $context->smarty->assign($template_vars);
+        $context->smarty->assign($pagination);
+        die($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/tableOrders_ajax.tpl'));
+    }
+
     public function ajaxProcessResyncOrder()
     {
         $ebay = Module::getInstanceByName('ebay');
@@ -76,5 +92,20 @@ class AdminEbayOrdersController extends ModuleAdminController
         $reference_ebay = Tools::getValue('reference_ebay') ? Tools::getValue('reference_ebay') : '';
         EbayOrderErrors::deleteByOrderRef($reference_ebay);
         die();
+    }
+
+    public function ajaxProcessLoadReturnsHistory()
+    {
+        $pagination = EbayOrder::getPaginatedOrderReturns(Tools::getValue('page'));
+        $context = Context::getContext();
+        $template_vars = array(
+            'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
+            'id_employee' => Tools::getValue('id_employee')
+        );
+
+        $ebay = Module::getInstanceByName('ebay');
+        $context->smarty->assign($template_vars);
+        $context->smarty->assign($pagination);
+        die($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/table_returns_ajax.tpl'));
     }
 }

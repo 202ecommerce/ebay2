@@ -138,24 +138,7 @@ class EbayApiLog extends ObjectModel
         if ($page_current && $length) {
             $limit = (int) $length;
             $offset = $limit * ( (int) $page_current - 1 );
-            $query = "SELECT * FROM "._DB_PREFIX_."ebay_api_log 
-                       WHERE id_ebay_profile = ".(int) $id_ebay_profile;
-            if ($search['id_product']) {
-                $query .= " AND id_product LIKE '%".(int) $search['id_product']."%'";
-            }
-            if ($search['id_product_attribute']) {
-                $query .= " AND id_product_attribute LIKE '%".(int) $search['id_product_attribute']."%'";
-            }
-            if ($search['status']) {
-                $query .= " AND status LIKE '%".pSQL($search['status'])."%'";
-            }
-            if ($search['type']) {
-                $query .= " AND type LIKE '%".pSQL($search['type'])."%'";
-            }
-            if ($search['date']) {
-                $query .= " AND date_add LIKE '%".pSQL($search['date'])."%'";
-            }
-
+            $query = self::getAllApiLogsQueryBySearch($id_ebay_profile, $search);
             $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
             //var_dump($query); die();
             return DB::getInstance()->ExecuteS($query);
@@ -163,5 +146,34 @@ class EbayApiLog extends ObjectModel
             $sql_select = "SELECT * FROM `"._DB_PREFIX_."ebay_api_log` WHERE `id_ebay_profile` = ".pSQL($id_ebay_profile)." ORDER BY `date_add`";
             return DB::getInstance()->executeS($sql_select);
         }
+    }
+
+    private static function getAllApiLogsQueryBySearch($id_ebay_profile, $search)
+    {
+        $query = "SELECT * FROM "._DB_PREFIX_."ebay_api_log 
+                       WHERE id_ebay_profile = ".(int) $id_ebay_profile;
+        if ($search['id_product']) {
+            $query .= " AND id_product LIKE '%".(int) $search['id_product']."%'";
+        }
+        if (isset($search['id_product_attribute']) && $search['id_product_attribute'] != '') {
+            $query .= " AND id_product_attribute LIKE '%".(int) $search['id_product_attribute']."%'";
+        }
+        if ($search['status']) {
+            $query .= " AND status LIKE '%".pSQL(trim($search['status']))."%'";
+        }
+        if ($search['type']) {
+            $query .= " AND type LIKE '%".pSQL(trim($search['type']))."%'";
+        }
+        if ($search['date']) {
+            $query .= " AND date_add LIKE '%".pSQL($search['date'])."%'";
+        }
+        return $query;
+    }
+
+    public static function getAllApiLogsSearchCount($id_ebay_profile, $search)
+    {
+        $query = self::getAllApiLogsQueryBySearch($id_ebay_profile, $search);
+        $result = DB::getInstance()->ExecuteS($query);
+        return count($result);
     }
 }

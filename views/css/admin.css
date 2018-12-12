@@ -695,4 +695,27 @@
   content: none;
 }
 
+.links-wrapper {
+  display: inline-block;
+  float: right;
+  margin: -16px -16px -16px 0 !important;
+  text-align: center;
+}
+.links-wrapper > div {
+  position: relative;
+  padding: 10px 15px;
+}
+.links-wrapper > div {
+  border-left: 1px solid #dedede;
+}
+.links-wrapper > div:last-child {
+  border-left: 0;
+}
+.links-wrapper a > * {
+  display: block;
+}
+.links-wrapper a > i {
+  font-size: 30px;
+}
+
 /*# sourceMappingURL=admin.css.map */

@@ -29,7 +29,7 @@
     </h4>
 
     {if empty($products)}
-        <div class="table-block__message table-block__holder">
+        <div class="table-block__message table-block__message_green table-block__holder">
             <div class="table-block__message-holder">
                 <p>{l s='No excluded products' mod='ebay'}</p>
             </div>

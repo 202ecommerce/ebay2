@@ -171,7 +171,7 @@
         deleteLogsByIds(id_log);
     });
 
-    $(document).on('click', '.loadListApiLog', function(){
+    $('.loadListApiLog').click(function(){
         $.ajax({
             url: apilogs_ajax_link+'&configure=ebay',
             data: {
@@ -193,28 +193,10 @@
         });
     });
 
-    $(document).on('click', '.navPaginationListLogApiTab .pagination span', function(){
+    $('.navPaginationListLogApiTab .pagination span').click(function(){
         var page = $(this).attr('value');
         if(page){
-            $.ajax({
-                url: apilogs_ajax_link+'&configure=ebay',
-                data: {
-                    ajax: true,
-                    action: 'PaginationLogApi',
-                    id_employee: id_employee,
-                    profile: id_ebay_profile,
-                    page: page
-                },
-                beforeSend : function(){
-                    $('#contentLogApiTab').empty();
-                    var html = '<div class="ajaxLoadingFormSyncTab" style="position:relative; height:60px"><img src="../modules/ebay/views/img/ajax-loader-small.gif" style="position:absolute; left:50%; width:60px;"></div>';
-                    $('#contentLogApiTab').append(html);
-                },
-                success: function(data)
-                {
-                    $('#contentLogApiTab').parent().html(data);
-                }
-            });
+            search(page);
         }
     });
 
@@ -284,7 +266,9 @@
         })
     });
 
-    $('#searchBtnLogApi').click(search);
+    $('#searchBtnLogApi').click(function () {
+        search(1);
+    });
     $('#reset_apilogs').click(function(){
             $.ajax({
                 url: apilogs_ajax_link+'&configure=ebay',
@@ -307,7 +291,7 @@
         });
     }
     );
-    function search() {
+    function search(page) {
         var id_prod;
         var id_prod_attr;
         var status;
@@ -326,7 +310,7 @@
                 ajax: true,
                 action: 'PaginationLogApi',
                 id_shop: id_shop,
-                page: 1,
+                page: page,
                 id_prod: id_prod,
                 id_prod_attr: id_prod_attr,
                 status: status,

@@ -34,9 +34,8 @@ function loadOrphans() {
             ajax: true,
             action: 'LoadTableOrphanListings',
         },
-        success: function(data)
-        {
-            $('#ebayOrphanListing').fadeOut(400, function(){
+        success: function (data) {
+            $('#ebayOrphanListing').fadeOut(400, function () {
                 $(this).html(data).fadeIn();
             })
         }
@@ -45,6 +44,41 @@ function loadOrphans() {
   
 }
 
+function searchOrphan() {
+    var id_prod_ebay;
+    var name_product;
+    var ps_category;
+    var ebay_category;
+
+    id_prod_ebay = $('#id_product_ebay_search').attr('value');
+    name_product = $('#name_product_search').attr('value');
+    ps_category = $('#ps_category_search').attr('value');
+    ebay_category = $('#ebay_category_search').attr('value');
+
+    var data = {
+        id_employee: id_employee,
+        profile: id_ebay_profile,
+        id_shop: id_shop,
+        page: 1,
+        name_product: name_product,
+        id_prod_ebay: id_prod_ebay,
+        ps_category: ps_category,
+        ebay_category: ebay_category,
+        ajax: true,
+        action: 'LoadTableOrphanListings',
+    };
+
+    $.ajax({
+        type: "POST",
+        url: ebayOrphanListingsController,
+        data: data,
+        success: function (data) {
+            $('#ebayOrphanListing').fadeOut(400, function () {
+                $(this).html(data).fadeIn();
+            })
+        }
+    });
+}
 
 
 function delete_orphan(index, element) {
@@ -140,6 +174,11 @@ var element_for_delete;
 
 $(document).ready(function () {
 
+    $(document).on('click', '.orphanCheckAll', function(){
+        var state = $(this).prop('checked');
+        $('.checkboxfordelete').prop('checked', state);
+    });
+
     $(document).on('click', '.delete_all_orphans', function(){
         $('#popin-delete-all-products').show();
     });
@@ -186,8 +225,14 @@ $(document).ready(function () {
     content_ebay_relistings.live('click', 'button', function () {
         loadOrphans();
     });
-
-
+    var resetBtn = $('#reset_list_orphanEbay');
+    resetBtn.live('click', 'button', function () {
+        loadOrphans();
+    });
+    var applyBtn = $('#searchBtnOrphan');
+    applyBtn.live('click', 'button', function () {
+        searchOrphan();
+    });
 
 });
 /*

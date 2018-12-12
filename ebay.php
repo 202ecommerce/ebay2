@@ -130,6 +130,14 @@ class Ebay extends Module
 
     private $stats_version;
 
+    const PRIORITY_DELETE_PRODUCT = 1;
+
+    const PRIORITY_UPDATE_STOCK = 2;
+
+    const PRIORITY_UPDATE_PRODUCT = 3;
+
+    const PRIORITY_CREATE_PRODUCT = 4;
+
     /**
      * Construct Method
      *
@@ -139,7 +147,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.1.4';
+        $this->version = '2.1.5';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -1609,7 +1617,7 @@ class Ebay extends Module
                 $this->html .= $this->display('alert_tabs.tpl', $vars);
             }
 
-            if (Configuration::get('EBAY_SEND_STATS')) {
+            if (true) {
                 $ebay_stat = new EbayStat($this->stats_version, $this->ebay_profile);
                 $ebay_stat->save();
             }
@@ -2476,7 +2484,7 @@ class Ebay extends Module
                         'quantity' => $combinaison['quantity'],
                         'category' => $p['name_cat'],
                         'prestashop_title' => $data['name'],
-                        'ebay_title' => EbayRequest::prepareTitle($data),
+                        'ebay_title' => EbayRequest::prepareTitle($data, $this->ebay_profile->id_lang),
                         'reference_ebay' => $reference_ebay,
                         'link' => $url,
                         'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
@@ -2494,7 +2502,7 @@ class Ebay extends Module
                     'quantity' => $product->quantity,
                     'category' => $p['name_cat'],
                     'prestashop_title' => $data['name'],
-                    'ebay_title' => EbayRequest::prepareTitle($data),
+                    'ebay_title' => EbayRequest::prepareTitle($data, $this->ebay_profile->id_lang),
                     'reference_ebay' => $reference_ebay,
                     'link' => $url,
                     'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),

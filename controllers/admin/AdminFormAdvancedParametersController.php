@@ -29,11 +29,25 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
     public function init()
     {
         if (Tools::getValue('action') == 'getLogs') {
-            $url = dirname(__FILE__) . '/../../log/request.txt';
-            $data = Tools::file_get_contents($url);
-            $text = htmlentities($data);
-            die('<pre>' . $text);
+            $this->getLogs();
         }
+    }
+
+    private function getLogs()
+    {
+        $url = dirname(__FILE__) . '/../../log/request.txt';
+        $data = Tools::file_get_contents($url);
+        $text = htmlentities($data);
+        die('<pre>' . $text);
+    }
+
+    public function ajaxProcessClearLogs(){
+        $url = dirname(__FILE__) . '/../../log/request.txt';
+        if (file_exists($url) && Configuration::get('EBAY_ACTIVATE_LOGS')) {
+            file_put_contents($url, "");
+            echo json_encode("success");
+        }
+
     }
 
     public function ajaxProcessCheckDatabase()

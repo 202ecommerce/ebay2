@@ -198,7 +198,9 @@
   .badge {
     padding: 0 5px;
   }
-
+  input[readonly]{
+    cursor: pointer;
+  }
   // Colored badge in panel-heading
   .panel-heading .badge {
     &.badge-success {
