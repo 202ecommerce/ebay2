@@ -350,7 +350,8 @@ class EbayDbValidator
             'date_add' => array('type' => 'TIMESTAMP', 'length' => null),
             'date_upd' => array('type' => 'TIMESTAMP', 'length' => null),
             'retry' => array('type' => 'int', 'length' => 30),
-            'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true)
+            'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true),
+            'priority'  => array('type' => 'int', 'length' => 2, 'null' => true),
         ),
         'ebay_catalog_configuration' => array(
             'id' => array('type' => 'INT', 'length' => 11, 'primary' => true, 'auto_increment' => true),
