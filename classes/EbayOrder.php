@@ -179,8 +179,8 @@ class EbayOrder
         $order_in_ps = (boolean) DB::getInstance()->getValue('SELECT `id_order`
 			FROM `'._DB_PREFIX_.'orders`
 			WHERE `payment` LIKE \'%' . pSQL($this->id_order_seller) . '%\'');
-        
-	return $order_in_ebay_order_table || $order_in_ps;
+
+        return $order_in_ebay_order_table || $order_in_ps;
     }
 
     /**
@@ -252,7 +252,6 @@ class EbayOrder
         }
 
         $format = new TotFormat();
-	
         $address->id_country = (int) Country::getByIso($this->country_iso_code);
         $address->alias = 'eBay';
         $address->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
@@ -263,9 +262,9 @@ class EbayOrder
         $address->city = $format->formatCityName($this->city);
         if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
             $address->id_state = $id_state;
-        } elseif($id_state = State::getIdByName(pSQL(trim($this->state)))) {
+        } elseif ($id_state = State::getIdByName(pSQL(trim($this->state)))) {
             $state = new State((int)$id_state);
-            if($state->id_country == $address->id_country) {
+            if ($state->id_country == $address->id_country) {
                 $address->id_state = $state->id;
             }
         }
@@ -529,7 +528,7 @@ class EbayOrder
 
         //Change context's currency
         $this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
-        if(Configuration::get('PS_TAX_ADDRESS_TYPE') == 'id_address_delivery') {
+        if (Configuration::get('PS_TAX_ADDRESS_TYPE') == 'id_address_delivery') {
             $this->context->country = new Country((int) Country::getByIso($this->country_iso_code));
         }
 
@@ -547,12 +546,13 @@ class EbayOrder
                 new Shop((int) $id_shop)
             );
         } catch (Exception $e) {
-	    Ebay::debug($e->getMessage()); 
+            Ebay::debug($e->getMessage());
             $this->_writeLog($id_ebay_profile, $e->getMessage(), false, 'End of validate order FAIL!');
             $this->delete();
         }
-	
-	if(!$payment->currentOrder) {
+
+
+        if (!$payment->currentOrder) {
             $id_cart = $this->carts[$id_shop]->id;
             $query = new DBQuery();
             $query->select('o.id_order');
@@ -560,7 +560,7 @@ class EbayOrder
             $query->leftJoin('ebay_order_order', 'eoo', 'o.id_order = eoo.id_order');
             $query->where('o.payment LIKE "%ebay%" AND eoo.id_order IS NULL');
             $id_order = (int)DB::getInstance()->getValue($query);
-	    $payment->currentOrder = $id_order;
+            $payment->currentOrder = $id_order;
         }
 
         $this->id_orders[$id_shop] = $payment->currentOrder;
@@ -613,14 +613,12 @@ class EbayOrder
                 'reduction_amount' => 0,
             );
 
-
-                $detail_data = array_merge($detail_data, array(
-                    'unit_price_tax_incl' => (float) $product['price'],
-                    'unit_price_tax_excl' => (float) ($product['price'] / $coef_rate),
-                    'total_price_tax_incl' => (float) ($product['price'] * $product['quantity']),
-                    'total_price_tax_excl' => (float) (($product['price'] / $coef_rate) * $product['quantity']),
-                ));
-
+            $detail_data = array_merge($detail_data, array(
+                'unit_price_tax_incl' => (float) $product['price'],
+                'unit_price_tax_excl' => (float) ($product['price'] / $coef_rate),
+                'total_price_tax_incl' => (float) ($product['price'] * $product['quantity']),
+                'total_price_tax_excl' => (float) (($product['price'] / $coef_rate) * $product['quantity']),
+            ));
 
             $dbEbay->autoExecute(
                 _DB_PREFIX_.'order_detail',
@@ -749,7 +747,7 @@ class EbayOrder
     {
         $this->id_ebay_order = EbayOrder::insert(array(
             'id_order_ref' => pSQL($this->id_order_ref),
-	    'id_order' => 0
+            'id_order' => 0
         ));
         if ($this->id_ebay_order) {
             $this->_writeLog($id_ebay_profile, 'add_orders', $this->id_ebay_order);
@@ -885,9 +883,7 @@ class EbayOrder
         $products = array();
 
         foreach ($transactions->Transaction as $transaction) {
-
             $id_product = 0;
-
             $id_product_attribute = 0;
             $id_ebay_profile = 0;
             $quantity = (string) $transaction->QuantityPurchased;
@@ -950,7 +946,7 @@ class EbayOrder
                     }
                 }
 
-                if (!$product_has_find ) {
+                if (!$product_has_find) {
                     //Not possible with ebay multivariation products to retrieve the correct product
                     if (!isset($transaction->Variation->SKU) && !isset($transaction->Item->SKU)) {
                         if ($p = EbayProduct::getProductsIdFromItemId($transaction->Item->ItemID)) {
@@ -959,7 +955,8 @@ class EbayOrder
                                 'id_product_attribute' => $p['id_product_attribute'],
                                 'id_ebay_profile' => 0,
                                 'quantity' => $quantity,
-                                'price' => (string) $transaction->TransactionPrice);
+                                'price' => (string) $transaction->TransactionPrice
+                            );
                         }
                     }
                 }
@@ -1248,11 +1245,12 @@ class EbayOrder
         $vars['stop'] = $stop;
         return $vars;
     }
-      public static function deletingInjuredOrders()
+
+    public static function deletingInjuredOrders()
     {
         $delete = 'DELETE eo.* FROM ' . _DB_PREFIX_ . 'ebay_order eo
                     LEFT JOIN ' . _DB_PREFIX_ . 'ebay_order_order eoo ON eo.id_ebay_order = eoo.id_ebay_order
                     WHERE eoo.id_ebay_order_order IS NULL';
         return DB::getInstance()->execute($delete);
-	}
+    }
 }

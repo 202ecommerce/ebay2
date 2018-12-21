@@ -53,7 +53,7 @@ class EbayShippingService
         if (EbayShippingService::getTotal($ebay_site_id)) {
             return EbayShippingService::getAll($ebay_site_id);
         }
-		
+
         $ebay = new EbayRequest();
         $carriers = $ebay->getCarriers();
 
@@ -66,7 +66,6 @@ class EbayShippingService
 
     public static function getCarrierByName($name, $ebay_site_id)
     {
-        
         return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_shipping_service
 			WHERE `ebay_site_id` = '.(int) $ebay_site_id .' AND `shippingService` = "'. pSQL($name) .'"');

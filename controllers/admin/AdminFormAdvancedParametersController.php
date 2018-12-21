@@ -41,13 +41,13 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
         die('<pre>' . $text);
     }
 
-    public function ajaxProcessClearLogs(){
+    public function ajaxProcessClearLogs()
+    {
         $url = dirname(__FILE__) . '/../../log/request.txt';
         if (file_exists($url) && Configuration::get('EBAY_ACTIVATE_LOGS')) {
             file_put_contents($url, "");
             echo json_encode("success");
         }
-
     }
 
     public function ajaxProcessCheckDatabase()
