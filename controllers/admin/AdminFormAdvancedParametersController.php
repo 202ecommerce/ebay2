@@ -113,6 +113,9 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
                     '.pSQL($cat['CategoryID']).', 
                     '.pSQL($cat['CategoryParentID']).', 
                     '.pSQL($cat['CategoryLevel']).')');
+                            if (isset($cat['BestOfferEnabled'])) {
+                                EbayCategory::setBestOffer($cat['CategoryID'], $cat['BestOfferEnabled'], Tools::getValue('id_profile_ebay'));
+                            }
                         };
                         die(Tools::jsonEncode($cat));
                     } elseif ($step == 3) {

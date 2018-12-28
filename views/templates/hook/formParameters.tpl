@@ -377,6 +377,25 @@
 					</div>
 				</div>
 			</div>
+	{if isset($sync_offers_by_cron_url)}
+				<div class="form-group">
+					<label class="control-label col-sm-3">
+						{l s='Sync Offers' mod='ebay'}
+					</label>
+					<div class="col-sm-9">
+						<div class="radio">
+							<label for="sync_offers_mode_cron">
+								<input type="radio" size="20" id="sync_offers_mode_cron" name="sync_offers_mode" class="sync_offers_mode" value="cron" checked="checked"/>
+								{l s='by CRON task' mod='ebay'}
+							</label>
+						</div>
+
+						<div class="help-block">
+							<a id="sync_products_by_cron_url" href="{$sync_offers_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_offers_by_cron_url}</a>
+						</div>
+					</div>
+				</div>
+			{/if}
 
 			{if $help_Cat_upd.ps_version > '1.4.11'}
 				<div class="form-group">

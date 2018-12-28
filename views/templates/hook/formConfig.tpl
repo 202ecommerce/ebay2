@@ -70,7 +70,9 @@
 					<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a></li>
 
 					<li role="presentation" id="menuTab78" class="menuTabButton"><a href="#">{l s='Order Returns' mod='ebay'}</a></li>
-
+					{if isset($best_offers)}
+						<li role="presentation" id="menuTab999" class="menuTabButton"><a href="#">{l s='Best Offers' mod='ebay'}</a></li>
+					{/if}
 				</ul>
 
 
@@ -132,6 +134,9 @@
 					<div id="menuTab14Sheet" class="tabItem tab-pane"><div class="panel">{$orders_sync}</div></div>
 					<div id="menuTab79Sheet" class="tabItem tab-pane"><div class="panel">{$orders_returns_sync}</div></div>
 					<div id="menuTab78Sheet" class="tabItem tab-pane"><div class="panel">{$order_returns}</div></div>
+					{if isset($best_offers)}
+						<div id="menuTab999Sheet" class="tabItem tab-pane">{$best_offers}</div>
+					{/if}
 					<div id="menuTab81Sheet" class="tabItem tab-pane">{$dashboard}</div>
 					<div id="menuTab16Sheet" class="tabItem tab-pane"><div class="panel">{$orphan_listings}</div></div>
 					<div id="menuTab80Sheet" class="tabItem tab-pane"><div class="panel">{$table_product_error}</div></div>
