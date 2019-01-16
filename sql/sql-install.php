@@ -414,3 +414,20 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
             `name` VARCHAR(250),
             `value` VARCHAR(250)
             ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_best_offers` (
+	`id_best_offer` int(16) NOT NULL AUTO_INCREMENT,
+	`id_ebay_profile` int(16) NOT NULL,
+	`itemid` varchar(40) NOT NULL,
+	`best_offer_ebay_id` varchar(40) NOT NULL,
+	`id_product` int(16) NOT NULL,
+	`seller_message` text,
+	`id_product_attribute` int(16),
+	`status` VARCHAR(125),
+    `date_add` datetime NOT NULL,
+    `expirationTime` datetime,
+    `price` float(8,2),
+    `quantity` int(16),
+    `product_title` VARCHAR(125),
+	PRIMARY KEY  (`id_best_offer`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

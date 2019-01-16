@@ -45,7 +45,7 @@ class EbayBestOffersTab extends EbayTab
                 'type'  => 'text',
             ),
             'product_title' => array(
-                'title' => 'Id product',
+                'title' => 'Product Name',
                 'type'  => 'text',
             ),
             'seller_message' => array(
@@ -74,6 +74,7 @@ class EbayBestOffersTab extends EbayTab
         $helper->title = 'Best Offers';
         $helper->table = 'ebay_best_offers';
         $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->no_link = true;
 
 
         //$currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&totlookbook_edit='.Tools::getValue('totlookbook_edit', 'global');

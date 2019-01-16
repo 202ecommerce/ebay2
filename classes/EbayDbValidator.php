@@ -55,6 +55,7 @@ class EbayDbValidator
             'is_multi_sku' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
             'name' => array('type' => 'varchar', 'length' => 255),
             'k_type' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
+            'best_offer_enabled' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
         ),
 
         'ebay_category_condition' => array(
