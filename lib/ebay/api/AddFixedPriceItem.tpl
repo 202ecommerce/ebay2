@@ -71,7 +71,7 @@
 		<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
 		<ListingType>FixedPriceItem</ListingType>
-		{if isset($minimumBestOfferPrice) && !$minimumBestOfferPrice}
+		{if isset($minimumBestOfferPrice)  && $minimumBestOfferPrice > 0}
 			<ListingDetails>
 				<MinimumBestOfferPrice>{$minimumBestOfferPrice|escape:'htmlall':'UTF-8'}</MinimumBestOfferPrice>
 			</ListingDetails>
