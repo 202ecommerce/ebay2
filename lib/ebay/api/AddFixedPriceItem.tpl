@@ -41,7 +41,7 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}
 				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture|replace:'https://':'http://'|escape:'htmlall':'UTF-8'}</PictureURL>
+					<PictureURL>{$picture|escape:'htmlall':'UTF-8'}</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}
@@ -76,7 +76,7 @@
 		<ItemSpecifics>
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
-					<Name><![CDATA[{$name|unescape:"UTF-8" nofilter}]]></Name>
+					<Name><![CDATA[{$name nofilter}]]></Name>
 					{if $value|is_array}
 						{foreach $value as $item}
 							{if $item != ""}

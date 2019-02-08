@@ -57,7 +57,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
 
         $action_url = $this->_getUrl($url_vars);
-
+	    $rootCategory = Category::getRootCategory($this->context->language->id, $this->context->shop);
         // Loading categories
         $category_config_list = array();
         //var_dump(Category::getCategories($this->context->language->id, true, true, ' and c.id_category=5')); die();
@@ -76,9 +76,9 @@ class EbayFormEbaySyncTab extends EbayTab
                 $query_filter = " AND 0";
             }
 
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), 0, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), $rootCategory->id, array(), '', $searche);
         } else {
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), 0);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), $rootCategory->id);
         }
 
         $categories = array();

@@ -1562,7 +1562,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
-
+	
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
@@ -1606,7 +1606,7 @@ class Ebay extends Module
 
         // If isset Post Var, post process else display form
         if (!empty($_POST) && (Tools::isSubmit('submitSave') || Tools::isSubmit('btnSubmitSyncAndPublish') || Tools::isSubmit('btnSubmitSync'))) {
-            $errors = null;
+            $errors = array();
 
             if (!count($errors)) {
                 $this->__postProcess();

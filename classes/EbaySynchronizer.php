@@ -153,7 +153,7 @@ class EbaySynchronizer
         } else {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
             $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
-            if ($data['variations'][0]) {
+            if (isset($data['variations'][0])) {
                 $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
             }
             
@@ -231,7 +231,7 @@ class EbaySynchronizer
         /** @var EbayCategory $ebay_category */
         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
 
-        $variations = null;
+        $variations = array();
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
 
         if (!empty($prodAttributeCombinations)) {
@@ -1185,7 +1185,7 @@ class EbaySynchronizer
 
         /** @var EbayCategory $ebay_category */
         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
-        $variations = null;
+        $variations = array();
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
         if (!empty($prodAttributeCombinations)) {
             $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute, $limitEbayStock);

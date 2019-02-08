@@ -371,7 +371,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                 $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
                 $root_category = Category::getRootCategory();
                 $categories = Category::getCategories(Tools::getValue('id_lang'));
-                $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+                $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'));
                 $nb_categories = count($category_list);
 
                 $ebay_category_list = Db::getInstance()->executeS('SELECT *
@@ -686,7 +686,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $ebay = Module::getInstanceByName('ebay');
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
-        $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+        $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'));
 
         $vars = array(
             'categoryList' => $category_list,

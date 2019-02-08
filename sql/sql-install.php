@@ -67,7 +67,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_product` (
 		  `id_product_ref` varchar(32) NOT NULL,
 		  `date_add` datetime NOT NULL,
 		  `date_upd` datetime NOT NULL,
-		  `id_shipping_policies` varchar(255) NULL,
+		  `id_shipping_policies` varchar(255) DEFAULT NULL,
 		  `id_category_ps` int(16) NOT NULL,
 		  UNIQUE(`id_product_ref`),
 		  PRIMARY KEY  (`id_ebay_product`),
