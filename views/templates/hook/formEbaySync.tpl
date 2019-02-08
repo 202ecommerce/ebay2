@@ -383,7 +383,7 @@
       });
     });
 
-    $('div.cat_list ul li').live('click', function () {
+    $(document).on('click', 'div.cat_list ul li', function () {
       $('.category_ps_list').show();
       $('.category_ps_list').append($(this));
       $('.category_ps_list').children().last().children('button').remove();
