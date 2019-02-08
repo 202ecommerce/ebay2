@@ -38,6 +38,7 @@ $classes_to_load = array(
     'EbayCategory',
     'EbayCategoryConfiguration',
     'EbayDeliveryTimeOptions',
+    'EbayBestOffers',
     'EbayOrder',
     'EbayProduct',
     'EbayReturnsPolicy',
@@ -68,6 +69,7 @@ $classes_to_load = array(
     'EbayStoreCategory',
     'EbayStoreCategoryConfiguration',
     'tabs/EbayTab',
+    'tabs/EbayBestOffersTab',
     'tabs/EbayFormParametersTab',
     'tabs/EbayFormAdvancedParametersTab',
     'tabs/EbayFormShippingTab',
@@ -129,6 +131,8 @@ class Ebay extends Module
     private $is_multishop;
 
     private $stats_version;
+
+    public $best_offer = false;
 
     const PRIORITY_DELETE_PRODUCT = 1;
 
@@ -2042,6 +2046,10 @@ class Ebay extends Module
 
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
+        if ($this->best_offer) {
+            $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
+        }
+
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
@@ -2107,6 +2115,9 @@ class Ebay extends Module
             'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id),
             );
 
+        if ($this->best_offer) {
+            $smarty_vars['best_offers'] = $best_offers->getContent($this->ebay_profile->id);
+        }
 
         $this->smarty->assign($smarty_vars);
 
@@ -2601,5 +2612,50 @@ class Ebay extends Module
     public function isSymfonyProject()
     {
         return (bool) version_compare(_PS_VERSION_, '1.7', '>=');
+    }
+
+    public function addAdditionalInfoForProduct($id_product, $id_product_attribute = 0, $id_category_ebay = false, $ebay_site_id = false)
+    {
+       return array();
+    }
+
+    public function getEbayLastOffers()
+    {
+        $ebay = new EbayRequest(5);
+        $page = 1;
+        $orders = array();
+        $nb_page_orders = 100;
+        EbayBestOffers::clear();
+        while ($nb_page_orders > 0 && $page < 10) {
+            $page_orders = array();
+            foreach ($ebay->getBestOffers($page) as $offer_xml) {
+                $ps_product = EbayProduct::getProductsIdFromItemId($offer_xml->ItemBestOffers->Item->ItemID);
+                $itemId = $offer_xml->ItemBestOffers->Item->ItemID;
+
+                foreach ($offer_xml->ItemBestOffers->BestOfferArray as $offer) {
+                    $date = Tools::substr((string) $offer->BestOffer->ExpirationTime, 0, 10).' '.Tools::substr((string) $offer->BestOffer->ExpirationTime, 11, 8);
+                    $bestOffer = new EbayBestOffers();
+                    $bestOffer->itemId = $itemId;
+                    $bestOffer->product_title = pSQL($offer_xml->ItemBestOffers->Item->Title);
+                    $bestOffer->best_offer_ebay_id = pSQL($offer->BestOffer->BestOfferID);
+                    $bestOffer->status = pSQL($offer->BestOffer->Status);
+                    $bestOffer->expirationTime = $date;
+                    $bestOffer->price = $offer->BestOffer->Price;
+                    $bestOffer->quantity = $offer->BestOffer->Quantity;
+                    $bestOffer->id_product = $ps_product['id_product'];
+                    $bestOffer->id_product_attribute = $ps_product['id_product_attribute'];
+                    $bestOffer->id_ebay_profile = $this->ebay_profile->id;
+                    $bestOffer->seller_message = pSQL($offer->BestOffer->BuyerMessage);
+                    $bestOffer->save();
+                }
+            }
+
+            $nb_page_orders = count($page_orders);
+            $orders = array_merge($orders, $page_orders);
+
+            $page++;
+        }
+
+        return $orders;
     }
 }

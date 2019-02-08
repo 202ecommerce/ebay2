@@ -38,6 +38,7 @@ class EbayCategory
 
     private $items_specific_values;
     private $conditions_values;
+    private $best_offer_enabled;
 
     public function __construct($ebay_profile, $id_category_ref, $id_category = null)
     {
@@ -347,5 +348,27 @@ class EbayCategory
         $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
             'k_type' => ($value == 'true') ? 1 : 0,
             ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref .' AND `id_country` = ' . (int)$ebay_site_id, 0, true, true);
+    }
+
+    public static function setBestOffer($id_category_ref, $value, $id_ebay_profile)
+    {
+        $dbEbay = new DbEbay();
+        $db = Db::getInstance();
+        $dbEbay->setDb($db);
+        $ebay_profile= new EbayProfile($id_ebay_profile);
+        $ebay_site_id = $ebay_profile->ebay_site_id;
+        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array(
+            'best_offer_enabled' => ($value == 'true') ? 1 : 0,
+        ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref .' AND `id_country` = ' . (int)$ebay_site_id, 0, true, true);
+    }
+
+    public static function getBestOffer($id_category_ref, $ebay_site_id)
+    {
+        $row = Db::getInstance()->getRow('SELECT `best_offer_enabled`
+			FROM `'._DB_PREFIX_.'ebay_category`
+			WHERE `id_category_ref` = '.(int)$id_category_ref.'
+			AND `id_country` = '.(int)$ebay_site_id);
+
+        return $row['best_offer_enabled'];
     }
 }

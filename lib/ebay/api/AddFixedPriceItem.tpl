@@ -27,6 +27,12 @@
 	<ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
 	<WarningLevel>High</WarningLevel>
 	<Item>
+		{if isset($bestOfferEnabled)}
+			<BestOfferDetails>
+				<BestOfferEnabled>{$bestOfferEnabled|escape:'htmlall':'UTF-8'}</BestOfferEnabled>
+			</BestOfferDetails>
+		{/if}
+
 		{if $sku && isset($sku) && !$variations}
 			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
@@ -65,6 +71,11 @@
 		<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
 		<ListingType>FixedPriceItem</ListingType>
+		{if isset($minimumBestOfferPrice)  && $minimumBestOfferPrice > 0}
+			<ListingDetails>
+				<MinimumBestOfferPrice>{$minimumBestOfferPrice|escape:'htmlall':'UTF-8'}</MinimumBestOfferPrice>
+			</ListingDetails>
+		{/if}
 		{if isset($pay_pal_email_address) && !$bp_active}
 		<PaymentMethods>PayPal</PaymentMethods>
 		<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>

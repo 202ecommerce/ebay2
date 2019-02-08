@@ -287,7 +287,7 @@ class EbayProduct
 
         $sql .= ' AND pl.id_shop = '.(int)$ebay_profile->id_shop;
 
-        $sql .= ') WHERE p.id_product IS NOT NULL ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+        $sql .= ') WHERE p.id_product IS NOT NULL AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }

@@ -55,6 +55,7 @@ class EbayDbValidator
             'is_multi_sku' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
             'name' => array('type' => 'varchar', 'length' => 255),
             'k_type' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
+            'best_offer_enabled' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
         ),
 
         'ebay_category_condition' => array(
@@ -350,7 +351,8 @@ class EbayDbValidator
             'date_add' => array('type' => 'TIMESTAMP', 'length' => null),
             'date_upd' => array('type' => 'TIMESTAMP', 'length' => null),
             'retry' => array('type' => 'int', 'length' => 30),
-            'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true)
+            'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true),
+            'priority'  => array('type' => 'int', 'length' => 2, 'null' => true),
         ),
         'ebay_catalog_configuration' => array(
             'id' => array('type' => 'INT', 'length' => 11, 'primary' => true, 'auto_increment' => true),

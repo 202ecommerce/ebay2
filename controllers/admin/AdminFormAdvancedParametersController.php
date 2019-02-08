@@ -41,13 +41,13 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
         die('<pre>' . $text);
     }
 
-    public function ajaxProcessClearLogs(){
+    public function ajaxProcessClearLogs()
+    {
         $url = dirname(__FILE__) . '/../../log/request.txt';
         if (file_exists($url) && Configuration::get('EBAY_ACTIVATE_LOGS')) {
             file_put_contents($url, "");
             echo json_encode("success");
         }
-
     }
 
     public function ajaxProcessCheckDatabase()
@@ -113,6 +113,9 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
                     '.pSQL($cat['CategoryID']).', 
                     '.pSQL($cat['CategoryParentID']).', 
                     '.pSQL($cat['CategoryLevel']).')');
+                            if (isset($cat['BestOfferEnabled'])) {
+                                EbayCategory::setBestOffer($cat['CategoryID'], $cat['BestOfferEnabled'], Tools::getValue('id_profile_ebay'));
+                            }
                         };
                         die(Tools::jsonEncode($cat));
                     } elseif ($step == 3) {

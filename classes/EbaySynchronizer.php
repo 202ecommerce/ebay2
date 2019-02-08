@@ -267,6 +267,14 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
         );
+
+        $ebay = Module::getInstanceByName('ebay');
+        $additionalInfo =  $ebay->addAdditionalInfoForProduct($product->id, $id_product_attribute, $ebay_category->getIdCategoryRef(), $ebay_profile->ebay_site_id);
+
+        if (!empty($additionalInfo)) {
+            $data = array_merge($data, $additionalInfo);
+        }
+
         $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang, $id_product_attribute);
 
         if (isset($data['item_specifics']['K-type'])) {

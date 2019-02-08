@@ -32,6 +32,16 @@
 			<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
 			<Location>{$country|escape:'htmlall':'UTF-8'}</Location>
 		{/if}
+		{if isset($bestOfferEnabled)}
+			<BestOfferDetails>
+				<BestOfferEnabled>{$bestOfferEnabled|escape:'htmlall':'UTF-8'}</BestOfferEnabled>
+			</BestOfferDetails>
+		{/if}
+		{if isset($minimumBestOfferPrice) && $minimumBestOfferPrice > 0}
+			<ListingDetails>
+				<MinimumBestOfferPrice>{$minimumBestOfferPrice|escape:'htmlall':'UTF-8'}</MinimumBestOfferPrice>
+			</ListingDetails>
+		{/if}
 		{if isset($autopay)}
 			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
 		{/if}        

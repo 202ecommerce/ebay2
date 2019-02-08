@@ -744,6 +744,8 @@ class EbayRequest
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'variations' => false,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1148,8 +1150,9 @@ class EbayRequest
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'isKtype' => (bool)$ebay_category->isKtype(),
             'variations' => false,
-            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
-
+            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1231,6 +1234,8 @@ class EbayRequest
             'site' => $this->ebay_country->getSiteName(),
             'item_specifics' => $data['item_specifics'],
             'return_policy' => $return_policy,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
@@ -1282,6 +1287,8 @@ class EbayRequest
             'item_specifics' => $data['item_specifics'],
             'sku' => false,
             'return_policy' => $return_policy,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if ((!isset($data['variations']) && $data['price']) || (!$data['variations'] && $data['price'])) {
             $vars['price'] = $data['price'];
@@ -1338,6 +1345,8 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'start_price' => false,
             'sku' => false,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
@@ -1511,6 +1520,8 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'start_price' => false,
             'sku' => false,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1776,5 +1787,21 @@ class EbayRequest
         }
 
         return $response->SellerProfilePreferences;
+    }
+
+    public function getBestOffers($page)
+    {
+        $vars = array(
+            'page_number' => $page,
+            'version' => $this->compatibility_level,
+        );
+
+        $response = $this->_makeRequest('GetBestOffers', $vars);
+
+        if ($response === false) {
+            return false;
+        }
+
+        return isset($response->ItemBestOffersArray) ? $response->ItemBestOffersArray : array();
     }
 }

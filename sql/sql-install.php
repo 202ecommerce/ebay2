@@ -37,6 +37,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category` (
 		  `is_multi_sku` tinyint(1),
 		  `name` varchar(255) NOT NULL,
 		  `k_type` tinyint(1),
+		  `best_offer_enabled` tinyint(1),
 		  UNIQUE(`id_category_ref`, `id_country`),
 		  PRIMARY KEY  (`id_ebay_category`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
@@ -404,7 +405,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_task_manager` (
     `date_add` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `date_upd` datetime,
     `retry` INT(30),
-    `locked` VARCHAR(125)
+    `locked` VARCHAR(125),
+    `priority` INT(2) NULL DEFAULT NULL
 )ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
@@ -413,3 +415,20 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
             `name` VARCHAR(250),
             `value` VARCHAR(250)
             ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_best_offers` (
+	`id_best_offer` int(16) NOT NULL AUTO_INCREMENT,
+	`id_ebay_profile` int(16) NOT NULL,
+	`itemid` varchar(40) NOT NULL,
+	`best_offer_ebay_id` varchar(40) NOT NULL,
+	`id_product` int(16) NOT NULL,
+	`seller_message` text,
+	`id_product_attribute` int(16),
+	`status` VARCHAR(125),
+    `date_add` datetime NOT NULL,
+    `expirationTime` datetime,
+    `price` float(8,2),
+    `quantity` int(16),
+    `product_title` VARCHAR(125),
+	PRIMARY KEY  (`id_best_offer`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
