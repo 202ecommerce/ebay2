@@ -29,7 +29,7 @@
       <Shipment>
         <ShipmentTrackingDetails>
           <ShipmentTrackingNumber>{$tracking_number|escape:'htmlall':'UTF-8'}</ShipmentTrackingNumber>
-          <ShippingCarrierUsed>{$carrier_name|escape:'htmlall':'UTF-8'}</ShippingCarrierUsed>
+          <ShippingCarrierUsed><![CDATA[{$carrier_name nofilter}]]></ShippingCarrierUsed> {*it is impossible escape $carrier_name*}
         </ShipmentTrackingDetails>
       </Shipment>
   {else}
