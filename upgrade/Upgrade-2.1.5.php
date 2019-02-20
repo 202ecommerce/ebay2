@@ -53,6 +53,15 @@ function upgrade_module_2_1_5($module)
                         ADD UNIQUE KEY unique_task(id_product, id_product_attribute, id_task, id_ebay_profile)";
         $result &= DB::getInstance()->execute($alter_3);
     }
-	 $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category` ADD COLUMN `best_offer_enabled` tinyint(1)');
+
+    $count = (int)DB::getInstance()->getValue('SELECT count(*) 
+	    FROM INFORMATION_SCHEMA.COLUMNS
+		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_category"
+		AND `TABLE_SCHEMA` = "'._DB_NAME_.'"
+		AND `COLUMN_NAME` = "best_offer_enabled"');
+    if ($count == 0) {
+        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category` ADD COLUMN `best_offer_enabled` tinyint(1)');
+    }
+
     return $result;
 }

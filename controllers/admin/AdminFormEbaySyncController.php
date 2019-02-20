@@ -605,7 +605,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
-            WHERE ';
+            WHERE product_shop.active = 1 AND ';
         $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('category');
         $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
 
