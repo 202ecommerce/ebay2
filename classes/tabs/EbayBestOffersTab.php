@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -86,7 +86,8 @@ class EbayBestOffersTab extends EbayTab
         return $html;
     }
 
-    public function getProductInfo($id_product) {
+    public function getProductInfo($id_product)
+    {
         $product = new Product($id_product, false, $this->context->language->id);
 
         return $product->name .'('.$id_product.')';

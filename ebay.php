@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -1566,7 +1566,7 @@ class Ebay extends Module
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
         ));
-	
+
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
             Configuration::set('EBAY_VERSION', $this->version);
@@ -2616,7 +2616,7 @@ class Ebay extends Module
 
     public function addAdditionalInfoForProduct($id_product, $id_product_attribute = 0, $id_category_ebay = false, $ebay_site_id = false)
     {
-       return array();
+        return array();
     }
 
     public function getEbayLastOffers()

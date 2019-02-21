@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -57,7 +57,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
 
         $action_url = $this->_getUrl($url_vars);
-	    $rootCategory = Category::getRootCategory($this->context->language->id, $this->context->shop);
+            $rootCategory = Category::getRootCategory($this->context->language->id, $this->context->shop);
         // Loading categories
         $category_config_list = array();
         //var_dump(Category::getCategories($this->context->language->id, true, true, ' and c.id_category=5')); die();
