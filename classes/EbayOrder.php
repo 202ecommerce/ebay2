@@ -1067,7 +1067,10 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order_order`
 			WHERE `id_transaction` = '.(string) $transaction_id);
 
+        if ($result) {
             $result['id_ebay_order']= EbayOrder::getIdOrderRefByIdOrder((int)$result[0]['id_order']);
+        }
+
   
         return $result;
     }
