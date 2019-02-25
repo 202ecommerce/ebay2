@@ -125,9 +125,7 @@ class EbayFormShippingTab extends EbayTab
         if ($ebay_carriers = Tools::getValue('ebayCarrier')) {
             $ps_carriers = Tools::getValue('psCarrier');
             $extra_fees = Tools::getValue('extrafee');
-            $ps_ship = new Carrier($ps_carriers);
             EbayTaskManager::deleteErrors($this->ebay_profile->id);
-            $ps_ship->getMaxDeliveryPriceByPrice($this->ebay_profile->id);
             foreach ($ebay_carriers as $key => $ebay_carrier) {
                 if (!empty($ebay_carrier) && !empty($ps_carriers[$key])) {
                     //Get id_carrier and id_zone from ps_carrier
