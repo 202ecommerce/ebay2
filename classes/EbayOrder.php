@@ -535,7 +535,7 @@ class EbayOrder
         try {
             $payment->validateOrder(
                 (int) $this->carts[$id_shop]->id,
-                Configuration::get('PS_OS_PAYMENT'),
+                (int) Configuration::get('EBAY_STATUS_ORDER'),
                 (float) $this->carts[$id_shop]->getOrderTotal(true, Cart::BOTH),
                 'eBay '.$this->payment_method.' '.$this->id_order_seller,
                 null,
@@ -1255,5 +1255,13 @@ class EbayOrder
                     LEFT JOIN ' . _DB_PREFIX_ . 'ebay_order_order eoo ON eo.id_ebay_order = eoo.id_ebay_order
                     WHERE eoo.id_ebay_order_order IS NULL';
         return DB::getInstance()->execute($delete);
+    }
+
+    public function updateOrderState($ebay_profile)
+    {
+        $id_order = (int) $this->id_orders[$ebay_profile->id_shop];
+        $orderHistory = new OrderHistory();
+        $id_orderState = (int)Configuration::get('PS_OS_PAYMENT');
+        $orderHistory->changeIdOrderState($id_orderState, $id_order);
     }
 }

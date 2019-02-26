@@ -345,6 +345,10 @@ class Ebay extends Module
             return false;
         }
 
+        if (!$this->addEbayStateOrder()) {
+            return false;
+        }
+
         $this->ebay_profile = EbayProfile::getCurrent();
 
         $this->setConfiguration('EBAY_INSTALL_DATE', date('Y-m-d\TH:i:s.000\Z'));
@@ -552,6 +556,7 @@ class Ebay extends Module
         $this->context->cookie->eBaySession = '';
         $this->context->cookie->eBayUsername = '';
         $this->uninstallTabs();
+        $this->removeEbayStateOrder();
         return true;
     }
 
@@ -1136,6 +1141,7 @@ class Ebay extends Module
                 }
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
+                $order->updateOrderState($ebay_profile);
             }
             //foreach ($order->getProducts() as $product) {
                //$this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
@@ -2657,5 +2663,40 @@ class Ebay extends Module
         }
 
         return $orders;
+    }
+
+    public function addEbayStateOrder()
+    {
+        $state_exist = false;
+        $states = OrderState::getOrderStates((int)$this->context->language->id);
+        foreach ($states as $state) {
+            if ($state['module_name'] == $this->name) {
+                $state_exist = true;
+            }
+        }
+
+        if (!$state_exist) {
+            $order_state = new OrderState();
+            $order_state->send_email = false;
+            $order_state->color = '#0000ff';
+            $order_state->module_name = $this->name;
+            $order_state->name = array();
+            $languages = Language::getLanguages(false);
+            foreach ($languages as $language) {
+                $order_state->name[ $language['id_lang'] ] = 'Ebay payment accepted';
+            }
+            $state_exist = $order_state->add();
+            Configuration::updateValue('EBAY_STATUS_ORDER', $order_state->id);
+        }
+
+        return $state_exist;
+    }
+
+    public function removeEbayStateOrder()
+    {
+        $orderState = new OrderState((int)Configuration::get('EBAY_STATUS_ORDER'));
+        if (Validate::isLoadedObject($orderState)) {
+            $orderState->delete();
+        }
     }
 }
