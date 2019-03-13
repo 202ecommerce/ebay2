@@ -178,7 +178,7 @@ class EbayOrder
 
         $order_in_ps = (boolean) DB::getInstance()->getValue('SELECT `id_order`
 			FROM `'._DB_PREFIX_.'orders`
-			WHERE `payment` LIKE \'%' . pSQL($this->id_order_seller) . '%\'');
+			WHERE `payment` LIKE \'%' . pSQL('eBay '.$this->payment_method.' '.$this->id_order_seller) . '%\'');
 
         return $order_in_ebay_order_table || $order_in_ps;
     }
@@ -706,7 +706,8 @@ class EbayOrder
                 'shipping_cost_tax_excl' => 0,
             );
         }
-
+        $data['id_carrier'] = $id_carrier;
+        $ship_data['id_carrier'] = $id_carrier;
         $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
         return $dbEbay->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
