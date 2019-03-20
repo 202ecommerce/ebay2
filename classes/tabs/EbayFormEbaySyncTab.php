@@ -136,12 +136,12 @@ class EbayFormEbaySyncTab extends EbayTab
                 $nb_products_variations_blocked = 0;
                 $nb_products_man = Db::getInstance()->ExecuteS($sql);
                 $nb_products_variations = 0;
+                $count_variation_by_product = $this->getCountVariationProductByIdCategory((int)$category['id_category']);
+
                 if ($nb_products_man) {
                     foreach ($nb_products_man as $product_ps) {
-                        $product = new Product($product_ps['id']);
-                        $variation = $product->getWsCombinations();
-                        $count_variation = count($variation);
-                        $nb_products_variations += ($count_variation > 0 ? $count_variation : 1);
+                        $count_variation = isset($count_variation_by_product[$product_ps['id']]) ? $count_variation_by_product[$product_ps['id']] : 0;
+                        $nb_products_variations += $count_variation;
                         if ($product_ps['blacklisted']) {
                             $nb_products_blocked += 1;
                             $nb_products_variations_blocked += $count_variation;
@@ -331,5 +331,28 @@ class EbayFormEbaySyncTab extends EbayTab
             }
         }
         return $ids_categories;
+    }
+    
+    public function getCountVariationProductByIdCategory($id_category)
+    {
+        $return = array();
+        $query = new DBQuery();
+        $query->select("ps.id_product, COUNT(pas.id_product_attribute) as count_variation");
+        $query->from("product_shop", "ps");
+        $query->leftJoin("product_attribute_shop", "pas", "ps.id_product = pas.id_product AND ps.id_shop = pas.id_shop");
+        $query->where("ps.id_shop = " . $this->context->shop->id);
+        $query->where("ps.id_category_default = " . $id_category);
+        $query->groupBy("ps.id_product");
+
+        $result_query = DB::getInstance()->executeS($query);
+        if (!$result_query) {
+            return $return;
+        }
+
+        foreach ($result_query as $row) {
+            $return[$row['id_product']] = (int) $row['count_variation'];
+        }
+
+        return $return;
     }
 }

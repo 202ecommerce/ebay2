@@ -979,6 +979,7 @@ class Ebay extends Module
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
             $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService);
             $ebayProfileOrder = new EbayProfile($idProfileOrder);
+
             if (!$ebayProfileOrder->id) {
                 continue;
             }
@@ -1127,8 +1128,8 @@ class Ebay extends Module
                 }
 
                 // Validate order
-                if ($order->validate($ebay_profile->id_shop, $this->ebay_profile->id)) {
-                    $order->update($this->ebay_profile->id);
+                if ($order->validate($ebay_profile->id_shop, $ebay_profile->id)) {
+                    $order->update($ebay_profile->id);
                 } else {
                     $order->delete();
                 }
