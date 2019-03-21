@@ -140,7 +140,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
                 if ($nb_products_man) {
                     foreach ($nb_products_man as $product_ps) {
-                        $count_variation = isset($count_variation_by_product[$product_ps['id']]) ? $count_variation_by_product[$product_ps['id']] : 0;
+                        $count_variation = isset($count_variation_by_product[$product_ps['id']]) ? $count_variation_by_product[$product_ps['id']] : 1;
                         $nb_products_variations += $count_variation;
                         if ($product_ps['blacklisted']) {
                             $nb_products_blocked += 1;
@@ -276,7 +276,7 @@ class EbayFormEbaySyncTab extends EbayTab
 
         $cat_with_problem = '';
         foreach ($categories as $cat) {
-            if (!$cat['category_multi'] && $cat['nb_products_variations'] > 0) {
+            if (!$cat['category_multi'] && $cat['nb_products_variations'] > $cat['nb_products']) {
                 $cat_with_problem = $cat['name'];
                 break;
             }
@@ -340,7 +340,7 @@ class EbayFormEbaySyncTab extends EbayTab
     {
         $return = array();
         $query = new DBQuery();
-        $query->select("ps.id_product, COUNT(pas.id_product_attribute) as count_variation");
+        $query->select("ps.id_product, COUNT(ps.id_product) as count_variation");
         $query->from("product_shop", "ps");
         $query->leftJoin("product_attribute_shop", "pas", "ps.id_product = pas.id_product AND ps.id_shop = pas.id_shop");
         $query->where("ps.id_shop = " . $this->context->shop->id);
