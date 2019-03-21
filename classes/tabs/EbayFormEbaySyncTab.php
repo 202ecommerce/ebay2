@@ -196,7 +196,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'page_current'            => isset($page_current) ? $page_current : 0,
             'start'                   => isset($start) ? $start : 0,
             'stop'                    => isset($stop) ? $stop : 0,
-            'category_alerts'         => $this->_getAlertCategories(),
+            'category_alerts'         => $this->_getAlertCategories($categories),
             'path'                    => $this->path,
             'nb_products'             => 0,
             'nb_products_mode_a'      => 0,
@@ -267,20 +267,23 @@ class EbayFormEbaySyncTab extends EbayTab
      * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
      *
      */
-    private function _getAlertCategories()
+    private function _getAlertCategories($categories)
     {
         $alert = '';
+        if (empty($categories)) {
+            return $alert;
+        }
 
-        $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
-
-        $var = implode('; ', $cat_with_problem);
-
-        if (count($cat_with_problem) > 0) {
-            if (count($cat_with_problem) == 1) {
-                $alert = $this->ebay->l('You have chosen eBay category : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
-            } else {
-                $alert = $this->ebay->l('You have chosen eBay categories : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
+        $cat_with_problem = '';
+        foreach ($categories as $cat) {
+            if (!$cat['category_multi'] && $cat['nb_products_variations'] > 0) {
+                $cat_with_problem = $cat['name'];
+                break;
             }
+        }
+
+        if ($cat_with_problem != '') {
+            $alert = $this->ebay->l('You have chosen eBay category : ', 'ebayformebaysynctab').' "'.$cat_with_problem.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
         }
         return $alert;
     }
