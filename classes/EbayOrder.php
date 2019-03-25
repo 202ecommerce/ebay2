@@ -843,8 +843,8 @@ class EbayOrder
 
     private function _formatShippingAddressName($name)
     {
-        $name = str_replace(array('_', ',', '  '), array('', '', ' '), (string) $name);
-        $name = preg_replace('/\-?\d+/', '', $name);
+        $name = preg_replace('/(\-)*(\d+)*(_)*(,)*(\t)*(\(.*\))*/', '', $name);
+        $name = trim($name);
         $name = explode(' ', $name, 2);
         $firstname = trim(Tools::substr(trim($name[0]), 0, 32));
         $familyname = trim(isset($name[1]) ? Tools::substr(trim($name[1]), 0, 32) : Tools::substr(trim($name[0]), 0, 32));
