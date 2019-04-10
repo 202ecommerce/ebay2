@@ -971,7 +971,7 @@ class Ebay extends Module
         $dbEbay->setDb(Db::getInstance());
         $request = new EbayRequest();
         $errors_email = array();
-        EbayOrder::deletingInjuredOrders();
+        //EbayOrder::deletingInjuredOrders();
 
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
@@ -1307,14 +1307,16 @@ class Ebay extends Module
      */
     public function hookUpdateProduct($params)
     {
-        if (!isset($params['product']->id) && !isset($params['id_product'])) {
-            return false;
+        $id_product = false;
+
+        if (isset($params['product']) && Validate::isLoadedObject($params['product'])) {
+            $id_product = (int) $params['product']->id;
+        } elseif (isset($params['id_product']) && $params['id_product']) {
+            $id_product = (int) $params['id_product'];
         }
 
-        if (!($id_product = (int) $params['product']->id)) {
-            if (!($id_product = (int) $params['id_product'])) {
-                return false;
-            }
+        if ($id_product == false) {
+            return false;
         }
 
         if (!($this->ebay_profile instanceof EbayProfile)) {

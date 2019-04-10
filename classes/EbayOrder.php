@@ -833,7 +833,7 @@ class EbayOrder
     private function _parseSku($sku, $id_product, $id_product_attribute, $id_ebay_profile)
     {
         $result = array();
-        preg_match('/[a-zA-Z_-]*([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
+        preg_match('/^[a-zA-Z_-]+([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
         $id_product = isset($result[1]) ? $result[1] : 0;
         $id_product_attribute = isset($result[2]) ? $result[2] : 0;
         $id_ebay_profile = isset($result[3]) ? $result[3] : 0;
@@ -1254,7 +1254,8 @@ class EbayOrder
     {
         $delete = 'DELETE eo.* FROM ' . _DB_PREFIX_ . 'ebay_order eo
                     LEFT JOIN ' . _DB_PREFIX_ . 'ebay_order_order eoo ON eo.id_ebay_order = eoo.id_ebay_order
-                    WHERE eoo.id_ebay_order_order IS NULL';
+                    WHERE eoo.id_ebay_order_order IS NULL
+                    LIMIT 100';
         return DB::getInstance()->execute($delete);
     }
 
