@@ -100,6 +100,7 @@ $classes_to_load = array(
     'EbayBussinesPolicies',
     'EbayTaskManager',
     'DbEbay',
+    '../services/EbayProfileService'
 );
 
 
@@ -125,6 +126,10 @@ class Ebay extends Module
 {
     private $html = '';
     private $ebay_country;
+    /**
+     * @var EbayProfileService
+     */
+    protected $ebayProfileService;
 
     public $ebay_profile;
 
@@ -258,6 +263,7 @@ class Ebay extends Module
             // Warning uninstall
             $this->confirmUninstall = $this->l('Are you sure you want to uninistall this module? All configuration settings will be lost');
         }
+        $this->ebayProfileService = new EbayProfileService();
     }
 
     /**
@@ -860,7 +866,12 @@ class Ebay extends Module
             || Tools::getValue('EBAY_SYNC_ORDERS') == 1) {
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
-            Configuration::updateValue('EBAY_ORDER_LAST_UPDATE', $current_date);
+            $profiles = EbayProfile::getAllProfile();
+            if (empty($profiles) == false) {
+                foreach ($profiles as $profile) {
+                    $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+                }
+            }
 
             if ($orders = $this->__getEbayLastOrders($current_date)) {
                 $this->importOrders($orders, $this->ebay_profile);
@@ -873,7 +884,11 @@ class Ebay extends Module
             || Tools::getValue('EBAY_SYNC_ORDERS_RETURNS') == 1) {
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
-            Configuration::updateValue('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
+            if (empty($profiles) == false) {
+                foreach ($profiles as $profile) {
+                    $this->ebayProfileService->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+                }
+            }
 
             if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
                 if (isset($orders['refund'][0]['cancellations'])) {
@@ -941,7 +956,14 @@ class Ebay extends Module
         }
 
         // we set the new last update date after retrieving the last orders
-        Configuration::updateValue('EBAY_ORDER_LAST_UPDATE', $current_date);
+
+        $profiles = EbayProfile::getAllProfile();
+        if (empty($profiles) == false) {
+            foreach ($profiles as $profile) {
+                $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+            }
+        }
+
     }
 
     public function cronOrdersReturnsSync()
@@ -962,7 +984,12 @@ class Ebay extends Module
             }
         }
         // we set the new last update date after retrieving the last orders
-        Configuration::updateValue('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date);
+        $profiles = EbayProfile::getAllProfile();
+        if (empty($profiles) == false) {
+            foreach ($profiles as $profile) {
+                $this->ebayProfileService->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+            }
+        }
     }
 
     public function importOrders($orders, $ebay_profile)
