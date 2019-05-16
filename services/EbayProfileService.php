@@ -37,10 +37,12 @@ class EbayProfileService
         if (is_array($ids_profile) == false || empty($ids_profile)) {
             return false;
         }
+
         $collection = new PrestaShopCollection('EbayProfile');
         $collection->where('id_ebay_profile', 'in', $ids_profile);
         $profiles = $collection->getResults();
         foreach ($profiles as $profile) {
+            /** @var $profile EbayProfile*/
             $profile->setConfiguration($name, $value, $html);
         }
     }

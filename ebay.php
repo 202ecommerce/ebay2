@@ -862,7 +862,7 @@ class Ebay extends Module
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
         if (((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
             &&
-            (Configuration::get('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
+            ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS') == 1) {
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
@@ -880,7 +880,7 @@ class Ebay extends Module
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
         if (((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 0)
             &&
-            (Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
+            ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS_RETURNS') == 1) {
             $current_date = date('Y-m-d\TH:i:s').'.000Z';
             // we set the new last update date after retrieving the last orders
@@ -1213,7 +1213,7 @@ class Ebay extends Module
         if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
             //If it is more than 30 days that we installed the module
             // check from 30 days before
-            $from_date_ar = explode('T', Configuration::get('EBAY_ORDER_LAST_UPDATE'));
+            $from_date_ar = explode('T', $this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
             $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -'.$nb_days_backward.' days'));
             $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         } else {
@@ -1253,7 +1253,7 @@ class Ebay extends Module
         if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
             //If it is more than 30 days that we installed the module
             // check from 30 days before
-            $from_date_ar = explode('T', Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+            $from_date_ar = explode('T', $this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE'));
             $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -'.$nb_days_backward.' days'));
             $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         } else {
