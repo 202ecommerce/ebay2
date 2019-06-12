@@ -415,9 +415,10 @@ class EbayProfile extends ObjectModel
      */
     public static function getCurrent($check_current_shop = true)
     {
+        $context = Context::getContext();
         $id_shop = (int) EbayProfile::_getIdShop(false);
 
-        $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
+        $current_profile = $context->cookie->ebayCurrentProfile;
         if ($current_profile) {
             $data = explode('_', $current_profile);
             if ($check_current_shop && $id_shop) {
@@ -436,14 +437,14 @@ class EbayProfile extends ObjectModel
         if (!$ebay_profile) {
             return null;
         }
-
-        Configuration::updateValue('EBAY_CURRENT_PROFILE', $ebay_profile->id.'_'.$id_shop, false, 0, 0);
+        $context->cookie->ebayCurrentProfile = $ebay_profile->id.'_'.$id_shop;
 
         return $ebay_profile;
     }
 
     public static function setProfile($id_ebay_profile)
     {
+        $context = Context::getContext();
         $id_shop = (int) EbayProfile::_getIdShop(false);
 
         // check that this profile is for the current shop
@@ -460,8 +461,7 @@ class EbayProfile extends ObjectModel
                 return false;
             }
         }
-
-        Configuration::updateValue('EBAY_CURRENT_PROFILE', $id_ebay_profile.'_'.$id_shop, false, 0, 0);
+        $context->cookie->ebayCurrentProfile = $id_ebay_profile.'_'.$id_shop;
 
         return true;
     }
@@ -543,6 +543,7 @@ class EbayProfile extends ObjectModel
 
     public static function deleteById($id_ebay_profile)
     {
+        $context = Context::getContext();
         $tables = array(
             'ebay_product',
             'ebay_category_condition_configuration',
@@ -560,10 +561,10 @@ class EbayProfile extends ObjectModel
         }
 
         // if the profile deleted is the current one, we reset the EBAY_CURRENT_PROFILE
-        $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
+        $current_profile = Configuration::get($context->cookie->ebayCurrentProfile);
         $data = explode('_', $current_profile);
         if ($data[0] == $id_ebay_profile) {
-            Configuration::deleteByName('EBAY_CURRENT_PROFILE');
+            $context->cookie->ebayCurrentProfile = '';
         }
 
         return true;
