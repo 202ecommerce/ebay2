@@ -561,7 +561,7 @@ class EbayProfile extends ObjectModel
         }
 
         // if the profile deleted is the current one, we reset the EBAY_CURRENT_PROFILE
-        $current_profile = Configuration::get($context->cookie->ebayCurrentProfile);
+        $current_profile = $context->cookie->ebayCurrentProfile;
         $data = explode('_', $current_profile);
         if ($data[0] == $id_ebay_profile) {
             $context->cookie->ebayCurrentProfile = '';
