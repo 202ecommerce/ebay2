@@ -406,7 +406,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_task_manager` (
     `date_upd` datetime,
     `retry` INT(30),
     `locked` VARCHAR(125),
-    `priority` INT(2) NULL DEFAULT NULL
+    `priority` INT(2) NULL DEFAULT NULL,
+    CONSTRAINT unique_task UNIQUE(id_product, id_product_attribute, id_task, id_ebay_profile)
 )ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
