@@ -28,6 +28,7 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
 {
     public function init()
     {
+        parent::init();
         if (Tools::getValue('action') == 'getLogs') {
             $this->getLogs();
         }
