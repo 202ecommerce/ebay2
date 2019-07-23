@@ -59,10 +59,11 @@ class EbayShippingInternationalZone
 
     public static function getInternationalZone($id_ebay_profile)
     {
+        $ebayProfile = new EbayProfile($id_ebay_profile);
         return DB::getInstance()->ExecuteS('SELECT esl.description
 				FROM '._DB_PREFIX_.'ebay_shipping_international_zone esiz
 				  LEFT JOIN `' . _DB_PREFIX_ . 'ebay_shipping_location` esl
-                ON esl.`location` = esiz.`id_ebay_zone` 
+                ON esl.`location` = esiz.`id_ebay_zone` AND esl.ebay_site_id = ' . pSQL($ebayProfile->ebay_site_id) .' 
 				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.' GROUP BY id_ebay_zone ');
     }
 }
