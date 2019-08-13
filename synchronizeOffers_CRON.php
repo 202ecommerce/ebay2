@@ -24,25 +24,18 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-/**
- * @param Ebay $module
- * @return bool
- */
-function upgrade_module_1_4($module)
+include dirname(__FILE__).'/../../config/config.inc.php';
+include dirname(__FILE__).'/../../init.php';
+include dirname(__FILE__).'/ebay.php';
+
+class EbaySynchronizeOffersTask extends Ebay
 {
-    $sql= array();
-    include dirname(__FILE__).'/sql/sql-upgrade-1-4.php';
 
-    if (!empty($sql) && is_array($sql)) {
-        foreach ($sql as $request) {
-            if (!Db::getInstance()->execute($request)) {
-                return false;
-            }
-        }
+    public function __construct()
+    {
+        parent::__construct();
+        $this->getEbayLastOffers();
     }
-
-    $module->installUpgradeOneFour();
-    $module->setConfiguration('EBAY_VERSION', $module->version);
-
-    return true;
 }
+
+new EbaySynchronizeOffersTask();

@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -404,13 +404,6 @@
             $('select[name = \'sizebig\'], select[name = \'sizedefault\']').each(function(){
                 width = $(this).find('option:selected').attr('data-width');
                 height = $(this).find('option:selected').attr('data-height');
-
-                {*if (+width < 800 || +height < 800){*}
-                  {*warning = "<div class='alert alert-warning alert_image_size'><button class='close' data-dismiss='alert'>&#215;</button>{l s='If the image lenght is lower than 800*800px, the zoom option will be desactivated on eBay' mod='ebay'}</div>";*}
-                  {*if ($('.alert_image_size').length == 0) {*}
-                    {*$('#annoncestab1').closest('.panel').before(warning);*}
-                  {*}*}
-                {*}*}
 			});
 
 		}

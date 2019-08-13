@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -73,7 +73,7 @@
 		<ItemSpecifics>
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
-					<Name><![CDATA[{$name}]]></Name>
+					<Name><![CDATA[{$name nofilter}]]></Name>
 					{if $value|is_array}
 						{foreach $value as $item}
 							{if $item != ""}
@@ -88,6 +88,10 @@
 		</ItemSpecifics>
 {/if}
 
+		{if isset($return_policy) && $return_policy}
+			{$return_policy nofilter}
+		{/if}
+		
         {if isset($variations) && $variations}
             {$variations nofilter}
         {/if}

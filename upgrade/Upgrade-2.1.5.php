@@ -28,37 +28,39 @@
  * @param Ebay $module
  * @return bool
  */
-function upgrade_module_2_1_0($module)
+function upgrade_module_2_1_5($module)
 {
-    if (!$module->installTabs()) {
-        return false;
-    }
     $result = true;
-    $count = DB::getInstance()->getValue('SELECT count(*) 
+    $count = (int)DB::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
-		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_api_log"
+		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_task_manager"
 		AND `TABLE_SCHEMA` = "'._DB_NAME_.'"
-		AND `COLUMN_NAME` = "id_product_attribute"');
+		AND `COLUMN_NAME` = "priority"');
     if ($count == 0) {
-        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `id_product_attribute` INT(11)');
+        $alter = 'ALTER TABLE ' . _DB_PREFIX_ . 'ebay_task_manager ADD COLUMN `priority` INT(2)';
+        $result &= DB::getInstance()->execute($alter);
     }
 
-    $count = DB::getInstance()->getValue('SELECT count(*) 
-	    FROM INFORMATION_SCHEMA.COLUMNS
-		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_api_log"
-		AND `TABLE_SCHEMA` = "'._DB_NAME_.'"
-		AND `COLUMN_NAME` = "request"');
-    if ($count == 0) {
-        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `request` TEXT');
+    $alter_2 = 'ALTER TABLE ' . _DB_PREFIX_ . 'ebay_task_manager MODIFY `date_add` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP';
+    $result &= DB::getInstance()->execute($alter_2);
+
+    $select = 'show index
+	    FROM '._DB_PREFIX_.'ebay_task_manager
+	    where Key_name = "unique_task"';
+
+    if (empty(DB::getInstance()->executeS($select))) {
+        $alter_3 = "ALTER TABLE " . _DB_PREFIX_ . "ebay_task_manager 
+                        ADD UNIQUE KEY unique_task(id_product, id_product_attribute, id_task, id_ebay_profile)";
+        $result &= DB::getInstance()->execute($alter_3);
     }
 
-    $count = DB::getInstance()->getValue('SELECT count(*) 
+    $count = (int)DB::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
-		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_api_log"
+		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_category"
 		AND `TABLE_SCHEMA` = "'._DB_NAME_.'"
-		AND `COLUMN_NAME` = "status"');
+		AND `COLUMN_NAME` = "best_offer_enabled"');
     if ($count == 0) {
-        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` CHANGE id_order status VARCHAR(255)');
+        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category` ADD COLUMN `best_offer_enabled` tinyint(1)');
     }
 
     return $result;

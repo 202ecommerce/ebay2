@@ -22,19 +22,16 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
 <?xml version="1.0" encoding="utf-8"?>
-<GetUserPreferencesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-    <!-- Call-specific Input Fields -->
-
-    <ShowSellerProfilePreferences>True</ShowSellerProfilePreferences>
-    <ShowOutOfStockControlPreference>True</ShowOutOfStockControlPreference>
-
-    <!-- Standard Input Fields -->
+<GetBestOffersRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <RequesterCredentials>
         <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
-    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
+    <DetailLevel>ReturnAll</DetailLevel>
     <Version>{$version|escape:'htmlall':'UTF-8'}</Version>
     <WarningLevel>High</WarningLevel>
-</GetUserPreferencesRequest>
+    <Pagination>
+        <EntriesPerPage>100</EntriesPerPage>
+        <PageNumber>{$page_number|escape:'htmlall':'UTF-8'}</PageNumber>
+    </Pagination>
+</GetBestOffersRequest>

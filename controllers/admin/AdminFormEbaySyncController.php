@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -371,7 +371,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                 $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
                 $root_category = Category::getRootCategory();
                 $categories = Category::getCategories(Tools::getValue('id_lang'));
-                $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+                $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'));
                 $nb_categories = count($category_list);
 
                 $ebay_category_list = Db::getInstance()->executeS('SELECT *
@@ -605,7 +605,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
-            WHERE ';
+            WHERE product_shop.active = 1 AND ';
         $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('category');
         $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
 
@@ -686,7 +686,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $ebay = Module::getInstanceByName('ebay');
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
-        $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+        $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'));
 
         $vars = array(
             'categoryList' => $category_list,

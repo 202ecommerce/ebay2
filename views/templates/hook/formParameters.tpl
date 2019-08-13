@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -181,6 +181,17 @@
 			loadCategoriesFromEbay();
 		}
 
+		$('.open-btn').click(function () {
+			var $input = $(this).parents('.input-group').first().find('input');
+            window.open($input.val());
+        });
+        $('.copy-btn').click(function () {
+            var $input = $(this).parents('.input-group').first().find('input');
+            $($input).select();
+            document.execCommand('copy');
+        });
+
+
 	});
 
 
@@ -313,7 +324,19 @@
 					</div>
 
 					<div class="help-block">
-						<a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path}</a>
+						<div class="input-group" id="sync_orders_by_cron_url" style="{if $sync_orders_by_cron == false};display:none{/if}">
+							<input type="text" class="form-control" value="{$sync_orders_by_cron_url}" readonly >
+							<div class="input-group-btn">
+								<button class="btn btn-default copy-btn" type="button">
+									<i class="fa fa-copy"></i>
+									<span>{l s='Copy' mod='ebay'}</span>
+								</button>
+								<button class="btn btn-default open-btn" type="button">
+                                    {l s='Open' mod='ebay'}
+								</button>
+							</div>
+						</div>
+						{*<a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path}</a>*}
 					</div>
 				</div>
 			</div>
@@ -338,10 +361,41 @@
 					</div>
 					
 					<div class="help-block">
-						<a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path}</a>
+						<div class="input-group" id="sync_products_by_cron_url" style="{if $sync_products_by_cron == false};display:none{/if}">
+							<input type="text" class="form-control" value="{$sync_products_by_cron_url}" readonly >
+							<div class="input-group-btn">
+								<button class="btn btn-default copy-btn" type="button">
+									<i class="fa fa-copy"></i>
+									<span>{l s='Copy' mod='ebay'}</span>
+								</button>
+								<button class="btn btn-default open-btn" type="button">
+                                    {l s='Open' mod='ebay'}
+								</button>
+							</div>
+						</div>
+						{*<a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path}</a>*}
 					</div>
 				</div>
 			</div>
+	{if isset($sync_offers_by_cron_url)}
+				<div class="form-group">
+					<label class="control-label col-sm-3">
+						{l s='Sync Offers' mod='ebay'}
+					</label>
+					<div class="col-sm-9">
+						<div class="radio">
+							<label for="sync_offers_mode_cron">
+								<input type="radio" size="20" id="sync_offers_mode_cron" name="sync_offers_mode" class="sync_offers_mode" value="cron" checked="checked"/>
+								{l s='by CRON task' mod='ebay'}
+							</label>
+						</div>
+
+						<div class="help-block">
+							<a id="sync_products_by_cron_url" href="{$sync_offers_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_offers_by_cron_url}</a>
+						</div>
+					</div>
+				</div>
+			{/if}
 
 			{if $help_Cat_upd.ps_version > '1.4.11'}
 				<div class="form-group">
@@ -364,7 +418,19 @@
 						</div>
 
 						<div class="help-block">
-							<a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url}" target="_blank" style="{if $sync_orders_returns_by_cron == false}display:none{/if}">{$sync_orders_returns_by_cron_path}</a>
+							<div class="input-group" id="sync_orders_returns_by_cron_url" style="{if $sync_orders_returns_by_cron == false};display:none{/if}">
+								<input type="text" class="form-control" value="{$sync_orders_returns_by_cron_url}" readonly >
+								<div class="input-group-btn">
+									<button class="btn btn-default copy-btn" type="button">
+										<i class="fa fa-copy"></i>
+										<span>{l s='Copy' mod='ebay'}</span>
+									</button>
+									<button class="btn btn-default open-btn" type="button">
+										{l s='Open' mod='ebay'}
+									</button>
+								</div>
+							</div>
+							{*<a id="sync_orders_returns_by_cron_url" href="{$sync_orders_returns_by_cron_url}" target="_blank" style="{if $sync_orders_returns_by_cron == false}display:none{/if}">{$sync_orders_returns_by_cron_path}</a>*}
 						</div>
 					</div>
 				</div>

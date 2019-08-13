@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -383,7 +383,7 @@
       });
     });
 
-    $('div.cat_list ul li').live('click', function () {
+    $(document).on('click', 'div.cat_list ul li', function () {
       $('.category_ps_list').show();
       $('.category_ps_list').append($(this));
       $('.category_ps_list').children().last().children('button').remove();

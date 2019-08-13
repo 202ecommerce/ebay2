@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -38,6 +38,7 @@ $classes_to_load = array(
     'EbayCategory',
     'EbayCategoryConfiguration',
     'EbayDeliveryTimeOptions',
+    'EbayBestOffers',
     'EbayOrder',
     'EbayProduct',
     'EbayReturnsPolicy',
@@ -68,6 +69,7 @@ $classes_to_load = array(
     'EbayStoreCategory',
     'EbayStoreCategoryConfiguration',
     'tabs/EbayTab',
+    'tabs/EbayBestOffersTab',
     'tabs/EbayFormParametersTab',
     'tabs/EbayFormAdvancedParametersTab',
     'tabs/EbayFormShippingTab',
@@ -130,6 +132,16 @@ class Ebay extends Module
 
     private $stats_version;
 
+    public $best_offer = false;
+
+    const PRIORITY_DELETE_PRODUCT = 1;
+
+    const PRIORITY_UPDATE_STOCK = 2;
+
+    const PRIORITY_UPDATE_PRODUCT = 3;
+
+    const PRIORITY_CREATE_PRODUCT = 4;
+
     /**
      * Construct Method
      *
@@ -139,7 +151,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '2.1.3';
+        $this->version = '2.1.5';
         $this->stats_version = '1.0';
         $this->bootstrap = true;
         $this->class_tab = 'AdminEbay';
@@ -1267,8 +1279,8 @@ class Ebay extends Module
                 'status' => pSQL($return['status']),
                 'id_item' => pSQL($return['creationInfo']['item']['itemId']),
                 'id_transaction' => pSQL($return['creationInfo']['item']['transactionId']),
-                'id_ebay_order' => pSQL($id_order['id_ebay_order']),
-                'id_order' => pSQL($id_order[0]['id_order']),
+                'id_ebay_order' => !empty($id_order) ? pSQL($id_order['id_ebay_order']) : 0,
+                'id_order' => !empty($id_order) ? pSQL($id_order[0]['id_order']) : 0,
             );
 
             $lin_is = DB::getInstance()->executeS('SELECT * FROM ' ._DB_PREFIX_. 'ebay_order_return_detail WHERE `id_return` = ' .pSQL($vars['id_return']));
@@ -1598,7 +1610,7 @@ class Ebay extends Module
 
         // If isset Post Var, post process else display form
         if (!empty($_POST) && (Tools::isSubmit('submitSave') || Tools::isSubmit('btnSubmitSyncAndPublish') || Tools::isSubmit('btnSubmitSync'))) {
-            $errors = null;
+            $errors = array();
 
             if (!count($errors)) {
                 $this->__postProcess();
@@ -1609,7 +1621,7 @@ class Ebay extends Module
                 $this->html .= $this->display('alert_tabs.tpl', $vars);
             }
 
-            if (Configuration::get('EBAY_SEND_STATS')) {
+            if (true) {
                 $ebay_stat = new EbayStat($this->stats_version, $this->ebay_profile);
                 $ebay_stat->save();
             }
@@ -2034,6 +2046,10 @@ class Ebay extends Module
 
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
+        if ($this->best_offer) {
+            $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
+        }
+
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
@@ -2099,6 +2115,9 @@ class Ebay extends Module
             'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id),
             );
 
+        if ($this->best_offer) {
+            $smarty_vars['best_offers'] = $best_offers->getContent($this->ebay_profile->id);
+        }
 
         $this->smarty->assign($smarty_vars);
 
@@ -2476,7 +2495,7 @@ class Ebay extends Module
                         'quantity' => $combinaison['quantity'],
                         'category' => $p['name_cat'],
                         'prestashop_title' => $data['name'],
-                        'ebay_title' => EbayRequest::prepareTitle($data),
+                        'ebay_title' => EbayRequest::prepareTitle($data, $this->ebay_profile->id_lang),
                         'reference_ebay' => $reference_ebay,
                         'link' => $url,
                         'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
@@ -2494,7 +2513,7 @@ class Ebay extends Module
                     'quantity' => $product->quantity,
                     'category' => $p['name_cat'],
                     'prestashop_title' => $data['name'],
-                    'ebay_title' => EbayRequest::prepareTitle($data),
+                    'ebay_title' => EbayRequest::prepareTitle($data, $this->ebay_profile->id_lang),
                     'reference_ebay' => $reference_ebay,
                     'link' => $url,
                     'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
@@ -2593,5 +2612,50 @@ class Ebay extends Module
     public function isSymfonyProject()
     {
         return (bool) version_compare(_PS_VERSION_, '1.7', '>=');
+    }
+
+    public function addAdditionalInfoForProduct($id_product, $id_product_attribute = 0, $id_category_ebay = false, $ebay_site_id = false)
+    {
+        return array();
+    }
+
+    public function getEbayLastOffers()
+    {
+        $ebay = new EbayRequest(5);
+        $page = 1;
+        $orders = array();
+        $nb_page_orders = 100;
+        EbayBestOffers::clear();
+        while ($nb_page_orders > 0 && $page < 10) {
+            $page_orders = array();
+            foreach ($ebay->getBestOffers($page) as $offer_xml) {
+                $ps_product = EbayProduct::getProductsIdFromItemId($offer_xml->ItemBestOffers->Item->ItemID);
+                $itemId = $offer_xml->ItemBestOffers->Item->ItemID;
+
+                foreach ($offer_xml->ItemBestOffers->BestOfferArray as $offer) {
+                    $date = Tools::substr((string) $offer->BestOffer->ExpirationTime, 0, 10).' '.Tools::substr((string) $offer->BestOffer->ExpirationTime, 11, 8);
+                    $bestOffer = new EbayBestOffers();
+                    $bestOffer->itemId = $itemId;
+                    $bestOffer->product_title = pSQL($offer_xml->ItemBestOffers->Item->Title);
+                    $bestOffer->best_offer_ebay_id = pSQL($offer->BestOffer->BestOfferID);
+                    $bestOffer->status = pSQL($offer->BestOffer->Status);
+                    $bestOffer->expirationTime = $date;
+                    $bestOffer->price = $offer->BestOffer->Price;
+                    $bestOffer->quantity = $offer->BestOffer->Quantity;
+                    $bestOffer->id_product = $ps_product['id_product'];
+                    $bestOffer->id_product_attribute = $ps_product['id_product_attribute'];
+                    $bestOffer->id_ebay_profile = $this->ebay_profile->id;
+                    $bestOffer->seller_message = pSQL($offer->BestOffer->BuyerMessage);
+                    $bestOffer->save();
+                }
+            }
+
+            $nb_page_orders = count($page_orders);
+            $orders = array_merge($orders, $page_orders);
+
+            $page++;
+        }
+
+        return $orders;
     }
 }

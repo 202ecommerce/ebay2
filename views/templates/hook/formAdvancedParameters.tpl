@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -60,6 +60,14 @@
 							{l s='Download' mod='ebay'}
 						</span>
 					</a>
+
+					<a href="#" class ='clear-logs btn btn-default' ">
+						<i class="icon-trash"></i>
+						<span>
+							{l s='Clear logs' mod='ebay'}
+						</span>
+					</a>
+					<p id="clear-logs-message" style="display: inline-block; margin-left: 10px"></p>
 				</div>
 			</div>
 		{/if}
@@ -256,6 +264,35 @@
             window.open(formAdvancedParametersController + '&action=getLogs');
 		});
 
+        $('.clear-logs').click(function(e) {
+            e.preventDefault();
+			if($('#activate_logs').is(':checked')){
+                $.ajax({
+					type: 'POST',
+					url: formAdvancedParametersController,
+					data: {
+						ajax: true,
+						action: 'ClearLogs'
+					},
+					beforeSend: function() {
+						$('#clear-logs-message').show().text(clearing).css({color : 'yellow'});
+					},
+					success: function(response){
+						if(response)
+							$('#clear-logs-message').text(cleared).css({color : 'green'});
+						else
+						    $('#clear-logs-message').text(notActivated).css({color : 'red'});
+						setTimeout(function () {
+                            $('#clear-logs-message').fadeOut('slow');
+                        }, 5000);
+					}
+            });
+			}
+			else {
+                $('#clear-logs-message').text(notActivated).css({color : 'red'});
+            }
+        });
+
 		$('#reload_categories_store').click(function(e) {
 			e.preventDefault();
 			$('#reload_categories_store_go').submit();
@@ -434,7 +471,9 @@
 	var categories_true = "{l s='All configured categories are already using last category definition version, no action to be taken.' mod='ebay'}";
 	var categories_false = "{l s='The following categories are not configured based on the last category definition, you may need to reload categories.' mod='ebay'}";
 	var categories_null = "{l s='No category to compare because you did not set up any category in tab Settings > Categories' mod='ebay'}";
-
+	var clearing = "{l s='Clearing' mod='ebay'}";
+	var cleared = "{l s='Job done! Log\'s file is empty!' mod='ebay'}";
+	var notActivated = "{l s='To clear logs you need to activate them first!' mod='ebay'}";
 </script>
 
 <style>

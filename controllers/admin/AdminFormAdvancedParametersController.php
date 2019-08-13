@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -29,10 +29,24 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
     public function init()
     {
         if (Tools::getValue('action') == 'getLogs') {
-            $url = dirname(__FILE__) . '/../../log/request.txt';
-            $data = Tools::file_get_contents($url);
-            $text = htmlentities($data);
-            die('<pre>' . $text);
+            $this->getLogs();
+        }
+    }
+
+    private function getLogs()
+    {
+        $url = dirname(__FILE__) . '/../../log/request.txt';
+        $data = Tools::file_get_contents($url);
+        $text = htmlentities($data);
+        die('<pre>' . $text);
+    }
+
+    public function ajaxProcessClearLogs()
+    {
+        $url = dirname(__FILE__) . '/../../log/request.txt';
+        if (file_exists($url) && Configuration::get('EBAY_ACTIVATE_LOGS')) {
+            file_put_contents($url, "");
+            echo json_encode("success");
         }
     }
 
@@ -99,6 +113,9 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
                     '.pSQL($cat['CategoryID']).', 
                     '.pSQL($cat['CategoryParentID']).', 
                     '.pSQL($cat['CategoryLevel']).')');
+                            if (isset($cat['BestOfferEnabled'])) {
+                                EbayCategory::setBestOffer($cat['CategoryID'], $cat['BestOfferEnabled'], Tools::getValue('id_profile_ebay'));
+                            }
                         };
                         die(Tools::jsonEncode($cat));
                     } elseif ($step == 3) {

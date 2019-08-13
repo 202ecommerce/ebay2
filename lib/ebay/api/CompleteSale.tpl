@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -29,7 +29,7 @@
       <Shipment>
         <ShipmentTrackingDetails>
           <ShipmentTrackingNumber>{$tracking_number|escape:'htmlall':'UTF-8'}</ShipmentTrackingNumber>
-          <ShippingCarrierUsed>{$carrier_name|escape:'htmlall':'UTF-8'}</ShippingCarrierUsed>
+          <ShippingCarrierUsed><![CDATA[{$carrier_name nofilter}]]></ShippingCarrierUsed> {*it is impossible escape $carrier_name*}
         </ShipmentTrackingDetails>
       </Shipment>
   {else}

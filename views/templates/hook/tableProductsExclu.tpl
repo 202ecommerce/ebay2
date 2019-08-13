@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
+*  @copyright 2007-2019 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -29,7 +29,7 @@
     </h4>
 
     {if empty($products)}
-        <div class="table-block__message table-block__holder">
+        <div class="table-block__message table-block__message_green table-block__holder">
             <div class="table-block__message-holder">
                 <p>{l s='No excluded products' mod='ebay'}</p>
             </div>
