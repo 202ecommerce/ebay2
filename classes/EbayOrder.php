@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -50,7 +50,7 @@ class EbayOrder
     private $id_order_seller;
     private $date_add;
     private $id_currency;
-    private $id_transaction;
+    public $id_transaction;
     private $CODCost;
     private $ebaySiteName;
 
@@ -120,7 +120,7 @@ class EbayOrder
         $this->date_add = $date;
 
         if ($order_xml->TransactionArray->Transaction) {
-            $this->product_list = $this->_getProductsFromTransactions($order_xml->TransactionArray->Transaction);
+            $this->product_list = $this->_getProductsFromTransactions($order_xml->TransactionArray);
         }
 
         $this->write_logs = (bool) Configuration::get('EBAY_ACTIVATE_LOGS');
@@ -172,9 +172,15 @@ class EbayOrder
      */
     public function exists()
     {
-        return (boolean) Db::getInstance()->getValue('SELECT `id_ebay_order`
+        $order_in_ebay_order_table = (boolean) Db::getInstance()->getValue('SELECT `id_ebay_order`
 			FROM `'._DB_PREFIX_.'ebay_order`
 			WHERE `id_order_ref` = "'.pSQL($this->id_order_ref).'"');
+
+        $order_in_ps = (boolean) DB::getInstance()->getValue('SELECT `id_order`
+			FROM `'._DB_PREFIX_.'orders`
+			WHERE `payment` LIKE \'%' . pSQL($this->id_order_seller) . '%\'');
+
+        return $order_in_ebay_order_table || $order_in_ps;
     }
 
     /**
@@ -246,7 +252,6 @@ class EbayOrder
         }
 
         $format = new TotFormat();
-
         $address->id_country = (int) Country::getByIso($this->country_iso_code);
         $address->alias = 'eBay';
         $address->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
@@ -257,8 +262,15 @@ class EbayOrder
         $address->city = $format->formatCityName($this->city);
         if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
             $address->id_state = $id_state;
+        } elseif ($id_state = State::getIdByName(pSQL(trim($this->state)))) {
+            $state = new State((int)$id_state);
+            if ($state->id_country == $address->id_country) {
+                $address->id_state = $state->id;
+            }
         }
-
+        if (Country::isNeedDniByCountryId($address->id_country) && !Validate::isLoadedObject($address)) {
+            $address->dni = 'ThereIsNotDni000';
+        }
         
         if (!empty($this->phone)) {
             $phone = $format->formatPhoneNumber($this->phone);
@@ -481,7 +493,8 @@ class EbayOrder
                     false,
                     'up',
                     0,
-                    new Shop($ebay_profile->id_shop)
+                    new Shop($ebay_profile->id_shop),
+                    false
                 );
                 if ($update === true) {
                     $cart_nb_products++;
@@ -515,8 +528,8 @@ class EbayOrder
 
         //Change context's currency
         $this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
-        if(Configuration::get('PS_TAX_ADDRESS_TYPE') == 'id_address_delivery') {
-            $this->context->country = new Country((int) Country::getByIso($this->country_iso_code)); //there was adding for fixing error: address country is not active
+        if (Configuration::get('PS_TAX_ADDRESS_TYPE') == 'id_address_delivery') {
+            $this->context->country = new Country((int) Country::getByIso($this->country_iso_code));
         }
 
         try {
@@ -533,8 +546,21 @@ class EbayOrder
                 new Shop((int) $id_shop)
             );
         } catch (Exception $e) {
+            Ebay::debug($e->getMessage());
             $this->_writeLog($id_ebay_profile, $e->getMessage(), false, 'End of validate order FAIL!');
             $this->delete();
+        }
+
+
+        if (!$payment->currentOrder) {
+            $id_cart = $this->carts[$id_shop]->id;
+            $query = new DBQuery();
+            $query->select('o.id_order');
+            $query->from('orders', 'o');
+            $query->leftJoin('ebay_order_order', 'eoo', 'o.id_order = eoo.id_order');
+            $query->where('o.payment LIKE "%ebay%" AND eoo.id_order IS NULL');
+            $id_order = (int)DB::getInstance()->getValue($query);
+            $payment->currentOrder = $id_order;
         }
 
         $this->id_orders[$id_shop] = $payment->currentOrder;
@@ -587,14 +613,12 @@ class EbayOrder
                 'reduction_amount' => 0,
             );
 
-
-                $detail_data = array_merge($detail_data, array(
-                    'unit_price_tax_incl' => (float) $product['price'],
-                    'unit_price_tax_excl' => (float) ($product['price'] / $coef_rate),
-                    'total_price_tax_incl' => (float) ($product['price'] * $product['quantity']),
-                    'total_price_tax_excl' => (float) (($product['price'] / $coef_rate) * $product['quantity']),
-                ));
-
+            $detail_data = array_merge($detail_data, array(
+                'unit_price_tax_incl' => (float) $product['price'],
+                'unit_price_tax_excl' => (float) ($product['price'] / $coef_rate),
+                'total_price_tax_incl' => (float) ($product['price'] * $product['quantity']),
+                'total_price_tax_excl' => (float) (($product['price'] / $coef_rate) * $product['quantity']),
+            ));
 
             $dbEbay->autoExecute(
                 _DB_PREFIX_.'order_detail',
@@ -723,11 +747,9 @@ class EbayOrder
     {
         $this->id_ebay_order = EbayOrder::insert(array(
             'id_order_ref' => pSQL($this->id_order_ref),
-	    'id_order' => 0
+            'id_order' => 0
         ));
-
-
-	if (!$this->id_ebay_order) {
+        if ($this->id_ebay_order) {
             $this->_writeLog($id_ebay_profile, 'add_orders', $this->id_ebay_order);
         }
     }
@@ -860,9 +882,8 @@ class EbayOrder
     {
         $products = array();
 
-        foreach ($transactions as $transaction) {
+        foreach ($transactions->Transaction as $transaction) {
             $id_product = 0;
-
             $id_product_attribute = 0;
             $id_ebay_profile = 0;
             $quantity = (string) $transaction->QuantityPurchased;
@@ -925,7 +946,7 @@ class EbayOrder
                     }
                 }
 
-                if (!$product_has_find && !$products) {
+                if (!$product_has_find) {
                     //Not possible with ebay multivariation products to retrieve the correct product
                     if (!isset($transaction->Variation->SKU) && !isset($transaction->Item->SKU)) {
                         if ($p = EbayProduct::getProductsIdFromItemId($transaction->Item->ItemID)) {
@@ -934,7 +955,8 @@ class EbayOrder
                                 'id_product_attribute' => $p['id_product_attribute'],
                                 'id_ebay_profile' => 0,
                                 'quantity' => $quantity,
-                                'price' => (string) $transaction->TransactionPrice);
+                                'price' => (string) $transaction->TransactionPrice
+                            );
                         }
                     }
                 }
@@ -1045,7 +1067,10 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order_order`
 			WHERE `id_transaction` = '.(string) $transaction_id);
 
+        if ($result) {
             $result['id_ebay_order']= EbayOrder::getIdOrderRefByIdOrder((int)$result[0]['id_order']);
+        }
+
   
         return $result;
     }
@@ -1095,13 +1120,13 @@ class EbayOrder
         }
     }
 
-    public static function getOrders()
+    public static function getOrders($id_ebay_profile)
     {
         return Db::getInstance()->executeS('SELECT eoo.*, o.date_add, o.payment, c.email, o.total_paid, o.reference
 			FROM `'._DB_PREFIX_.'ebay_order_order` eoo
 			LEFT JOIN '._DB_PREFIX_.'orders o ON eoo.id_order=o.id_order
 			LEFT JOIN '._DB_PREFIX_.'customer c ON o.id_customer=c.id_customer
-			WHERE eoo.`id_order` > 0 ORDER BY o.date_add DESC');
+			WHERE eoo.`id_order` > 0 AND eoo.id_ebay_profile = ' . $id_ebay_profile . ' ORDER BY o.date_add DESC');
     }
     public static function getOrderByOrderRef($id_order_ref)
     {
@@ -1121,6 +1146,107 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order_order` eo
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON eo.`id_order` = o.`id_order`
 			WHERE eo.`id_order` > 0 AND o.`date_add`>"'.$period.'"');
+    }
+
+    public static function getPaginatedOrdersErrors($id_ebay_profile, $currentPage = 1, $length = 20)
+    {
+        $orders_error = EbayOrderErrors::getAll($id_ebay_profile);
+        $orders = self::getOrders($id_ebay_profile);
+        $ordersErrors = array(
+            'errors' => array(),
+            'orders' => array()
+        );
+        if (!empty($orders_error)) {
+            foreach ($orders_error as $order_er) {
+                $ordersErrors['errors'][] = array(
+                    'date_ebay' => $order_er['date_order'],
+                    'reference_ebay' => $order_er['id_order_ebay'],
+                    'referance_marchand' => $order_er['id_order_seller'],
+                    'email' => $order_er['email'],
+                    'total' => $order_er['total'],
+                    'error' => $order_er['error'],
+                    'date_import' => $order_er['date_add'],
+                );
+            }
+        }
+        if (!empty($orders)) {
+            foreach ($orders as $ord) {
+                $ordersErrors['orders'][] = array(
+                    'date_ebay' => $ord['date_add'],
+                    'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),
+                    'referance_marchand' => $ord['payment'],
+                    'email' => $ord['email'],
+                    'total' => $ord['total_paid'],
+                    'id_prestashop' => $ord['id_order'],
+                    'reference_ps' => $ord['reference'],
+                    'date_import' => $ord['date_add'],
+                );
+            }
+        }
+        $final_array  = array_merge($ordersErrors['errors'], $ordersErrors['orders']);
+        $final_array_count = count($final_array);
+
+        $pages_all = ceil(((int)($final_array_count)) / ((int)$length));
+        $range = 3;
+        $start = $currentPage - $range;
+        if ($start <= 0) {
+            $start = 1;
+        }
+        $stop = $currentPage + $range;
+
+        if ($stop > $pages_all) {
+            $stop = $pages_all;
+        }
+
+        $prev_page = (int)$currentPage - 1;
+        $next_page = (int)$currentPage + 1;
+        $tpl_include = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/pagination.tpl';
+        $vars = array();
+
+        $vars['all_orders'] = array_slice($final_array, ($currentPage - 1) * $length, $length);
+        $vars['count'] = $final_array_count;
+        $vars['prev_page'] = $prev_page;
+        $vars['next_page' ] = $next_page;
+        $vars['tpl_include' ] = $tpl_include;
+        $vars['pages_all'] = $pages_all;
+        $vars['page_current'] = $currentPage;
+        $vars['start'] = $start;
+        $vars['stop'] = $stop;
+        return $vars;
+    }
+
+    public static function getPaginatedOrderReturns($currentPage = 1, $length = 20)
+    {
+        $orderReturns = self::getAllReturns();
+        $final_array_count = count($orderReturns);
+
+        $pages_all = ceil(((int)($final_array_count)) / ((int)$length));
+        $range = 3;
+        $start = $currentPage - $range;
+        if ($start <= 0) {
+            $start = 1;
+        }
+        $stop = $currentPage + $range;
+
+        if ($stop > $pages_all) {
+            $stop = $pages_all;
+        }
+
+        $prev_page = (int)$currentPage - 1;
+        $next_page = (int)$currentPage + 1;
+        $tpl_include = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/pagination.tpl';
+
+        $vars = array();
+        $vars['returns'] = array_slice($orderReturns, ($currentPage - 1) * $length, $length);
+        $vars['count'] = $final_array_count;
+        $vars['prev_page'] = $prev_page;
+        $vars['next_page' ] = $next_page;
+        $vars['tpl_include' ] = $tpl_include;
+        $vars['pages_all'] = $pages_all;
+        $vars['page_current'] = $currentPage;
+        $vars['start'] = $start;
+        $vars['stop'] = $stop;
+        return $vars;
     }
 
     public static function deletingInjuredOrders()

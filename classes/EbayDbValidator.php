@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -55,6 +55,7 @@ class EbayDbValidator
             'is_multi_sku' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
             'name' => array('type' => 'varchar', 'length' => 255),
             'k_type' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
+            'best_offer_enabled' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
         ),
 
         'ebay_category_condition' => array(
@@ -165,7 +166,7 @@ class EbayDbValidator
             'id_product_ref' => array('type' => 'varchar', 'length' => 32),
             'date_add' => array('type' => 'datetime', 'length' => null),
             'date_upd' => array('type' => 'datetime', 'length' => null),
-            'id_shipping_policies' => array('type' => 'varchar', 'length' => 125),
+            'id_shipping_policies' => array('type' => 'varchar', 'length' => 125,'null' => true, 'default' => null),
             'id_category_ps' => array('type' => 'int', 'length' => 11),
         ),
 
@@ -350,7 +351,8 @@ class EbayDbValidator
             'date_add' => array('type' => 'TIMESTAMP', 'length' => null),
             'date_upd' => array('type' => 'TIMESTAMP', 'length' => null),
             'retry' => array('type' => 'int', 'length' => 30),
-            'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true)
+            'locked' => array('type' => ' VARCHAR', 'length' => 125, 'null' => true),
+            'priority'  => array('type' => 'int', 'length' => 2, 'null' => true),
         ),
         'ebay_catalog_configuration' => array(
             'id' => array('type' => 'INT', 'length' => 11, 'primary' => true, 'auto_increment' => true),

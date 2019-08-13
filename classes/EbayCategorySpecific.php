@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -107,7 +107,7 @@ class EbayCategorySpecific
 
                     $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
 						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$recommendation->Name).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
-						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values;
+						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values . ', ebay_site_id=' . (int)$ebay_profile->ebay_site_id;
 
                     $db->execute($sql);
 

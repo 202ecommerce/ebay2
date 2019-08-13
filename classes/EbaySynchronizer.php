@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -153,7 +153,7 @@ class EbaySynchronizer
         } else {
             $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
             $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
-            if ($data['variations'][0]) {
+            if (isset($data['variations'][0])) {
                 $data = EbaySynchronizer::__getVariationData($data, $data['variations'][0], $id_currency);
             }
             
@@ -231,7 +231,7 @@ class EbaySynchronizer
         /** @var EbayCategory $ebay_category */
         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
 
-        $variations = null;
+        $variations = array();
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
 
         if (!empty($prodAttributeCombinations)) {
@@ -267,6 +267,14 @@ class EbaySynchronizer
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
         );
+
+        $ebay = Module::getInstanceByName('ebay');
+        $additionalInfo =  $ebay->addAdditionalInfoForProduct($product->id, $id_product_attribute, $ebay_category->getIdCategoryRef(), $ebay_profile->ebay_site_id);
+
+        if (!empty($additionalInfo)) {
+            $data = array_merge($data, $additionalInfo);
+        }
+
         $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang, $id_product_attribute);
 
         if (isset($data['item_specifics']['K-type'])) {
@@ -463,7 +471,9 @@ class EbaySynchronizer
                         // If issue, it's because of https/http in the url
                         $link = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
                         if ($id_product_atributte == 0) {
-                            $variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
+                            if (isset($variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id])) {
+                                $variations[$product->id . '-' . $image['id_product_attribute'] . '_' . $ebay_profile->id]['pictures'][] = $link;
+                            }
                         } else {
                             $variations[0]['pictures'][] = $link;
                         }
@@ -505,9 +515,9 @@ class EbaySynchronizer
             AND ecs.`ebay_site_id` = ' . (int)$ebay_site_id . '
             WHERE pac.id_product_attribute=' . (int)$product_attribute_id;
 
-        if ($ebay_category !== false) {
+        /*if ($ebay_category !== false) {
             $sql .= '  AND (ecs.id_category_ref = ' . (int)$ebay_category->getIdCategoryRef() . ' OR ecs.id_category_ref IS NULL)';
-        }
+        }*/
         $attributes_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 
         $variation_specifics_pairs = array();
@@ -1183,7 +1193,7 @@ class EbaySynchronizer
 
         /** @var EbayCategory $ebay_category */
         $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
-        $variations = null;
+        $variations = array();
         $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
         if (!empty($prodAttributeCombinations)) {
             $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category, $id_product_attribute, $limitEbayStock);
@@ -1206,6 +1216,7 @@ class EbaySynchronizer
             'synchronize_upc' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
             'synchronize_isbn' => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             'id_category_ps' => $product->id_category_default,
+            'shipping' => EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile),
         );
         unset($variations);
         $data_for_stock['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $ebay_profile->id_lang, $id_product_attribute);

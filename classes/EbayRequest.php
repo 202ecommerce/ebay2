@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = true;
+    private $dev = false;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -722,7 +722,7 @@ class EbayRequest
         $data['description'] = str_replace('http://', 'https://', $data['description']);
         $vars = array(
             'sku' => 'prestashop-' . $data['id_product'],
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'description' => $data['description'],
             'category_id' => $data['categoryId'],
@@ -744,6 +744,8 @@ class EbayRequest
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'variations' => false,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -772,12 +774,16 @@ class EbayRequest
         return $response;
     }
 
-    public static function prepareTitle($data)
+    public static function prepareTitle($data, $id_lang = null)
     {
+        if (!$id_lang) {
+            $ebay = new Ebay();
+            $id_lang = $ebay->ebay_profile->id_lang;
+        }
+
         $product = new Product($data['real_id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
-        $features = Feature::getFeatures(Configuration::get('PS_LANG_DEFAULT'));
-        $ebay = new Ebay();
-        $features_product = $product->getFrontFeatures($ebay->ebay_profile->id_lang);
+        $features = Feature::getFeatures($id_lang);
+        $features_product = $product->getFrontFeatures($id_lang);
         $tags = array(
             '{TITLE}',
             '{BRAND}',
@@ -1119,6 +1125,7 @@ class EbayRequest
         }
         $ebay_category = new EbayCategory($this->ebay_profile, $data['categoryId']);
         $data['description'] = str_replace('http://', 'https://', $data['description']);
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
@@ -1131,26 +1138,28 @@ class EbayRequest
             'category_id' => $data['categoryId'],
             'start_price' => $data['price'],
             'resynchronize' => 1,
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'description' => $data['description'],
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
             'return_policy' => $return_policy,
             'item_specifics' => $data['item_specifics'],
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'country_currency' => $currency->iso_code,
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'product_listing_details' => $this->_getProductListingDetails($data),
             'ktype' => isset($data['ktype'])?$data['ktype']:null,
             'isKtype' => (bool)$ebay_category->isKtype(),
             'variations' => false,
-            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')
-
+            'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
-        }        
+        }
 
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
@@ -1207,7 +1216,8 @@ class EbayRequest
         if (!$data) {
             return false;
         }
-        //$return_policy = $this->_getReturnPolicy($data);
+        $return_policy = $this->_getReturnPolicy($data);
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $vars = array(
             'item_id' => $data['itemID'],
             'condition_id' => $data['condition'],
@@ -1215,13 +1225,17 @@ class EbayRequest
             'sku' => 'prestashop-' . $data['id_product'],
             'quantity' => $data['quantity'],
             'price_update' => true,
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'country_currency' => $currency->iso_code,
             'category_id' => $data['categoryId'],
             'variations' => false,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'site' => $this->ebay_country->getSiteName(),
             'item_specifics' => $data['item_specifics'],
+            'return_policy' => $return_policy,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if ($data['id_for_sku'] > 0) {
             $vars['sku'] .= '_'.$data['id_for_sku'];
@@ -1250,7 +1264,8 @@ class EbayRequest
         if (!$data) {
             return false;
         }
-
+        
+        $return_policy = $this->_getReturnPolicy($data);
         // Set Api Call
         $this->apiCall = 'ReviseFixedPriceItem';
 
@@ -1266,11 +1281,14 @@ class EbayRequest
             'price_update' => true,
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'site' => $this->ebay_country->getSiteName(),
             'variations' => $this->_getVariations($data),
             'item_specifics' => $data['item_specifics'],
             'sku' => false,
+            'return_policy' => $return_policy,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         if ((!isset($data['variations']) && $data['price']) || (!$data['variations'] && $data['price'])) {
             $vars['price'] = $data['price'];
@@ -1313,7 +1331,7 @@ class EbayRequest
             'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
             'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
             'category_id' => $data['categoryId'],
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
             'price_update' => true,
@@ -1327,6 +1345,8 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'start_price' => false,
             'sku' => false,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
@@ -1487,7 +1507,7 @@ class EbayRequest
             'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
             'return_policy' => $return_policy,
             'resynchronize' => 1,
-            'title' => Tools::substr(self::prepareTitle($data), 0, 80),
+            'title' => Tools::substr(self::prepareTitle($data, $this->ebay_profile->id_lang), 0, 80),
             'description' => $data['description'],
             'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
             'site' => $this->ebay_country->getSiteName(),
@@ -1500,6 +1520,8 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'start_price' => false,
             'sku' => false,
+            'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1765,5 +1787,21 @@ class EbayRequest
         }
 
         return $response->SellerProfilePreferences;
+    }
+
+    public function getBestOffers($page)
+    {
+        $vars = array(
+            'page_number' => $page,
+            'version' => $this->compatibility_level,
+        );
+
+        $response = $this->_makeRequest('GetBestOffers', $vars);
+
+        if ($response === false) {
+            return false;
+        }
+
+        return isset($response->ItemBestOffersArray) ? $response->ItemBestOffersArray : array();
     }
 }

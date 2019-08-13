@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -53,7 +53,7 @@ class EbayShippingService
         if (EbayShippingService::getTotal($ebay_site_id)) {
             return EbayShippingService::getAll($ebay_site_id);
         }
-		
+
         $ebay = new EbayRequest();
         $carriers = $ebay->getCarriers();
 
@@ -66,7 +66,6 @@ class EbayShippingService
 
     public static function getCarrierByName($name, $ebay_site_id)
     {
-        
         return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_shipping_service
 			WHERE `ebay_site_id` = '.(int) $ebay_site_id .' AND `shippingService` = "'. pSQL($name) .'"');

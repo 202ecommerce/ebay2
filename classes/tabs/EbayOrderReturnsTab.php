@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -28,24 +28,23 @@ class EbayOrderReturnsTab extends EbayTab
 {
     public function getContent($id_ebay_profile)
     {
+        $data = array();
         // Load prestashop ebay's configuration
-        $returns= EbayOrder::getAllReturns();
+        $data = array_merge($data, EbayOrder::getPaginatedOrderReturns());
         $url_vars = array(
             'id_tab' => '78',
             'section' => 'orders',
         );
-
+        $data['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
         $url_vars['controller'] = Tools::getValue('controller');
 
-        $url = $this->_getUrl($url_vars);
-        $datetime = new DateTime(Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+        $data['url'] = $this->_getUrl($url_vars);
 
-        $date_last_import = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
-        return $this->display('order_returns.tpl', array(
-            'type_sync_returns' => (Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON')?'Cron':'Prestashop'),
-            'returns' => $returns,
-            'url' => $url,
-            'date_last_import' => $date_last_import,
-        ));
+        $datetime = new DateTime(Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+        $data['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+        $data['type_sync_returns'] = (Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON')?'Cron':'Prestashop');
+        $data['tpl_returns_ajax'] = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/table_returns_ajax.tpl';
+
+        return $this->display('order_returns.tpl', $data);
     }
 }

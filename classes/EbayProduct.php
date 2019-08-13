@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2018 PrestaShop SA
+ *  @copyright 2007-2019 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -287,7 +287,7 @@ class EbayProduct
 
         $sql .= ' AND pl.id_shop = '.(int)$ebay_profile->id_shop;
 
-        $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+        $sql .= ') WHERE p.id_product IS NOT NULL AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
@@ -325,7 +325,7 @@ class EbayProduct
 
             $sql .= 'AND pl.id_shop = '.(int)$ebay_profile->id_shop;
 
-            $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+            $sql .= ') WHERE p.id_product IS NOT NULL AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
             if ($no_blacklisted) {
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
@@ -358,7 +358,7 @@ class EbayProduct
 
             $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
 
-            $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+            $sql .= ') WHERE p.id_product IS NOT NULL AND ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
             if ($no_blacklisted) {
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }

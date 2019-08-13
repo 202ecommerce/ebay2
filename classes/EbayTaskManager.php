@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -131,6 +131,10 @@ class EbayTaskManager
                                 }
                             }
 
+                            if (in_array(10, $id_tasks) && StockAvailable::getQuantityAvailableByProduct($product->id, $id_attribute, $ebay_profile->id_shop) == 0) {
+                                return true;
+                            }
+
                             foreach ($id_tasks as $id_task) {
                                 self::insertTask($product_ebay['id_product'], $id_attribute, $id_task, $product_ebay['id_ebay_profile']);
                             }
@@ -143,6 +147,21 @@ class EbayTaskManager
 
     public static function insertTask($id_product, $id_product_atttibute, $id_task, $id_ebay_profile, $ingnore = false)
     {
+        $priority = 0;
+        switch ($id_task) {
+            case 14:
+                $priority = Ebay::PRIORITY_DELETE_PRODUCT;
+                break;
+            case 13:
+                $priority = Ebay::PRIORITY_UPDATE_STOCK;
+                break;
+            case 11:
+                $priority = Ebay::PRIORITY_UPDATE_PRODUCT;
+                break;
+            case 10:
+                $priority = Ebay::PRIORITY_CREATE_PRODUCT;
+                break;
+        }
         $vars = array(
             'id_product' => $id_product,
             'id_product_attribute' => $id_product_atttibute,
@@ -151,6 +170,7 @@ class EbayTaskManager
             'date_add' =>  pSQL(date("Y-m-d H:i:s")),
             'retry' => 0,
             'locked' => 0,
+            'priority' => $priority,
         );
 
         if ($id_task == 14) {
@@ -208,8 +228,8 @@ class EbayTaskManager
     {
         if (self::nbTaskInwork() < 1500) {
             $unidId = uniqid();
-            if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0', 150)) {
-                return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "' . $unidId . '" ORDER BY `date_add`');
+            if (DB::getInstance()->update('ebay_task_manager', array('locked' => $unidId), '`locked` = 0 AND `retry` = 0 ORDER BY `priority`', 150)) {
+                return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "' . $unidId . '"  ORDER BY `priority`');
             }
         }
         return false;
@@ -250,7 +270,7 @@ class EbayTaskManager
 
     public static function cleanTasks()
     {
-        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 10 MINUTE');
+        return DB::getInstance()->update('ebay_task_manager', array('locked' => 0, 'error_code' => null, 'error' => ''), '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 120 MINUTE');
     }
 
     public static function getCountErrors($id_ebay_profile, $search = false, $id_lang = null)

@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2018 PrestaShop SA
+ * @copyright 2007-2019 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -71,16 +71,16 @@ class EbayListErrorsProductsTab extends EbayTab
                 }
                 switch ($task['id_task']) {
                     case 10:
-                        $error = 'Publication refusée';
+                        $error = $this->ebay->l('Publication refusée');
                         break;
                     case 11:
-                        $error = 'Mise à jour refusée';
+                        $error = $this->ebay->l('Mise à jour refusée');
                         break;
                     case 13:
-                        $error = 'Mise à jour du stock refusée';
+                        $error = $this->ebay->l('Mise à jour du stock refusée');
                         break;
                     case 14:
-                        $error = 'Supprimant refusée';
+                        $error = $this->ebay->l('Supprimant refusée');
                         break;
                 }
 
