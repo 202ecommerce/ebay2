@@ -262,7 +262,7 @@
 
                             <label class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
                                 {l s='Last SYNC :' mod='ebay'}
-                            {if $last_sync_prod == '1970-01-01 03:00:00'}
+                            {if $last_sync_prod == ''}
                                 {l s='never done' mod='ebay'}
                             {else}
                                 {$last_sync_prod}

@@ -1775,12 +1775,22 @@ class Ebay extends Module
             $count_orphan = 0;
         }
 
+        $lastSync = '';
+        if (Configuration::get('DATE_LAST_SYNC_PRODUCTS')) {
+            $timeLastSync = strtotime(Configuration::get('DATE_LAST_SYNC_PRODUCTS'));
+            $timeInstallingModule = strtotime(Configuration::get('EBAY_INSTALL_DATE'));
+
+            if ($timeLastSync > $timeInstallingModule) {
+                $lastSync = date('Y-m-d H:i:s', $timeLastSync);
+            }
+        }
+
 
         $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
         $this->smarty->assign(array(
             'cron_url' => $cron_url,
             'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
-            'last_sync_prod' => date('Y-m-d H:i:s', strtotime(Configuration::get('DATE_LAST_SYNC_PRODUCTS'))),
+            'last_sync_prod' => $lastSync,
             'img_stats' => ($this->ebay_country->getImgStats()),
             'alert' => $alerts,
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
