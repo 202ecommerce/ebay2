@@ -1738,6 +1738,7 @@ class Ebay extends Module
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
             $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
             $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
+            $profile['categoryIsLoaded'] = (int)$ebay_profile_hook->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == 1;
         }
 
         $add_profile = (Tools::getValue('action') == 'addProfile');

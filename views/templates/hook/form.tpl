@@ -177,7 +177,13 @@
                                                 <tr>
                                                     <td class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                         <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                                                            <span id = 'name'>{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                                                            <span id = 'name'>
+                                                                {if $profile['categoryIsLoaded']}
+                                                                    {$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}
+                                                                {else}
+                                                                    {l s='New' mod='ebay'}
+                                                                {/if}
+                                                            </span>
                                                         </a>
                                                     </td>
                                                     <td>
@@ -189,6 +195,12 @@
                                                         <td colspan="4" class="text-center">
                                                             <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                                 <span class="text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
+                                                            </a>
+                                                        </td>
+                                                    {elseif $profile['categoryIsLoaded'] == false}
+                                                        <td colspan="4" class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                                <span class="text-right">{l s='In process' mod='ebay'}</span>
                                                             </a>
                                                         </td>
                                                     {elseif $profile.category == 0}
