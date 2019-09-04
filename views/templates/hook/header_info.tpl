@@ -39,25 +39,34 @@
                 <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Order errors' mod='ebay'}</small></span>
                 <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><small>{l s='Tasks' mod='ebay'}</small></span>
             </li>
-            {foreach from=$profiles item=profile}
 
-                <li>
-                    <a class="clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" style="padding: 5px 0;">
-                        <span id='name' class="col-xs-5" style="position: relative; float: left; padding-left: 20px; padding-right: 5px; min-height: 1px; width: 170px;">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
-                        <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px;">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
-                        {if $profile.token == 0 }
-                            <span class="col-xs-5 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 170px;">{l s='Not associated with Ebay' mod='ebay'}</span>
-                        {elseif $profile.category == 0}
-                            <span class="col-xs-5 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 170px;">{l s='No category configured' mod='ebay'}</span>
-                        {else}
-                            <span class="col-xs-2 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-success">{$profile.nb_products}</span></span>
-                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
-                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
-                            <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-primary">{$profile.nb_tasks}</span></span>
-                        {/if}
-                    </a>
+            {if isset($profiles) && count($profiles)}
+                {foreach from=$profiles item=profile}
+
+                    <li>
+                        <a class="clearfix" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" style="padding: 5px 0;">
+                            <span id='name' class="col-xs-5" style="position: relative; float: left; padding-left: 20px; padding-right: 5px; min-height: 1px; width: 170px;">{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                            <span class="col-xs-2" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 100px;">{$profile.site_name|escape:'htmlall':'UTF-8'}</span>
+                            {if $profile.token == 0 }
+                                <span class="col-xs-5 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 170px;">{l s='Not associated with Ebay' mod='ebay'}</span>
+                            {elseif $profile.category == 0}
+                                <span class="col-xs-5 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 170px;">{l s='No category configured' mod='ebay'}</span>
+                            {else}
+                                <span class="col-xs-2 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-success">{$profile.nb_products}</span></span>
+                                <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_product_errors}</span></span>
+                                <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-danger">{$profile.count_order_errors}</span></span>
+                                <span class="col-xs-1 text-right" style="position: relative; float: left; padding-left: 5px; padding-right: 5px; min-height: 1px; width: 70px;"><span class="badge badge-primary">{$profile.nb_tasks}</span></span>
+                            {/if}
+                        </a>
+                    </li>
+                {/foreach}
+
+            {else}
+                <li class="text-center">
+                    <a href="{$url_ebay|addslashes}">{l s='Configure module' mod='ebay'}</a>
                 </li>
-            {/foreach}
+            {/if}
+
 
             </ul>
         </div>
