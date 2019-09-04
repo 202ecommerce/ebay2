@@ -189,6 +189,8 @@ class EbayOrder
      */
     public function hasValidContact()
     {
+        $this->familyname = empty($this->familyname) ? 'Undefined' : $this->familyname;
+        $this->firstname = empty($this->firstname) ? 'Undefined' : $this->firstname;
         return Validate::isEmail($this->email)
         && $this->firstname
         && $this->familyname;
@@ -219,8 +221,8 @@ class EbayOrder
             if (empty($this->familyname)) {
                 $this->familyname = 'no-send';
             }
-            $customer->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
-            $customer->firstname = $format->formatName($this->firstname);
+            $customer->lastname = empty($this->familyname) ? 'Undefined' : $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
+            $customer->firstname = empty($this->firstname) ? 'Undefined' : $format->formatName($this->firstname);
             $customer->active = 1;
             $customer->optin = 0;
             $customer->id_shop = (int) $ebay_profile->id_shop;
@@ -259,7 +261,7 @@ class EbayOrder
         $address->address1 = $format->formatAddress($this->address1);
         $address->address2 = $format->formatAddress($this->address2);
         $address->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
-        $address->city = $format->formatCityName($this->city);
+        $address->city = $format->formatCityName(empty($this->city) ? 'Undefined' : $this->city);
         if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
             $address->id_state = $id_state;
         } elseif ($id_state = State::getIdByName(pSQL(trim($this->state)))) {
@@ -548,19 +550,12 @@ class EbayOrder
         } catch (Exception $e) {
             Ebay::debug($e->getMessage());
             $this->_writeLog($id_ebay_profile, $e->getMessage(), false, 'End of validate order FAIL!');
-            $this->delete();
         }
 
 
         if (!$payment->currentOrder) {
             $id_cart = $this->carts[$id_shop]->id;
-            $query = new DBQuery();
-            $query->select('o.id_order');
-            $query->from('orders', 'o');
-            $query->leftJoin('ebay_order_order', 'eoo', 'o.id_order = eoo.id_order');
-            $query->where('o.payment LIKE "%ebay%" AND eoo.id_order IS NULL');
-            $id_order = (int)DB::getInstance()->getValue($query);
-            $payment->currentOrder = $id_order;
+            $payment->currentOrder = (int)Order::getIdByCartId((int) $id_cart);
         }
 
         $this->id_orders[$id_shop] = $payment->currentOrder;
