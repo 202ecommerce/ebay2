@@ -171,6 +171,7 @@ class Ebay extends Module
         $this->displayName = $this->l('eBay');
         $this->description = $this->l('Easily export your products from PrestaShop to eBay, the biggest market place, to acquire new customers and realize more sales.');
         $this->module_key = '91a52165797d12abfadeb0829bb671fc';
+        $this->ebayProfileService = new EbayProfileService();
 
         // Checking Extension
         $this->__checkExtensionsLoading();
@@ -263,7 +264,6 @@ class Ebay extends Module
             // Warning uninstall
             $this->confirmUninstall = $this->l('Are you sure you want to uninistall this module? All configuration settings will be lost');
         }
-        $this->ebayProfileService = new EbayProfileService();
     }
 
     /**
