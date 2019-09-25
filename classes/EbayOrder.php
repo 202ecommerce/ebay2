@@ -176,11 +176,7 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order`
 			WHERE `id_order_ref` = "'.pSQL($this->id_order_ref).'"');
 
-        $order_in_ps = (boolean) DB::getInstance()->getValue('SELECT `id_order`
-			FROM `'._DB_PREFIX_.'orders`
-			WHERE `payment` LIKE \'' . pSQL('eBay '.$this->payment_method.' '.$this->id_order_seller) . '\'');
-
-        return $order_in_ebay_order_table || $order_in_ps;
+        return $order_in_ebay_order_table;
     }
 
     /**
