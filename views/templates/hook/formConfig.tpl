@@ -77,7 +77,7 @@
 
 
 				<ul class="nav nav-pills settings-menu menuTab ebay_hidden " role="tablist">
-					<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='Account settings' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='General settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab101" class="menuTabButton"><a href="#">2. {l s='Listing settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab102" class="menuTabButton"><a href="#">3. {l s='Orders settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab3" class="menuTabButton"><a href="#">4. {l s='Dispatch and Shipping' mod='ebay'}</a></li>

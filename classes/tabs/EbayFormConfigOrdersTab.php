@@ -38,7 +38,7 @@ class EbayFormConfigOrdersTab extends EbayTab
 
         if (!$this->ebay_profile->getConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK')) {
             $vars = array(
-                'msg' => $this->ebay->l('Please configure the \'Annonces settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
+                'msg' => $this->ebay->l('Please configure the \'Listing settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
             );
             return $this->display('alert_tabs.tpl', $vars);
         }

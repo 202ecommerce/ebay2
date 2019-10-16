@@ -41,9 +41,11 @@ class EbayFormInterShippingTab extends EbayTab
         ));
 
         // Check if the module is configured
-        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            $template_vars = array('error_form_shipping' => 'true');
-            return $this->display('error_paypal_email.tpl', $template_vars);
+        if (!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
+            $vars = array(
+                'msg' => $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
+            );
+            return $this->display('alert_tabs.tpl', $vars);
         }
 
         $nb_shipping_zones_excluded = DB::getInstance()->getValue('SELECT COUNT(*)
