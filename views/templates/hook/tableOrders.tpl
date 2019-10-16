@@ -24,7 +24,7 @@
 *}
 
 <div class="table-block">
-    <h4 class="table-block__title table-block__holder">{l s='Add a desctiption in ' mod='ebay'} {$type_sync_order}
+    <h4 class="table-block__title table-block__holder">{l s='Add a description in ' mod='ebay'} {$type_sync_order}
         <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"
            class="button-refresh btn btn-default"
            title="{l s='Sync orders from eBay' mod='ebay'}"
