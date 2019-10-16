@@ -1763,7 +1763,7 @@ class Ebay extends Module
         } elseif (in_array($id_tab, array(1,101,102,3,103,4,13))) {
             $main_tab = 'settings';
         } else {
-            $main_tab = 'dashbord';
+            $main_tab = 'dashboard';
         }
         $request = new EbayRequest();
 

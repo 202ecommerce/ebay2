@@ -376,7 +376,7 @@
     {* Main navigation *}
     <div class="sidebar navigation col-md-3 col-lg-2">
         <ul class="list-group nav">
-            <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashbord" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
+            <a id="dashboard-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashboard" data-sub="dashboard" ><i class="icon-tachometer"></i> {l s='Dashboard' mod='ebay'}</a>
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
             <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Listings' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>

@@ -90,7 +90,7 @@ class EbayFormConfigOrdersTab extends EbayTab
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
-            //Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=102&section=category#dashbord');
+            //Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=102&section=category#dashboard');
             return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));

@@ -51,8 +51,8 @@
 			<div class="tab-pane fade in active" id="annoncestab1">
 				<div id='tab_title_level1' class="panel-heading"></div>
 
-				<ul class="nav nav-pills dashbord-menu menuTab fade hidden" role="tablist">
-					<li role="presentation" id="menuTab81" class="menuTabButton active" ><a href="#">{l s='Dashbord' mod='ebay'}</a></li>
+				<ul class="nav nav-pills dashboard-menu menuTab fade hidden" role="tablist">
+					<li role="presentation" id="menuTab81" class="menuTabButton active" ><a href="#">{l s='Dashboard' mod='ebay'}</a></li>
 				</ul>
 
 				<ul class="nav nav-pills annonces-menu menuTab ebay_hidden " role="tablist">
