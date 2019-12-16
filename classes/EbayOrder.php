@@ -699,6 +699,7 @@ class EbayOrder
         }
         $data['id_carrier'] = $id_carrier;
         $ship_data['id_carrier'] = $id_carrier;
+
         $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
         return $dbEbay->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
