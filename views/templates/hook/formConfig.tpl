@@ -51,8 +51,8 @@
 			<div class="tab-pane fade in active" id="annoncestab1">
 				<div id='tab_title_level1' class="panel-heading"></div>
 
-				<ul class="nav nav-pills dashbord-menu menuTab fade hidden" role="tablist">
-					<li role="presentation" id="menuTab81" class="menuTabButton active" ><a href="#">{l s='Dashbord' mod='ebay'}</a></li>
+				<ul class="nav nav-pills dashboard-menu menuTab fade hidden" role="tablist">
+					<li role="presentation" id="menuTab81" class="menuTabButton active" ><a href="#">{l s='Dashboard' mod='ebay'}</a></li>
 				</ul>
 
 				<ul class="nav nav-pills annonces-menu menuTab ebay_hidden " role="tablist">
@@ -77,7 +77,7 @@
 
 
 				<ul class="nav nav-pills settings-menu menuTab ebay_hidden " role="tablist">
-					<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='Account settings' mod='ebay'}</a></li>
+					<li role="presentation" id="menuTab1" class="menuTabButton"><a href="#">1. {l s='General settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab101" class="menuTabButton"><a href="#">2. {l s='Listing settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab102" class="menuTabButton"><a href="#">3. {l s='Orders settings' mod='ebay'}</a></li>
 					<li role="presentation" id="menuTab3" class="menuTabButton"><a href="#">4. {l s='Dispatch and Shipping' mod='ebay'}</a></li>

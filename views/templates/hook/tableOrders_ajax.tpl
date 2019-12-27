@@ -52,13 +52,13 @@
                         <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
                         <td>
                             <div class="action">
-                                <a class="reSynchOrder btn btn-default btn-sm" id="{$order.reference_ebay}"
+                                <a class="reSynchOrder btn btn-default btn-sm" id="{$order.reference_ebay|addslashes}"
                                    title="{l s='ReSync Order from eBay' mod='ebay'}"
                                    data-toggle="tooltip">
                                     <i class="icon-refresh"></i>
                                 </a>
                                 <button class="deleteOrderError btn btn-default btn-sm btn-hover-danger"
-                                        data-error="{$order.reference_ebay}"
+                                        data-error="{$order.reference_ebay|addslashes}"
                                         title="{l s='Delete' mod='ebay'}"
                                         data-toggle="tooltip">
                                     <i class="icon-close"></i>
@@ -98,7 +98,7 @@
         $.ajax({
             type: 'POST',
             url: ebayOrdersController,
-            data: "ajax=true&action=ResyncOrder&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay=" + $(this).attr('id'),
+            data: "ajax=true&action=ResyncOrder&id_ebay_profile={/literal}{$id_ebay_profile|addslashes}{literal}&id_order_ebay=" + $(this).attr('id'),
             success: function (data) {
                 var data = jQuery.parseJSON(data);
 

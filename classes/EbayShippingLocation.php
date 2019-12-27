@@ -26,10 +26,16 @@
 
 class EbayShippingLocation
 {
-    public static function getEbayShippingLocations()
+    public static function getEbayShippingLocations($idEbayProfile = null)
     {
-        return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_location GROUP BY `description`');
+        $ebayProfile = $idEbayProfile ? new EbayProfile($idEbayProfile) : EbayProfile::getCurrent();
+        $query = new DbQuery();
+        $query->from('ebay_shipping_location');
+        $query->select('*');
+        $query->where('ebay_site_id = ' . pSQL($ebayProfile->ebay_site_id));
+        $query->groupBy('`description`');
+
+        return Db::getInstance()->ExecuteS($query);
     }
 
     public static function getTotal()
@@ -43,22 +49,40 @@ class EbayShippingLocation
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'REPLACE');
     }
 
-    public static function getInternationalShippingLocations()
+    public static function getInternationalShippingLocations($idEbayProfile = null)
     {
-        if (EbayShippingLocation::getTotal()) {
+        if (EbayShippingLocation::isInternationalShippingLocationExists($idEbayProfile)) {
             return EbayShippingLocation::getEbayShippingLocations();
         }
 
         $ebay = new EbayRequest();
         $locations = $ebay->getInternationalShippingLocations();
+        $ebayProfile = $idEbayProfile ? new EbayProfile($idEbayProfile) : EbayProfile::getCurrent();
 
         foreach ($locations as $location) {
+            $location['ebay_site_id'] = $ebayProfile->ebay_site_id;
             EbayShippingLocation::insert(array_map('pSQL', $location));
         }
 
         return $locations;
+    }
+
+    public static function isInternationalShippingLocationExists($idEbayProfile = null)
+    {
+        $ebayProfile = $idEbayProfile ? new EbayProfile($idEbayProfile) : EbayProfile::getCurrent();
+        if (!$ebayProfile) {
+            return false;
+        }
+
+        $query = new DbQuery();
+        $query->select('COUNT(*)');
+        $query->from('ebay_shipping_location');
+        $query->where('ebay_site_id = ' . pSQL($ebayProfile->ebay_site_id));
+        $result = Db::getInstance()->getValue($query);
+
+        return $result == false ? false : $result > 0;
     }
 }

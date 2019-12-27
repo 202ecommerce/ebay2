@@ -293,12 +293,13 @@
 				</span>
 			</div>
 
-			<div class="regenerate_token_button" style="display: none;">
+			<div class="regenerate_token_button col-sm-9 col-sm-push-3 pos-r" style="display: none;">
 				<label>{l s='Regenerate Token' mod='ebay'} :</label>
 				<a href="{$url|escape:'htmlall':'UTF-8'}&action=regenerate_token">
 					<input type="button" id="token-btn" class="button" value="{l s='Regenerate Token' mod='ebay'}" />
 				</a>
 			</div>
+
 		</fieldset>
 
 		<fieldset style="margin-top:10px;">

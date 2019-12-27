@@ -177,7 +177,13 @@
                                                 <tr>
                                                     <td class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                         <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
-                                                            <span id = 'name'>{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</span>
+                                                            <span id = 'name'>
+                                                                {if $profile['categoryIsLoaded']}
+                                                                    {$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}
+                                                                {else}
+                                                                    {l s='New' mod='ebay'}
+                                                                {/if}
+                                                            </span>
                                                         </a>
                                                     </td>
                                                     <td>
@@ -189,6 +195,12 @@
                                                         <td colspan="4" class="text-center">
                                                             <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
                                                                 <span class="text-right">{l s='Not associated with Ebay' mod='ebay'}</span>
+                                                            </a>
+                                                        </td>
+                                                    {elseif $profile['categoryIsLoaded'] == false}
+                                                        <td colspan="4" class="text-center">
+                                                            <a class="{if $current_profile->id == $profile.id_ebay_profile}selected{/if}" href="#" data-value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}">
+                                                                <span class="text-right">{l s='In process' mod='ebay'}</span>
                                                             </a>
                                                         </td>
                                                     {elseif $profile.category == 0}
@@ -250,7 +262,7 @@
 
                             <label class="nb_tasks_in_work_success refreshNbTasksInWork btn btn-md btn-success pull-left" style="display: none">
                                 {l s='Last SYNC :' mod='ebay'}
-                            {if $last_sync_prod == '1970-01-01 03:00:00'}
+                            {if $last_sync_prod == ''}
                                 {l s='never done' mod='ebay'}
                             {else}
                                 {$last_sync_prod}
@@ -364,7 +376,7 @@
     {* Main navigation *}
     <div class="sidebar navigation col-md-3 col-lg-2">
         <ul class="list-group nav">
-            <a id="dashbord-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashbord" data-sub="dashbord" ><i class="icon-tachometer"></i> {l s='Dashbord' mod='ebay'}</a>
+            <a id="dashboard-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#dashboard" data-sub="dashboard" ><i class="icon-tachometer"></i> {l s='Dashboard' mod='ebay'}</a>
             <a id="orders-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#orders" data-sub="orders"><i class="icon-share-square"></i> {l s='Orders' mod='ebay'} {if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
             <a id="annonces-menu-link" class="list-group-item active main-menu-a" data-toggle="tab" href="#annonces" data-sub="annonces"><i class="icon-list-alt"></i> {l s='Listings' mod='ebay'} {if $count_product_errors_total > 0}<span class="badge badge-danger">{$count_product_errors_total}</span>{/if}</a>
             <a id="settings-menu-link" class="list-group-item main-menu-a" data-toggle="tab" href="#settings" data-sub="settings"><i class="icon-cog"></i> {l s='Settings' mod='ebay'}</a>

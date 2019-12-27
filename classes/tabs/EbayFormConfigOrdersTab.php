@@ -38,7 +38,7 @@ class EbayFormConfigOrdersTab extends EbayTab
 
         if (!$this->ebay_profile->getConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK')) {
             $vars = array(
-                'msg' => $this->ebay->l('Please configure the \'Annonces settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
+                'msg' => $this->ebay->l('Please configure the \'Listing settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
             );
             return $this->display('alert_tabs.tpl', $vars);
         }
@@ -90,7 +90,7 @@ class EbayFormConfigOrdersTab extends EbayTab
             $link = new Link();
             $url = $link->getAdminLink('AdminModules');
             $this->ebay_profile->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
-            //Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=102&section=category#dashbord');
+            //Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=102&section=category#dashboard');
             return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));

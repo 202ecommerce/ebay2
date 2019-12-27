@@ -58,7 +58,7 @@ class TotFormat
      */
     public static function formatName($name)
     {
-        return trim(preg_replace(self::cleanNonUnicodeSupport('/[0-9!<>,;?=+()@#"°{}_$%:]+/u'), ' ', Tools::stripslashes($name)));
+        return trim(preg_replace(self::cleanNonUnicodeSupport('/[0-9!<>,\.;?=+()@#"°{}_$%:\/]+/u'), ' ', Tools::stripslashes($name)));
     }
 
     /**

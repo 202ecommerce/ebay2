@@ -136,12 +136,12 @@ class EbayFormEbaySyncTab extends EbayTab
                 $nb_products_variations_blocked = 0;
                 $nb_products_man = Db::getInstance()->ExecuteS($sql);
                 $nb_products_variations = 0;
+                $count_variation_by_product = $this->getCountVariationProductByIdCategory((int)$category['id_category']);
+
                 if ($nb_products_man) {
                     foreach ($nb_products_man as $product_ps) {
-                        $product = new Product($product_ps['id']);
-                        $variation = $product->getWsCombinations();
-                        $count_variation = count($variation);
-                        $nb_products_variations += ($count_variation > 0 ? $count_variation : 1);
+                        $count_variation = isset($count_variation_by_product[$product_ps['id']]) ? $count_variation_by_product[$product_ps['id']] : 1;
+                        $nb_products_variations += $count_variation;
                         if ($product_ps['blacklisted']) {
                             $nb_products_blocked += 1;
                             $nb_products_variations_blocked += $count_variation;
@@ -196,7 +196,7 @@ class EbayFormEbaySyncTab extends EbayTab
             'page_current'            => isset($page_current) ? $page_current : 0,
             'start'                   => isset($start) ? $start : 0,
             'stop'                    => isset($stop) ? $stop : 0,
-            'category_alerts'         => $this->_getAlertCategories(),
+            'category_alerts'         => $this->_getAlertCategories($categories),
             'path'                    => $this->path,
             'nb_products'             => 0,
             'nb_products_mode_a'      => 0,
@@ -267,20 +267,23 @@ class EbayFormEbaySyncTab extends EbayTab
      * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
      *
      */
-    private function _getAlertCategories()
+    private function _getAlertCategories($categories)
     {
         $alert = '';
+        if (empty($categories)) {
+            return $alert;
+        }
 
-        $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
-
-        $var = implode('; ', $cat_with_problem);
-
-        if (count($cat_with_problem) > 0) {
-            if (count($cat_with_problem) == 1) {
-                $alert = $this->ebay->l('You have chosen eBay category : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
-            } else {
-                $alert = $this->ebay->l('You have chosen eBay categories : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
+        $cat_with_problem = '';
+        foreach ($categories as $cat) {
+            if (!$cat['category_multi'] && $cat['nb_products_variations'] > $cat['nb_products']) {
+                $cat_with_problem = $cat['name'];
+                break;
             }
+        }
+
+        if ($cat_with_problem != '') {
+            $alert = $this->ebay->l('You have chosen eBay category : ', 'ebayformebaysynctab').' "'.$cat_with_problem.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
         }
         return $alert;
     }
@@ -331,5 +334,28 @@ class EbayFormEbaySyncTab extends EbayTab
             }
         }
         return $ids_categories;
+    }
+    
+    public function getCountVariationProductByIdCategory($id_category)
+    {
+        $return = array();
+        $query = new DBQuery();
+        $query->select("ps.id_product, COUNT(ps.id_product) as count_variation");
+        $query->from("product_shop", "ps");
+        $query->leftJoin("product_attribute_shop", "pas", "ps.id_product = pas.id_product AND ps.id_shop = pas.id_shop");
+        $query->where("ps.id_shop = " . $this->context->shop->id);
+        $query->where("ps.id_category_default = " . $id_category);
+        $query->groupBy("ps.id_product");
+
+        $result_query = DB::getInstance()->executeS($query);
+        if (!$result_query) {
+            return $return;
+        }
+
+        foreach ($result_query as $row) {
+            $return[$row['id_product']] = (int) $row['count_variation'];
+        }
+
+        return $return;
     }
 }

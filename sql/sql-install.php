@@ -133,6 +133,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_shipping_location` (
 		  `id_ebay_location` int(11) NOT NULL AUTO_INCREMENT,
 		  `location` varchar(256) NOT NULL,
 		  `description` varchar(256) NOT NULL,
+		  `ebay_site_id` INT NULL,
 		  PRIMARY KEY (`id_ebay_location`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -345,6 +346,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
 	`data_sent` text NOT NULL,
 	`response` text NOT NULL,
 	`id_product` int(16),
+	`id_product_attribute` int(16),
 	`id_order` int(16),
     `date_add` datetime NOT NULL,
     `request` text,
@@ -406,7 +408,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_task_manager` (
     `date_upd` datetime,
     `retry` INT(30),
     `locked` VARCHAR(125),
-    `priority` INT(2) NULL DEFAULT NULL
+    `priority` INT(2) NULL DEFAULT NULL,
+    CONSTRAINT unique_task UNIQUE(id_product, id_product_attribute, id_task, id_ebay_profile)
 )ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
@@ -432,3 +435,4 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_best_offers` (
     `product_title` VARCHAR(125),
 	PRIMARY KEY  (`id_best_offer`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+

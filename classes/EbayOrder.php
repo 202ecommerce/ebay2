@@ -176,11 +176,7 @@ class EbayOrder
 			FROM `'._DB_PREFIX_.'ebay_order`
 			WHERE `id_order_ref` = "'.pSQL($this->id_order_ref).'"');
 
-        $order_in_ps = (boolean) DB::getInstance()->getValue('SELECT `id_order`
-			FROM `'._DB_PREFIX_.'orders`
-			WHERE `payment` LIKE \'%' . pSQL($this->id_order_seller) . '%\'');
-
-        return $order_in_ebay_order_table || $order_in_ps;
+        return $order_in_ebay_order_table;
     }
 
     /**
@@ -189,6 +185,8 @@ class EbayOrder
      */
     public function hasValidContact()
     {
+        $this->familyname = empty($this->familyname) ? 'Undefined' : $this->familyname;
+        $this->firstname = empty($this->firstname) ? 'Undefined' : $this->firstname;
         return Validate::isEmail($this->email)
         && $this->firstname
         && $this->familyname;
@@ -219,8 +217,8 @@ class EbayOrder
             if (empty($this->familyname)) {
                 $this->familyname = 'no-send';
             }
-            $customer->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
-            $customer->firstname = $format->formatName($this->firstname);
+            $customer->lastname = empty($this->familyname) ? 'Undefined' : $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
+            $customer->firstname = empty($this->firstname) ? 'Undefined' : $format->formatName($this->firstname);
             $customer->active = 1;
             $customer->optin = 0;
             $customer->id_shop = (int) $ebay_profile->id_shop;
@@ -259,7 +257,7 @@ class EbayOrder
         $address->address1 = $format->formatAddress($this->address1);
         $address->address2 = $format->formatAddress($this->address2);
         $address->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
-        $address->city = $format->formatCityName($this->city);
+        $address->city = $format->formatCityName(empty($this->city) ? 'Undefined' : $this->city);
         if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
             $address->id_state = $id_state;
         } elseif ($id_state = State::getIdByName(pSQL(trim($this->state)))) {
@@ -535,7 +533,7 @@ class EbayOrder
         try {
             $payment->validateOrder(
                 (int) $this->carts[$id_shop]->id,
-                Configuration::get('PS_OS_PAYMENT'),
+                (int) Configuration::get('EBAY_STATUS_ORDER'),
                 (float) $this->carts[$id_shop]->getOrderTotal(true, Cart::BOTH),
                 'eBay '.$this->payment_method.' '.$this->id_order_seller,
                 null,
@@ -548,7 +546,12 @@ class EbayOrder
         } catch (Exception $e) {
             Ebay::debug($e->getMessage());
             $this->_writeLog($id_ebay_profile, $e->getMessage(), false, 'End of validate order FAIL!');
-            $this->delete();
+        }
+
+
+        if (!$payment->currentOrder) {
+            $id_cart = $this->carts[$id_shop]->id;
+            $payment->currentOrder = (int)Order::getIdByCartId((int) $id_cart);
         }
 
 
@@ -706,6 +709,8 @@ class EbayOrder
                 'shipping_cost_tax_excl' => 0,
             );
         }
+        $data['id_carrier'] = $id_carrier;
+        $ship_data['id_carrier'] = $id_carrier;
 
         $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
@@ -832,7 +837,7 @@ class EbayOrder
     private function _parseSku($sku, $id_product, $id_product_attribute, $id_ebay_profile)
     {
         $result = array();
-        preg_match('/[a-zA-Z_-]*([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
+        preg_match('/^[a-zA-Z_-]+([\d]+)?[-_]?([\d]+)?[-_]?([\d]+)?/', $sku, $result);
         $id_product = isset($result[1]) ? $result[1] : 0;
         $id_product_attribute = isset($result[2]) ? $result[2] : 0;
         $id_ebay_profile = isset($result[3]) ? $result[3] : 0;
@@ -842,8 +847,8 @@ class EbayOrder
 
     private function _formatShippingAddressName($name)
     {
-        $name = str_replace(array('_', ',', '  '), array('', '', ' '), (string) $name);
-        $name = preg_replace('/\-?\d+/', '', $name);
+        $name = preg_replace('/(\-)*(\d+)*(_)*(,)*(\t)*(\(.*\))*(\[.*\])*/', '', $name);
+        $name = trim($name);
         $name = explode(' ', $name, 2);
         $firstname = trim(Tools::substr(trim($name[0]), 0, 32));
         $familyname = trim(isset($name[1]) ? Tools::substr(trim($name[1]), 0, 32) : Tools::substr(trim($name[0]), 0, 32));
@@ -1253,7 +1258,16 @@ class EbayOrder
     {
         $delete = 'DELETE eo.* FROM ' . _DB_PREFIX_ . 'ebay_order eo
                     LEFT JOIN ' . _DB_PREFIX_ . 'ebay_order_order eoo ON eo.id_ebay_order = eoo.id_ebay_order
-                    WHERE eoo.id_ebay_order_order IS NULL';
+                    WHERE eoo.id_ebay_order_order IS NULL
+                    LIMIT 100';
         return DB::getInstance()->execute($delete);
+    }
+
+    public function updateOrderState($ebay_profile)
+    {
+        $id_order = (int) $this->id_orders[$ebay_profile->id_shop];
+        $orderHistory = new OrderHistory();
+        $id_orderState = (int)Configuration::get('PS_OS_PAYMENT');
+        $orderHistory->changeIdOrderState($id_orderState, $id_order);
     }
 }
