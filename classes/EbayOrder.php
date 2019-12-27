@@ -554,6 +554,18 @@ class EbayOrder
             $payment->currentOrder = (int)Order::getIdByCartId((int) $id_cart);
         }
 
+
+        if (!$payment->currentOrder) {
+            $id_cart = $this->carts[$id_shop]->id;
+            $query = new DBQuery();
+            $query->select('o.id_order');
+            $query->from('orders', 'o');
+            $query->leftJoin('ebay_order_order', 'eoo', 'o.id_order = eoo.id_order');
+            $query->where('o.payment LIKE "%ebay%" AND eoo.id_order IS NULL');
+            $id_order = (int)DB::getInstance()->getValue($query);
+            $payment->currentOrder = $id_order;
+        }
+
         $this->id_orders[$id_shop] = $payment->currentOrder;
 
         $this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
