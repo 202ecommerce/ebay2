@@ -346,6 +346,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
 	`data_sent` text NOT NULL,
 	`response` text NOT NULL,
 	`id_product` int(16),
+	`id_product_attribute` int(16),
 	`id_order` int(16),
     `date_add` datetime NOT NULL,
     `request` text,
