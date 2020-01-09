@@ -435,4 +435,3 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_best_offers` (
     `product_title` VARCHAR(125),
 	PRIMARY KEY  (`id_best_offer`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
-

@@ -963,7 +963,6 @@ class Ebay extends Module
                 $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
             }
         }
-
     }
 
     public function cronOrdersReturnsSync()
