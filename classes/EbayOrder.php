@@ -202,7 +202,7 @@ class EbayOrder
 			AND `deleted` = 0'.(Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
 
         $format = new TotFormat();
-            
+
         // Add customer if he doesn't exist
         //if ($id_customer < 1) RAPH
         if (!$id_customer) {
@@ -269,7 +269,7 @@ class EbayOrder
         if (Country::isNeedDniByCountryId($address->id_country) && !Validate::isLoadedObject($address)) {
             $address->dni = 'ThereIsNotDni000';
         }
-        
+
         if (!empty($this->phone)) {
             $phone = $format->formatPhoneNumber($this->phone);
             $phone_mobile = $format->formatPhoneNumber($this->phone);
@@ -702,7 +702,19 @@ class EbayOrder
 
         $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+        $orderPs = new Order((int)$this->id_orders[$ebay_profile->id_shop]);
+        $orderPs->total_paid = $data['total_paid'];
+        $orderPs->total_paid_real = $data['total_paid_real'];
+        $orderPs->total_products = round($data['total_products'], 2);
+        $orderPs->total_products_wt = $data['total_products_wt'];
+        $orderPs->total_shipping = $data['total_shipping'];
+        $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'] , 2);
+        $orderPs->total_shipping_tax_incl = (float) $data['total_shipping_tax_incl'];
+        $orderPs->total_shipping_tax_excl = (float) $data['total_shipping_tax_excl'];
+        $orderPs->total_paid_tax_incl = (float) $data['total_paid_tax_incl'];
+        $orderPs->id_carrier = $data['id_carrier'];
+
+        return $orderPs->save();
     }
 
     public function _getTaxByProduct($id_product)
@@ -1052,7 +1064,7 @@ class EbayOrder
 
         return $ebay_order;
     }
-    
+
     public static function getOrderbytransactionId($transaction_id)
     {
 
@@ -1064,10 +1076,10 @@ class EbayOrder
             $result['id_ebay_order']= EbayOrder::getIdOrderRefByIdOrder((int)$result[0]['id_order']);
         }
 
-  
+
         return $result;
     }
-    
+
     public static function getAllReturns()
     {
         return Db::getInstance()->ExecuteS('SELECT *
