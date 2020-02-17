@@ -470,7 +470,7 @@ class EbayProfile extends ObjectModel
     public static function getProfilesByIdShop($id_shop = 0)
     {
         $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
-				,s.`name` 
+				,s.`name`
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
 				 LEFT JOIN `'._DB_PREFIX_.'shop` s ON (ep.`id_shop` = s.`id_shop`)
@@ -481,7 +481,7 @@ class EbayProfile extends ObjectModel
     public static function getProfilesById($id_ebay_profile)
     {
         $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
-				,s.`name` 
+				,s.`name`
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
 				 LEFT JOIN `'._DB_PREFIX_.'shop` s ON (ep.`id_shop` = s.`id_shop`)
@@ -575,8 +575,8 @@ class EbayProfile extends ObjectModel
 
     public function getCatalogConfiguration($name_configuration)
     {
-        $sql = "SELECT `value` FROM "._DB_PREFIX_."ebay_catalog_configuration 
-                WHERE `name` = '".$name_configuration."' 
+        $sql = "SELECT `value` FROM "._DB_PREFIX_."ebay_catalog_configuration
+                WHERE `name` = '".$name_configuration."'
                 AND `id_country` = " . $this->ebay_site_id;
         $result = DB::getInstance()->getValue($sql);
         return $result;
@@ -584,8 +584,8 @@ class EbayProfile extends ObjectModel
 
     public function setCatalogConfiguration($name_configuration, $value_configuration)
     {
-        $name_exists = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_catalog_configuration 
-                                                    WHERE `name`= '" . $name_configuration . "' 
+        $name_exists = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_catalog_configuration
+                                                    WHERE `name`= '" . $name_configuration . "'
                                                     AND `id_country` = " . $this->ebay_site_id);
         if ($name_exists) {
             $data = array(
@@ -607,9 +607,19 @@ class EbayProfile extends ObjectModel
     public static function getAllProfile()
     {
         $sql = "SELECT * FROM " . _DB_PREFIX_ . "ebay_profile";
-        $list_ids = DB::getInstance()->ExecuteS($sql);
+        $list_ids = DB::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
         return $list_ids;
+    }
+
+    public static function getAllProfileIdentifiers()
+    {
+        $query = new DbQuery();
+        $query->select('*');
+        $query->from('ebay_profile');
+        $query->groupBy('ebay_user_identifier');
+
+        return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($query->build());
     }
 
     public static function getIdProfileBySiteId($siteId, $id_shop = null, $shippingService = null)

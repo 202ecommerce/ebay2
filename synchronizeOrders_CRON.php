@@ -34,7 +34,15 @@ class EbaySynchronizeOrdersTask extends Ebay
     public function __construct()
     {
         parent::__construct();
-        $this->cronOrdersSync();
+
+        $profiles = EbayProfile::getAllProfileIdentifiers();
+        if (empty($profiles) == false) {
+            foreach ($profiles as $profile) {
+                EbayProfile::setProfile($profile['id_ebay_profile']);
+                $this->ebay_profile = new EbayProfile($profile['id_ebay_profile']);
+                $this->cronOrdersSync();
+            }
+        }
     }
 }
 
