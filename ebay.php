@@ -1003,12 +1003,13 @@ class Ebay extends Module
         foreach ($orders as $order) {
             $errors = array();
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
-            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService);
+            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService, $order->ebay_user_identifier);
             $ebayProfileOrder = new EbayProfile($idProfileOrder);
 
             if (!$ebayProfileOrder->id) {
                 continue;
             }
+
             $ebay_user_identifier = $ebayProfileOrder->ebay_user_identifier;
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
@@ -1106,7 +1107,7 @@ class Ebay extends Module
 
             foreach ($id_shops as $id_shop) {
                 if ($this->is_multishop) {
-                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService);
+                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService, $order->ebay_user_identifier);
                     $ebay_profile = new EbayProfile($idProfileOrder);
                 } else {
                     $ebay_profile = $ebayProfileOrder;
@@ -1466,11 +1467,17 @@ class Ebay extends Module
             EbayStat::send();
             Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
         }
-
+	if (Tools::getValue('tracking_number')) {
+		$tracking_number = Tools::getValue('tracking_number');
+	} else {
+		$tracking_number = Tools::getValue('shipping_tracking_number');
+	}
+	
+	
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
-            ($tracking_number = Tools::getValue('tracking_number'))
+            $tracking_number
             &&
             ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order))) {
             Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `'._DB_PREFIX_.'ebay_profile`');

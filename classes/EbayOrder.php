@@ -53,6 +53,7 @@ class EbayOrder
     public $id_transaction;
     private $CODCost;
     private $ebaySiteName;
+    public $ebay_user_identifier;
 
     private $error_messages = array();
 
@@ -91,6 +92,7 @@ class EbayOrder
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
         $this->ebaySiteName = $order_xml->TransactionArray->Transaction->Item->Site;
+        $this->ebay_user_identifier = isset($order_xml->MonetaryDetails->Payments->Payment->Payee) ? $order_xml->MonetaryDetails->Payments->Payment->Payee : false;
 
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
@@ -770,6 +772,7 @@ class EbayOrder
 
     public function update($id_ebay_profile = null)
     {
+      
         if (is_array($this->id_orders)) {
             foreach ($this->id_orders as $id_shop => $id_order) {
                     $res = Db::getInstance()->insert('ebay_order_order', array(
