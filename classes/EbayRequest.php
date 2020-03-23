@@ -104,7 +104,7 @@ class EbayRequest
             $this->appID = 'Prestash-2629-4880-ba43-368352aecc86';
             $this->certID = '6bd3f4bd-3e21-41e8-8164-7ac733218122';
             $this->apiUrl = 'https://api.sandbox.ebay.com/ws/api.dll';
-            $this->apiUrlSeller = 'http://svcs.sandbox.ebay.com/services/selling/v1/SellerProfilesManagementService';
+            $this->apiUrlSeller = 'https://svcs.sandbox.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.sandbox.ebay.com/post-order/v2/';
             $this->compatibility_level = 719;
             $this->runame = 'Prestashop-Prestash-2629-4-hpehxegu';
