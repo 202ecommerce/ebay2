@@ -711,9 +711,9 @@ class EbayOrder
         $orderPs->total_products_wt = $data['total_products_wt'];
         $orderPs->total_shipping = $data['total_shipping'];
         $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'] , 2);
-        $orderPs->total_shipping_tax_incl = (float) $data['total_shipping_tax_incl'];
-        $orderPs->total_shipping_tax_excl = (float) $data['total_shipping_tax_excl'];
-        $orderPs->total_paid_tax_incl = (float) $data['total_paid_tax_incl'];
+        $orderPs->total_shipping_tax_incl = round($data['total_shipping_tax_incl'], 2);
+        $orderPs->total_shipping_tax_excl = round($data['total_shipping_tax_excl'], 2);
+        $orderPs->total_paid_tax_incl = round($data['total_paid_tax_incl'], 2);
         $orderPs->id_carrier = $data['id_carrier'];
 
         return $orderPs->save();
