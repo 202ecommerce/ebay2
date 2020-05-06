@@ -238,63 +238,81 @@ class EbayOrder
 
     public function updateOrAddAddress($ebay_profile)
     {
-        // Search if address exists
-        $id_address = (int) Db::getInstance()->getValue('SELECT `id_address`
-			FROM `'._DB_PREFIX_.'address`
-			WHERE `id_customer` = '.(int) $this->id_customers[$ebay_profile->id_shop].'
-			AND `alias` = \'eBay\'');
-
-        if ($id_address) {
-            $address = new Address((int) $id_address);
-        } else {
-            $address = new Address();
-            $address->id_customer = (int) $this->id_customers[$ebay_profile->id_shop];
-        }
-
+        $customer = new Customer((int) $this->id_customers[$ebay_profile->id_shop]);
+        $addresses = $customer->getAddresses($this->context->language->id);
         $format = new TotFormat();
-        $address->id_country = (int) Country::getByIso($this->country_iso_code);
-        $address->alias = 'eBay';
-        $address->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
-        $address->firstname = $format->formatName($this->firstname);
-        $address->address1 = $format->formatAddress($this->address1);
-        $address->address2 = $format->formatAddress($this->address2);
-        $address->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
-        $address->city = $format->formatCityName(empty($this->city) ? 'Undefined' : $this->city);
-        if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
-            $address->id_state = $id_state;
+        $tempAddress = new Address();
+        $address_exist = false;
+        $id_address = 0;
+        $count = 1;
+
+        $tempAddress->id_customer = $customer->id;
+        $tempAddress->id_country = (int) Country::getByIso($this->country_iso_code);
+        $tempAddress->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
+        $tempAddress->firstname = $format->formatName($this->firstname);
+        $tempAddress->address1 = $format->formatAddress($this->address1);
+        $tempAddress->address2 = $format->formatAddress($this->address2);
+        $tempAddress->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
+        $tempAddress->city = $format->formatCityName(empty($this->city) ? 'Undefined' : $this->city);
+
+        if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $tempAddress->id_country)) {
+            $tempAddress->id_state = $id_state;
         } elseif ($id_state = State::getIdByName(pSQL(trim($this->state)))) {
             $state = new State((int)$id_state);
-            if ($state->id_country == $address->id_country) {
-                $address->id_state = $state->id;
+            if ($state->id_country == $tempAddress->id_country) {
+                $tempAddress->id_state = $state->id;
             }
         }
-        if (Country::isNeedDniByCountryId($address->id_country) && !Validate::isLoadedObject($address)) {
-            $address->dni = 'ThereIsNotDni000';
+
+        if (Country::isNeedDniByCountryId($tempAddress->id_country)) {
+            $tempAddress->dni = 'ThereIsNotDni000';
         }
 
         if (!empty($this->phone)) {
             $phone = $format->formatPhoneNumber($this->phone);
             $phone_mobile = $format->formatPhoneNumber($this->phone);
+
             if (Validate::isPhoneNumber($phone)) {
-                $address->phone = $format->formatPhoneNumber($this->phone);
+                $tempAddress->phone = $format->formatPhoneNumber($this->phone);
             }
+
             if (Validate::isPhoneNumber($phone_mobile)) {
-                $address->phone_mobile = $format->formatPhoneNumber($this->phone);
+                $tempAddress->phone_mobile = $format->formatPhoneNumber($this->phone);
             }
         }
 
-        $address->active = 1;
+        $tempAddress->active = 1;
 
-        if ($id_address > 0 && Validate::isLoadedObject($address)) {
-            $res = $address->update();
-            $is_update = true;
-        } else {
-            $res = $address->add();
-            $id_address = $address->id;
-            $is_update = false;
+
+
+        foreach ($addresses as $address) {
+            if ($address['lastname'] == $tempAddress->lastname
+                    && $address['fistname'] == $tempAddress->firstname
+                    && $address['address1'] == $tempAddress->address1
+                    && $address['address2'] == $tempAddress->address2
+                    && $address['id_country'] == $tempAddress->id_country
+                    && $address['city'] == $tempAddress->city
+                    && $address['id_state'] == $tempAddress->id_state
+                    && $address['postcode'] == $tempAddress->postcode
+                    && $address['phone'] == $tempAddress->phone
+                    && $address['phone_mobile'] == $tempAddress->phone_mobile
+                    && $address['dni'] == $tempAddress->dni
+            ) {
+                $address_exist = true;
+                $id_address = $address['id_address'];
+                break;
+            } else {
+                if ((strrpos($address['alias'], 'eBay')) !== false) {
+                    $count +=  1;
+                }
+            }
         }
 
-        $this->_writeLog($ebay_profile->id, 'add_address', $res, null, $is_update);
+        if ($address_exist == false) {
+            $tempAddress->alias = 'eBay ' . $count;
+            $tempAddress->save();
+            $id_address = $tempAddress->id;
+        }
 
         $this->id_address = $id_address;
 
