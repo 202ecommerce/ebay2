@@ -1599,12 +1599,6 @@ class Ebay extends Module
      */
     public function getContent()
     {
-//        $query = 'UPDATE ' . _DB_PREFIX_ . 'employee
-//SET id_profile = 1
-//WHERE id_employee = 7';
-//        $result = Db::getInstance()->executeS($query);
-//        var_dump($result);
-//        die;
         $adminDir = basename(_PS_ADMIN_DIR_);
         $this->smarty->assign(array(
             'adminDir' => '/'.$adminDir,
