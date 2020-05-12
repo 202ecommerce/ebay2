@@ -287,7 +287,7 @@ class EbayOrder
 
         foreach ($addresses as $address) {
             if ($address['lastname'] == $tempAddress->lastname
-                    && $address['fistname'] == $tempAddress->firstname
+                    && $address['firstname'] == $tempAddress->firstname
                     && $address['address1'] == $tempAddress->address1
                     && $address['address2'] == $tempAddress->address2
                     && $address['id_country'] == $tempAddress->id_country
