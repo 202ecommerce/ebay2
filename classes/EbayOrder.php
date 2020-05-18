@@ -729,11 +729,11 @@ class EbayOrder
         $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
         $orderPs = new Order((int)$this->id_orders[$ebay_profile->id_shop]);
-        $orderPs->total_paid = $data['total_paid'];
-        $orderPs->total_paid_real = $data['total_paid_real'];
+        $orderPs->total_paid = round($data['total_paid'], 2);
+        $orderPs->total_paid_real = round($data['total_paid_real'], 2);
         $orderPs->total_products = round($data['total_products'], 2);
-        $orderPs->total_products_wt = $data['total_products_wt'];
-        $orderPs->total_shipping = $data['total_shipping'];
+        $orderPs->total_products_wt = round($data['total_products_wt'], 2);
+        $orderPs->total_shipping = round($data['total_shipping'], 2);
         $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'] , 2);
         $orderPs->total_shipping_tax_incl = round($data['total_shipping_tax_incl'], 2);
         $orderPs->total_shipping_tax_excl = round($data['total_shipping_tax_excl'], 2);
