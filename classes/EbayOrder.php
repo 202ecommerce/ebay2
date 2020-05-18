@@ -194,7 +194,12 @@ class EbayOrder
         && $this->familyname;
     }
 
-    public function getOrAddCustomer($ebay_profile)
+    /**
+     * @param EbayProfile $ebay_profile
+     * @param EbayCountrySpec $ebayCountry
+     * @return int
+     */
+    public function getOrAddCustomer($ebay_profile, $ebayCountry)
     {
         $id_customer = (int) Db::getInstance()->getValue('SELECT `id_customer`
 			FROM `'._DB_PREFIX_.'customer`
@@ -224,6 +229,7 @@ class EbayOrder
             $customer->active = 1;
             $customer->optin = 0;
             $customer->id_shop = (int) $ebay_profile->id_shop;
+            $customer->id_lang = $ebayCountry->getIdLang();
             $res = $customer->add();
 
             $this->_writeLog($ebay_profile->id, 'add_customer', $res);

@@ -1005,6 +1005,7 @@ class Ebay extends Module
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
             $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService, $order->ebay_user_identifier);
             $ebayProfileOrder = new EbayProfile($idProfileOrder);
+            $ebayCountry = EbayCountrySpec::getInstanceByKey($ebayProfileOrder->getConfiguration('EBAY_COUNTRY_DEFAULT'));
 
             if (!$ebayProfileOrder->id) {
                 continue;
@@ -1090,7 +1091,7 @@ class Ebay extends Module
                 
                 $ebay_profile = $ebayProfileOrder;
 
-                $id_customer = $order->getOrAddCustomer($ebay_profile);
+                $id_customer = $order->getOrAddCustomer($ebay_profile, $ebayCountry);
                 $order->updateOrAddAddress($ebay_profile);
                 $customer_ids[] = $id_customer;
 
@@ -1109,12 +1110,13 @@ class Ebay extends Module
                 if ($this->is_multishop) {
                     $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService, $order->ebay_user_identifier);
                     $ebay_profile = new EbayProfile($idProfileOrder);
+                    $ebayCountry = EbayCountrySpec::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
                 } else {
                     $ebay_profile = $ebayProfileOrder;
                 }
 
                 if (!$has_shared_customers) {
-                    $id_customer = $order->getOrAddCustomer($ebay_profile);
+                    $id_customer = $order->getOrAddCustomer($ebay_profile, $ebayCountry);
                     $order->updateOrAddAddress($ebay_profile);
 
                     $customer_ids[] = $id_customer;
@@ -1129,7 +1131,7 @@ class Ebay extends Module
                     }
                 }
 
-                $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
+                $cart = $order->addCart($ebay_profile, $ebayCountry); //Create a Cart for the order
                 if (!($cart instanceof Cart)) {
                     $message = $this->l('Error while creating a cart for the order');
                     $order->checkError($message, $ebay_user_identifier);
