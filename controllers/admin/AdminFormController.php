@@ -154,8 +154,7 @@ class AdminFormController extends ModuleAdminController
                     }
                 } else if ($step == 2) {
                     $cat = $ebay_request->getCategories((int) $cat);
-
-                    if (EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
+                    if (empty($cat) || EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
                         die(Tools::jsonEncode($cat));
                     } else {
                         die(Tools::jsonEncode('error'));
