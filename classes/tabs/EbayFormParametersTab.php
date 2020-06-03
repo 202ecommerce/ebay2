@@ -68,7 +68,10 @@ class EbayFormParametersTab extends EbayTab
         } else {
             $catLoaded = 1;
         }
-        
+
+        $link = Context::getContext()->link;
+        $static_token = Configuration::get('EBAY_CRON_TOKEN');
+
         $smarty_vars = array(
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
             'url'                       => $url,
@@ -92,14 +95,14 @@ class EbayFormParametersTab extends EbayTab
             'immediate_payment'         => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             // CRON sync
             'sync_products_by_cron'      => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
-            'sync_products_by_cron_url'  => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
-            'sync_products_by_cron_path' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
+            'sync_products_by_cron_url'  => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => $static_token)),
+            'sync_products_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => $static_token)),
             'sync_orders_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
-            'sync_orders_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
-            'sync_orders_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
+            'sync_orders_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'order', 'token' => $static_token)),
+            'sync_orders_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'order', 'token' => $static_token)),
             'sync_orders_returns_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
-            'sync_orders_returns_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
-            'sync_orders_returns_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'sync_orders_returns_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'orderReturns', 'token' => $static_token)),
+            'sync_orders_returns_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'orderReturns', 'token' => $static_token)),
             'activate_resynchBP'         => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
             'help_Cat_upd' => array(
                 'lang'           => $this->context->country->iso_code,

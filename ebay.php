@@ -1573,7 +1573,7 @@ class Ebay extends Module
                 'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
-                'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN'))),
                 'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         } else {
@@ -1583,7 +1583,7 @@ class Ebay extends Module
                 'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
-                'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN'))),
                 'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         }
@@ -1615,6 +1615,9 @@ class Ebay extends Module
             $validatordb->checkDatabase(false);
         }
 
+        if (!Configuration::get('EBAY_CRON_TOKEN')) {
+            $this->setConfiguration('EBAY_CRON_TOKEN', md5('ebay_' . $_SERVER['HTTP_HOST'] . date('Y-m-d H:i:s')));
+        }
         if (Shop::getContext() != Shop::CONTEXT_SHOP) {
             $this->bootstrap = true;
             return $this->display(__FILE__, 'views/templates/hook/alert_multishop.tpl');
@@ -1794,7 +1797,7 @@ class Ebay extends Module
         }
 
 
-        $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
+        $cron_url = $this->context->link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN')));
         $this->smarty->assign(array(
             'cron_url' => $cron_url,
             'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
