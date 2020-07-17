@@ -22,9 +22,13 @@
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-{foreach from=$excluded_zones item=zone}
-	<ExcludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</ExcludeShipToLocation>
-{/foreach}
+{if empty($excluded_zones)}
+	<ExcludeShipToLocation>NONE</ExcludeShipToLocation>
+{else}
+	{foreach from=$excluded_zones item=zone}
+		<ExcludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</ExcludeShipToLocation>
+	{/foreach}
+{/if}
 
 {foreach from=$national_services key=service_name item=services}
 	{foreach from=$services item=service}

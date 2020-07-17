@@ -71,9 +71,13 @@
                         {/if}
                     {/foreach}
                 {/foreach}
-                {foreach from=$excluded_zones item=zone}
-                    <excludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</excludeShipToLocation>
-                {/foreach}
+                {if empty($excluded_zones)}
+                    <excludeShipToLocation>NONE</excludeShipToLocation>
+                {else}
+                    {foreach from=$excluded_zones item=zone}
+                        <excludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</excludeShipToLocation>
+                    {/foreach}
+                {/if}
             {/if}
             <shippingPolicyCurrency>{$currency_id|escape:'htmlall':'UTF-8'}</shippingPolicyCurrency>
             <domesticShippingType>Flat</domesticShippingType>
