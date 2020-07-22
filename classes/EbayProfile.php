@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author 202-ecommerce <tech@202-ecommerce.com>
+ * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -470,7 +470,7 @@ class EbayProfile extends ObjectModel
     public static function getProfilesByIdShop($id_shop = 0)
     {
         $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
-				,s.`name` 
+				,s.`name`
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
 				 LEFT JOIN `'._DB_PREFIX_.'shop` s ON (ep.`id_shop` = s.`id_shop`)
@@ -481,7 +481,7 @@ class EbayProfile extends ObjectModel
     public static function getProfilesById($id_ebay_profile)
     {
         $sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`, s.id_shop
-				,s.`name` 
+				,s.`name`
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
 				 LEFT JOIN `'._DB_PREFIX_.'shop` s ON (ep.`id_shop` = s.`id_shop`)
@@ -575,8 +575,8 @@ class EbayProfile extends ObjectModel
 
     public function getCatalogConfiguration($name_configuration)
     {
-        $sql = "SELECT `value` FROM "._DB_PREFIX_."ebay_catalog_configuration 
-                WHERE `name` = '".$name_configuration."' 
+        $sql = "SELECT `value` FROM "._DB_PREFIX_."ebay_catalog_configuration
+                WHERE `name` = '".$name_configuration."'
                 AND `id_country` = " . $this->ebay_site_id;
         $result = DB::getInstance()->getValue($sql);
         return $result;
@@ -584,8 +584,8 @@ class EbayProfile extends ObjectModel
 
     public function setCatalogConfiguration($name_configuration, $value_configuration)
     {
-        $name_exists = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_catalog_configuration 
-                                                    WHERE `name`= '" . $name_configuration . "' 
+        $name_exists = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_catalog_configuration
+                                                    WHERE `name`= '" . $name_configuration . "'
                                                     AND `id_country` = " . $this->ebay_site_id);
         if ($name_exists) {
             $data = array(
@@ -607,19 +607,40 @@ class EbayProfile extends ObjectModel
     public static function getAllProfile()
     {
         $sql = "SELECT * FROM " . _DB_PREFIX_ . "ebay_profile";
-        $list_ids = DB::getInstance()->ExecuteS($sql);
+        $list_ids = DB::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
         return $list_ids;
     }
 
-    public static function getIdProfileBySiteId($siteId, $id_shop = null, $shippingService = null)
+    public static function getAllProfileIdentifiers()
+    {
+        $query = new DbQuery();
+        $query->select('*');
+        $query->from('ebay_profile');
+        $query->groupBy('ebay_user_identifier');
+
+        return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($query->build());
+    }
+
+    public static function getIdProfileBySiteId($siteId, $id_shop = null, $shippingService = null, $ebay_user_identifier = false)
     {
         if (!$id_shop) {
               $context = Context::getContext();
               $id_shop = $context->shop->id;
         }
         $id_profile = false;
-        if (!$id_profile = DB::getInstance()->getValue('SELECT id_ebay_profile FROM ' . _DB_PREFIX_ . 'ebay_profile WHERE ebay_site_id=' . $siteId . ' AND id_shop = ' . $id_shop)) {
+
+        $select = new DBQuery();
+        $select->select('id_ebay_profile');
+        $select->from('ebay_profile');
+        $select->where('ebay_site_id = \'' . pSQL($siteId) . '\'');
+        $select->where('id_shop = ' . (int) $id_shop );
+        if ($ebay_user_identifier) {
+            $select->where('ebay_user_identifier = \'' . pSQL($ebay_user_identifier) . '\'');
+        }
+
+
+        if (!$id_profile = DB::getInstance()->getValue($select->build())) {
             if ($shippingService) {
                 $id_profile = self::getIdProfileByEbayShippingService($shippingService);
             }

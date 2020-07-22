@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author 202-ecommerce <tech@202-ecommerce.com>
+ * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -435,4 +435,3 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_best_offers` (
     `product_title` VARCHAR(125),
 	PRIMARY KEY  (`id_best_offer`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
-

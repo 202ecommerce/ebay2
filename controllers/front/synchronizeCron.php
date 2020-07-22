@@ -21,21 +21,27 @@
  * @author 202-ecommerce <tech@202-ecommerce.com>
  * @copyright Copyright (c) 2017-2020 202-ecommerce
  * @license Commercial license
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
-/**
- * @param Ebay $module
- * @return bool
- */
-function upgrade_module_2_0_4($module)
+class EbaySynchronizeCronModuleFrontController extends ModuleFrontController
 {
-    $sql = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
-            `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
-            `id_country` INT(11),
-            `name` VARCHAR(250),
-            `value` VARCHAR(250)
-            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
-    return DB::getInstance()->Execute($sql);
+    public function postProcess()
+    {
+        $action = Tools::getValue('action');
+        $actions_list = array(
+            'order' => 'cronOrdersSync',
+            'orderReturns' => 'cronOrdersReturnsSync',
+            'product' => 'cronProductsSync',
+            'offers' => 'getEbayLastOffers'
+        );
+        $token = Tools::getValue('token');
+        if (strcmp(Configuration::get('EBAY_CRON_TOKEN'), $token) != 0) {
+            die('Invalid token');
+        }
+        set_time_limit(3600);
+        $this->module->{$actions_list[$action]}();
+        die(json_encode(array('success' => true)));
+    }
 }

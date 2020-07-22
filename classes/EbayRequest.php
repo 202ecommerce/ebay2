@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2019 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author 202-ecommerce <tech@202-ecommerce.com>
+ * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @license Commercial license
  * International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -104,7 +104,7 @@ class EbayRequest
             $this->appID = 'Prestash-2629-4880-ba43-368352aecc86';
             $this->certID = '6bd3f4bd-3e21-41e8-8164-7ac733218122';
             $this->apiUrl = 'https://api.sandbox.ebay.com/ws/api.dll';
-            $this->apiUrlSeller = 'http://svcs.sandbox.ebay.com/services/selling/v1/SellerProfilesManagementService';
+            $this->apiUrlSeller = 'https://svcs.sandbox.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.sandbox.ebay.com/post-order/v2/';
             $this->compatibility_level = 719;
             $this->runame = 'Prestashop-Prestash-2629-4-hpehxegu';

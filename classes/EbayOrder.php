@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author 202-ecommerce <tech@202-ecommerce.com>
+ * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -53,6 +53,7 @@ class EbayOrder
     public $id_transaction;
     private $CODCost;
     private $ebaySiteName;
+    public $ebay_user_identifier;
 
     private $error_messages = array();
 
@@ -91,6 +92,7 @@ class EbayOrder
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
         $this->ebaySiteName = $order_xml->TransactionArray->Transaction->Item->Site;
+        $this->ebay_user_identifier = isset($order_xml->MonetaryDetails->Payments->Payment->Payee) ? $order_xml->MonetaryDetails->Payments->Payment->Payee : false;
 
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
@@ -192,7 +194,12 @@ class EbayOrder
         && $this->familyname;
     }
 
-    public function getOrAddCustomer($ebay_profile)
+    /**
+     * @param EbayProfile $ebay_profile
+     * @param EbayCountrySpec $ebayCountry
+     * @return int
+     */
+    public function getOrAddCustomer($ebay_profile, $ebayCountry)
     {
         $id_customer = (int) Db::getInstance()->getValue('SELECT `id_customer`
 			FROM `'._DB_PREFIX_.'customer`
@@ -202,7 +209,7 @@ class EbayOrder
 			AND `deleted` = 0'.(Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
 
         $format = new TotFormat();
-            
+
         // Add customer if he doesn't exist
         //if ($id_customer < 1) RAPH
         if (!$id_customer) {
@@ -222,6 +229,7 @@ class EbayOrder
             $customer->active = 1;
             $customer->optin = 0;
             $customer->id_shop = (int) $ebay_profile->id_shop;
+            $customer->id_lang = $ebayCountry->getIdLang();
             $res = $customer->add();
 
             $this->_writeLog($ebay_profile->id, 'add_customer', $res);
@@ -236,63 +244,81 @@ class EbayOrder
 
     public function updateOrAddAddress($ebay_profile)
     {
-        // Search if address exists
-        $id_address = (int) Db::getInstance()->getValue('SELECT `id_address`
-			FROM `'._DB_PREFIX_.'address`
-			WHERE `id_customer` = '.(int) $this->id_customers[$ebay_profile->id_shop].'
-			AND `alias` = \'eBay\'');
-
-        if ($id_address) {
-            $address = new Address((int) $id_address);
-        } else {
-            $address = new Address();
-            $address->id_customer = (int) $this->id_customers[$ebay_profile->id_shop];
-        }
-
+        $customer = new Customer((int) $this->id_customers[$ebay_profile->id_shop]);
+        $addresses = $customer->getAddresses($this->context->language->id);
         $format = new TotFormat();
-        $address->id_country = (int) Country::getByIso($this->country_iso_code);
-        $address->alias = 'eBay';
-        $address->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
-        $address->firstname = $format->formatName($this->firstname);
-        $address->address1 = $format->formatAddress($this->address1);
-        $address->address2 = $format->formatAddress($this->address2);
-        $address->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
-        $address->city = $format->formatCityName(empty($this->city) ? 'Undefined' : $this->city);
-        if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $address->id_country)) {
-            $address->id_state = $id_state;
+        $tempAddress = new Address();
+        $address_exist = false;
+        $id_address = 0;
+        $count = 1;
+
+        $tempAddress->id_customer = $customer->id;
+        $tempAddress->id_country = (int) Country::getByIso($this->country_iso_code);
+        $tempAddress->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
+        $tempAddress->firstname = $format->formatName($this->firstname);
+        $tempAddress->address1 = $format->formatAddress($this->address1);
+        $tempAddress->address2 = $format->formatAddress($this->address2);
+        $tempAddress->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
+        $tempAddress->city = $format->formatCityName(empty($this->city) ? 'Undefined' : $this->city);
+
+        if ($id_state = (int)State::getIdByIso(Tools::strtoupper($this->state), $tempAddress->id_country)) {
+            $tempAddress->id_state = $id_state;
         } elseif ($id_state = State::getIdByName(pSQL(trim($this->state)))) {
             $state = new State((int)$id_state);
-            if ($state->id_country == $address->id_country) {
-                $address->id_state = $state->id;
+            if ($state->id_country == $tempAddress->id_country) {
+                $tempAddress->id_state = $state->id;
             }
         }
-        if (Country::isNeedDniByCountryId($address->id_country) && !Validate::isLoadedObject($address)) {
-            $address->dni = 'ThereIsNotDni000';
+
+        if (Country::isNeedDniByCountryId($tempAddress->id_country)) {
+            $tempAddress->dni = 'ThereIsNotDni000';
         }
-        
+
         if (!empty($this->phone)) {
             $phone = $format->formatPhoneNumber($this->phone);
             $phone_mobile = $format->formatPhoneNumber($this->phone);
+
             if (Validate::isPhoneNumber($phone)) {
-                $address->phone = $format->formatPhoneNumber($this->phone);
+                $tempAddress->phone = $format->formatPhoneNumber($this->phone);
             }
+
             if (Validate::isPhoneNumber($phone_mobile)) {
-                $address->phone_mobile = $format->formatPhoneNumber($this->phone);
+                $tempAddress->phone_mobile = $format->formatPhoneNumber($this->phone);
             }
         }
 
-        $address->active = 1;
+        $tempAddress->active = 1;
 
-        if ($id_address > 0 && Validate::isLoadedObject($address)) {
-            $res = $address->update();
-            $is_update = true;
-        } else {
-            $res = $address->add();
-            $id_address = $address->id;
-            $is_update = false;
+
+
+        foreach ($addresses as $address) {
+            if ($address['lastname'] == $tempAddress->lastname
+                    && $address['firstname'] == $tempAddress->firstname
+                    && $address['address1'] == $tempAddress->address1
+                    && $address['address2'] == $tempAddress->address2
+                    && $address['id_country'] == $tempAddress->id_country
+                    && $address['city'] == $tempAddress->city
+                    && $address['id_state'] == $tempAddress->id_state
+                    && $address['postcode'] == $tempAddress->postcode
+                    && $address['phone'] == $tempAddress->phone
+                    && $address['phone_mobile'] == $tempAddress->phone_mobile
+                    && $address['dni'] == $tempAddress->dni
+            ) {
+                $address_exist = true;
+                $id_address = $address['id_address'];
+                break;
+            } else {
+                if ((strrpos($address['alias'], 'eBay')) !== false) {
+                    $count +=  1;
+                }
+            }
         }
 
-        $this->_writeLog($ebay_profile->id, 'add_address', $res, null, $is_update);
+        if ($address_exist == false) {
+            $tempAddress->alias = 'eBay ' . $count;
+            $tempAddress->save();
+            $id_address = $tempAddress->id;
+        }
 
         $this->id_address = $id_address;
 
@@ -702,7 +728,19 @@ class EbayOrder
 
         $dbEbay->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'orders', $data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
+        $orderPs = new Order((int)$this->id_orders[$ebay_profile->id_shop]);
+        $orderPs->total_paid = round($data['total_paid'], 2);
+        $orderPs->total_paid_real = round($data['total_paid_real'], 2);
+        $orderPs->total_products = round($data['total_products'], 2);
+        $orderPs->total_products_wt = round($data['total_products_wt'], 2);
+        $orderPs->total_shipping = round($data['total_shipping'], 2);
+        $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'] , 2);
+        $orderPs->total_shipping_tax_incl = round($data['total_shipping_tax_incl'], 2);
+        $orderPs->total_shipping_tax_excl = round($data['total_shipping_tax_excl'], 2);
+        $orderPs->total_paid_tax_incl = round($data['total_paid_tax_incl'], 2);
+        $orderPs->id_carrier = $data['id_carrier'];
+
+        return $orderPs->save();
     }
 
     public function _getTaxByProduct($id_product)
@@ -758,6 +796,7 @@ class EbayOrder
 
     public function update($id_ebay_profile = null)
     {
+      
         if (is_array($this->id_orders)) {
             foreach ($this->id_orders as $id_shop => $id_order) {
                     $res = Db::getInstance()->insert('ebay_order_order', array(
@@ -835,7 +874,7 @@ class EbayOrder
 
     private function _formatShippingAddressName($name)
     {
-        $name = preg_replace('/(\-)*(\d+)*(_)*(,)*(\t)*(\(.*\))*(\[.*\])*/', '', $name);
+        $name = preg_replace('/(\-)*(\d+)*(_)*(,)*(\t)*(\(.*\))*(\[.*\])*(\")*(\')*/', '', $name);
         $name = trim($name);
         $name = explode(' ', $name, 2);
         $firstname = trim(Tools::substr(trim($name[0]), 0, 32));
@@ -1052,7 +1091,7 @@ class EbayOrder
 
         return $ebay_order;
     }
-    
+
     public static function getOrderbytransactionId($transaction_id)
     {
 
@@ -1064,10 +1103,10 @@ class EbayOrder
             $result['id_ebay_order']= EbayOrder::getIdOrderRefByIdOrder((int)$result[0]['id_order']);
         }
 
-  
+
         return $result;
     }
-    
+
     public static function getAllReturns()
     {
         return Db::getInstance()->ExecuteS('SELECT *

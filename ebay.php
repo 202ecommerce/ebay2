@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author 202-ecommerce <tech@202-ecommerce.com>
+ * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -963,7 +963,6 @@ class Ebay extends Module
                 $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
             }
         }
-
     }
 
     public function cronOrdersReturnsSync()
@@ -1004,12 +1003,14 @@ class Ebay extends Module
         foreach ($orders as $order) {
             $errors = array();
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
-            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService);
+            $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $this->context->shop->id, $order->shippingService, $order->ebay_user_identifier);
             $ebayProfileOrder = new EbayProfile($idProfileOrder);
+            $ebayCountry = EbayCountrySpec::getInstanceByKey($ebayProfileOrder->getConfiguration('EBAY_COUNTRY_DEFAULT'));
 
             if (!$ebayProfileOrder->id) {
                 continue;
             }
+
             $ebay_user_identifier = $ebayProfileOrder->ebay_user_identifier;
             EbayOrderErrors::deleteByOrderRef($order->getIdOrderRef());
 
@@ -1090,7 +1091,7 @@ class Ebay extends Module
                 
                 $ebay_profile = $ebayProfileOrder;
 
-                $id_customer = $order->getOrAddCustomer($ebay_profile);
+                $id_customer = $order->getOrAddCustomer($ebay_profile, $ebayCountry);
                 $order->updateOrAddAddress($ebay_profile);
                 $customer_ids[] = $id_customer;
 
@@ -1107,14 +1108,15 @@ class Ebay extends Module
 
             foreach ($id_shops as $id_shop) {
                 if ($this->is_multishop) {
-                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService);
+                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService, $order->ebay_user_identifier);
                     $ebay_profile = new EbayProfile($idProfileOrder);
+                    $ebayCountry = EbayCountrySpec::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
                 } else {
                     $ebay_profile = $ebayProfileOrder;
                 }
 
                 if (!$has_shared_customers) {
-                    $id_customer = $order->getOrAddCustomer($ebay_profile);
+                    $id_customer = $order->getOrAddCustomer($ebay_profile, $ebayCountry);
                     $order->updateOrAddAddress($ebay_profile);
 
                     $customer_ids[] = $id_customer;
@@ -1129,7 +1131,7 @@ class Ebay extends Module
                     }
                 }
 
-                $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
+                $cart = $order->addCart($ebay_profile, $ebayCountry); //Create a Cart for the order
                 if (!($cart instanceof Cart)) {
                     $message = $this->l('Error while creating a cart for the order');
                     $order->checkError($message, $ebay_user_identifier);
@@ -1467,11 +1469,17 @@ class Ebay extends Module
             EbayStat::send();
             Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
         }
-
+	if (Tools::getValue('tracking_number')) {
+		$tracking_number = Tools::getValue('tracking_number');
+	} else {
+		$tracking_number = Tools::getValue('shipping_tracking_number');
+	}
+	
+	
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
-            ($tracking_number = Tools::getValue('tracking_number'))
+            $tracking_number
             &&
             ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order))) {
             Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `'._DB_PREFIX_.'ebay_profile`');
@@ -1565,7 +1573,7 @@ class Ebay extends Module
                 'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
-                'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN'))),
                 'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         } else {
@@ -1575,7 +1583,7 @@ class Ebay extends Module
                 'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
                 '_module_ebay_dir_' => _MODULE_DIR_,
                 'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
-                'cron_url' => Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php',
+                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN'))),
                 'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
             );
         }
@@ -1607,6 +1615,9 @@ class Ebay extends Module
             $validatordb->checkDatabase(false);
         }
 
+        if (!Configuration::get('EBAY_CRON_TOKEN')) {
+            $this->setConfiguration('EBAY_CRON_TOKEN', md5('ebay_' . $_SERVER['HTTP_HOST'] . date('Y-m-d H:i:s')));
+        }
         if (Shop::getContext() != Shop::CONTEXT_SHOP) {
             $this->bootstrap = true;
             return $this->display(__FILE__, 'views/templates/hook/alert_multishop.tpl');
@@ -1786,7 +1797,7 @@ class Ebay extends Module
         }
 
 
-        $cron_url = Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/synchronizeProducts_CRON.php';
+        $cron_url = $this->context->link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN')));
         $this->smarty->assign(array(
             'cron_url' => $cron_url,
             'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
