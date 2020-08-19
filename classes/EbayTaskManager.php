@@ -132,7 +132,7 @@ class EbayTaskManager
                             }
 
                             if (in_array(10, $id_tasks) && StockAvailable::getQuantityAvailableByProduct($product->id, $id_attribute, $ebay_profile->id_shop) == 0) {
-                                return true;
+                                continue;
                             }
 
                             foreach ($id_tasks as $id_task) {
