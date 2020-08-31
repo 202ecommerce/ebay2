@@ -22,6 +22,16 @@
             <arg value="${env.BUILD_TAG}" />
             <arg value="${env.GIT_URL}" />
         </exec>
+
+        <exec executable="${env.TOTBUILDER_PATH}tot-package.sh" failonerror="true">
+            <arg value="dev" />
+            <arg value="${TARGETNAME}" />
+            <arg value="${TARGETBRANCH}" />
+            <arg value="${TARGETVERSION}" />
+            <arg value="${env.BUILD_TAG}" />
+            <arg value="${env.GIT_URL}" />
+        </exec>
+
     </target>
 
     <target name="psvalidator" description="Send Prestashop Validator">
