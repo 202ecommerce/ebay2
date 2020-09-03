@@ -254,8 +254,8 @@ class EbayOrder
 
         $tempAddress->id_customer = $customer->id;
         $tempAddress->id_country = (int) Country::getByIso($this->country_iso_code);
-        $tempAddress->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
-        $tempAddress->firstname = $format->formatName($this->firstname);
+        $tempAddress->lastname = empty($format->formatName(EbayOrder::_formatFamilyName($this->familyname))) ? 'Undefined' : $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
+        $tempAddress->firstname = empty($format->formatName($this->firstname)) ? 'Undefined' : $format->formatName($this->firstname);
         $tempAddress->address1 = $format->formatAddress($this->address1);
         $tempAddress->address2 = $format->formatAddress($this->address2);
         $tempAddress->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
