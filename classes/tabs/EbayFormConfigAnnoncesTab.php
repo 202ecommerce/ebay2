@@ -83,7 +83,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             'url'                       => $url,
             // pictures
             'sizes'               => ImageType::getImagesTypes('products'),
-            'itemspecifics'               => AttributeGroup::getAttributesGroups(1),
+            'itemspecifics'               => AttributeGroup::getAttributesGroups($this->ebay_profile->id_lang),
             'sizedefault'         => $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT'),
             'sizebig'             => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'),
             'sizesmall'           => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL'),
