@@ -561,7 +561,7 @@ class EbayOrder
                 (int) $this->carts[$id_shop]->id,
                 (int) Configuration::get('EBAY_STATUS_ORDER'),
                 (float) $this->carts[$id_shop]->getOrderTotal(true, Cart::BOTH),
-                'eBay '.$this->payment_method.' '.$this->id_order_seller,
+                $this->getPaymentMethod(),
                 null,
                 array(),
                 (int) $this->carts[$id_shop]->id_currency,
@@ -709,6 +709,8 @@ class EbayOrder
        // Update payment
         $payment_data = array(
             'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
+            'payment_method' => $this->getPaymentMethod(),
+            'transaction_id' => $this->id_transaction
         );
         $dbEbay->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
 
@@ -1296,5 +1298,10 @@ class EbayOrder
         $orderHistory = new OrderHistory();
         $id_orderState = (int)Configuration::get('PS_OS_PAYMENT');
         $orderHistory->changeIdOrderState($id_orderState, $id_order);
+    }
+
+    public function getPaymentMethod()
+    {
+        return 'eBay '.$this->payment_method.' '.$this->id_order_seller;
     }
 }
