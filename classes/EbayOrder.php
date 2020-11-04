@@ -706,7 +706,8 @@ class EbayOrder
         $invoice_data = $data;
         unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
         $dbEbay->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
-       // Update payment
+
+        // Update payment
         $payment_data = array(
             'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
             'payment_method' => $this->getPaymentMethod(),

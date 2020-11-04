@@ -2727,6 +2727,7 @@ class Ebay extends Module
             $order_state->color = '#0000ff';
             $order_state->module_name = $this->name;
             $order_state->name = array();
+            $order_state->logable = true;
             $languages = Language::getLanguages(false);
             foreach ($languages as $language) {
                 $order_state->name[ $language['id_lang'] ] = 'Ebay payment accepted';
