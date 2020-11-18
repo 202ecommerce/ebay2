@@ -876,10 +876,19 @@ class EbayRequest
 
                 if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
                     if ($response->errorMessage->error->errorId == '178149') {
+                        $idBussinesPolicie = '';
+
+                        foreach ($response->errorMessage->error->parameter as $parameter) {
+                            if ($parameter['name'] == 'DuplicateProfileId') {
+                                $idBussinesPolicie = (string) $parameter;
+                            }
+                        }
+
                         $dataProf = array(
-                        'id' => $name_shipping,
-                        'id_bussines_Policie' => (string) $response->errorMessage->error->parameter,
-                             );
+                            'id' => $name_shipping,
+                            'id_bussines_Policie' => $idBussinesPolicie
+                        );
+
                         EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                     } else {
                         $this->_checkForErrors($response);
