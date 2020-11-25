@@ -644,12 +644,12 @@ class EbayOrder
                 '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute']
             );
 
-                $detail_tax_data = array(
-                    'unit_amount' => (float) ($product['price'] - ($product['price'] / $coef_rate)),
-                    'total_amount' => ((float) ($product['price'] - ($product['price'] / $coef_rate)) * $product['quantity']),
-                );
+            $detail_tax_data = array(
+                'unit_amount' => (float) ($product['price'] - ($product['price'] / $coef_rate)),
+                'total_amount' => ((float) ($product['price'] - ($product['price'] / $coef_rate)) * $product['quantity']),
+            );
 
-                $dbEbay->autoExecute(_DB_PREFIX_.'order_detail_tax', $detail_tax_data, 'UPDATE', '`id_order_detail` = (SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute'].') ');
+            $dbEbay->autoExecute(_DB_PREFIX_.'order_detail_tax', $detail_tax_data, 'UPDATE', '`id_order_detail` = (SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute'].') ');
 
 
             $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
@@ -685,7 +685,7 @@ class EbayOrder
                 'total_paid_tax_excl' => (float) ($total_price_tax_excl + $total_shipping_tax_excl),
                 'total_shipping_tax_incl' => (float) $total_shipping_tax_incl,
                 'total_shipping_tax_excl' => (float) $total_shipping_tax_excl,
-                )
+            )
         );
         if ($this->payment_method == 'COD') {
             $data['total_paid_tax_incl'] = (float) $this->amount + $this->CODCost;
@@ -706,7 +706,7 @@ class EbayOrder
         $invoice_data = $data;
         unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
         $dbEbay->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
-       // Update payment
+        // Update payment
         $payment_data = array(
             'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
             'payment_method' => $this->getPaymentMethod(),
@@ -931,13 +931,13 @@ class EbayOrder
             }
 
             $id_product = (int) Db::getInstance()->getValue('SELECT `id_product`
-				FROM `'._DB_PREFIX_.'product`
-				WHERE `id_product` = '.(int) $id_product);
+        FROM `'._DB_PREFIX_.'product`
+        WHERE `id_product` = '.(int) $id_product);
 
             $id_product_attribute = (int) Db::getInstance()->getValue('SELECT `id_product_attribute`
-				FROM `'._DB_PREFIX_.'product_attribute`
-				WHERE `id_product` = '.(int) $id_product.'
-				AND `id_product_attribute` = '.(int) $id_product_attribute);
+        FROM `'._DB_PREFIX_.'product_attribute`
+        WHERE `id_product` = '.(int) $id_product.'
+        AND `id_product_attribute` = '.(int) $id_product_attribute);
 
             if ($id_product) {
                 $products[] = array(
@@ -945,15 +945,16 @@ class EbayOrder
                     'id_product_attribute' => $id_product_attribute,
                     'id_ebay_profile' => $id_ebay_profile,
                     'quantity' => $quantity,
-                    'price' => (string) $transaction->TransactionPrice);
+                    'price' => (string) $transaction->TransactionPrice,
+                    'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount);
             } else {
                 $product_has_find = false;
                 $reference = $this->_getReference($transaction);
 
                 if (!empty($reference)) {
                     $id_product = Db::getInstance()->getValue('SELECT `id_product`
-						FROM `'._DB_PREFIX_.'product`
-						WHERE `reference` = \''.pSQL($reference).'\'');
+            FROM `'._DB_PREFIX_.'product`
+            WHERE `reference` = \''.pSQL($reference).'\'');
 
                     if ((int) $id_product) {
                         $products[] = array(
@@ -961,12 +962,13 @@ class EbayOrder
                             'id_product_attribute' => 0,
                             'id_ebay_profile' => 0,
                             'quantity' => $quantity,
-                            'price' => (string) $transaction->TransactionPrice);
+                            'price' => (string) $transaction->TransactionPrice,
+                            'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount);
                         $product_has_find = true;
                     } else {
                         $row = Db::getInstance()->getRow('SELECT `id_product`, `id_product_attribute`
-							FROM `'._DB_PREFIX_.'product_attribute`
-							WHERE `reference` = \''.pSQL($reference).'\'');
+              FROM `'._DB_PREFIX_.'product_attribute`
+              WHERE `reference` = \''.pSQL($reference).'\'');
 
                         if ((int) $row['id_product']) {
                             $products[] = array(
@@ -974,7 +976,8 @@ class EbayOrder
                                 'id_product_attribute' => (int) $row['id_product_attribute'],
                                 'id_ebay_profile' => 0,
                                 'quantity' => $quantity,
-                                'price' => (string) $transaction->TransactionPrice);
+                                'price' => (string) $transaction->TransactionPrice,
+                                'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount);
                             $product_has_find = true;
                         }
                     }
@@ -989,7 +992,8 @@ class EbayOrder
                                 'id_product_attribute' => $p['id_product_attribute'],
                                 'id_ebay_profile' => 0,
                                 'quantity' => $quantity,
-                                'price' => (string) $transaction->TransactionPrice
+                                'price' => (string) $transaction->TransactionPrice,
+                                'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount
                             );
                         }
                     }
