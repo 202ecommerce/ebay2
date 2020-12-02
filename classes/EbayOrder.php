@@ -970,7 +970,7 @@ class EbayOrder
                     'id_ebay_profile' => $id_ebay_profile,
                     'quantity' => $quantity,
                     'price' => (string) $transaction->TransactionPrice,
-                    'ebayTaxTotalAmount' => (string) $transaction->Taxes->TotalTaxAmount);
+                    'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount);
             } else {
                 $product_has_find = false;
                 $reference = $this->_getReference($transaction);
@@ -987,7 +987,7 @@ class EbayOrder
                             'id_ebay_profile' => 0,
                             'quantity' => $quantity,
                             'price' => (string) $transaction->TransactionPrice,
-                            'ebayTaxTotalAmount' => (string) $transaction->Taxes->TotalTaxAmount);
+                            'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount);
                         $product_has_find = true;
                     } else {
                         $row = Db::getInstance()->getRow('SELECT `id_product`, `id_product_attribute`
@@ -1001,7 +1001,7 @@ class EbayOrder
                                 'id_ebay_profile' => 0,
                                 'quantity' => $quantity,
                                 'price' => (string) $transaction->TransactionPrice,
-                                'ebayTaxTotalAmount' => (string) $transaction->Taxes->TotalTaxAmount);
+                                'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount);
                             $product_has_find = true;
                         }
                     }
@@ -1017,7 +1017,7 @@ class EbayOrder
                                 'id_ebay_profile' => 0,
                                 'quantity' => $quantity,
                                 'price' => (string) $transaction->TransactionPrice,
-                                'ebayTaxTotalAmount' => (string) $transaction->Taxes->TotalTaxAmount
+                                'ebayTaxTotalAmount' => $transaction->Taxes->TotalTaxAmount
                             );
                         }
                     }
