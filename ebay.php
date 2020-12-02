@@ -2746,31 +2746,4 @@ class Ebay extends Module
             $orderState->delete();
         }
     }
-
-    /**
-     * @return Tax
-     */
-    public function getEbayTax()
-    {
-        $idTax = Configuration::get('EBAY_TAX');
-        $tax = new Tax((int)$idTax);
-
-        if (Validate::isLoadedObject($tax)) {
-            return $tax;
-        }
-
-        $tax->name = [];
-        $languages = Language::getLanguages(false);
-
-        foreach ($languages as $language) {
-            $tax->name[ $language['id_lang'] ] = 'Ebay tax';
-        }
-
-        $tax->rate = 0;
-        $tax->active = true;
-        $tax->save();
-        Configuration::updateValue('EBAY_TAX', $tax->id);
-
-        return $tax;
-    }
 }
