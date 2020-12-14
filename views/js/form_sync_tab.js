@@ -159,9 +159,14 @@ $(document).ready(function(){
                 id_ebay_profile: id_ebay_profile,
                 modeResync: modeResync,
             },
-
+            beforeSend: function() {
+                $('.button-sync button').prop('disabled', true);
+            },
+            success: function(response) {
+                location.reload();
+            }
         });
-        location.reload();
+
     }
 });
 
