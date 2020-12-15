@@ -163,7 +163,7 @@ $(document).ready(function(){
                 $('.button-sync button').prop('disabled', true);
             },
             success: function(response) {
-                location.reload();
+                $('.button-sync button').prop('disabled', false);
             }
         });
 
