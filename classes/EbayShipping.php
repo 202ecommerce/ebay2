@@ -83,7 +83,19 @@ class EbayShipping
             }
         }
 
+        // Sort a shippings beacause FR_RemiseEnMainPropre should be last
+        usort($shippings, array('self', 'sortCarriers'));
+
         return $shippings;
+    }
+
+    public static function sortCarriers($carrierOne, $carrierTwo)
+    {
+        if ($carrierOne['ebay_carrier'] == 'FR_RemiseEnMainPropre') {
+            return 1;
+        }
+
+        return -1;
     }
 
     public static function internationalShippingsHaveZone($shippings)
@@ -143,6 +155,9 @@ class EbayShipping
                 }
             }
         }
+
+        // Sort a shippings beacause FR_RemiseEnMainPropre should be last
+        usort($shippings, array('self', 'sortCarriers'));
 
         return $shippings;
     }
