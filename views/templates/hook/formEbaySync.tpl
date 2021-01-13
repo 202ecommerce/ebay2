@@ -899,7 +899,7 @@
         <div class="alert alert-info">{l s='Associate a Prestashop category with an eBay category. Optionally you can select multiple categories to associate with a single eBay category.' mod='ebay'}</div>
         <div class="form-group page">
           <label for="" class="control-label col-xs-12 col-md-5" data-toggle="tooltip" data-placement="bottom"
-                 title="Pour des raisons de performances, il est recommandé de se limiter à 3 catégories par annonce.">
+                 title="{l s='For performance reasons, it is recommended to limit  to 3 categories per advertisement.' mod='ebay'}">
             <span class="label-tooltip">{l s='PrestaShop category' mod='ebay'} <strong class="text-danger"><sup>*</sup></strong></span>
           </label>
 
