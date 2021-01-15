@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -651,8 +651,7 @@ class EbayOrder
 
                 $dbEbay->autoExecute(_DB_PREFIX_.'order_detail_tax', $detail_tax_data, 'UPDATE', '`id_order_detail` = (SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute'].') ');
 
-
-            $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
+                $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
         }
 
         $total_shipping_tax_incl += (float)$this->shippingServiceCost;
@@ -737,7 +736,7 @@ class EbayOrder
         $orderPs->total_products = round($data['total_products'], 2);
         $orderPs->total_products_wt = round($data['total_products_wt'], 2);
         $orderPs->total_shipping = round($data['total_shipping'], 2);
-        $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'] , 2);
+        $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'], 2);
         $orderPs->total_shipping_tax_incl = round($data['total_shipping_tax_incl'], 2);
         $orderPs->total_shipping_tax_excl = round($data['total_shipping_tax_excl'], 2);
         $orderPs->total_paid_tax_incl = round($data['total_paid_tax_incl'], 2);

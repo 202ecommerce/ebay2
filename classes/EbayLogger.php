@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -160,20 +160,6 @@ class EbayLogger
 
 
         $logs = self::getLogs($uid, $keyword); //self::getLogs();
-
-
-        /*
-			'uid' => array(
-				'title' => 'Operation',
-				'width' => 140,
-				'type' => 'text',
-			),
-			'id_ebay_logs' => array(
-				'title' => 'ID',
-				'width' => 140,
-				'type' => 'hidden',
-			),
-        */
 
         $fields_list = array(
 

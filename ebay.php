@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -1468,13 +1468,13 @@ class Ebay extends Module
             EbayStat::send();
             Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
         }
-	if (Tools::getValue('tracking_number')) {
-		$tracking_number = Tools::getValue('tracking_number');
-	} else {
-		$tracking_number = Tools::getValue('shipping_tracking_number');
-	}
-	
-	
+
+        if (Tools::getValue('tracking_number')) {
+            $tracking_number = Tools::getValue('tracking_number');
+        } else {
+            $tracking_number = Tools::getValue('shipping_tracking_number');
+        }
+
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
