@@ -339,7 +339,12 @@ class EbayOrder
 
     public function getProductIds()
     {
-        return array_map(create_function('$product', 'return (int)$product[\'id_product\'];'), $this->product_list);
+        return array_map(
+            function($product) {
+                return (int)$product['id_product'];
+            },
+            $this->product_list
+        );
     }
 
     /**
