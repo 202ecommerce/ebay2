@@ -1156,25 +1156,23 @@ class Ebay extends Module
                 }
 
                 // Validate order
-                if ($order->validate($ebay_profile->id_shop, $ebay_profile->id)) {
-                    $order->update($ebay_profile->id);
-                } else {
-                    $order->delete();
-                }
-
-                // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
+                $idOrder = $order->validate($ebay_profile->id_shop, $ebay_profile->id);
                 // we now disable the carrier if required
                 if ($has_disabled_carrier) {
                     $carrier->active = false;
                     $carrier->save();
                 }
+
+                if ($idOrder == false) {
+                    $order->delete();
+                    continue;
+                }
+
+                $order->update($ebay_profile->id);
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
                 $order->updateOrderState($ebay_profile);
             }
-            //foreach ($order->getProducts() as $product) {
-               //$this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
-            //}
 
 
             foreach ($customer_ids as $id_customer) {

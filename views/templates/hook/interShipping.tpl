@@ -542,7 +542,7 @@
 		var message_cost = "{/literal}{l s='Between 0 and ' mod='ebay'}{literal}";
 		$('.extrafee').live('keyup', '.js_numbers_only', function(event) {
 
-			var max = parseInt($(this).attr('max'));
+			var max = parseFloat($(this).attr('max'));
 			console.log(max);
 			if ($(this).val() > max ) {
 
