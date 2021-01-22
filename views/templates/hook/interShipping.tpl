@@ -1,5 +1,5 @@
 {*
-* 2007-2017 PrestaShop
+* 2007-2021 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2017-2020 202-ecommerce
+* @copyright Copyright (c) 2007-2021 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -542,7 +542,7 @@
 		var message_cost = "{/literal}{l s='Between 0 and ' mod='ebay'}{literal}";
 		$('.extrafee').live('keyup', '.js_numbers_only', function(event) {
 
-			var max = parseInt($(this).attr('max'));
+			var max = parseFloat($(this).attr('max'));
 			console.log(max);
 			if ($(this).val() > max ) {
 

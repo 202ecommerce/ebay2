@@ -5,7 +5,7 @@
     <property name="src-dir" value="${basedir}" />
     <property name="TARGETNAME" value="ebay" />
     <property name="TARGETBRANCH" value="${env.GIT_BRANCH}" />
-    <property name="TARGETVERSION" value="2.1.7" />
+    <property name="TARGETVERSION" value="2.1.8" />
 
     <target name="build" depends="build-common,package-zip,psvalidator" />
 
@@ -22,6 +22,16 @@
             <arg value="${env.BUILD_TAG}" />
             <arg value="${env.GIT_URL}" />
         </exec>
+
+        <exec executable="${env.TOTBUILDER_PATH}tot-package.sh" failonerror="true">
+            <arg value="dev" />
+            <arg value="${TARGETNAME}" />
+            <arg value="${TARGETBRANCH}" />
+            <arg value="${TARGETVERSION}" />
+            <arg value="${env.BUILD_TAG}" />
+            <arg value="${env.GIT_URL}" />
+        </exec>
+
     </target>
 
     <target name="psvalidator" description="Send Prestashop Validator">

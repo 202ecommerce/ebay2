@@ -21,24 +21,23 @@
  * @author 202-ecommerce <tech@202-ecommerce.com>
  * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
- * International Registered Trademark & Property of PrestaShop SA
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 /**
  * @param Ebay $module
  * @return bool
  */
-function upgrade_module_1_12_2($module)
+function upgrade_module_2_1_8($module)
 {
-    if (Configuration::get('EBAY_SYNCHRONIZE_EAN')) {
-        $module->setConfiguration('EBAY_SYNCHRONIZE_EAN', 'EAN');
+    $orderStateEbay = new OrderState((int)Configuration::get('EBAY_STATUS_ORDER'));
+
+    if (false === Validate::isLoadedObject($orderStateEbay)) {
+        return true;
     }
 
-    if ($module->ebay_profile) {
-        $module->ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', null);
-    }
+    $orderStateEbay->logable = true;
+    $orderStateEbay->invoice = true;
 
-    $module->setConfiguration('EBAY_VERSION', $module->version);
-
-    return true;
+    return $orderStateEbay->save();
 }

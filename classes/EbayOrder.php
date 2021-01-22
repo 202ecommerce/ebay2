@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -254,8 +254,8 @@ class EbayOrder
 
         $tempAddress->id_customer = $customer->id;
         $tempAddress->id_country = (int) Country::getByIso($this->country_iso_code);
-        $tempAddress->lastname = $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
-        $tempAddress->firstname = $format->formatName($this->firstname);
+        $tempAddress->lastname = empty($format->formatName(EbayOrder::_formatFamilyName($this->familyname))) ? 'Undefined' : $format->formatName(EbayOrder::_formatFamilyName($this->familyname));
+        $tempAddress->firstname = empty($format->formatName($this->firstname)) ? 'Undefined' : $format->formatName($this->firstname);
         $tempAddress->address1 = $format->formatAddress($this->address1);
         $tempAddress->address2 = $format->formatAddress($this->address2);
         $tempAddress->postcode = $format->formatPostCode(str_replace('.', '', $this->postalcode));
@@ -339,7 +339,12 @@ class EbayOrder
 
     public function getProductIds()
     {
-        return array_map(create_function('$product', 'return (int)$product[\'id_product\'];'), $this->product_list);
+        return array_map(
+            function($product) {
+                return (int)$product['id_product'];
+            },
+            $this->product_list
+        );
     }
 
     /**
@@ -561,7 +566,7 @@ class EbayOrder
                 (int) $this->carts[$id_shop]->id,
                 (int) Configuration::get('EBAY_STATUS_ORDER'),
                 (float) $this->carts[$id_shop]->getOrderTotal(true, Cart::BOTH),
-                'eBay '.$this->payment_method.' '.$this->id_order_seller,
+                $this->getPaymentMethod(),
                 null,
                 array(),
                 (int) $this->carts[$id_shop]->id_currency,
@@ -651,8 +656,7 @@ class EbayOrder
 
                 $dbEbay->autoExecute(_DB_PREFIX_.'order_detail_tax', $detail_tax_data, 'UPDATE', '`id_order_detail` = (SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop].' AND `product_id` = '.(int) $product['id_product'].' AND `product_attribute_id` = '.(int) $product['id_product_attribute'].') ');
 
-
-            $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
+                $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
         }
 
         $total_shipping_tax_incl += (float)$this->shippingServiceCost;
@@ -706,9 +710,12 @@ class EbayOrder
         $invoice_data = $data;
         unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
         $dbEbay->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
-       // Update payment
+
+        // Update payment
         $payment_data = array(
             'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
+            'payment_method' => $this->getPaymentMethod(),
+            'transaction_id' => $this->id_transaction
         );
         $dbEbay->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
 
@@ -734,7 +741,7 @@ class EbayOrder
         $orderPs->total_products = round($data['total_products'], 2);
         $orderPs->total_products_wt = round($data['total_products_wt'], 2);
         $orderPs->total_shipping = round($data['total_shipping'], 2);
-        $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'] , 2);
+        $orderPs->total_paid_tax_excl = round($data['total_paid_tax_excl'], 2);
         $orderPs->total_shipping_tax_incl = round($data['total_shipping_tax_incl'], 2);
         $orderPs->total_shipping_tax_excl = round($data['total_shipping_tax_excl'], 2);
         $orderPs->total_paid_tax_incl = round($data['total_paid_tax_incl'], 2);
@@ -1296,5 +1303,10 @@ class EbayOrder
         $orderHistory = new OrderHistory();
         $id_orderState = (int)Configuration::get('PS_OS_PAYMENT');
         $orderHistory->changeIdOrderState($id_orderState, $id_order);
+    }
+
+    public function getPaymentMethod()
+    {
+        return 'eBay '.$this->payment_method.' '.$this->id_order_seller;
     }
 }

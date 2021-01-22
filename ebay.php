@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -29,8 +29,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-
-
+require_once _PS_MODULE_DIR_ . 'ebay/config_dev.php';
 
 /* Loading eBay Class Request*/
 $classes_to_load = array(
@@ -1157,25 +1156,23 @@ class Ebay extends Module
                 }
 
                 // Validate order
-                if ($order->validate($ebay_profile->id_shop, $ebay_profile->id)) {
-                    $order->update($ebay_profile->id);
-                } else {
-                    $order->delete();
-                }
-
-                // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
+                $idOrder = $order->validate($ebay_profile->id_shop, $ebay_profile->id);
                 // we now disable the carrier if required
                 if ($has_disabled_carrier) {
                     $carrier->active = false;
                     $carrier->save();
                 }
+
+                if ($idOrder == false) {
+                    $order->delete();
+                    continue;
+                }
+
+                $order->update($ebay_profile->id);
                 // Update price (because of possibility of price impact)
                 $order->updatePrice($ebay_profile);
                 $order->updateOrderState($ebay_profile);
             }
-            //foreach ($order->getProducts() as $product) {
-               //$this->hookAddProduct(array('product' => new Product((int) $product['id_product'])));
-            //}
 
 
             foreach ($customer_ids as $id_customer) {
@@ -1469,13 +1466,13 @@ class Ebay extends Module
             EbayStat::send();
             Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
         }
-	if (Tools::getValue('tracking_number')) {
-		$tracking_number = Tools::getValue('tracking_number');
-	} else {
-		$tracking_number = Tools::getValue('shipping_tracking_number');
-	}
-	
-	
+
+        if (Tools::getValue('tracking_number')) {
+            $tracking_number = Tools::getValue('tracking_number');
+        } else {
+            $tracking_number = Tools::getValue('shipping_tracking_number');
+        }
+
         // update tracking number of eBay if required
         if (($id_order = (int) Tools::getValue('id_order'))
             &&
@@ -2728,6 +2725,8 @@ class Ebay extends Module
             $order_state->color = '#0000ff';
             $order_state->module_name = $this->name;
             $order_state->name = array();
+            $order_state->logable = true;
+            $order_state->invoice = true;
             $languages = Language::getLanguages(false);
             foreach ($languages as $language) {
                 $order_state->name[ $language['id_lang'] ] = 'Ebay payment accepted';

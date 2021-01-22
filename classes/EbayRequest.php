@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = false;
+    private $dev = EBAY_DEV;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -876,10 +876,19 @@ class EbayRequest
 
                 if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
                     if ($response->errorMessage->error->errorId == '178149') {
+                        $idBussinesPolicie = '';
+
+                        foreach ($response->errorMessage->error->parameter as $parameter) {
+                            if ($parameter['name'] == 'DuplicateProfileId') {
+                                $idBussinesPolicie = (string) $parameter;
+                            }
+                        }
+
                         $dataProf = array(
-                        'id' => $name_shipping,
-                        'id_bussines_Policie' => (string) $response->errorMessage->error->parameter,
-                             );
+                            'id' => $name_shipping,
+                            'id_bussines_Policie' => $idBussinesPolicie
+                        );
+
                         EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                     } else {
                         $this->_checkForErrors($response);

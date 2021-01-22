@@ -21,24 +21,41 @@
  * @author 202-ecommerce <tech@202-ecommerce.com>
  * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
- * International Registered Trademark & Property of PrestaShop SA
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
-/**
- * @param Ebay $module
- * @return bool
- */
-function upgrade_module_1_12_2($module)
+class EbayDebugTools
 {
-    if (Configuration::get('EBAY_SYNCHRONIZE_EAN')) {
-        $module->setConfiguration('EBAY_SYNCHRONIZE_EAN', 'EAN');
+    public static function updateProfileIdentifier($old, $new)
+    {
+        $return = true;
+        $data = [
+            'ebay_user_identifier' => $new
+        ];
+
+        $return &= Db::getInstance()->update(
+            'ebay_profile',
+            $data,
+            sprintf('ebay_user_identifier LIKE "%s"', $old)
+        );
+
+        $return &= Db::getInstance()->update(
+            'ebay_user_identifier_token',
+            $data,
+            sprintf('ebay_user_identifier LIKE "%s"', $old)
+        );
+
+        return $return;
     }
 
-    if ($module->ebay_profile) {
-        $module->ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', null);
+    public static function getTableData($table, $where = null)
+    {
+        $query = (new DbQuery())->from($table);
+
+        if (false === is_null($where)) {
+            $query->where($where);
+        }
+
+        return Db::getInstance()->executeS($query);
     }
-
-    $module->setConfiguration('EBAY_VERSION', $module->version);
-
-    return true;
 }

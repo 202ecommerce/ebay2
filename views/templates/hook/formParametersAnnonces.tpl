@@ -1,5 +1,5 @@
 {*
-* 2007-2017 PrestaShop
+* 2007-2021 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2017-2020 202-ecommerce
+* @copyright Copyright (c) 2007-2021 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -28,7 +28,12 @@
 
 	<fieldset>
 		<div class="panel-heading">
-			{l s='EAN Sync' mod='ebay'} <a class="kb-help" data-errorcode="{$help_ean.error_code}" data-module="ebay" data-lang="{$help_ean.lang}" module_version="{$help_ean.module_version}" prestashop_version="{$help_ean.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
+			<a
+					href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/installation-configuration/ajouter-les-codes-produits-a-vos-annonces-ebay-avec-le-module-ebay"
+					target="_blank"
+			>
+				{l s='EAN Sync' mod='ebay'}
+			</a>
 		</div>
 
 		<div class="form-group">
@@ -295,8 +300,14 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				{l s='Listing duration' mod='ebay'}
-				<a class="kb-help" data-errorcode="{$help_gtc.error_code}" data-module="ebay" data-lang="{$help_gtc.lang}" module_version="{$help_gtc.module_version}" prestashop_version="{$help_gtc.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
+				<a
+						target="_blank"
+						href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/duree-de-mise-en-vente-good-till-canceled-gtc/"
+				>
+					{l s='Listing duration' mod='ebay'}
+				</a>
+
+
 			</label>
 			<div class="col-sm-9">
 				<select name="listingdurations" class="form-control">
@@ -320,8 +331,12 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				{l s='Out of Stock status ' mod='ebay'}
-				<a class="kb-help" data-errorcode="{$help_out_of_stock.error_code}" data-module="ebay" data-lang="{$help_out_of_stock.lang}" module_version="{$help_out_of_stock.module_version}" prestashop_version="{$help_out_of_stock.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
+				<a
+						target="_blank"
+						href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/statut-en-rupture-de-stock/"
+				>
+					{l s='Out of Stock status ' mod='ebay'}
+				</a>
 			</label>
 			<div class="col-sm-9">
 				<input type="text" readonly value="{if $out_of_stock_value}{l s='Activated' mod='ebay'}{else}{l s='Deactivated' mod='ebay'}{/if}" class="d-ib" style="text-align: center;">
@@ -330,8 +345,12 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-                {l s='Limit of ebay stock' mod='ebay'}
-				<a class="kb-help" data-errorcode="{$help_limit_of_stock.error_code}" data-module="ebay" data-lang="{$help_limit_of_stock.lang}" module_version="{$help_limit_of_stock.module_version}" prestashop_version="{$help_limit_of_stock.ps_version}" href="" target="_blank">&nbsp;<i class="icon-info-circle"></i></a>
+				<a
+						target="_blank"
+						href="https://help.202-ecommerce.com/ebay-for-prestashop-3/installation-configuration/settings/stock-limit-on-ebay/"
+				>
+					{l s='Limit of ebay stock' mod='ebay'}
+				</a>
 			</label>
 			<div class="col-sm-9">
 				<input type="number" name="limitEbayStock" max="50" min="0" class="form-control width-num" id="limitEbayStock"

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -83,7 +83,7 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             'url'                       => $url,
             // pictures
             'sizes'               => ImageType::getImagesTypes('products'),
-            'itemspecifics'               => AttributeGroup::getAttributesGroups(1),
+            'itemspecifics'               => AttributeGroup::getAttributesGroups($this->ebay_profile->id_lang),
             'sizedefault'         => $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT'),
             'sizebig'             => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'),
             'sizesmall'           => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL'),

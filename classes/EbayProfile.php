@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -85,7 +85,7 @@ class EbayProfile extends ObjectModel
                 ),
             );
 
-        return parent::__construct($id, $id_lang, $id_shop);
+            return parent::__construct($id, $id_lang, $id_shop);
     }
 
     public function getReturnsPolicyConfiguration()
@@ -634,7 +634,7 @@ class EbayProfile extends ObjectModel
         $select->select('id_ebay_profile');
         $select->from('ebay_profile');
         $select->where('ebay_site_id = \'' . pSQL($siteId) . '\'');
-        $select->where('id_shop = ' . (int) $id_shop );
+        $select->where('id_shop = ' . (int) $id_shop);
         if ($ebay_user_identifier) {
             $select->where('ebay_user_identifier = \'' . pSQL($ebay_user_identifier) . '\'');
         }

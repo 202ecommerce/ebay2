@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2017 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2017-2020 202-ecommerce
+ * @copyright Copyright (c) 2007-2021 202-ecommerce
  * @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -83,7 +83,19 @@ class EbayShipping
             }
         }
 
+        // Sort a shippings beacause FR_RemiseEnMainPropre should be last
+        usort($shippings, array('self', 'sortCarriers'));
+
         return $shippings;
+    }
+
+    public static function sortCarriers($carrierOne, $carrierTwo)
+    {
+        if ($carrierOne['ebay_carrier'] == 'FR_RemiseEnMainPropre') {
+            return 1;
+        }
+
+        return -1;
     }
 
     public static function internationalShippingsHaveZone($shippings)
@@ -143,6 +155,9 @@ class EbayShipping
                 }
             }
         }
+
+        // Sort a shippings beacause FR_RemiseEnMainPropre should be last
+        usort($shippings, array('self', 'sortCarriers'));
 
         return $shippings;
     }
