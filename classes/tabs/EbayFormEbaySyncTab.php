@@ -76,9 +76,9 @@ class EbayFormEbaySyncTab extends EbayTab
                 $query_filter = " AND 0";
             }
 
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), $rootCategory->id, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, false, true, '', $query_filter), $rootCategory->id, array(), '', $searche);
         } else {
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), $rootCategory->id);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, false), $rootCategory->id);
         }
 
         $categories = array();
