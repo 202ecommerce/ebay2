@@ -99,7 +99,8 @@ $classes_to_load = array(
     'EbayBussinesPolicies',
     'EbayTaskManager',
     'DbEbay',
-    '../services/EbayProfileService'
+    '../services/EbayProfileService',
+    'EbayDebugTools'
 );
 
 
