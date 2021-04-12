@@ -2228,9 +2228,10 @@ class Ebay extends Module
      * @param array  $path
      * @param string $path_add
      * @param string $search
+     * @param array $restrictedCategories. Collection of a category id
      * @return array
      */
-    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '')
+    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '', $restrictedCategories = [])
     {
         $category_tab = array();
 
@@ -2245,6 +2246,7 @@ class Ebay extends Module
         }
         if (isset($cats) && $cats) {
             foreach ($cats as $idc => $cc) {
+                $isEligible = true;
                 $name = '';
                 if ($path) {
                     foreach ($path as $p) {
@@ -2253,25 +2255,29 @@ class Ebay extends Module
                 }
 
                 $name .= $cc['infos']['name'];
-                $category_tab[] = array(
-                    'id_category' => $cc['infos']['id_category'],
-                    'name' => $name,
-                    'active' => $cc['infos']['active'],
-                );
 
-                $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], '');
+                if ($search) {
+                    if (strpos(Tools::strtolower($name), Tools::strtolower($search)) === false) {
+                        $isEligible = false;
+                    }
+                }
+
+                if (in_array((int)$cc['infos']['id_category'], $restrictedCategories)) {
+                    $isEligible = false;
+                }
+
+                if ($isEligible) {
+                    $category_tab[] = array(
+                        'id_category' => $cc['infos']['id_category'],
+                        'name' => $name,
+                        'active' => $cc['infos']['active'],
+                    );
+                }
+
+                $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], $search, $restrictedCategories);
 
                 $category_tab = array_merge($category_tab, $categoryTmp);
             }
-        }
-        if ($search) {
-            $category_tab_filtered = array();
-            foreach ($category_tab as $c) {
-                if (strpos(Tools::strtolower($c['name']), Tools::strtolower($search)) !== false) {
-                    $category_tab_filtered[] = $c;
-                }
-            }
-            $category_tab = $category_tab_filtered;
         }
 
         return $category_tab;
