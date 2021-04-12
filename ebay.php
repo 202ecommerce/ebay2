@@ -2231,8 +2231,21 @@ class Ebay extends Module
      * @param array $restrictedCategories. Collection of a category id
      * @return array
      */
-    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '', $restrictedCategories = [])
+    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '', $idEbayProfile = null, $configuredCategories = [])
     {
+        if (empty($configuredCategories)) {
+            if (is_null($idEbayProfile)) {
+                $ebayProfile = EbayProfile::getCurrent();
+                $idEbayProfile = $ebayProfile->id;
+            }
+
+            $configuredCategories = array_map(
+                function($category) {
+                    return (int)$category['id_category'];
+                },
+                EbayCategoryConfiguration::getEbayCategoryConfigurations((int)$idEbayProfile)
+            );
+        }
         $category_tab = array();
 
         if ($path_add != '') {
@@ -2262,19 +2275,16 @@ class Ebay extends Module
                     }
                 }
 
-                if (in_array((int)$cc['infos']['id_category'], $restrictedCategories)) {
-                    $isEligible = false;
-                }
-
                 if ($isEligible) {
                     $category_tab[] = array(
                         'id_category' => $cc['infos']['id_category'],
                         'name' => $name,
                         'active' => $cc['infos']['active'],
+                        'configured' => in_array((int)$cc['infos']['id_category'], $configuredCategories)
                     );
                 }
 
-                $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], $search, $restrictedCategories);
+                $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], $search, $idEbayProfile, $configuredCategories);
 
                 $category_tab = array_merge($category_tab, $categoryTmp);
             }

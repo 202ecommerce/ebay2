@@ -676,14 +676,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $ebay = Module::getInstanceByName('ebay');
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
-        $configuredCategories = array_map(
-            function($category) {
-                return (int)$category['id_category'];
-            },
-            EbayCategoryConfiguration::getEbayCategoryConfigurations((int)Tools::getValue('profile'))
-        );
-
-        $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'), $configuredCategories);
+        $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'), (int)Tools::getValue('profile'));
 
         $vars = array(
             'categoryList' => $category_list,

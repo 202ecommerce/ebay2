@@ -704,9 +704,15 @@
       success: function (data) {
         var data = jQuery.parseJSON(data);
         var str = '';
+        var option;
         $.each(data.categoryList, function (index, value) {
+          option = '<li id="' + value.id_category + '"';
+          if (value.configured == true) {
+            option += ' style="color:red" ';
+          }
+          option += '>' + value.name + '</li>';
           if (selected_cat.indexOf(value.name) == -1) {
-            str += '<li id="' + value.id_category + '">' + value.name + '</li>';
+            str += option
           }
         });
 
