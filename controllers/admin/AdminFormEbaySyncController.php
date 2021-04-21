@@ -48,7 +48,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         require_once dirname(__FILE__).'/../../classes/EbayProfile.php';
         require_once dirname(__FILE__).'/../../classes/EbayRequest.php';
         if (Tools::getValue('admin_path')) {
-            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.EbayTools::getValue('admin_path').TMP_DS);
+            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.Tools::getValue('admin_path').TMP_DS);
         }
 
         $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));

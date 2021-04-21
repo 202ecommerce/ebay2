@@ -2225,7 +2225,7 @@ class Ebay extends Module
             }
 
             $configuredCategories = array_map(
-                function($category) {
+                function ($category) {
                     return (int)$category['id_category'];
                 },
                 EbayCategoryConfiguration::getEbayCategoryConfigurations((int)$idEbayProfile)

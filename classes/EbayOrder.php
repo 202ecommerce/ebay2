@@ -340,7 +340,7 @@ class EbayOrder
     public function getProductIds()
     {
         return array_map(
-            function($product) {
+            function ($product) {
                 return (int)$product['id_product'];
             },
             $this->product_list
