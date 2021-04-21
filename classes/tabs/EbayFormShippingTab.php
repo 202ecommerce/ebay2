@@ -47,11 +47,6 @@ class EbayFormShippingTab extends EbayTab
             );
             return $this->display('alert_tabs.tpl', $vars);
         }
-        // Check if the module is configured
-        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            $template_vars = array('error_form_shipping' => 'true');
-            return $this->display('error_paypal_email.tpl', $template_vars);
-        }
 
         $nb_shipping_zones_excluded = DB::getInstance()->getValue('SELECT COUNT(*)
 			FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded

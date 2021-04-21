@@ -63,7 +63,7 @@ class EbayValidatorTab
 
     public static function getParametersTabConfiguration($id_ebay_profile)
     {
-        $configs_mandatory_profile = array('EBAY_PAYPAL_EMAIL', 'EBAY_SHOP_POSTALCODE');
+        $configs_mandatory_profile = array('EBAY_SHOP_POSTALCODE');
         //$configs_mandatory = array('EBAY_API_USERNAME');
         $ebay = new Ebay();
         $ebay_profile = new EbayProfile($id_ebay_profile);

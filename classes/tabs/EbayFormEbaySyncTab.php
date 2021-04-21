@@ -32,13 +32,6 @@ class EbayFormEbaySyncTab extends EbayTab
 {
     public function getContent($page_current = 1, $length = 20, $searche = false, $filter = array())
     {
-        // Check if the module is configured
-        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            $vars = array(
-                'msg' => $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab'),
-            );
-            return $this->display('alert_tabs.tpl', $vars);
-        }
         $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
         if (empty($national_shipping)) {
             $vars = array(

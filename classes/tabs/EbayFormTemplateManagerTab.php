@@ -29,16 +29,7 @@ class EbayFormTemplateManagerTab extends EbayTab
 
     public function getContent()
     {
-        // Check if the module is configured
-        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            $vars = array(
-                'msg' => $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformtemplatemanagertab'),
-            );
-            return $this->display('alert_tabs.tpl', $vars);
-        }
-
         $iso = $this->context->language->iso_code;
-
 
         // Display Form
         $url_vars = array(

@@ -76,7 +76,7 @@
 				<MinimumBestOfferPrice>{$minimumBestOfferPrice|escape:'htmlall':'UTF-8'}</MinimumBestOfferPrice>
 			</ListingDetails>
 		{/if}
-		{if isset($pay_pal_email_address) && !$bp_active}
+		{if isset($pay_pal_email_address) && $pay_pal_email_address  && !$bp_active}
 		<PaymentMethods>PayPal</PaymentMethods>
 		<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
 		{/if}

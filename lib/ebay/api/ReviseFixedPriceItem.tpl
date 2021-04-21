@@ -52,7 +52,7 @@
 		{if isset($listing_type)}
 			<ListingType>{$listing_type|escape:'htmlall':'UTF-8'}</ListingType>
 		{/if}
-		{if isset($payment_method) && !$bp_active}
+		{if isset($pay_pal_email_address) && pay_pal_email_address && !$bp_active}
 			<PaymentMethods>{$payment_method|escape:'htmlall':'UTF-8'}</PaymentMethods>
 			<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
 		{/if}
