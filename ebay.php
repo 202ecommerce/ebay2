@@ -841,6 +841,10 @@ class Ebay extends Module
             return false;
         }
 
+        if (false === Validate::isLoadedObject($this->ebay_profile)) {
+            return false;
+        }
+
         $ebay_site_id=$this->ebay_profile->ebay_site_id;
         if (Tools::getValue('resynchCategories')) {
             //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
@@ -2282,7 +2286,7 @@ class Ebay extends Module
 
     private function __relistItems()
     {
-        if ($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC'
+        if ($this->ebay_profile && $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC'
             && $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
             //We do relist automatically each day
             $this->ebay_profile->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));
