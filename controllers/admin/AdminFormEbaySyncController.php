@@ -29,27 +29,17 @@ class AdminFormEbaySyncController extends ModuleAdminController
 
     public function ajaxProcessDeleteConfigCategory()
     {
-        $sql = 'SELECT p.`id_product`
-            FROM `'._DB_PREFIX_.'product` p';
-
-        $sql .= Shop::addSqlAssociation('product', 'p');
-        $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-                ON (p.`id_product` = pl.`id_product`
-                AND pl.`id_lang` = '.(int) Tools::getValue('ebay_category');
-        $sql .= Shop::addSqlRestrictionOnLang('pl');
-        $sql .= ')
-            LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)Tools::getValue('profile').'
-            LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
-                ON p.`id_product` = sa.`id_product`
-                AND sa.`id_product_attribute` = 0
-            WHERE ';
-        $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('ebay_category');
-        $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
+        $sql = (new DbQuery())
+            ->select('id_product')
+            ->from('product_shop')
+            ->where('id_category_default = ' . (int)Tools::getValue('ebay_category'))
+            ->where('id_shop = ' . Context::getContext()->shop->id);
         $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
+
         foreach ($to_synchronize_product_ids as $product_id_to_sync) {
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id_to_sync['id_product'], Tools::getValue('profile'));
         }
+
         EbayCategoryConfiguration::deleteByIdCategory(Tools::getValue('profile'), Tools::getValue('ebay_category'));
     }
 
@@ -58,7 +48,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         require_once dirname(__FILE__).'/../../classes/EbayProfile.php';
         require_once dirname(__FILE__).'/../../classes/EbayRequest.php';
         if (Tools::getValue('admin_path')) {
-            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.EbayTools::getValue('admin_path').TMP_DS);
+            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.Tools::getValue('admin_path').TMP_DS);
         }
 
         $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
@@ -686,7 +676,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $ebay = Module::getInstanceByName('ebay');
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
-        $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'));
+        $category_list = $ebay->getChildCategories($categories, $root_category->id, array(), '', Tools::getValue('s'), (int)Tools::getValue('profile'));
 
         $vars = array(
             'categoryList' => $category_list,

@@ -58,4 +58,24 @@ class EbayDebugTools
 
         return Db::getInstance()->executeS($query);
     }
+
+    public static function describeTable($table)
+    {
+        $query = sprintf(
+            'DESCRIBE %s',
+            pSQL(_DB_PREFIX_ . $table)
+        );
+
+        return Db::getInstance()->executeS($query);
+    }
+
+    public static function showKeys($table)
+    {
+        $query = sprintf(
+            'SHOW INDEX FROM %s',
+            pSQL(_DB_PREFIX_ . $table)
+        );
+
+        return Db::getInstance()->executeS($query);
+    }
 }

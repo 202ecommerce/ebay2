@@ -99,7 +99,8 @@ $classes_to_load = array(
     'EbayBussinesPolicies',
     'EbayTaskManager',
     'DbEbay',
-    '../services/EbayProfileService'
+    '../services/EbayProfileService',
+    'EbayDebugTools'
 );
 
 
@@ -840,10 +841,10 @@ class Ebay extends Module
             return false;
         }
 
-        if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-        // if the module is not upgraded or not configured don't do anything
+        if (false === Validate::isLoadedObject($this->ebay_profile)) {
             return false;
         }
+
         $ebay_site_id=$this->ebay_profile->ebay_site_id;
         if (Tools::getValue('resynchCategories')) {
             //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
@@ -1516,16 +1517,6 @@ class Ebay extends Module
             Configuration::updateValue('EBAY_SEND_STATS', true);
             foreach ($profiles as &$profile) {
                 $profile_ebay = new EbayProfile($profile['id_ebay_profile']);
-                if (!$profile_ebay->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-                    $profile_ebay->setConfiguration('EBAY_PARAMETERS_TAB_OK', 0);
-                } else {
-                    $profile_ebay->setConfiguration('LIMIT_EBAY_STOCK', 50);
-                    $profile_ebay->setConfiguration('EBAY_PARAMETERS_TAB_OK', 1);
-                    $profile_ebay->setConfiguration('EBAY_ANONNCES_CONFIG_TAB_OK', 1);
-                    $profile_ebay->setConfiguration('EBAY_ORDERS_CONFIG_TAB_OK', 1);
-                    $profile_ebay->setConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK', 1);
-                    $profile_ebay->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 14);
-                }
                 if ($profile_ebay->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == "A") {
                     EbayCategoryConfiguration::activeAllCAtegories($profile['id_ebay_profile']);
                 }
@@ -1818,7 +1809,6 @@ class Ebay extends Module
             'bootstrapselectcss' => $this->_path.'views/css/bootstrap-select.min.css',
             'fancybox' => $this->_path.'views/js/jquery.fancybox.min.js',
             'fancyboxCss' => $this->_path.'views/css/jquery.fancybox.css',
-            'parametersValidator' => ($this->ebay_profile ? EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id) : ''),
             'categoryValidator' => ($this->ebay_profile ? EbayValidatorTab::getCategoryTabConfiguration($this->ebay_profile->id) : ''),
             'itemSpecificValidator' => ($this->ebay_profile ? EbayValidatorTab::getItemSpecificsTabConfiguration($this->ebay_profile->id) : ''),
             'shippingValidator' => ($this->ebay_profile ? EbayValidatorTab::getShippingTabConfiguration($this->ebay_profile->id) : ''),
@@ -1911,7 +1901,7 @@ class Ebay extends Module
 
         $errors = array();
 
-        if (!Validate::isEmail(Tools::getValue('ebay_paypal_email'))) {
+        if (Tools::getValue('ebay_paypal_email') && !Validate::isEmail(Tools::getValue('ebay_paypal_email'))) {
             $errors[] = $this->l('Your PayPal email address is not specified or invalid');
         }
 
@@ -2227,10 +2217,24 @@ class Ebay extends Module
      * @param array  $path
      * @param string $path_add
      * @param string $search
+     * @param array $restrictedCategories. Collection of a category id
      * @return array
      */
-    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '')
+    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '', $idEbayProfile = null, $configuredCategories = [])
     {
+        if (empty($configuredCategories)) {
+            if (is_null($idEbayProfile)) {
+                $ebayProfile = EbayProfile::getCurrent();
+                $idEbayProfile = $ebayProfile->id;
+            }
+
+            $configuredCategories = array_map(
+                function ($category) {
+                    return (int)$category['id_category'];
+                },
+                EbayCategoryConfiguration::getEbayCategoryConfigurations((int)$idEbayProfile)
+            );
+        }
         $category_tab = array();
 
         if ($path_add != '') {
@@ -2244,6 +2248,7 @@ class Ebay extends Module
         }
         if (isset($cats) && $cats) {
             foreach ($cats as $idc => $cc) {
+                $isEligible = true;
                 $name = '';
                 if ($path) {
                     foreach ($path as $p) {
@@ -2252,25 +2257,26 @@ class Ebay extends Module
                 }
 
                 $name .= $cc['infos']['name'];
-                $category_tab[] = array(
-                    'id_category' => $cc['infos']['id_category'],
-                    'name' => $name,
-                    'active' => $cc['infos']['active'],
-                );
 
-                $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], '');
+                if ($search) {
+                    if (strpos(Tools::strtolower($name), Tools::strtolower($search)) === false) {
+                        $isEligible = false;
+                    }
+                }
+
+                if ($isEligible) {
+                    $category_tab[] = array(
+                        'id_category' => $cc['infos']['id_category'],
+                        'name' => $name,
+                        'active' => $cc['infos']['active'],
+                        'configured' => in_array((int)$cc['infos']['id_category'], $configuredCategories)
+                    );
+                }
+
+                $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], $search, $idEbayProfile, $configuredCategories);
 
                 $category_tab = array_merge($category_tab, $categoryTmp);
             }
-        }
-        if ($search) {
-            $category_tab_filtered = array();
-            foreach ($category_tab as $c) {
-                if (strpos(Tools::strtolower($c['name']), Tools::strtolower($search)) !== false) {
-                    $category_tab_filtered[] = $c;
-                }
-            }
-            $category_tab = $category_tab_filtered;
         }
 
         return $category_tab;
@@ -2280,7 +2286,7 @@ class Ebay extends Module
 
     private function __relistItems()
     {
-        if ($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC'
+        if ($this->ebay_profile && $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') != 'GTC'
             && $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST')) {
             //We do relist automatically each day
             $this->ebay_profile->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));

@@ -32,13 +32,6 @@ class EbayFormEbaySyncTab extends EbayTab
 {
     public function getContent($page_current = 1, $length = 20, $searche = false, $filter = array())
     {
-        // Check if the module is configured
-        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
-            $vars = array(
-                'msg' => $this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab'),
-            );
-            return $this->display('alert_tabs.tpl', $vars);
-        }
         $national_shipping = EbayShipping::getNationalShippings($this->ebay_profile->id);
         if (empty($national_shipping)) {
             $vars = array(
@@ -76,9 +69,9 @@ class EbayFormEbaySyncTab extends EbayTab
                 $query_filter = " AND 0";
             }
 
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, true, true, '', $query_filter), $rootCategory->id, array(), '', $searche);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, false, true, '', $query_filter), $rootCategory->id, array(), '', $searche);
         } else {
-            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id), $rootCategory->id);
+            $category_list = $this->ebay->getChildCategories(Category::getCategories($this->context->language->id, false), $rootCategory->id);
         }
 
         $categories = array();

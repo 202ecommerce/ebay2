@@ -293,14 +293,14 @@
                                                 </div>
 
                                                 <div class="pull-right">
-                                                    <a href="#" class="js-popin-help">
+                                                    <a href="https://addons.prestashop.com/en/ratings.php" target="_blank">
                                                         <i class="icon-star-half-o"></i>
                                                         <span>{l s='Feedback' mod='ebay'}</span>
                                                     </a>
                                                 </div>
 
                                                 <div class="pull-right">
-                                                    <a href="#" class="js-popin-help">
+                                                    <a href="https://addons.prestashop.com/it/contact-us?id_product=27282" target="_blank">
                                                         <i class="icon-support"></i>
                                                         <span>{l s='Support' mod='ebay'}</span>
                                                     </a>
