@@ -823,3 +823,8 @@ $_MODULE['<{ebay}prestashop>table_products_errors_06df33001c1d7187fdd81ea1f5b277
 $_MODULE['<{ebay}prestashop>table_products_errors_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
 $_MODULE['<{ebay}prestashop>table_products_errors_7dce122004969d56ae2e0245cb754d35'] = 'Editar';
 $_MODULE['<{ebay}prestashop>table_products_errors_1063e38cb53d94d386f21227fcd84717'] = 'Remover';
+$_MODULE['<{ebay}prestashop>formconfig_4f5b9a4eaa461096c17efdc13eaad843'] = 'A partir del 1 de julio, los vendedores que alcancen el nuevo umbral para la venta a distancia de bienes dentro de la UE (10.000 €) deben proporcionar el número de IVA de cada país de la UE en el que venden y envíar a eBay o confirmar su registro de OSS.';
+$_MODULE['<{ebay}prestashop>formconfig_5b9cd52c162785810f4fea8ef47f2c4b'] = 'Los comerciantes deben proporcionar el precio con impuestos incluidos para todos los anuncios y la tasa de IVA aplicada. eBay cobrará automáticamente el IVA en los casos previstos por las normas fiscales.';
+$_MODULE['<{ebay}prestashop>formconfig_22a900453520e928cba65cc7d19c3fb8'] = 'Puede ver si eBay ha cobrado el IVA en sus pedidos en la página "Detalles del pedido" de su cuenta "eBay" o en el Informe de pedidos, que contiene nuevas columnas suplementarias.';
+$_MODULE['<{ebay}prestashop>formconfig_d97519ac2143d0db3472e6621fcbd6a5'] = 'Para los pedidos en los que eBay ha recaudado el IVA, eBay emite una factura al comprador. La factura incluye el importe del IVA recaudado por eBay. eBay devuelve el';
+$_MODULE['<{ebay}prestashop>formconfig_9a165874f90c07ce3164dfe890cf7bfa'] = 'importe del IVA a la autoridad fiscal correspondiente. Los vendedores no deben emitir facturas con IVA por separado en este caso.';
