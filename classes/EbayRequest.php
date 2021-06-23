@@ -246,14 +246,17 @@ class EbayRequest
         curl_setopt($connection, CURLOPT_SSL_VERIFYHOST, 0);
         // Set the headers (Different headers depending on the api call !)
         if ($shoppingEndPoint === true) {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersShopping($apiCall));
+            $headers = $this->_buildHeadersShopping($apiCall);
         } elseif ($shoppingEndPoint === 'seller') {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersSeller($apiCall));
+            $headers = $this->_buildHeadersSeller($apiCall);
         } elseif ($shoppingEndPoint === 'post-order') {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersPostOrder($apiCall));
+            $headers = $this->_buildHeadersPostOrder();
         } else {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($apiCall));
+            $headers = $this->_buildHeaders($apiCall);
         }
+
+        curl_setopt($connection, CURLOPT_HTTPHEADER, $headers);
+
         if (isset($request)) {
             curl_setopt($connection, CURLOPT_POST, 1);
         }
@@ -278,7 +281,7 @@ class EbayRequest
             if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 30) {
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
-            file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($apiCall), true), FILE_APPEND | LOCK_EX);
+            file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($headers, true), FILE_APPEND | LOCK_EX);
 
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n" . $request . "\n\n" . $response . "\n\n-------------------\n\n", FILE_APPEND | LOCK_EX);
         }
