@@ -730,3 +730,8 @@ $_MODULE['<{ebay}prestashop>formconfig_5b9cd52c162785810f4fea8ef47f2c4b'] = 'Les
 $_MODULE['<{ebay}prestashop>formconfig_22a900453520e928cba65cc7d19c3fb8'] = 'Vous pouvez voir si eBay a perçu le TVA sur vos commandes dans la page \"détails de la commande\" de votre compte \"eBay\" ou dans le Rapport des commandes qui contient des nouvelles colonnes supplémentaires.';
 $_MODULE['<{ebay}prestashop>formconfig_d97519ac2143d0db3472e6621fcbd6a5'] = 'Pour les commandes où eBay a collecté la TVA, eBay émet une facture à l\'intention de l\'acheteur. La facture inclut le montant de la TVA perçu par eBay. eBay reverse le montant de la TVA à l\'administration fiscale concernée.';
 $_MODULE['<{ebay}prestashop>formconfig_9a165874f90c07ce3164dfe890cf7bfa'] = 'Les vendeurs ne doivent pas émettre de factures TVA distinctes dans ce cas.';
+$_MODULE['<{ebay}prestashop>formconfig_38a512ff88f06faee4b038b0f933c7e9'] = 'Dans un effort continu pour protéger les API et ses utilisateurs, eBay a activé l\'autorisation OAuth pour l\'API Shopping.';
+$_MODULE['<{ebay}prestashop>formconfig_7e90b5814e8e9c8e1b75fa2569c13c08'] = 'eBay cessera de prendre en charge l\'autorisation basée sur APPID d\'ici le 30 juin 2021. Toutes les demandes d\'API Shopping soumises avec une autorisation basée sur APPID échoueront à compter du 1er juillet 2021.';
+$_MODULE['<{ebay}prestashop>formconfig_809450e0efa5a3eea62acc7e056599ec'] = 'Pour permettre au module de fonctionner correctement, suite à ce changement, vous devrez avoir un compte sur';
+$_MODULE['<{ebay}prestashop>formconfig_890a809d106775864698064a3b5898c9'] = 'Créez votre compte maintenant si vous ne l\'avez pas encore fait. La création de ce compte nécessite un temps de validation.';
+
