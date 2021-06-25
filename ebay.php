@@ -100,7 +100,8 @@ $classes_to_load = array(
     'EbayTaskManager',
     'DbEbay',
     '../services/EbayProfileService',
-    'EbayDebugTools'
+    'EbayDebugTools',
+    'Const/ProfileConf'
 );
 
 

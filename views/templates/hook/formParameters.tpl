@@ -265,6 +265,15 @@
 			</div>
 
 			<div class="form-group">
+				<label class="control-label col-sm-3">
+					<span class="label-tooltip" >{l s='User authorization token' mod='ebay'}</span>
+				</label>
+				<div class="col-sm-9">
+					<textarea name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
 				<div class="col-sm-9 col-sm-push-3">
 					<div class="checkbox">
 						<label for="immediate_payment">

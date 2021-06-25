@@ -317,7 +317,7 @@ class EbayRequest
     private function _buildHeadersShopping($api_call)
     {
         $headers = array(
-            'X-EBAY-API-APP-ID:' . $this->appID,
+            'X-EBAY-API-IAF-TOKEN:Bearer ' . ($this->ebay_profile ? $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN) : ''),
             'X-EBAY-API-VERSION:' . $this->compatibility_level,
             'X-EBAY-API-SITE-ID:' . $this->ebay_country->getSiteID(),
             'X-EBAY-API-CALL-NAME:' . $api_call,
