@@ -101,7 +101,8 @@ $classes_to_load = array(
     'DbEbay',
     '../services/EbayProfileService',
     'EbayDebugTools',
-    'Const/ProfileConf'
+    'Const/ProfileConf',
+    '../services/ProductPrice'
 );
 
 

@@ -630,6 +630,7 @@ class EbaySynchronizer
      */
     private static function __getPrices($product_id, $percent, $ebay_profile)
     {
+        $productPrice = new ProductPrice($ebay_profile);
         $context = Context::getContext()->cloneContext();
         $context->shop = new Shop($ebay_profile->id_shop);
         // Use currency of ebay_profile
@@ -642,12 +643,10 @@ class EbaySynchronizer
 
         $specific_price_output = null;
         $price = null;
-        $price = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context);
-        $price = round($price, 2);
+        $price = $productPrice->getPriceById((int)$product_id, ['usereduc' => true]);
         $specific_price_output = null;
         $price_original = null;
-        $price_original = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
-        $price_original = round($price_original, 2);
+        $price_original = $productPrice->getPriceById((int)$product_id, ['usereduc' => false]);
 
         preg_match('#^([-|+]{0,1})([0-9]{0,3}[\.|\,]?[0-9]{0,2})([\%]{0,1})$#is', $percent, $temp);
         if ($temp[3] != '') {

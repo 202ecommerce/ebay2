@@ -749,6 +749,7 @@ class EbayRequest
             'variations' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1165,7 +1166,8 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-        );
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
@@ -1359,7 +1361,8 @@ class EbayRequest
             'sku' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-        );
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
@@ -1534,7 +1537,8 @@ class EbayRequest
             'sku' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-        );
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1815,5 +1819,13 @@ class EbayRequest
         }
 
         return isset($response->ItemBestOffersArray) ? $response->ItemBestOffersArray : array();
+    }
+
+    /**
+     * @return EbayProfileService
+     */
+    protected function getEbayProfileService()
+    {
+        return new EbayProfileService();
     }
 }
