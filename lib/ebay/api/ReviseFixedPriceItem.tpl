@@ -162,7 +162,7 @@
             </Storefront>
         {/if}
 
-		{if isset($vat) && $vat > 0}
+		{if isset($vat)}
 			<VATDetails>
 				<VATPercent>
 					{$vat}
