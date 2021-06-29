@@ -144,6 +144,14 @@
                   {*<!--<StoreCategoryName> string </StoreCategoryName>-->*}
             </Storefront>
         {/if}
+
+		{if isset($vat)}
+			<VATDetails>
+				<VATPercent>
+					{$vat}
+				</VATPercent>
+			</VATDetails>
+        {/if}
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>

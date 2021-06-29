@@ -246,14 +246,17 @@ class EbayRequest
         curl_setopt($connection, CURLOPT_SSL_VERIFYHOST, 0);
         // Set the headers (Different headers depending on the api call !)
         if ($shoppingEndPoint === true) {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersShopping($apiCall));
+            $headers = $this->_buildHeadersShopping($apiCall);
         } elseif ($shoppingEndPoint === 'seller') {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersSeller($apiCall));
+            $headers = $this->_buildHeadersSeller($apiCall);
         } elseif ($shoppingEndPoint === 'post-order') {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeadersPostOrder($apiCall));
+            $headers = $this->_buildHeadersPostOrder();
         } else {
-            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($apiCall));
+            $headers = $this->_buildHeaders($apiCall);
         }
+
+        curl_setopt($connection, CURLOPT_HTTPHEADER, $headers);
+
         if (isset($request)) {
             curl_setopt($connection, CURLOPT_POST, 1);
         }
@@ -278,7 +281,7 @@ class EbayRequest
             if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 30) {
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
-            file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($apiCall), true), FILE_APPEND | LOCK_EX);
+            file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($headers, true), FILE_APPEND | LOCK_EX);
 
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n" . $request . "\n\n" . $response . "\n\n-------------------\n\n", FILE_APPEND | LOCK_EX);
         }
@@ -314,7 +317,7 @@ class EbayRequest
     private function _buildHeadersShopping($api_call)
     {
         $headers = array(
-            'X-EBAY-API-APP-ID:' . $this->appID,
+            'X-EBAY-API-IAF-TOKEN:Bearer ' . ($this->ebay_profile ? $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN) : ''),
             'X-EBAY-API-VERSION:' . $this->compatibility_level,
             'X-EBAY-API-SITE-ID:' . $this->ebay_country->getSiteID(),
             'X-EBAY-API-CALL-NAME:' . $api_call,
@@ -746,6 +749,7 @@ class EbayRequest
             'variations' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1162,7 +1166,8 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-        );
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
@@ -1356,7 +1361,8 @@ class EbayRequest
             'sku' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-        );
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
 
@@ -1531,7 +1537,8 @@ class EbayRequest
             'sku' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
             'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-        );
+            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1812,5 +1819,13 @@ class EbayRequest
         }
 
         return isset($response->ItemBestOffersArray) ? $response->ItemBestOffersArray : array();
+    }
+
+    /**
+     * @return EbayProfileService
+     */
+    protected function getEbayProfileService()
+    {
+        return new EbayProfileService();
     }
 }

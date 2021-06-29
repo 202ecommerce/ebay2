@@ -111,8 +111,10 @@ class EbayFormParametersTab extends EbayTab
                 'error_code'     => 'HELP-CATEGORY-UPDATE',
             ),
             'id_shop' => $this->context->shop->id,
-
+            'user_auth_token' => $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
+            'taxes' => Tax::getTaxes($this->ebay_profile->id_lang),
+            ProfileConf::TAX => $this->ebay_profile->getConfiguration(ProfileConf::TAX)
         );
 
         if (Tools::getValue('relogin')) {
@@ -167,6 +169,8 @@ class EbayFormParametersTab extends EbayTab
             && in_array((int) Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int) Tools::getValue('currency'))
             && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment'))
+            && $this->ebay_profile->setConfiguration(ProfileConf::USER_AUTH_TOKEN, Tools::getValue(ProfileConf::USER_AUTH_TOKEN))
+            && $this->ebay_profile->setConfiguration(ProfileConf::TAX, Tools::getValue(ProfileConf::TAX))
         ) {
             //$products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
             $products = EbayProduct::getProductsIdForSync($this->ebay_profile->id);

@@ -240,6 +240,22 @@
 					</select>
 				</div>
 			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-3">
+					<span class="label-tooltip">{l s='Tax' mod='ebay'}</span>
+				</label>
+				<div class="col-sm-9">
+					<select name="TAX" class="form-control">
+						<option value="">{l s='Choose tax' mod='ebay'}</option>
+						{if isset($taxes) && false == empty($taxes)}
+							{foreach from=$taxes item='tax'}
+								<option value="{$tax.id_tax|escape:'htmlall':'UTF-8'}"{if $tax.id_tax == $TAX} selected{/if}>{$tax.name|escape:'htmlall':'UTF-8'}</option>
+							{/foreach}
+						{/if}
+					</select>
+				</div>
+			</div>
 			
 			<div class="form-group">
 				<label class="control-label col-sm-3">
@@ -261,6 +277,15 @@
 							<option value="{$k|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $k} selected="selected"{/if}>{$ebay_shop_country|escape:'htmlall':'UTF-8'}</option>
 						{/foreach}
 					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-3">
+					<span class="label-tooltip" >{l s='User authorization token' mod='ebay'}</span>
+				</label>
+				<div class="col-sm-9">
+					<textarea name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
 				</div>
 			</div>
 

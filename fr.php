@@ -725,3 +725,13 @@ $_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Consulter
 $_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Ajouter cette boutique à mes favoris';
 $_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilité';
 $_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'en stock';
+$_MODULE['<{ebay}prestashop>formconfig_4f5b9a4eaa461096c17efdc13eaad843'] = 'À partir du 1er juillet, les vendeurs qui atteignent le nouveau seuil pour les ventes à distance de biens au sein de l\'UE (€10,000) doivent fournir le numéro de TVA de chaque pays de l\'UE dans lequel ils vendent et expédient sur eBay ou confirmer leur enregistrement OSS.';
+$_MODULE['<{ebay}prestashop>formconfig_5b9cd52c162785810f4fea8ef47f2c4b'] = 'Les marchands doivent fournir le prix TTC pour toutes les annonces et le taux de TVA appliqués. eBay collectera automatiquement le TVA dans les cas prévus par les règles en matière de fiscalité.';
+$_MODULE['<{ebay}prestashop>formconfig_22a900453520e928cba65cc7d19c3fb8'] = 'Vous pouvez voir si eBay a perçu le TVA sur vos commandes dans la page \"détails de la commande\" de votre compte \"eBay\" ou dans le Rapport des commandes qui contient des nouvelles colonnes supplémentaires.';
+$_MODULE['<{ebay}prestashop>formconfig_d97519ac2143d0db3472e6621fcbd6a5'] = 'Pour les commandes où eBay a collecté la TVA, eBay émet une facture à l\'intention de l\'acheteur. La facture inclut le montant de la TVA perçu par eBay. eBay reverse le montant de la TVA à l\'administration fiscale concernée.';
+$_MODULE['<{ebay}prestashop>formconfig_9a165874f90c07ce3164dfe890cf7bfa'] = 'Les vendeurs ne doivent pas émettre de factures TVA distinctes dans ce cas.';
+$_MODULE['<{ebay}prestashop>formconfig_38a512ff88f06faee4b038b0f933c7e9'] = 'Dans un effort continu pour protéger les API et ses utilisateurs, eBay a activé l\'autorisation OAuth pour l\'API Shopping.';
+$_MODULE['<{ebay}prestashop>formconfig_7e90b5814e8e9c8e1b75fa2569c13c08'] = 'eBay cessera de prendre en charge l\'autorisation basée sur APPID d\'ici le 30 juin 2021. Toutes les demandes d\'API Shopping soumises avec une autorisation basée sur APPID échoueront à compter du 1er juillet 2021.';
+$_MODULE['<{ebay}prestashop>formconfig_809450e0efa5a3eea62acc7e056599ec'] = 'Pour permettre au module de fonctionner correctement, suite à ce changement, vous devrez avoir un compte sur';
+$_MODULE['<{ebay}prestashop>formconfig_890a809d106775864698064a3b5898c9'] = 'Créez votre compte maintenant si vous ne l\'avez pas encore fait. La création de ce compte nécessite un temps de validation.';
+

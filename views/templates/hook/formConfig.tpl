@@ -23,6 +23,25 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <div class="col-md-9 col-lg-10">
+	<div class="alert alert-danger">
+		<div>
+			{l s='In a continuing effort to protect APIs and his users, eBay enabled OAuth authorization for the Shopping API.' mod='ebay'}
+		</div>
+
+		<div>
+			{l s='eBay will stop support for APPID based authorization by June 30, 2021. Any Shopping API requests submitted with APPID based authorization will fail starting July 1, 2021.' mod='ebay'}
+
+		</div>
+
+		<div>
+			{l s='To allow the module to work properly, following this change, you will need to have an account at' mod='ebay'}
+			<a href="https://developer.ebay.com/">https://developer.ebay.com/</a>
+		</div>
+
+		<div>
+			{l s='Create your account now if you haven\'t done so yet. The creation of this account requires a validation time.' mod='ebay'}
+		</div>
+	</div>
 	{if isset($green_message) && $green_message}
 		<div class="alert alert-success conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
 	{/if}
@@ -42,6 +61,23 @@
 				</div>
 			{/foreach}
 		{/if}
+		<div class="alert alert-info">
+			<div>
+				{l s='From July 1, sellers who reach the new threshold for distance sales of goods within the EU (€ 10,000) must provide the VAT number of each EU country to which they sell and ship on eBay or confirm their OSS registration.' mod='ebay'}
+			</div>
+			<div>
+				{l s='Merchants must provide the price including tax for all listings and the VAT rate applied. eBay will automatically collect VAT in cases provided for by tax rules.' mod='ebay'}
+			</div>
+			<div>
+				{l s='You can see if eBay has charged VAT on your orders in the "Order Details" page of your "eBay" account or in the Orders Report which contains additional new columns.' mod='ebay'}
+			</div>
+			<div>
+				{l s='For orders where eBay has collected VAT, eBay issues an invoice to the buyer. The invoice includes the amount of VAT collected by eBay. eBay returns the amount of VAT to the relevant tax authority.' mod='ebay'}
+			</div>
+			<div>
+				{l s='In this case, sellers do not have to issue separate VAT invoices.' mod='ebay'}
+			</div>
+		</div>
 	</div>
 	<div class="panel">
 		<div class="tab-content">
