@@ -65,6 +65,8 @@ class EbayOrder
     private $id_orders;
     /** @var $carts Cart[] */
     private $carts;
+    /** @var string*/
+    protected $ioss;
 
     public function __construct(SimpleXMLElement $order_xml = null)
     {
@@ -93,6 +95,7 @@ class EbayOrder
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
         $this->ebaySiteName = $order_xml->TransactionArray->Transaction->Item->Site;
         $this->ebay_user_identifier = isset($order_xml->MonetaryDetails->Payments->Payment->Payee) ? $order_xml->MonetaryDetails->Payments->Payment->Payee : false;
+        $this->ioss = $this->getIOSSFromResponse($order_xml);
 
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
@@ -1307,6 +1310,53 @@ class EbayOrder
 
     public function getPaymentMethod()
     {
-        return 'eBay '.$this->payment_method.' '.$this->id_order_seller;
+        $paymentMethod = 'eBay '.$this->payment_method.' '.$this->id_order_seller;
+
+        if ($this->getIOSS()) {
+            $paymentMethod .= ' - IOSS ' . $this->getIOSS();
+        }
+
+        return $paymentMethod;
+    }
+
+    /**
+     * @param SimpleXMLElement $order_xml
+     * @return string
+     */
+    protected function getIOSSFromResponse(SimpleXMLElement $order_xml)
+    {
+        $ioss = '';
+
+        if (false == isset($order_xml->TransactionArray)) {
+            return $ioss;
+        }
+
+        if (false == isset($order_xml->TransactionArray->Transaction)) {
+            return $ioss;
+        }
+
+        foreach ($order_xml->TransactionArray->Transaction as $transaction) {
+            if (false == isset($transaction->eBayCollectAndRemitTaxes)) {
+                continue;
+            }
+
+            if (false == isset($transaction->eBayCollectAndRemitTaxes->eBayReference)) {
+                continue;
+            }
+
+            if (Tools::strtolower($transaction->eBayCollectAndRemitTaxes->eBayReference['name']) == 'ioss') {
+                return (string)$transaction->eBayCollectAndRemitTaxes->eBayReference;
+            }
+        }
+
+        return $ioss;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIOSS()
+    {
+        return $this->ioss;
     }
 }
