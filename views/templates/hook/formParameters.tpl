@@ -240,6 +240,17 @@
 					</select>
 				</div>
 			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-3">
+					<span class="label-tooltip">{l s='Tax' mod='ebay'}</span>
+				</label>
+				<div class="col-sm-9">
+					<select name="TAX" class="form-control">
+
+					</select>
+				</div>
+			</div>
 			
 			<div class="form-group">
 				<label class="control-label col-sm-3">
