@@ -1310,7 +1310,13 @@ class EbayOrder
 
     public function getPaymentMethod()
     {
-        return 'eBay '.$this->payment_method.' '.$this->id_order_seller;
+        $paymentMethod = 'eBay '.$this->payment_method.' '.$this->id_order_seller;
+
+        if ($this->getIOSS()) {
+            $paymentMethod .= ' - IOSS ' . $this->getIOSS();
+        }
+
+        return $paymentMethod;
     }
 
     /**
@@ -1344,5 +1350,13 @@ class EbayOrder
         }
 
         return $ioss;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIOSS()
+    {
+        return $this->ioss;
     }
 }
