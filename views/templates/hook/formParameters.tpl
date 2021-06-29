@@ -247,7 +247,12 @@
 				</label>
 				<div class="col-sm-9">
 					<select name="TAX" class="form-control">
-
+						<option value="">{l s='Choose tax' mod='ebay'}</option>
+						{if isset($taxes) && false == empty($taxes)}
+							{foreach from=$taxes item='tax'}
+								<option value="{$tax.id_tax|escape:'htmlall':'UTF-8'}"{if $tax.id_tax == $TAX} selected{/if}>{$tax.name|escape:'htmlall':'UTF-8'}</option>
+							{/foreach}
+						{/if}
 					</select>
 				</div>
 			</div>
