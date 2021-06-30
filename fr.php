@@ -734,4 +734,4 @@ $_MODULE['<{ebay}prestashop>formconfig_38a512ff88f06faee4b038b0f933c7e9'] = 'Dan
 $_MODULE['<{ebay}prestashop>formconfig_7e90b5814e8e9c8e1b75fa2569c13c08'] = 'eBay cessera de prendre en charge l\'autorisation basée sur APPID d\'ici le 30 juin 2021. Toutes les demandes d\'API Shopping soumises avec une autorisation basée sur APPID échoueront à compter du 1er juillet 2021.';
 $_MODULE['<{ebay}prestashop>formconfig_809450e0efa5a3eea62acc7e056599ec'] = 'Pour permettre au module de fonctionner correctement, suite à ce changement, vous devrez avoir un compte sur';
 $_MODULE['<{ebay}prestashop>formconfig_890a809d106775864698064a3b5898c9'] = 'Créez votre compte maintenant si vous ne l\'avez pas encore fait. La création de ce compte nécessite un temps de validation.';
-
+$_MODULE['<{ebay}prestashop>formparameters_7c4f831a56b6b66f0f5be71ff1eb8e15'] = 'Ce champ défini le taux de TVA sur le prix du produit. Le choix n\'auras pas d\'impacte sur le prix final, mais aide eBay à collecter la TVA correctement dans le cas où cela est nécessaire.';
