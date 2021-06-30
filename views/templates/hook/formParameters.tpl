@@ -243,7 +243,7 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-					<span class="label-tooltip">{l s='Tax' mod='ebay'}</span>
+					<span class="label-tooltip" title="{l s='This field defines the VAT rate on the product price. The choice will not affect the final price, but it does help eBay to properly collect VAT in case it is needed.' mod='ebay'}">{l s='Tax' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<select name="TAX" class="form-control">
