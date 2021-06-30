@@ -38,6 +38,7 @@ class ProductPrice
 
     public function getPriceById($idProduct, $params = [])
     {
+    	$spicific_price_output = [];
         $price = Product::getPriceStatic(
             (int)$idProduct,
             false,
@@ -51,7 +52,7 @@ class ProductPrice
             isset($params['id_customer']) ? $params['id_customer'] : null,
             isset($params['id_cart']) ? $params['id_cart'] : null,
             isset($params['id_address']) ? $params['id_address'] : null,
-            null,
+            $spicific_price_output,
             isset($params['with_ecotax']) ? $params['with_ecotax'] : true,
             isset($params['use_group_reduction']) ? $params['use_group_reduction'] : true,
             isset($params['context']) ? $params['context'] : null,
