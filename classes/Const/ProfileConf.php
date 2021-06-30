@@ -20,8 +20,8 @@
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
 *  @copyright 2007-2021 PrestaShop SA
-*  @version  Release: $Revision: 7776 $
 *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  @version  Release: $Revision: 7776 $
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
