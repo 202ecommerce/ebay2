@@ -282,7 +282,11 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-					<span class="label-tooltip" >{l s='User authorization token' mod='ebay'}</span>
+					<span class="label-tooltip" >
+						<a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/installation-configuration/parametres/configurer-le-token-ebay-pour-activer-lautorisation-oauth-pour-les-apis/" target="_blank">
+							{l s='User authorization token' mod='ebay'}
+						</a>
+					</span>
 				</label>
 				<div class="col-sm-9">
 					<textarea name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
