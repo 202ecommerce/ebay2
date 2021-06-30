@@ -289,7 +289,7 @@
 					</span>
 				</label>
 				<div class="col-sm-9">
-					<textarea name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
+					<textarea required name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
 				</div>
 			</div>
 
