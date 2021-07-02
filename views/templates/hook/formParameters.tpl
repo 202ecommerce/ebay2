@@ -243,7 +243,7 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-					<span class="label-tooltip">{l s='Tax' mod='ebay'}</span>
+					<span class="label-tooltip" title="{l s='This field defines the VAT rate on the product price. The choice will not affect the final price, but it does help eBay to properly collect VAT in case it is needed.' mod='ebay'}">{l s='Tax' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<select name="TAX" class="form-control">
@@ -282,10 +282,14 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-					<span class="label-tooltip" >{l s='User authorization token' mod='ebay'}</span>
+					<span class="label-tooltip" >
+						<a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/installation-configuration/parametres/configurer-le-token-ebay-pour-activer-lautorisation-oauth-pour-les-apis/" target="_blank">
+							{l s='User authorization token' mod='ebay'}
+						</a>
+					</span>
 				</label>
 				<div class="col-sm-9">
-					<textarea name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
+					<textarea required name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
 				</div>
 			</div>
 
