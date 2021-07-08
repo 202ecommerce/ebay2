@@ -253,7 +253,7 @@
 			
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-          <span class="label-tooltip" title="{l s='Here you have to add your shop\'s postal code' mod='ebay'}">{l s='Item location' mod='ebay'}</span>
+          <span class="label-tooltip" title="{l s='The postal code of the address from which you are sending packages. eBay needs this information to find out if your products are sold overseas' mod='ebay'}">{l s='Postal code of the warehouse.' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall':'UTF-8'}" class="form-control" placeholder="{l s='Your shop\'s postal code' mod='ebay'}" />
@@ -262,7 +262,7 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-          <span class="label-tooltip" title="{l s='Here you have to add your shop\'s country' mod='ebay'}">{l s='Item Country' mod='ebay'}</span>
+          <span class="label-tooltip" title="{l s='eBay needs this information to find out if your products are sold overseas' mod='ebay'}">{l s='Country of your warehouse' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<select name="ebay_shop_country" class="form-control">
