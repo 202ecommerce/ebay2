@@ -65,8 +65,6 @@
 	<div class="panel">
 		<div class="tab-content">
 
-
-
 			<div class="tab-pane fade in active" id="annoncestab1">
 				<div id='tab_title_level1' class="panel-heading"></div>
 
