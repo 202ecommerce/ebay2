@@ -262,10 +262,10 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-          <span class="label-tooltip" title="{l s='eBay needs this information to find out if your products are sold overseas' mod='ebay'}">{l s='Country of your warehouse' mod='ebay'}</span>
+          			<span class="label-tooltip" title="{l s='eBay needs this information to find out if your products are sold overseas' mod='ebay'}">{l s='Country of your warehouse*' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
-					<select name="ebay_shop_country" class="form-control">
+					<select required name="ebay_shop_country" class="form-control">
 						<option value="" disabled selected>{l s='Your shop\'s country' mod='ebay'}</option>
 						{foreach from=$ebay_shop_countries  key=k item=ebay_shop_country}
 							<option value="{$k|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $k} selected="selected"{/if}>{$ebay_shop_country|escape:'htmlall':'UTF-8'}</option>

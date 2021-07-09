@@ -63,7 +63,7 @@
 					</span>
 				</label>
 				<div class="col-sm-9">
-					<select name="return_order_state" class="ebay_select" data-inlinehelp="{l s='Synchronisation is 2 ways : a cancellation validated on eBay will change PrestaShop order to this status, and a change to this status on PrestaShop will cancel order on eBay.' mod='ebay'}">
+					<select  name="return_order_state" class="ebay_select" data-inlinehelp="{l s='Synchronisation is 2 ways : a cancellation validated on eBay will change PrestaShop order to this status, and a change to this status on PrestaShop will cancel order on eBay.' mod='ebay'}">
 						<option value=""></option>
 						{if isset($order_states) && $order_states && sizeof($order_states)}
 							{foreach from=$order_states item='order_state'}
@@ -80,10 +80,10 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				{l s='Since when fetch orders' mod='ebay'}
+				{l s='Since when fetch orders' mod='ebay'}*
 			</label>
 			<div class="col-sm-9">
-				<input type="number" class="form-control width-num" name="orders_days_backward" min ="0" max="14" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
+				<input required type="number" class="form-control width-num" name="orders_days_backward" min ="0" max="14" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
 			</div>
 			<div class="col-sm-9 col-sm-push-3">
 				<div class="help-block">
