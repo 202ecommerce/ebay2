@@ -38,7 +38,7 @@ class ProductPrice
 
     public function getPriceById($idProduct, $params = [])
     {
-    	$spicific_price_output = [];
+        $spicific_price_output = [];
         $price = Product::getPriceStatic(
             (int)$idProduct,
             false,
