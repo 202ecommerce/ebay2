@@ -43,6 +43,7 @@ $_MODULE['<{ebay}prestashop>ebayalert_9174adfc0e3bed27e58e517ff6b8198d'] = 'Ulti
 $_MODULE['<{ebay}prestashop>ebayalert_f64a8bb198e64eebb1136f768e3e3406'] = 'Devoluciones de pedidos cron job nunca ha sido ejecutada';
 $_MODULE['<{ebay}prestashop>ebaysynchronizer_7bb63c7de5a5ee79356083a12f21e1e8'] = 'en lugar de';
 $_MODULE['<{ebay}prestashop>ebaysynchronizer_320fa491b6a72b8221a881eea63a399d'] = 'promoción de';
+$_MODULE['<{ebay}prestashop>ebayalert_41c048042be8eabe003e5a4b6e072f8c'] = 'La tarea CRON Devolución de pedido nunca se ha ejecutado';
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_c888438d14855d7d96a2724ee9c306bd'] = 'Se ha actualizado la configuración';
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_b9284bff13acffdd879ef4ac7fca5234'] = 'Se ha producido un error en la configuración';
 $_MODULE['<{ebay}prestashop>ebayformebaysynctab_f95af8121eaadb52f6811c6e16861bc1'] = 'Configura el \"Envío nacional\" antes de utilizar esta pestaña ';

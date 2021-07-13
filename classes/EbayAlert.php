@@ -201,7 +201,7 @@ class EbayAlert
 
                 $date = date('Y-m-d', strtotime($last_sync_datetime));
                 $time = date('H:i:s', strtotime($last_sync_datetime));
-                $msg = $this->ebay->l('Last product synchronization has been done the').' '.$date.' '.$this->ebay->l('at').' '.$time;
+                $msg = $this->ebay->l('Last product synchronization has been done the', get_class($this)).' '.$date.' '.$this->ebay->l('at', get_class($this)).' '.$time;
 
                 if (strtotime($last_sync_datetime) < $warning_date) {
                     $this->warnings[] = array(
@@ -269,7 +269,7 @@ class EbayAlert
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
-                    'message' => $this->ebay->l('Order returns cron job has never been run.'),
+                    'message' => $this->ebay->l('Order return Cron Job has never been done', get_class($this)),
                 );
             }
         }
