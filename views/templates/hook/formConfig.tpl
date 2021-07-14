@@ -23,25 +23,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <div class="col-md-9 col-lg-10">
-	<div class="alert alert-danger">
-		<div>
-			{l s='In a continuing effort to protect APIs and his users, eBay enabled OAuth authorization for the Shopping API.' mod='ebay'}
-		</div>
-
-		<div>
-			{l s='eBay will stop support for APPID based authorization by June 30, 2021. Any Shopping API requests submitted with APPID based authorization will fail starting July 1, 2021.' mod='ebay'}
-
-		</div>
-
-		<div>
-			{l s='To allow the module to work properly, following this change, you will need to have an account at' mod='ebay'}
-			<a href="https://developer.ebay.com/">https://developer.ebay.com/</a>
-		</div>
-
-		<div>
-			{l s='Create your account now if you haven\'t done so yet. The creation of this account requires a validation time.' mod='ebay'}
-		</div>
-	</div>
 	{if isset($green_message) && $green_message}
 		<div class="alert alert-success conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
 	{/if}
@@ -64,6 +45,8 @@
 	</div>
 	<div class="panel">
 		<div class="tab-content">
+
+
 
 			<div class="tab-pane fade in active" id="annoncestab1">
 				<div id='tab_title_level1' class="panel-heading"></div>
