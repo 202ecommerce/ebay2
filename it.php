@@ -719,3 +719,6 @@ $_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Guarda le
 $_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Aggiungi questo negozio ai preferiti';
 $_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilità';
 $_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'in magazzino';
+$_MODULE['<{ebay}prestashop>adminformcontroller_deceee0bee1bc447eb73682678f750b2'] = 'Il server è compatibile con TLS 1.2:';
+$_MODULE['<{ebay}prestashop>adminformcontroller_93cba07454f06a4a960172bbd6e2a435'] = 'Si';
+$_MODULE['<{ebay}prestashop>adminformcontroller_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
