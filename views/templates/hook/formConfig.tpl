@@ -42,6 +42,21 @@
 			{l s='Create your account now if you haven\'t done so yet. The creation of this account requires a validation time.' mod='ebay'}
 		</div>
 	</div>
+
+	<div class="alert alert-info">
+		<div>
+			{l s='eBay enabled TLS 1.2 for all APIs in Sandbox and Production. We strongly recommend that you contact your web host to verify TLS 1.2 and SHA2 compatibility.' mod='ebay'}
+		</div>
+
+		<div>
+			{l s='API calls that are not TLS 1.2 compliant will fail as of 08/31/2021.' mod='ebay'}
+		</div>
+
+		<div style="margin-top: 10px">
+			{include file='./tls/tls_button.tpl' controller=$formController|addslashes}
+		</div>
+
+	</div>
 	{if isset($green_message) && $green_message}
 		<div class="alert alert-success conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
 	{/if}
