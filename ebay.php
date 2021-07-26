@@ -104,6 +104,7 @@ $classes_to_load = array(
     'Const/ProfileConf',
     'Const/TlsConf',
     '../services/ProductPrice',
+    '../services/ProductTax',
     'TlsValidator'
 );
 
