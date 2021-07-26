@@ -28,39 +28,29 @@ class ProductPrice
 {
     protected $ebayProfile;
 
-    protected $taxRate;
+    /** @var ProductTax*/
+    protected $productTax;
 
     public function __construct(EbayProfile $ebayProfile)
     {
         $this->ebayProfile = $ebayProfile;
-        $this->taxRate = $this->getEbayProfileService()->getTaxRate($ebayProfile);
+        $this->productTax = new ProductTax($ebayProfile);
     }
 
     public function getPriceById($idProduct, $params = [])
     {
-        $spicific_price_output = [];
-        $price = Product::getPriceStatic(
-            (int)$idProduct,
+        $product = new Product($idProduct);
+        $price = $product->getPrice(
             false,
             isset($params['id_product_attribute']) ? $params['id_product_attribute'] : null,
             isset($params['decimals']) ? $params['decimals'] : 6,
             isset($params['devisor']) ? $params['divisor'] : null,
             isset($params['only_reduc']) ? $params['only_reduc'] : false,
             isset($params['usereduc']) ? $params['usereduc'] : true,
-            isset($params['quantity']) ? $params['quantity'] : 1,
-            isset($params['force_associated_tax']) ? $params['force_associated_tax'] : false,
-            isset($params['id_customer']) ? $params['id_customer'] : null,
-            isset($params['id_cart']) ? $params['id_cart'] : null,
-            isset($params['id_address']) ? $params['id_address'] : null,
-            $spicific_price_output,
-            isset($params['with_ecotax']) ? $params['with_ecotax'] : true,
-            isset($params['use_group_reduction']) ? $params['use_group_reduction'] : true,
-            isset($params['context']) ? $params['context'] : null,
-            isset($params['use_customer_price']) ? $params['use_customer_price'] : true,
-            isset($params['id_customization']) ? $params['id_customization'] : null
+            isset($params['quantity']) ? $params['quantity'] : 1
         );
-
-        $price = $price * (1 + $this->taxRate / 100);
+        $taxRate = $this->productTax->getTaxRateByProduct($product);
+        $price = $price * (1 + $taxRate / 100);
         $price = Tools::ps_round($price, $this->precision());
 
         return $price;
@@ -72,13 +62,5 @@ class ProductPrice
     protected function precision()
     {
         return 2;
-    }
-
-    /**
-     * @return EbayProfileService
-     */
-    protected function getEbayProfileService()
-    {
-        return new EbayProfileService();
     }
 }
