@@ -722,3 +722,5 @@ $_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'in magazz
 $_MODULE['<{ebay}prestashop>adminformcontroller_deceee0bee1bc447eb73682678f750b2'] = 'Il server è compatibile con TLS 1.2:';
 $_MODULE['<{ebay}prestashop>adminformcontroller_93cba07454f06a4a960172bbd6e2a435'] = 'Si';
 $_MODULE['<{ebay}prestashop>adminformcontroller_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
+$_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay ha abilitato TLS 1.2 per tutte le API in Sandbox e Produzione. Ti consigliamo vivamente di contattare il tuo host per verificare la compatibilità con TLS 1.2 e SHA2.';
+$_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Le istruzioni inviate alle API che non sono conformi a TLS 1.2 avranno esito negativo a partire dal 31/8/2021.';
