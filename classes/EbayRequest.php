@@ -95,7 +95,9 @@ class EbayRequest
             $this->context = $context;
         }
 
-        $this->productTax = new ProductTax($this->ebay_profile);
+        if ($this->ebay_profile instanceof EbayProfile) {
+            $this->productTax = new ProductTax($this->ebay_profile);
+        }
 
         /**
          * Sandbox params
