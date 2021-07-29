@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class ProfileConf
+class TlsConf
 {
-    const USER_AUTH_TOKEN = 'USER_AUTH_TOKEN';
+    const STATUS_SUCCESS = 202;
 }

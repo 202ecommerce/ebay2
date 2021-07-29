@@ -726,3 +726,9 @@ $_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Consulta 
 $_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Añade esta tienda a Mis favoritos';
 $_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilidad';
 $_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'disponible';
+$_MODULE['<{ebay}prestashop>adminformcontroller_deceee0bee1bc447eb73682678f750b2'] = 'Su host es compatible con TLS 1.2:';
+$_MODULE['<{ebay}prestashop>adminformcontroller_93cba07454f06a4a960172bbd6e2a435'] = 'Si';
+$_MODULE['<{ebay}prestashop>adminformcontroller_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
+$_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay ha habilitado TLS 1.2 para todas las API en Sandbox y Producción. Le recomendamos encarecidamente que se ponga en contacto con su proveedor de hosting web para verificar la compatibilidad con TLS 1.2 y SHA2.';
+$_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Las llamadas de API que no cumplan con TLS 1.2 fallarán a partir del 31/8/2021.';
+

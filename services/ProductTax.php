@@ -24,43 +24,35 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class ProductPrice
+class ProductTax
 {
     protected $ebayProfile;
 
-    /** @var ProductTax*/
-    protected $productTax;
+    protected $idCountry;
 
     public function __construct(EbayProfile $ebayProfile)
     {
-        $this->ebayProfile = $ebayProfile;
-        $this->productTax = new ProductTax($ebayProfile);
-    }
-
-    public function getPriceById($idProduct, $params = [])
-    {
-        $product = new Product($idProduct);
-        $price = $product->getPrice(
-            false,
-            isset($params['id_product_attribute']) ? $params['id_product_attribute'] : null,
-            isset($params['decimals']) ? $params['decimals'] : 6,
-            isset($params['devisor']) ? $params['divisor'] : null,
-            isset($params['only_reduc']) ? $params['only_reduc'] : false,
-            isset($params['usereduc']) ? $params['usereduc'] : true,
-            isset($params['quantity']) ? $params['quantity'] : 1
-        );
-        $taxRate = $this->productTax->getTaxRateByProduct($product);
-        $price = $price * (1 + $taxRate / 100);
-        $price = Tools::ps_round($price, $this->precision());
-
-        return $price;
+        $this->setEbayProfile($ebayProfile);
     }
 
     /**
-     * @return int
+     * @param Product $product
+     * @return float
      */
-    protected function precision()
+    public function getTaxRateByProduct(Product $product)
     {
-        return 2;
+        $address = new Address();
+        $address->id_country = $this->idCountry;
+
+        return $product->getTaxesRate($address);
+    }
+
+    public function setEbayProfile(EbayProfile $ebayProfile)
+    {
+        $this->ebayProfile = $ebayProfile;
+        $ebayCountrySpec = EbayCountrySpec::getInstanceBySiteId($this->ebayProfile->ebay_site_id);
+        $this->idCountry = Country::getByIso($ebayCountrySpec->getIsoCode());
+
+        return $this;
     }
 }

@@ -102,7 +102,10 @@ $classes_to_load = array(
     '../services/EbayProfileService',
     'EbayDebugTools',
     'Const/ProfileConf',
-    '../services/ProductPrice'
+    'Const/TlsConf',
+    '../services/ProductPrice',
+    '../services/ProductTax',
+    'TlsValidator'
 );
 
 

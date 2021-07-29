@@ -234,22 +234,6 @@
 					</select>
 				</div>
 			</div>
-
-			<div class="form-group">
-				<label class="control-label col-sm-3">
-					<span class="label-tooltip" title="{l s='This field defines the VAT rate on the product price. The choice will not affect the final price, but it does help eBay to properly collect VAT in case it is needed.' mod='ebay'}">{l s='Tax' mod='ebay'}</span>
-				</label>
-				<div class="col-sm-9">
-					<select name="TAX" class="form-control">
-						<option value="">{l s='Choose tax' mod='ebay'}</option>
-						{if isset($taxes) && false == empty($taxes)}
-							{foreach from=$taxes item='tax'}
-								<option value="{$tax.id_tax|escape:'htmlall':'UTF-8'}"{if $tax.id_tax == $TAX} selected{/if}>{$tax.name|escape:'htmlall':'UTF-8'}</option>
-							{/foreach}
-						{/if}
-					</select>
-				</div>
-			</div>
 			
 			<div class="form-group">
 				<label class="control-label col-sm-3">
