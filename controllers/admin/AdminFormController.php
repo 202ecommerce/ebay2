@@ -175,7 +175,7 @@ class AdminFormController extends ModuleAdminController
         if ($isTlsValid) {
             $message .= $this->l('Yes');
         } else {
-            $message = $this->l('No');
+            $message .= $this->l('No');
         }
 
         $response = [
