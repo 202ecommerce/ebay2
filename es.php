@@ -462,6 +462,7 @@ $_MODULE['<{ebay}prestashop>formparametersannonces_ae798807f1b87255565780faaab3a
 $_MODULE['<{ebay}prestashop>formparametersannonces_4c6a5defb992e4f3488a97840a009b4d'] = 'Sincronización solo de nuevos productos ';
 $_MODULE['<{ebay}prestashop>formparametersannonces_26030c760e6e50206710389d768204a9'] = 'Guardar y continuar ';
 $_MODULE['<{ebay}prestashop>formparametersannonces_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar ';
+$_MODULE['<{ebay}prestashop>formconfig_3ffcdde82ab6ef9fbd4c3e963352d535'] = "Ahora, el módulo de eBay puede sincronizar un porcentaje de IVA diferente para cada producto. El porcentaje que se tiene en cuenta es el indicado en el campo \"Regla de impuestos\" de la página del producto, en la pestaña \"Ajustes básicos\". Para sincronizar el campo de IVA en sus anuncios de eBay, inicie la sincronización manual de todas las categorías a través del menú \"Anuncios\" del módulo.";
 $_MODULE['<{ebay}prestashop>checktoken_500e5667ff27df92e6f2d327c2440911'] = 'Si te has desconectado de eBay y no has pasado a la página de configuración, pulsa aquí';
 $_MODULE['<{ebay}prestashop>checktoken_16bfbf9c462762cf1cba4134ec53c504'] = 'Cargando';
 $_MODULE['<{ebay}prestashop>checktoken_745f12b02aa3ed40c85772578bd48298'] = 'Una vez que te hayas identificado a través de la nueva ventana de eBay, el módulo finalizará automáticamente la instalación';

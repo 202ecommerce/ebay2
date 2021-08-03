@@ -22,6 +22,7 @@ $_MODULE['<{ebay}prestashop>ebay_27560c2d2e07f0c3f9839d728e6b03b1'] = 'È in cor
 $_MODULE['<{ebay}prestashop>ebay_dbd4457258add3475ca1ba82d1305ed5'] = 'Non è possibile cambiare il profilo';
 $_MODULE['<{ebay}prestashop>ebay_c888438d14855d7d96a2724ee9c306bd'] = 'Le impostazioni sono state aggiornate';
 $_MODULE['<{ebay}prestashop>ebay_b9284bff13acffdd879ef4ac7fca5234'] = 'Le impostazioni non sono corrette';
+$_MODULE['<{ebay}prestashop>formconfig_3ffcdde82ab6ef9fbd4c3e963352d535'] = "Ora il modulo eBay può sincronizzare una percentuale di IVA diversa per ogni prodotto. La percentuale presa in conto è quella indicata nel campo \"Regime Iva\" nella pagina prodotto, nella scheda \"Impostazioni di base\". Per sincronizzare il campo IVA sui tuoi annunci eBay, lancia la sincronizzazione manuale di tutte le categorie attraverso il menu \"Annunci\" del modulo.";
 $_MODULE['<{ebay}prestashop>ebayvalidatortab_c776eb48aa70dc0337f83512f1f16459'] = 'È necessario configurare almeno un servizio di spedizione all\'interno del paese';
 $_MODULE['<{ebay}prestashop>ebayvalidatortab_a56abc118b65893f55220258f819013a'] = 'Per la spedizione internazionale è necessario configurare almeno un\'area geografica';
 $_MODULE['<{ebay}prestashop>ebayvalidatortab_d375ce71d7a0089f5242350a7dbed337'] = 'Potrebbe convenirti configurare i servizi di spedizione internazionale';
