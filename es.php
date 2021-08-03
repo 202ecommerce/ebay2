@@ -456,7 +456,7 @@ $_MODULE['<{ebay}prestashop>formparametersannonces_a06421f3734ecbddaa7c7845c307c
 $_MODULE['<{ebay}prestashop>formparametersannonces_54acd5df763de1e578c2d15b52f098f4'] = 'Realistar automaticamente';
 $_MODULE['<{ebay}prestashop>formparametersannonces_cb456215c3333db0551bd0788bc258c7'] = 'Estado Fuera de Stock ';
 $_MODULE['<{ebay}prestashop>formparametersannonces_43c7582c40594c3fe32a6634ef9dcb07'] = 'Desactivar ';
-$_MODULE['<{ebay}prestashop>formparametersannonces_ccaebaa6a07ed153c7cb81ffcfba65fd'] = 'Limite de stock eBay ';
+$_MODULE['<{ebay}prestashop>formparametersannonces_ccaebaa6a07ed153c7cb81ffcfba65fd'] = 'Limite de Stock en eBay';
 $_MODULE['<{ebay}prestashop>formparametersannonces_8ed221ecf0f80f887c9ee6f1ffae60d0'] = '0- ilimitado, 1 ,in - 50 maximo limite de stock ';
 $_MODULE['<{ebay}prestashop>formparametersannonces_ae798807f1b87255565780faaab3a848'] = 'Sincronización de solo precio y cantidad';
 $_MODULE['<{ebay}prestashop>formparametersannonces_4c6a5defb992e4f3488a97840a009b4d'] = 'Sincronización solo de nuevos productos ';
@@ -702,7 +702,7 @@ $_MODULE['<{ebay}prestashop>form_424ede1f93586d5d64744e846cf13958'] = 'Haz que t
 $_MODULE['<{ebay}prestashop>form_ef853586960f1fb633eaad6703b1e5c9'] = '|a|busca artículos similares a los tuyos en eBay|/a| para comparar con tus precios';
 $_MODULE['<{ebay}prestashop>form_7a53cdfb9604db4c37815a9e9e150580'] = '|b|Asegúrate de que las fotos de los artículos sean de calidad,|/b| |a|esto ayudará a que los compradores decidan comprar tus artículos. |/a|';
 $_MODULE['<{ebay}prestashop>form_1be96c53c4948c9edbb6401f73990fea'] = 'Consigue que los compradores vuelvan|/b| ofreciendo |a|un servicio excelente|/a| y envío gratis.';
-$_MODULE['<{ebay}prestashop>form_2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
+$_MODULE['<{ebay}prestashop>form_2938c7f7e560ed972f8a4f68e80ff834'] = 'Tablero Dashboard';
 $_MODULE['<{ebay}prestashop>form_7442e29d7d53e549b78d93c46b8cdcfc'] = 'Pedidos';
 $_MODULE['<{ebay}prestashop>form_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
 $_MODULE['<{ebay}prestashop>form_ce0be71e33226e4c1db2bcea5959f16b'] = 'Log';
