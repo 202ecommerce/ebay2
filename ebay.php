@@ -30,6 +30,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once _PS_MODULE_DIR_ . 'ebay/config_dev.php';
+require_once _PS_MODULE_DIR_ . 'ebay/vendor/autoload.php';
 
 /* Loading eBay Class Request*/
 $classes_to_load = array(
