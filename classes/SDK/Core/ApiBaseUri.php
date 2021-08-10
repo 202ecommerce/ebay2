@@ -11,7 +11,7 @@ class ApiBaseUri implements ApiBaseUriInterface
     /** @var SandboxMode*/
     protected $sandboxMode;
 
-    public function __construct($mode)
+    public function __construct($mode = null)
     {
         if (false == $mode instanceof SandboxMode) {
             $mode = new SandboxMode();
