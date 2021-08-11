@@ -9,6 +9,7 @@ use Ebay\classes\SDK\Core\ApiBaseUri;
 use Ebay\classes\SDK\Core\BearerAuthToken;
 use Ebay\classes\SDK\Core\EbayApiResponse;
 use Ebay\classes\SDK\Core\EbayClient;
+use Ebay\classes\SDK\Lib\FulfilmentPolicyList;
 use Ebay\services\MarketplaceByProfile;
 use Symfony\Component\VarDumper\VarDumper;
 use Exception;
@@ -37,8 +38,14 @@ class GetFulfilmentPolicies
                 ->setResult($result);
         }
 
-        $response = new GetResponse();
         $resultContent = json_decode($result->getBody()->getContents(), true);
+        $response = (new GetResponse())
+            ->setSuccess(true)
+            ->setResult($result);
+
+        if (isset($resultContent['fulfillmentPolicies']) && false == empty($resultContent['fulfillmentPolicies'])) {
+            $response->fulfilmentPolicies = (new FulfilmentPolicyList())->fromArray($resultContent['fulfillmentPolicies']);
+        }
 
 
         // TODO: complete a methode
