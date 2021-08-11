@@ -201,6 +201,7 @@ class EbayAlert
 
                 $date = date('Y-m-d', strtotime($last_sync_datetime));
                 $time = date('H:i:s', strtotime($last_sync_datetime));
+
                 $msg = $this->ebay->l('Last product synchronization has been done the', get_class($this)).' '.$date.' '.$this->ebay->l('at', get_class($this)).' '.$time;
 
                 if (strtotime($last_sync_datetime) < $warning_date) {
@@ -217,7 +218,7 @@ class EbayAlert
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
-                    'message' => $this->ebay->l('The product cron job has never been run.'),
+                    'message' => $this->ebay->l('The product cron job has never been run.', get_class($this)),
                 );
             }
         }
@@ -237,13 +238,13 @@ class EbayAlert
                 if ($interval >= 1) {
                     $this->errors[] = array(
                         'type' => 'error',
-                        'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                        'message' => $this->ebay->l('Last order synchronization has been done the ', get_class($this)).$date.$this->ebay->l(' at ', get_class($this)).$time,
                     );
                 }
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
-                    'message' => $this->ebay->l('Order cron job has never been run.'),
+                    'message' => $this->ebay->l('Order cron job has never been run.', get_class($this)),
                 );
             }
         }
@@ -263,7 +264,7 @@ class EbayAlert
                 if ($interval >= 1) {
                     $this->errors[] = array(
                         'type' => 'error',
-                        'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                        'message' => $this->ebay->l('Last order returns synchronization has been done the ', get_class($this)).$date.$this->ebay->l('at ', get_class($this)).$time,
                     );
                 }
             } else {
