@@ -26,6 +26,8 @@ class CategoryTypeList extends ResourceModel
                 (new CategoryType())->fromArray($categoryType)
             );
         }
+
+        return $this;
     }
 
     public function toArray()

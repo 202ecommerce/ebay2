@@ -29,6 +29,8 @@ class FulfilmentPolicyList extends ResourceModel
                 (new FulfilmentPolicy())->fromArray($fulfilmentPolicy)
             );
         }
+
+        return $this;
     }
 
     public function toArray()

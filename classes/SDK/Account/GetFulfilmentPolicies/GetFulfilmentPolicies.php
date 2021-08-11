@@ -47,8 +47,7 @@ class GetFulfilmentPolicies
             $response->fulfilmentPolicies = (new FulfilmentPolicyList())->fromArray($resultContent['fulfillmentPolicies']);
         }
 
-
-        // TODO: complete a methode
+        return $response;
     }
 
     protected function getToken()
