@@ -38,6 +38,10 @@ class FulfilmentPolicy extends ResourceModel
     /** @var string*/
     protected $fulfillmentPolicyId;
 
+    /**
+     * @param mixed
+     * @return self
+     */
     public function fromArray($data)
     {
         if (isset($data['name'])) {
@@ -95,56 +99,112 @@ class FulfilmentPolicy extends ResourceModel
         return $this;
     }
 
+    /** @return array*/
     public function toArray()
     {
-        return [
-            'name' => $this->getName(),
-            'description' => $this->getDescription(),
-            'marketplaceId' => $this->getMarketplaceId(),
-            'categoryTypes' => $this->getCategoryTypes()->toArray(),
-            'handlingTime' => $this->getHandlingTime()->toArray(),
-            'shipToLocations' => $this->getShipToLocations()->toArray(),
-            'shippingOptions' => $this->getShippingOptions()->toArray(),
-            'globalShipping' => $this->isGlobalShipping(),
-            'pickupDropOff' => $this->isPickupDropOff(),
-            'freightShipping' => $this->isFreightShipping(),
-            'fulfillmentPolicyId' => $this->getFulfillmentPolicyId()
-        ];
+        $return = [];
+
+        if (is_string($this->getName())) {
+            $return['name'] = $this->getName();
+        }
+
+        if (is_string($this->getDescription())) {
+            $return['description'] = $this->getDescription();
+        }
+
+        if (is_string($this->getMarketplaceId())) {
+            $return['marketplaceId'] = $this->getMarketplaceId();
+        }
+
+        if ($this->getCategoryTypes() instanceof CategoryTypeList) {
+            $return['categoryTypes'] = $this->getCategoryTypes()->toArray();
+        }
+
+        if ($this->getHandlingTime() instanceof HandlingTime) {
+            $return['handlingTime'] = $this->getHandlingTime()->toArray();
+        }
+
+        if ($this->getShipToLocations() instanceof ShipToLocations) {
+            $return['shipToLocations'] = $this->getShipToLocations()->toArray();
+        }
+
+        if ($this->getShippingOptions() instanceof ShipToLocations) {
+            $return['shippingOptions'] = $this->getShippingOptions()->toArray();
+        }
+
+        if (is_bool($this->isGlobalShipping())) {
+            $return['globalShipping'] = $this->isGlobalShipping();
+        }
+
+        if (is_bool($this->isPickupDropOff())) {
+            $return['pickupDropOff'] = $this->isPickupDropOff();
+        }
+
+        if (is_bool($this->isFreightShipping())) {
+            $return['freightShipping'] = $this->isFreightShipping();
+        }
+
+        if (is_string($this->getFulfillmentPolicyId())) {
+            $return['fulfillmentPolicyId'] = $this->getFulfillmentPolicyId();
+        }
+
+        return $return;
     }
 
+    /**
+     * @param string
+     * @return self
+     */
     public function setName($name)
     {
         $this->name = (string)$name;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param string
+     * @return self
+     */
     public function setDescription($description)
     {
         $this->description = (string)$description;
         return $this;
     }
 
+    /** @return string|null*/
     public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @param string
+     * @return self
+     */
     public function setMarketplaceId($marketplaceId)
     {
         $this->marketplaceId = (string) $marketplaceId;
         return $this;
     }
 
+    /** @return string|null*/
     public function getMarketplaceId()
     {
         return $this->marketplaceId;
     }
 
+    /**
+     * @param HandlingTime
+     * @return self
+     */
     public function setHandlingTime(HandlingTime $handlingTime)
     {
         $this->handlingTime = $handlingTime;
@@ -171,26 +231,28 @@ class FulfilmentPolicy extends ResourceModel
         return $this;
     }
 
+    /**
+     * @return  CategoryTypeList|null
+     */
     public function getCategoryTypes()
     {
         return $this->categoryTypes;
     }
 
+    /**
+     * @return  HandlingTime|null
+     */
     public function getHandlingTime()
     {
-        if ($this->handlingTime instanceof HandlingTime) {
-            return $this->handlingTime;
-        }
-
-        return new HandlingTime();
+        return $this->handlingTime;
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isGlobalShipping()
     {
-        return (bool)$this->globalShipping;
+        return $this->globalShipping;
     }
 
     /**
@@ -204,11 +266,11 @@ class FulfilmentPolicy extends ResourceModel
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isPickupDropOff()
     {
-        return (bool)$this->pickupDropOff;
+        return $this->pickupDropOff;
     }
 
     /**
@@ -222,11 +284,11 @@ class FulfilmentPolicy extends ResourceModel
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isFreightShipping()
     {
-        return (bool)$this->freightShipping;
+        return $this->freightShipping;
     }
 
     /**
@@ -240,11 +302,11 @@ class FulfilmentPolicy extends ResourceModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFulfillmentPolicyId()
     {
-        return (string)$this->fulfillmentPolicyId;
+        return $this->fulfillmentPolicyId;
     }
 
     /**
@@ -268,15 +330,11 @@ class FulfilmentPolicy extends ResourceModel
     }
 
     /**
-     * @return ShippingOptionList
+     * @return ShippingOptionList|null
      */
     public function getShippingOptions()
     {
-        if ($this->shoppingOptions instanceof ShippingOptionList) {
-            return $this->shoppingOptions;
-        }
-
-        return new ShippingOptionList();
+        return $this->shoppingOptions;
     }
 
     /**
@@ -302,12 +360,9 @@ class FulfilmentPolicy extends ResourceModel
         $this->shipToLocations = $shipToLocations;
     }
 
+    /** @return ShipToLocations|null */
     public function getShipToLocations()
     {
-        if ($this->shipToLocations instanceof ShipToLocations) {
-            return $this->shipToLocations;
-        }
-
         return new ShipToLocations();
     }
 }
