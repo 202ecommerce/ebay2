@@ -42,11 +42,11 @@ class ShippingOption extends ResourceModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCostType()
     {
-        return (string)$this->costType;
+        return $this->costType;
     }
 
     /**
@@ -60,15 +60,11 @@ class ShippingOption extends ResourceModel
     }
 
     /**
-     * @return ShippingServiceList
+     * @return ShippingServiceList|null
      */
     public function getShippingServices()
     {
-        if ($this->shippingServices instanceof ShippingServiceList) {
-            return $this->shippingServices;
-        }
-
-        return new ShippingServiceList();
+        return $this->shippingServices;
     }
 
     /**
@@ -82,11 +78,11 @@ class ShippingOption extends ResourceModel
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isInsuranceOffered()
     {
-        return (bool)$this->insuranceOffered;
+        return $this->insuranceOffered;
     }
 
     /**
@@ -100,15 +96,11 @@ class ShippingOption extends ResourceModel
     }
 
     /**
-     * @return InsuranceFee
+     * @return InsuranceFee|null
      */
     public function getInsuranceFee()
     {
-        if ($this->insuranceFee instanceof InsuranceFee) {
-            return $this->insuranceFee;
-        }
-
-        return new InsuranceFee();
+        return $this->insuranceFee;
     }
 
     /**
@@ -166,12 +158,28 @@ class ShippingOption extends ResourceModel
 
     public function toArray()
     {
-        return [
-            'optionType' => $this->getOptionType(),
-            'costType' => $this->getCostType(),
-            'insuranceOffered' => $this->isInsuranceOffered(),
-            'insuranceFee' => $this->getInsuranceFee()->toArray(),
-            'shippingServices' => $this->getShippingServices()->toArray()
-        ];
+        $return = [];
+
+        if (is_string($this->getOptionType())) {
+            $return['optionType'] = $this->getOptionType();
+        }
+
+        if (is_string($this->getCostType())) {
+            $return['costType'] = $this->getCostType();
+        }
+
+        if (is_bool($this->isInsuranceOffered())) {
+            $return['insuranceOffered'] = $this->isInsuranceOffered();
+        }
+
+        if ($this->getInsuranceFee() instanceof InsuranceFee) {
+            $return['insuranceFee'] = $this->getInsuranceFee();
+        }
+
+        if ($this->getShippingServices() instanceof ShippingServiceList) {
+            $return['shippingServices'] = $this->getShippingServices();
+        }
+
+        return $return;
     }
 }
