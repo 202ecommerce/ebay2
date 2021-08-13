@@ -2,6 +2,7 @@
 namespace Ebay\classes\SDK\Lib;
 
 use Ebay\classes\SDK\Core\ResourceModel;
+use Symfony\Component\VarDumper\VarDumper;
 
 class FulfilmentPolicy extends ResourceModel
 {
@@ -128,7 +129,7 @@ class FulfilmentPolicy extends ResourceModel
             $return['shipToLocations'] = $this->getShipToLocations()->toArray();
         }
 
-        if ($this->getShippingOptions() instanceof ShipToLocations) {
+        if ($this->getShippingOptions() instanceof ShippingOptionList) {
             $return['shippingOptions'] = $this->getShippingOptions()->toArray();
         }
 
@@ -363,6 +364,6 @@ class FulfilmentPolicy extends ResourceModel
     /** @return ShipToLocations|null */
     public function getShipToLocations()
     {
-        return new ShipToLocations();
+        return $this->shipToLocations;
     }
 }

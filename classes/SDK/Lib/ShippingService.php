@@ -33,11 +33,11 @@ class ShippingService extends ResourceModel
     protected $buyerResponsibleForPickup;
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getSortOrder()
     {
-        return (int)$this->sortOrder;
+        return $this->sortOrder;
     }
 
     /**
@@ -51,11 +51,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShippingCarrierCode()
     {
-        return (string)$this->shippingCarrierCode;
+        return $this->shippingCarrierCode;
     }
 
     /**
@@ -69,11 +69,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShippingServiceCode()
     {
-        return (string)$this->shippingServiceCode;
+        return $this->shippingServiceCode;
     }
 
     /**
@@ -87,15 +87,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return ShippingCost
+     * @return ShippingCost|null
      */
     public function getShippingCost()
     {
-        if ($this->shippingCost instanceof ShippingCost) {
-            return $this->shippingCost;
-        }
-
-        return new ShippingCost();
+        return $this->shippingCost;
     }
 
     /**
@@ -109,15 +105,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return AdditionalShippingCost
+     * @return AdditionalShippingCost|null
      */
     public function getAdditionalShippingCost()
     {
-        if ($this->additionalShippingCost instanceof AdditionalShippingCost) {
-            return $this->additionalShippingCost;
-        }
-
-        return new AdditionalShippingCost();
+        return $this->additionalShippingCost;
     }
 
     /**
@@ -131,11 +123,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isFreeShipping()
     {
-        return (bool)$this->freeShipping;
+        return $this->freeShipping;
     }
 
     /**
@@ -149,11 +141,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isBuyerResponsibleForShipping()
     {
-        return (bool)$this->buyerResponsibleForShipping;
+        return $this->buyerResponsibleForShipping;
     }
 
     /**
@@ -167,11 +159,11 @@ class ShippingService extends ResourceModel
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isBuyerResponsibleForPickup()
     {
-        return (bool)$this->buyerResponsibleForPickup;
+        return $this->buyerResponsibleForPickup;
     }
 
     /**
@@ -227,15 +219,40 @@ class ShippingService extends ResourceModel
 
     public function toArray()
     {
-        return [
-            'sortOrder' => $this->getSortOrder(),
-            'shippingCarrierCode' => $this->getShippingCarrierCode(),
-            'shippingServiceCode' => $this->getShippingServiceCode(),
-            'shippingCost' => $this->getShippingCost()->toArray(),
-            'additionalShippingCost' => $this->getAdditionalShippingCost()->toArray(),
-            'freeShipping' => $this->isFreeShipping(),
-            'buyerResponsibleForShipping' => $this->isBuyerResponsibleForShipping(),
-            'buyerResponsibleForPickup' => $this->isBuyerResponsibleForPickup()
-        ];
+        $return = [];
+
+        if (is_int($this->getSortOrder())) {
+            $return['sortOrder'] = $this->getSortOrder();
+        }
+
+        if (is_string($this->getShippingCarrierCode())) {
+            $return['shippingCarrierCode'] = $this->getShippingCarrierCode();
+        }
+
+        if (is_string($this->getShippingServiceCode())) {
+            $return['shippingServiceCode'] = $this->getShippingServiceCode();
+        }
+
+        if ($this->getShippingCost() instanceof ShippingCost) {
+            $return['shippingCost'] = $this->getShippingCost()->toArray();
+        }
+
+        if ($this->getAdditionalShippingCost() instanceof AdditionalShippingCost) {
+            $return['additionalShippingCost'] = $this->getAdditionalShippingCost()->toArray();
+        }
+
+        if (is_bool($this->isFreeShipping())) {
+            $return['freeShipping'] = $this->isFreeShipping();
+        }
+
+        if (is_bool($this->isBuyerResponsibleForShipping())) {
+            $return['buyerResponsibleForShipping'] = $this->isBuyerResponsibleForShipping();
+        }
+
+        if (is_bool($this->isBuyerResponsibleForPickup())) {
+            $return['buyerResponsibleForPickup'] = $this->isBuyerResponsibleForPickup();
+        }
+
+        return $return;
     }
 }
