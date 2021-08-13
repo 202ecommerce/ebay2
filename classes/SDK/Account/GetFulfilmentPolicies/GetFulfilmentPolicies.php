@@ -24,6 +24,9 @@ class GetFulfilmentPolicies
         $this->ebayProfile = $ebayProfile;
     }
 
+    /**
+     * @return EbayApiResponse
+     */
     public function execute()
     {
         try {

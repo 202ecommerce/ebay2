@@ -20,6 +20,9 @@ class FulfilmentPolicy extends ResourceModel
     /** @var HandlingTime*/
     protected $handlingTime;
 
+    /** @var string*/
+    protected $shipToLocations;
+
     /** @var ShippingOptionList*/
     protected $shoppingOptions;
 
@@ -61,6 +64,12 @@ class FulfilmentPolicy extends ResourceModel
             );
         }
 
+        if (isset($data['shipToLocations']) && false == empty($data['shipToLocations'])) {
+            $this->setShipToLocations(
+                (new ShipToLocations())->fromArray($data['shipToLocations'])
+            );
+        }
+
         if (isset($data['shippingOptions']) && false == empty($data['shippingOptions'])) {
             $this->setShippingOptions(
                 (new ShippingOptionList())->fromArray($data['shippingOptions'])
@@ -94,6 +103,7 @@ class FulfilmentPolicy extends ResourceModel
             'marketplaceId' => $this->getMarketplaceId(),
             'categoryTypes' => $this->getCategoryTypes()->toArray(),
             'handlingTime' => $this->getHandlingTime()->toArray(),
+            'shipToLocations' => $this->getShipToLocations()->toArray(),
             'shippingOptions' => $this->getShippingOptions()->toArray(),
             'globalShipping' => $this->isGlobalShipping(),
             'pickupDropOff' => $this->isPickupDropOff(),
@@ -281,5 +291,23 @@ class FulfilmentPolicy extends ResourceModel
 
         $this->shoppingOptions->addShippingOption($shippingOption);
         return $this;
+    }
+
+    /**
+     * @param ShipToLocations $shipToLocations
+     * @return self
+     */
+    public function setShipToLocations(ShipToLocations $shipToLocations)
+    {
+        $this->shipToLocations = $shipToLocations;
+    }
+
+    public function getShipToLocations()
+    {
+        if ($this->shipToLocations instanceof ShipToLocations) {
+            return $this->shipToLocations;
+        }
+
+        return new ShipToLocations();
     }
 }
