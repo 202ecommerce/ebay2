@@ -533,7 +533,9 @@ $_MODULE['<{ebay}prestashop>ebay_log_workers_0450d266974d92724ff4bacc3a51952e'] 
 $_MODULE['<{ebay}prestashop>ebay_log_workers_d3b206d196cd6be3a2764c1fb90b200f'] = 'Supprimer la sélection';
 $_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay a activé TLS 1.2 pour toutes les API dans Sandbox et Production. Nous vous recommandons vivement de contacter votre hébergeur pour vérifier la compatibilité avec TLS 1.2 et SHA2.';
 $_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Les appels d\'API qui ne sont pas conformes à TLS 1.2 échoueront à partir du 31/08/2021.';
-$_MODULE['<{ebay}prestashop>formconfig_3ffcdde82ab6ef9fbd4c3e963352d535'] = 'Désormais, le module eBay peut synchroniser un pourcentage de TVA différent pour chaque produit. Le pourcentage pris en compte est celui indiqué dans le champ \"Règle de taxe\" de la page produit, dans l\'onglet \"Essentiel\". Pour synchroniser le champ TVA sur vos annonces eBay, lancez la synchronisation manuelle de toutes les catégories via le menu \"Annonces\" du module.';
+$_MODULE['<{ebay}prestashop>formconfig_0788e34b977bbbcf7b3ebb625a4e4d2f'] = 'En septembre 2021, eBay retirera la condition d\'article \"Reconditionné\" sur ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr et ebay.com.au. Actions demandées à compter du 27 septembre : ';
+$_MODULE['<{ebay}prestashop>formconfig_af954d385d97afe00437ec8496bac31d'] = '1) Si vous créez une nouvelle annonce pour un article reconditionné, vous devez l\'inscrire sous la condition d\'article « d\'occasion ».';
+$_MODULE['<{ebay}prestashop>formconfig_8c48fe62f3067a0278ff2060e9882a29'] = '2) Mettre à jour les titres ou la description de l\'annonce pour refléter l\'état de l\'article';
 $_MODULE['<{ebay}prestashop>formconfig_2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
 $_MODULE['<{ebay}prestashop>formconfig_212f7cc9644cdd793a6e5cc3edda6d90'] = 'Liste des catégories';
 $_MODULE['<{ebay}prestashop>formconfig_9f636cbd08d62f823dab82b4266dc774'] = 'Liste des produits rejetés';

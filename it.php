@@ -527,7 +527,9 @@ $_MODULE['<{ebay}prestashop>ebay_log_workers_0450d266974d92724ff4bacc3a51952e'] 
 $_MODULE['<{ebay}prestashop>ebay_log_workers_d3b206d196cd6be3a2764c1fb90b200f'] = 'Elimina selezionati';
 $_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay ha abilitato TLS 1.2 per tutte le API in Sandbox e Produzione. Ti consigliamo vivamente di contattare il tuo host per verificare la compatibilità con TLS 1.2 e SHA2.';
 $_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Le istruzioni inviate alle API che non sono conformi a TLS 1.2 avranno esito negativo a partire dal 31/8/2021.';
-$_MODULE['<{ebay}prestashop>formconfig_3ffcdde82ab6ef9fbd4c3e963352d535'] = 'Ora il modulo eBay può sincronizzare una percentuale di IVA diversa per ogni prodotto. La percentuale presa in conto è quella indicata nel campo \"Regime Iva\" nella pagina prodotto, nella scheda \"Impostazioni di base\". Per sincronizzare il campo IVA sui tuoi annunci eBay, lancia la sincronizzazione manuale di tutte le categorie attraverso il menu \"Annunci\" del modulo.';
+$_MODULE['<{ebay}prestashop>formconfig_0788e34b977bbbcf7b3ebb625a4e4d2f'] = 'A settembre 2021, eBay rimuoverà la condizione dell\'articolo \"Ricondizionato\" da ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr e ebay.com.au. Azioni richieste dal 27 settembre: ';
+$_MODULE['<{ebay}prestashop>formconfig_af954d385d97afe00437ec8496bac31d'] = '1) Se crei una nuova inserzione per un articolo ricondizionato, devi inserirla nella condizione di articolo \"usato\".';
+$_MODULE['<{ebay}prestashop>formconfig_8c48fe62f3067a0278ff2060e9882a29'] = '2) Aggiorna i titoli o la descrizione dell\'inserzione per riflettere lo stato dell\'oggetto';
 $_MODULE['<{ebay}prestashop>formconfig_212f7cc9644cdd793a6e5cc3edda6d90'] = 'Lista Categorie';
 $_MODULE['<{ebay}prestashop>formconfig_9f636cbd08d62f823dab82b4266dc774'] = 'Lista Prodotti Rifiutati';
 $_MODULE['<{ebay}prestashop>formconfig_5f559053a91684025f09ca40283abf96'] = 'Inserzioni eBay';

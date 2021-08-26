@@ -532,7 +532,9 @@ $_MODULE['<{ebay}prestashop>ebay_log_workers_0450d266974d92724ff4bacc3a51952e'] 
 $_MODULE['<{ebay}prestashop>ebay_log_workers_d3b206d196cd6be3a2764c1fb90b200f'] = 'Borrar selección ';
 $_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay ha habilitado TLS 1.2 para todas las API en Sandbox y Producción. Le recomendamos encarecidamente que se ponga en contacto con su proveedor de hosting web para verificar la compatibilidad con TLS 1.2 y SHA2.';
 $_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Las llamadas de API que no cumplan con TLS 1.2 fallarán a partir del 31/8/2021.';
-$_MODULE['<{ebay}prestashop>formconfig_3ffcdde82ab6ef9fbd4c3e963352d535'] = 'Ahora, el módulo de eBay puede sincronizar un porcentaje de IVA diferente para cada producto. El porcentaje que se tiene en cuenta es el indicado en el campo \"Regla de impuestos\" de la página del producto, en la pestaña \"Ajustes básicos\". Para sincronizar el campo de IVA en sus anuncios de eBay, inicie la sincronización manual de todas las categorías a través del menú \"Anuncios\" del módulo.';
+$_MODULE['<{ebay}prestashop>formconfig_0788e34b977bbbcf7b3ebb625a4e4d2f'] = 'En septiembre de 2021, eBay eliminará la condición del artículo \"Reacondicionado\" de ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr y ebay.com.au. Acciones solicitadas a partir del 27 de septiembre: ';
+$_MODULE['<{ebay}prestashop>formconfig_af954d385d97afe00437ec8496bac31d'] = '1) Si crea un nuevo listado para un artículo reacondicionado, debe incluirlo bajo la condición de artículo \"usado\".';
+$_MODULE['<{ebay}prestashop>formconfig_8c48fe62f3067a0278ff2060e9882a29'] = '2) Actualice los títulos o la descripción de los artículos para reflejar su condición.';
 $_MODULE['<{ebay}prestashop>formconfig_2938c7f7e560ed972f8a4f68e80ff834'] = 'Tablero Dashboard';
 $_MODULE['<{ebay}prestashop>formconfig_212f7cc9644cdd793a6e5cc3edda6d90'] = 'Lista de categorias ';
 $_MODULE['<{ebay}prestashop>formconfig_9f636cbd08d62f823dab82b4266dc774'] = 'Lista de Anuncios Rechazados';
