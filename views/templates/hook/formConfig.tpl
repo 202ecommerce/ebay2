@@ -38,10 +38,10 @@
 
 	</div>
 	<div class="alert alert-info">
-		<div>
-			{l s='Now the eBay module can synchronize a different VAT percentage for each product. The percentage taken into account is that indicated in the "Tax rule" field on the product page, in the "Basic Settings" tab. To synchronize the VAT field on your eBay listings, start the manual synchronization of all categories through the "Listings" menu of the module.' mod='ebay'}
-		</div>
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{l s='Now the eBay module can synchronize a different VAT percentage for each product. The percentage taken into account is that indicated in the "Tax rule" field on the product page, in the "Basic Settings" tab. To synchronize the VAT field on your eBay listings, start the manual synchronization of all categories through the "Listings" menu of the module.' mod='ebay'}
 	</div>
+
 	{if isset($green_message) && $green_message}
 		<div class="alert alert-success conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
 	{/if}
