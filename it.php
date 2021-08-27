@@ -530,6 +530,7 @@ $_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Le 
 $_MODULE['<{ebay}prestashop>formconfig_0788e34b977bbbcf7b3ebb625a4e4d2f'] = 'A settembre 2021, eBay rimuoverà la condizione dell\'articolo \"Ricondizionato\" da ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr e ebay.com.au. Azioni richieste dal 27 settembre: ';
 $_MODULE['<{ebay}prestashop>formconfig_af954d385d97afe00437ec8496bac31d'] = '1) Se crei una nuova inserzione per un articolo ricondizionato, devi inserirla nella condizione di articolo \"usato\".';
 $_MODULE['<{ebay}prestashop>formconfig_8c48fe62f3067a0278ff2060e9882a29'] = '2) Aggiorna i titoli o la descrizione dell\'inserzione per riflettere lo stato dell\'oggetto';
+$_MODULE['<{ebay}prestashop>formconfig_15c7e2fbecdad1a606bd1e3e50bc8738'] = 'Ora il modulo eBay può sincronizzare una percentuale di IVA diversa per ogni prodotto. La percentuale presa in conto è quella indicata nel campo \"Regime Iva\" nella pagina prodotto, nella scheda \"Impostazioni di base\". Per sincronizzare il campo IVA sui tuoi annunci eBay, lancia la sincronizzazione manuale di tutte le categorie attraverso il menu \"Annunci\" del modulo.';
 $_MODULE['<{ebay}prestashop>formconfig_212f7cc9644cdd793a6e5cc3edda6d90'] = 'Lista Categorie';
 $_MODULE['<{ebay}prestashop>formconfig_9f636cbd08d62f823dab82b4266dc774'] = 'Lista Prodotti Rifiutati';
 $_MODULE['<{ebay}prestashop>formconfig_5f559053a91684025f09ca40283abf96'] = 'Inserzioni eBay';
