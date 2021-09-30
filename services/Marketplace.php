@@ -1,16 +1,21 @@
 <?php
 namespace Ebay\services;
 
-class MarketplaceByProfile
+class Marketplace
 {
     /**
      * @param \EbayProfile
      * @return string
      */
-    public function get(\EbayProfile $ebayProfile)
+    public function getByProfile(\EbayProfile $ebayProfile)
+    {
+        return $this->getBySiteId($ebayProfile->ebay_site_id);
+    }
+
+    public function getBySiteId($idSite)
     {
         foreach (\EbaySiteMap::get() as $map) {
-            if ($map['site_id'] == $ebayProfile->ebay_site_id) {
+            if ($map['site_id'] == $idSite) {
                 return strtoupper('ebay_' . $map['site_extension']);
             }
         }

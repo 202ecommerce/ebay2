@@ -24,6 +24,8 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\CreateFulfilmentPolicy;
+
 if (file_exists(dirname(__FILE__) . '/EbayCountrySpec.php')) {
     require_once dirname(__FILE__) . '/EbayCountrySpec.php';
 }
@@ -883,59 +885,74 @@ class EbayRequest
                     'international_services' => $data['shipping']['internationalShip'],
                     'currency_id' => $this->ebay_country->getCurrency(),
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
-                    'shipping_name' => 'Prestashop-Ebay-'.$name_shipping,
+                    'shipping_name' => $policies_ship_name,
                     'description' => 'PrestaShop_' . $namedesc,
                 ));
-                $this->smarty->assign($vars);
-                $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
+                $createFulfilmentPolicy = new CreateFulfilmentPolicy($this->ebay_profile, $vars);
+                $response = $createFulfilmentPolicy->execute();
 
+                if ($response->isSuccess() == false) {
+                    //todo: to implement handling the cases when policiy exists already
 
-                if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
-                    if ($response->errorMessage->error->errorId == '178149') {
-                        $idBussinesPolicie = '';
-
-                        foreach ($response->errorMessage->error->parameter as $parameter) {
-                            if ($parameter['name'] == 'DuplicateProfileId') {
-                                $idBussinesPolicie = (string) $parameter;
-                            }
-                        }
-
-                        $dataProf = array(
-                            'id' => $name_shipping,
-                            'id_bussines_Policie' => $idBussinesPolicie
-                        );
-
-                        EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
-                    } else {
-                        $this->_checkForErrors($response);
-
-                        $error = '';
-                        $error .= $response->errorMessage->error->errorId . ' : ';
-                        $error .= (string)$response->errorMessage->error->message;
-
-                        if (isset($response->errorMessage->error->parameter)) {
-                            $error .= ' ' . (string)$response->errorMessage->error->parameter;
-                        }
-
-                        if (!Tools::isEmpty($response->errorMessage->error->errorId)) {
-                            $context = Context::getContext();
-                            $error .= '<a class="kb-help" data-errorcode="' . (int)$response->errorMessage->error->errorId . '"';
-                            $error .= ' data-module="ebay" data-lang="' . $context->language->iso_code . '"';
-                            $error .= ' module_version="1.11.0" prestashop_version="' . _PS_VERSION_ . '"></a>';
-                        }
-
-
-                        return array('error' => $error);
-
-                        Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
-                    }
+                    Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
                 } else {
                     $dataProf = array(
                         'id' => $name_shipping,
-                        'id_bussines_Policie' => $response->shippingPolicyProfile->profileId,
+                        'id_bussines_Policie' => $response->getFulfilmentPolicy()->getFulfillmentPolicyId(),
                     );
                     EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                 }
+// Old code
+//                $this->smarty->assign($vars);
+//                $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
+//
+//
+//                if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
+//                    if ($response->errorMessage->error->errorId == '178149') {
+//                        $idBussinesPolicie = '';
+//
+//                        foreach ($response->errorMessage->error->parameter as $parameter) {
+//                            if ($parameter['name'] == 'DuplicateProfileId') {
+//                                $idBussinesPolicie = (string) $parameter;
+//                            }
+//                        }
+//
+//                        $dataProf = array(
+//                            'id' => $name_shipping,
+//                            'id_bussines_Policie' => $idBussinesPolicie
+//                        );
+//
+//                        EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
+//                    } else {
+//                        $this->_checkForErrors($response);
+//
+//                        $error = '';
+//                        $error .= $response->errorMessage->error->errorId . ' : ';
+//                        $error .= (string)$response->errorMessage->error->message;
+//
+//                        if (isset($response->errorMessage->error->parameter)) {
+//                            $error .= ' ' . (string)$response->errorMessage->error->parameter;
+//                        }
+//
+//                        if (!Tools::isEmpty($response->errorMessage->error->errorId)) {
+//                            $context = Context::getContext();
+//                            $error .= '<a class="kb-help" data-errorcode="' . (int)$response->errorMessage->error->errorId . '"';
+//                            $error .= ' data-module="ebay" data-lang="' . $context->language->iso_code . '"';
+//                            $error .= ' module_version="1.11.0" prestashop_version="' . _PS_VERSION_ . '"></a>';
+//                        }
+//
+//
+//                        return array('error' => $error);
+//
+//                        Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
+//                    }
+//                } else {
+//                    $dataProf = array(
+//                        'id' => $name_shipping,
+//                        'id_bussines_Policie' => $response->shippingPolicyProfile->profileId,
+//                    );
+//                    EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
+//                }
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
             if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1) {
@@ -946,12 +963,16 @@ class EbayRequest
                     'international_services' => $data['shipping']['internationalShip'],
                     'currency_id' => $this->ebay_country->getCurrency(),
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
-                    'shipping_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
+                    'shipping_name' => $shippingPolicies[0]['id'],
                     'description' => 'PrestaShop_' . $namedesc,
                     'shipping_id' => $shippingPolicies[0]['id_bussines_Policie'],
                 ));
-                $this->smarty->assign($vars);
-                $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
+
+                $updateFulfilmentPolicy = new UpdateFulfilmentPolicy($this->ebay_profile, $vars);
+                $response = $updateFulfilmentPolicy->execute();
+// Old code
+//                $this->smarty->assign($vars);
+//                $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
             }
 
             DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
@@ -962,7 +983,7 @@ class EbayRequest
                 'return_profile_id' => $policies_config[0]['id_return'],
                 'return_profile_name' => $return_name[0]['name'],
                 'shipping_profile_id' => $shippingPolicies[0]['id_bussines_Policie'],
-                'shipping_profile_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
+                'shipping_profile_name' => $shippingPolicies[0]['id'],
             ));
         }
 

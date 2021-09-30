@@ -8,6 +8,8 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class HandlingTime extends ResourceModel
 {
+    const DAY = 'DAY';
+
     /** @var string*/
     protected $value;
 

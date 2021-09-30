@@ -8,6 +8,8 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class CategoryType extends ResourceModel
 {
+    const ALL_EXCLUDING_MOTORS_VEHICLES = 'ALL_EXCLUDING_MOTORS_VEHICLES';
+
     protected $name;
 
     protected $default;

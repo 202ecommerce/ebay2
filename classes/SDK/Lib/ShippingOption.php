@@ -8,6 +8,12 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class ShippingOption extends ResourceModel
 {
+    const DOMESTIC = 'DOMESTIC';
+
+    const INTERNATIONAL = 'INTERNATIONAL';
+
+    const FLAT_RATE = 'FLAT_RATE';
+
     /** @var string*/
     protected $optionType;
 
@@ -177,7 +183,7 @@ class ShippingOption extends ResourceModel
         }
 
         if ($this->getShippingServices() instanceof ShippingServiceList) {
-            $return['shippingServices'] = $this->getShippingServices();
+            $return['shippingServices'] = $this->getShippingServices()->toArray();
         }
 
         return $return;

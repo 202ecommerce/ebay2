@@ -1,31 +1,37 @@
 <?php
 
 
-namespace Ebay\classes\SDK\Account\GetFulfilmentPolicies;
+namespace Ebay\classes\SDK\Account\CreateFulfilmentPolicy;
 
-use Ebay\classes\SDK\Account\GetFulfilmentPolicies\Request as GetRequest;
-use Ebay\classes\SDK\Account\GetFulfilmentPolicies\Response as GetResponse;
+use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\Request as GetRequest;
+use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\Response as GetResponse;
 use Ebay\classes\SDK\Core\ApiBaseUri;
 use Ebay\classes\SDK\Core\BearerAuthToken;
 use Ebay\classes\SDK\Core\EbayApiResponse;
 use Ebay\classes\SDK\Core\EbayClient;
+use Ebay\classes\SDK\Lib\FulfilmentPolicy;
 use Ebay\classes\SDK\Lib\FulfilmentPolicyList;
-use Ebay\services\Marketplace;
+use Ebay\services\Builder\BuilderInterface;
+use Ebay\services\Builder\FulfilmentBuilder;
 use Symfony\Component\VarDumper\VarDumper;
 use Exception;
 
-class GetFulfilmentPolicies
+class CreateFulfilmentPolicy
 {
     /** @var \EbayProfile*/
     protected $ebayProfile;
 
-    public function __construct(\EbayProfile $ebayProfile)
+    /** @var mixed*/
+    protected $data;
+
+    public function __construct(\EbayProfile $ebayProfile, $data)
     {
         $this->ebayProfile = $ebayProfile;
+        $this->setData($data);
     }
 
     /**
-     * @return EbayApiResponse
+     * @return GetRequest
      */
     public function execute()
     {
@@ -41,14 +47,11 @@ class GetFulfilmentPolicies
                 ->setResult($result);
         }
 
-        $resultContent = json_decode($result->getBody()->getContents(), true);
+        $fulfilmentPolicy = (new FulfilmentPolicy())->fromJson($result->getBody()->getContents());
         $response = (new GetResponse())
             ->setSuccess(true)
-            ->setResult($result);
-
-        if (isset($resultContent['fulfillmentPolicies']) && false == empty($resultContent['fulfillmentPolicies'])) {
-            $response->fulfilmentPolicies = (new FulfilmentPolicyList())->fromArray($resultContent['fulfillmentPolicies']);
-        }
+            ->setResult($result)
+            ->setFulfilmentPolicy($fulfilmentPolicy);
 
         return $response;
     }
@@ -56,14 +59,6 @@ class GetFulfilmentPolicies
     protected function getToken()
     {
         return (new BearerAuthToken($this->ebayProfile));
-    }
-
-    /**
-     * @return string
-     */
-    protected function getMarketplace()
-    {
-        return (new Marketplace())->getByProfile($this->ebayProfile);
     }
 
     /**
@@ -81,9 +76,26 @@ class GetFulfilmentPolicies
 
     protected function getRequest()
     {
+        $fulfilment = $this->getFulfilmentBuilder()->build();
         return new GetRequest(
             $this->getToken(),
-            $this->getMarketplace()
+            $fulfilment
         );
+    }
+
+    /**
+     * @param mixed $data
+     * @return self
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /** @return BuilderInterface*/
+    protected function getFulfilmentBuilder()
+    {
+        return new FulfilmentBuilder($this->data);
     }
 }
