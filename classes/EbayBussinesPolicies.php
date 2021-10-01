@@ -84,4 +84,9 @@ class EbayBussinesPolicies
     {
         return  Db::getInstance()->update('ebay_business_policies', array('id_bussines_Policie' => pSQL($data['id_bussines_Policie'])), 'id = '.(int)$data['id']);
     }
+
+    public static function updatePolicy($id, $data)
+    {
+        return  Db::getInstance()->update('ebay_business_policies', $data, 'id = '.(int)$id);
+    }
 }

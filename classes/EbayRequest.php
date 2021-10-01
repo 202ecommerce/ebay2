@@ -892,9 +892,48 @@ class EbayRequest
                 $response = $createFulfilmentPolicy->execute();
 
                 if ($response->isSuccess() == false) {
-                    //todo: to implement handling the cases when policiy exists already
+                    $result = $response->getResult();
+                    $isDeletePolicy = true;
 
-                    Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
+                    if (empty($result['body-response']['errors']) == false) {
+                        foreach ($result['body-response']['errors'] as $error) {
+                            if ($error['errorId'] != 20400) {
+                                continue;
+                            }
+
+                            if (empty($error['parameters'])) {
+                                continue;
+                            }
+
+                            $isDeletePolicy = false;
+                            $profileName = null;
+                            $profileId = null;
+
+                            foreach ($error['parameters'] as $parameter) {
+                                if ($parameter['name'] == 'DuplicateProfileName') {
+                                    $profileName = $parameter['value'];
+                                }
+
+                                if ($parameter['name'] == 'DuplicateProfileId') {
+                                    $profileId = $parameter['value'];
+                                }
+                            }
+
+                            if ($profileName && $profileId) {
+                                EbayBussinesPolicies::updatePolicy(
+                                    $name_shipping,
+                                    [
+                                        'name' => $profileName,
+                                        'id_bussines_Policie' => $profileId
+                                    ]
+                                );
+                            }
+                        }
+                    }
+
+                    if ($isDeletePolicy) {
+                        Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
+                    }
                 } else {
                     $dataProf = array(
                         'id' => $name_shipping,
@@ -902,60 +941,10 @@ class EbayRequest
                     );
                     EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                 }
-// Old code
-//                $this->smarty->assign($vars);
-//                $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
-//
-//
-//                if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
-//                    if ($response->errorMessage->error->errorId == '178149') {
-//                        $idBussinesPolicie = '';
-//
-//                        foreach ($response->errorMessage->error->parameter as $parameter) {
-//                            if ($parameter['name'] == 'DuplicateProfileId') {
-//                                $idBussinesPolicie = (string) $parameter;
-//                            }
-//                        }
-//
-//                        $dataProf = array(
-//                            'id' => $name_shipping,
-//                            'id_bussines_Policie' => $idBussinesPolicie
-//                        );
-//
-//                        EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
-//                    } else {
-//                        $this->_checkForErrors($response);
-//
-//                        $error = '';
-//                        $error .= $response->errorMessage->error->errorId . ' : ';
-//                        $error .= (string)$response->errorMessage->error->message;
-//
-//                        if (isset($response->errorMessage->error->parameter)) {
-//                            $error .= ' ' . (string)$response->errorMessage->error->parameter;
-//                        }
-//
-//                        if (!Tools::isEmpty($response->errorMessage->error->errorId)) {
-//                            $context = Context::getContext();
-//                            $error .= '<a class="kb-help" data-errorcode="' . (int)$response->errorMessage->error->errorId . '"';
-//                            $error .= ' data-module="ebay" data-lang="' . $context->language->iso_code . '"';
-//                            $error .= ' module_version="1.11.0" prestashop_version="' . _PS_VERSION_ . '"></a>';
-//                        }
-//
-//
-//                        return array('error' => $error);
-//
-//                        Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
-//                    }
-//                } else {
-//                    $dataProf = array(
-//                        'id' => $name_shipping,
-//                        'id_bussines_Policie' => $response->shippingPolicyProfile->profileId,
-//                    );
-//                    EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
-//                }
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
-            if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1) {
+            $shippingPolicies = array_pop($shippingPolicies);
+            if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1 && false == is_null($shippingPolicies)) {
                 $vars = array_merge($vars, array(
                     'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
                     'excluded_zones' => $data['shipping']['excludedZone'],
@@ -963,27 +952,26 @@ class EbayRequest
                     'international_services' => $data['shipping']['internationalShip'],
                     'currency_id' => $this->ebay_country->getCurrency(),
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
-                    'shipping_name' => $shippingPolicies[0]['id'],
+                    'shipping_name' => (empty($shippingPolicies['name']) ? '' : $shippingPolicies['name']),
                     'description' => 'PrestaShop_' . $namedesc,
-                    'shipping_id' => $shippingPolicies[0]['id_bussines_Policie'],
+                    'shipping_id' => (empty($shippingPolicies['id_bussines_Policie']) ? '' : $shippingPolicies['id_bussines_Policie']),
                 ));
 
                 $updateFulfilmentPolicy = new UpdateFulfilmentPolicy($this->ebay_profile, $vars);
-                $response = $updateFulfilmentPolicy->execute();
-// Old code
-//                $this->smarty->assign($vars);
-//                $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
+                $updateFulfilmentPolicy->execute();
             }
 
-            DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
+            if (false == empty($shippingPolicies['id_bussines_Policie'])) {
+                DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
+            }
 
             $vars = array_merge($vars, array(
                 'payment_profile_id' => $policies_config[0]['id_payment'],
                 'payment_profile_name' => $payement_name[0]['name'],
                 'return_profile_id' => $policies_config[0]['id_return'],
                 'return_profile_name' => $return_name[0]['name'],
-                'shipping_profile_id' => $shippingPolicies[0]['id_bussines_Policie'],
-                'shipping_profile_name' => $shippingPolicies[0]['id'],
+                'shipping_profile_id' => (empty($shippingPolicies['id_bussines_Policie']) ? '' : $shippingPolicies['id_bussines_Policie']),
+                'shipping_profile_name' => (empty($shippingPolicies['name']) ? '' : $shippingPolicies['name']),
             ));
         }
 

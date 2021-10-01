@@ -45,6 +45,7 @@ class Request extends AbstractBearerRequest
     {
         $options = parent::getOptions();
         $options[RequestOptions::BODY] = $this->fulfilmentPolicy->toJson();
+        $options[RequestOptions::HEADERS]['Content-Type'] = 'application/json';
 
         return $options;
     }

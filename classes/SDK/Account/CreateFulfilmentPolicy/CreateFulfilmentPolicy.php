@@ -13,6 +13,7 @@ use Ebay\classes\SDK\Lib\FulfilmentPolicy;
 use Ebay\classes\SDK\Lib\FulfilmentPolicyList;
 use Ebay\services\Builder\BuilderInterface;
 use Ebay\services\Builder\FulfilmentBuilder;
+use EbayVendor\GuzzleHttp\Exception\RequestException;
 use Symfony\Component\VarDumper\VarDumper;
 use Exception;
 
@@ -31,12 +32,28 @@ class CreateFulfilmentPolicy
     }
 
     /**
-     * @return GetRequest
+     * @return GetResponse
      */
     public function execute()
     {
         try {
             $result = $this->getClient()->executeRequest($this->getRequest());
+        } catch (RequestException $e) {
+            $result = [
+                'response' => $e->getResponse()
+            ];
+            $headers = $e->getResponse()->getHeaders();
+
+            if (false == empty($headers['content-type'])) {
+                if (in_array('application/json', explode(';', $headers['content-type'][0]))) {
+                    $result['body-response'] = json_decode(
+                        $e->getResponse()->getBody()->getContents(),
+                        true
+                    );
+                }
+            }
+
+            return (new GetResponse())->setSuccess(false)->setResult($result);
         } catch (Exception $e) {
             return (new GetResponse())->setSuccess(false);
         }
