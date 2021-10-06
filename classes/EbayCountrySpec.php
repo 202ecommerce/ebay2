@@ -971,6 +971,27 @@ class EbayCountrySpec
     }
 
     /**
+     * @param int
+     * @return self
+     */
+    public static function getInstanceBySiteId($siteId)
+    {
+        foreach (self::$country_data as $data) {
+            if ($data['site_id'] == $siteId) {
+                try {
+                    $country = new Country(Country::getByIso($data['iso_code']));
+                } catch (Exception $e) {
+                    return new self();
+                }
+
+                return new self($country);
+            }
+        }
+
+        return new self();
+    }
+
+    /**
      * Set dev or not
      * @param boolean $dev set dev or not
      */

@@ -45,7 +45,8 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = EBAY_DEV;
+//    private $dev = EBAY_DEV;
+    private $dev = false;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -65,6 +66,9 @@ class EbayRequest
 
     private $cacheFolder;
     private $session;
+
+    /** @var ProductTax */
+    protected $productTax;
 
     public function __construct($id_ebay_profile = null, $context = null)
     {
@@ -90,6 +94,10 @@ class EbayRequest
 
         if ($context) {
             $this->context = $context;
+        }
+
+        if ($this->ebay_profile instanceof EbayProfile) {
+            $this->productTax = new ProductTax($this->ebay_profile);
         }
 
         /**
@@ -748,9 +756,13 @@ class EbayRequest
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'variations' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
-            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false'
         );
+
+        if (isset($data['id_product'])) {
+            $vars['vat'] = $this->getVatByProduct(new Product((int)$data['id_product']));
+        }
+
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
@@ -1165,9 +1177,13 @@ class EbayRequest
             'variations' => false,
             'bp_active' => (bool) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
-            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false'
             );
+
+        if (isset($data['id_product'])) {
+            $vars['vat'] = $this->getVatByProduct(new Product((int)$data['id_product']));
+        }
+
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
         }
@@ -1360,11 +1376,14 @@ class EbayRequest
             'start_price' => false,
             'sku' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
-            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false'
             );
         $vars['payment_method'] = 'PayPal';
         $vars['pay_pal_email_address'] = $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL');
+
+        if (isset($data['id_product'])) {
+            $vars['vat'] = $this->getVatByProduct(new Product((int)$data['id_product']));
+        }
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1536,9 +1555,12 @@ class EbayRequest
             'start_price' => false,
             'sku' => false,
             'bestOfferEnabled' => isset($data['bestOfferEnabled'])?$data['bestOfferEnabled']:'false',
-            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false',
-            'vat' => $this->getEbayProfileService()->getTaxRate($this->ebay_profile)
+            'minimumBestOfferPrice' =>  isset($data['minimumBestOfferPrice'])?$data['minimumBestOfferPrice']:'false'
             );
+
+        if (isset($data['id_product'])) {
+            $vars['vat'] = $this->getVatByProduct(new Product((int)$data['id_product']));
+        }
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
             $vars['shipping_details'] = $this->_getShippingDetails($data);
@@ -1827,5 +1849,15 @@ class EbayRequest
     protected function getEbayProfileService()
     {
         return new EbayProfileService();
+    }
+
+    protected function getProductTax()
+    {
+        return $this->productTax;
+    }
+
+    protected function getVatByProduct(Product $product)
+    {
+        return $this->getProductTax()->getTaxRateByProduct($product);
     }
 }

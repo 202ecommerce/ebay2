@@ -166,4 +166,29 @@ class AdminFormController extends ModuleAdminController
             }
         }
     }
+
+    public function ajaxProcessCheckTls()
+    {
+        $isTlsValid = $this->getTlsValidator()->isValid();
+        $message = $this->l('Your host is compatible with TLS 1.2:');
+
+        if ($isTlsValid) {
+            $message .= $this->l('Yes');
+        } else {
+            $message .= $this->l('No');
+        }
+
+        $response = [
+            'message' => $message
+        ];
+        die(json_encode($response));
+    }
+
+    /**
+     * @return TlsValidator
+     */
+    protected function getTlsValidator()
+    {
+        return new TlsValidator();
+    }
 }

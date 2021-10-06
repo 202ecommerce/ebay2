@@ -148,7 +148,7 @@
                     {
                         tinyMCE.init({
                             mode : "specific_textareas",
-                            //theme : "advanced",
+                            // theme : "advanced",
                             skin:"cirkuit",
                             editor_selector : "rte",
                             editor_deselector : "noEditor",
@@ -172,7 +172,8 @@
                             entity_encoding: "raw",
                             convert_urls : false,
                             language : iso,
-                            valid_children : "+body[style], +body[link]",
+                            // valid_children : "+body[style], +body[link]",
+                            valid_children : "+body[link]",
                             setup: function (ed) {
                                 ed.on('init', function(args) {
                                     $('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
@@ -289,5 +290,5 @@
             $('#ebay_product_template_title').val($('#ebay_product_template_title').val()+$(this).val())
         });
 	});
-	
-</script>	
+
+</script>

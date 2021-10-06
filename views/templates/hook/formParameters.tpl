@@ -218,12 +218,6 @@
 				<div class="col-sm-9">
 					<input type="text" class="form-control" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
 				</div>
-
-				<div class="col-sm-9 col-sm-push-3">
-					<div class="help-block">
-						{l s='You have to set your PayPal e-mail account, this is the only payment solution available with this module.' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank">&nbsp;</a>
-					</div>
-				</div>
 			</div>
 			
 			<div class="form-group">
@@ -240,26 +234,10 @@
 					</select>
 				</div>
 			</div>
-
-			<div class="form-group">
-				<label class="control-label col-sm-3">
-					<span class="label-tooltip" title="{l s='This field defines the VAT rate on the product price. The choice will not affect the final price, but it does help eBay to properly collect VAT in case it is needed.' mod='ebay'}">{l s='Tax' mod='ebay'}</span>
-				</label>
-				<div class="col-sm-9">
-					<select name="TAX" class="form-control">
-						<option value="">{l s='Choose tax' mod='ebay'}</option>
-						{if isset($taxes) && false == empty($taxes)}
-							{foreach from=$taxes item='tax'}
-								<option value="{$tax.id_tax|escape:'htmlall':'UTF-8'}"{if $tax.id_tax == $TAX} selected{/if}>{$tax.name|escape:'htmlall':'UTF-8'}</option>
-							{/foreach}
-						{/if}
-					</select>
-				</div>
-			</div>
 			
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-          <span class="label-tooltip" title="{l s='Here you have to add your shop\'s postal code' mod='ebay'}">{l s='Item location' mod='ebay'}</span>
+          <span class="label-tooltip" title="{l s='The postal code of the address from which you are sending packages. eBay needs this information to find out if your products are sold overseas' mod='ebay'}">{l s='Postal code of the warehouse.' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
 					<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall':'UTF-8'}" class="form-control" placeholder="{l s='Your shop\'s postal code' mod='ebay'}" />
@@ -268,10 +246,10 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-3">
-          <span class="label-tooltip" title="{l s='Here you have to add your shop\'s country' mod='ebay'}">{l s='Item Country' mod='ebay'}</span>
+          			<span class="label-tooltip" title="{l s='eBay needs this information to find out if your products are sold overseas' mod='ebay'}">{l s='Country of your warehouse*' mod='ebay'}</span>
 				</label>
 				<div class="col-sm-9">
-					<select name="ebay_shop_country" class="form-control">
+					<select required name="ebay_shop_country" class="form-control">
 						<option value="" disabled selected>{l s='Your shop\'s country' mod='ebay'}</option>
 						{foreach from=$ebay_shop_countries  key=k item=ebay_shop_country}
 							<option value="{$k|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $k} selected="selected"{/if}>{$ebay_shop_country|escape:'htmlall':'UTF-8'}</option>
@@ -289,7 +267,7 @@
 					</span>
 				</label>
 				<div class="col-sm-9">
-					<textarea required name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
+					<textarea name="USER_AUTH_TOKEN" class="form-control">{$user_auth_token}</textarea>
 				</div>
 			</div>
 

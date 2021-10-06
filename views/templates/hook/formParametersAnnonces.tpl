@@ -110,11 +110,11 @@
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				<span title="{l s='eBay business sellers must accept returns under the Distance Selling Regulations.' mod='ebay'}" class="label-tooltip" data-toggle="tooltip">
-					{l s='Please define your returns policy' mod='ebay'}
+					{l s='Please define your returns policy' mod='ebay'}*
 				</span>
 			</label>
 			<div class="col-sm-9">
-				<select name="ebay_returns_accepted_option" class="form-control">
+				<select required name="ebay_returns_accepted_option" class="form-control">
 				{foreach from=$policies item=policy}
 					<option value="{$policy.value|escape:'htmlall':'UTF-8'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall':'UTF-8'}</option>
 				{/foreach}
@@ -125,11 +125,11 @@
 		<div class="form-group">
 			<label class="control-label col-sm-3">
 				<span title="{l s='eBay business sellers must offer a minimum of 14 days for buyers to return their items.' mod='ebay'}" class="label-tooltip" data-toggle="tooltip">
-					{l s='Returns within' mod='ebay'}
+					{l s='Returns within' mod='ebay'}*
 				</span>
 			</label>
 			<div class="col-sm-9">
-				<select name="returnswithin" class="form-control">
+				<select required name="returnswithin" class="form-control">
 						{if isset($within_values) && $within_values && sizeof($within_values)}
 							{foreach from=$within_values item='within_value'}
 								<option value="{$within_value.value|escape:'htmlall':'UTF-8'}"{if isset($within) && $within == $within_value.value} selected{/if}>{$within_value.description|escape:'htmlall':'UTF-8'}</option>
@@ -141,10 +141,10 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				{l s='Who pays' mod='ebay'}
+				{l s='Who pays' mod='ebay'}*
 			</label>
 			<div class="col-sm-9">
-				<select name="returnswhopays" class="form-control">
+				<select required name="returnswhopays" class="form-control">
 					{if isset($whopays_values) && $whopays_values && sizeof($whopays_values)}
 						{foreach from=$whopays_values item='whopays_value'}
 							<option value="{$whopays_value.value|escape:'htmlall':'UTF-8'}"{if isset($whopays) && $whopays == $whopays_value.value} selected{/if}>{$whopays_value.description|escape:'htmlall':'UTF-8'}</option>
@@ -304,13 +304,13 @@
 						target="_blank"
 						href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/duree-de-mise-en-vente-good-till-canceled-gtc/"
 				>
-					{l s='Listing duration' mod='ebay'}
+					{l s='Listing duration' mod='ebay'}*
 				</a>
 
 
 			</label>
 			<div class="col-sm-9">
-				<select name="listingdurations" class="form-control">
+				<select required name="listingdurations" class="form-control">
 					{foreach from=$listingDurations item=listing key=key}
 						<option value="{$key|escape:'htmlall':'UTF-8'}" {if $ebayListingDuration == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}

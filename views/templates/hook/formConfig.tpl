@@ -23,25 +23,37 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <div class="col-md-9 col-lg-10">
-	<div class="alert alert-danger">
+	<div class="alert alert-info">
 		<div>
-			{l s='In a continuing effort to protect APIs and his users, eBay enabled OAuth authorization for the Shopping API.' mod='ebay'}
+			{l s='eBay enabled TLS 1.2 for all APIs in Sandbox and Production. We strongly recommend that you contact your web host to verify TLS 1.2 and SHA2 compatibility.' mod='ebay'}
 		</div>
 
 		<div>
-			{l s='eBay will stop support for APPID based authorization by June 30, 2021. Any Shopping API requests submitted with APPID based authorization will fail starting July 1, 2021.' mod='ebay'}
-
+			{l s='API calls that are not TLS 1.2 compliant will fail as of 08/31/2021.' mod='ebay'}
 		</div>
 
-		<div>
-			{l s='To allow the module to work properly, following this change, you will need to have an account at' mod='ebay'}
-			<a href="https://developer.ebay.com/">https://developer.ebay.com/</a>
+		<div style="margin-top: 10px">
+			{include file='./tls/tls_button.tpl' controller=$formController|addslashes}
 		</div>
 
-		<div>
-			{l s='Create your account now if you haven\'t done so yet. The creation of this account requires a validation time.' mod='ebay'}
-		</div>
 	</div>
+
+	<div class="alert alert-info">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<br>
+		{l s='In September 2021, eBay will retire the Seller Refurbished item condition on ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr and ebay.com.au. Actions required by you effective September 27:' mod='ebay'}
+		<br>
+		{l s='1) If you create a new listing for a refurbished item, you must list under the item condition ‘Used’' mod='ebay'}
+		<br>
+		{l s='2) Update item titles or item  description to reflect the item condition/grade' mod='ebay'}
+	</div>
+
+
+	<div class="alert alert-info">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{l s='Now the eBay module can synchronize a different VAT percentage for each product. The percentage taken into account is that indicated in the "Tax rule" field on the product page, in the "Basic Settings" tab. To synchronize the VAT field on your eBay listings, start the manual synchronization of all categories through	the "Listings" menu of the module.' mod='ebay'}
+	</div>
+
 	{if isset($green_message) && $green_message}
 		<div class="alert alert-success conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
 	{/if}
@@ -61,28 +73,9 @@
 				</div>
 			{/foreach}
 		{/if}
-		<div class="alert alert-info">
-			<div>
-				{l s='From July 1, sellers who reach the new threshold for distance sales of goods within the EU (€ 10,000) must provide the VAT number of each EU country to which they sell and ship on eBay or confirm their OSS registration.' mod='ebay'}
-			</div>
-			<div>
-				{l s='Merchants must provide the price including tax for all listings and the VAT rate applied. eBay will automatically collect VAT in cases provided for by tax rules.' mod='ebay'}
-			</div>
-			<div>
-				{l s='You can see if eBay has charged VAT on your orders in the "Order Details" page of your "eBay" account or in the Orders Report which contains additional new columns.' mod='ebay'}
-			</div>
-			<div>
-				{l s='For orders where eBay has collected VAT, eBay issues an invoice to the buyer. The invoice includes the amount of VAT collected by eBay. eBay returns the amount of VAT to the relevant tax authority.' mod='ebay'}
-			</div>
-			<div>
-				{l s='In this case, sellers do not have to issue separate VAT invoices.' mod='ebay'}
-			</div>
-		</div>
 	</div>
 	<div class="panel">
 		<div class="tab-content">
-
-
 
 			<div class="tab-pane fade in active" id="annoncestab1">
 				<div id='tab_title_level1' class="panel-heading"></div>
