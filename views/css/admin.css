@@ -34,6 +34,10 @@
 }
 .totebay .width-num {
   width: 60px !important;
+  padding: 0px 5px;
+}
+.totebay .label-tooltip{
+  background-color: #edf7fb;
 }
 .totebay .big {
   font-size: large;
