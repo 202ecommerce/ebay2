@@ -9,6 +9,10 @@ use Symfony\Component\VarDumper\VarDumper;
 
 class AspectConstraint extends ResourceModel
 {
+    const MODE_SELECT_ONLY = 'SELECTION_ONLY';
+
+    const MODE_FREE_TEXT = 'FREE_TEXT';
+
     /** @var string*/
     protected $aspectDataType;
 
@@ -26,6 +30,27 @@ class AspectConstraint extends ResourceModel
 
     /** @var bool*/
     protected $aspectEnabledForVariations;
+
+    /** @var int*/
+    protected $aspectMaxLength;
+
+    /**
+     * @return int|null
+     */
+    public function getAspectMaxLength()
+    {
+        return $this->aspectMaxLength;
+    }
+
+    /**
+     * @param int $maxLength
+     * @return self
+     */
+    public function setAspectMaxLength($maxLength)
+    {
+        $this->aspectMaxLength = (int)$maxLength;
+        return $this;
+    }
 
     /**
      * @return string
@@ -175,6 +200,10 @@ class AspectConstraint extends ResourceModel
 
         if (isset($data['aspectEnabledForVariations'])) {
             $this->setAspectEnabledForVariations($data['aspectEnabledForVariations']);
+        }
+
+        if (false == empty($data['aspectMaxLength'])) {
+            $this->setAspectMaxLength($data['aspectMaxLength']);
         }
 
         return $this;
