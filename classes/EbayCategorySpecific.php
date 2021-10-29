@@ -113,7 +113,7 @@ class EbayCategorySpecific
                 $db = Db::getInstance();
 
                 $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
-						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$recommendation->Name).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
+						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$aspect->getLocalizedAspectName()).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
 						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values . ', ebay_site_id=' . (int)$ebay_profile->ebay_site_id;
 
                 $db->execute($sql);
@@ -125,7 +125,7 @@ class EbayCategorySpecific
 							FROM `'._DB_PREFIX_.'ebay_category_specific`
 							WHERE `id_category_ref` = '.(int)$ebay_category_id.'
 							AND `ebay_site_id` = '.(int)$ebay_profile->ebay_site_id.'
-							AND `name` = \''.pSQL((string)$recommendation->Name).'\'');
+							AND `name` = \''.pSQL((string)$aspect->getLocalizedAspectName()).'\'');
                 }
 
                 $insert_data = array();
