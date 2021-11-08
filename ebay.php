@@ -2341,10 +2341,12 @@ class Ebay extends Module
         if ($this->ebay_profile->ebay_user_identifier) {
             $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
-            $this->StoreName = $user_profile['StoreName'];
+            if (false == empty($user_profile)) {
+                $this->StoreName = $user_profile['StoreName'];
 
-            if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
-                $alerts[] = 'SellerBusinessType';
+                if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
+                    $alerts[] = 'SellerBusinessType';
+                }
             }
         }
 

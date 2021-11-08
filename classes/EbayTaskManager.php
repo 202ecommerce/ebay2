@@ -304,10 +304,10 @@ class EbayTaskManager
             $query = "SELECT * FROM "._DB_PREFIX_."ebay_task_manager etm
                        LEFT JOIN "._DB_PREFIX_."product_lang pl ON etm.id_product = pl.id_product AND pl.id_lang = ".(int) $id_lang." AND pl.id_shop = ".(int) $profile->id_shop."
                        WHERE etm.error_code NOT IN('0') AND etm.error_code IS NOT NULL AND etm.id_ebay_profile = ".(int) $id_ebay_profile;
-            if ($search['id_product']) {
+            if (false == empty($search['id_product'])) {
                 $query .= " AND pl.id_product LIKE '%".(int) $search['id_product']."%'";
             }
-            if ($search['name_product']) {
+            if (false == empty($search['name_product'])) {
                 $query .= " AND pl.name LIKE '%".pSQL($search['name_product'])."%'";
             }
             $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
