@@ -4,7 +4,7 @@
 namespace Ebay\classes\SDK\Core;
 
 
-use GuzzleHttp\RequestOptions;
+use EbayVendor\GuzzleHttp\RequestOptions;
 
 abstract class AbstractBearerRequest implements RequestInterface
 {

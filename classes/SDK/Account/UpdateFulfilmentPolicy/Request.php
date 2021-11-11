@@ -4,7 +4,7 @@ namespace Ebay\classes\SDK\Account\UpdateFulfilmentPolicy;
 use Ebay\classes\SDK\Core\AbstractBearerRequest;
 use Ebay\classes\SDK\Core\BearerAuthToken;
 use Ebay\classes\SDK\Lib\FulfilmentPolicy;
-use GuzzleHttp\RequestOptions;
+use EbayVendor\GuzzleHttp\RequestOptions;
 use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\Request as CreateRequest;
 
 class Request extends CreateRequest
