@@ -1430,7 +1430,7 @@ class EbayRequest
                 $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'));
                 $attribute_for_image = new AttributeGroup($this->ebay_profile->getConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS'));
 
-                if (isset($variation['variations'])) {
+                if (isset($variation['variation_specifics'])) {
                     if (isset($variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]])) {
                         $value = $variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]];
                         if (!isset($attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang] . $value)]) && isset($variation['pictures'][0])) {
