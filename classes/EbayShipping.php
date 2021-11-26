@@ -126,7 +126,7 @@ class EbayShipping
                     if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT
                         && (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight, $value['id_zone'])))
                         || ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
-                            && (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT'))))) {
+                            && (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->getPrice(), $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT'))))) {
                         $exclude[] = $key;
                     }
                 }
