@@ -146,6 +146,8 @@ class Ebay extends Module
 
     public $best_offer = false;
 
+    public $StoreName = '';
+
     const PRIORITY_DELETE_PRODUCT = 1;
 
     const PRIORITY_UPDATE_STOCK = 2;
