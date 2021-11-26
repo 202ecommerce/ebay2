@@ -923,7 +923,6 @@ class EbayRequest
                                 EbayBussinesPolicies::updatePolicy(
                                     $name_shipping,
                                     [
-                                        'name' => $profileName,
                                         'id_bussines_Policie' => $profileId
                                     ]
                                 );

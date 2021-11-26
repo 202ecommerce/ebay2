@@ -42,14 +42,19 @@ class CreateFulfilmentPolicy
             $result = [
                 'response' => $e->getResponse()
             ];
+            $body = $e->getResponse()->getBody()->getContents();
             $headers = $e->getResponse()->getHeaders();
-
+            \Ebay::debug([
+                $body
+            ]);
             if (false == empty($headers['content-type'])) {
                 if (in_array('application/json', explode(';', $headers['content-type'][0]))) {
-                    $result['body-response'] = json_decode(
-                        $e->getResponse()->getBody()->getContents(),
+                    $bodyArray = json_decode(
+                        $body,
                         true
                     );
+
+                    $result['body-response'] = $bodyArray;
                 }
             }
 
