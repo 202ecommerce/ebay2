@@ -116,7 +116,7 @@ class EbayRequest
             $this->apiUrl = 'https://api.sandbox.ebay.com/ws/api.dll';
             $this->apiUrlSeller = 'https://svcs.sandbox.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.sandbox.ebay.com/post-order/v2/';
-            $this->compatibility_level = 719;
+            $this->compatibility_level = 1225;
             $this->runame = 'Prestashop-Prestash-2629-4-hpehxegu';
             $this->loginURL = $this->ebay_country->getSiteSignin();
         } else {
@@ -125,7 +125,7 @@ class EbayRequest
             $this->apiUrl = 'https://api.ebay.com/ws/api.dll';
             $this->apiUrlSeller = 'https://svcs.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.ebay.com/post-order/v2/';
-            $this->compatibility_level = 741;
+            $this->compatibility_level = 1225;
             $this->runame = 'Prestashop-Prestash-70a5-4-wdawja';
             $this->loginURL = $this->ebay_country->getSiteSignin();
         }
