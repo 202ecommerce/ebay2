@@ -675,6 +675,7 @@
 .totebay #popin-container #category_config .ebay_select {
   width: 50px;
   display: inline-block;
+  padding: 5px;
 }
 .totebay #popin-container #category_config #impact_prix {
   width: 80px;
