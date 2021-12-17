@@ -32,6 +32,9 @@ class ShippingService extends ResourceModel
     /** @var bool*/
     protected $buyerResponsibleForPickup;
 
+    /** @var ShipToLocations*/
+    protected $shipToLocations;
+
     /**
      * @return int|null
      */
@@ -214,6 +217,12 @@ class ShippingService extends ResourceModel
             $this->setBuyerResponsibleForPickup($data['buyerResponsibleForPickup']);
         }
 
+        if (false == empty($data['shipToLocations'])) {
+            $this->setShipToLocations(
+                (new ShipToLocations())->fromArray($data['shipToLocations'])
+            );
+        }
+
         return $this;
     }
 
@@ -253,6 +262,26 @@ class ShippingService extends ResourceModel
             $return['buyerResponsibleForPickup'] = $this->isBuyerResponsibleForPickup();
         }
 
+        if ($this->getShipToLocations() instanceof ShipToLocations) {
+            $return['shipToLocations'] = $this->getShipToLocations()->toArray();
+        }
+
         return $return;
+    }
+
+    /**
+     * @param ShipToLocations $shipToLocations
+     * @return self
+     */
+    public function setShipToLocations(ShipToLocations $shipToLocations)
+    {
+        $this->shipToLocations = $shipToLocations;
+        return $this;
+    }
+
+    /** @return ShipToLocations|null */
+    public function getShipToLocations()
+    {
+        return $this->shipToLocations;
     }
 }

@@ -63,10 +63,27 @@ class CreateFulfilmentPolicy
             return (new GetResponse())->setSuccess(false);
         }
 
-        if ($result->getStatusCode() != 200) {
+        if ($result->getStatusCode() < 200 || $result->getStatusCode() > 300) {
+            $res = [
+                'response' => $result
+            ];
+            $body = $result->getBody()->getContents();
+            $headers = $result->getHeaders();
+
+            if (false == empty($headers['content-type'])) {
+                if (in_array('application/json', explode(';', $headers['content-type'][0]))) {
+                    $bodyArray = json_decode(
+                        $body,
+                        true
+                    );
+
+                    $res['body-response'] = $bodyArray;
+                }
+            }
+
             return (new GetResponse())
                 ->setSuccess(false)
-                ->setResult($result);
+                ->setResult($res);
         }
 
         $fulfilmentPolicy = (new FulfilmentPolicy())->fromJson($result->getBody()->getContents());

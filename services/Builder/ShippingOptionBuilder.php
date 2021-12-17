@@ -5,11 +5,13 @@ namespace Ebay\services\Builder;
 
 
 use Ebay\classes\SDK\Lib\AdditionalShippingCost;
+use Ebay\classes\SDK\Lib\RegionList;
 use Ebay\classes\SDK\Lib\ShippingCost;
 use Ebay\classes\SDK\Lib\ShippingOption;
 use Ebay\classes\SDK\Lib\ShippingOptionList;
 use Ebay\classes\SDK\Lib\ShippingService;
 use Ebay\classes\SDK\Lib\ShippingServiceList;
+use Ebay\classes\SDK\Lib\ShipToLocations;
 use Symfony\Component\VarDumper\VarDumper;
 
 class ShippingOptionBuilder implements BuilderInterface
@@ -30,8 +32,13 @@ class ShippingOptionBuilder implements BuilderInterface
             return $shippingOptionList;
         }
 
-        if (isset($this->data['national_services']) && false == empty($this->data['national_services'])) {
+        if (false == empty($this->data['national_services'])) {
             $shippingOption = $this->buildShippingOption($this->data['national_services'], ShippingOption::DOMESTIC, $this->data['currency_id']);
+            $shippingOptionList->addShippingOption($shippingOption);
+        }
+
+        if (false == empty($this->data['international_services'])) {
+            $shippingOption = $this->buildShippingOption($this->data['international_services'], ShippingOption::INTERNATIONAL, $this->data['currency_id']);
             $shippingOptionList->addShippingOption($shippingOption);
         }
 
@@ -68,6 +75,20 @@ class ShippingOptionBuilder implements BuilderInterface
                     $additionalShippingCost->setValue($service['serviceAdditionalCosts']);
                     $additionalShippingCost->setCurrency($currency);
                     $shippingService->setAdditionalShippingCost($additionalShippingCost);
+                }
+
+                if (false == empty($service['locationsToShip'])) {
+                    $shipToLocations = new ShipToLocations();
+                    $regions = array_map(
+                        function($row) {
+                            return ['regionName' => $row['id_ebay_zone']];
+                        },
+                        $service['locationsToShip']
+                    );
+                    $shipToLocations->setRegionIncluded(
+                        (new RegionList())->fromArray($regions)
+                    );
+                    $shippingService->setShipToLocations($shipToLocations);
                 }
 
                 $shippingCost = new ShippingCost();

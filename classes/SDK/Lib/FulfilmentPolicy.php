@@ -21,7 +21,7 @@ class FulfilmentPolicy extends ResourceModel
     /** @var HandlingTime*/
     protected $handlingTime;
 
-    /** @var string*/
+    /** @var ShipToLocations*/
     protected $shipToLocations;
 
     /** @var ShippingOptionList*/
@@ -359,6 +359,7 @@ class FulfilmentPolicy extends ResourceModel
     public function setShipToLocations(ShipToLocations $shipToLocations)
     {
         $this->shipToLocations = $shipToLocations;
+        return $this;
     }
 
     /** @return ShipToLocations|null */
