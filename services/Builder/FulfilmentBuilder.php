@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Ebay\services\Builder;
-
 
 use Ebay\classes\SDK\Lib\CategoryType;
 use Ebay\classes\SDK\Lib\CategoryTypeList;

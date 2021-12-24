@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Ebay\classes\SDK\Account\UpdateFulfilmentPolicy;
 
 use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\CreateFulfilmentPolicy;

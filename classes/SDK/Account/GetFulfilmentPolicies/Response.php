@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Ebay\classes\SDK\Account\GetFulfilmentPolicies;
-
 
 use Ebay\classes\SDK\Core\EbayApiResponse;
 use Ebay\classes\SDK\Lib\FulfilmentPolicyList;

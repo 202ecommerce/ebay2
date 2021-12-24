@@ -104,7 +104,7 @@ class EbayCategorySpecific
                 }
 
                 $values = array_map(
-                    function(AspectValue $aspectValue) {
+                    function (AspectValue $aspectValue) {
                         return $aspectValue->getLocalizedValue();
                     },
                     $aspect->getAspectValues()->getList()

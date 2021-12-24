@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Ebay\classes\SDK\Core;
 
 use Configuration;

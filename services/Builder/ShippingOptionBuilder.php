@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Ebay\services\Builder;
-
 
 use Ebay\classes\SDK\Lib\AdditionalShippingCost;
 use Ebay\classes\SDK\Lib\RegionList;
@@ -80,7 +77,7 @@ class ShippingOptionBuilder implements BuilderInterface
                 if (false == empty($service['locationsToShip'])) {
                     $shipToLocations = new ShipToLocations();
                     $regions = array_map(
-                        function($row) {
+                        function ($row) {
                             return ['regionName' => $row['id_ebay_zone']];
                         },
                         $service['locationsToShip']

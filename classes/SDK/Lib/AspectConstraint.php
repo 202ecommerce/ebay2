@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Ebay\classes\SDK\Lib;
-
 
 use Ebay\classes\SDK\Core\ResourceModel;
 use Symfony\Component\VarDumper\VarDumper;
@@ -219,6 +216,5 @@ class AspectConstraint extends ResourceModel
             'aspectUsage' => $this->getAspectUsage(),
             'aspectEnabledForVariations' => $this->isAspectEnabledForVariations()
         ];
-
     }
 }

@@ -28,6 +28,7 @@ class EbayTlsModuleFrontController extends ModuleFrontController
 {
     public function run()
     {
-        header("HTTP/1.1 " . TlsConf::STATUS_SUCCESS); die;
+        header("HTTP/1.1 " . TlsConf::STATUS_SUCCESS);
+        die;
     }
 }

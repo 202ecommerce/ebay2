@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Ebay\classes\SDK\Account\CreateFulfilmentPolicy;
 
 use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\Request as GetRequest;

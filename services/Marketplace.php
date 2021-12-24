@@ -16,7 +16,7 @@ class Marketplace
     {
         foreach (\EbaySiteMap::get() as $map) {
             if ($map['site_id'] == $idSite) {
-                return strtoupper('ebay_' . $map['site_extension']);
+                return \Tools::strtoupper('ebay_' . $map['site_extension']);
             }
         }
 

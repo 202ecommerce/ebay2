@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Ebay\classes\SDK\Core;
-
 
 class EbayApiResponse
 {

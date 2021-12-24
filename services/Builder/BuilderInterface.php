@@ -1,5 +1,4 @@
 <?php
-
 namespace Ebay\services\Builder;
 
 interface BuilderInterface
