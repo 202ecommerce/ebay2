@@ -1,12 +1,29 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
+/**
+ *  2007-2022 PrestaShop
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ *  NOTICE OF LICENSE
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
+ *
+ *  DISCLAIMER
+ *
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 2007-2022 202-ecommerce
+ *  @license Commercial license
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
  */
 namespace EbayVendor\Symfony\Polyfill\Php72;
 
@@ -25,15 +42,15 @@ final class Php72
         $len = \strlen($s);
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (\true) {
-                case $s[$i] < "€":
+                case $s[$i] < "ï¿½":
                     $s[$j] = $s[$i];
                     break;
-                case $s[$i] < "À":
-                    $s[$j] = "Â";
+                case $s[$i] < "ï¿½":
+                    $s[$j] = "ï¿½";
                     $s[++$j] = $s[$i];
                     break;
                 default:
-                    $s[$j] = "Ã";
+                    $s[$j] = "ï¿½";
                     $s[++$j] = \chr(\ord($s[$i]) - 64);
                     break;
             }
@@ -45,16 +62,16 @@ final class Php72
         $s = (string) $s;
         $len = \strlen($s);
         for ($i = 0, $j = 0; $i < $len; ++$i, ++$j) {
-            switch ($s[$i] & "ð") {
-                case "À":
-                case "Ð":
+            switch ($s[$i] & "ï¿½") {
+                case "ï¿½":
+                case "ï¿½":
                     $c = \ord($s[$i] & "\37") << 6 | \ord($s[++$i] & "?");
                     $s[$j] = $c < 256 ? \chr($c) : '?';
                     break;
-                case "ð":
+                case "ï¿½":
                     ++$i;
                 // no break
-                case "à":
+                case "ï¿½":
                     $s[$j] = '?';
                     $i += 2;
                     break;
