@@ -106,6 +106,7 @@ $classes_to_load = array(
     'Const/ProfileConf',
     'Const/TlsConf',
     'Const/EbaySiteMap',
+    'Const/Common',
     '../services/ProductPrice',
     '../services/ProductTax',
     'TlsValidator'
