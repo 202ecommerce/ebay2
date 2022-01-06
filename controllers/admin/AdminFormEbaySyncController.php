@@ -717,4 +717,20 @@ class AdminFormEbaySyncController extends ModuleAdminController
         }
         die();
     }
+
+    public function ajaxProcessSaveOnboardingUrl()
+    {
+        $response = [
+            'success' => false
+        ];
+        $input = json_decode(Tools::file_get_contents('php://input'), true);
+
+        if (empty($input['onboardingUrl'])) {
+            die(json_encode($response));
+        }
+
+        $this->module->ebay_profile->setConfiguration(ProfileConf::ONBOARDING_URL, $input['onboardingUrl']);
+        $response['success'] = true;
+        die(json_encode($response));
+    }
 }

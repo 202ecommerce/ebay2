@@ -25,9 +25,10 @@
  *
  */
 
-class ProfileConf
+class EbayTokenListenerModuleFrontController extends ModuleFrontController
 {
-    const USER_AUTH_TOKEN = 'USER_AUTH_TOKEN';
+    public function run()
+    {
 
-    const ONBOARDING_URL = 'EBAY_ONBOARDING_URL';
+    }
 }
