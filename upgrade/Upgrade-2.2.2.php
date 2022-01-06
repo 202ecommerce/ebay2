@@ -25,10 +25,12 @@
  *
  */
 
-class EbayTokenListenerModuleFrontController extends ModuleFrontController
+/**
+ * @param Ebay $module
+ * @return bool
+ */
+function upgrade_module_2_2_2($module)
 {
-    public function run()
-    {
-
-    }
+    $module->installTabs();
+    return true;
 }

@@ -46,7 +46,7 @@
             </div>
 
             <div>
-                Redirect link: <b>{Context::getContext()->link->getModuleLink('ebay', 'tokenListener')}</b>
+                Redirect link: <b>{Context::getContext()->link->getAdminLink('AdminTokenListener')}</b>
             </div>
 
             <div class="form-group">
@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<script src="{Context::getContext()->shop->getBaseURL()}modules/ebay/views/js/ButtonOnboarding.js"></script>
+<script src="{Context::getContext()->shop->getBaseURL(true)}modules/ebay/views/js/ButtonOnboarding.js"></script>
 <script>
     var buttonOnboardingObj = new ButtonOnboarding({
         modal: document.getElementById('onboarding-modal'),

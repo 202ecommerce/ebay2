@@ -93,8 +93,10 @@ ButtonOnboarding.prototype.handleClick = function (e) {
 
     if (false == onboardingUrl) {
         $(this.modal).modal('show');
+        return;
     }
 
+    window.location.href = onboardingUrl;
 };
 
 ButtonOnboarding.prototype.saveOnboardingUrl = function () {

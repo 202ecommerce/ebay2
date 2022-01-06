@@ -406,9 +406,15 @@ class Ebay extends Module
             'AdminEbayListErrorsProducts',
             'AdminFormAdvancedParameters',
             'AdminForm',
+            'AdminTokenListener'
         );
         foreach ($tabs_to_load as $tab_name) {
-            $tab = new Tab();
+            $tab = Tab::getInstanceFromClassName($tab_name);
+
+            if (Validate::isLoadedObject($tab)) {
+                continue;
+            }
+            
             $tab->module = $this->name;
             $tab->active = 0;
             $tab->class_name = $tab_name;  //AdminCustomProducts e.g.

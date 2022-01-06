@@ -112,6 +112,7 @@ class EbayFormParametersTab extends EbayTab
                 'error_code'     => 'HELP-CATEGORY-UPDATE',
             ),
             'id_shop' => $this->context->shop->id,
+            'user_auth_token' => $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
             'onboardingUrl' => $this->ebay_profile->getConfiguration(ProfileConf::ONBOARDING_URL),
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0)
         );
