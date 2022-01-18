@@ -1,29 +1,12 @@
 <?php
 
-/**
- *  2007-2022 PrestaShop
+/*
+ * This file is part of the Symfony package.
  *
- *  NOTICE OF LICENSE
+ * (c) Fabien Potencier <fabien@symfony.com>
  *
- *  This source file is subject to the Academic Free License (AFL 3.0)
- *  that is bundled with this package in the file LICENSE.txt.
- *  It is also available through the world-wide-web at this URL:
- *  http://opensource.org/licenses/afl-3.0.php
- *  If you did not receive a copy of the license and are unable to
- *  obtain it through the world-wide-web, please send an email
- *  to license@prestashop.com so we can send you a copy immediately.
- *
- *  DISCLAIMER
- *
- *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- *  versions in the future. If you wish to customize PrestaShop for your
- *  needs please refer to http://www.prestashop.com for more information.
- *
- *  @author 202-ecommerce <tech@202-ecommerce.com>
- *  @copyright Copyright (c) 2007-2022 202-ecommerce
- *  @license Commercial license
- *  International Registered Trademark & Property of PrestaShop SA
- *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace EbayVendor\Symfony\Polyfill\Intl\Normalizer;
 
@@ -51,7 +34,7 @@ class Normalizer
     private static $D;
     private static $KD;
     private static $cC;
-    private static $ulenMask = ["ï¿½" => 2, "ï¿½" => 2, "ï¿½" => 3, "ï¿½" => 4];
+    private static $ulenMask = ["À" => 2, "Ð" => 2, "à" => 3, "ð" => 4];
     private static $ASCII = " eiasntrolud][cmp'\ng|hv.fb,:=-q10C2*yx)(L9AS/P\"EjMIk3>5T<D4}B{8FwR67UGN;JzV#HOW_&!K?XQ%Y\\\tZ+~^\$@`\0\1\2\3\4\5\6\7\10\v\f\r\16\17\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37";
     public static function isNormalized(string $s, int $form = self::FORM_C)
     {
@@ -129,12 +112,12 @@ class Normalizer
         $combClass = self::$cC;
         $ulenMask = self::$ulenMask;
         $result = $tail = '';
-        $i = $s[0] < "ï¿½" ? 1 : $ulenMask[$s[0] & "ï¿½"];
+        $i = $s[0] < "€" ? 1 : $ulenMask[$s[0] & "ð"];
         $len = \strlen($s);
         $lastUchr = \substr($s, 0, $i);
         $lastUcls = isset($combClass[$lastUchr]) ? 256 : 0;
         while ($i < $len) {
-            if ($s[$i] < "ï¿½") {
+            if ($s[$i] < "€") {
                 // ASCII chars
                 if ($tail) {
                     $lastUchr .= $tail;
@@ -150,7 +133,7 @@ class Normalizer
                 ++$i;
                 continue;
             }
-            $ulen = $ulenMask[$s[$i] & "ï¿½"];
+            $ulen = $ulenMask[$s[$i] & "ð"];
             $uchr = \substr($s, $i, $ulen);
             if ($lastUchr < "á„€" || "á„’" < $lastUchr || $uchr < "á…¡" || "á…µ" < $uchr || $lastUcls) {
                 // Table lookup and combining chars composition
@@ -199,7 +182,7 @@ class Normalizer
         $i = 0;
         $len = \strlen($s);
         while ($i < $len) {
-            if ($s[$i] < "ï¿½") {
+            if ($s[$i] < "€") {
                 // ASCII chars
                 if ($c) {
                     \ksort($c);
@@ -211,7 +194,7 @@ class Normalizer
                 $i += $j;
                 continue;
             }
-            $ulen = $ulenMask[$s[$i] & "ï¿½"];
+            $ulen = $ulenMask[$s[$i] & "ð"];
             $uchr = \substr($s, $i, $ulen);
             $i += $ulen;
             if ($uchr < "ê°€" || "íž£" < $uchr) {
@@ -219,7 +202,7 @@ class Normalizer
                 if ($uchr !== ($j = $compatMap[$uchr] ?? $decompMap[$uchr] ?? $uchr)) {
                     $uchr = $j;
                     $j = \strlen($uchr);
-                    $ulen = $uchr[0] < "ï¿½" ? 1 : $ulenMask[$uchr[0] & "ï¿½"];
+                    $ulen = $uchr[0] < "€" ? 1 : $ulenMask[$uchr[0] & "ð"];
                     if ($ulen != $j) {
                         // Put trailing chars in $s
                         $j -= $ulen;
@@ -247,9 +230,9 @@ class Normalizer
                 // Hangul chars
                 $uchr = \unpack('C*', $uchr);
                 $j = ($uchr[1] - 224 << 12) + ($uchr[2] - 128 << 6) + $uchr[3] - 0xac80;
-                $uchr = "ï¿½" . \chr(0x80 + (int) ($j / 588)) . "ï¿½" . \chr(0xa1 + (int) ($j % 588 / 28));
+                $uchr = "á„" . \chr(0x80 + (int) ($j / 588)) . "á…" . \chr(0xa1 + (int) ($j % 588 / 28));
                 if ($j %= 28) {
-                    $uchr .= $j < 25 ? "ï¿½" . \chr(0xa7 + $j) : "ï¿½" . \chr(0x67 + $j);
+                    $uchr .= $j < 25 ? "á†" . \chr(0xa7 + $j) : "á‡" . \chr(0x67 + $j);
                 }
             }
             if ($c) {
