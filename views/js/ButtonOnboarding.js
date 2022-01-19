@@ -65,7 +65,7 @@ ButtonOnboarding.prototype.init = function () {
         return;
     }
 
-    this.modal.querySelector('[save-onboarding-url-btn]').addEventListener('click', this.saveOnboardingUrl.bind(this));
+    this.modal.querySelector('[save-onboarding-url-btn]').addEventListener('click', this.saveOnboardingConf.bind(this));
 
     if (false == this.getOnboardingUrl()) {
         this.button.disabled = true;
@@ -89,17 +89,71 @@ ButtonOnboarding.prototype.handleClick = function (e) {
         return;
     }
 
-    var onboardingUrl = this.getOnboardingUrl();
-
-    if (false == onboardingUrl) {
+    if (this.isConfigured() == false) {
         $(this.modal).modal('show');
         return;
     }
 
-    window.location.href = onboardingUrl;
+    window.location.href = this.getOnboardingUrl();
 };
 
-ButtonOnboarding.prototype.saveOnboardingUrl = function () {
+ButtonOnboarding.prototype.isConfigured = function () {
+    if (false == this.getOnboardingUrl()) {
+        return false;
+    }
+
+    if (false == this.getAppId()) {
+        return false;
+    }
+
+    if (false == this.getCertId()) {
+        return false;
+    }
+
+    if (false == this.getRuName()) {
+        return false;
+    }
+
+    return  true;
+};
+
+ButtonOnboarding.prototype.getAppId = function () {
+    if (this.modal == null) {
+        return '';
+    }
+
+    try {
+        return this.modal.querySelector('[name="EBAY_APP_ID"]').value;
+    } catch (e) {
+        return '';
+    }
+};
+
+ButtonOnboarding.prototype.getCertId = function () {
+    if (this.modal == null) {
+        return '';
+    }
+
+    try {
+        return this.modal.querySelector('[name="EBAY_CERT_ID"]').value;
+    } catch (e) {
+        return '';
+    }
+};
+
+ButtonOnboarding.prototype.getRuName = function () {
+    if (this.modal == null) {
+        return '';
+    }
+
+    try {
+        return this.modal.querySelector('[name="EBAY_RU_NAME"]').value;
+    } catch (e) {
+        return '';
+    }
+};
+
+ButtonOnboarding.prototype.saveOnboardingConf = function () {
     if (this.controller == null) {
         return;
     }
@@ -108,15 +162,20 @@ ButtonOnboarding.prototype.saveOnboardingUrl = function () {
         return;
     }
 
-    var onboardingUrl = this.getOnboardingUrl();
-
-    if (false == onboardingUrl) {
+    if (this.isConfigured() == false) {
         return;
     }
 
+    var data = {
+        onboardingUrl: this.getOnboardingUrl(),
+        appId: this.getAppId(),
+        certId: this.getCertId(),
+        ruName: this.getRuName()
+    };
+
     var controllerUrl = new URL(this.controller);
     controllerUrl.searchParams.append('ajax', 1);
-    controllerUrl.searchParams.append('action', 'SaveOnboardingUrl');
+    controllerUrl.searchParams.append('action', 'SaveOnboardingConf');
     fetch(
         controllerUrl.toString(),
         {
@@ -124,7 +183,7 @@ ButtonOnboarding.prototype.saveOnboardingUrl = function () {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({onboardingUrl: onboardingUrl})
+            body: JSON.stringify(data)
         }
     ).then(function(res) {
         return res.json();

@@ -30,4 +30,10 @@ class ProfileConf
     const USER_AUTH_TOKEN = 'USER_AUTH_TOKEN';
 
     const ONBOARDING_URL = 'EBAY_ONBOARDING_URL';
+
+    const APP_ID = 'EBAY_APP_ID';
+
+    const CERT_ID = 'EBAY_CERT_ID';
+
+    const RU_NAME = 'EBAY_RU_NAME';
 }

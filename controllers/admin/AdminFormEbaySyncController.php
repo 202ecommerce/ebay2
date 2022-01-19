@@ -718,7 +718,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         die();
     }
 
-    public function ajaxProcessSaveOnboardingUrl()
+    public function ajaxProcessSaveOnboardingConf()
     {
         $response = [
             'success' => false
@@ -729,7 +729,22 @@ class AdminFormEbaySyncController extends ModuleAdminController
             die(json_encode($response));
         }
 
+        if (empty($input['appId'])) {
+            die(json_encode($response));
+        }
+
+        if (empty($input['certId'])) {
+            die(json_encode($response));
+        }
+
+        if (empty($input['ruName'])) {
+            die(json_encode($response));
+        }
+
         $this->module->ebay_profile->setConfiguration(ProfileConf::ONBOARDING_URL, $input['onboardingUrl']);
+        $this->module->ebay_profile->setConfiguration(ProfileConf::APP_ID, $input['appId']);
+        $this->module->ebay_profile->setConfiguration(ProfileConf::CERT_ID, $input['certId']);
+        $this->module->ebay_profile->setConfiguration(ProfileConf::RU_NAME, $input['ruName']);
         $response['success'] = true;
         die(json_encode($response));
     }

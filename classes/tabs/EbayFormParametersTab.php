@@ -114,6 +114,9 @@ class EbayFormParametersTab extends EbayTab
             'id_shop' => $this->context->shop->id,
             'user_auth_token' => $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
             'onboardingUrl' => $this->ebay_profile->getConfiguration(ProfileConf::ONBOARDING_URL),
+            'appId' => $this->ebay_profile->getConfiguration(ProfileConf::APP_ID),
+            'certId' => $this->ebay_profile->getConfiguration(ProfileConf::CERT_ID),
+            'ruName' => $this->ebay_profile->getConfiguration(ProfileConf::RU_NAME),
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0)
         );
 

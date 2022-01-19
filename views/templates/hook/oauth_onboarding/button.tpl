@@ -41,12 +41,37 @@
                 </button>
             </div>
 
-            <div>
-                {l s='Here should be the instructions how to configure ebay business account.' mod='ebay'}
+            <div style="padding: 20px">
+                <p>{l s='Pay attention you should set right \'Your auth accepted URL\'' mod='ebay'}</p>
+                <p>{l s='Right URL' mod='ebay'}: <b>{Context::getContext()->link->getAdminLink('AdminTokenListener')}</b></p>
+
             </div>
 
-            <div>
-                Redirect link: <b>{Context::getContext()->link->getAdminLink('AdminTokenListener')}</b>
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                    {l s='APP ID' mod='ebay'}
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="EBAY_APP_ID" value="{if isset($appId)}{$appId}{/if}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                    {l s='CERT ID' mod='ebay'}
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="EBAY_CERT_ID" value="{if isset($certId)}{$certId}{/if}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                    {l s='RuName (eBay Redirect URL name)' mod='ebay'}
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="EBAY_RU_NAME" value="{if isset($ruName)}{$ruName}{/if}">
+                </div>
             </div>
 
             <div class="form-group">
