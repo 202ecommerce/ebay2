@@ -28,22 +28,26 @@
 namespace Ebay\services\Token\OAuth;
 
 use Ebay\classes\SandboxMode;
+use EbayProfile;
 use ProfileConf;
 use Throwable;
-use EbayProfile;
 
-class GetAccessToken
+class RefreshAccessToken
 {
     /**
      * @param EbayProfile $ebayProfile
-     * @param string $code temp auth code from ebay
      * @return ResponseGetAccessToken
      */
-    public function get(EbayProfile $ebayProfile, $code)
+    public function refresh(EbayProfile $ebayProfile)
     {
         $response = new ResponseGetAccessToken();
 
         try {
+            $ebayAccessToken = new \EbayVendor\NeilCrookes\OAuth2\Client\Token\EbayAccessToken([
+                'access_token' => $ebayProfile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
+                'refresh_token' => $ebayProfile->getConfiguration(ProfileConf::REFRESH_TOKEN)
+            ]);
+
             $provider = new \EbayVendor\NeilCrookes\OAuth2\Client\Provider\Ebay([
                 'clientId' => $ebayProfile->getConfiguration(ProfileConf::APP_ID),
                 'clientSecret' => $ebayProfile->getConfiguration(ProfileConf::CERT_ID),
@@ -54,13 +58,11 @@ class GetAccessToken
                 'optionProvider' => new \EbayVendor\League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider()
             ]);
 
-            $accessToken = $provider->getAccessToken('authorization_code', [
-                'code' => $code
-            ]);
+            $newToken = $provider->refreshAccessToken($ebayAccessToken);
 
             $response->setSuccess(true);
-            $response->setAccessToken($accessToken->getToken());
-            $response->setRefreshToken($accessToken->getRefreshToken());
+            $response->setAccessToken($newToken->getToken());
+            $response->setRefreshToken($newToken->getRefreshToken());
         } catch (Throwable $e) {
             $response->setSuccess(false);
             $response->setError($e->getMessage());

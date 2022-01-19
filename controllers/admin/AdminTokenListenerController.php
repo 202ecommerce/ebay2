@@ -41,15 +41,8 @@ class AdminTokenListenerController extends ModuleAdminController
     public function handleEbayInfo()
     {
         $code = Tools::getValue('code');
-        $accountConfiguration = $this->initAccountConfiguration();
         $getAccessToken = $this->initGetAccessToken();
-
-        $accountConfiguration->setAppId($this->module->ebay_profile->getConfiguration(ProfileConf::APP_ID));
-        $accountConfiguration->setCertId($this->module->ebay_profile->getConfiguration(ProfileConf::CERT_ID));
-        $accountConfiguration->setRuName($this->module->ebay_profile->getConfiguration(ProfileConf::RU_NAME));
-        $accountConfiguration->setSandbox((new SandboxMode())->isSandbox());
-
-        $response = $getAccessToken->get($accountConfiguration, $code);
+        $response = $getAccessToken->get($this->module->ebay_profile, $code);
 
         if ($response->isSuccess() == false) {
             PrestaShopLogger::addLog('[ebay] Fail generate access token. ' . $response->getError());
@@ -58,11 +51,6 @@ class AdminTokenListenerController extends ModuleAdminController
 
         $this->module->ebay_profile->setConfiguration(ProfileConf::USER_AUTH_TOKEN, $response->getAccessToken());
         $this->module->ebay_profile->setConfiguration(ProfileConf::REFRESH_TOKEN, $response->getRefreshToken());
-    }
-
-    public function initAccountConfiguration()
-    {
-        return new AccountConfiguration();
     }
 
     public function doRedirection()
