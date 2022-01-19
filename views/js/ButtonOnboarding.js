@@ -44,6 +44,12 @@ var ButtonOnboarding = function(conf) {
         this.modal = null;
     }
 
+    if (conf['refreshBtn'] instanceof Element) {
+        this.refreshBtn = conf['refreshBtn'];
+    } else {
+        this.refreshBtn = null;
+    }
+
     if (typeof conf['controller'] != 'undefined') {
         this.controller = conf['controller'];
     } else {
@@ -70,6 +76,12 @@ ButtonOnboarding.prototype.init = function () {
     if (false == this.getOnboardingUrl()) {
         this.button.disabled = true;
     }
+
+    if (this.refreshBtn == null) {
+        return;
+    }
+
+    this.refreshBtn.addEventListener('click', this.refreshToken.bind(this));
 };
 
 ButtonOnboarding.prototype.getOnboardingUrl = function () {
@@ -191,6 +203,32 @@ ButtonOnboarding.prototype.saveOnboardingConf = function () {
         if (data.success) {
             this.button.disabled = false;
             $(this.modal).modal('hide');
+        }
+    }.bind(this));
+};
+
+ButtonOnboarding.prototype.refreshToken = function () {
+    if (this.controller == null) {
+        return;
+    }
+
+    var controllerUrl = new URL(this.controller);
+    controllerUrl.searchParams.append('ajax', 1);
+    controllerUrl.searchParams.append('action', 'RefreshToken');
+
+    fetch(
+        controllerUrl.toString(),
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(function(res) {
+        return res.json();
+    }).then(function(data) {
+        if (data.success) {
+            document.querySelector('[name="USER_AUTH_TOKEN"]').value = data.token;
         }
     }.bind(this));
 };

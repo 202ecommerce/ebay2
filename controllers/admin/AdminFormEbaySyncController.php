@@ -748,4 +748,25 @@ class AdminFormEbaySyncController extends ModuleAdminController
         $response['success'] = true;
         die(json_encode($response));
     }
+
+    public function ajaxProcessRefreshToken()
+    {
+        $response = [
+            'success' => false
+        ];
+
+        $refreshToken = new \Ebay\services\Token\OAuth\RefreshAccessToken();
+        $token = $refreshToken->refresh($this->module->ebay_profile);
+
+        if ($token->isSuccess() == false) {
+            die(json_encode($response));
+        }
+
+        $this->module->ebay_profile->setConfiguration(ProfileConf::USER_AUTH_TOKEN, $token->getAccessToken());
+
+        $response['success'] = true;
+        $response['token'] = $token->getAccessToken();
+
+        die(json_encode($response));
+    }
 }

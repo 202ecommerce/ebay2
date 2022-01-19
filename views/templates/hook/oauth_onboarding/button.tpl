@@ -29,7 +29,11 @@
 </button>
 
 <button id="onboarding-conf-btn" class="btn btn-default" type="button">
-    {l s='Configure Onboarding URL' mod='ebay'}
+    {l s='Configure Onboarding' mod='ebay'}
+</button>
+
+<button id="refresh-token-btn" class="btn btn-default" type="button">
+    {l s='Refresh Token' mod='ebay'}
 </button>
 
 <div id="onboarding-modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -99,6 +103,7 @@
         modal: document.getElementById('onboarding-modal'),
         btn: document.getElementById('onboarding-btn'),
         confBtn: document.getElementById('onboarding-conf-btn'),
+        refreshBtn: document.getElementById('refresh-token-btn'),
         controller: '{$formEbaySyncController}'
     });
     buttonOnboardingObj.init();
