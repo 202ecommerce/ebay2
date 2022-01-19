@@ -29,6 +29,8 @@ class ProfileConf
 {
     const USER_AUTH_TOKEN = 'USER_AUTH_TOKEN';
 
+    const REFRESH_TOKEN = 'REFRESH_TOKEN';
+
     const ONBOARDING_URL = 'EBAY_ONBOARDING_URL';
 
     const APP_ID = 'EBAY_APP_ID';
