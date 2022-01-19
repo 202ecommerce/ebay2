@@ -843,6 +843,12 @@ class Ebay extends Module
         }
     }
 
+    /** @return \Ebay\services\Token\OAuth\ActualizeTokens*/
+    public function getActualizeTokens()
+    {
+        return new \Ebay\services\Token\OAuth\ActualizeTokens();
+    }
+
     /**
      * @param array $params hook parameters
      *
@@ -851,6 +857,7 @@ class Ebay extends Module
     public function hookHeader($params)
     {
         self::addSmartyModifiers();
+        $this->getActualizeTokens()->execute();
 
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
