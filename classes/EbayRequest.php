@@ -127,7 +127,7 @@ class EbayRequest
             $this->apiUrlSeller = 'https://svcs.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.ebay.com/post-order/v2/';
             $this->compatibility_level = 1225;
-            $this->runame = 'Prestashop-Prestash-70a5-4-wdawja';
+            $this->runame = 'Prestashop-Prestash-70a5-4-bjmgtj';
             $this->loginURL = $this->ebay_country->getSiteSignin();
         }
 
