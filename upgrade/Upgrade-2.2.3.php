@@ -29,7 +29,7 @@
  * @param Ebay $module
  * @return bool
  */
-function upgrade_module_2_2_2($module)
+function upgrade_module_2_2_3($module)
 {
     $module->installTabs();
     return true;
