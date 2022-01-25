@@ -31,7 +31,7 @@
     <property name="src-dir" value="${basedir}" />
     <property name="TARGETNAME" value="ebay" />
     <property name="TARGETBRANCH" value="${env.GIT_BRANCH}" />
-    <property name="TARGETVERSION" value="2.2.2" />
+    <property name="TARGETVERSION" value="2.2.3" />
 
     <target name="build" depends="build-common,package-zip,psvalidator" />
 
