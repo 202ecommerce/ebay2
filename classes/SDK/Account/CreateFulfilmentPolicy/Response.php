@@ -39,6 +39,7 @@ class Response extends EbayApiResponse
     public function setFulfilmentPolicy(FulfilmentPolicy $fulfilmentPolicy)
     {
         $this->fulfilmentPolicy = $fulfilmentPolicy;
+        return $this;
     }
 
     public function getFulfilmentPolicy()
