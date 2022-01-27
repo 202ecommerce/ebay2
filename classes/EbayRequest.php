@@ -26,6 +26,7 @@
  */
 
 use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\CreateFulfilmentPolicy;
+use Ebay\classes\SDK\Account\UpdateFulfilmentPolicy\UpdateFulfilmentPolicy;
 
 if (file_exists(dirname(__FILE__) . '/EbayCountrySpec.php')) {
     require_once dirname(__FILE__) . '/EbayCountrySpec.php';
