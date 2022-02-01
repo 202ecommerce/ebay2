@@ -569,6 +569,7 @@ $_MODULE['<{ebay}prestashop>formconfig_5f559053a91684025f09ca40283abf96'] = 'Ann
 $_MODULE['<{ebay}prestashop>formconfig_d4d31aa2f5e5175dc94d8499f099e682'] = 'Annonces orphelines';
 $_MODULE['<{ebay}prestashop>formconfig_e8a9f88da7fb7fb5ffc20ed0958f21a8'] = 'Produits exclus';
 $_MODULE['<{ebay}prestashop>formconfig_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique des commandes';
+$_MODULE['<{ebay}prestashop>formconfig_83465313917bcc76185ea86fb41b7148'] = 'Commandes non importées';
 $_MODULE['<{ebay}prestashop>formconfig_39a36d4536fd7bccf9e82b8889398988'] = 'Retours des commandes ';
 $_MODULE['<{ebay}prestashop>formconfig_de62775a71fc2bf7a13d7530ae24a7ed'] = 'Paramètres généraux';
 $_MODULE['<{ebay}prestashop>formconfig_35d03a5af13933096e9063294c02d437'] = 'Paramètres des Annonces';

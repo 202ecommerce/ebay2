@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -35,7 +35,9 @@
             <th class="text-center"><span>{l s='ID' mod='ebay'}</span></th>
             <th class="text-center"><span>{l s='PrestaShop Reference' mod='ebay'}</span></th>
             <th class="text-center"><span>{l s='Date Import' mod='ebay'}</span></th>
-            <th class="text-center">{l s='Actions' mod='ebay'}</th>
+            {if isset($errors)}
+                <th class="text-center">{l s='Actions' mod='ebay'}</th>
+            {/if}
         </tr>
         </thead
         <tbody>
@@ -76,7 +78,6 @@
                         <td>{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
-                        <td></td>
                     </tr>
                 {/if}
             {/foreach}
