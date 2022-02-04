@@ -1,28 +1,33 @@
 <?php
 /**
- * 2007-2021 PrestaShop
+ *  2007-2022 PrestaShop
  *
- * NOTICE OF LICENSE
+ *  NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
+ *  DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
  *
- * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2007-2021 202-ecommerce
- * @license Commercial license
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 2007-2022 202-ecommerce
+ *  @license Commercial license
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
  */
+
+use Ebay\classes\SDK\Lib\AspectConstraint;
+use Ebay\classes\SDK\Lib\AspectValue;
+use Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory\GetItemAspectsForCategory;
 
 require_once dirname(__FILE__).'/EbayRequest.php';
 require_once dirname(__FILE__).'/EbayCategorySpecificValue.php';
@@ -51,6 +56,11 @@ class EbayCategorySpecific
         return EbayCategorySpecific::$prefix_to_field_names;
     }
 
+    public static function initGetAspectsCommand(EbayProfile $ebayProfile, $ebay_category_id)
+    {
+        return new GetItemAspectsForCategory($ebayProfile, $ebay_category_id);
+    }
+
     /**
      * Parse the data returned by the API and enter them in the table
      *
@@ -71,67 +81,64 @@ class EbayCategorySpecific
         $ebay_profile = new EbayProfile($id_ebay_profile);
 
         foreach ($ebay_category_ids as $ebay_category_id) {
-            $xml_data = $request->getCategorySpecifics($ebay_category_id);
-            if ($xml_data->Recommendations->NameRecommendation) {
-                foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
-                    $required = isset($recommendation->ValidationRules->MinValues) && ((int)$recommendation->ValidationRules->MinValues >= 1);
+            $getAspectsCommande = self::initGetAspectsCommand($ebay_profile, $ebay_category_id);
+            $response = $getAspectsCommande->execute();
+
+            if ($response->isSuccess() == false) {
+                continue;
+            }
+
+            foreach ($response->getAspectList()->getList() as $aspect) {
+                $required = $aspect->getAspectConstraint()->isAspectRequired();
+                $can_variation = $aspect->getAspectConstraint()->isAspectEnabledForVariations();
+
+                if (is_null($aspect->getAspectConstraint()->getAspectMaxLength())) {
                     $max_values = 1;
-                    if (isset($recommendation->ValidationRules->MaxValues)) {
-                        $max_values = (int) $recommendation->ValidationRules->MaxValues;
-                    }
-                    // if true can be used either in Item Specifics or VariationSpecifics
-                    $can_variation = !(isset($recommendation->ValidationRules->VariationSpecifics)
-                        && ((string)$recommendation->ValidationRules->VariationSpecifics == 'Disabled'));
+                } else {
+                    $max_values = $aspect->getAspectConstraint()->getAspectMaxLength();
+                }
 
-                    if (isset($recommendation->ValidationRules->SelectionMode)) {
-                        if ((string)$recommendation->ValidationRules->SelectionMode == 'Prefilled') {
-                            continue;
-                        } elseif ((string)$recommendation->ValidationRules->SelectionMode == 'SelectionOnly') {
-                            $selection_mode = EbayCategorySpecific::SELECTION_MODE_SELECTION_ONLY;
-                        } else {
-                            $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
-                        }
-                    } else {
-                        $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
-                    }
+                if ($aspect->getAspectConstraint()->getAspectMode() == AspectConstraint::MODE_SELECT_ONLY) {
+                    $selection_mode = EbayCategorySpecific::SELECTION_MODE_SELECTION_ONLY;
+                } else {
+                    $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
+                }
 
-                    $values = array();
+                $values = array_map(
+                    function (AspectValue $aspectValue) {
+                        return $aspectValue->getLocalizedValue();
+                    },
+                    $aspect->getAspectValues()->getList()
+                );
 
-                    if (isset($recommendation->ValueRecommendation->Value)) {
-                        foreach ($recommendation->ValueRecommendation as $value_recommendation) {
-                            $values[] = (string)$value_recommendation->Value;
-                        }
-                    }
+                $db = Db::getInstance();
 
-                    $db = Db::getInstance();
-
-                    $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
-						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$recommendation->Name).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
+                $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
+						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$aspect->getLocalizedAspectName()).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
 						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values . ', ebay_site_id=' . (int)$ebay_profile->ebay_site_id;
 
-                    $db->execute($sql);
+                $db->execute($sql);
 
-                    $ebay_category_specific_id = $db->Insert_ID();
+                $ebay_category_specific_id = $db->Insert_ID();
 
-                    if (!$ebay_category_specific_id) {
-                        $ebay_category_specific_id = $db->getValue('SELECT `id_ebay_category_specific`
+                if (!$ebay_category_specific_id) {
+                    $ebay_category_specific_id = $db->getValue('SELECT `id_ebay_category_specific`
 							FROM `'._DB_PREFIX_.'ebay_category_specific`
 							WHERE `id_category_ref` = '.(int)$ebay_category_id.'
 							AND `ebay_site_id` = '.(int)$ebay_profile->ebay_site_id.'
-							AND `name` = \''.pSQL((string)$recommendation->Name).'\'');
-                    }
-
-                    $insert_data = array();
-
-                    foreach ($values as $value) {
-                        $insert_data[] = array(
-                            'id_ebay_category_specific' => (int)$ebay_category_specific_id,
-                            'value'                     => pSQL($value),
-                        );
-                    }
-
-                    EbayCategorySpecificValue::insertIgnore($insert_data);
+							AND `name` = \''.pSQL((string)$aspect->getLocalizedAspectName()).'\'');
                 }
+
+                $insert_data = array();
+
+                foreach ($values as $value) {
+                    $insert_data[] = array(
+                        'id_ebay_category_specific' => (int)$ebay_category_specific_id,
+                        'value'                     => pSQL($value),
+                    );
+                }
+
+                EbayCategorySpecificValue::insertIgnore($insert_data);
             }
         }
 

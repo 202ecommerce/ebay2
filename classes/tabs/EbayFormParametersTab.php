@@ -1,27 +1,28 @@
 <?php
 /**
- * 2007-2021 PrestaShop
+ *  2007-2022 PrestaShop
  *
- * NOTICE OF LICENSE
+ *  NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
+ *  DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
  *
- * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2007-2021 202-ecommerce
- * @license Commercial license
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 2007-2022 202-ecommerce
+ *  @license Commercial license
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
  */
 
 class EbayFormParametersTab extends EbayTab
@@ -112,6 +113,10 @@ class EbayFormParametersTab extends EbayTab
             ),
             'id_shop' => $this->context->shop->id,
             'user_auth_token' => $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
+            'onboardingUrl' => $this->ebay_profile->getConfiguration(ProfileConf::ONBOARDING_URL),
+            'appId' => $this->ebay_profile->getConfiguration(ProfileConf::APP_ID),
+            'certId' => $this->ebay_profile->getConfiguration(ProfileConf::CERT_ID),
+            'ruName' => $this->ebay_profile->getConfiguration(ProfileConf::RU_NAME),
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0)
         );
 
@@ -167,7 +172,6 @@ class EbayFormParametersTab extends EbayTab
             && in_array((int) Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int) Tools::getValue('currency'))
             && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment'))
-            && $this->ebay_profile->setConfiguration(ProfileConf::USER_AUTH_TOKEN, Tools::getValue(ProfileConf::USER_AUTH_TOKEN))
         ) {
             //$products = EbayProduct::getProductsWithoutBlacklisted($this->ebay_profile->id_lang, $this->ebay_profile->id, true);
             $products = EbayProduct::getProductsIdForSync($this->ebay_profile->id);

@@ -1,27 +1,28 @@
 <?php
 /**
- * 2007-2021 PrestaShop
+ *  2007-2022 PrestaShop
  *
- * NOTICE OF LICENSE
+ *  NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
+ *  DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
  *
- * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2007-2021 202-ecommerce
- * @license Commercial license
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 2007-2022 202-ecommerce
+ *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
+ *
  */
 
 /* Security*/
@@ -30,6 +31,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once _PS_MODULE_DIR_ . 'ebay/config_dev.php';
+require_once _PS_MODULE_DIR_ . 'ebay/vendor/autoload.php';
 
 /* Loading eBay Class Request*/
 $classes_to_load = array(
@@ -103,6 +105,8 @@ $classes_to_load = array(
     'EbayDebugTools',
     'Const/ProfileConf',
     'Const/TlsConf',
+    'Const/EbaySiteMap',
+    'Const/Common',
     '../services/ProductPrice',
     '../services/ProductTax',
     'TlsValidator'
@@ -143,6 +147,8 @@ class Ebay extends Module
     private $stats_version;
 
     public $best_offer = false;
+
+    public $StoreName = '';
 
     const PRIORITY_DELETE_PRODUCT = 1;
 
@@ -400,9 +406,15 @@ class Ebay extends Module
             'AdminEbayListErrorsProducts',
             'AdminFormAdvancedParameters',
             'AdminForm',
+            'AdminTokenListener'
         );
         foreach ($tabs_to_load as $tab_name) {
-            $tab = new Tab();
+            $tab = Tab::getInstanceFromClassName($tab_name);
+
+            if (Validate::isLoadedObject($tab)) {
+                continue;
+            }
+            
             $tab->module = $this->name;
             $tab->active = 0;
             $tab->class_name = $tab_name;  //AdminCustomProducts e.g.
@@ -831,6 +843,12 @@ class Ebay extends Module
         }
     }
 
+    /** @return \Ebay\services\Token\OAuth\ActualizeTokens*/
+    public function getActualizeTokens()
+    {
+        return new \Ebay\services\Token\OAuth\ActualizeTokens();
+    }
+
     /**
      * @param array $params hook parameters
      *
@@ -839,6 +857,7 @@ class Ebay extends Module
     public function hookHeader($params)
     {
         self::addSmartyModifiers();
+        $this->getActualizeTokens()->execute();
 
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
@@ -2339,9 +2358,11 @@ class Ebay extends Module
         if ($this->ebay_profile->ebay_user_identifier) {
             $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
-            $this->StoreName = $user_profile['StoreName'];
+            if (false == empty($user_profile['StoreName'])) {
+                $this->StoreName = $user_profile['StoreName'];
+            }
 
-            if ($user_profile['SellerBusinessType'][0] != 'Commercial') {
+            if (empty($user_profile['SellerBusinessType'][0]) || $user_profile['SellerBusinessType'][0] != 'Commercial') {
                 $alerts[] = 'SellerBusinessType';
             }
         }

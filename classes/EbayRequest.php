@@ -1,28 +1,32 @@
 <?php
 /**
- * 2007-2021 PrestaShop
+ *  2007-2022 PrestaShop
  *
- * NOTICE OF LICENSE
+ *  NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
+ *  DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
  *
- * @author 202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 2007-2021 202-ecommerce
- * @license Commercial license
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 2007-2022 202-ecommerce
+ *  @license Commercial license
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
  */
+
+use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\CreateFulfilmentPolicy;
+use Ebay\classes\SDK\Account\UpdateFulfilmentPolicy\UpdateFulfilmentPolicy;
 
 if (file_exists(dirname(__FILE__) . '/EbayCountrySpec.php')) {
     require_once dirname(__FILE__) . '/EbayCountrySpec.php';
@@ -45,8 +49,8 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-//    private $dev = EBAY_DEV;
-    private $dev = false;
+    private $dev = EBAY_DEV;
+    //private $dev = false;
     /** @var EbayCountrySpec */
     private $ebay_country;
     /** @var Smarty_Data */
@@ -114,7 +118,7 @@ class EbayRequest
             $this->apiUrl = 'https://api.sandbox.ebay.com/ws/api.dll';
             $this->apiUrlSeller = 'https://svcs.sandbox.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.sandbox.ebay.com/post-order/v2/';
-            $this->compatibility_level = 719;
+            $this->compatibility_level = 1225;
             $this->runame = 'Prestashop-Prestash-2629-4-hpehxegu';
             $this->loginURL = $this->ebay_country->getSiteSignin();
         } else {
@@ -123,8 +127,8 @@ class EbayRequest
             $this->apiUrl = 'https://api.ebay.com/ws/api.dll';
             $this->apiUrlSeller = 'https://svcs.ebay.com/services/selling/v1/SellerProfilesManagementService';
             $this->apiUrlPostOrder = 'https://api.ebay.com/post-order/v2/';
-            $this->compatibility_level = 741;
-            $this->runame = 'Prestashop-Prestash-70a5-4-pepwa';
+            $this->compatibility_level = 1225;
+            $this->runame = 'Prestashop-Prestash-70a5-4-bjmgtj';
             $this->loginURL = $this->ebay_country->getSiteSignin();
         }
 
@@ -883,62 +887,65 @@ class EbayRequest
                     'international_services' => $data['shipping']['internationalShip'],
                     'currency_id' => $this->ebay_country->getCurrency(),
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
-                    'shipping_name' => 'Prestashop-Ebay-'.$name_shipping,
+                    'shipping_name' => $policies_ship_name,
                     'description' => 'PrestaShop_' . $namedesc,
                 ));
-                $this->smarty->assign($vars);
-                $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
+                $createFulfilmentPolicy = new CreateFulfilmentPolicy($this->ebay_profile, $vars);
+                $response = $createFulfilmentPolicy->execute();
 
+                if ($response->isSuccess() == false) {
+                    $result = $response->getResult();
+                    $isDeletePolicy = true;
 
-                if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
-                    if ($response->errorMessage->error->errorId == '178149') {
-                        $idBussinesPolicie = '';
+                    if (empty($result['body-response']['errors']) == false) {
+                        foreach ($result['body-response']['errors'] as $error) {
+                            if ($error['errorId'] != 20400) {
+                                continue;
+                            }
 
-                        foreach ($response->errorMessage->error->parameter as $parameter) {
-                            if ($parameter['name'] == 'DuplicateProfileId') {
-                                $idBussinesPolicie = (string) $parameter;
+                            if (empty($error['parameters'])) {
+                                continue;
+                            }
+
+                            $isDeletePolicy = false;
+                            $profileName = null;
+                            $profileId = null;
+
+                            foreach ($error['parameters'] as $parameter) {
+                                if ($parameter['name'] == 'DuplicateProfileName') {
+                                    $profileName = $parameter['value'];
+                                }
+
+                                if ($parameter['name'] == 'DuplicateProfileId') {
+                                    $profileId = $parameter['value'];
+                                }
+                            }
+
+                            if ($profileName && $profileId) {
+                                EbayBussinesPolicies::updatePolicy(
+                                    $name_shipping,
+                                    [
+                                        'id_bussines_Policie' => $profileId
+                                    ]
+                                );
                             }
                         }
+                    }
 
-                        $dataProf = array(
-                            'id' => $name_shipping,
-                            'id_bussines_Policie' => $idBussinesPolicie
-                        );
-
-                        EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
-                    } else {
-                        $this->_checkForErrors($response);
-
-                        $error = '';
-                        $error .= $response->errorMessage->error->errorId . ' : ';
-                        $error .= (string)$response->errorMessage->error->message;
-
-                        if (isset($response->errorMessage->error->parameter)) {
-                            $error .= ' ' . (string)$response->errorMessage->error->parameter;
-                        }
-
-                        if (!Tools::isEmpty($response->errorMessage->error->errorId)) {
-                            $context = Context::getContext();
-                            $error .= '<a class="kb-help" data-errorcode="' . (int)$response->errorMessage->error->errorId . '"';
-                            $error .= ' data-module="ebay" data-lang="' . $context->language->iso_code . '"';
-                            $error .= ' module_version="1.11.0" prestashop_version="' . _PS_VERSION_ . '"></a>';
-                        }
-
-
-                        return array('error' => $error);
-
+                    if ($isDeletePolicy) {
                         Db::getInstance()->getValue('DELETE  FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `id` = ' . $name_shipping);
                     }
                 } else {
                     $dataProf = array(
                         'id' => $name_shipping,
-                        'id_bussines_Policie' => $response->shippingPolicyProfile->profileId,
+                        'id_bussines_Policie' => $response->getFulfilmentPolicy()->getFulfillmentPolicyId(),
                     );
                     EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                 }
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
-            if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1) {
+            $shippingPolicies = array_pop($shippingPolicies);
+            if (!empty($seller_ship_prof) && $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP') == 1 && false == is_null($shippingPolicies)) {
                 $vars = array_merge($vars, array(
                     'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
                     'excluded_zones' => $data['shipping']['excludedZone'],
@@ -946,23 +953,26 @@ class EbayRequest
                     'international_services' => $data['shipping']['internationalShip'],
                     'currency_id' => $this->ebay_country->getCurrency(),
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
-                    'shipping_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
+                    'shipping_name' => (empty($shippingPolicies['name']) ? '' : $shippingPolicies['name']),
                     'description' => 'PrestaShop_' . $namedesc,
-                    'shipping_id' => $shippingPolicies[0]['id_bussines_Policie'],
+                    'shipping_id' => (empty($shippingPolicies['id_bussines_Policie']) ? '' : $shippingPolicies['id_bussines_Policie']),
                 ));
-                $this->smarty->assign($vars);
-                $response = $this->_makeRequest('setSellerProfile', $vars, 'seller');
+
+                $updateFulfilmentPolicy = new UpdateFulfilmentPolicy($this->ebay_profile, $vars);
+                $updateFulfilmentPolicy->execute();
             }
 
-            DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
+            if (false == empty($shippingPolicies['id_bussines_Policie'])) {
+                DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int)$data['id_product'] . '"');
+            }
 
             $vars = array_merge($vars, array(
                 'payment_profile_id' => $policies_config[0]['id_payment'],
                 'payment_profile_name' => $payement_name[0]['name'],
                 'return_profile_id' => $policies_config[0]['id_return'],
                 'return_profile_name' => $return_name[0]['name'],
-                'shipping_profile_id' => $shippingPolicies[0]['id_bussines_Policie'],
-                'shipping_profile_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
+                'shipping_profile_id' => (empty($shippingPolicies['id_bussines_Policie']) ? '' : $shippingPolicies['id_bussines_Policie']),
+                'shipping_profile_name' => (empty($shippingPolicies['name']) ? '' : $shippingPolicies['name']),
             ));
         }
 
@@ -1421,7 +1431,7 @@ class EbayRequest
                 $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], $this->ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'));
                 $attribute_for_image = new AttributeGroup($this->ebay_profile->getConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS'));
 
-                if (isset($variation['variations'])) {
+                if (isset($variation['variation_specifics'])) {
                     if (isset($variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]])) {
                         $value = $variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]];
                         if (!isset($attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang] . $value)]) && isset($variation['pictures'][0])) {

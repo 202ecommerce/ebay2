@@ -1,0 +1,17 @@
+{
+    "name": "202/ebay",
+    "description": "prestashop module",
+    "config": {
+        "vendor-dir": "vendor",
+        "prepend-autoloader": false
+    },
+    "require": {
+        "guzzlehttp/guzzle": "6.*",
+        "neilcrookes/oauth2-ebay": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ebay\\": "./"
+        }
+    }
+}
