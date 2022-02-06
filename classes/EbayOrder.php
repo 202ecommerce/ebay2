@@ -1226,7 +1226,7 @@ class EbayOrder
                 );
             }
         }
-        $final_array  = array_merge($ordersErrors['errors'], $ordersErrors['orders']);
+        $final_array  = array_merge($ordersErrors['orders'], $ordersErrors['errors']);
         $final_array_count = count($final_array);
 
         $pages_all = ceil(((int)($final_array_count)) / ((int)$length));
