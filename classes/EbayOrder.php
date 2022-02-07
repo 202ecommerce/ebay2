@@ -1191,43 +1191,10 @@ class EbayOrder
 			WHERE eo.`id_order` > 0 AND o.`date_add`>"'.$period.'"');
     }
 
-    public static function getPaginatedOrdersErrors($id_ebay_profile, $currentPage = 1, $length = 20)
+    public static function getPaginated($orders, $currentPage, $length)
     {
-        $orders_error = EbayOrderErrors::getAll($id_ebay_profile);
-        $orders = self::getOrders($id_ebay_profile);
-        $ordersErrors = array(
-            'errors' => array(),
-            'orders' => array()
-        );
-        if (!empty($orders_error)) {
-            foreach ($orders_error as $order_er) {
-                $ordersErrors['errors'][] = array(
-                    'date_ebay' => $order_er['date_order'],
-                    'reference_ebay' => $order_er['id_order_ebay'],
-                    'referance_marchand' => $order_er['id_order_seller'],
-                    'email' => $order_er['email'],
-                    'total' => $order_er['total'],
-                    'error' => $order_er['error'],
-                    'date_import' => $order_er['date_add'],
-                );
-            }
-        }
-        if (!empty($orders)) {
-            foreach ($orders as $ord) {
-                $ordersErrors['orders'][] = array(
-                    'date_ebay' => $ord['date_add'],
-                    'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),
-                    'referance_marchand' => $ord['payment'],
-                    'email' => $ord['email'],
-                    'total' => $ord['total_paid'],
-                    'id_prestashop' => $ord['id_order'],
-                    'reference_ps' => $ord['reference'],
-                    'date_import' => $ord['date_add'],
-                );
-            }
-        }
-        $final_array  = array_merge($ordersErrors['errors'], $ordersErrors['orders']);
-        $final_array_count = count($final_array);
+        $final_array  = $orders;
+        $final_array_count = count($orders);
 
         $pages_all = ceil(((int)($final_array_count)) / ((int)$length));
         $range = 3;
@@ -1255,6 +1222,52 @@ class EbayOrder
         $vars['page_current'] = $currentPage;
         $vars['start'] = $start;
         $vars['stop'] = $stop;
+
+        return $vars;
+    }
+
+    public static function getPaginatedOrders($id_ebay_profile, $currentPage = 1, $length = 20)
+    {
+        $ordersSql = self::getOrders($id_ebay_profile);
+        $orders = array();
+        if (!empty($ordersSql)) {
+            foreach ($ordersSql as $ord) {
+                $orders[] = array(
+                    'date_ebay' => $ord['date_add'],
+                    'reference_ebay'  => EbayOrder::getIdOrderRefByIdOrder($ord['id_order']),
+                    'referance_marchand' => $ord['payment'],
+                    'email' => $ord['email'],
+                    'total' => $ord['total_paid'],
+                    'id_prestashop' => $ord['id_order'],
+                    'reference_ps' => $ord['reference'],
+                    'date_import' => $ord['date_add'],
+                );
+            }
+        }
+        $vars = self::getPaginated($orders, $currentPage, $length);
+
+        return $vars;
+    }
+
+    public static function getPaginatedErrors($id_ebay_profile, $currentPage = 1, $length = 20)
+    {
+        $ordersErrorSql = EbayOrderErrors::getAll($id_ebay_profile);
+        $ordersErrors = array();
+        if (!empty($ordersErrorSql)) {
+            foreach ($ordersErrorSql as $order_er) {
+                $ordersErrors[] = array(
+                    'date_ebay' => $order_er['date_order'],
+                    'reference_ebay' => $order_er['id_order_ebay'],
+                    'referance_marchand' => $order_er['id_order_seller'],
+                    'email' => $order_er['email'],
+                    'total' => $order_er['total'],
+                    'error' => $order_er['error'],
+                    'date_import' => $order_er['date_add'],
+                );
+            }
+        }
+        $vars = self::getPaginated($ordersErrors, $currentPage, $length);
+
         return $vars;
     }
 

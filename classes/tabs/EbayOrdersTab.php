@@ -31,7 +31,7 @@ class EbayOrdersTab extends EbayTab
     public function getContent($id_ebay_profile)
     {
         $this->vars = array();
-        $pagination_vars = EbayOrder::getPaginatedOrdersErrors($id_ebay_profile);
+        $pagination_vars = EbayOrder::getPaginatedOrders($id_ebay_profile);
         $this->vars = array_merge($this->vars, $pagination_vars);
         $this->vars['id_ebay_profile'] = $id_ebay_profile;
         $this->vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');

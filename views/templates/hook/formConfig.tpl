@@ -151,7 +151,7 @@
 
 					<div id="menuTab9Sheet" class="tabItem tab-pane"><div class="panel">{$ebay_listings}</div></div>
 					<div id="menuTab6Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders}</div></div>
-					<div id="menuTab61Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders_not_imported}</div></div>
+					<div id="menuTab61Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders_errors}</div></div>
 					<div id="menuTab14Sheet" class="tabItem tab-pane"><div class="panel">{$orders_sync}</div></div>
 					<div id="menuTab79Sheet" class="tabItem tab-pane"><div class="panel">{$orders_returns_sync}</div></div>
 					<div id="menuTab78Sheet" class="tabItem tab-pane"><div class="panel">{$order_returns}</div></div>

@@ -86,7 +86,7 @@ $classes_to_load = array(
     'tabs/EbayOrderReturnsTab',
     'tabs/EbayDashboardTab',
     'tabs/EbayOrdersTab',
-    'tabs/EbayOrdersNotImportedTab',
+    'tabs/EbayOrdersErrorsTab',
     'tabs/EbayListErrorsProductsTab',
     'tabs/EbayFormConfigAnnoncesTab',
     'tabs/EbayFormConfigOrdersTab',
@@ -2102,7 +2102,7 @@ class Ebay extends Module
         $orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
         $orphan_listings = new EbayOrphanListingsTab($this, $this->smarty, $this->context);
         $tableOrders = new EbayOrdersTab($this, $this->smarty, $this->context);
-        $tableOrdersNotImported = new EbayOrdersNotImportedTab($this, $this->smarty, $this->context);
+        $tableOrdersErrors = new EbayOrdersErrorsTab($this, $this->smarty, $this->context);
         $tableListErrorProduct = new EbayListErrorsProductsTab($this, $this->smarty, $this->context);
         $form_parameters_annonces_tab = new EbayFormConfigAnnoncesTab($this, $this->smarty, $this->context);
         $form_parameters_orders_tab = new EbayFormConfigOrdersTab($this, $this->smarty, $this->context);
@@ -2168,7 +2168,7 @@ class Ebay extends Module
             'orders_returns_sync' => $orders_returns_sync->getContent(),
             'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
             'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
-            'table_orders_not_imported' => $tableOrdersNotImported ->getContent($this->ebay_profile->id),
+            'table_orders_errors' => $tableOrdersErrors ->getContent($this->ebay_profile->id),
             'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
             'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
             'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0),

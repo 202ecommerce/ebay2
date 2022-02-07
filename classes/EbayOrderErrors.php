@@ -124,7 +124,7 @@ class EbayOrderErrors extends ObjectModel
     public static function getAll($id_ebay_profile)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `ebay_user_identifier` = "'.pSQL($ebay_profile->ebay_user_identifier).'"';
+        $q = 'SELECT * FROM `'._DB_PREFIX_.self::$definition['table'].'` WHERE `ebay_user_identifier` = "'.pSQL($ebay_profile->ebay_user_identifier).'" ORDER BY date_add DESC';
         return Db::getInstance()->ExecuteS($q);
     }
 

@@ -25,20 +25,13 @@
  *
  */
 
-class EbayOrdersNotImportedTab extends EbayTab
+class EbayOrdersErrorsTab extends EbayTab
 {
     private $vars;
     public function getContent($id_ebay_profile)
     {
         $this->vars = array();
-        $pagination_vars = EbayOrder::getPaginatedOrdersErrors($id_ebay_profile);
-        foreach ($pagination_vars["all_orders"] as $key => $order) {
-            if (!isset($order["error"])) {
-                unset($pagination_vars["all_orders"][$key]);
-            }
-        }
-        $pagination_vars["all_orders"] = array_reverse($pagination_vars["all_orders"]);
-
+        $pagination_vars = EbayOrder::getPaginatedErrors($id_ebay_profile);
         $this->vars = array_merge($this->vars, $pagination_vars);
         $this->vars['id_ebay_profile'] = $id_ebay_profile;
         $this->vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
@@ -50,11 +43,11 @@ class EbayOrdersNotImportedTab extends EbayTab
         $url_vars['controller'] = Tools::getValue('controller');
         $datetime = new DateTime(Configuration::get('EBAY_ORDER_LAST_UPDATE'));
         $this->vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
-        $this->vars['tpl_orders_ajax'] = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/tableOrders_ajax.tpl';
+        $this->vars['tpl_orders_errors_ajax'] = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/tableOrdersErrors_ajax.tpl';
         $this->vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         $this->vars['currency'] = $this->context->currency;
         $this->vars['url'] = $this->_getUrl($url_vars);
         $this->vars['errors'] = true;
-        return $this->display('tableOrdersNotImported.tpl', $this->vars);
+        return $this->display('tableOrdersErrors.tpl', $this->vars);
     }
 }

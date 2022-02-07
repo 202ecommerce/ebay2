@@ -41,8 +41,8 @@
     {else}
 {*        <p class="table-block__holder" style="margin:0;padding: 5px 0;">{l s='Last import:' mod='ebay'} {$date_last_import|escape:'htmlall':'UTF-8'}</p>*}
 
-        <div id="OrderListingsBlock">
-            {include file=$tpl_orders_ajax}
+        <div id="OrderErrorsListingsBlock">
+            {include file=$tpl_orders_errors_ajax}
         </div>
 
 
@@ -74,28 +74,5 @@
         });
     });
 
-    $('.deleteOrderError').click(deleteOrderError);
-
-    function deleteOrderError() {
-        var reference_ebay;
-        var tr;
-
-        reference_ebay = $(this).attr('data-error');
-        tr = $(this).closest('tr');
-        $.ajax({
-            type: 'POST',
-            url: ebayOrdersController,
-            data: {
-                reference_ebay: reference_ebay,
-                ajax: true,
-                action: 'DeleteOrderError',
-            },
-            success: function (data) {
-                console.log(data);
-                $(tr).remove();
-            },
-        });
-
-    }
     {/literal}
 </script>
