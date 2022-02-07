@@ -80,7 +80,7 @@
 
             <div class="form-group">
                 <label class="control-label col-sm-3">
-                    {l s='Onboarding URL' mod='ebay'}
+                    {l s='Your branded eBay Production Sign In (OAuth)' mod='ebay'}
                 </label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" name="EBAY_ONBOARDING_URL" value="{if isset($onboardingUrl)}{$onboardingUrl}{/if}">
