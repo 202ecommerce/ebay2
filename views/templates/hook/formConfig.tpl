@@ -85,8 +85,10 @@
 				</ul>
 
 				<ul class=" nav nav-pills orders-menu menuTab ebay_hidden" role="tablist">
-					<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a></li>
-
+					<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}</a></li>
+					<li  role="presentation" id="menuTab61" class="menuTabButton"><a href="#">{l s='Orders not imported' mod='ebay'}
+							{if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
+					</li>
 					<li role="presentation" id="menuTab78" class="menuTabButton"><a href="#">{l s='Order Returns' mod='ebay'}</a></li>
 					{if isset($best_offers)}
 						<li role="presentation" id="menuTab999" class="menuTabButton"><a href="#">{l s='Best Offers' mod='ebay'}</a></li>
@@ -149,6 +151,7 @@
 
 					<div id="menuTab9Sheet" class="tabItem tab-pane"><div class="panel">{$ebay_listings}</div></div>
 					<div id="menuTab6Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders}</div></div>
+					<div id="menuTab61Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders_errors}</div></div>
 					<div id="menuTab14Sheet" class="tabItem tab-pane"><div class="panel">{$orders_sync}</div></div>
 					<div id="menuTab79Sheet" class="tabItem tab-pane"><div class="panel">{$orders_returns_sync}</div></div>
 					<div id="menuTab78Sheet" class="tabItem tab-pane"><div class="panel">{$order_returns}</div></div>

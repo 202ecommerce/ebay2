@@ -37,6 +37,7 @@ $_MODULE['<{ebay}prestashop>ebay_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Per utili
 $_MODULE['<{ebay}prestashop>ebay_ffa05a17b5e84d1c3b1f2fbda2bfea3c'] = 'Prezzo del prodotto inferiore a 0.1 o prodotto non trovato';
 $_MODULE['<{ebay}prestashop>ebay_eaa0d1591e6369a298dcd6cb1a8eba8a'] = 'Indirizzo email non valido';
 $_MODULE['<{ebay}prestashop>ebay_f19bab7c4c3d19688f1a16d7830517b9'] = 'Il Paese non è attivato';
+$_MODULE['<{ebay}prestashop>formconfig_83465313917bcc76185ea86fb41b7148'] = 'Ordini non importati';
 $_MODULE['<{ebay}prestashop>ebay_6450acbf317261ce71e7341df1fc1a66'] = 'Impossibile trovare i prodotti nel database';
 $_MODULE['<{ebay}prestashop>ebay_967451b8be95342ed2e756b7376f315f'] = 'Impossibile creare un carrello per l\'ordine';
 $_MODULE['<{ebay}prestashop>ebay_5f8d9c30e0606a91c5d7b6e1bf1217ac'] = 'Impossibile aggiungere il prodotto al carrello (è possibile che la quantità in magazzino sia 0)';

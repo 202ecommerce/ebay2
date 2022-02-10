@@ -37,6 +37,7 @@ $_MODULE['<{ebay}prestashop>ebay_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Debe habi
 $_MODULE['<{ebay}prestashop>ebay_ffa05a17b5e84d1c3b1f2fbda2bfea3c'] = 'Cantidad menor a 0.1 o no producto coincidente';
 $_MODULE['<{ebay}prestashop>ebay_eaa0d1591e6369a298dcd6cb1a8eba8a'] = 'Correo electrónico no válido';
 $_MODULE['<{ebay}prestashop>ebay_f19bab7c4c3d19688f1a16d7830517b9'] = 'El país no está activado';
+$_MODULE['<{ebay}prestashop>formconfig_83465313917bcc76185ea86fb41b7148'] = 'Pedidos no importados';
 $_MODULE['<{ebay}prestashop>ebay_6450acbf317261ce71e7341df1fc1a66'] = 'No se han podido encontrar los productos en la base de datos';
 $_MODULE['<{ebay}prestashop>ebay_967451b8be95342ed2e756b7376f315f'] = 'Error mientras se crea la orden en el carro ';
 $_MODULE['<{ebay}prestashop>ebay_5f8d9c30e0606a91c5d7b6e1bf1217ac'] = 'No se ha podido añadir el producto al carro (puede que no tengas existencias disponibles)';

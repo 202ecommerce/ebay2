@@ -29,18 +29,31 @@ class AdminEbayOrdersController extends ModuleAdminController
 {
     public function ajaxProcessLoadOrderHistory()
     {
-        $pagination = EbayOrder::getPaginatedOrdersErrors(Tools::getValue('id_ebay_profile'), Tools::getValue('page'));
+        $pagination = EbayOrder::getPaginatedOrders(Tools::getValue('id_ebay_profile'), Tools::getValue('page'));
+        $ebay = $this->paginationVars($pagination);
+        die($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/tableOrders_ajax.tpl'));
+    }
+
+    public function ajaxProcessLoadOrderErrorsHistory()
+    {
+        $pagination = EbayOrder::getPaginatedOrders(Tools::getValue('id_ebay_profile'), Tools::getValue('page'));
+        $ebay = $this->paginationVars($pagination);
+        die($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/tableOrdersErrors_ajax.tpl'));
+    }
+
+    public function paginationVars($pagination)
+    {
         $context = Context::getContext();
         $template_vars = array(
             'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
             'id_employee' => Tools::getValue('id_employee'),
             'currency' => $context->currency,
-            );
-
+        );
         $ebay = Module::getInstanceByName('ebay');
         $context->smarty->assign($template_vars);
         $context->smarty->assign($pagination);
-        die($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/tableOrders_ajax.tpl'));
+
+        return $ebay;
     }
 
     public function ajaxProcessResyncOrder()
