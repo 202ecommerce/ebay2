@@ -261,7 +261,7 @@
 			<div class="form-group">
 								<label class="control-label col-sm-3">
 									<span class="label-tooltip" >
-										<a href="https://help.202-ecommerce.com/fr/ebay-pour-prestashop/installation-configuration/parametres/configurer-le-token-ebay-pour-activer-lautorisation-oauth-pour-les-apis-2022/" target="_blank">
+										<a href="{l s='https://help.202-ecommerce.com/ebay-for-prestashop-3/installation-configuration/settings/obtain-the-ebay-token-to-activate-oauth-authorization-for-apis-2022/' mod='ebay'}" target="_blank">
 											{l s='User authorization token' mod='ebay'}
 										</a>
 									</span>
