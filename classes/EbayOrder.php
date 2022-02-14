@@ -1165,7 +1165,7 @@ class EbayOrder
 
     public static function getOrders($id_ebay_profile)
     {
-        return Db::getInstance()->executeS('SELECT eoo.*, o.date_add, o.payment, c.email, o.total_paid, o.reference
+        return Db::getInstance()->executeS('SELECT eoo.*, o.date_add, o.payment, c.email, o.total_paid, o.reference, o.id_order
 			FROM `'._DB_PREFIX_.'ebay_order_order` eoo
 			LEFT JOIN '._DB_PREFIX_.'orders o ON eoo.id_order=o.id_order
 			LEFT JOIN '._DB_PREFIX_.'customer c ON o.id_customer=c.id_customer
@@ -1241,6 +1241,10 @@ class EbayOrder
                     'id_prestashop' => $ord['id_order'],
                     'reference_ps' => $ord['reference'],
                     'date_import' => $ord['date_add'],
+                    'order_link' =>  Context::getContext()->link->getAdminLink('AdminOrders', true, [], [
+                            'vieworder' => 1,
+                            'id_order' => (int) $ord["id_order"],
+                        ]),
                 );
             }
         }
