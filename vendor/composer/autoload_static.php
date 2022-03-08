@@ -4,16 +4,17 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit356a1ca24f28a3887220689608b4db13
+class ComposerStaticInit72719ef24cc6e6ee2261d0ac5cab9831
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '154e0d165f5fe76e8e9695179d0a7345' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -21,7 +22,7 @@ class ComposerStaticInit356a1ca24f28a3887220689608b4db13
         array (
             'Ebay\\' => 5,
             'EbayVendor\\Symfony\\Polyfill\\Php72\\' => 34,
-            'EbayVendor\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 44,
+            'EbayVendor\\Symfony\\Polyfill\\Mbstring\\' => 37,
             'EbayVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => 37,
             'EbayVendor\\Psr\\Http\\Message\\' => 28,
             'EbayVendor\\NeilCrookes\\OAuth2\\Client\\' => 37,
@@ -41,9 +42,9 @@ class ComposerStaticInit356a1ca24f28a3887220689608b4db13
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
         ),
-        'EbayVendor\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        'EbayVendor\\Symfony\\Polyfill\\Mbstring\\' => 
         array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
         'EbayVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => 
         array (
@@ -77,15 +78,14 @@ class ComposerStaticInit356a1ca24f28a3887220689608b4db13
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'EbayVendor\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit356a1ca24f28a3887220689608b4db13::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit356a1ca24f28a3887220689608b4db13::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit356a1ca24f28a3887220689608b4db13::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit72719ef24cc6e6ee2261d0ac5cab9831::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit72719ef24cc6e6ee2261d0ac5cab9831::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit72719ef24cc6e6ee2261d0ac5cab9831::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -2,16 +2,14 @@
 
 namespace EbayVendor\GuzzleHttp;
 
-use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
 use EbayVendor\Psr\Http\Message\RequestInterface;
-use EbayVendor\Psr\Http\Message\ResponseInterface;
 /**
  * Creates a composed Guzzle handler function by stacking middlewares on top of
  * an HTTP handler function.
  */
 class HandlerStack
 {
-    /** @var callable|null */
+    /** @var callable */
     private $handler;
     /** @var array */
     private $stack = [];
@@ -21,7 +19,7 @@ class HandlerStack
      * Creates a default handler stack that can be used by clients.
      *
      * The returned handler will wrap the provided handler or use the most
-     * appropriate default handler for your system. The returned HandlerStack has
+     * appropriate default handler for you system. The returned HandlerStack has
      * support for cookies, redirects, HTTP error exceptions, and preparing a body
      * before sending.
      *
@@ -37,9 +35,9 @@ class HandlerStack
     public static function create(callable $handler = null)
     {
         $stack = new self($handler ?: choose_handler());
-        $stack->push(Middleware::httpErrors(), 'http_errors');
-        $stack->push(Middleware::redirect(), 'allow_redirects');
         $stack->push(Middleware::cookies(), 'cookies');
+        $stack->push(Middleware::redirect(), 'allow_redirects');
+        $stack->push(Middleware::httpErrors(), 'http_errors');
         $stack->push(Middleware::prepareBody(), 'prepare_body');
         return $stack;
     }
@@ -55,12 +53,13 @@ class HandlerStack
      *
      * @param RequestInterface $request
      * @param array            $options
-     *
-     * @return ResponseInterface|PromiseInterface
      */
     public function __invoke(RequestInterface $request, array $options)
     {
-        $handler = $this->resolve();
+        if (!$this->cached) {
+            $this->cached = $this->resolve();
+        }
+        $handler = $this->cached;
         return $handler($request, $options);
     }
     /**
@@ -172,19 +171,16 @@ class HandlerStack
      */
     public function resolve()
     {
-        if (!$this->cached) {
-            if (!($prev = $this->handler)) {
-                throw new \LogicException('No handler has been specified');
-            }
-            foreach (\array_reverse($this->stack) as $fn) {
-                $prev = $fn[0]($prev);
-            }
-            $this->cached = $prev;
+        if (!($prev = $this->handler)) {
+            throw new \LogicException('No handler has been specified');
         }
-        return $this->cached;
+        foreach (\array_reverse($this->stack) as $fn) {
+            $prev = $fn[0]($prev);
+        }
+        return $prev;
     }
     /**
-     * @param string $name
+     * @param $name
      * @return int
      */
     private function findByName($name)
@@ -199,10 +195,10 @@ class HandlerStack
     /**
      * Splices a function into the middleware list at a specific position.
      *
-     * @param string   $findName
-     * @param string   $withName
+     * @param          $findName
+     * @param          $withName
      * @param callable $middleware
-     * @param bool     $before
+     * @param          $before
      */
     private function splice($findName, $withName, callable $middleware, $before)
     {

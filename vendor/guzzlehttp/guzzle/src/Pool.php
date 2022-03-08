@@ -2,12 +2,11 @@
 
 namespace EbayVendor\GuzzleHttp;
 
-use EbayVendor\GuzzleHttp\Promise\EachPromise;
-use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
 use EbayVendor\GuzzleHttp\Promise\PromisorInterface;
 use EbayVendor\Psr\Http\Message\RequestInterface;
+use EbayVendor\GuzzleHttp\Promise\EachPromise;
 /**
- * Sends an iterator of requests concurrently using a capped pool size.
+ * Sends and iterator of requests concurrently using a capped pool size.
  *
  * The pool will read from an iterator until it is cancelled or until the
  * iterator is consumed. When a request is yielded, the request is sent after
@@ -47,11 +46,11 @@ class Pool implements PromisorInterface
         }
         $iterable = \EbayVendor\GuzzleHttp\Promise\iter_for($requests);
         $requests = function () use($iterable, $client, $opts) {
-            foreach ($iterable as $key => $rfn) {
+            foreach ($iterable as $rfn) {
                 if ($rfn instanceof RequestInterface) {
-                    (yield $key => $client->sendAsync($rfn, $opts));
+                    (yield $client->sendAsync($rfn, $opts));
                 } elseif (\is_callable($rfn)) {
-                    (yield $key => $rfn($opts));
+                    (yield $rfn($opts));
                 } else {
                     throw new \InvalidArgumentException('Each value yielded by ' . 'the iterator must be a Psr7\\Http\\Message\\RequestInterface ' . 'or a callable that returns a promise that fulfills ' . 'with a Psr7\\Message\\Http\\ResponseInterface object.');
                 }
@@ -59,11 +58,6 @@ class Pool implements PromisorInterface
         };
         $this->each = new EachPromise($requests(), $config);
     }
-    /**
-     * Get promise
-     *
-     * @return PromiseInterface
-     */
     public function promise()
     {
         return $this->each->promise();
@@ -95,11 +89,6 @@ class Pool implements PromisorInterface
         \ksort($res);
         return $res;
     }
-    /**
-     * Execute callback(s)
-     *
-     * @return void
-     */
     private static function cmpCallback(array &$options, $name, array &$results)
     {
         if (!isset($options[$name])) {

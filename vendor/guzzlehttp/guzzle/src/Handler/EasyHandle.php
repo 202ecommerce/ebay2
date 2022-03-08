@@ -41,23 +41,8 @@ final class EasyHandle
         }
         // HTTP-version SP status-code SP reason-phrase
         $startLine = \explode(' ', \array_shift($this->headers), 3);
-        $headers = \EbayVendor\GuzzleHttp\headers_from_lines($this->headers);
-        $normalizedKeys = \EbayVendor\GuzzleHttp\normalize_header_keys($headers);
-        if (!empty($this->options['decode_content']) && isset($normalizedKeys['content-encoding'])) {
-            $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];
-            unset($headers[$normalizedKeys['content-encoding']]);
-            if (isset($normalizedKeys['content-length'])) {
-                $headers['x-encoded-content-length'] = $headers[$normalizedKeys['content-length']];
-                $bodyLength = (int) $this->sink->getSize();
-                if ($bodyLength) {
-                    $headers[$normalizedKeys['content-length']] = $bodyLength;
-                } else {
-                    unset($headers[$normalizedKeys['content-length']]);
-                }
-            }
-        }
         // Attach a response to the easy handle with the parsed headers.
-        $this->response = new Response($startLine[1], $headers, $this->sink, \substr($startLine[0], 5), isset($startLine[2]) ? (string) $startLine[2] : null);
+        $this->response = new Response($startLine[1], \EbayVendor\GuzzleHttp\headers_from_lines($this->headers), $this->sink, \substr($startLine[0], 5), isset($startLine[2]) ? (int) $startLine[2] : null);
     }
     public function __get($name)
     {
