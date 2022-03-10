@@ -1,6 +1,6 @@
 <?php
 
-namespace EbayVendor;
+
 
 if (!\is_callable('random_int')) {
     /**

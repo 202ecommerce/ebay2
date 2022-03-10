@@ -67,6 +67,6 @@ class ComposerAutoloaderInit72719ef24cc6e6ee2261d0ac5cab9831
 
 function composerRequire72719ef24cc6e6ee2261d0ac5cab9831($fileIdentifier, $file)
 {
-    require $file;
+    require_once $file;
     $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;
 }
