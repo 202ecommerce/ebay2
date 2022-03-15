@@ -50,8 +50,8 @@ class FulfilmentBuilder implements BuilderInterface
         $fulfilmentPolicy->setCategoryTypes($this->getCategoryTypeList());
         $fulfilmentPolicy->setShippingOptions($this->getShippingOptions());
 
-        if (false == empty($this->data['shipping_name'])) {
-            $fulfilmentPolicy->setFulfillmentPolicyId((string)$this->data['shipping_name']);
+        if (false == empty($this->data['shipping_id'])) {
+            $fulfilmentPolicy->setFulfillmentPolicyId((string)$this->data['shipping_id']);
         }
 
         if (false == empty($this->data['shipping_name'])) {
