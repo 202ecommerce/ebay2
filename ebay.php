@@ -26,6 +26,9 @@
  */
 
 /* Security*/
+
+use Ebay\services\EbayLink;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -1886,7 +1889,7 @@ class Ebay extends Module
                 'prestashop_version'     => _PS_VERSION_,
                 'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
             ),
-            'formEbaySyncController' => $this->context->link->getAdminLink('AdminFormEbaySync'),
+            'formEbaySyncController' => $this->initLinkService()->getAdminLink('AdminFormEbaySync'),
             'formController' => $this->context->link->getAdminLink('AdminForm'),
 
             ));
@@ -1902,6 +1905,11 @@ class Ebay extends Module
             $template = $this->__displayFormConfig();
         }
         return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
+    }
+
+    protected function initLinkService()
+    {
+        return new EbayLink();
     }
 
     private function shopIsAvailableFor90DaysOffer()
