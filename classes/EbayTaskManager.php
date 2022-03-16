@@ -1,4 +1,7 @@
 <?php
+
+use Ebay\services\EbayContext;
+
 /**
  *  2007-2022 PrestaShop
  *
@@ -219,6 +222,7 @@ class EbayTaskManager
         Configuration::updateValue('DATE_LAST_SYNC_PRODUCTS', date('Y-m-d H:i:s'));
         if ($tasks) {
             while ($row = $tasks->fetch(PDO::FETCH_ASSOC)) {
+                EbayContext::getContext()->set('id_ebay_profile_sync_process', (int)$row['id_ebay_profile']);
                 $response = EbaySynchronizer::callFunction(self::getMethode($row['id_task']), array('id_product' => $row['id_product'], 'id_product_attribute' => $row['id_product_attribute'], 'id_ebay_profile' => $row['id_ebay_profile']));
                 self::checkError($response, $row);
             }

@@ -28,6 +28,7 @@
 namespace Ebay\classes\SDK\Core;
 
 use Configuration;
+use Ebay\services\EbayContext;
 use EbayVendor\GuzzleHttp\Client;
 use EbayVendor\GuzzleHttp\RequestOptions;
 use EbayVendor\Psr\Http\Message\ResponseInterface;
@@ -40,10 +41,13 @@ class EbayClient
     /** @var ApiBaseUriInterface*/
     protected $apiBaseUri;
 
+    protected $ebayContext;
+
     public function __construct(ApiBaseUriInterface $apiBaseUri)
     {
         $this->client = new Client(['base_uri' => $apiBaseUri->get()]);
         $this->apiBaseUri = $apiBaseUri;
+        $this->ebayContext = EbayContext::getContext();
     }
 
     public function executeRequest(RequestInterface $request)
@@ -110,6 +114,7 @@ class EbayClient
 
         $ebayApiLog->type = get_class($params['request']);
         $ebayApiLog->request = $params['request']->toJson();
+        $ebayApiLog->id_ebay_profile = $this->ebayContext->get('id_ebay_profile_sync_process', 0);
 
         if (false == empty($params['error'])) {
             $ebayApiLog->status = 'KO';
