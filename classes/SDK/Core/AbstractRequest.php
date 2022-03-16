@@ -25,40 +25,24 @@
  *
  */
 
-namespace Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory;
+namespace Ebay\classes\SDK\Core;
 
-use Ebay\classes\SDK\Core\AbstractBearerRequest;
-use Ebay\classes\SDK\Core\BearerAuthToken;
 
-class Request extends AbstractBearerRequest
+abstract class AbstractRequest implements RequestInterface
 {
-    /** @var string*/
-    protected $categoryTreeId;
-
-    /** @var string*/
-    protected $categoryId;
-
-    public function __construct(BearerAuthToken $token, $categoryTreeId, $categoryId)
+    /** @return string */
+    public function toJson()
     {
-        parent::__construct($token);
-
-        $this->categoryTreeId = (string)$categoryTreeId;
-        $this->categoryId = (string)$categoryId;
+        return json_encode($this->toArray());
     }
 
-    /** @return string */
-    public function getEndPoint()
+    /** @return array */
+    public function toArray()
     {
-        return sprintf(
-            '/commerce/taxonomy/v1/category_tree/%s/get_item_aspects_for_category?category_id=%s',
-            $this->categoryTreeId,
-            $this->categoryId
-        );
-    }
-
-    /** @return string */
-    public function getMethod()
-    {
-        return 'get';
+        return [
+            'endPoint' => $this->getEndPoint(),
+            'options' => $this->getOptions(),
+            'method' => $this->getMethod()
+        ];
     }
 }

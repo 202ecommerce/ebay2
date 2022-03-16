@@ -52,18 +52,6 @@ class Request extends AbstractBearerRequest
     }
 
     /** @return string */
-    public function toJson()
-    {
-        return '';
-    }
-
-    /** @return array */
-    public function toArray()
-    {
-        return [];
-    }
-
-    /** @return string */
     public function getMethod()
     {
         return 'get';

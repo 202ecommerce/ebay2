@@ -27,8 +27,10 @@
 
 namespace Ebay\classes\SDK\Core;
 
+use Configuration;
 use EbayVendor\GuzzleHttp\Client;
 use EbayVendor\GuzzleHttp\RequestOptions;
+use EbayVendor\Psr\Http\Message\ResponseInterface;
 
 class EbayClient
 {
@@ -46,16 +48,91 @@ class EbayClient
 
     public function executeRequest(RequestInterface $request)
     {
-        return $this->client->request(
-            $request->getMethod(),
-            $request->getEndPoint(),
-            array_merge($this->getOptions(), $request->getOptions())
-        );
+        try {
+            $result = $this->client->request(
+                $request->getMethod(),
+                $request->getEndPoint(),
+                array_merge($this->getOptions(), $request->getOptions())
+            );
+
+            if ($this->isLoggingActive()) {
+                $this->log([
+                    'request' => $request,
+                    'response' => $result
+                ]);
+            }
+        } catch (\Exception $e) {
+            if ($this->isLoggingActive()) {
+                $this->log([
+                    'request' => $request,
+                    'error' => $e,
+                ]);
+            }
+
+            throw $e;
+        } catch (\Throwable $e) {// Throwable is available from php 7
+            if ($this->isLoggingActive()) {
+                $this->log([
+                    'request' => $request,
+                    'error' => $e,
+                ]);
+            }
+
+            throw $e;
+        }
+
+
+        return $result;
     }
 
     /** @return array*/
     protected function getOptions()
     {
         return [];
+    }
+
+    protected function isLoggingActive()
+    {
+        return (int)Configuration::get('EBAY_API_LOGS');
+    }
+
+    protected function log($params)
+    {
+        $ebayApiLog = new \EbayApiLog();
+
+        if (empty($params['request'])) {
+            return;
+        }
+
+        if ($params['request'] instanceof RequestInterface == false) {
+            return;
+        }
+
+        $ebayApiLog->type = get_class($params['request']);
+        $ebayApiLog->request = $params['request']->toJson();
+
+        if (false == empty($params['error'])) {
+            $ebayApiLog->status = 'KO';
+
+            if (is_callable([$params['error'], 'getMessage'])) {
+                $ebayApiLog->response = $params['error']->getMessage();
+            }
+
+            $ebayApiLog->save();
+            return;
+        }
+
+        if (empty($params['response'])) {
+            return;
+        }
+
+        if ($params['response'] instanceof ResponseInterface == false) {
+            return;
+        }
+
+        $ebayApiLog->status = 'OK';
+        $ebayApiLog->response = json_encode($params['response']->getBody()->getContents());
+        $ebayApiLog->save();
+        $params['response']->getBody()->rewind();
     }
 }

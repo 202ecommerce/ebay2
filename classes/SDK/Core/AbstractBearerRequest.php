@@ -29,7 +29,7 @@ namespace Ebay\classes\SDK\Core;
 
 use EbayVendor\GuzzleHttp\RequestOptions;
 
-abstract class AbstractBearerRequest implements RequestInterface
+abstract class AbstractBearerRequest extends AbstractRequest
 {
     /** @var BearerAuthToken*/
     protected $token;
