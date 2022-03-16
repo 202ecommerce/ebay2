@@ -28,6 +28,7 @@
 namespace Ebay\services\Token\OAuth;
 
 use Ebay\classes\SandboxMode;
+use Exception;
 use ProfileConf;
 use Throwable;
 use EbayProfile;
@@ -61,7 +62,10 @@ class GetAccessToken
             $response->setSuccess(true);
             $response->setAccessToken($accessToken->getToken());
             $response->setRefreshToken($accessToken->getRefreshToken());
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
+            $response->setSuccess(false);
+            $response->setError($e->getMessage());
+        } catch (Throwable $e) {// Throwable exists from php 7
             $response->setSuccess(false);
             $response->setError($e->getMessage());
         }
