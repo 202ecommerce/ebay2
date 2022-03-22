@@ -1,29 +1,4 @@
 <?php
-/**
- *  2007-2022 PrestaShop
- *
- *  NOTICE OF LICENSE
- *
- *  This source file is subject to the Academic Free License (AFL 3.0)
- *  that is bundled with this package in the file LICENSE.txt.
- *  It is also available through the world-wide-web at this URL:
- *  http://opensource.org/licenses/afl-3.0.php
- *  If you did not receive a copy of the license and are unable to
- *  obtain it through the world-wide-web, please send an email
- *  to license@prestashop.com so we can send you a copy immediately.
- *
- *  DISCLAIMER
- *
- *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- *  versions in the future. If you wish to customize PrestaShop for your
- *  needs please refer to http://www.prestashop.com for more information.
- *
- *  @author 202-ecommerce <tech@202-ecommerce.com>
- *  @copyright Copyright (c) 2007-2022 202-ecommerce
- *  @license Commercial license
- *  International Registered Trademark & Property of PrestaShop SA
- *
- */
 
 global $_MODULE;
 $_MODULE = array();
@@ -558,9 +533,6 @@ $_MODULE['<{ebay}prestashop>ebay_log_workers_0450d266974d92724ff4bacc3a51952e'] 
 $_MODULE['<{ebay}prestashop>ebay_log_workers_d3b206d196cd6be3a2764c1fb90b200f'] = 'Supprimer la sélection';
 $_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay a activé TLS 1.2 pour toutes les API dans Sandbox et Production. Nous vous recommandons vivement de contacter votre hébergeur pour vérifier la compatibilité avec TLS 1.2 et SHA2.';
 $_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Les appels d\'API qui ne sont pas conformes à TLS 1.2 échoueront à partir du 31/08/2021.';
-$_MODULE['<{ebay}prestashop>formconfig_0788e34b977bbbcf7b3ebb625a4e4d2f'] = 'En septembre 2021, eBay retirera la condition d\'article \"Reconditionné\" sur ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr et ebay.com.au. Actions demandées à compter du 27 septembre : ';
-$_MODULE['<{ebay}prestashop>formconfig_af954d385d97afe00437ec8496bac31d'] = '1) Si vous créez une nouvelle annonce pour un article reconditionné, vous devez l\'inscrire sous la condition d\'article « d\'occasion ».';
-$_MODULE['<{ebay}prestashop>formconfig_8c48fe62f3067a0278ff2060e9882a29'] = '2) Mettre à jour les titres ou la description de l\'annonce pour refléter l\'état de l\'article';
 $_MODULE['<{ebay}prestashop>formconfig_15c7e2fbecdad1a606bd1e3e50bc8738'] = 'Désormais, le module eBay peut synchroniser un pourcentage de TVA différent pour chaque produit. Le pourcentage pris en compte est celui indiqué dans le champ \"Règle de taxe\" de la page produit, dans l\'onglet \"Essentiel\". Pour synchroniser le champ TVA sur vos annonces eBay, lancez la synchronisation manuelle de toutes les catégories via le menu \"Annonces\" du module.';
 $_MODULE['<{ebay}prestashop>formconfig_2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
 $_MODULE['<{ebay}prestashop>formconfig_212f7cc9644cdd793a6e5cc3edda6d90'] = 'Liste des catégories';
@@ -624,6 +596,7 @@ $_MODULE['<{ebay}prestashop>formparameters_bb9a2f66fc726c85e45c8ddc93297ab9'] = 
 $_MODULE['<{ebay}prestashop>formparameters_22fe7efb781673fdccf9a590619abde5'] = ' eBay utilise ces informations pour savoir si vos produits sont vendus à l\'étranger';
 $_MODULE['<{ebay}prestashop>formparameters_f0ef777d2636419a042d3df7a07d2d09'] = 'Pays de votre entrepôt*';
 $_MODULE['<{ebay}prestashop>formparameters_8df186b9585c13cf5d0f67f28de1cb93'] = 'Pays de votre boutique';
+$_MODULE['<{ebay}prestashop>formparameters_d8d6b21be208777adc1204486267e2b5'] = 'https://help.202-ecommerce.com/fr/ebay-pour-prestashop/installation-configuration/parametres/configurer-le-token-ebay-pour-activer-lautorisation-oauth-pour-les-apis-2022/';
 $_MODULE['<{ebay}prestashop>formparameters_de6fed9eef9a07b669c1748ff6f82ef4'] = 'Token d\'autorisation utilisateur';
 $_MODULE['<{ebay}prestashop>formparameters_b024248d9fecf8c34f629e89a9fb93b4'] = 'Paiement immédiat';
 $_MODULE['<{ebay}prestashop>formparameters_e6696de60cd347055ee8c82116f3aa9f'] = 'A n\'utilisez que si vous avez un message indiquant l\'expiration de votre jeton';
@@ -754,6 +727,11 @@ $_MODULE['<{ebay}prestashop>form_a82453f4c052dccc82774210de264634'] = 'Voulez-vo
 $_MODULE['<{ebay}prestashop>form_59e62623173611f2596e84b1526b3186'] = 'Voulez-vous vraiment inclure ce produit ?';
 $_MODULE['<{ebay}prestashop>form_d52aa0d830bf5502e06293de771b59ad'] = 'Voulez-vous vraiment supprimer ce catégorie ?';
 $_MODULE['<{ebay}prestashop>form_89ef88e2dc9e63d3b5b5f7391458df88'] = 'Synchronisation effectuée';
+$_MODULE['<{ebay}prestashop>button_4a22a61e3d4c92e0170f9b6723a97fdb'] = 'Créer le Token OAuth';
+$_MODULE['<{ebay}prestashop>button_044156be2664f29f71cc8d8482e4c8fe'] = 'Configurer l\'intégration';
+$_MODULE['<{ebay}prestashop>button_ad35fbaef240a8ec1f43e8a0d5e15099'] = 'Mettre à jour le token';
+$_MODULE['<{ebay}prestashop>button_b7a8465687652ba934a370d4f2902e59'] = 'Faites attention, vous devez définir correctement le \'Your auth accepted URL\'';
+$_MODULE['<{ebay}prestashop>button_ee106588bc1cb90d3c6f304406ca65a8'] = 'URL correcte';
 $_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Consulter nos évaluations';
 $_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Ajouter cette boutique à mes favoris';
 $_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilité';
