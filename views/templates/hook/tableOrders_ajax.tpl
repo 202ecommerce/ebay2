@@ -51,7 +51,7 @@
                         <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
                         <td>{$currency->sign}{$order.total|string_format:"%.2f"|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
+                        <td><a href="{$order.order_link}">{$order.reference_ps|escape:'htmlall':'UTF-8'}</a></td>
                         <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
                     </tr>
                 {/if}
