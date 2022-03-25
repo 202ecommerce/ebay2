@@ -41,7 +41,12 @@ class ProductPrice
     public function getPriceById($idProduct, $params = [])
     {
         $product = new Product($idProduct);
-        $idCountry = Country::getByIso($this->ebayProfile->getConfiguration(Common::COUNTRY_DEFAULT));
+        $country_iso = $this->ebayProfile->getConfiguration(Common::COUNTRY_DEFAULT);
+	    if (in_array($country_iso, array('be-nl', 'be-fr'))) {
+		    $country_iso = "be";
+	    }
+        
+        $idCountry = Country::getByIso($country_iso);
         $idCurrency = $this->ebayProfile->getConfiguration(Common::EBAY_CURRENCY);
         $specific_price_output = [];
 
