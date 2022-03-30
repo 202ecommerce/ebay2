@@ -69,6 +69,9 @@ class EbayOrder
     /** @var string*/
     protected $ioss;
 
+    /** @var int*/
+    protected $idEbayProfile;
+
     public function __construct(SimpleXMLElement $order_xml = null)
     {
         if (!$order_xml) {
@@ -129,6 +132,7 @@ class EbayOrder
             $this->product_list = $this->_getProductsFromTransactions($order_xml->TransactionArray);
         }
 
+        $this->idEbayProfile = $this->getProfileByItemId($order_xml);
         $this->write_logs = (bool) Configuration::get('EBAY_ACTIVATE_LOGS');
     }
 
@@ -370,8 +374,8 @@ class EbayOrder
     {
         $res = array();
         foreach ($this->product_list as $product) {
-            if (false) {
-                $ebay_profile = new EbayProfile((int)$product['id_ebay_profile']);
+            if ($this->getIdEbayProfile()) {
+                $ebay_profile = new EbayProfile($this->getIdEbayProfile());
             } else {
                 $sql = 'SELECT epr.`id_ebay_profile`
 				FROM `'._DB_PREFIX_.'ebay_product` epr
@@ -1376,5 +1380,24 @@ class EbayOrder
     public function getIOSS()
     {
         return $this->ioss;
+    }
+
+    public function getIdEbayProfile()
+    {
+        return (int)$this->idEbayProfile;
+    }
+
+    public function getProfileByItemId($order_xml) {
+        if (false == empty($order_xml->TransactionArray->Transaction->Item->ItemID)) {
+            $itemId = $order_xml->TransactionArray->Transaction->Item->ItemID;
+            $sql = (new DbQuery())
+                ->from('ebay_product')
+                ->select('id_ebay_profile')
+                ->where('id_product_ref = \'' . pSQL($itemId) . '\'');
+
+            return (int)Db::getInstance()->getValue($sql);
+        }
+
+        return 0;
     }
 }
