@@ -1,4 +1,7 @@
 <?php
+
+use Ebay\services\EbayLink;
+
 /**
  *  2007-2022 PrestaShop
  *
@@ -117,7 +120,8 @@ class EbayFormParametersTab extends EbayTab
             'appId' => $this->ebay_profile->getConfiguration(ProfileConf::APP_ID),
             'certId' => $this->ebay_profile->getConfiguration(ProfileConf::CERT_ID),
             'ruName' => $this->ebay_profile->getConfiguration(ProfileConf::RU_NAME),
-            'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0)
+            'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
+            'adminTokenListener' => $this->initEbayLink()->getAdminLink('AdminTokenListener'),
         );
 
         if (Tools::getValue('relogin')) {
@@ -189,5 +193,10 @@ class EbayFormParametersTab extends EbayTab
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
+    }
+
+    protected function initEbayLink()
+    {
+        return new EbayLink();
     }
 }

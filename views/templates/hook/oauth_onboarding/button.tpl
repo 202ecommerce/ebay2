@@ -47,7 +47,7 @@
 
             <div style="padding: 20px">
                 <p>{l s='Pay attention you should set right \'Your auth accepted URL\'' mod='ebay'}</p>
-                <p>{l s='Right URL' mod='ebay'}: <b>{Context::getContext()->link->getAdminLink('AdminTokenListener')}</b></p>
+                <p>{l s='Right URL' mod='ebay'}: <b>{if isset($adminTokenListener)}{$adminTokenListener nofilter}{/if}</b></p>
 
             </div>
 
