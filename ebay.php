@@ -1147,7 +1147,17 @@ class Ebay extends Module
 
             foreach ($id_shops as $id_shop) {
                 if ($this->is_multishop) {
-                    $idProfileOrder = EbayProfile::getIdProfileBySiteId($idEbaySite, $id_shop, $order->shippingService, $order->ebay_user_identifier);
+                    if ($order->getIdEbayProfile()) {
+                        $idProfileOrder = $order->getIdEbayProfile();
+                    } else {
+                        $idProfileOrder = EbayProfile::getIdProfileBySiteId(
+                            $idEbaySite,
+                            $this->context->shop->id,
+                            $order->shippingService,
+                            $order->ebay_user_identifier
+                        );
+                    }
+
                     $ebay_profile = new EbayProfile($idProfileOrder);
                     $ebayCountry = EbayCountrySpec::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
                 } else {
