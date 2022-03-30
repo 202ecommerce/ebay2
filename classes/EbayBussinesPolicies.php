@@ -90,4 +90,9 @@ class EbayBussinesPolicies
     {
         return  Db::getInstance()->update('ebay_business_policies', $data, 'id = '.(int)$id);
     }
+
+    public static function removeShippingPolicies()
+    {
+        return Db::getInstance()->delete('ebay_business_policies', 'type = "SHIPPING"');
+    }
 }
