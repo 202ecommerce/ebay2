@@ -30,6 +30,7 @@ namespace Ebay\services;
 use Configuration;
 use Context;
 use Shop;
+use Tools;
 use Validate;
 
 class EbayLink
@@ -65,7 +66,7 @@ class EbayLink
     protected function getAdminBaseLink($idShop = null, $ssl = null, $relativeProtocol = false)
     {
         if (null === $ssl) {
-            $ssl = Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+            $ssl = Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE') && Tools::usingSecureMode();
         }
 
         $shop = Context::getContext()->shop;
@@ -75,7 +76,7 @@ class EbayLink
         }
 
         if ($relativeProtocol) {
-            $base = '//' . ($ssl && $this->ssl_enable ? $shop->domain_ssl : $shop->domain);
+            $base = '//' . ($ssl ? $shop->domain_ssl : $shop->domain);
         } else {
             $base = (($ssl) ? 'https://' . $shop->domain_ssl : 'http://' . $shop->domain);
         }
