@@ -97,7 +97,12 @@
     </div>
 </div>
 
-<script src="{Context::getContext()->shop->getBaseURL(true)}modules/ebay/views/js/ButtonOnboarding.js"></script>
+{if Tools::usingSecureMode()}
+    <script src="{Tools::getShopDomainSsl(true)}{Context::getContext()->shop->getBaseURI()}modules/ebay/views/js/ButtonOnboarding.js"></script>
+{else}
+    <script src="{Tools::getShopDomain(true)}{Context::getContext()->shop->getBaseURI()}modules/ebay/views/js/ButtonOnboarding.js"></script>
+{/if}
+
 <script>
     var buttonOnboardingObj = new ButtonOnboarding({
         modal: document.getElementById('onboarding-modal'),
