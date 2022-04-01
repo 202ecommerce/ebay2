@@ -45,7 +45,7 @@ class AdminTokenListenerController extends ModuleAdminController
         $response = $getAccessToken->get($this->module->ebay_profile, $code);
 
         if ($response->isSuccess() == false) {
-            PrestaShopLogger::addLog('[ebay] Fail generate access token. ' . $response->getError());
+            PrestaShopLogger::addLog('[ebay] Fail generate access token. ' . $response->getError(), 1, null, null, null, true);
             return;
         }
 
