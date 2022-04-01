@@ -27,8 +27,6 @@
 
 /* Security*/
 
-use Ebay\services\EbayLink;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -1930,7 +1928,7 @@ class Ebay extends Module
 
     protected function initLinkService()
     {
-        return new EbayLink();
+        return new \Ebay\services\EbayLink();
     }
 
     private function shopIsAvailableFor90DaysOffer()
