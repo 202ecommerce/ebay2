@@ -78,8 +78,13 @@
 
     // Select item from user dropdown
     $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
-        var url_ebay = '{$url_ebay}';
-        window.location.href = url_ebay + '&ebay_profile=' + $(this).data('value');
+        var url_ebay = '{$url_ebay}' + '&ebay_profile=' + $(this).data('value');
+        setTimeout(
+            function(){
+                location.href = url_ebay;
+            },
+            0
+        );
     });
     {if !$syncProductByCron}
     $(document).ready(function(){
