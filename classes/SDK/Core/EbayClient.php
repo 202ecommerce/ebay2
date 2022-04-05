@@ -30,6 +30,7 @@ namespace Ebay\classes\SDK\Core;
 use Configuration;
 use Ebay\services\EbayContext;
 use EbayVendor\GuzzleHttp\Client;
+use EbayVendor\GuzzleHttp\Exception\RequestException;
 use EbayVendor\GuzzleHttp\RequestOptions;
 use EbayVendor\Psr\Http\Message\ResponseInterface;
 
@@ -121,6 +122,11 @@ class EbayClient
 
             if (is_callable([$params['error'], 'getMessage'])) {
                 $ebayApiLog->response = $params['error']->getMessage();
+            }
+
+            if ($params['error'] instanceof RequestException) {
+                $ebayApiLog->response = $params['error']->getResponse()->getBody()->getContents();
+                $params['error']->getResponse()->getBody()->rewind();
             }
 
             $ebayApiLog->save();
