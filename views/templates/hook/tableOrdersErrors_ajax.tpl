@@ -32,8 +32,7 @@
             <th class="text-center"><span>{l s='Payment' mod='ebay'}</span></th>
             <th class="text-center"><span>{l s='Email' mod='ebay'}</span></th>
             <th><span>{l s='Total' mod='ebay'}</span></th>
-            <th class="text-center"><span>{l s='ID' mod='ebay'}</span></th>
-            <th class="text-center"><span>{l s='PrestaShop Reference' mod='ebay'}</span></th>
+            <th class="text-center"><span>{l s='Ebay errors' mod='ebay'}</span></th>
             <th class="text-center"><span>{l s='Date Import' mod='ebay'}</span></th>
             {if isset($errors)}
                 <th class="text-center">{l s='Actions' mod='ebay'}</th>
@@ -50,7 +49,7 @@
                         <td>{$order.referance_marchand|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
                         <td>{$currency->sign}{$order.total|string_format:"%.2f"|escape:'htmlall':'UTF-8'}</td>
-                        <td colspan="2">{$order.error|escape:'htmlall':'UTF-8'}</td>
+                        <td>{$order.error|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
                         <td>
                             <div class="action">
