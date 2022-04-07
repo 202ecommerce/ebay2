@@ -70,7 +70,7 @@
                     {foreach from=$task_errors item="task_error"}
                         <tr>
                             <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
-                            <td>{$task_error.id_product|escape:'htmlall':'UTF-8'}</td>
+                            <td><a href="{$task_error.product_url|escape:'htmlall':'UTF-8'}">{$task_error.id_product|escape:'htmlall':'UTF-8'}</a></td>
                             <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
                             <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                             <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
