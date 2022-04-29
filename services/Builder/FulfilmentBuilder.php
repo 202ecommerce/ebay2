@@ -61,8 +61,8 @@ class FulfilmentBuilder implements BuilderInterface
         if (false == empty($this->data['description'])) {
             $fulfilmentPolicy->setDescription($this->data['description']);
         }
-
-        if (false == empty($this->data['ebay_site_id'])) {
+	
+        if ($this->data['ebay_site_id'] == 0 || false == empty($this->data['ebay_site_id'])) {
             $fulfilmentPolicy->setMarketplaceId(
                 $this->getMarketplaceId($this->data['ebay_site_id'])
             );

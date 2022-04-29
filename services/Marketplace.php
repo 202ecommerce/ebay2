@@ -40,6 +40,9 @@ class Marketplace
 
     public function getBySiteId($idSite)
     {
+    	if ($idSite == 0) {
+		return \Tools::strtoupper('ebay_us');	
+	}
         foreach (\EbaySiteMap::get() as $map) {
             if ($map['site_id'] == $idSite) {
                 return \Tools::strtoupper('ebay_' . $map['site_extension']);
