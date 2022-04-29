@@ -43,6 +43,9 @@ class Marketplace
     	if ($idSite == 0) {
 		return \Tools::strtoupper('ebay_us');	
 	}
+	if ($idSite == 3) {
+		return \Tools::strtoupper('ebay_gb');
+	}
         foreach (\EbaySiteMap::get() as $map) {
             if ($map['site_id'] == $idSite) {
                 return \Tools::strtoupper('ebay_' . $map['site_extension']);
