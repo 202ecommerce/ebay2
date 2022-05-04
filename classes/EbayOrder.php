@@ -133,6 +133,11 @@ class EbayOrder
         }
 
         $this->idEbayProfile = $this->getProfileByItemId($order_xml);
+
+        if ($this->idEbayProfile == 0) {
+            $this->idEbayProfile = $this->getProfileBySku($order_xml);
+        }
+
         $this->write_logs = (bool) Configuration::get('EBAY_ACTIVATE_LOGS');
     }
 
@@ -1387,7 +1392,7 @@ class EbayOrder
         return (int)$this->idEbayProfile;
     }
 
-    public function getProfileByItemId($order_xml) {
+    protected function getProfileByItemId($order_xml) {
         if (false == empty($order_xml->TransactionArray->Transaction->Item->ItemID)) {
             $itemId = $order_xml->TransactionArray->Transaction->Item->ItemID;
             $sql = (new DbQuery())
@@ -1396,6 +1401,26 @@ class EbayOrder
                 ->where('id_product_ref = \'' . pSQL($itemId) . '\'');
 
             return (int)Db::getInstance()->getValue($sql);
+        }
+
+        return 0;
+    }
+
+    protected function getProfileBySku($order_xml)
+    {
+        $sku = false;
+
+        if (false == empty($order_xml->TransactionArray->Transaction->Item->SKU)) {
+            $sku = $order_xml->TransactionArray->Transaction->Item->SKU;
+        }
+
+        if (false == empty($order_xml->TransactionArray->Transaction->Variation->SKU)) {
+            $sku = $order_xml->TransactionArray->Transaction->Variation->SKU;
+        }
+
+        if ($sku) {
+            list($id_product, $id_product_attribute, $id_ebay_profile) = $this->_parseSku($sku, 0, 0, 0);
+            return (int) $id_ebay_profile;
         }
 
         return 0;
