@@ -57,27 +57,27 @@ class ProductPrice
         }
 
         $price = Product::priceCalculation(
-            $this->ebayProfile->id_shop,//id_shop
-            $idProduct,//id_product
-            isset($params['id_product_attribute']) ? $params['id_product_attribute'] : null,//id_product_attribute
-            $idCountry,//id_country
-            isset($params['id_state']) ? $params['id_state'] : null,//id_state
-            isset($params['postcode']) ? $params['postcode'] : null,//postcode
-            $idCurrency,//id_currency
-            isset($params['id_group']) ? $params['id_group'] : null,//id_group
-            isset($params['quantity']) ? $params['quantity'] : 1,//quantity
-            false,//use_tax
-            isset($params['decimals']) ? $params['decimals'] : 6,//decimals
-            isset($params['only_reduc']) ? $params['only_reduc'] : false,//only_reduc
-            isset($params['use_reduc']) ? $params['use_reduc'] : true,//use_reduc
-            isset($params['with_ecotax']) ? $params['with_ecotax'] : true,//with_ecotax
-            $specific_price_output,//specific_price_output
-            isset($params['use_group_reduction']) ? $params['use_group_reduction'] : true,//use_group_reduction
-            isset($params['id_customer']) ? $params['id_customer'] : 0,//id_customer
-            isset($params['use_customer_price']) ? $params['use_customer_price'] : true,//use_customer_price
-            isset($params['id_cart']) ? $params['id_cart'] : 0,//id_cart
-            isset($params['cart_quantity']) ? $params['cart_quantity'] : 0,//cart_quantity
-            isset($params['id_customization']) ? $params['id_customization'] : null//id_customization
+            $this->ebayProfile->id_shop, //id_shop
+            $idProduct, //id_product
+            isset($params['id_product_attribute']) ? $params['id_product_attribute'] : null, //id_product_attribute
+            $idCountry, //id_country
+            isset($params['id_state']) ? $params['id_state'] : null, //id_state
+            isset($params['postcode']) ? $params['postcode'] : null, //postcode
+            $idCurrency, //id_currency
+            isset($params['id_group']) ? $params['id_group'] : null, //id_group
+            isset($params['quantity']) ? $params['quantity'] : 1, //quantity
+            false, //use_tax
+            isset($params['decimals']) ? $params['decimals'] : 6, //decimals
+            isset($params['only_reduc']) ? $params['only_reduc'] : false, //only_reduc
+            isset($params['use_reduc']) ? $params['use_reduc'] : true, //use_reduc
+            isset($params['with_ecotax']) ? $params['with_ecotax'] : true, //with_ecotax
+            $specific_price_output, //specific_price_output
+            isset($params['use_group_reduction']) ? $params['use_group_reduction'] : true, //use_group_reduction
+            isset($params['id_customer']) ? $params['id_customer'] : 0, //id_customer
+            isset($params['use_customer_price']) ? $params['use_customer_price'] : true, //use_customer_price
+            isset($params['id_cart']) ? $params['id_cart'] : 0, //id_cart
+            isset($params['cart_quantity']) ? $params['cart_quantity'] : 0, //cart_quantity
+            isset($params['id_customization']) ? $params['id_customization'] : null //id_customization
         );
 
         $taxRate = $this->productTax->getTaxRateByProduct($product);
