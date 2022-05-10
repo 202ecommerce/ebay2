@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayStat
 {
     private static $server = 'http://stats.202-ecommerce.com';
@@ -37,6 +35,7 @@ class EbayStat
 
     /**
      * EbayStat constructor.
+     *
      * @param $stats_version
      * @param EbayProfile $ebay_profile
      */
@@ -51,7 +50,7 @@ class EbayStat
         $this->stats_version = $stats_version;
         $this->id_ebay_profile = (int) $ebay_profile->id;
 
-        $this->data = array(
+        $this->data = [
             'id' => sha1($this->_getDefaultShopUrl()),
             'profile' => $ebay_profile->id,
             'ebay_username' => sha1($ebay_profile->ebay_user_identifier),
@@ -66,7 +65,7 @@ class EbayStat
             'nb_national_shipping_services' => EbayShipping::getNbNationalShippings($ebay_profile->id),
             'nb_international_shipping_services' => EbayShipping::getNbInternationalShippings($ebay_profile->id),
             'date_add' => date('Y-m-d H:i:s'),
-            'Configuration' => EbayConfiguration::getAll($ebay_profile->id, array('EBAY_PAYPAL_EMAIL')),
+            'Configuration' => EbayConfiguration::getAll($ebay_profile->id, ['EBAY_PAYPAL_EMAIL']),
             'impact_price' => EbayCategoryConfiguration::getImpactPrices($ebay_profile->id),
             'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
             'ps_version' => _PS_VERSION_,
@@ -75,13 +74,14 @@ class EbayStat
             'ps_country' => Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')),
             'business_policies' => EbayConfiguration::get($ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
             'OutOfStock' => EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK'),
-        );
+        ];
         $this->date_add = date('Y-m-d H:i:s');
     }
 
     private function _getDefaultShopUrl()
     {
         $shop = new Shop(Configuration::get('PS_SHOP_DEFAULT'));
+
         return $shop->getBaseURL();
     }
 
@@ -92,60 +92,60 @@ class EbayStat
         }
 
         $sql = 'SELECT count(*)
-						FROM `'._DB_PREFIX_.'ebay_stat`
-						WHERE `id_ebay_profile` = '.(int) $this->id_ebay_profile;
+						FROM `' . _DB_PREFIX_ . 'ebay_stat`
+						WHERE `id_ebay_profile` = ' . (int) $this->id_ebay_profile;
         $nb_rows = Db::getInstance()->getValue($sql);
         if ($nb_rows >= 2) {
             return false;
         }
 
-        $data = array(
+        $data = [
             'id_ebay_profile' => (int) $this->id_ebay_profile,
             'version' => pSQL($this->stats_version),
             'data' => pSQL(Tools::jsonEncode($this->data)),
             'date_add' => pSQL($this->date_add),
-        );
+        ];
 
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_stat', $data, 'INSERT');
+        $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_stat', $data, 'INSERT');
     }
 
     private static function _computeSignature($version, $data, $date_add)
     {
-        return sha1(self::$key.$version.$data.$date_add);
+        return sha1(self::$key . $version . $data . $date_add);
     }
 
     public static function send()
     {
         $sql = 'SELECT `id_ebay_stat`, `tries`, `version`, `data`, `date_add`
-						FROM '._DB_PREFIX_.'ebay_stat';
+						FROM ' . _DB_PREFIX_ . 'ebay_stat';
         $res = Db::getInstance()->executeS($sql);
         foreach ($res as $row) {
-            $data = array(
+            $data = [
                 'version' => $row['version'],
                 'data' => Tools::stripslashes($row['data']),
                 'date' => $row['date_add'],
                 'sig' => EbayStat::_computeSignature($row['version'], Tools::stripslashes($row['data']), $row['date_add']),
-            );
-            $opts = array('http' => array(
+            ];
+            $opts = ['http' => [
                 'method' => 'POST',
                 'header' => 'Content-type: application/x-www-form-urlencoded',
                 'content' => http_build_query($data),
-            ),
-            );
+            ],
+            ];
             $context = stream_context_create($opts);
-            $ret = Tools::file_get_contents(self::$server.'/stats.php', false, $context);
+            $ret = Tools::file_get_contents(self::$server . '/stats.php', false, $context);
 
             if (($ret == 'OK') || ($row['tries'] > 0)) {
                 // if upload is OK or if it's the second try already
-                $sql = 'DELETE FROM `'._DB_PREFIX_.'ebay_stat`
-										WHERE `id_ebay_stat` = '.(int) $row['id_ebay_stat'];
+                $sql = 'DELETE FROM `' . _DB_PREFIX_ . 'ebay_stat`
+										WHERE `id_ebay_stat` = ' . (int) $row['id_ebay_stat'];
             } else {
-                $sql = 'UPDATE `'._DB_PREFIX_.'ebay_stat`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'ebay_stat`
 										SET `tries` = `tries` + 1
-										WHERE `id_ebay_stat` = '.(int) $row['id_ebay_stat'];
+										WHERE `id_ebay_stat` = ' . (int) $row['id_ebay_stat'];
             }
             Db::getInstance()->execute($sql);
         }

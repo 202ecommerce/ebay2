@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class Mail extends MailCore
 {
     public static function send(
@@ -57,6 +55,7 @@ class Mail extends MailCore
                 return true;
             }
         }
+
         return parent::send($idLang, $template, $subject, $templateVars, $to, $toName, $from, $fromName, $fileAttachment, $mode_smtp, $templatePath, $die, $idShop, $bcc, $replyTo, $replyToName);
     }
 }

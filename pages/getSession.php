@@ -22,18 +22,16 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-include dirname(__FILE__).'/../../../config/config.inc.php';
+include dirname(__FILE__) . '/../../../config/config.inc.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
-    die('ERROR: Invalid Token');
+    exit('ERROR: Invalid Token');
 }
 
-include dirname(__FILE__).'/../ebay.php';
+include dirname(__FILE__) . '/../ebay.php';
 $ebay = new Ebay();
 $ebay_request = new EbayRequest();
 $session_id = $ebay->login();
 
-Tools::redirect($ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$session_id);
+Tools::redirect($ebay_request->getLoginUrl() . '?SignIn&runame=' . $ebay_request->runame . '&SessID=' . $session_id);
 exit;

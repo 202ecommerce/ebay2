@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayBestOffers extends ObjectModel
 {
     public $id_ebay_profile;
@@ -60,24 +58,24 @@ class EbayBestOffers extends ObjectModel
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)
     {
-        self::$definition = array(
+        self::$definition = [
             'table' => 'ebay_best_offers',
             'primary' => 'id_best_offer',
-            'fields' => array(
-                'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                'itemid' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                'product_title' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                'best_offer_ebay_id' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-                'id_product_attribute' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                'seller_message' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                'status' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                'expirationTime' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-                'price' => array('type' => self::TYPE_FLOAT, 'validate' => 'isFloat'),
-                'quantity' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-            ),
-        );
+            'fields' => [
+                'id_ebay_profile' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+                'itemid' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                'product_title' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                'best_offer_ebay_id' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                'id_product' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+                'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
+                'id_product_attribute' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+                'seller_message' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                'status' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                'expirationTime' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
+                'price' => ['type' => self::TYPE_FLOAT, 'validate' => 'isFloat'],
+                'quantity' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+            ],
+        ];
 
         $this->date_add = date('Y-m-d H:i:s');
 
@@ -87,27 +85,27 @@ class EbayBestOffers extends ObjectModel
     public static function get($offset, $limit)
     {
         return Db::getInstance()->executeS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_best_offers`
+			FROM `' . _DB_PREFIX_ . 'ebay_best_offers`
 			ORDER BY `id_best_offer` DESC
-			LIMIT '.(int) $offset.', '.(int) $limit);
+			LIMIT ' . (int) $offset . ', ' . (int) $limit);
     }
 
     public static function count()
     {
         return Db::getInstance()->getValue('SELECT count(*)
-			FROM `'._DB_PREFIX_.'ebay_best_offers`');
+			FROM `' . _DB_PREFIX_ . 'ebay_best_offers`');
     }
 
     public static function clear()
     {
-        return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_best_offers');
+        return Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_best_offers');
     }
 
     public static function getOffersForProfile($id_ebay_profile)
     {
         return Db::getInstance()->executeS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_best_offers`
-			WHERE id_ebay_profile = '.(int) $id_ebay_profile.'
+			FROM `' . _DB_PREFIX_ . 'ebay_best_offers`
+			WHERE id_ebay_profile = ' . (int) $id_ebay_profile . '
 			ORDER BY `id_best_offer` DESC');
     }
 
@@ -115,30 +113,31 @@ class EbayBestOffers extends ObjectModel
     {
         if ($page_current && $length) {
             $limit = (int) $length;
-            $offset = $limit * ( (int) $page_current - 1 );
-            $query = "SELECT * FROM "._DB_PREFIX_."ebay_best_offers 
-                       WHERE id_ebay_profile = ".(int) $id_ebay_profile;
+            $offset = $limit * ((int) $page_current - 1);
+            $query = 'SELECT * FROM ' . _DB_PREFIX_ . 'ebay_best_offers 
+                       WHERE id_ebay_profile = ' . (int) $id_ebay_profile;
             if ($search['id_product']) {
-                $query .= " AND id_product LIKE '%".(int) $search['id_product']."%'";
+                $query .= " AND id_product LIKE '%" . (int) $search['id_product'] . "%'";
             }
             if ($search['id_product_attribute']) {
-                $query .= " AND id_product_attribute LIKE '%".(int) $search['id_product_attribute']."%'";
+                $query .= " AND id_product_attribute LIKE '%" . (int) $search['id_product_attribute'] . "%'";
             }
             if ($search['status']) {
-                $query .= " AND status LIKE '%".pSQL($search['status'])."%'";
+                $query .= " AND status LIKE '%" . pSQL($search['status']) . "%'";
             }
             if ($search['date']) {
-                $query .= " AND date_add LIKE '%".pSQL($search['date'])."%'";
+                $query .= " AND date_add LIKE '%" . pSQL($search['date']) . "%'";
             }
             if ($search['itemid']) {
-                $query .= " AND itemid LIKE '%".pSQL($search['itemid'])."%'";
+                $query .= " AND itemid LIKE '%" . pSQL($search['itemid']) . "%'";
             }
 
-            $query .=  " ORDER BY `date_add` LIMIT ".pSQL($limit)."  OFFSET ".(int) $offset;
+            $query .= ' ORDER BY `date_add` LIMIT ' . pSQL($limit) . '  OFFSET ' . (int) $offset;
 
             return DB::getInstance()->ExecuteS($query);
         } else {
-            $sql_select = "SELECT * FROM `"._DB_PREFIX_."ebay_best_offers` WHERE `id_ebay_profile` = ".pSQL($id_ebay_profile)." ORDER BY `date_add`";
+            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_best_offers` WHERE `id_ebay_profile` = ' . pSQL($id_ebay_profile) . ' ORDER BY `date_add`';
+
             return DB::getInstance()->executeS($sql_select);
         }
     }

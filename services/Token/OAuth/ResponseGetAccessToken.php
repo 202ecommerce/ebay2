@@ -22,24 +22,22 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services\Token\OAuth;
 
-
 class ResponseGetAccessToken
 {
-    /** @var bool*/
+    /** @var bool */
     protected $success;
 
-    /** @var string*/
+    /** @var string */
     protected $error;
 
-    /** @var string*/
+    /** @var string */
     protected $accessToken;
 
-    /** @var string*/
+    /** @var string */
     protected $refreshToken;
 
     /**
@@ -47,16 +45,18 @@ class ResponseGetAccessToken
      */
     public function isSuccess()
     {
-        return (bool)$this->success;
+        return (bool) $this->success;
     }
 
     /**
      * @param bool $success
+     *
      * @return self
      */
     public function setSuccess($success)
     {
-        $this->success = (bool)$success;
+        $this->success = (bool) $success;
+
         return $this;
     }
 
@@ -65,16 +65,18 @@ class ResponseGetAccessToken
      */
     public function getError()
     {
-        return (string)$this->error;
+        return (string) $this->error;
     }
 
     /**
      * @param string $error
+     *
      * @return self
      */
     public function setError($error)
     {
-        $this->error = (string)$error;
+        $this->error = (string) $error;
+
         return $this;
     }
 
@@ -83,16 +85,18 @@ class ResponseGetAccessToken
      */
     public function getAccessToken()
     {
-        return (string)$this->accessToken;
+        return (string) $this->accessToken;
     }
 
     /**
      * @param string $accessToken
+     *
      * @return self
      */
     public function setAccessToken($accessToken)
     {
-        $this->accessToken = (string)$accessToken;
+        $this->accessToken = (string) $accessToken;
+
         return $this;
     }
 
@@ -101,16 +105,18 @@ class ResponseGetAccessToken
      */
     public function getRefreshToken()
     {
-        return (string)$this->refreshToken;
+        return (string) $this->refreshToken;
     }
 
     /**
      * @param string $refreshToken
+     *
      * @return self
      */
     public function setRefreshToken($refreshToken)
     {
-        $this->refreshToken = (string)$refreshToken;
+        $this->refreshToken = (string) $refreshToken;
+
         return $this;
     }
 }

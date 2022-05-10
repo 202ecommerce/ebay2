@@ -22,20 +22,21 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
-    require_once dirname(__FILE__).'/EbayRequest.php';
+if (file_exists(dirname(__FILE__) . '/EbayRequest.php')) {
+    require_once dirname(__FILE__) . '/EbayRequest.php';
 }
 
 class EbayCategoryCondition
 {
     /**
      * Parse the data returned by the API for the eBay Category Conditions
-     * @param int  $id_ebay_profile
+     *
+     * @param int $id_ebay_profile
      * @param bool $id_category
+     *
      * @return bool
+     *
      * @throws PrestaShopDatabaseException
      */
     public static function loadCategoryConditions($id_ebay_profile, $id_category = false)
@@ -43,12 +44,12 @@ class EbayCategoryCondition
         $request = new EbayRequest($id_ebay_profile);
 
         if ($id_category) {
-            $ebay_category_ids = array($id_category);
+            $ebay_category_ids = [$id_category];
         } else {
-            $ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int)$id_ebay_profile);
+            $ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int) $id_ebay_profile);
         }
 
-        $conditions = array();
+        $conditions = [];
 
         foreach ($ebay_category_ids as $category_id) {
             $xml_data = $request->getCategoryFeatures($category_id);
@@ -59,8 +60,8 @@ class EbayCategoryCondition
                 EbayCategory::setKtypeConfiguration($category_id, $ktype_value, $id_ebay_profile);
                 $ebay_profile = new EbayProfile($id_ebay_profile);
                 if (EbayCategory::getKtype($category_id, $ebay_profile->ebay_site_id) == 1) {
-                    $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`)
-						VALUES ('.(int)$category_id.', \'K-type\', 1, 0, 0, '.(int)$ebay_profile->ebay_site_id.')
+                    $sql = 'INSERT INTO `' . _DB_PREFIX_ . 'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`)
+						VALUES (' . (int) $category_id . ', \'K-type\', 1, 0, 0, ' . (int) $ebay_profile->ebay_site_id . ')
 						ON DUPLICATE KEY UPDATE `required` = 1, `can_variation` = 0, `selection_mode` = 0';
                     Db::getInstance()->execute($sql);
                 }
@@ -84,17 +85,16 @@ class EbayCategoryCondition
 
             if ($xml_conditions) {
                 foreach ($xml_conditions as $xml_condition) {
-                    $conditions[] = array(
-                        'id_ebay_profile'  => (int)$id_ebay_profile,
-                        'id_category_ref'  => (int)$category_id,
-                        'id_condition_ref' => (int)$xml_condition->ID,
-                        'name'             => pSQL((string)$xml_condition->DisplayName),
-                    );
+                    $conditions[] = [
+                        'id_ebay_profile' => (int) $id_ebay_profile,
+                        'id_category_ref' => (int) $category_id,
+                        'id_condition_ref' => (int) $xml_condition->ID,
+                        'name' => pSQL((string) $xml_condition->DisplayName),
+                    ];
                 }
             }
 
-            //
-            Db::getInstance()->ExecuteS("SELECT 1");
+            Db::getInstance()->ExecuteS('SELECT 1');
         }
 
         // security to make sure there are values to enter befor truncating the table
@@ -105,17 +105,15 @@ class EbayCategoryCondition
             $dbEbay->setDb($db);
 
             if (!$id_category) {
-                $db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition
-				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+                $db->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_category_condition
+				WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile);
             } else {
-                $db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition
-				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
-				AND `id_category_ref` = '.(int)$id_category);
+                $db->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_category_condition
+				WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
+				AND `id_category_ref` = ' . (int) $id_category);
             }
 
-
             $db->insert('ebay_category_condition', $conditions);
-
 
             return true;
         }

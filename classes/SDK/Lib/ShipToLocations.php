@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,10 +30,10 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class ShipToLocations extends ResourceModel
 {
-    /** @var RegionList*/
+    /** @var RegionList */
     protected $regionIncluded;
 
-    /** @var RegionList*/
+    /** @var RegionList */
     protected $regionExcluded;
 
     /**
@@ -51,11 +50,13 @@ class ShipToLocations extends ResourceModel
 
     /**
      * @param RegionList $regionIncluded
+     *
      * @return ShipToLocations
      */
     public function setRegionIncluded(RegionList $regionIncluded)
     {
         $this->regionIncluded = $regionIncluded;
+
         return $this;
     }
 
@@ -73,11 +74,13 @@ class ShipToLocations extends ResourceModel
 
     /**
      * @param RegionList $regionExcluded
+     *
      * @return ShipToLocations
      */
     public function setRegionExcluded($regionExcluded)
     {
         $this->regionExcluded = $regionExcluded;
+
         return $this;
     }
 
@@ -102,7 +105,7 @@ class ShipToLocations extends ResourceModel
     {
         return [
             'regionIncluded' => $this->getRegionIncluded()->toArray(),
-            'regionExcluded' => $this->getRegionExcluded()->toArray()
+            'regionExcluded' => $this->getRegionExcluded()->toArray(),
         ];
     }
 }

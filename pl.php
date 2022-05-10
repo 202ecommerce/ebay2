@@ -22,11 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Z łatwością eksportuj produkty z PrestaShop do eBay, największej platformy handlowej, aby zdobyć nowych klientów i zwiększyć sprzedaż.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Moduł eBay jest obecnie dostępny dla serwisów eBay.fr, eBay.it, eBay.co.uk, eBay.pl, eBay.nl i eBay.es';
@@ -159,7 +157,7 @@ $_MODULE['<{ebay}prestashop>form_3d9742de1b9742bd8031ec3f8334da22'] = 'Powiąż 
 $_MODULE['<{ebay}prestashop>form_c9e6616dc1bb37bf1ab3d56156288a8f'] = 'Skonfiguruj moduł eBay';
 $_MODULE['<{ebay}prestashop>form_5c79609876d64e33ff348736ba605867'] = 'Ouvrez une Boutique eBay gratuitement';
 $_MODULE['<{ebay}prestashop>form_f7781230f034f74844124eb49c04e684'] = 'Lancez ou boostez votre activité sur eBay, en profitant de';
-$_MODULE['<{ebay}prestashop>form_1c1d90087dfad5f38c4135ac25197e6d'] = '90 jours* d\'abonnement gratuits ';
+$_MODULE['<{ebay}prestashop>form_1c1d90087dfad5f38c4135ac25197e6d'] = '90 jours* d\'abonnement gratuits ';
 $_MODULE['<{ebay}prestashop>form_de02798502e46104ef6d3627c34721af'] = 'à la Boutique A la Une.';
 $_MODULE['<{ebay}prestashop>form_6b2535c9030827712b8315f4b33afaad'] = 'http://portal.ebay.fr/ouvrezuneboutiquegratuitement';
 $_MODULE['<{ebay}prestashop>form_7d5a27f1b53dc519eac7bb288f664892'] = 'Plus d\'infos';

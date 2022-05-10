@@ -22,16 +22,14 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayAlert
 {
     private $ebay_profile;
     private $ebay;
-    private $errors = array();
-    private $warnings = array();
-    private $infos = array();
+    private $errors = [];
+    private $warnings = [];
+    private $infos = [];
 
     private $alerts;
 
@@ -51,12 +49,14 @@ class EbayAlert
 
         return $this->alerts;
     }
+
     private function reset()
     {
-        $this->errors = array();
-        $this->warnings = array();
-        $this->infos = array();
+        $this->errors = [];
+        $this->warnings = [];
+        $this->infos = [];
     }
+
     private function build()
     {
         $this->alerts = array_merge($this->errors, $this->warnings, $this->infos);
@@ -68,37 +68,35 @@ class EbayAlert
         if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') > 0) {
             $link = new EbayCountrySpec();
             $link->getPictureUrl();
-            return array(
+
+            return [
                 'type' => 'warning',
                 'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify this link'),
                 'link_warn' => $link->getPictureUrl(),
-                'kb' => array(
+                'kb' => [
                     'errorcode' => 'PICTURES_NUMBER_ABOVE_ZERO',
                     'lang' => $context->language->iso_code,
                     'module_version' => $this->ebay->version,
                     'prestashop_version' => _PS_VERSION_,
-                ),
-            );
+                ],
+            ];
         }
 
         if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') >= 12) {
-            return array(
+            return [
                 'type' => 'error',
                 'message' => $this->ebay->l('You can\'t send more than 12 pictures per product. Please configure in Advanced Settings'),
-                'kb' => array(
+                'kb' => [
                     'errorcode' => 'PICTURES_NUMBER_ABOVE_TWELVE',
                     'lang' => $context->language->iso_code,
                     'module_version' => $this->ebay->version,
                     'prestashop_version' => _PS_VERSION_,
-                ),
-            );
+                ],
+            ];
         }
 
         return false;
     }
-
-
-
 
     public function sendDailyMail()
     {
@@ -110,7 +108,7 @@ class EbayAlert
             return;
         }
 
-        $template_vars = array('{content}' => $this->formatEmail());
+        $template_vars = ['{content}' => $this->formatEmail()];
 
         Mail::Send(
             (int) Configuration::get('PS_LANG_DEFAULT'),
@@ -123,15 +121,14 @@ class EbayAlert
             (string) Configuration::get('PS_SHOP_NAME'),
             null,
             null,
-            dirname(__FILE__).'/../views/templates/mails/'
+            dirname(__FILE__) . '/../views/templates/mails/'
         );
         $this->reset();
     }
 
     public function formatEmail()
     {
-
-        $templates_vars = array();
+        $templates_vars = [];
 
         $templates_vars['errors'] = (!empty($this->errors)) ? $this->errors : '';
         $templates_vars['warnings'] = (!empty($this->warnings)) ? $this->warnings : '';
@@ -144,7 +141,7 @@ class EbayAlert
         $smarty = Context::getContext()->smarty;
         $smarty->assign($templates_vars);
 
-        return $this->ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/alert_mail.tpl');
+        return $this->ebay->display(realpath(dirname(__FILE__) . '/../'), '/views/templates/hook/alert_mail.tpl');
     }
 
     public function checkUrlDomain()
@@ -153,8 +150,7 @@ class EbayAlert
         $shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
 
         $wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
-        $domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain.DIRECTORY_SEPARATOR.$shop->physical_uri;
-
+        $domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain . DIRECTORY_SEPARATOR . $shop->physical_uri;
 
         if ($wrong_domain) {
             // if (version_compare(_PS_VERSION_, '1.5', '>'))
@@ -165,62 +161,60 @@ class EbayAlert
 
             $context = Context::getContext();
             $protocol = Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http';
-            $this->errors[] = array(
+            $this->errors[] = [
                 'type' => 'error',
                 'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL than set up, this module will not work properly. Please log in using @link@this url.@/link@'),
-                'link_warn' => $protocol.'://'.$domain.DIRECTORY_SEPARATOR.basename(_PS_ADMIN_DIR_).DIRECTORY_SEPARATOR,
-                'kb' => array(
+                'link_warn' => $protocol . '://' . $domain . DIRECTORY_SEPARATOR . basename(_PS_ADMIN_DIR_) . DIRECTORY_SEPARATOR,
+                'kb' => [
                     'errorcode' => 'HELP-ALERT-DEFAULT-PS-URL',
                     'lang' => $context->language->iso_code,
                     'module_version' => $this->ebay->version,
                     'prestashop_version' => _PS_VERSION_,
-                ),
-            );
+                ],
+            ];
         }
     }
 
-    private function _getUrl($extra_vars = array())
+    private function _getUrl($extra_vars = [])
     {
-        $url_vars = array(
+        $url_vars = [
             'configure' => Tools::getValue('configure'),
             'token' => Tools::getAdminTokenLite($extra_vars['controller']),
             'tab_module' => Tools::getValue('tab_module'),
             'module_name' => Tools::getValue('module_name'),
-        );
+        ];
 
-        return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
+        return 'index.php?' . http_build_query(array_merge($url_vars, $extra_vars));
     }
 
     private function checkCronTask()
     {
-
-
         // PRODUCTS
         if ((int) Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1) {
             if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS')) {
-                $warning_date = strtotime(date('Y-m-d').' - 2 days');
+                $warning_date = strtotime(date('Y-m-d') . ' - 2 days');
 
                 $date = date('Y-m-d', strtotime($last_sync_datetime));
                 $time = date('H:i:s', strtotime($last_sync_datetime));
 
-                $msg = $this->ebay->l('Last product synchronization has been done the', get_class($this)).' '.$date.' '.$this->ebay->l('at', get_class($this)).' '.$time;
+                $msg = $this->ebay->l('Last product synchronization has been done the', get_class($this)) . ' ' . $date . ' ' . $this->ebay->l('at', get_class($this)) . ' ' . $time;
 
                 if (strtotime($last_sync_datetime) < $warning_date) {
-                    $this->warnings[] = array(
+                    $this->warnings[] = [
                         'type' => 'warning',
                         'message' => $msg,
-                    );
+                    ];
                 } else {
-                    $this->infos[] = array(
+                    $this->infos[] = [
                         'type' => 'info',
                         'message' => $msg,
-                    );
+                    ];
                 }
             } else {
-                $this->errors[] = array(
+                $this->errors[] = [
                     'type' => 'error',
                     'message' => $this->ebay->l('The product cron job has never been run.', get_class($this)),
-                );
+                ];
             }
         }
 
@@ -237,16 +231,16 @@ class EbayAlert
                 $interval = round(($datetime2->format('U') - $datetime->format('U')) / (60 * 60 * 24));
 
                 if ($interval >= 1) {
-                    $this->errors[] = array(
+                    $this->errors[] = [
                         'type' => 'error',
-                        'message' => $this->ebay->l('Last order synchronization has been done the ', get_class($this)).$date.$this->ebay->l(' at ', get_class($this)).$time,
-                    );
+                        'message' => $this->ebay->l('Last order synchronization has been done the ', get_class($this)) . $date . $this->ebay->l(' at ', get_class($this)) . $time,
+                    ];
                 }
             } else {
-                $this->errors[] = array(
+                $this->errors[] = [
                     'type' => 'error',
                     'message' => $this->ebay->l('Order cron job has never been run.', get_class($this)),
-                );
+                ];
             }
         }
 
@@ -263,16 +257,16 @@ class EbayAlert
                 $interval = round(($datetime2->format('U') - $datetime->format('U')) / (60 * 60 * 24));
 
                 if ($interval >= 1) {
-                    $this->errors[] = array(
+                    $this->errors[] = [
                         'type' => 'error',
-                        'message' => $this->ebay->l('Last order returns synchronization has been done the ', get_class($this)).$date.$this->ebay->l('at ', get_class($this)).$time,
-                    );
+                        'message' => $this->ebay->l('Last order returns synchronization has been done the ', get_class($this)) . $date . $this->ebay->l('at ', get_class($this)) . $time,
+                    ];
                 }
             } else {
-                $this->errors[] = array(
+                $this->errors[] = [
                     'type' => 'error',
                     'message' => $this->ebay->l('Order return Cron Job has never been done', get_class($this)),
-                );
+                ];
             }
         }
     }

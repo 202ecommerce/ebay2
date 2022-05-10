@@ -22,26 +22,24 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayDeliveryTimeOptions
 {
     public static function getAll()
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
+			FROM ' . _DB_PREFIX_ . 'ebay_delivery_time_options');
     }
 
     public static function getTotal()
     {
         return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
+			FROM ' . _DB_PREFIX_ . 'ebay_delivery_time_options');
     }
 
     public static function insert($all_data)
     {
-        $to_insert = array();
+        $to_insert = [];
         if (is_array($all_data) && count($all_data)) {
             foreach ($all_data as $key => $data) {
                 $to_insert[bqSQL($key)] = pSQL($data);
@@ -51,7 +49,7 @@ class EbayDeliveryTimeOptions
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_delivery_time_options', $to_insert, 'INSERT');
+        $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_delivery_time_options', $to_insert, 'INSERT');
     }
 
     public static function getDeliveryTimeOptions()

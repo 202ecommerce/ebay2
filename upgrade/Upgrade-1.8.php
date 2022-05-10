@@ -22,18 +22,19 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * @param Ebay $module
+ *
  * @return bool
+ *
  * @throws PrestaShopDatabaseException
  */
 function upgrade_module_1_8($module)
 {
-    $sql= array();
-    include dirname(__FILE__).'/sql/sql-upgrade-1-8.php';
+    $sql = [];
+    include dirname(__FILE__) . '/sql/sql-upgrade-1-8.php';
 
     if (!empty($sql) && is_array($sql)) {
         foreach ($sql as $request) {
@@ -74,18 +75,18 @@ function upgrade_module_1_8($module)
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
         // update ebay_category
-        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category', array('id_country' => $ebay_site_id), 'UPDATE');
+        $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_category', ['id_country' => $ebay_site_id], 'UPDATE');
 
         if ($ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED')) {
             $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
         }
 
         // update ebay_category_specific
-        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_category_specific', array('ebay_site_id' => $ebay_site_id), 'UPDATE');
+        $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_category_specific', ['ebay_site_id' => $ebay_site_id], 'UPDATE');
 
         // update ebay_product_configuration
         $ebay_profile = EbayProfile::getCurrent();
-        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_product_configuration', array('id_ebay_profile' => $ebay_profile->id), 'UPDATE');
+        $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_product_configuration', ['id_ebay_profile' => $ebay_profile->id], 'UPDATE');
     }
 
     return true;

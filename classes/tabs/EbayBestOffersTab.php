@@ -22,54 +22,50 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayBestOffersTab extends EbayTab
 {
     public function getContent($id_ebay_profile)
     {
-
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '999',
             'section' => 'offers',
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
 
         $url = $this->_getUrl($url_vars);
         $offers = EbayBestOffers::getOffersForProfile($id_ebay_profile);
-        $fields_list = array(
-
-            'id_product' => array(
+        $fields_list = [
+            'id_product' => [
                 'title' => 'Id product',
-                'type'  => 'text',
-            ),
-            'product_title' => array(
+                'type' => 'text',
+            ],
+            'product_title' => [
                 'title' => 'Product Name',
-                'type'  => 'text',
-            ),
-            'seller_message' => array(
+                'type' => 'text',
+            ],
+            'seller_message' => [
                 'title' => 'Message',
-                'type'  => 'text',
-            ),
-            'price'     => array(
+                'type' => 'text',
+            ],
+            'price' => [
                 'title' => 'Price',
-                'type'  => 'text',
-            ),
-            'quantity'     => array(
+                'type' => 'text',
+            ],
+            'quantity' => [
                 'title' => 'Quantity',
-                'type'  => 'text',
-            ),
-            'status'     => array(
+                'type' => 'text',
+            ],
+            'status' => [
                 'title' => 'Status',
-                'type'  => 'text',
-            ),
-        );
+                'type' => 'text',
+            ],
+        ];
         $helper = new HelperList();
         $helper->shopLinkType = '';
         $helper->simple_header = true;
-        $helper->actions = array();
+        $helper->actions = [];
         $helper->identifier = 'id_best_offer';
         $helper->show_toolbar = false;
         $helper->title = 'Best Offers';
@@ -77,11 +73,10 @@ class EbayBestOffersTab extends EbayTab
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->no_link = true;
 
-
         //$currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&totlookbook_edit='.Tools::getValue('totlookbook_edit', 'global');
         $helper->currentIndex = $_SERVER['REQUEST_URI'];
 
-        $html = "";
+        $html = '';
         $html .= $helper->generateList($offers, $fields_list);
 
         return $html;
@@ -91,6 +86,6 @@ class EbayBestOffersTab extends EbayTab
     {
         $product = new Product($id_product, false, $this->context->language->id);
 
-        return $product->name .'('.$id_product.')';
+        return $product->name . '(' . $id_product . ')';
     }
 }

@@ -22,20 +22,18 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayListingsTab extends EbayTab
 {
-
     public function getContent($id_ebay_profile)
     {
-        $template_vars = array(
+        $template_vars = [
             'id_employee' => $this->context->employee->id,
             'id_ebay_profile' => $id_ebay_profile,
-            'admin_path'      => basename(_PS_ADMIN_DIR_),
+            'admin_path' => basename(_PS_ADMIN_DIR_),
             'ebayListingsController' => $this->context->link->getAdminLink('AdminEbayListings'),
-        );
+        ];
+
         return $this->display('ebay_listings.tpl', $template_vars);
     }
 }

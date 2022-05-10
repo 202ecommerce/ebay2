@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class ProductTax
 {
     protected $ebayProfile;
@@ -38,6 +36,7 @@ class ProductTax
 
     /**
      * @param Product $product
+     *
      * @return float
      */
     public function getTaxRateByProduct(Product $product)

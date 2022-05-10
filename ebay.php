@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /* Security*/
@@ -35,7 +34,7 @@ require_once _PS_MODULE_DIR_ . 'ebay/config_dev.php';
 require_once _PS_MODULE_DIR_ . 'ebay/vendor/autoload.php';
 
 /* Loading eBay Class Request*/
-$classes_to_load = array(
+$classes_to_load = [
     'EbayRequest',
     'EbayCategory',
     'EbayCategoryConfiguration',
@@ -111,13 +110,12 @@ $classes_to_load = array(
     'Const/Common',
     '../services/ProductPrice',
     '../services/ProductTax',
-    'TlsValidator'
-);
-
+    'TlsValidator',
+];
 
 foreach ($classes_to_load as $classname) {
-    if (file_exists(dirname(__FILE__).'/classes/'.$classname.'.php')) {
-        require_once dirname(__FILE__).'/classes/'.$classname.'.php';
+    if (file_exists(dirname(__FILE__) . '/classes/' . $classname . '.php')) {
+        require_once dirname(__FILE__) . '/classes/' . $classname . '.php';
     }
 }
 
@@ -179,7 +177,7 @@ class Ebay extends Module
         parent::__construct();
 
         /** Backward compatibility */
-        require _PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php';
+        require _PS_MODULE_DIR_ . $this->name . '/backward_compatibility/backward.php';
 
         $this->displayName = $this->l('eBay');
         $this->description = $this->l('Easily export your products from PrestaShop to eBay, the biggest market place, to acquire new customers and realize more sales.');
@@ -200,24 +198,24 @@ class Ebay extends Module
         }
 
         // For 1.4.3 and less compatibility
-        $update_config = array(
-            'PS_OS_CHEQUE'      => 1,
-            'PS_OS_PAYMENT'     => 2,
+        $update_config = [
+            'PS_OS_CHEQUE' => 1,
+            'PS_OS_PAYMENT' => 2,
             'PS_OS_PREPARATION' => 3,
-            'PS_OS_SHIPPING'    => 4,
-            'PS_OS_DELIVERED'   => 5,
-            'PS_OS_CANCELED'    => 6,
-            'PS_OS_REFUND'      => 7,
-            'PS_OS_ERROR'       => 8,
-            'PS_OS_OUTOFSTOCK'  => 9,
-            'PS_OS_BANKWIRE'    => 10,
-            'PS_OS_PAYPAL'      => 11,
-            'PS_OS_WS_PAYMENT'  => 12,
-        );
+            'PS_OS_SHIPPING' => 4,
+            'PS_OS_DELIVERED' => 5,
+            'PS_OS_CANCELED' => 6,
+            'PS_OS_REFUND' => 7,
+            'PS_OS_ERROR' => 8,
+            'PS_OS_OUTOFSTOCK' => 9,
+            'PS_OS_BANKWIRE' => 10,
+            'PS_OS_PAYPAL' => 11,
+            'PS_OS_WS_PAYMENT' => 12,
+        ];
 
         foreach ($update_config as $key => $value) {
             if (!Configuration::get($key)) {
-                $const_name = '_'.$key.'_';
+                $const_name = '_' . $key . '_';
 
                 if ((int) constant($const_name)) {
                     $this->setConfiguration($key, constant($const_name));
@@ -265,12 +263,14 @@ class Ebay extends Module
 
                     if (!$this->ebay_country->checkCountry()) {
                         $this->warning = $this->l('The eBay module currently works for eBay.fr, eBay.it, eBay.co.uk, eBay.pl, eBay.nl and eBay.es');
+
                         return false;
                     }
                 } else {
                     $iso_country = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
                     $iso_lang = Tools::strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
                     $this->ebay_country = EbayCountrySpec::getInstanceByCountryAndLang($iso_country, $iso_lang);
+
                     return false;
                 }
             }
@@ -282,7 +282,6 @@ class Ebay extends Module
     /**
      * Test if the different php extensions are loaded
      * and update the warning var
-     *
      */
     private function __checkExtensionsLoading()
     {
@@ -300,13 +299,13 @@ class Ebay extends Module
     /**
      * Install module
      *
-     * @return boolean
+     * @return bool
      */
     public function install()
     {
-        $sql=array();
+        $sql = [];
         // Install SQL
-        include dirname(__FILE__).'/sql/sql-install.php';
+        include dirname(__FILE__) . '/sql/sql-install.php';
 
         foreach ($sql as $s) {
             if (!Db::getInstance()->execute($s)) {
@@ -386,7 +385,6 @@ class Ebay extends Module
 
         $this->verifyAndFixDataBaseFor17();
 
-
         // Ebay 1.12.0
         EbayOrderErrors::install();
         EbayKb::install();
@@ -398,7 +396,7 @@ class Ebay extends Module
 
     public function installTabs()
     {
-        $tabs_to_load = array(
+        $tabs_to_load = [
             'AdminEbayApiLog',
             'AdminFormEbaySync',
             'AdminEbayListings',
@@ -408,15 +406,15 @@ class Ebay extends Module
             'AdminEbayListErrorsProducts',
             'AdminFormAdvancedParameters',
             'AdminForm',
-            'AdminTokenListener'
-        );
+            'AdminTokenListener',
+        ];
         foreach ($tabs_to_load as $tab_name) {
             $tab = Tab::getInstanceFromClassName($tab_name);
 
             if (Validate::isLoadedObject($tab)) {
                 continue;
             }
-            
+
             $tab->module = $this->name;
             $tab->active = 0;
             $tab->class_name = $tab_name;  //AdminCustomProducts e.g.
@@ -428,12 +426,13 @@ class Ebay extends Module
 
             $tab->add();
         }
+
         return true;
     }
 
     public function uninstallTabs()
     {
-        $tabs_to_load = array(
+        $tabs_to_load = [
             'AdminEbayApiLog',
             'AdminFormEbaySync',
             'AdminEbayListings',
@@ -443,50 +442,51 @@ class Ebay extends Module
             'AdminEbayListErrorsProducts',
             'AdminFormAdvancedParameters',
             'AdminForm',
-        );
+        ];
         foreach ($tabs_to_load as $tab_name) {
-            $tab  = Tab::getInstanceFromClassName($tab_name);
+            $tab = Tab::getInstanceFromClassName($tab_name);
 
             if (Validate::isLoadedObject($tab)) {
                 $tab->delete();
             }
         }
+
         return true;
     }
 
     public function verifyAndFixDataBaseFor17()
     {
         if (!Configuration::get('EBAY_UPGRADE_17')) {
-            if (count(Db::getInstance()->ExecuteS("SHOW COLUMNS FROM "._DB_PREFIX_."ebay_category_configuration LIKE 'id_ebay_category'")) == 0) {
+            if (count(Db::getInstance()->ExecuteS('SHOW COLUMNS FROM ' . _DB_PREFIX_ . "ebay_category_configuration LIKE 'id_ebay_category'")) == 0) {
                 //Check if column id_ebay_profile exists on each table already existing in 1.6
-                $sql = array(
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration`
+                $sql = [
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_configuration`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_category_configuration`',
                     // TODO: that would be better to remove the previous indexes if possible
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration` ADD INDEX `ebay_category` (`id_ebay_profile` ,  `id_ebay_category`)',
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration` ADD INDEX `category` (`id_ebay_profile` ,  `id_category`)',
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_configuration` ADD INDEX `ebay_category` (`id_ebay_profile` ,  `id_ebay_category`)',
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_configuration` ADD INDEX `category` (`id_ebay_profile` ,  `id_category`)',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_zone_excluded`',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_international_zone`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_shipping_international_zone`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_zone`',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_category_condition`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_condition`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_category_condition`',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_category_condition_configuration`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_condition_configuration`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_category_condition_configuration`',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_product`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_product`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_product`',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_shipping`
                         ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `international`',
 
-                    'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping`
+                    'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_shipping`
                         ADD `id_zone` INT( 16 ) NOT NULL AFTER `id_ebay_shipping`',
-                );
+                ];
                 foreach ($sql as $q) {
                     Db::getInstance()->Execute($q);
                 }
@@ -498,48 +498,48 @@ class Ebay extends Module
     public function emptyEverything()
     {
         $this->uninstall();
-        Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'configuration WHERE name LIKE  "%EBAY%"');
+        Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'configuration WHERE name LIKE  "%EBAY%"');
         Db::getInstance()->Execute('DROP TABLE IF EXISTS
-         `'._DB_PREFIX_.'ebay_category`,
-         `'._DB_PREFIX_.'ebay_category_condition`,
-         `'._DB_PREFIX_.'ebay_category_condition_configuration`,
-         `'._DB_PREFIX_.'ebay_category_configuration`,
-         `'._DB_PREFIX_.'ebay_category_specific`,
-         `'._DB_PREFIX_.'ebay_category_specific_value`,
-         `'._DB_PREFIX_.'ebay_configuration`,
-         `'._DB_PREFIX_.'ebay_delivery_time_options`,
-         `'._DB_PREFIX_.'ebay_log`,
-         `'._DB_PREFIX_.'ebay_order`,
-         `'._DB_PREFIX_.'ebay_order_order`,
-         `'._DB_PREFIX_.'ebay_product`,
-         `'._DB_PREFIX_.'ebay_product_configuration`,
-         `'._DB_PREFIX_.'ebay_product_image`,
-         `'._DB_PREFIX_.'ebay_product_modified`,
-         `'._DB_PREFIX_.'ebay_profile`,
-         `'._DB_PREFIX_.'ebay_returns_policy`,
-         `'._DB_PREFIX_.'ebay_returns_policy_configuration`,
-         `'._DB_PREFIX_.'ebay_returns_policy_description`,
-         `'._DB_PREFIX_.'ebay_shipping`,
-         `'._DB_PREFIX_.'ebay_shipping_international_zone`,
-         `'._DB_PREFIX_.'ebay_shipping_location`,
-         `'._DB_PREFIX_.'ebay_shipping_service`,
-         `'._DB_PREFIX_.'ebay_shipping_zone_excluded`,
-         `'._DB_PREFIX_.'ebay_stat`,
-         `'._DB_PREFIX_.'ebay_sync_history`,
-         `'._DB_PREFIX_.'ebay_sync_history_product`,
-         `'._DB_PREFIX_.'ebay_api_log`,
-         `'._DB_PREFIX_.'ebay_order_log`,
-         `'._DB_PREFIX_.'ebay_store_category`,
-         `'._DB_PREFIX_.'ebay_store_category_configuration`,
-         `'._DB_PREFIX_.'ebay_user_identifier_token`,
-         `'._DB_PREFIX_.'ebay_kb`,
-          `'._DB_PREFIX_.'ebay_category_business_config`,
-         `'._DB_PREFIX_.'ebay_business_policies`,
-         `'._DB_PREFIX_.'ebay_order_return_detail`,
-         `'._DB_PREFIX_.'ebay_logs`,
-          `'._DB_PREFIX_.'ebay_task_manager`,
-         `'._DB_PREFIX_.'ebay_order_errors`,
-         `'._DB_PREFIX_.'ebay_catalog_configuration`;
+         `' . _DB_PREFIX_ . 'ebay_category`,
+         `' . _DB_PREFIX_ . 'ebay_category_condition`,
+         `' . _DB_PREFIX_ . 'ebay_category_condition_configuration`,
+         `' . _DB_PREFIX_ . 'ebay_category_configuration`,
+         `' . _DB_PREFIX_ . 'ebay_category_specific`,
+         `' . _DB_PREFIX_ . 'ebay_category_specific_value`,
+         `' . _DB_PREFIX_ . 'ebay_configuration`,
+         `' . _DB_PREFIX_ . 'ebay_delivery_time_options`,
+         `' . _DB_PREFIX_ . 'ebay_log`,
+         `' . _DB_PREFIX_ . 'ebay_order`,
+         `' . _DB_PREFIX_ . 'ebay_order_order`,
+         `' . _DB_PREFIX_ . 'ebay_product`,
+         `' . _DB_PREFIX_ . 'ebay_product_configuration`,
+         `' . _DB_PREFIX_ . 'ebay_product_image`,
+         `' . _DB_PREFIX_ . 'ebay_product_modified`,
+         `' . _DB_PREFIX_ . 'ebay_profile`,
+         `' . _DB_PREFIX_ . 'ebay_returns_policy`,
+         `' . _DB_PREFIX_ . 'ebay_returns_policy_configuration`,
+         `' . _DB_PREFIX_ . 'ebay_returns_policy_description`,
+         `' . _DB_PREFIX_ . 'ebay_shipping`,
+         `' . _DB_PREFIX_ . 'ebay_shipping_international_zone`,
+         `' . _DB_PREFIX_ . 'ebay_shipping_location`,
+         `' . _DB_PREFIX_ . 'ebay_shipping_service`,
+         `' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded`,
+         `' . _DB_PREFIX_ . 'ebay_stat`,
+         `' . _DB_PREFIX_ . 'ebay_sync_history`,
+         `' . _DB_PREFIX_ . 'ebay_sync_history_product`,
+         `' . _DB_PREFIX_ . 'ebay_api_log`,
+         `' . _DB_PREFIX_ . 'ebay_order_log`,
+         `' . _DB_PREFIX_ . 'ebay_store_category`,
+         `' . _DB_PREFIX_ . 'ebay_store_category_configuration`,
+         `' . _DB_PREFIX_ . 'ebay_user_identifier_token`,
+         `' . _DB_PREFIX_ . 'ebay_kb`,
+          `' . _DB_PREFIX_ . 'ebay_category_business_config`,
+         `' . _DB_PREFIX_ . 'ebay_business_policies`,
+         `' . _DB_PREFIX_ . 'ebay_order_return_detail`,
+         `' . _DB_PREFIX_ . 'ebay_logs`,
+          `' . _DB_PREFIX_ . 'ebay_task_manager`,
+         `' . _DB_PREFIX_ . 'ebay_order_errors`,
+         `' . _DB_PREFIX_ . 'ebay_catalog_configuration`;
          ');
     }
 
@@ -549,17 +549,16 @@ class Ebay extends Module
      **/
     private function __getModuleUrl()
     {
-        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+        return Tools::getShopDomain(true) . __PS_BASE_URI__ . 'modules/ebay/';
     }
 
     /**
      * Uninstall module
      *
-     * @return boolean
+     * @return bool
      **/
     public function uninstall()
     {
-
         // Uninstall Module
         if (!parent::uninstall()
             || !$this->unregisterHook('addProduct')
@@ -582,6 +581,7 @@ class Ebay extends Module
         $this->context->cookie->eBayUsername = '';
         $this->uninstallTabs();
         $this->removeEbayStateOrder();
+
         return true;
     }
 
@@ -591,96 +591,96 @@ class Ebay extends Module
 
         if ($version == '1.1' || empty($version)) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.2.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.2.php';
                 upgrade_module_1_2($this);
             }
         }
 
         if (version_compare($version, '1.4.0', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.4.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.4.php';
                 upgrade_module_1_4($this);
             }
         }
 
         if (version_compare($version, '1.5.0', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.5.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.5.php';
                 upgrade_module_1_5($this);
             }
         }
 
         if (version_compare($version, '1.6', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.6.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.6.php';
                 upgrade_module_1_6($this);
             }
         }
 
         if (version_compare($version, '1.7', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.7.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.7.php';
                 upgrade_module_1_7($this);
             }
         }
 
         if (version_compare($version, '1.8', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.8.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.8.php';
                 upgrade_module_1_8($this);
             }
         }
 
         if (version_compare($version, '1.9', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.9.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.9.php';
                 upgrade_module_1_9($this);
             }
         }
 
         if (version_compare($version, '1.10', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.10.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.10.php';
                 upgrade_module_1_10($this);
             }
         }
 
         if (version_compare($version, '1.11', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.11.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.11.php';
                 upgrade_module_1_11($this);
             }
         }
 
         if (version_compare($version, '1.12', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.12.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.12.php';
                 upgrade_module_1_12($this);
             }
         }
 
         if (version_compare($version, '1.12.2', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.12.2.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.12.2.php';
                 upgrade_module_1_12_2($this);
             }
         }
 
         if (version_compare($version, '1.12.3', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.12.3.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.12.3.php';
                 upgrade_module_1_12_3($this);
             }
         }
         if (version_compare($version, '1.14.0', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.14.0.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.14.0.php';
                 upgrade_module_1_14_0($this);
             }
         }
         if (version_compare($version, '1.15.0', '<')) {
             if (version_compare(_PS_VERSION_, '1.5', '<')) {
-                include_once dirname(__FILE__).'/upgrade/Upgrade-1.15.0.php';
+                include_once dirname(__FILE__) . '/upgrade/Upgrade-1.15.0.php';
                 upgrade_module_1_15_0($this);
             }
         }
@@ -733,7 +733,6 @@ class Ebay extends Module
      */
     public function hookAddProduct($params)
     {
-
         if (!isset($params['product']->id) && !isset($params['id_product'])) {
             return false;
         }
@@ -762,35 +761,35 @@ class Ebay extends Module
     {
         $this->hookUpdateCarrier($params);
     }
+
     public function hookUpdateCarrier($params)
     {
         EbayShipping::updatePsCarrier($params['id_carrier'], $params['carrier']->id);
     }
 
-
     public function hookadminOrder($params)
     {
         $order = new Order($params['id_order']);
         // If buy by this module
-        $res = array();
+        $res = [];
         if ($order->module == $this->name) {
             $returns = EbayOrder::getReturnsByOrderId($params['id_order']);
             foreach ($returns as $return) {
                 $id_product = EbayProduct::getProductsIdFromItemId($return['id_item']);
                 $product = new Product($id_product['id_product']);
 
-                $res[]= array(
+                $res[] = [
                         'type_of_refund' => $return['type'],
                         'date' => $return['date'],
                         'product_name' => $product->name,
                         'description' => $return['description'],
                         'id_ebay_order' => $return['id_ebay_order'],
                         'status' => $return['status'],
-                );
+                ];
             }
-            $smarty_vars = array(
+            $smarty_vars = [
                 'returns' => $res,
-            );
+            ];
             $this->smarty->assign($smarty_vars);
 
             return $this->display(__FILE__, 'views/templates/hook/order_return_details.tpl');
@@ -799,6 +798,7 @@ class Ebay extends Module
 
     /**
      * @param string $data
+     *
      * @return string
      */
     public static function smartyCleanHtml($data)
@@ -807,11 +807,13 @@ class Ebay extends Module
         if (Validate::isCleanHtml($data)) {
             return $data;
         }
-        return "";
+
+        return '';
     }
 
     /**
      * @param string $data
+     *
      * @return string
      */
     public static function smartyHtmlDescription($data)
@@ -829,18 +831,18 @@ class Ebay extends Module
         static $function_called = 0;
 
         if ($function_called === 0) {
-            $function_called++;
+            ++$function_called;
             // Add modifier cleanHtml for older version of Prestashop
             if (method_exists('Tools', 'version_compare')) {
-                if (Tools::version_compare(_PS_VERSION_, "1.6.1", "<")) {
-                    $callback = array('Ebay', 'smartyCleanHtml');
+                if (Tools::version_compare(_PS_VERSION_, '1.6.1', '<')) {
+                    $callback = ['Ebay', 'smartyCleanHtml'];
                     smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'cleanHtml', $callback);
                 }
             } else {
-                $callback = array('Ebay', 'smartyCleanHtml');
+                $callback = ['Ebay', 'smartyCleanHtml'];
                 smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'cleanHtml', $callback);
             }
-            $callback = array('Ebay', 'smartyHtmlDescription');
+            $callback = ['Ebay', 'smartyHtmlDescription'];
             smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'ebayHtml', $callback);
         }
     }
@@ -864,6 +866,7 @@ class Ebay extends Module
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
             Configuration::deleteByName('DATE_LAST_SYNC_PRODUCTS');
+
             return false;
         }
 
@@ -871,7 +874,7 @@ class Ebay extends Module
             return false;
         }
 
-        $ebay_site_id=$this->ebay_profile->ebay_site_id;
+        $ebay_site_id = $this->ebay_profile->ebay_site_id;
         if (Tools::getValue('resynchCategories')) {
             //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
             $this->ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
@@ -888,14 +891,14 @@ class Ebay extends Module
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
         if (((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
             &&
-            ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
+            ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')) . '.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS') == 1) {
-            $current_date = date('Y-m-d\TH:i:s').'.000Z';
+            $current_date = date('Y-m-d\TH:i:s') . '.000Z';
             // we set the new last update date after retrieving the last orders
             $profiles = EbayProfile::getAllProfile();
             if (empty($profiles) == false) {
                 foreach ($profiles as $profile) {
-                    $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+                    $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, [$profile['id_ebay_profile']]);
                 }
             }
 
@@ -906,13 +909,13 @@ class Ebay extends Module
         // update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
         if (((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 0)
             &&
-            ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
+            ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')) . '.000Z')
             || Tools::getValue('EBAY_SYNC_ORDERS_RETURNS') == 1) {
-            $current_date = date('Y-m-d\TH:i:s').'.000Z';
+            $current_date = date('Y-m-d\TH:i:s') . '.000Z';
             // we set the new last update date after retrieving the last orders
             if (empty($profiles) == false) {
                 foreach ($profiles as $profile) {
-                    $this->ebayProfileService->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+                    $this->ebayProfileService->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date, [$profile['id_ebay_profile']]);
                 }
             }
 
@@ -945,9 +948,9 @@ class Ebay extends Module
      */
     private function __cleanLogs()
     {
-        $config = Configuration::getMultiple(array('EBAY_LOGS_LAST_CLEANUP', 'EBAY_LOGS_DAYS', 'EBAY_API_LOGS', 'EBAY_ACTIVATE_LOGS'));
+        $config = Configuration::getMultiple(['EBAY_LOGS_LAST_CLEANUP', 'EBAY_LOGS_DAYS', 'EBAY_API_LOGS', 'EBAY_ACTIVATE_LOGS']);
 
-        if (isset($config['EBAY_LOGS_LAST_CLEANUP']) && $config['EBAY_LOGS_LAST_CLEANUP'] >= date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z') {
+        if (isset($config['EBAY_LOGS_LAST_CLEANUP']) && $config['EBAY_LOGS_LAST_CLEANUP'] >= date('Y-m-d\TH:i:s', strtotime('-1 day')) . '.000Z') {
             return;
         }
 
@@ -975,7 +978,7 @@ class Ebay extends Module
 
     public function cronOrdersSync()
     {
-        $current_date = date('Y-m-d\TH:i:s').'.000Z';
+        $current_date = date('Y-m-d\TH:i:s') . '.000Z';
 
         if ($orders = $this->__getEbayLastOrders($current_date)) {
             $this->importOrders($orders, $this->ebay_profile);
@@ -986,15 +989,14 @@ class Ebay extends Module
         $profiles = EbayProfile::getAllProfile();
         if (empty($profiles) == false) {
             foreach ($profiles as $profile) {
-                $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+                $this->ebayProfileService->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date, [$profile['id_ebay_profile']]);
             }
         }
     }
 
     public function cronOrdersReturnsSync()
     {
-
-        $current_date = date('Y-m-d\TH:i:s').'.000Z';
+        $current_date = date('Y-m-d\TH:i:s') . '.000Z';
 
         if ($orders = $this->__getEbayLastOrdersReturnsRefunds($current_date)) {
             if (isset($orders['return'][0]['cancellations'])) {
@@ -1012,7 +1014,7 @@ class Ebay extends Module
         $profiles = EbayProfile::getAllProfile();
         if (empty($profiles) == false) {
             foreach ($profiles as $profile) {
-                $this->ebayProfileService->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date, array($profile['id_ebay_profile']));
+                $this->ebayProfileService->setConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE', $current_date, [$profile['id_ebay_profile']]);
             }
         }
     }
@@ -1022,12 +1024,12 @@ class Ebay extends Module
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
         $request = new EbayRequest();
-        $errors_email = array();
+        $errors_email = [];
         //EbayOrder::deletingInjuredOrders();
 
         /** @var EbayOrder $order */
         foreach ($orders as $order) {
-            $errors = array();
+            $errors = [];
             $idEbaySite = EbayCountrySpec::getSiteIDBySiteNAme($order->getEbaySiteName());
 
             if ($order->getIdEbayProfile()) {
@@ -1053,7 +1055,7 @@ class Ebay extends Module
 
             if (!$request->getDev()) {
                 if (!$order->checkStatus()) {
-                    $message = $this->l("Payment status '".$order->getStatus()."'");
+                    $message = $this->l("Payment status '" . $order->getStatus() . "'");
                     $order->checkError($message, $ebay_user_identifier);
                     continue;
                 }
@@ -1094,20 +1096,20 @@ class Ebay extends Module
                 if (count($id_shops) > 1) {
                     $product_ids = $order->getProductIds();
                     $first_id_shop = $id_shops[0];
-                        $sql = 'SELECT count(*)
-                            FROM `'._DB_PREFIX_.'product_shop` ps
-                            WHERE ps.`id_shop` = '.(int) $first_id_shop.'
+                    $sql = 'SELECT count(*)
+                            FROM `' . _DB_PREFIX_ . 'product_shop` ps
+                            WHERE ps.`id_shop` = ' . (int) $first_id_shop . '
                             AND ps.`active` = 1
-                            AND ps.`id_product` IN ('.pSQL(implode(',', $product_ids)).')';
+                            AND ps.`id_product` IN (' . pSQL(implode(',', $product_ids)) . ')';
 
                     $nb_products_in_shop = Db::getInstance()->getValue($sql);
                     if ($nb_products_in_shop == count($product_ids)) {
-                        $id_shops = array($first_id_shop);
+                        $id_shops = [$first_id_shop];
                         $has_shared_customers = true;
                     } else {
                         $sql = 'SELECT count(*)
-                            FROM `'._DB_PREFIX_.'shop` s
-                            INNER JOIN `'._DB_PREFIX_.'shop_group` sg
+                            FROM `' . _DB_PREFIX_ . 'shop` s
+                            INNER JOIN `' . _DB_PREFIX_ . 'shop_group` sg
                             ON s.`id_shop_group` = sg.`id_shop_group`
                             AND sg.`share_customer` = 1';
                         $nb_shops_sharing = Db::getInstance()->getValue($sql);
@@ -1118,14 +1120,14 @@ class Ebay extends Module
                 }
             } else {
                 $default_shop = Configuration::get('PS_SHOP_DEFAULT') ? Configuration::get('PS_SHOP_DEFAULT') : 1;
-                $id_shops = array($default_shop);
+                $id_shops = [$default_shop];
                 $has_shared_customers = true;
             }
 
-            $customer_ids = array();
+            $customer_ids = [];
             if ($has_shared_customers) {
                 // in case of shared customers in multishop, we take the profile of the first shop
-                
+
                 $ebay_profile = $ebayProfileOrder;
 
                 $id_customer = $order->getOrAddCustomer($ebay_profile, $ebayCountry);
@@ -1134,7 +1136,7 @@ class Ebay extends Module
 
                 // Fix on sending e-mail
                 if (!$order->getEmail()) {
-                    $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                    $dbEbay->autoExecute(_DB_PREFIX_ . 'customer', ['email' => 'NOSEND-EBAY'], 'UPDATE', '`id_customer` = ' . (int) $id_customer);
                 }
 
                 $customer_clear = new Customer();
@@ -1170,7 +1172,7 @@ class Ebay extends Module
 
                     // Fix on sending e-mail
                     if (!$order->getEmail()) {
-                        $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                        $dbEbay->autoExecute(_DB_PREFIX_ . 'customer', ['email' => 'NOSEND-EBAY'], 'UPDATE', '`id_customer` = ' . (int) $id_customer);
                     }
                     $customer_clear = new Customer();
                     if (method_exists($customer_clear, 'clearCache')) {
@@ -1222,17 +1224,16 @@ class Ebay extends Module
                 $order->updateOrderState($ebay_profile);
             }
 
-
             foreach ($customer_ids as $id_customer) {
                 // Fix on sending e-mail
-                $dbEbay->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order->getEmail())), 'UPDATE', '`id_customer` = '.(int) $id_customer);
+                $dbEbay->autoExecute(_DB_PREFIX_ . 'customer', ['email' => pSQL($order->getEmail())], 'UPDATE', '`id_customer` = ' . (int) $id_customer);
             }
         }
 
-        $orders_ar = array();
+        $orders_ar = [];
 
         foreach ($orders as $order) {
-            $orders_ar[] = array(
+            $orders_ar[] = [
                 'id_order_ref' => $order->getIdOrderRef(),
                 'id_order_seller' => $order->getIdOrderSeller(),
                 'amount' => $order->getAmount(),
@@ -1241,7 +1242,7 @@ class Ebay extends Module
                 'email' => $order->getEmail(),
                 'products' => $order->getProducts(),
                 'error_messages' => $order->getErrorMessages(),
-            );
+            ];
         }
 
         //file_put_contents(dirname(__FILE__).'/log/orders.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
@@ -1251,35 +1252,36 @@ class Ebay extends Module
      * Returns Ebay last passed orders as an array of EbayOrder objects
      *
      * @param string $until_date Date until which the orders should be retrieved
+     *
      * @return array
      **/
     private function __getEbayLastOrders($until_date)
     {
         $nb_days_backward = (int) $this->ebay_profile->getConfiguration('EBAY_ORDERS_DAYS_BACKWARD');
 
-        if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
+        if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-' . $nb_days_backward . ' days'))) {
             //If it is more than 30 days that we installed the module
             // check from 30 days before
             $from_date_ar = explode('T', $this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
-            $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -'.$nb_days_backward.' days'));
-            $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
+            $from_date = date('Y-m-d', strtotime($from_date_ar[0] . ' -' . $nb_days_backward . ' days'));
+            $from_date .= 'T' . (isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         } else {
             //If it is less than
             //
             //  days that we installed the module
             // check from one day before
             $from_date_ar = explode('T', Configuration::get('EBAY_INSTALL_DATE'));
-            $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -1 day'));
-            $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
+            $from_date = date('Y-m-d', strtotime($from_date_ar[0] . ' -1 day'));
+            $from_date .= 'T' . (isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         }
 
         $ebay = new EbayRequest($this->ebay_profile->id);
         $page = 1;
-        $orders = array();
+        $orders = [];
         $nb_page_orders = 100;
 
         while ($nb_page_orders > 0 && $page < 10) {
-            $page_orders = array();
+            $page_orders = [];
             foreach ($ebay->getOrders($from_date, $until_date, $page) as $order_xml) {
                 $page_orders[] = new EbayOrder($order_xml);
             }
@@ -1287,7 +1289,7 @@ class Ebay extends Module
             $nb_page_orders = count($page_orders);
             $orders = array_merge($orders, $page_orders);
 
-            $page++;
+            ++$page;
         }
 
         return $orders;
@@ -1297,25 +1299,25 @@ class Ebay extends Module
     {
         $nb_days_backward = (int) $this->ebay_profile->getConfiguration('EBAY_ORDERS_DAYS_BACKWARD');
 
-        if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-'.$nb_days_backward.' days'))) {
+        if (Configuration::get('EBAY_INSTALL_DATE') < date('Y-m-d\TH:i:s', strtotime('-' . $nb_days_backward . ' days'))) {
             //If it is more than 30 days that we installed the module
             // check from 30 days before
             $from_date_ar = explode('T', $this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE'));
-            $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -'.$nb_days_backward.' days'));
-            $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
+            $from_date = date('Y-m-d', strtotime($from_date_ar[0] . ' -' . $nb_days_backward . ' days'));
+            $from_date .= 'T' . (isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         } else {
             //If it is less than
             //
             //  days that we installed the module
             // check from one day before
             $from_date_ar = explode('T', Configuration::get('EBAY_INSTALL_DATE'));
-            $from_date = date('Y-m-d', strtotime($from_date_ar[0].' -1 day'));
-            $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
+            $from_date = date('Y-m-d', strtotime($from_date_ar[0] . ' -1 day'));
+            $from_date .= 'T' . (isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         }
 
         $ebay = new EbayRequest($this->ebay_profile->id);
 
-        $orders = array();
+        $orders = [];
 
         $orders['return'][] = $ebay->getUserReturn($from_date, $until_date);
         if (isset($orders['return'][0]['members'])) {
@@ -1336,14 +1338,13 @@ class Ebay extends Module
 
     public function importCanceletions($refund)
     {
-
         if (!empty($refund)) {
             $order_id = DB::getInstance()->executeS('SELECT `id_order` FROM ' . _DB_PREFIX_ . 'ebay_order_order WHERE `id_ebay_order`= (
-                SELECT `id_ebay_order` FROM ' . _DB_PREFIX_ . 'ebay_order WHERE `id_order_ref` = "' . (string)$refund['legacyOrderId'] . '")');
+                SELECT `id_ebay_order` FROM ' . _DB_PREFIX_ . 'ebay_order WHERE `id_order_ref` = "' . (string) $refund['legacyOrderId'] . '")');
             if (isset($order_id[0]['id_order'])) {
                 $history = new OrderHistory();
-                $history->id_order = (int)$order_id[0]['id_order'];
-                $history->changeIdOrderState($this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE'), (int)($order_id[0]['id_order']));
+                $history->id_order = (int) $order_id[0]['id_order'];
+                $history->changeIdOrderState($this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE'), (int) ($order_id[0]['id_order']));
             }
         }
     }
@@ -1352,7 +1353,7 @@ class Ebay extends Module
     {
         if (!empty($return)) {
             $id_order = EbayOrder::getOrderbytransactionId((string) $return['creationInfo']['item']['transactionId']);
-            $vars = array(
+            $vars = [
                 'id_return' => pSQL($return['returnId']),
                 'type' => pSQL($return['creationInfo']['type']),
                 'date' => $return['creationInfo']['creationDate']['value'],
@@ -1362,11 +1363,11 @@ class Ebay extends Module
                 'id_transaction' => pSQL($return['creationInfo']['item']['transactionId']),
                 'id_ebay_order' => !empty($id_order) ? pSQL($id_order['id_ebay_order']) : 0,
                 'id_order' => !empty($id_order) ? pSQL($id_order[0]['id_order']) : 0,
-            );
+            ];
 
-            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' ._DB_PREFIX_. 'ebay_order_return_detail WHERE `id_return` = ' .pSQL($vars['id_return']));
+            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . pSQL($vars['id_return']));
             if (!empty($lin_is)) {
-                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' .pSQL($vars['id_return']));
+                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . pSQL($vars['id_return']));
             } else {
                 DB::getInstance()->insert('ebay_order_return_detail', $vars);
             }
@@ -1375,8 +1376,11 @@ class Ebay extends Module
 
     /**
      * Called when a product is updated
+     *
      * @param array $params
+     *
      * @return bool
+     *
      * @throws PrestaShopDatabaseException
      */
     public function hookUpdateProduct($params)
@@ -1400,10 +1404,8 @@ class Ebay extends Module
         EbayTaskManager::addTask('update', $product);
     }
 
-
     public function hookActionUpdateQuantity($params)
     {
-
         if (isset($params['id_product'])) {
             $params['product'] = new Product($params['id_product']);
         }
@@ -1425,8 +1427,6 @@ class Ebay extends Module
         EbayTaskManager::addTask('stock', $params['product']);
     }
 
-
-
     public function hookActionOrderStatusUpdate($params)
     {
         $new_order_status = $params['newOrderStatus'];
@@ -1437,23 +1437,23 @@ class Ebay extends Module
         }
 
         if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state) {
-            $this->__orderHasShipped((int)$params['id_order']);
+            $this->__orderHasShipped((int) $params['id_order']);
             $id_ebay_profile = EbayOrder::getIdProfilebyIdOrder($params['id_order']);
             $order = new Order($params['id_order']);
             $ebay_profile = new EbayProfile($id_ebay_profile);
             if ($ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE')) {
-                $id_order_ref = EbayOrder::getIdOrderRefByIdOrder((int)$params['id_order']);
+                $id_order_ref = EbayOrder::getIdOrderRefByIdOrder((int) $params['id_order']);
                 $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
                 $ebay_request = new EbayRequest($id_ebay_profile);
-                $numero_sv =  $order->getWsShippingNumber();
+                $numero_sv = $order->getWsShippingNumber();
                 if ($numero_sv != '') {
                     $ebay_request->updateOrderTracking($id_order_ref, $numero_sv, $carrier->name);
                 }
             }
         }
         if ($this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE') == $id_order_state) {
-           //changer state of order
-            $id_order_ref = EbayOrder::getIdOrderRefByIdOrder((int)$params['id_order']);
+            //changer state of order
+            $id_order_ref = EbayOrder::getIdOrderRefByIdOrder((int) $params['id_order']);
 
             if (!$id_order_ref) {
                 return;
@@ -1482,13 +1482,13 @@ class Ebay extends Module
             && Tools::getValue('id_product_attribute')
             && ($id_product_attribute = (int) Tools::getValue('id_product_attribute'))) {
             $id_product = Db::getInstance()->getValue('SELECT `id_product`
-                FROM `'._DB_PREFIX_.'product_attribute`
-                WHERE `id_product_attribute` = '.(int) $id_product_attribute);
+                FROM `' . _DB_PREFIX_ . 'product_attribute`
+                WHERE `id_product_attribute` = ' . (int) $id_product_attribute);
 
-            $this->hookUpdateProduct(array(
+            $this->hookUpdateProduct([
                 'id_product_attribute' => $id_product_attribute,
                 'product' => new Product($id_product),
-            ));
+            ]);
         }
     }
 
@@ -1505,12 +1505,12 @@ class Ebay extends Module
     public function hookBackOfficeTop($params)
     {
         $visible_logo = Tools::getValue('configure') == 'ebay' ? false : true;
-        if (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 day')).'.000Z') {
+        if (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 day')) . '.000Z') {
             $stat = new EbayStat($this->stats_version, $this->ebay_profile);
             $stat->save();
         }
 
-        if (Configuration::get('EBAY_SEND_STATS') && (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z')) {
+        if (Configuration::get('EBAY_SEND_STATS') && (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-1 day')) . '.000Z')) {
             EbayStat::send();
             Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
         }
@@ -1527,7 +1527,7 @@ class Ebay extends Module
             $tracking_number
             &&
             ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order))) {
-            Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `'._DB_PREFIX_.'ebay_profile`');
+            Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `' . _DB_PREFIX_ . 'ebay_profile`');
             $id_ebay_profile = EbayOrder::getIdProfilebyIdOrder($id_order);
             $order = new Order($id_order);
 
@@ -1544,16 +1544,16 @@ class Ebay extends Module
             && !Shop::isFeatureActive())) {
             $this->hookHeader($params);
         }
-        $id_shop =  Shop::getContextShopID();
+        $id_shop = Shop::getContextShopID();
         $profiles = EbayProfile::getAllProfile();
-        $id_ebay_profiles = array();
+        $id_ebay_profiles = [];
         foreach ($profiles as &$profile) {
             if ($profile['ebay_site_id'] == 123) {
                 $profile['site_name'] = 'ebay.benl';
             } elseif ($profile['ebay_site_id'] == 23) {
                 $profile['site_name'] = 'ebay.befr';
             } else {
-                $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+                $profile['site_name'] = 'ebay.' . EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             }
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
         }
@@ -1564,7 +1564,7 @@ class Ebay extends Module
             Configuration::updateValue('EBAY_SEND_STATS', true);
             foreach ($profiles as &$profile) {
                 $profile_ebay = new EbayProfile($profile['id_ebay_profile']);
-                if ($profile_ebay->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == "A") {
+                if ($profile_ebay->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
                     EbayCategoryConfiguration::activeAllCAtegories($profile['id_ebay_profile']);
                 }
             }
@@ -1583,63 +1583,65 @@ class Ebay extends Module
 
         if ($visible_logo) {
             $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
-            $nb_errors=0;
+            $nb_errors = 0;
             foreach ($profiles as &$profile) {
                 $profile_count_order_errors = EbayOrderErrors::getAllCount($profile['id_ebay_profile']);
                 $profile_count_product_errors = EbayTaskManager::getErrorsCount($profile['id_ebay_profile']);
                 $ebay_profile_hook = new EbayProfile($profile['id_ebay_profile']);
                 $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-                $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb']:0);
-                $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ?$profile_count_product_errors[0]['nb']:0);
+                $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb'] : 0);
+                $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ? $profile_count_product_errors[0]['nb'] : 0);
                 $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
-                $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
-                $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
-                $nb_errors +=$profile['count_product_errors'];
+                $profile['token'] = ($ebay_profile_hook->getToken() ? 1 : 0);
+                $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile'])) ? 1 : 0);
+                $nb_errors += $profile['count_product_errors'];
             }
         }
 
         $link = $this->context->link;
         if ($visible_logo) {
-            $smarty_vars = array(
+            $smarty_vars = [
                 'visible_logo' => $visible_logo,
                 'path' => $this->_path,
                 'profiles' => $profiles,
                 'nb_errors' => $nb_errors,
-                'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
+                'url_ebay' => $link->getAdminLink('AdminModules') . '&configure=ebay&module_name',
                 '_module_ebay_dir_' => _MODULE_DIR_,
-                'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
-                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN'))),
-                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
-            );
+                'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN')]),
+                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
+            ];
         } else {
-            $smarty_vars = array(
+            $smarty_vars = [
                 'visible_logo' => $visible_logo,
                 'path' => $this->_path,
-                'url_ebay' => $link->getAdminLink('AdminModules').'&configure=ebay&module_name',
+                'url_ebay' => $link->getAdminLink('AdminModules') . '&configure=ebay&module_name',
                 '_module_ebay_dir_' => _MODULE_DIR_,
-                'ebay_token' =>  Configuration::get('EBAY_SECURITY_TOKEN'),
-                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN'))),
-                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')
-            );
+                'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+                'cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN')]),
+                'syncProductByCron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
+            ];
         }
 
         $this->smarty->assign($smarty_vars);
+
         return $this->display(__FILE__, 'views/templates/hook/header_info.tpl');
     }
+
     protected function _getModuleUrl()
     {
-        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+        return Tools::getShopDomain(true) . __PS_BASE_URI__ . 'modules/ebay/';
     }
+
     /**
      * Main Form Method
-     *
      */
     public function getContent()
     {
         $adminDir = basename(_PS_ADMIN_DIR_);
-        $this->smarty->assign(array(
-            'adminDir' => '/'.$adminDir,
-        ));
+        $this->smarty->assign([
+            'adminDir' => '/' . $adminDir,
+        ]);
 
         if (Configuration::get('EBAY_VERSION') != $this->version) {
             set_time_limit(3600);
@@ -1655,6 +1657,7 @@ class Ebay extends Module
         }
         if (Shop::getContext() != Shop::CONTEXT_SHOP) {
             $this->bootstrap = true;
+
             return $this->display(__FILE__, 'views/templates/hook/alert_multishop.tpl');
         }
 
@@ -1668,8 +1671,6 @@ class Ebay extends Module
             EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories(), $this->ebay_profile);
         }
 
-
-
         if ($this->ebay_profile) {
             $this->ebay_profile->loadStoreCategories();
         }
@@ -1677,24 +1678,24 @@ class Ebay extends Module
         // Checking Extension
         if (!extension_loaded('curl') || !ini_get('allow_url_fopen')) {
             if (!extension_loaded('curl') && !ini_get('allow_url_fopen')) {
-                return $this->html.$this->displayError($this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.'));
+                return $this->html . $this->displayError($this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.'));
             } elseif (!extension_loaded('curl')) {
-                return $this->html.$this->displayError($this->l('You must enable cURL extension on your server if you want to use this module.'));
+                return $this->html . $this->displayError($this->l('You must enable cURL extension on your server if you want to use this module.'));
             } elseif (!ini_get('allow_url_fopen')) {
-                return $this->html.$this->displayError($this->l('You must enable allow_url_fopen option on your server if you want to use this module.'));
+                return $this->html . $this->displayError($this->l('You must enable allow_url_fopen option on your server if you want to use this module.'));
             }
         }
 
         // If isset Post Var, post process else display form
         if (!empty($_POST) && (Tools::isSubmit('submitSave') || Tools::isSubmit('btnSubmitSyncAndPublish') || Tools::isSubmit('btnSubmitSync'))) {
-            $errors = array();
+            $errors = [];
 
             if (!count($errors)) {
                 $this->__postProcess();
             } else {
-                $vars = array(
-                    'errors' => $errors
-                );
+                $vars = [
+                    'errors' => $errors,
+                ];
                 $this->html .= $this->display('alert_tabs.tpl', $vars);
             }
 
@@ -1705,7 +1706,7 @@ class Ebay extends Module
         }
         $this->context->controller->addCSS(
             // $this->_path.'/views/css/ebayV2.css'
-            $this->_path.'/views/css/admin.css'
+            $this->_path . '/views/css/admin.css'
         );
         $this->html .= $this->__displayForm();
 
@@ -1728,15 +1729,15 @@ class Ebay extends Module
 
         $alerts = $this->__getAlerts();
 
-        $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
+        $stream_context = @stream_context_create(['http' => ['method' => 'GET', 'timeout' => 2]]);
         $count_order_errors = 0;
         $count_product_errors = 0;
         if ($this->ebay_profile) {
             $count_order_errors = EbayOrderErrors::getAll($this->ebay_profile->id);
-            $count_product_errors =EbayTaskManager::getErrors($this->ebay_profile->id);
+            $count_product_errors = EbayTaskManager::getErrors($this->ebay_profile->id);
         }
 
-        $url_data = array(
+        $url_data = [
             'version' => $this->version,
             'shop' => urlencode(Configuration::get('PS_SHOP_NAME')),
             'registered' => in_array('registration', $alerts) ? 'no' : 'yes',
@@ -1745,9 +1746,9 @@ class Ebay extends Module
             'iso_lang' => Tools::strtolower($this->context->language->iso_code),
             'id_lang' => (int) $this->context->language->id,
             'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
-            'security' => md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_),
-        );
-        $url = 'http://api.prestashop.com/partner/modules/ebay.php?'.http_build_query($url_data);
+            'security' => md5(Configuration::get('PS_SHOP_EMAIL') . _COOKIE_IV_),
+        ];
+        $url = 'http://api.prestashop.com/partner/modules/ebay.php?' . http_build_query($url_data);
 
         $prestashop_content = @Tools::file_get_contents($url, false, $stream_context);
         if (!Validate::isCleanHtml($prestashop_content)) {
@@ -1757,16 +1758,16 @@ class Ebay extends Module
         $ebay_send_stats = Configuration::get('EBAY_SEND_STATS');
 
         // profiles data
-        $id_shop =  Shop::getContextShopID();
+        $id_shop = Shop::getContextShopID();
         $profiles = EbayProfile::getProfilesByIdShop($id_shop);
-        $id_ebay_profiles = array();
+        $id_ebay_profiles = [];
         foreach ($profiles as &$profile) {
             if ($profile['ebay_site_id'] == 123) {
                 $profile['site_name'] = 'ebay.benl';
             } elseif ($profile['ebay_site_id'] == 23) {
                 $profile['site_name'] = 'ebay.befr';
             } else {
-                $profile['site_name'] = 'ebay.'.EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
+                $profile['site_name'] = 'ebay.' . EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             }
 
             $id_ebay_profiles[] = $profile['id_ebay_profile'];
@@ -1779,34 +1780,33 @@ class Ebay extends Module
             $profile_count_product_errors = EbayTaskManager::getErrorsCount($profile['id_ebay_profile']);
             $ebay_profile_hook = new EbayProfile($profile['id_ebay_profile']);
             $profile['nb_tasks'] = EbayTaskManager::getNbTasks($profile['id_ebay_profile']);
-            $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb']:0);
-            $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ?$profile_count_product_errors[0]['nb']:0);
+            $profile['count_order_errors'] = (isset($profile_count_order_errors[0]['nb']) ? $profile_count_order_errors[0]['nb'] : 0);
+            $profile['count_product_errors'] = (isset($profile_count_product_errors[0]['nb']) ? $profile_count_product_errors[0]['nb'] : 0);
             $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
-            $profile['token'] = ($ebay_profile_hook->getToken()?1:0);
-            $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile']))?1:0);
-            $profile['categoryIsLoaded'] = (int)$ebay_profile_hook->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == 1;
+            $profile['token'] = ($ebay_profile_hook->getToken() ? 1 : 0);
+            $profile['category'] = (count(EbayCategoryConfiguration::getEbayCategories($profile['id_ebay_profile'])) ? 1 : 0);
+            $profile['categoryIsLoaded'] = (int) $ebay_profile_hook->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == 1;
         }
 
         $add_profile = (Tools::getValue('action') == 'addProfile');
 
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '1',
             'section' => 'parameters',
             'action' => 'addProfile',
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
-
 
         $add_profile_url = $this->__getUrl($url_vars);
 
         // main tab
         $id_tab = Tools::getValue('id_tab', 81);
-        if (in_array($id_tab, array(6, 78))) {
+        if (in_array($id_tab, [6, 78])) {
             $main_tab = 'orders';
-        } elseif (in_array($id_tab, array(5, 80, 9, 16, 106))) {
+        } elseif (in_array($id_tab, [5, 80, 9, 16, 106])) {
             $main_tab = 'annonces';
-        } elseif (in_array($id_tab, array(1,101,102,3,103,4,13))) {
+        } elseif (in_array($id_tab, [1, 101, 102, 3, 103, 4, 13])) {
             $main_tab = 'settings';
         } else {
             $main_tab = 'dashboard';
@@ -1831,9 +1831,8 @@ class Ebay extends Module
             }
         }
 
-
-        $cron_url = $this->context->link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN')));
-        $this->smarty->assign(array(
+        $cron_url = $this->context->link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'product', 'token' => Configuration::get('EBAY_CRON_TOKEN')]);
+        $this->smarty->assign([
             'cron_url' => $cron_url,
             'task_total_todo' => EbayTaskManager::getNbTasksTotal(),
             'last_sync_prod' => $lastSync,
@@ -1842,20 +1841,20 @@ class Ebay extends Module
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
             'prestashop_content' => $prestashop_content,
             'path' => $this->_path,
-            'multishop' =>  Shop::isFeatureActive(),
+            'multishop' => Shop::isFeatureActive(),
             'site_extension' => ($this->ebay_country->getSiteExtension()),
             'documentation_lang' => ($this->ebay_country->getDocumentationLang()),
             'is_version_one_dot_five_dot_one' => (version_compare(_PS_VERSION_, '1.5.1', '>=') && version_compare(_PS_VERSION_, '1.5.2', '<')),
-            'css_file' => $this->_path.'views/css/ebay_back.css',
-            'font_awesome_css_file' => $this->_path.'views/css/font-awesome.min.css',
-            'tooltip' => $this->_path.'views/js/jquery.tooltipster.min.js',
-            'tips202' => $this->_path.'views/js/202tips.js',
-            'noConflicts' => $this->_path.'views/js/jquery.noConflict.php?version=1.7.2',
-            'ebayjquery' => $this->_path.'views/js/jquery-1.7.2.min.js',
-            'bootstrapselect' => $this->_path.'views/js/bootstrap-select.js',
-            'bootstrapselectcss' => $this->_path.'views/css/bootstrap-select.min.css',
-            'fancybox' => $this->_path.'views/js/jquery.fancybox.min.js',
-            'fancyboxCss' => $this->_path.'views/css/jquery.fancybox.css',
+            'css_file' => $this->_path . 'views/css/ebay_back.css',
+            'font_awesome_css_file' => $this->_path . 'views/css/font-awesome.min.css',
+            'tooltip' => $this->_path . 'views/js/jquery.tooltipster.min.js',
+            'tips202' => $this->_path . 'views/js/202tips.js',
+            'noConflicts' => $this->_path . 'views/js/jquery.noConflict.php?version=1.7.2',
+            'ebayjquery' => $this->_path . 'views/js/jquery-1.7.2.min.js',
+            'bootstrapselect' => $this->_path . 'views/js/bootstrap-select.js',
+            'bootstrapselectcss' => $this->_path . 'views/css/bootstrap-select.min.css',
+            'fancybox' => $this->_path . 'views/js/jquery.fancybox.min.js',
+            'fancyboxCss' => $this->_path . 'views/css/jquery.fancybox.css',
             'categoryValidator' => ($this->ebay_profile ? EbayValidatorTab::getCategoryTabConfiguration($this->ebay_profile->id) : ''),
             'itemSpecificValidator' => ($this->ebay_profile ? EbayValidatorTab::getItemSpecificsTabConfiguration($this->ebay_profile->id) : ''),
             'shippingValidator' => ($this->ebay_profile ? EbayValidatorTab::getShippingTabConfiguration($this->ebay_profile->id) : ''),
@@ -1865,7 +1864,7 @@ class Ebay extends Module
             'show_welcome_stats' => $ebay_send_stats === false,
             'free_shop_for_90_days' => $this->shopIsAvailableFor90DaysOffer(),
             'show_welcome' => (($ebay_send_stats !== false) && (!count($id_ebay_profiles))),
-            'show_seller_tips' => ( $this->ebay_profile && $this->ebay_profile->getToken()),
+            'show_seller_tips' => ($this->ebay_profile && $this->ebay_profile->getToken()),
             'current_profile' => $this->ebay_profile,
             'current_profile_site_extension' => ($this->ebay_profile ? EbayCountrySpec::getSiteExtensionBySiteId($this->ebay_profile->ebay_site_id) : ''),
             'profiles' => $profiles,
@@ -1882,48 +1881,47 @@ class Ebay extends Module
             'top_rated_url' => $this->ebay_country->getTopRatedUrl(),
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),
-            'debug' => ($request->getDev())? 1:0,
-            'id_lang' => ($this->ebay_profile && $this->ebay_profile->id_lang?$this->ebay_profile->id_lang:Configuration::get('PS_LANG_DEFAULT')),
+            'debug' => ($request->getDev()) ? 1 : 0,
+            'id_lang' => ($this->ebay_profile && $this->ebay_profile->id_lang ? $this->ebay_profile->id_lang : Configuration::get('PS_LANG_DEFAULT')),
             'id_ebay_profile' => ($this->ebay_profile && $this->ebay_profile->id ? $this->ebay_profile->id : false),
-            'count_order_errors' => ($count_order_errors?count($count_order_errors):0),
-            'count_product_errors' => ($count_product_errors?count($count_product_errors):0),
-            'count_product_errors_total' => ($count_product_errors?count($count_product_errors):0)+ $count_orphan,
-            'ebay_shipping_config_tab' => ($this->ebay_profile?$this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK'):0),
-            'count_category' => ($this->ebay_profile?EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id):0),
-            'help_listing_rejection' => array(
-                'lang'           => $this->context->country->iso_code,
+            'count_order_errors' => ($count_order_errors ? count($count_order_errors) : 0),
+            'count_product_errors' => ($count_product_errors ? count($count_product_errors) : 0),
+            'count_product_errors_total' => ($count_product_errors ? count($count_product_errors) : 0) + $count_orphan,
+            'ebay_shipping_config_tab' => ($this->ebay_profile ? $this->ebay_profile->getConfiguration('EBAY_SHIPPING_CONFIG_TAB_OK') : 0),
+            'count_category' => ($this->ebay_profile ? EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id) : 0),
+            'help_listing_rejection' => [
+                'lang' => $this->context->country->iso_code,
                 'module_version' => $this->version,
-                'prestashop_version'     => _PS_VERSION_,
-                'errorcode'     => 'HELP_LISTING_REJECTION',
-            ),
-            'help_order_import' => array(
-                'lang'           => $this->context->country->iso_code,
+                'prestashop_version' => _PS_VERSION_,
+                'errorcode' => 'HELP_LISTING_REJECTION',
+            ],
+            'help_order_import' => [
+                'lang' => $this->context->country->iso_code,
                 'module_version' => $this->version,
-                'prestashop_version'     => _PS_VERSION_,
-                'errorcode'     => 'HELP_ORDER_IMPORT',
-            ),
-            'help_ebay_seller' => array(
-                'lang'           => $this->context->country->iso_code,
+                'prestashop_version' => _PS_VERSION_,
+                'errorcode' => 'HELP_ORDER_IMPORT',
+            ],
+            'help_ebay_seller' => [
+                'lang' => $this->context->country->iso_code,
                 'module_version' => $this->version,
-                'prestashop_version'     => _PS_VERSION_,
-                'errorcode'     => 'HELP_EBAY_SELLER_CONTACT',
-            ),
+                'prestashop_version' => _PS_VERSION_,
+                'errorcode' => 'HELP_EBAY_SELLER_CONTACT',
+            ],
             'formEbaySyncController' => $this->initLinkService()->getAdminLink('AdminFormEbaySync'),
             'formController' => $this->context->link->getAdminLink('AdminForm'),
-
-            ));
+            ]);
 
         // test if multishop Screen and all shops
 
-        $is_all_shops = in_array(Shop::getContext(), array(Shop::CONTEXT_ALL, Shop::CONTEXT_GROUP));
-
+        $is_all_shops = in_array(Shop::getContext(), [Shop::CONTEXT_ALL, Shop::CONTEXT_GROUP]);
 
         if (!($this->ebay_profile && $this->ebay_profile->getToken()) || $add_profile || Tools::isSubmit('ebayRegisterButton')) {
             $template = $this->__displayFormRegister();
         } else {
             $template = $this->__displayFormConfig();
         }
-        return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
+
+        return $this->display(__FILE__, 'views/templates/hook/form.tpl') . $template;
     }
 
     protected function initLinkService()
@@ -1933,15 +1931,16 @@ class Ebay extends Module
 
     private function shopIsAvailableFor90DaysOffer()
     {
-        $ebay_site_offers = array(
+        $ebay_site_offers = [
             'FR',
             'IT',
             'ES',
-        );
+        ];
         $country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
         if (in_array($country->iso_code, $ebay_site_offers)) {
             return true;
         }
+
         return false;
     }
 
@@ -1951,7 +1950,7 @@ class Ebay extends Module
             return null;
         }
 
-        $errors = array();
+        $errors = [];
 
         if (Tools::getValue('ebay_paypal_email') && !Validate::isEmail(Tools::getValue('ebay_paypal_email'))) {
             $errors[] = $this->l('Your PayPal email address is not specified or invalid');
@@ -1999,8 +1998,8 @@ class Ebay extends Module
      **/
     private function __displayFormStats()
     {
-        $smarty_vars = array(
-        );
+        $smarty_vars = [
+        ];
 
         $this->smarty->assign($smarty_vars);
 
@@ -2014,7 +2013,7 @@ class Ebay extends Module
     {
         $ebay = new EbayRequest();
         self::addSmartyModifiers();
-        $smarty_vars = array();
+        $smarty_vars = [];
         $smarty_vars['show_send_stats'] = Configuration::get('EBAY_SEND_STATS') === false ? true : false;
 
         if ($this->ebay_profile && Tools::getValue('relogin')) {
@@ -2022,10 +2021,10 @@ class Ebay extends Module
             $this->context->cookie->eBaySession = $session_id;
             Configuration::updateValue('EBAY_API_SESSION', $session_id, false, 0, 0);
 
-            $smarty_vars = array_merge($smarty_vars, array(
+            $smarty_vars = array_merge($smarty_vars, [
                 'relogin' => true,
-                'redirect_url' => $ebay->getLoginUrl().'?SignIn&runame='.$ebay->runame.'&SessID='.$this->context->cookie->eBaySession,
-            ));
+                'redirect_url' => $ebay->getLoginUrl() . '?SignIn&runame=' . $ebay->runame . '&SessID=' . $this->context->cookie->eBaySession,
+            ]);
         } else {
             $smarty_vars['relogin'] = false;
         }
@@ -2033,7 +2032,7 @@ class Ebay extends Module
         $logged = (!empty($this->context->cookie->eBaySession) && Tools::getValue('action') == 'logged');
         $smarty_vars['logged'] = $logged;
 
-        $id_shop =  Shop::getContextShopID();
+        $id_shop = Shop::getContextShopID();
         if ($logged) {
             if ($ebay_username = Tools::getValue('eBayUsernamesList')) {
                 if ($ebay_username == -1) {
@@ -2059,23 +2058,23 @@ class Ebay extends Module
             if (isset($this->ebay_profile->id_shop)) {
                 $ebay_profiles = EbayProfile::getProfilesByIdShop($this->ebay_profile->id_shop);
             } else {
-                $ebay_profiles = array();
+                $ebay_profiles = [];
             }
 
             foreach ($ebay_profiles as &$profile) {
                 $profile['site_extension'] = EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             }
 
-            $smarty_vars = array_merge($smarty_vars, array(
-                'action_url' => $_SERVER['REQUEST_URI'].'&action=logged',
+            $smarty_vars = array_merge($smarty_vars, [
+                'action_url' => $_SERVER['REQUEST_URI'] . '&action=logged',
                 'ebay_username' => $this->context->cookie->eBayUsername,
-                'window_open_url' => '?SignIn&runame='.$ebay->runame.'&SessID='.$this->context->cookie->eBaySession,
+                'window_open_url' => '?SignIn&runame=' . $ebay->runame . '&SessID=' . $this->context->cookie->eBaySession,
                 'ebay_countries' => EbayCountrySpec::getCountries($ebay->getDev()),
                 'default_country' => EbayCountrySpec::getKeyForEbayCountry(),
                 'ebay_user_identifiers' => EbayProfile::getEbayUserIdentifiers(),
                 'ebay_profiles' => $ebay_profiles,
                 'languages' => Language::getLanguages(true, ($this->ebay_profile ? $this->ebay_profile->id_shop : $id_shop)),
-            ));
+            ]);
         }
 
         $this->smarty->assign($smarty_vars);
@@ -2084,25 +2083,21 @@ class Ebay extends Module
     }
 
     /**
-     *
      * Waiting screen when expecting eBay login to refresh the token
-     *
      */
-
     public function displayCheckToken()
     {
-        $url_vars = array(
+        $url_vars = [
             'action' => 'validateToken',
             'path' => $this->_path,
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
 
-
-        $smarty_vars = array(
+        $smarty_vars = [
             'window_location_href' => $this->__getUrl($url_vars),
             'request_uri' => $_SERVER['REQUEST_URI'],
-        );
+        ];
 
         $this->smarty->assign($smarty_vars);
 
@@ -2115,7 +2110,6 @@ class Ebay extends Module
      **/
     private function __displayFormConfig()
     {
-
         self::addSmartyModifiers();
         $form_parameters_tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
         $form_advanced_parameters_tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
@@ -2136,13 +2130,11 @@ class Ebay extends Module
         $ebayProductsExcluTab = new EbayProductsExcluTab($this, $this->smarty, $this->context);
         $dashboard = new EbayDashboardTab($this, $this->smarty, $this->context, $this->_path);
 
-
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
         if ($this->best_offer) {
             $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
         }
-
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
@@ -2157,7 +2149,7 @@ class Ebay extends Module
 
         // Get all alerts
         $alert = new EbayAlert($this);
-        
+
         /*if ($this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') === null
             || $this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') < date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z'
         ) {
@@ -2174,7 +2166,7 @@ class Ebay extends Module
             $count_orphan_listing = $count_orphan_listing[0]['number'];
         }
 
-        $smarty_vars = array(
+        $smarty_vars = [
             'class_general' => 'uncinq',
             'form_parameters' => $form_parameters_tab->getContent(),
             'form_advanced_parameters' => $form_advanced_parameters_tab->getContent(),
@@ -2193,21 +2185,21 @@ class Ebay extends Module
             'alert_exit_import_categories' => $this->l('Import of eBay category is running.'),
             'order_returns' => $order_returns->getContent($this->ebay_profile->id),
             'orders_returns_sync' => $orders_returns_sync->getContent(),
-            'dashboard' =>   $dashboard->getContent($this->ebay_profile->id),
-            'table_orders' => $tableOrders ->getContent($this->ebay_profile->id),
-            'table_orders_errors' => $tableOrdersErrors ->getContent($this->ebay_profile->id),
-            'table_product_error'=> $tableListErrorProduct->getContent($this->ebay_profile->id),
-            'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
-            'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0),
-            'count_product_errors_total' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ ($count_orphan_listing?$count_orphan_listing:0),
-            'count_orphan_listing' => ($count_orphan_listing?$count_orphan_listing:0),
+            'dashboard' => $dashboard->getContent($this->ebay_profile->id),
+            'table_orders' => $tableOrders->getContent($this->ebay_profile->id),
+            'table_orders_errors' => $tableOrdersErrors->getContent($this->ebay_profile->id),
+            'table_product_error' => $tableListErrorProduct->getContent($this->ebay_profile->id),
+            'count_order_errors' => (isset($count_order_errors[0]['nb']) ? $count_order_errors[0]['nb'] : 0),
+            'count_product_errors' => (isset($count_product_errors[0]['nb']) ? $count_product_errors[0]['nb'] : 0),
+            'count_product_errors_total' => (isset($count_product_errors[0]['nb']) ? $count_product_errors[0]['nb'] : 0) + ($count_orphan_listing ? $count_orphan_listing : 0),
+            'count_orphan_listing' => ($count_orphan_listing ? $count_orphan_listing : 0),
             'form_parameters_annonces_tab' => $form_parameters_annonces_tab->getContent(),
             'form_parameters_orders_tab' => $form_parameters_orders_tab->getContent(),
             'ebayProductsExcluTab' => $ebayProductsExcluTab->getContent($this->ebay_profile),
             'ebayLogJobs' => $log_jobs->getContent($this->ebay_profile->id),
             'ebayLogWorkers' => $log_workers->getContent($this->ebay_profile->id),
             'ebayApiLogs' => $apiLogs->getContent($this->ebay_profile->id),
-            );
+            ];
 
         if ($this->best_offer) {
             $smarty_vars['best_offers'] = $best_offers->getContent($this->ebay_profile->id);
@@ -2239,7 +2231,7 @@ class Ebay extends Module
         if ($ebay_username) {
             $this->context->cookie->eBayUsername = $ebay_username;
 
-            $id_shop =  Shop::getContextShopID();
+            $id_shop = Shop::getContextShopID();
 
             $this->ebay_profile = EbayProfile::getByLangShopSiteAndUsername((int) Tools::getValue('ebay_language'), $id_shop, Tools::getValue('ebay_country'), $ebay_username, EbayProductTemplate::getContent($this, $this->smarty));
             EbayProfile::setProfile($this->ebay_profile->id);
@@ -2266,15 +2258,17 @@ class Ebay extends Module
 
     /**
      * Category Form Config Methods
-     * @param array  $categories
-     * @param int    $id
-     * @param array  $path
+     *
+     * @param array $categories
+     * @param int $id
+     * @param array $path
      * @param string $path_add
      * @param string $search
      * @param array $restrictedCategories. Collection of a category id
+     *
      * @return array
      */
-    public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '', $idEbayProfile = null, $configuredCategories = [])
+    public function getChildCategories($categories, $id, $path = [], $path_add = '', $search = '', $idEbayProfile = null, $configuredCategories = [])
     {
         if (empty($configuredCategories)) {
             if (is_null($idEbayProfile)) {
@@ -2284,12 +2278,12 @@ class Ebay extends Module
 
             $configuredCategories = array_map(
                 function ($category) {
-                    return (int)$category['id_category'];
+                    return (int) $category['id_category'];
                 },
-                EbayCategoryConfiguration::getEbayCategoryConfigurations((int)$idEbayProfile)
+                EbayCategoryConfiguration::getEbayCategoryConfigurations((int) $idEbayProfile)
             );
         }
-        $category_tab = array();
+        $category_tab = [];
 
         if ($path_add != '') {
             $path[] = $path_add;
@@ -2306,7 +2300,7 @@ class Ebay extends Module
                 $name = '';
                 if ($path) {
                     foreach ($path as $p) {
-                        $name .= $p.' > ';
+                        $name .= $p . ' > ';
                     }
                 }
 
@@ -2319,12 +2313,12 @@ class Ebay extends Module
                 }
 
                 if ($isEligible) {
-                    $category_tab[] = array(
+                    $category_tab[] = [
                         'id_category' => $cc['infos']['id_category'],
                         'name' => $name,
                         'active' => $cc['infos']['active'],
-                        'configured' => in_array((int)$cc['infos']['id_category'], $configuredCategories)
-                    );
+                        'configured' => in_array((int) $cc['infos']['id_category'], $configuredCategories),
+                    ];
                 }
 
                 $categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name'], $search, $idEbayProfile, $configuredCategories);
@@ -2335,8 +2329,6 @@ class Ebay extends Module
 
         return $category_tab;
     }
-
-
 
     private function __relistItems()
     {
@@ -2356,16 +2348,16 @@ class Ebay extends Module
                 }
 
                 //Update of the product so that we don't take it in the next 10 products to relist !
-                EbayProduct::updateByIdProductRef($item['id_product_ref'], array(
+                EbayProduct::updateByIdProductRef($item['id_product_ref'], [
                     'id_product_ref' => pSQL($new_item_id),
-                    'date_upd' => date('Y-m-d h:i:s')));
+                    'date_upd' => date('Y-m-d h:i:s'), ]);
             }
         }
     }
 
     private function __getAlerts()
     {
-        $alerts = array();
+        $alerts = [];
 
         if ($this->ebay_profile && !$this->ebay_profile->getToken()) {
             $alerts[] = 'registration';
@@ -2397,7 +2389,6 @@ class Ebay extends Module
             }
         }
 
-
         return $alerts;
     }
 
@@ -2417,26 +2408,27 @@ class Ebay extends Module
                 break;
         }
 
-        return array(
+        return [
             $context_type,
             isset($context_id) ? $context_id : null,
-        );
+        ];
     }
 
-    private function __getUrl($extra_vars = array())
+    private function __getUrl($extra_vars = [])
     {
-        $url_vars = array(
+        $url_vars = [
             'configure' => Tools::getValue('configure'),
             'token' => Tools::getValue('token'),
             'tab_module' => Tools::getValue('tab_module'),
             'module_name' => Tools::getValue('module_name'),
-        );
+        ];
 
-        return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
+        return 'index.php?' . http_build_query(array_merge($url_vars, $extra_vars));
     }
 
     /**
      * $newContextShop = array
+     *
      * @param int $type Shop::CONTEXT_ALL | Shop::CONTEXT_GROUP | Shop::CONTEXT_SHOP
      * @param int $id ID shop if CONTEXT_SHOP or id shop group if CONTEXT_GROUP
      *
@@ -2452,13 +2444,11 @@ class Ebay extends Module
 
     public function addSqlRestrictionOnLang($alias)
     {
-
         return Shop::addSqlRestrictionOnLang($alias);
     }
 
     /**
      * used by loadTableCategories
-     *
      */
     public function getPath()
     {
@@ -2467,7 +2457,6 @@ class Ebay extends Module
 
     /**
      * used by loadTableCategories & suggestCategories
-     *
      */
     public function getContext()
     {
@@ -2482,28 +2471,28 @@ class Ebay extends Module
         $product = $product[0];
 
         // data
-        $data = array(
+        $data = [
             'price' => $product['price'],
             'price_without_reduction' => '',
             'reduction' => $product['reduction'],
             'name' => $product['name'],
             'description' => $product['description'],
             'description_short' => $product['description_short'],
-        );
+        ];
         if ($data['reduction'] > 0) {
             $data['price_without_reduction'] = $product['price_without_reduction'];
         }
 
         // pictures product
         $product = new Product($product['id_product'], false, $id_lang);
-        $pictures = EbaySynchronizer::__getPictures($product, $this->ebay_profile, $id_lang, $this->context, array());
+        $pictures = EbaySynchronizer::__getPictures($product, $this->ebay_profile, $id_lang, $this->context, []);
         $data['large_pictures'] = $pictures['large'];
         $data['medium_pictures'] = $pictures['medium'];
 
         // features product
         $features_html = '';
         foreach ($product->getFrontFeatures($id_lang) as $feature) {
-            $features_html .= '<b>'.$feature['name'].'</b> : '.$feature['value'].'<br/>';
+            $features_html .= '<b>' . $feature['name'] . '</b> : ' . $feature['value'] . '<br/>';
         }
 
         $data['features'] = $features_html;
@@ -2516,7 +2505,7 @@ class Ebay extends Module
     public function displayProductExclu($id_employee)
     {
         $ids_products = EbayProduct::getProductsBlocked($this->ebay_profile->id);
-        $products = array();
+        $products = [];
         if (!empty($ids_products)) {
             foreach ($ids_products as $product_id) {
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
@@ -2525,22 +2514,23 @@ class Ebay extends Module
                     $ebay_category = EbayCategoryConfiguration::getEbayCategoryById($this->ebay_profile->id, $ebay_category_id[0]['id_ebay_category']);
                 }
                 $category_ps = new Category($product->id_category_default, $this->ebay_profile->id_lang);
-                $products[] = array(
+                $products[] = [
                     'id_product' => $product_id['id_product'],
                     'name' => $product->name,
-                    'category_ebay' => (isset($ebay_category[0]['name'])?$ebay_category[0]['name']:''),
+                    'category_ebay' => (isset($ebay_category[0]['name']) ? $ebay_category[0]['name'] : ''),
                     'category_ps' => $category_ps->name,
-                );
+                ];
             }
         }
 
-        $vars = array(
+        $vars = [
             'products' => $products,
             'id_ebay_profile' => $this->ebay_profile->id,
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $id_employee,
-        );
+        ];
         $this->smarty->assign($vars);
+
         return $this->display(__FILE__, 'views/templates/hook/tableProductsExclu.tpl');
     }
 
@@ -2552,25 +2542,25 @@ class Ebay extends Module
         $link = $this->context->link;
         $id_lang = $this->ebay_profile->id_lang;
 
-        $products_ebay_listings = array();
+        $products_ebay_listings = [];
         $nb_products = EbayProduct::getCountProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false, $search);
         $products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false, $page_current, $length, $search);
-        $pages_all = ceil(((int) $nb_products[0]['count'])/ (int) $length);
-        $range =3;
+        $pages_all = ceil(((int) $nb_products[0]['count']) / (int) $length);
+        $range = 3;
         $start = $page_current - $range;
         if ($start <= 0) {
             $start = 1;
         }
         $stop = $page_current + $range;
-        if ($stop>$pages_all) {
+        if ($stop > $pages_all) {
             $stop = $pages_all;
         }
         $prev_page = (int) $page_current - 1;
         $next_page = (int) $page_current + 1;
-        $data = array(
+        $data = [
             'id_lang' => $id_lang,
             'titleTemplate' => $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
-        );
+        ];
 
         while ($p = $products->fetch(PDO::FETCH_ASSOC)) {
             $data['real_id_product'] = (int) $p['id_product'];
@@ -2584,8 +2574,8 @@ class Ebay extends Module
 
             if ((int) $p['id_attribute'] > 0) {
                 // No Multi Sku case so we do multiple products from a multivariation product
-                
-                if ($combinaison = $this->__getAttributeCombinationsById($product, (int)$p['id_attribute'], $id_lang)) {
+
+                if ($combinaison = $this->__getAttributeCombinationsById($product, (int) $p['id_attribute'], $id_lang)) {
                     $combinaison = $combinaison[0];
 
                     $data['reference'] = $combinaison['reference'];
@@ -2593,17 +2583,17 @@ class Ebay extends Module
                     $data['upc'] = $combinaison['upc'];
                     $variation_specifics = EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang, $this->ebay_profile->ebay_site_id);
                     foreach ($variation_specifics as $variation_specific) {
-                        $data['name'] .= ' '.$variation_specific;
+                        $data['name'] .= ' ' . $variation_specific;
                     }
 
                     if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-                        $url = $link->getAdminLink('AdminProducts', true, array('id_product' => $combinaison['id_product']));
+                        $url = $link->getAdminLink('AdminProducts', true, ['id_product' => $combinaison['id_product']]);
                     } else {
-                        $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $combinaison['id_product'].'&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
+                        $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts') . '&id_product=' . (int) $combinaison['id_product'] . '&updateproduct' : $link->getProductLink((int) $combinaison['id_product']);
                     }
 
-                    $products_ebay_listings[] = array(
-                        'id_product' => $combinaison['id_product'].'-'.$combinaison['id_product_attribute'],
+                    $products_ebay_listings[] = [
+                        'id_product' => $combinaison['id_product'] . '-' . $combinaison['id_product_attribute'],
                         'quantity' => $combinaison['quantity'],
                         'category' => $p['name_cat'],
                         'prestashop_title' => $data['name'],
@@ -2611,16 +2601,16 @@ class Ebay extends Module
                         'reference_ebay' => $reference_ebay,
                         'link' => $url,
                         'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
-                    );
+                    ];
                 }
             } else {
                 if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-                    $url = $link->getAdminLink('AdminProducts', true, array('id_product' => (int) $data['real_id_product']));
+                    $url = $link->getAdminLink('AdminProducts', true, ['id_product' => (int) $data['real_id_product']]);
                 } else {
-                    $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts').'&id_product='.(int) $data['real_id_product'].'&updateproduct' : $link->getProductLink((int) $data['real_id_product']);
+                    $url = method_exists($link, 'getAdminLink') ? $link->getAdminLink('AdminProducts') . '&id_product=' . (int) $data['real_id_product'] . '&updateproduct' : $link->getProductLink((int) $data['real_id_product']);
                 }
 
-                $products_ebay_listings[] = array(
+                $products_ebay_listings[] = [
                     'id_product' => $data['real_id_product'],
                     'quantity' => $product->quantity,
                     'category' => $p['name_cat'],
@@ -2629,23 +2619,23 @@ class Ebay extends Module
                     'reference_ebay' => $reference_ebay,
                     'link' => $url,
                     'link_ebay' => EbayProduct::getEbayUrl($reference_ebay, $ebay->getDev()),
-                );
+                ];
             }
         }
-        $tpl_include = _PS_MODULE_DIR_.'ebay/views/templates/hook/pagination.tpl';
+        $tpl_include = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/pagination.tpl';
         $this->smarty->assign('products_ebay_listings', $products_ebay_listings);
         $this->smarty->assign('id_employee', $id_employee);
         $this->smarty->assign('admin_path', $admin_path);
-        $this->smarty->assign(array(
-            'prev_page'               => $prev_page,
-            'next_page'               => $next_page,
-            'tpl_include'             => $tpl_include,
-            'pages_all'               => $pages_all,
-            'page_current'            => $page_current,
-            'start'                   => $start,
-            'stop'                    => $stop,
-            'search'                  => $search,
-        ));
+        $this->smarty->assign([
+            'prev_page' => $prev_page,
+            'next_page' => $next_page,
+            'tpl_include' => $tpl_include,
+            'pages_all' => $pages_all,
+            'page_current' => $page_current,
+            'start' => $start,
+            'stop' => $stop,
+            'search' => $search,
+        ]);
         echo $this->display(__FILE__, 'views/templates/hook/ebay_listings_ajax.tpl');
     }
 
@@ -2672,53 +2662,54 @@ class Ebay extends Module
 
         $sql = 'SELECT pa.*, pa.`quantity`, ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, al.`name` AS attribute_name,
                     a.`id_attribute`, pa.`unit_price_impact`
-                FROM `'._DB_PREFIX_.'product_attribute` pa
-                LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
-                LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
-                LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
-                LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int) $id_lang.')
-                LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int) $id_lang.')
-                WHERE pa.`id_product` = '.(int) $product->id.'
-                AND pa.`id_product_attribute` = '.(int) $id_attribute.'
+                FROM `' . _DB_PREFIX_ . 'product_attribute` pa
+                LEFT JOIN `' . _DB_PREFIX_ . 'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
+                LEFT JOIN `' . _DB_PREFIX_ . 'attribute` a ON a.`id_attribute` = pac.`id_attribute`
+                LEFT JOIN `' . _DB_PREFIX_ . 'attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
+                LEFT JOIN `' . _DB_PREFIX_ . 'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = ' . (int) $id_lang . ')
+                LEFT JOIN `' . _DB_PREFIX_ . 'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = ' . (int) $id_lang . ')
+                WHERE pa.`id_product` = ' . (int) $product->id . '
+                AND pa.`id_product_attribute` = ' . (int) $id_attribute . '
                 GROUP BY pa.`id_product_attribute`, ag.`id_attribute_group`
                 ORDER BY pa.`id_product_attribute`';
+
         return Db::getInstance()->ExecuteS($sql);
     }
 
-
-    ############################################################################################################
-    # Logger // Debug
-    ############################################################################################################
+    //###########################################################################################################
+    // Logger // Debug
+    //###########################################################################################################
 
     /**
      * Fonction de log
      *
      * Enregistre dans /modules/ebay/log/debug.log
      *
-     * @param     $object
+     * @param $object
      * @param int $error_level
      */
     public static function debug($object, $error_level = 0)
     {
-        $error_type = array(
-            0 => "[ALL]",
-            1 => "[DEBUG]",
-            2 => "[INFO]",
-            3 => "[WARN]",
-            4 => "[ERROR]",
-            5 => "[FATAL]"
-        );
-        $module_name = "ebay";
+        $error_type = [
+            0 => '[ALL]',
+            1 => '[DEBUG]',
+            2 => '[INFO]',
+            3 => '[WARN]',
+            4 => '[ERROR]',
+            5 => '[FATAL]',
+        ];
+        $module_name = 'ebay';
         $backtrace = debug_backtrace();
-        $date = date("<Y-m-d(H:i:s)>");
-        $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
-        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug_'.date('Y-m-d').'.log', 'a');
-        fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
+        $date = date('<Y-m-d(H:i:s)>');
+        $file = $backtrace[0]['file'] . ':' . $backtrace[0]['line'];
+        $stderr = fopen(_PS_MODULE_DIR_ . '/' . $module_name . '/log/debug_' . date('Y-m-d') . '.log', 'a');
+        fwrite($stderr, $error_type[$error_level] . ' ' . $date . ' ' . $file . "\n" . print_r($object, true) . "\n\n");
         fclose($stderr);
     }
 
     /**
      * Allow us to use last features from SF component
+     *
      * @return bool
      */
     public function isSymfonyProject()
@@ -2728,24 +2719,24 @@ class Ebay extends Module
 
     public function addAdditionalInfoForProduct($id_product, $id_product_attribute = 0, $id_category_ebay = false, $ebay_site_id = false)
     {
-        return array();
+        return [];
     }
 
     public function getEbayLastOffers()
     {
         $ebay = new EbayRequest(5);
         $page = 1;
-        $orders = array();
+        $orders = [];
         $nb_page_orders = 100;
         EbayBestOffers::clear();
         while ($nb_page_orders > 0 && $page < 10) {
-            $page_orders = array();
+            $page_orders = [];
             foreach ($ebay->getBestOffers($page) as $offer_xml) {
                 $ps_product = EbayProduct::getProductsIdFromItemId($offer_xml->ItemBestOffers->Item->ItemID);
                 $itemId = $offer_xml->ItemBestOffers->Item->ItemID;
 
                 foreach ($offer_xml->ItemBestOffers->BestOfferArray as $offer) {
-                    $date = Tools::substr((string) $offer->BestOffer->ExpirationTime, 0, 10).' '.Tools::substr((string) $offer->BestOffer->ExpirationTime, 11, 8);
+                    $date = Tools::substr((string) $offer->BestOffer->ExpirationTime, 0, 10) . ' ' . Tools::substr((string) $offer->BestOffer->ExpirationTime, 11, 8);
                     $bestOffer = new EbayBestOffers();
                     $bestOffer->itemId = $itemId;
                     $bestOffer->product_title = pSQL($offer_xml->ItemBestOffers->Item->Title);
@@ -2765,7 +2756,7 @@ class Ebay extends Module
             $nb_page_orders = count($page_orders);
             $orders = array_merge($orders, $page_orders);
 
-            $page++;
+            ++$page;
         }
 
         return $orders;
@@ -2774,7 +2765,7 @@ class Ebay extends Module
     public function addEbayStateOrder()
     {
         $state_exist = false;
-        $states = OrderState::getOrderStates((int)$this->context->language->id);
+        $states = OrderState::getOrderStates((int) $this->context->language->id);
         foreach ($states as $state) {
             if ($state['module_name'] == $this->name) {
                 $state_exist = true;
@@ -2786,12 +2777,12 @@ class Ebay extends Module
             $order_state->send_email = false;
             $order_state->color = '#0000ff';
             $order_state->module_name = $this->name;
-            $order_state->name = array();
+            $order_state->name = [];
             $order_state->logable = true;
             $order_state->invoice = true;
             $languages = Language::getLanguages(false);
             foreach ($languages as $language) {
-                $order_state->name[ $language['id_lang'] ] = 'Ebay payment accepted';
+                $order_state->name[$language['id_lang']] = 'Ebay payment accepted';
             }
             $state_exist = $order_state->add();
             Configuration::updateValue('EBAY_STATUS_ORDER', $order_state->id);
@@ -2802,7 +2793,7 @@ class Ebay extends Module
 
     public function removeEbayStateOrder()
     {
-        $orderState = new OrderState((int)Configuration::get('EBAY_STATUS_ORDER'));
+        $orderState = new OrderState((int) Configuration::get('EBAY_STATUS_ORDER'));
         if (Validate::isLoadedObject($orderState)) {
             $orderState->delete();
         }

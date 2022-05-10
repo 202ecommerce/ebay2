@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,7 +30,7 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class CategoryTypeList extends ResourceModel
 {
-    /** @var CategoryType[]*/
+    /** @var CategoryType[] */
     protected $categoryTypes = [];
 
     public function fromArray($data)
@@ -71,6 +70,7 @@ class CategoryTypeList extends ResourceModel
     public function addCategoryType(CategoryType $categoryType)
     {
         $this->categoryTypes[] = $categoryType;
+
         return $this;
     }
 

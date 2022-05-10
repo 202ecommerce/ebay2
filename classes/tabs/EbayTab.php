@@ -22,18 +22,16 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayTab
 {
-    /** @var Ebay $ebay */
+    /** @var Ebay */
     protected $ebay;
-    /** @var Smarty_Data $smarty */
+    /** @var Smarty_Data */
     protected $smarty;
-    /** @var EbayProfile $ebay_profile */
+    /** @var EbayProfile */
     protected $ebay_profile;
-    /** @var Context $context */
+    /** @var Context */
     protected $context;
     protected $path;
 
@@ -50,19 +48,19 @@ class EbayTab
     {
         $this->smarty->assign($template_vars);
 
-        return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
+        return $this->ebay->display(dirname(__FILE__) . '/../../ebay.php', '/views/templates/hook/' . $template);
     }
 
-    protected function _getUrl($extra_vars = array())
+    protected function _getUrl($extra_vars = [])
     {
-        $url_vars = array(
-            'configure'   => Tools::getValue('configure'),
-            'token'       => Tools::getValue('token'),
-            'tab_module'  => Tools::getValue('tab_module'),
+        $url_vars = [
+            'configure' => Tools::getValue('configure'),
+            'token' => Tools::getValue('token'),
+            'tab_module' => Tools::getValue('tab_module'),
             'module_name' => Tools::getValue('module_name'),
-        );
+        ];
 
-        return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
+        return 'index.php?' . http_build_query(array_merge($url_vars, $extra_vars));
     }
 
     /**
@@ -71,6 +69,6 @@ class EbayTab
      **/
     protected function _getModuleUrl()
     {
-        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/';
+        return Tools::getShopDomainSsl(true) . __PS_BASE_URI__ . 'modules/ebay/';
     }
 }

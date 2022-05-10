@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayCategoryConditionConfiguration
 {
     const PS_CONDITION_NEW = 1;
@@ -33,11 +31,11 @@ class EbayCategoryConditionConfiguration
 
     public static function getPSConditions($condition_type = null)
     {
-        $condition_types = array(
-            EbayCategoryConditionConfiguration::PS_CONDITION_NEW         => 'new',
-            EbayCategoryConditionConfiguration::PS_CONDITION_USED        => 'used',
+        $condition_types = [
+            EbayCategoryConditionConfiguration::PS_CONDITION_NEW => 'new',
+            EbayCategoryConditionConfiguration::PS_CONDITION_USED => 'used',
             EbayCategoryConditionConfiguration::PS_CONDITION_REFURBISHED => 'refurbished',
-        );
+        ];
 
         if ($condition_type) {
             return $condition_types[$condition_type];
@@ -48,7 +46,7 @@ class EbayCategoryConditionConfiguration
 
     public static function replace($data)
     {
-        $to_insert = array();
+        $to_insert = [];
         foreach ($data as $key => $value) {
             $to_insert[bqSQL($key)] = pSQL($value);
         }

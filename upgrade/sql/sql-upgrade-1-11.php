@@ -22,8 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-$sql= array();
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_log` CHANGE `id_ebay_log` `id_ebay_log` INT(16) NOT NULL AUTO_INCREMENT;';
+$sql = [];
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_log` CHANGE `id_ebay_log` `id_ebay_log` INT(16) NOT NULL AUTO_INCREMENT;';

@@ -22,27 +22,26 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayProductTemplate extends ObjectModel
 {
     /**
      * @param Ebay $ebay
      * @param Smarty_Data $smarty
+     *
      * @return bool|Smarty_Internal_Template
      */
     public static function getContent($ebay, $smarty)
     {
-        $logo_url = (Tools::getShopDomainSsl(true)._PS_IMG_.Configuration::get('PS_LOGO').'?'.Configuration::get('PS_IMG_UPDATE_TIME'));
+        $logo_url = (Tools::getShopDomainSsl(true) . _PS_IMG_ . Configuration::get('PS_LOGO') . '?' . Configuration::get('PS_IMG_UPDATE_TIME'));
 
-        $smarty->assign(array(
+        $smarty->assign([
             'shop_logo' => $logo_url,
             'shop_name' => Configuration::get('PS_SHOP_NAME'),
             'module_url' => self::__getModuleUrl(),
-        ));
+        ]);
 
-        return $ebay->display(dirname(__FILE__).'/../ebay.php', 'lib/ebay/ebay.tpl');
+        return $ebay->display(dirname(__FILE__) . '/../ebay.php', 'lib/ebay/ebay.tpl');
     }
 
     /**
@@ -51,6 +50,6 @@ class EbayProductTemplate extends ObjectModel
      **/
     protected static function __getModuleUrl()
     {
-        return Tools::getShopDomainSsl(true).__PS_BASE_URI__.'modules/ebay/';
+        return Tools::getShopDomainSsl(true) . __PS_BASE_URI__ . 'modules/ebay/';
     }
 }

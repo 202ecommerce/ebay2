@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayLog extends ObjectModel
 {
     public $type;
@@ -45,7 +43,7 @@ class EbayLog extends ObjectModel
 
     public function getFields()
     {
-        $fields = array();
+        $fields = [];
         parent::validateFields();
         if (isset($this->id)) {
             $fields['id_ebay_log'] = (int) ($this->id);
@@ -59,17 +57,16 @@ class EbayLog extends ObjectModel
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)
     {
-
-            self::$definition = array(
+        self::$definition = [
                 'table' => 'ebay_log',
                 'primary' => 'id_ebay_log',
-                'fields' => array(
-                    'text' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                ),
-            );
+                'fields' => [
+                    'text' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                    'type' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                ],
+            ];
 
-            return parent::__construct($id, $id_lang, $id_shop);
+        return parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function write($text, $type)

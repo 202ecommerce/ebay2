@@ -22,30 +22,28 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class AdminFormController extends ModuleAdminController
 {
     public function ajaxProcessLoadNbTasksInWork()
     {
         $id_profile = Tools::getValue('id_profile');
         if ($id_profile) {
-            $table = _DB_PREFIX_.'ebay_task_manager';
-            $sql_select = "SELECT COUNT(DISTINCT(id_product)) AS nb  FROM `".pSQL($table)."` WHERE `locked` != 0 AND `id_ebay_profile` = ".pSQL($id_profile);
+            $table = _DB_PREFIX_ . 'ebay_task_manager';
+            $sql_select = 'SELECT COUNT(DISTINCT(id_product)) AS nb  FROM `' . pSQL($table) . '` WHERE `locked` != 0 AND `id_ebay_profile` = ' . pSQL($id_profile);
             $res_select = DB::getInstance()->executeS($sql_select);
             $nb_tasks_in_work = $res_select[0]['nb'];
-            die($nb_tasks_in_work);
+            exit($nb_tasks_in_work);
         }
-        die('0');
+        exit('0');
     }
 
     public function ajaxProcessBoostMode()
     {
         Tools::file_get_contents(Tools::getValue('cron_url'));
-        $nb_tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL)');
+        $nb_tasks = Db::getInstance()->executeS('SELECT COUNT(*) AS nb	FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE (`error_code` = \'0\' OR `error_code` IS NULL)');
         echo $nb_tasks[0]['nb'];
-        die();
+        exit();
     }
 
     public function ajaxProcessDeleteProfile()
@@ -53,7 +51,7 @@ class AdminFormController extends ModuleAdminController
         if (Module::isInstalled('ebay')) {
             $enable = Module::isEnabled('ebay');
             if ($enable) {
-                die(EbayProfile::deleteById((int) Tools::getValue('profile')));
+                exit(EbayProfile::deleteById((int) Tools::getValue('profile')));
             }
         }
     }
@@ -61,15 +59,15 @@ class AdminFormController extends ModuleAdminController
     public function ajaxProcessCheckToken()
     {
         $result = EbayConfiguration::updateAPIToken() ? 'OK' : 'KO';
-        die($result);
+        exit($result);
     }
 
     public function ajaxProcessGetCountriesLocation()
     {
         $id_ebay_profile = (int) Tools::getValue('profile');
-        $sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded
-                WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
-                AND region = \''.pSQL(Tools::getValue('region')).'\'';
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded
+                WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
+                AND region = \'' . pSQL(Tools::getValue('region')) . '\'';
         $countries = Db::getInstance()->ExecuteS($sql);
 
         if (count($countries)) {
@@ -77,19 +75,19 @@ class AdminFormController extends ModuleAdminController
             $context = Context::getContext();
             $ebay = new Ebay();
             foreach ($countries as $country) {
-                $tpl_var = array(
-                    "location" => Tools::safeOutput($country['location']),
-                    "country" => $country,
-                );
+                $tpl_var = [
+                    'location' => Tools::safeOutput($country['location']),
+                    'country' => $country,
+                ];
                 $context->smarty->assign($tpl_var);
-                $string .= $ebay->display(realpath(dirname(__FILE__).'/../../'), '/views/templates/hook/form_countriesShipping.tpl');
+                $string .= $ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/form_countriesShipping.tpl');
             }
 
             echo $string;
-            die();
+            exit();
         } else {
             echo 'No countries were found for this region';
-            die();
+            exit();
         }
     }
 
@@ -98,14 +96,14 @@ class AdminFormController extends ModuleAdminController
         if (!($errorcode = Tools::getValue('errorcode'))
             || !($lang = Tools::getValue('lang'))
         ) {
-            die('ERROR : INVALID DATA');
+            exit('ERROR : INVALID DATA');
         }
         if (!defined('TMP_DS')) {
             define('TMP_DS', DIRECTORY_SEPARATOR);
         }
 
-        $name_module = basename(realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS));
-        $module_kb = Tools::ucfirst(Tools::strtolower($name_module)).'Kb';
+        $name_module = basename(realpath(dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS));
+        $module_kb = Tools::ucfirst(Tools::strtolower($name_module)) . 'Kb';
 
         if (Validate::isString($name_module) && Module::isInstalled($name_module)) {
             $enable = Module::isEnabled($name_module);
@@ -115,9 +113,9 @@ class AdminFormController extends ModuleAdminController
                 $kb->setErrorCode(Tools::getValue('errorcode'));
 
                 if ($result = $kb->getLink()) {
-                    die(Tools::jsonEncode(array('result' => $result, 'code' => 'kb-202')));
+                    exit(Tools::jsonEncode(['result' => $result, 'code' => 'kb-202']));
                 } else {
-                    die(Tools::jsonEncode(array('result' => 'error', 'code' => 'kb-001', 'more' => 'Aucun lien trouvé')));
+                    exit(Tools::jsonEncode(['result' => 'error', 'code' => 'kb-001', 'more' => 'Aucun lien trouvé']));
                 }
             }
         }
@@ -135,7 +133,7 @@ class AdminFormController extends ModuleAdminController
             || !($step = Tools::getValue('step')) || !Validate::isInt($step)
             || !($cat = Tools::getValue('id_category'))
         ) {
-            die('ERROR : INVALID DATA');
+            exit('ERROR : INVALID DATA');
         }
 
         if (Module::isInstalled('ebay')) {
@@ -149,16 +147,16 @@ class AdminFormController extends ModuleAdminController
                     EbayCategory::deleteCategoriesByIdCountry($ebay_profile->ebay_site_id);
                     $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
                     if ($cat_root = $ebay_request->getCategories(false)) {
-                        die(Tools::jsonEncode($cat_root));
+                        exit(Tools::jsonEncode($cat_root));
                     } else {
-                        die(Tools::jsonEncode('error'));
+                        exit(Tools::jsonEncode('error'));
                     }
-                } else if ($step == 2) {
+                } elseif ($step == 2) {
                     $cat = $ebay_request->getCategories((int) $cat);
                     if (empty($cat) || EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
-                        die(Tools::jsonEncode($cat));
+                        exit(Tools::jsonEncode($cat));
                     } else {
-                        die(Tools::jsonEncode('error'));
+                        exit(Tools::jsonEncode('error'));
                     }
                 } elseif ($step == 3) {
                     //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
@@ -180,9 +178,9 @@ class AdminFormController extends ModuleAdminController
         }
 
         $response = [
-            'message' => $message
+            'message' => $message,
         ];
-        die(json_encode($response));
+        exit(json_encode($response));
     }
 
     /**

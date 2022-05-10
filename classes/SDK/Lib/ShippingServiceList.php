@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,11 +30,12 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class ShippingServiceList extends ResourceModel
 {
-    /** @var ShippingService[]*/
+    /** @var ShippingService[] */
     protected $shippingServices = [];
 
     /**
      * @param ShippingService[] $shippingServices
+     *
      * @return self
      */
     public function setShippingServices($shippingServices)
@@ -61,11 +61,13 @@ class ShippingServiceList extends ResourceModel
 
     /**
      * @param ShippingService $shippingService
+     *
      * @return self
      */
     public function addShippingService(ShippingService $shippingService)
     {
         $this->shippingServices[] = $shippingService;
+
         return $this;
     }
 

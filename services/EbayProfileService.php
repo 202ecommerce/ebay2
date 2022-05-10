@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayProfileService
 {
     /**
@@ -43,18 +41,20 @@ class EbayProfileService
         $collection->where('id_ebay_profile', 'in', $ids_profile);
         $profiles = $collection->getResults();
         foreach ($profiles as $profile) {
-            /** @var $profile EbayProfile*/
+            /* @var $profile EbayProfile*/
             $profile->setConfiguration($name, $value, $html);
         }
     }
 
     /**
      * @param EbayProfile $ebayProfile
+     *
      * @return float
      */
     public function getTaxRate(EbayProfile $ebayProfile)
     {
-        $rate = (float)(new Tax((int)$ebayProfile->getConfiguration(ProfileConf::TAX)))->rate;
+        $rate = (float) (new Tax((int) $ebayProfile->getConfiguration(ProfileConf::TAX)))->rate;
+
         return round($rate, 1);
     }
 }

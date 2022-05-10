@@ -22,21 +22,19 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class AdminEbayApiLogController extends ModuleAdminController
 {
     public function ajaxProcessdeleteApiLogs()
     {
         $ids_logs = Tools::getValue('ids_logs');
         if ($ids_logs == 'all') {
-            DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_api_log");
+            DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_api_log');
         } else {
             $ids_logs = pSQL(implode(', ', $ids_logs));
-            DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_api_log WHERE id_ebay_api_log IN ($ids_logs)");
+            DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . "ebay_api_log WHERE id_ebay_api_log IN ($ids_logs)");
         }
-        die();
+        exit();
     }
 
     public function ajaxProcessPaginationLogApi()
@@ -47,27 +45,27 @@ class AdminEbayApiLogController extends ModuleAdminController
         $ebay = new Ebay();
         $context = Context::getContext();
 
-        $search = array(
-            'id_product' =>  Tools::getValue('id_prod'),
-            'id_product_attribute' =>  Tools::getValue('id_prod_attr'),
+        $search = [
+            'id_product' => Tools::getValue('id_prod'),
+            'id_product_attribute' => Tools::getValue('id_prod_attr'),
             'status' => Tools::getValue('status'),
             'type' => Tools::getValue('type'),
             'date' => Tools::getValue('date'),
-        );
+        ];
 
         $logApiTab = new EbayApiLogsTab($ebay, $context->smarty, $context);
         $response = $logApiTab->getContent($id_ebay_profile, $page_current, $length, $search);
-        die($response);
+        exit($response);
     }
 
     public function ajaxProcessgetApiLogDetails()
     {
         $id_log = Tools::getValue('id_log');
         if ($id_log) {
-            $details = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_api_log WHERE id_ebay_api_log =". (int)$id_log);
-            die(Tools::jsonEncode($details[0]));
+            $details = DB::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_api_log WHERE id_ebay_api_log =' . (int) $id_log);
+            exit(Tools::jsonEncode($details[0]));
         }
-        die();
+        exit();
     }
 
     public function ajaxProcessDeleteTasks()
@@ -75,16 +73,16 @@ class AdminEbayApiLogController extends ModuleAdminController
         $ids_tasks = Tools::getValue('ids_tasks');
         if ($ids_tasks == 'all') {
             if (Tools::getValue('type') == 'work') {
-                DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE `locked` != 0");
+                DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` != 0');
             } else {
-                DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager");
+                DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager');
             }
         } else {
             $ids_tasks = pSQL(implode(', ', $ids_tasks));
-            DB::getInstance()->Execute("DELETE FROM "._DB_PREFIX_."ebay_task_manager WHERE id IN ($ids_tasks)");
+            DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . "ebay_task_manager WHERE id IN ($ids_tasks)");
         }
 
-        die();
+        exit();
     }
 
     public function ajaxProcessPaginationLogWorkerTab()
@@ -97,7 +95,7 @@ class AdminEbayApiLogController extends ModuleAdminController
         $logJobsTab = new EbayLogWorkersTab($ebay, $context->smarty, $context);
         $response = $logJobsTab->getContent($id_ebay_profile, $page_current, $length);
 
-        die($response);
+        exit($response);
     }
 
     public function ajaxProcessPaginationLogJobsTab()
@@ -110,6 +108,6 @@ class AdminEbayApiLogController extends ModuleAdminController
         $logJobsTab = new EbayLogJobsTab($ebay, $context->smarty, $context);
         $response = $logJobsTab->getContent($id_ebay_profile, $page_current, $length);
 
-        die($response);
+        exit($response);
     }
 }

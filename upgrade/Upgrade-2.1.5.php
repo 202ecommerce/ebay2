@@ -22,20 +22,20 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_2_1_5($module)
 {
     $result = true;
-    $count = (int)DB::getInstance()->getValue('SELECT count(*) 
+    $count = (int) DB::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
-		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_task_manager"
-		AND `TABLE_SCHEMA` = "'._DB_NAME_.'"
+		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_task_manager"
+		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
 		AND `COLUMN_NAME` = "priority"');
     if ($count == 0) {
         $alter = 'ALTER TABLE ' . _DB_PREFIX_ . 'ebay_task_manager ADD COLUMN `priority` INT(2)';
@@ -46,19 +46,19 @@ function upgrade_module_2_1_5($module)
     $result &= DB::getInstance()->execute($alter_2);
 
     $select = 'show index
-	    FROM '._DB_PREFIX_.'ebay_task_manager
+	    FROM ' . _DB_PREFIX_ . 'ebay_task_manager
 	    where Key_name = "unique_task"';
 
     if (empty(DB::getInstance()->executeS($select))) {
-        $alter_3 = "ALTER TABLE " . _DB_PREFIX_ . "ebay_task_manager 
-                        ADD UNIQUE KEY unique_task(id_product, id_product_attribute, id_task, id_ebay_profile)";
+        $alter_3 = 'ALTER TABLE ' . _DB_PREFIX_ . 'ebay_task_manager 
+                        ADD UNIQUE KEY unique_task(id_product, id_product_attribute, id_task, id_ebay_profile)';
         $result &= DB::getInstance()->execute($alter_3);
     }
 
-    $count = (int)DB::getInstance()->getValue('SELECT count(*) 
+    $count = (int) DB::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
-		WHERE `TABLE_NAME` = "'._DB_PREFIX_.'ebay_category"
-		AND `TABLE_SCHEMA` = "'._DB_NAME_.'"
+		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_category"
+		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
 		AND `COLUMN_NAME` = "best_offer_enabled"');
     if ($count == 0) {
         $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category` ADD COLUMN `best_offer_enabled` tinyint(1)');

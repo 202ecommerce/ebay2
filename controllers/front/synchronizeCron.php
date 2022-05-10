@@ -22,27 +22,24 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbaySynchronizeCronModuleFrontController extends ModuleFrontController
 {
-
     public function postProcess()
     {
         $action = Tools::getValue('action');
-        $actions_list = array(
+        $actions_list = [
             'order' => 'cronOrdersSync',
             'orderReturns' => 'cronOrdersReturnsSync',
             'product' => 'cronProductsSync',
-            'offers' => 'getEbayLastOffers'
-        );
+            'offers' => 'getEbayLastOffers',
+        ];
         $token = Tools::getValue('token');
         if (strcmp(Configuration::get('EBAY_CRON_TOKEN'), $token) != 0) {
-            die('Invalid token');
+            exit('Invalid token');
         }
         set_time_limit(3600);
         $this->module->{$actions_list[$action]}();
-        die(json_encode(array('success' => true)));
+        exit(json_encode(['success' => true]));
     }
 }

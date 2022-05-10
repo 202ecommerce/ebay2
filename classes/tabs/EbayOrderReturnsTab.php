@@ -22,20 +22,18 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayOrderReturnsTab extends EbayTab
 {
     public function getContent($id_ebay_profile)
     {
-        $data = array();
+        $data = [];
         // Load prestashop ebay's configuration
         $data = array_merge($data, EbayOrder::getPaginatedOrderReturns());
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '78',
             'section' => 'orders',
-        );
+        ];
         $data['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
         $url_vars['controller'] = Tools::getValue('controller');
 
@@ -43,7 +41,7 @@ class EbayOrderReturnsTab extends EbayTab
 
         $datetime = new DateTime(Configuration::get('EBAY_ORDER_RETURNS_LAST_UPDATE'));
         $data['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
-        $data['type_sync_returns'] = (Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON')?'Cron':'Prestashop');
+        $data['type_sync_returns'] = (Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') ? 'Cron' : 'Prestashop');
         $data['tpl_returns_ajax'] = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/table_returns_ajax.tpl';
 
         return $this->display('order_returns.tpl', $data);

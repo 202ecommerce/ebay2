@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,21 +30,24 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class AspectValueList extends ResourceModel
 {
-    /** @var AspectValue[]*/
+    /** @var AspectValue[] */
     protected $aspectValueList = [];
 
     /**
      * @param AspectValue $aspectValue
+     *
      * @return self
      */
     public function add(AspectValue $aspectValue)
     {
         $this->aspectValueList[] = $aspectValue;
+
         return $this;
     }
 
     /**
      * @param AspectValue[] $aspectValues
+     *
      * @return self
      */
     public function set($aspectValues)

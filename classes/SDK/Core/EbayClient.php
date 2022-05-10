@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Core;
@@ -31,15 +30,14 @@ use Configuration;
 use Ebay\services\EbayContext;
 use EbayVendor\GuzzleHttp\Client;
 use EbayVendor\GuzzleHttp\Exception\RequestException;
-use EbayVendor\GuzzleHttp\RequestOptions;
 use EbayVendor\Psr\Http\Message\ResponseInterface;
 
 class EbayClient
 {
-    /** @var EbayVendor\GuzzleHttp\Client*/
+    /** @var EbayVendor\GuzzleHttp\Client */
     protected $client;
 
-    /** @var ApiBaseUriInterface*/
+    /** @var ApiBaseUriInterface */
     protected $apiBaseUri;
 
     protected $ebayContext;
@@ -63,7 +61,7 @@ class EbayClient
             if ($this->isLoggingActive()) {
                 $this->log([
                     'request' => $request,
-                    'response' => $result
+                    'response' => $result,
                 ]);
             }
         } catch (\Exception $e) {
@@ -86,7 +84,6 @@ class EbayClient
             throw $e;
         }
 
-
         return $result;
     }
 
@@ -98,7 +95,7 @@ class EbayClient
 
     protected function isLoggingActive()
     {
-        return (int)Configuration::get('EBAY_API_LOGS');
+        return (int) Configuration::get('EBAY_API_LOGS');
     }
 
     protected function log($params)
@@ -130,6 +127,7 @@ class EbayClient
             }
 
             $ebayApiLog->save();
+
             return;
         }
 

@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayShippingLocation
 {
     public static function getEbayShippingLocations($idEbayProfile = null)
@@ -42,7 +40,7 @@ class EbayShippingLocation
     public static function getTotal()
     {
         return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
+			FROM ' . _DB_PREFIX_ . 'ebay_delivery_time_options');
     }
 
     public static function insert($data)
@@ -50,7 +48,7 @@ class EbayShippingLocation
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'REPLACE');
+        return $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_shipping_location', $data, 'REPLACE');
     }
 
     public static function getInternationalShippingLocations($idEbayProfile = null)

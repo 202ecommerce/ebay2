@@ -22,11 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Esporta facilmente i tuoi prodotti da Prestshop a eBay, il più grande mercato online, per acquisire nuovi clienti e aumentare le tue vendite.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Il modulo eBay funziona al momento su ebay.co.uk, eBay.es, ebay.fr, eBay.it, ebay.nl e ebay.pl';

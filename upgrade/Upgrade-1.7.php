@@ -22,19 +22,21 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * Updates the template image links since the image files have moved
+ *
  * @param Ebay $module
+ *
  * @return bool
+ *
  * @throws PrestaShopDatabaseException
  */
 function upgrade_module_1_7($module)
 {
-    $sql= array();
-    include dirname(__FILE__).'/sql/sql-upgrade-1-7.php';
+    $sql = [];
+    include dirname(__FILE__) . '/sql/sql-upgrade-1-7.php';
 
     if (!empty($sql) && is_array($sql)) {
         foreach ($sql as $request) {
@@ -44,8 +46,8 @@ function upgrade_module_1_7($module)
         }
     }
 
-    Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int) Configuration::get('EBAY_ZONE_NATIONAL').' WHERE international = 0');
-    Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int) Configuration::get('EBAY_ZONE_INTERNATIONAL').' WHERE international = 1');
+    Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_shipping SET id_zone = ' . (int) Configuration::get('EBAY_ZONE_NATIONAL') . ' WHERE international = 0');
+    Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_shipping SET id_zone = ' . (int) Configuration::get('EBAY_ZONE_INTERNATIONAL') . ' WHERE international = 1');
 
     // create default profile(s)
     $is_multishop = (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive());
@@ -58,7 +60,7 @@ function upgrade_module_1_7($module)
 
     // handle default profile
     if (version_compare(_PS_VERSION_, '1.5', '<')) {
-        $id_shops = array('1' => '1');
+        $id_shops = ['1' => '1'];
     } else {
         $id_shops = Shop::getShops(false, null, false);
     }
@@ -83,7 +85,7 @@ function upgrade_module_1_7($module)
             $id_default_ebay_profile = $profile->id;
         }
 
-        $configurations_to_update = array(
+        $configurations_to_update = [
             'EBAY_COUNTRY_DEFAULT',
             'EBAY_ORDER_LAST_UPDATE',
             'EBAY_DELIVERY_TIME',
@@ -103,23 +105,23 @@ function upgrade_module_1_7($module)
             'EBAY_SYNC_LAST_PRODUCT',
             'EBAY_SPECIFICS_LAST_UPDATE',
             'EBAY_PAYPAL_EMAIL',
-        );
+        ];
 
-        $configuration_to_update_html = array(
+        $configuration_to_update_html = [
             'EBAY_PRODUCT_TEMPLATE',
-        );
+        ];
         EbayConfiguration::PSConfigurationsToEbayConfigurations($profile->id, $configurations_to_update, $configuration_to_update_html);
 
         $profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', '{TITLE}');
     }
 
-    $configurations_to_delete = array_merge($configurations_to_update, array('EBAY_RETURNS_DESCRIPTION', 'EBAY_RETURNS_ACCEPTED_OPTION', 'EBAY_RETURNS_WITHIN', 'EBAY_RETURNS_WHO_PAYS'));
+    $configurations_to_delete = array_merge($configurations_to_update, ['EBAY_RETURNS_DESCRIPTION', 'EBAY_RETURNS_ACCEPTED_OPTION', 'EBAY_RETURNS_WITHIN', 'EBAY_RETURNS_WHO_PAYS']);
     foreach ($configurations_to_delete as $name) {
         Configuration::deleteByName($name);
     }
 
     // ebay_category_configuration table
-    $tables = array(
+    $tables = [
         'ebay_category_configuration',
         'ebay_shipping_zone_excluded',
         'ebay_shipping_international_zone',
@@ -127,29 +129,29 @@ function upgrade_module_1_7($module)
         'ebay_category_condition_configuration',
         'ebay_shipping',
         'ebay_product',
-    );
+    ];
     $dbEbay = new DbEbay();
     $dbEbay->setDb(Db::getInstance());
     if (version_compare(_PS_VERSION_, '1.5', '<')) {
         foreach ($tables as $table) {
-            $dbEbay->autoExecute(_DB_PREFIX_.$table, array('id_ebay_profile' => $id_default_ebay_profile), 'UPDATE');
+            $dbEbay->autoExecute(_DB_PREFIX_ . $table, ['id_ebay_profile' => $id_default_ebay_profile], 'UPDATE');
         }
     } else {
         foreach ($tables as $table) {
-            Db::getInstance()->update($table, array('id_ebay_profile' => $id_default_ebay_profile));
+            Db::getInstance()->update($table, ['id_ebay_profile' => $id_default_ebay_profile]);
         }
     }
 
     $sql = 'SELECT `id_ebay_order`, `id_order`
-			FROM `'._DB_PREFIX_.'ebay_order`';
+			FROM `' . _DB_PREFIX_ . 'ebay_order`';
     $res = Db::getInstance()->executeS($sql);
     foreach ($res as $row) {
-        $data = array(
+        $data = [
             'id_ebay_order' => $row['id_ebay_order'],
             'id_order' => $row['id_order'],
-        );
+        ];
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
-            $dbEbay->autoExecute(_DB_PREFIX_.'ebay_order_order', $data, 'INSERT');
+            $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_order_order', $data, 'INSERT');
         } else {
             Db::getInstance()->insert('ebay_order_order', $data, false, true, Db::REPLACE);
         }

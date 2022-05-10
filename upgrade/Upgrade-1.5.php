@@ -22,11 +22,11 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * Updates the template image links since the image files have moved
+ *
  * @param Ebay $module
  */
 function update_product_template($module)
@@ -34,20 +34,20 @@ function update_product_template($module)
     if ($product_template = Configuration::get('EBAY_PRODUCT_TEMPLATE')) {
         // We cannot just replace "template/images/" by "img" since the use may have added its own images in "template/images"
         $product_template = str_replace(
-            array(
+            [
                 'template/images/favorite.png',
                 'template/images/footer.png',
                 'template/images/header.png',
                 'template/images/search.png',
                 'template/images/stats.png',
-            ),
-            array(
+            ],
+            [
                 'img/favorite.png',
                 'img/footer.png',
                 'img/header.png',
                 'img/search.png',
                 'img/stats.png',
-            ),
+            ],
             $product_template
         );
         $module->setConfiguration('EBAY_PRODUCT_TEMPLATE', $product_template, true);
@@ -56,12 +56,13 @@ function update_product_template($module)
 
 /**
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_1_5($module)
 {
-    $sql= array();
-    include dirname(__FILE__).'/sql/sql-upgrade-1-5.php';
+    $sql = [];
+    include dirname(__FILE__) . '/sql/sql-upgrade-1-5.php';
 
     if (!empty($sql) && is_array($sql)) {
         foreach ($sql as $request) {

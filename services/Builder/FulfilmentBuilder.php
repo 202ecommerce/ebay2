@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services\Builder;
@@ -32,8 +31,6 @@ use Ebay\classes\SDK\Lib\CategoryTypeList;
 use Ebay\classes\SDK\Lib\FulfilmentPolicy;
 use Ebay\classes\SDK\Lib\HandlingTime;
 use Ebay\services\Marketplace;
-use Ebay\services\MarketplaceByProfile;
-use Symfony\Component\VarDumper\VarDumper;
 
 class FulfilmentBuilder implements BuilderInterface
 {
@@ -51,7 +48,7 @@ class FulfilmentBuilder implements BuilderInterface
         $fulfilmentPolicy->setShippingOptions($this->getShippingOptions());
 
         if (false == empty($this->data['shipping_id'])) {
-            $fulfilmentPolicy->setFulfillmentPolicyId((string)$this->data['shipping_id']);
+            $fulfilmentPolicy->setFulfillmentPolicyId((string) $this->data['shipping_id']);
         }
 
         if (false == empty($this->data['shipping_name'])) {
@@ -61,7 +58,7 @@ class FulfilmentBuilder implements BuilderInterface
         if (false == empty($this->data['description'])) {
             $fulfilmentPolicy->setDescription($this->data['description']);
         }
-	
+
         if ($this->data['ebay_site_id'] == 0 || false == empty($this->data['ebay_site_id'])) {
             $fulfilmentPolicy->setMarketplaceId(
                 $this->getMarketplaceId($this->data['ebay_site_id'])
@@ -85,6 +82,7 @@ class FulfilmentBuilder implements BuilderInterface
 
     /**
      * @param int $idSite
+     *
      * @return string
      */
     protected function getMarketplaceId($idSite)

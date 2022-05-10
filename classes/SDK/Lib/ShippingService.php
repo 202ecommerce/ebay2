@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,31 +30,31 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class ShippingService extends ResourceModel
 {
-    /** @var int*/
+    /** @var int */
     protected $sortOrder;
 
-    /** @var string*/
+    /** @var string */
     protected $shippingCarrierCode;
 
-    /** @var string*/
+    /** @var string */
     protected $shippingServiceCode;
 
-    /** @var ShippingCost*/
+    /** @var ShippingCost */
     protected $shippingCost;
 
-    /** @var AdditionalShippingCost*/
+    /** @var AdditionalShippingCost */
     protected $additionalShippingCost;
 
-    /** @var bool*/
+    /** @var bool */
     protected $freeShipping;
 
-    /** @var bool*/
+    /** @var bool */
     protected $buyerResponsibleForShipping;
 
-    /** @var bool*/
+    /** @var bool */
     protected $buyerResponsibleForPickup;
 
-    /** @var ShipToLocations*/
+    /** @var ShipToLocations */
     protected $shipToLocations;
 
     /**
@@ -68,11 +67,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param int $sortOrder
+     *
      * @return ShippingService
      */
     public function setSortOrder($sortOrder)
     {
-        $this->sortOrder = (int)$sortOrder;
+        $this->sortOrder = (int) $sortOrder;
+
         return $this;
     }
 
@@ -86,11 +87,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param string $shippingCarrierCode
+     *
      * @return ShippingService
      */
     public function setShippingCarrierCode($shippingCarrierCode)
     {
-        $this->shippingCarrierCode = (string)$shippingCarrierCode;
+        $this->shippingCarrierCode = (string) $shippingCarrierCode;
+
         return $this;
     }
 
@@ -104,11 +107,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param string $shippingServiceCode
+     *
      * @return ShippingService
      */
     public function setShippingServiceCode($shippingServiceCode)
     {
-        $this->shippingServiceCode = (string)$shippingServiceCode;
+        $this->shippingServiceCode = (string) $shippingServiceCode;
+
         return $this;
     }
 
@@ -122,11 +127,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param ShippingCost $shippingCost
+     *
      * @return ShippingService
      */
     public function setShippingCost(ShippingCost $shippingCost)
     {
         $this->shippingCost = $shippingCost;
+
         return $this;
     }
 
@@ -140,11 +147,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param AdditionalShippingCost $additionalShippingCost
+     *
      * @return ShippingService
      */
     public function setAdditionalShippingCost(AdditionalShippingCost $additionalShippingCost)
     {
         $this->additionalShippingCost = $additionalShippingCost;
+
         return $this;
     }
 
@@ -158,11 +167,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param bool $freeShipping
+     *
      * @return ShippingService
      */
     public function setFreeShipping($freeShipping)
     {
-        $this->freeShipping = (bool)$freeShipping;
+        $this->freeShipping = (bool) $freeShipping;
+
         return $this;
     }
 
@@ -176,11 +187,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param bool $buyerResponsibleForShipping
+     *
      * @return ShippingService
      */
     public function setBuyerResponsibleForShipping($buyerResponsibleForShipping)
     {
-        $this->buyerResponsibleForShipping = (bool)$buyerResponsibleForShipping;
+        $this->buyerResponsibleForShipping = (bool) $buyerResponsibleForShipping;
+
         return $this;
     }
 
@@ -194,11 +207,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param bool $buyerResponsibleForPickup
+     *
      * @return ShippingService
      */
     public function setBuyerResponsibleForPickup($buyerResponsibleForPickup)
     {
-        $this->buyerResponsibleForPickup = (bool)$buyerResponsibleForPickup;
+        $this->buyerResponsibleForPickup = (bool) $buyerResponsibleForPickup;
+
         return $this;
     }
 
@@ -294,11 +309,13 @@ class ShippingService extends ResourceModel
 
     /**
      * @param ShipToLocations $shipToLocations
+     *
      * @return self
      */
     public function setShipToLocations(ShipToLocations $shipToLocations)
     {
         $this->shipToLocations = $shipToLocations;
+
         return $this;
     }
 

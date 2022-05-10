@@ -22,14 +22,12 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class ProductPrice
 {
     protected $ebayProfile;
 
-    /** @var ProductTax*/
+    /** @var ProductTax */
     protected $productTax;
 
     public function __construct(EbayProfile $ebayProfile)
@@ -42,10 +40,10 @@ class ProductPrice
     {
         $product = new Product($idProduct);
         $country_iso = $this->ebayProfile->getConfiguration(Common::COUNTRY_DEFAULT);
-	    if (in_array($country_iso, array('be-nl', 'be-fr'))) {
-		    $country_iso = "be";
-	    }
-        
+        if (in_array($country_iso, ['be-nl', 'be-fr'])) {
+            $country_iso = 'be';
+        }
+
         $idCountry = Country::getByIso($country_iso);
         $idCurrency = $this->ebayProfile->getConfiguration(Common::EBAY_CURRENCY);
         $specific_price_output = [];
@@ -55,7 +53,7 @@ class ProductPrice
         }
 
         if (false == $idCountry) {
-            $idCountry = (int)Configuration::get('PS_COUNTRY_DEFAULT', null, null, $this->ebayProfile->id_shop);
+            $idCountry = (int) Configuration::get('PS_COUNTRY_DEFAULT', null, null, $this->ebayProfile->id_shop);
         }
 
         $price = Product::priceCalculation(

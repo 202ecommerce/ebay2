@@ -22,12 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayKb extends ObjectModel
 {
-
     public $error_code;
     public $ps_version;
     public $language;
@@ -42,30 +39,29 @@ class EbayKb extends ObjectModel
 
     private $url;
 
-    public static $definition = array(
+    public static $definition = [
         'table' => 'ebay_kb',
         'primary' => 'id_ebay_kb',
-        'fields' => array(
-            'error_code' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'language' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'ps_version' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'module_version' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'link' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'date_add' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
-        ),
-    );
+        'fields' => [
+            'error_code' => ['type' => 'TYPE_STRING', 'validate' => 'isString'],
+            'language' => ['type' => 'TYPE_STRING', 'validate' => 'isString'],
+            'ps_version' => ['type' => 'TYPE_STRING', 'validate' => 'isString'],
+            'module_version' => ['type' => 'TYPE_STRING', 'validate' => 'isString'],
+            'link' => ['type' => 'TYPE_STRING', 'validate' => 'isString'],
+            'date_add' => ['type' => 'TYPE_DATE', 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => 'TYPE_DATE', 'validate' => 'isDateFormat'],
+        ],
+    ];
 
     //PS 1.4
     protected $table;
     protected $identifier;
-    protected $fieldsRequired = array();
-    protected $fieldsValidate = array();
-    protected $fieldsValidateLang = array();
+    protected $fieldsRequired = [];
+    protected $fieldsValidate = [];
+    protected $fieldsValidateLang = [];
 
     public function __construct($id = null)
     {
-
         $module = Module::getInstanceByName($this->module);
 
         $this->module_version = $module->version;
@@ -77,7 +73,7 @@ class EbayKb extends ObjectModel
 
     public function getFields()
     {
-        $fields = array();
+        $fields = [];
         $fields['error_code'] = $this->error_code;
         $fields['language'] = $this->language;
         $fields['ps_version'] = $this->ps_version;
@@ -91,17 +87,18 @@ class EbayKb extends ObjectModel
 
     public static function getIds()
     {
-        $sql = "SELECT `".self::$definition['primary']."` FROM "._DB_PREFIX_.self::$definition['table']."";
+        $sql = 'SELECT `' . self::$definition['primary'] . '` FROM ' . _DB_PREFIX_ . self::$definition['table'] . '';
         $objsIDs = Db::getInstance()->ExecuteS($sql);
+
         return $objsIDs;
     }
 
     public static function install()
     {
-        $sql= array();
+        $sql = [];
         // Create Category Table in Database
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.self::$definition['table'].'` (
-				  	`'.self::$definition['primary'].'` int(16) NOT NULL AUTO_INCREMENT,
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . self::$definition['table'] . '` (
+				  	`' . self::$definition['primary'] . '` int(16) NOT NULL AUTO_INCREMENT,
 				 	`error_code` varchar(255) NOT NULL,
 				 	`language` varchar(255) NOT NULL,
 				 	`ps_version` varchar(255) NOT NULL,
@@ -109,9 +106,9 @@ class EbayKb extends ObjectModel
 				 	`link` varchar(255) NOT NULL,
 				 	date_add datetime NOT NULL,
 					date_upd datetime NOT NULL,
-					UNIQUE(`'.self::$definition['primary'].'`),
-				  	PRIMARY KEY  ('.self::$definition['primary'].')
-			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+					UNIQUE(`' . self::$definition['primary'] . '`),
+				  	PRIMARY KEY  (' . self::$definition['primary'] . ')
+			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
@@ -120,9 +117,9 @@ class EbayKb extends ObjectModel
 
     public static function uninstall()
     {
-        $sql= array();
+        $sql = [];
         // Create Category Table in Database
-        $sql[] = 'DROP TABLE IF EXISTS `'._DB_PREFIX_.self::$definition['table'].'`';
+        $sql[] = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . self::$definition['table'] . '`';
 
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
@@ -135,6 +132,7 @@ class EbayKb extends ObjectModel
             $result = Tools::file_get_contents($this->url);
             if (!Tools::isEmpty($result)) {
                 $this->link = pSQL($result);
+
                 return $this->save();
             } else {
                 return false;
@@ -151,11 +149,12 @@ class EbayKb extends ObjectModel
         }
 
         $this->url = $this->domain;
-        $this->url .= '?module='.$this->module;
-        $this->url .= '&module_version='.$this->module_version;
-        $this->url .= '&prestashop_version='.$this->ps_version;
-        $this->url .= '&language='.$this->language;
-        $this->url .= '&error_code='.$this->error_code;
+        $this->url .= '?module=' . $this->module;
+        $this->url .= '&module_version=' . $this->module_version;
+        $this->url .= '&prestashop_version=' . $this->ps_version;
+        $this->url .= '&language=' . $this->language;
+        $this->url .= '&error_code=' . $this->error_code;
+
         return true;
     }
 
@@ -188,6 +187,7 @@ class EbayKb extends ObjectModel
                         return $this->link;
                     }
                 }
+
                 return false;
             } else {
                 if ($this->link == 'false' || $this->link === false) {
@@ -204,6 +204,7 @@ class EbayKb extends ObjectModel
                     return $this->link;
                 }
             }
+
             return false;
         }
     }
@@ -214,16 +215,17 @@ class EbayKb extends ObjectModel
             $this->setLanguage();
         }
 
-        $sql = 'SELECT `'.$this->identifier.'`
-		FROM '._DB_PREFIX_.pSQL($this->table).'
-		WHERE error_code="'.pSQL($this->error_code).' "
-		AND module_version="'.pSQL($this->module_version).' "
-		AND ps_version="'.pSQL($this->ps_version).' "
-		AND language="'.pSQL($this->language).'"';
+        $sql = 'SELECT `' . $this->identifier . '`
+		FROM ' . _DB_PREFIX_ . pSQL($this->table) . '
+		WHERE error_code="' . pSQL($this->error_code) . ' "
+		AND module_version="' . pSQL($this->module_version) . ' "
+		AND ps_version="' . pSQL($this->ps_version) . ' "
+		AND language="' . pSQL($this->language) . '"';
 
         if ($id_kb = Db::getInstance()->getValue($sql)) {
             if (Validate::isInt($id_kb)) {
                 parent::__construct((int) $id_kb);
+
                 return true;
             }
         }

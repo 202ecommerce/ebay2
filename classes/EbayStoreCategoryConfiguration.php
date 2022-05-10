@@ -22,29 +22,26 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayStoreCategoryConfiguration
 {
     public static function deleteByIdEbayProfile($id_ebay_profile)
     {
-        return Db::getInstance()->delete(_DB_PREFIX_.'ebay_store_category_configuration', '`id_ebay_profile` = '.(int) $id_ebay_profile);
+        return Db::getInstance()->delete(_DB_PREFIX_ . 'ebay_store_category_configuration', '`id_ebay_profile` = ' . (int) $id_ebay_profile);
     }
 
     public static function insert($id_ebay_profile, $ebay_category_id, $id_category)
     {
-        $data = array(
+        $data = [
             'id_ebay_profile' => (int) $id_ebay_profile,
             'ebay_category_id' => pSQL($ebay_category_id),
             'id_category' => (int) $id_category,
-        );
-
+        ];
 
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        $dbEbay->autoExecute(_DB_PREFIX_.'ebay_store_category_configuration', $data, 'INSERT');
+        $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_store_category_configuration', $data, 'INSERT');
     }
 
     public static function update($id_ebay_profile, $ebay_category_id, $id_category)
@@ -53,33 +50,33 @@ class EbayStoreCategoryConfiguration
             self::insert($id_ebay_profile, $ebay_category_id, $id_category);
         } else {
             $id = self::getIdByIdProfileAndIDCategory($id_ebay_profile, $id_category);
-            Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."ebay_store_category_configuration SET ebay_category_id = '".pSQL($ebay_category_id)."' WHERE id_ebay_store_category_configuration = '".(int) $id."'");
+            Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . "ebay_store_category_configuration SET ebay_category_id = '" . pSQL($ebay_category_id) . "' WHERE id_ebay_store_category_configuration = '" . (int) $id . "'");
         }
     }
 
     public static function getIdByIdProfileAndIdCategory($id_ebay_profile, $id_category)
     {
         return Db::getInstance()->getValue('SELECT `id_ebay_store_category_configuration`
-			FROM `'._DB_PREFIX_.'ebay_store_category_configuration`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
-			AND `id_category` = '.(int) $id_category);
+			FROM `' . _DB_PREFIX_ . 'ebay_store_category_configuration`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
+			AND `id_category` = ' . (int) $id_category);
     }
 
     public static function getEbayStoreCategoryIdByIdProfileAndIdCategory($id_ebay_profile, $id_category)
     {
         return Db::getInstance()->getValue('SELECT `ebay_category_id`
-			FROM `'._DB_PREFIX_.'ebay_store_category_configuration`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
-			AND `id_category` = '.(int) $id_category);
+			FROM `' . _DB_PREFIX_ . 'ebay_store_category_configuration`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
+			AND `id_category` = ' . (int) $id_category);
     }
 
     public static function checkExistingCategories($id_ebay_profile)
     {
-        return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category_configuration`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
+        return Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_store_category_configuration`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			AND `ebay_category_id` NOT IN (
 				SELECT `ebay_category_id`
-				FROM `'._DB_PREFIX_.'ebay_store_category`
-				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.')');
+				FROM `' . _DB_PREFIX_ . 'ebay_store_category`
+				WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . ')');
     }
 }

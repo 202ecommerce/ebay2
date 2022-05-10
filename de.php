@@ -22,11 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Exportieren Sie Ihre Produkte aus PrestaShop zu eBay, einem der größten Marktplätze,  gewinnen Sie neue Kunden und steigern Sie Ihre Umsätze.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Das eBay-Modul funktioniert derzeit für eBay.fr, eBay.it, eBay.co.uk, eBay.pl, eBay.nl und eBay.es';
@@ -226,12 +224,12 @@ $_MODULE['<{ebay}prestashop>formadvancedparameters_e8605220e0fd610c52ec6fdd43035
 $_MODULE['<{ebay}prestashop>formadvancedparameters_5b69be52cfc307fdebc04f850acb8566'] = 'Synchronisieren EAN';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d8e87c0927539672f54462c837be0b7f'] = 'Synchronisieren';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_31bb5929dfddc4a33bfb7d035e4d7be0'] = 'Bestellungen synchronisieren';
-$_MODULE['<{ebay}prestashop>formadvancedparameters_88470e0a387c590e7520820a4d665bb7'] = 'alle 30 Minuten beim Laden der Seite';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_88470e0a387c590e7520820a4d665bb7'] = 'alle 30 Minuten beim Laden der Seite';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_838c855e9245ea6d7f22dde18466c94c'] = 'nach CRON-Task';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_cde5429dbfd8a853fb33c58da02cea9a'] = 'Produkte synchronisieren';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_60752d03037e213949f51539d59657f0'] = 'Speichern EIN';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_1946fcd18638ae9703119c103c670e2c'] = 'Erfassungszeitraum für Bestellungen';
-$_MODULE['<{ebay}prestashop>formadvancedparameters_23b1672185d27fe1ba03806f43f79e9f'] = 'Bestellungen für welchen Zeitraum abrufen (in Tagen, bei zweiwöchentlich über 100 Bestellungen die Einstellung ändern)';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_23b1672185d27fe1ba03806f43f79e9f'] = 'Bestellungen für welchen Zeitraum abrufen (in Tagen, bei zweiwöchentlich über 100 Bestellungen die Einstellung ändern)';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_e83fcf9c2397e7e9ba8d0bac7a84ea2e'] = 'Datenbank prüfen';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_b9b0b0ecacf5c5a2daa09d8ef13825cf'] = 'Klicken Sie auf „Prüfung starten“, wenn Sie mit dem Überprüfen Ihrer eBay-Datenbank fortfahren möchten';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_ec53a8c4f07baed5d8825072c89799be'] = 'Status';
@@ -494,7 +492,7 @@ $_MODULE['<{ebay}prestashop>orphan_listings_1e03e36666c0929e593573fe989777e0'] =
 $_MODULE['<{ebay}prestashop>orphan_listings_649829dea8fe9632cc51a9aa3c8826c3'] = 'eBay-Kategorie';
 $_MODULE['<{ebay}prestashop>orphan_listings_10864d6a5daf9d4b4be2508baac6fb35'] = 'Unterstützt die eBay-Kategorie Angebote mit mehreren Varianten?';
 $_MODULE['<{ebay}prestashop>orphan_listings_641f981680b6f6bfa11229549c471589'] = 'Kategorie mit mehreren Lagerhaltungsnummern';
-$_MODULE['<{ebay}prestashop>orphan_listings_aa853db95faf359d4caceb01de54dedd'] = 'Wenn diese Spalte auf \'Nein\' gesetzt ist, wurde die Standardkategorie des Produkts nicht synchronisiert – Registerkarte \'Synchronisierung  > 1. Produkte einstellen\'';
+$_MODULE['<{ebay}prestashop>orphan_listings_aa853db95faf359d4caceb01de54dedd'] = 'Wenn diese Spalte auf \'Nein\' gesetzt ist, wurde die Standardkategorie des Produkts nicht synchronisiert – Registerkarte \'Synchronisierung  > 1. Produkte einstellen\'';
 $_MODULE['<{ebay}prestashop>orphan_listings_7631446679ad1478ec6c339080234045'] = 'Synchronisierung aktiviert';
 $_MODULE['<{ebay}prestashop>orphan_listings_004bf6c9a40003140292e97330236c53'] = 'Nächster Schritt';
 $_MODULE['<{ebay}prestashop>orphan_listings_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Hilfe';
@@ -503,7 +501,7 @@ $_MODULE['<{ebay}prestashop>pre_form_categories_083a0dc6abd3377a1f7268f22a20d8dc
 $_MODULE['<{ebay}prestashop>pre_form_categories_876c399ca46c9b29dab4da8e55ca1644'] = 'Kategorien anzeigen';
 $_MODULE['<{ebay}prestashop>prestashop_products_b0417cfa44e80e70c0bb90bfb5f5a1dc'] = 'Auf der Registerkarte \"Prestashop-Produkte\" wird für jedes PrestaShop-Produkt das verknüpfte eBay-Angebot angezeigt.';
 $_MODULE['<{ebay}prestashop>prestashop_products_a5e8cce401b708e304cb6ffc8eff0a14'] = 'Außerdem können Sie auf dieser Registerkarte feststellen, warum aus einem PrestaShop-Produkt kein eBay-Angebot erzeugt wird.';
-$_MODULE['<{ebay}prestashop>prestashop_products_0b24ccb11c68f0f8189b16dd16bb960a'] = 'Die ausgewählte Synchronisierungsoption (auf der Registerkarte \'Synchronisierung > 1. Produkte einstellen\') lautet:';
+$_MODULE['<{ebay}prestashop>prestashop_products_0b24ccb11c68f0f8189b16dd16bb960a'] = 'Die ausgewählte Synchronisierungsoption (auf der Registerkarte \'Synchronisierung > 1. Produkte einstellen\') lautet:';
 $_MODULE['<{ebay}prestashop>prestashop_products_9338712a2c11ec3793eec5a1c0e345d2'] = 'Nur Preis und Stückzahl synchronisieren';
 $_MODULE['<{ebay}prestashop>prestashop_products_fcc84f9401b30e9172ea68651b478a8a'] = 'Alles synchronisieren';
 $_MODULE['<{ebay}prestashop>prestashop_products_b9987a246a537f4fe86f1f2e3d10dbdb'] = 'Anzeige';
@@ -516,11 +514,11 @@ $_MODULE['<{ebay}prestashop>prestashop_products_e1ed4bfde4ba84e35dae821b2b93e55e
 $_MODULE['<{ebay}prestashop>prestashop_products_d0629ccdf9ac5d63566c3f46f375b4a8'] = 'Produktvorratsmenge';
 $_MODULE['<{ebay}prestashop>prestashop_products_1f13176a5645ecffa7e918d0176fe03c'] = 'Standardkategorie des PrestaShop-Produkts';
 $_MODULE['<{ebay}prestashop>prestashop_products_f927bea733853723f45e89a194ef9e05'] = 'PrestaShop-Kategorie';
-$_MODULE['<{ebay}prestashop>prestashop_products_2c4b0697dcda170c16ba4f6dbf15a619'] = 'Konfiguriert auf der Registerkarte \'Einstellungen > 2. Kategorien und Preise\'';
+$_MODULE['<{ebay}prestashop>prestashop_products_2c4b0697dcda170c16ba4f6dbf15a619'] = 'Konfiguriert auf der Registerkarte \'Einstellungen > 2. Kategorien und Preise\'';
 $_MODULE['<{ebay}prestashop>prestashop_products_3a2f2efb02bfef1effffe196ec8958f9'] = 'Verknüpfte eBay-Kategorie';
-$_MODULE['<{ebay}prestashop>prestashop_products_aa853db95faf359d4caceb01de54dedd'] = 'Wenn diese Spalte auf \'Nein\' gesetzt ist, wurde die Standardkategorie des Produkts nicht synchronisiert – Registerkarte \'Synchronisierung  > 1. Produkte einstellen\'';
+$_MODULE['<{ebay}prestashop>prestashop_products_aa853db95faf359d4caceb01de54dedd'] = 'Wenn diese Spalte auf \'Nein\' gesetzt ist, wurde die Standardkategorie des Produkts nicht synchronisiert – Registerkarte \'Synchronisierung  > 1. Produkte einstellen\'';
 $_MODULE['<{ebay}prestashop>prestashop_products_40a75ac5b19b94390e4ed9a379f5311c'] = 'Synchronisierung aktiviert';
-$_MODULE['<{ebay}prestashop>prestashop_products_588560e13f59b76581164e1a3f59b19a'] = 'Wenn diese Spalte auf \'Nein\' gesetzt ist, wurde die Auswahl des Produkts auf der Registerkarte \'Einstellungen > 2. Kategorien und Preise\' aufgehoben';
+$_MODULE['<{ebay}prestashop>prestashop_products_588560e13f59b76581164e1a3f59b19a'] = 'Wenn diese Spalte auf \'Nein\' gesetzt ist, wurde die Auswahl des Produkts auf der Registerkarte \'Einstellungen > 2. Kategorien und Preise\' aufgehoben';
 $_MODULE['<{ebay}prestashop>prestashop_products_74694bfc9286a93d1aa9d75e4905578a'] = 'Produkte ausgewählt';
 $_MODULE['<{ebay}prestashop>prestashop_products_e49a4f344570b4c5b9289a7fd604b4e5'] = 'Wenn diese Spalte auf \'Ja\' gesetzt ist, wurde das Produkt deaktiviert';
 $_MODULE['<{ebay}prestashop>prestashop_products_a239c339f35893bf66491b1c0bf3ced9'] = 'Produktdeaktivierung';
@@ -529,7 +527,7 @@ $_MODULE['<{ebay}prestashop>prestashop_products_b2377ac5bdf3b12d943cd478f0cdf17b
 $_MODULE['<{ebay}prestashop>prestashop_products_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Hilfe';
 $_MODULE['<{ebay}prestashop>prestashop_products_a397ef6f494bb819dbfe106a0e9f42f9'] = 'Nicht mehr vorrätig';
 $_MODULE['<{ebay}prestashop>prestashop_products_90524f47976064c466b44094e638ee8f'] = 'Synchronisierung deaktiviert';
-$_MODULE['<{ebay}prestashop>prestashop_products_84c27bbcecf86489f4a299b12c250e60'] = 'Auswahl des Produkts wurde aufgehoben – Registerkarte \'Einstellungen > 2. Kategorien und Preise\'';
+$_MODULE['<{ebay}prestashop>prestashop_products_84c27bbcecf86489f4a299b12c250e60'] = 'Auswahl des Produkts wurde aufgehoben – Registerkarte \'Einstellungen > 2. Kategorien und Preise\'';
 $_MODULE['<{ebay}prestashop>prestashop_products_26c101f998e6f8837f24891de4035ddd'] = 'Zugriff auf Angebot';
 $_MODULE['<{ebay}prestashop>prestashop_products_e4ddca9f671536aaabe3ff3b0ef3e638'] = 'Noch kein Angebot';
 $_MODULE['<{ebay}prestashop>prestashop_products_55eb627b4dab6b4b381d1c66cf7c0f78'] = 'Hauptprodukt anzeigen';
@@ -582,8 +580,8 @@ $_MODULE['<{ebay}prestashop>table_prestashop_products_e4ddca9f671536aaabe3ff3b0e
 $_MODULE['<{ebay}prestashop>table_prestashop_products_26c101f998e6f8837f24891de4035ddd'] = 'Zugriff auf Angebot';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_a397ef6f494bb819dbfe106a0e9f42f9'] = 'Nicht mehr vorrätig';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_b36db6f25a8ac28df16bc2ef04725d67'] = 'Diese Kategorie ist zwar in PrestaShop deaktiviert, wird aber weiterhin synchronisiert';
-$_MODULE['<{ebay}prestashop>table_prestashop_products_fda1f4f73c19c01c47312d2efb8736f8'] = 'Die Standardkategorie des Produkts wurde nicht synchronisiert – Registerkarte \'Synchronisierung > 1. Produkte einstellen\'';
-$_MODULE['<{ebay}prestashop>table_prestashop_products_84c27bbcecf86489f4a299b12c250e60'] = 'Auswahl des Produkts wurde aufgehoben – Registerkarte \'Einstellungen > 2. Kategorien und Preise\'';
+$_MODULE['<{ebay}prestashop>table_prestashop_products_fda1f4f73c19c01c47312d2efb8736f8'] = 'Die Standardkategorie des Produkts wurde nicht synchronisiert – Registerkarte \'Synchronisierung > 1. Produkte einstellen\'';
+$_MODULE['<{ebay}prestashop>table_prestashop_products_84c27bbcecf86489f4a299b12c250e60'] = 'Auswahl des Produkts wurde aufgehoben – Registerkarte \'Einstellungen > 2. Kategorien und Preise\'';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_44548951e9c6e0cd97093bd5894516d5'] = 'Die Kategorie ist nicht synchronisiert oder bei der Synchronisierung dieses Produkts ist ein Problem aufgetreten';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_c106ffb3df72a6d20ae1850eedf7cd03'] = 'Die eBay-Kategorie lässt nicht mehrere Lagerhaltungsnummern zu';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_48900a6a0a3b3104f52398c08c13cfa1'] = 'Mehrere Gründe';

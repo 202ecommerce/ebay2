@@ -22,24 +22,22 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class AdminEbayProductExcluController extends ModuleAdminController
 {
     public function ajaxProcessGetProductExclu()
     {
         $ebay = Module::getInstanceByName('ebay');
-        die($ebay->displayProductExclu(Tools::getValue('id_employee')));
+        exit($ebay->displayProductExclu(Tools::getValue('id_employee')));
     }
 
     public function ajaxProcessInclureProduct()
     {
-        EbayProductConfiguration::insertOrUpdate(Tools::getValue('id_product'), array(
+        EbayProductConfiguration::insertOrUpdate(Tools::getValue('id_product'), [
             'id_ebay_profile' => Tools::getValue('id_ebay_profile'),
-            'blacklisted' =>  0,
+            'blacklisted' => 0,
             'extra_images' => 0,
-        ));
+        ]);
         $product = new Product(Tools::getValue('id_product'));
         EbayTaskManager::addTask('mod', $product, Tools::getValue('id_employee'), Tools::getValue('id_ebay_profile'));
     }

@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes;
@@ -42,7 +41,7 @@ class SandboxMode
             return defined('EBAY_DEV') ? EBAY_DEV : false;
         }
 
-        return (bool)$this->sandboxMode;
+        return (bool) $this->sandboxMode;
     }
 
     public function setSandboxMode($sandboxMode)

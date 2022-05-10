@@ -22,31 +22,31 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayOrdersTab extends EbayTab
 {
     private $vars;
+
     public function getContent($id_ebay_profile)
     {
-        $this->vars = array();
+        $this->vars = [];
         $pagination_vars = EbayOrder::getPaginatedOrders($id_ebay_profile);
         $this->vars = array_merge($this->vars, $pagination_vars);
         $this->vars['id_ebay_profile'] = $id_ebay_profile;
         $this->vars['ebay_token'] = Configuration::get('EBAY_SECURITY_TOKEN');
         $this->vars['ebayOrdersController'] = $this->context->link->getAdminLink('AdminEbayOrders');
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '6',
             'section' => 'orders',
-        );
+        ];
         $url_vars['controller'] = Tools::getValue('controller');
         $datetime = new DateTime(Configuration::get('EBAY_ORDER_LAST_UPDATE'));
-        $this->vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
+        $this->vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') ? 'Cron' : 'Prestashop');
         $this->vars['tpl_orders_ajax'] = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/tableOrders_ajax.tpl';
         $this->vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
         $this->vars['currency'] = $this->context->currency;
         $this->vars['url'] = $this->_getUrl($url_vars);
+
         return $this->display('tableOrders.tpl', $this->vars);
     }
 }

@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayProductsExcluTab extends EbayTab
 {
     public function getContent($ebay_profile)
@@ -37,12 +35,12 @@ class EbayProductsExcluTab extends EbayTab
         $url_vars = $this->context->link->getAdminLink('AdminModules');
         $url_vars .= '&configure=ebay&module_name=ebay&id_tab=106&section=sync#';
 
-        $vars = array(
+        $vars = [
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
             'url_tab' => $url_vars,
             'ebayProductExcluController' => $this->context->link->getAdminLink('AdminEbayProductExclu'),
-        );
+        ];
 
         return $this->display('tableProductsExclu_ajax.tpl', $vars);
     }

@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory;
@@ -32,18 +31,18 @@ use Ebay\classes\SDK\Core\BearerAuthToken;
 
 class Request extends AbstractBearerRequest
 {
-    /** @var string*/
+    /** @var string */
     protected $categoryTreeId;
 
-    /** @var string*/
+    /** @var string */
     protected $categoryId;
 
     public function __construct(BearerAuthToken $token, $categoryTreeId, $categoryId)
     {
         parent::__construct($token);
 
-        $this->categoryTreeId = (string)$categoryTreeId;
-        $this->categoryId = (string)$categoryId;
+        $this->categoryTreeId = (string) $categoryTreeId;
+        $this->categoryId = (string) $categoryId;
     }
 
     /** @return string */

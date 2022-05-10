@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services;
@@ -46,7 +45,7 @@ class EbayLink
         }
     }
 
-    public function getAdminLink($controller, $withToken = true, $sfRouteParams = array(), $params = array())
+    public function getAdminLink($controller, $withToken = true, $sfRouteParams = [], $params = [])
     {
         if (version_compare(_PS_VERSION_, '1.7.0', '>=')) {
             return $this->context->link->getAdminLink(
@@ -83,6 +82,4 @@ class EbayLink
 
         return $base . $shop->getBaseURI();
     }
-
-
 }

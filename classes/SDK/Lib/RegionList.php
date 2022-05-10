@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -35,16 +34,19 @@ class RegionList extends ResourceModel
 
     /**
      * @param Region $region
+     *
      * @return self
      */
     public function addRegion(Region $region)
     {
         $this->regions[] = $region;
+
         return $this;
     }
 
     /**
      * @param Region[] $regions
+     *
      * @return self
      */
     public function setRegions($regions)

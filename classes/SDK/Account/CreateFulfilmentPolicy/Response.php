@@ -22,23 +22,22 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Account\CreateFulfilmentPolicy;
 
 use Ebay\classes\SDK\Core\EbayApiResponse;
 use Ebay\classes\SDK\Lib\FulfilmentPolicy;
-use Ebay\classes\SDK\Lib\FulfilmentPolicyList;
 
 class Response extends EbayApiResponse
 {
-    /** @var FulfilmentPolicy*/
+    /** @var FulfilmentPolicy */
     protected $fulfilmentPolicy = null;
 
     public function setFulfilmentPolicy(FulfilmentPolicy $fulfilmentPolicy)
     {
         $this->fulfilmentPolicy = $fulfilmentPolicy;
+
         return $this;
     }
 

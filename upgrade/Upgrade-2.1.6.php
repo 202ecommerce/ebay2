@@ -22,11 +22,11 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_2_1_6($module)
@@ -35,7 +35,7 @@ function upgrade_module_2_1_6($module)
     $result &= $module->addEbayStateOrder();
 
     Db::getInstance()->delete('ebay_shipping_location', 1);
-    $countEbaySiteId = (int)DB::getInstance()->getValue('SELECT count(*) 
+    $countEbaySiteId = (int) DB::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
 		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_shipping_location"
 		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
@@ -45,7 +45,6 @@ function upgrade_module_2_1_6($module)
             ADD COLUMN `ebay_site_id` INT NULL;';
         $result &= Db::getInstance()->execute($sql);
     }
-
 
     return $result;
 }

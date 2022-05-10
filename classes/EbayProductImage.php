@@ -22,10 +22,8 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-require_once dirname(__FILE__).'/EbayRequest.php';
+require_once dirname(__FILE__) . '/EbayRequest.php';
 
 class EbayProductImage
 {
@@ -33,8 +31,8 @@ class EbayProductImage
     {
         $db = Db::getInstance();
 
-        $ebay_url = $db->getValue('SELECT `ebay_image_url` from `'._DB_PREFIX_.'ebay_product_image`
-			WHERE `ps_image_url` = \''.pSQL($ps_url).'\'');
+        $ebay_url = $db->getValue('SELECT `ebay_image_url` from `' . _DB_PREFIX_ . 'ebay_product_image`
+			WHERE `ps_image_url` = \'' . pSQL($ps_url) . '\'');
 
         if (!$ebay_url) {
             $ebay_request = new EbayRequest();
@@ -44,10 +42,10 @@ class EbayProductImage
                 return $ps_url;
             }
 
-            $data = array(
+            $data = [
                 'ps_image_url' => pSQL($ps_url),
                 'ebay_image_url' => pSQL($ebay_url),
-            );
+            ];
 
             $db->insert('ebay_product_image', $data);
         }
@@ -57,7 +55,6 @@ class EbayProductImage
 
     public static function removeAllProductImage()
     {
-
-        return Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
+        return Db::getInstance()->Execute('TRUNCATE ' . _DB_PREFIX_ . 'ebay_product_image');
     }
 }

@@ -22,12 +22,10 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 global $_MODULE;
 
-$_MODULE = array();
+$_MODULE = [];
 
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Easily export your products from PrestaShop to eBay, the biggest market place, to acquire new customers and realize more sales.';

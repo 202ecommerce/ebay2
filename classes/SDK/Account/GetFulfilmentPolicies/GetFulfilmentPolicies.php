@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Account\GetFulfilmentPolicies;
@@ -35,12 +34,11 @@ use Ebay\classes\SDK\Core\EbayApiResponse;
 use Ebay\classes\SDK\Core\EbayClient;
 use Ebay\classes\SDK\Lib\FulfilmentPolicyList;
 use Ebay\services\Marketplace;
-use Symfony\Component\VarDumper\VarDumper;
 use Exception;
 
 class GetFulfilmentPolicies
 {
-    /** @var \EbayProfile*/
+    /** @var \EbayProfile */
     protected $ebayProfile;
 
     public function __construct(\EbayProfile $ebayProfile)
@@ -79,7 +77,7 @@ class GetFulfilmentPolicies
 
     protected function getToken()
     {
-        return (new BearerAuthToken($this->ebayProfile));
+        return new BearerAuthToken($this->ebayProfile);
     }
 
     /**

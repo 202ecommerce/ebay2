@@ -22,36 +22,34 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayFormShippingTab extends EbayTab
 {
-
     public function getContent()
     {
-        $configKeys = array(
+        $configKeys = [
             'EBAY_SECURITY_TOKEN',
             'PS_LANG_DEFAULT',
-        );
+        ];
         // Load prestashop ebay's configuration
         $configs = Configuration::getMultiple($configKeys);
 
-        $profile_configs = $this->ebay_profile->getMultiple(array(
+        $profile_configs = $this->ebay_profile->getMultiple([
             'EBAY_DELIVERY_TIME',
             'EBAY_ZONE_NATIONAL',
-        ));
+        ]);
 
         if (!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
-            $vars = array(
+            $vars = [
                 'msg' => $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
-            );
+            ];
+
             return $this->display('alert_tabs.tpl', $vars);
         }
 
         $nb_shipping_zones_excluded = DB::getInstance()->getValue('SELECT COUNT(*)
-			FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded
-			WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
+			FROM ' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded
+			WHERE `id_ebay_profile` = ' . (int) $this->ebay_profile->id);
 
         if (!$nb_shipping_zones_excluded) {
             EbayShippingZoneExcluded::loadEbayExcludedLocations($this->ebay_profile->id);
@@ -62,10 +60,10 @@ class EbayFormShippingTab extends EbayTab
         //INITIALIZE CACHE
         $psCarrierModule = $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT'], false, false, false, null, $module_filters);
 
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '3',
             'section' => 'shipping',
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
 
@@ -74,7 +72,7 @@ class EbayFormShippingTab extends EbayTab
             $zone['carriers'] = Carrier::getCarriers($this->context->language->id, false, false, $zone['id_zone']);
             if ($zone['carriers']) {
                 foreach ($zone['carriers'] as &$carrier) {
-                    $sql = 'SELECT MIN(d.`price`) FROM `'._DB_PREFIX_.'delivery` d WHERE d.`id_zone` = '.(int)$zone['id_zone'].' AND d.`id_carrier` = '.(int)$carrier['id_carrier'];
+                    $sql = 'SELECT MIN(d.`price`) FROM `' . _DB_PREFIX_ . 'delivery` d WHERE d.`id_zone` = ' . (int) $zone['id_zone'] . ' AND d.`id_carrier` = ' . (int) $carrier['id_carrier'];
                     $result = Db::getInstance()->getValue($sql);
 
                     if ($result == null) {
@@ -86,7 +84,7 @@ class EbayFormShippingTab extends EbayTab
             }
         }
 
-        $template_vars = array(
+        $template_vars = [
             'eBayCarrier' => EbayShippingService::getCarriers($this->ebay_profile->ebay_site_id),
             'psCarrier' => $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT']),
             'psCarrierModule' => $psCarrierModule,
@@ -99,20 +97,19 @@ class EbayFormShippingTab extends EbayTab
            'ebay_token' => $configs['EBAY_SECURITY_TOKEN'],
             'id_ebay_profile' => $this->ebay_profile->id,
             'newPrestashopZone' => $zones,
-            'help_ship_cost' => array(
-                'lang'           => $this->context->country->iso_code,
+            'help_ship_cost' => [
+                'lang' => $this->context->country->iso_code,
                 'module_version' => $this->ebay->version,
-                'ps_version'     => _PS_VERSION_,
-                'error_code'     => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
-            ),
-        );
+                'ps_version' => _PS_VERSION_,
+                'error_code' => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
+            ],
+        ];
 
         return $this->display('shipping.tpl', $template_vars);
     }
 
     public function postProcess()
     {
-
         //Update global information about shipping (delivery time, ...)
         $this->ebay_profile->setConfiguration('EBAY_DELIVERY_TIME', Tools::getValue('deliveryTime'));
         //Update Shipping Method for National Shipping (Delete And Insert)
@@ -128,14 +125,14 @@ class EbayFormShippingTab extends EbayTab
                     $infos = explode('-', $ps_carriers[$key]);
                     $ps_ship = new Carrier($infos[0]);
                     if ($ps_ship->shipping_method == 1) {
-                        $ship_cost =$ps_ship->getMaxDeliveryPriceByWeight($infos[1]);
+                        $ship_cost = $ps_ship->getMaxDeliveryPriceByWeight($infos[1]);
                     } else {
                         $ship_cost = $ps_ship->getMaxDeliveryPriceByPrice($infos[1]);
                     }
                     if ($ship_cost == false) {
                         $ship_cost = 0;
                     }
-                    if (isset($extra_fees) && (float)$ship_cost < $extra_fees[$key]) {
+                    if (isset($extra_fees) && (float) $ship_cost < $extra_fees[$key]) {
                         return false;
                     }
 
@@ -150,6 +147,7 @@ class EbayFormShippingTab extends EbayTab
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
         }
+
         return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
     }
 }

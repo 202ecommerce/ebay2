@@ -22,31 +22,29 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-$sql= array();
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_user_identifier_token` (
+$sql = [];
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_user_identifier_token` (
     `ebay_user_identifier` varchar(255) NOT NULL,
     `token` text NOT NULL,
     PRIMARY KEY (`ebay_user_identifier`)
-	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+	) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category` DROP INDEX `id_category_ref`';
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category` ADD UNIQUE (`id_category_ref`,`id_country`)';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category` DROP INDEX `id_category_ref`';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category` ADD UNIQUE (`id_category_ref`,`id_country`)';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_service` ADD `ebay_site_id` INT( 16 ) NOT NULL';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_shipping_service` ADD `ebay_site_id` INT( 16 ) NOT NULL';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `ebay_site_id` INT( 16 ) NOT NULL';
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` DROP INDEX `id_category_ref`';
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD UNIQUE (`id_category_ref`, `ebay_site_id`, `name`)';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_specific` ADD `ebay_site_id` INT( 16 ) NOT NULL';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_specific` DROP INDEX `id_category_ref`';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_specific` ADD UNIQUE (`id_category_ref`, `ebay_site_id`, `name`)';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` ADD `id_ebay_profile` INT( 16 ) NOT NULL';
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` DROP INDEX `id_product`';
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` ADD UNIQUE (`id_product`, `id_ebay_profile`)';
-$sql[] = 'CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'ebay_catalog_configuration (
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_product_configuration` ADD `id_ebay_profile` INT( 16 ) NOT NULL';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_product_configuration` DROP INDEX `id_product`';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_product_configuration` ADD UNIQUE (`id_product`, `id_ebay_profile`)';
+$sql[] = 'CREATE TABLE IF NOT EXISTS ' . _DB_PREFIX_ . 'ebay_catalog_configuration (
             `id` INT(11) PRIMARY KEY AUTO_INCREMENT,
             `id_country` INT(11),
             `name` VARCHAR(250),
             `value` VARCHAR(250)
-            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+            ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';

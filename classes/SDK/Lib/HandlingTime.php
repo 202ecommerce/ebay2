@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -33,10 +32,10 @@ class HandlingTime extends ResourceModel
 {
     const DAY = 'DAY';
 
-    /** @var string*/
+    /** @var string */
     protected $value;
 
-    /** @var string*/
+    /** @var string */
     protected $unit;
 
     /**
@@ -44,16 +43,18 @@ class HandlingTime extends ResourceModel
      */
     public function getValue()
     {
-        return (string)$this->value;
+        return (string) $this->value;
     }
 
     /**
      * @param string $value
+     *
      * @return HandlingTime
      */
     public function setValue($value)
     {
-        $this->value = (string)$value;
+        $this->value = (string) $value;
+
         return $this;
     }
 
@@ -62,16 +63,18 @@ class HandlingTime extends ResourceModel
      */
     public function getUnit()
     {
-        return (string)$this->unit;
+        return (string) $this->unit;
     }
 
     /**
      * @param string $unit
+     *
      * @return HandlingTime
      */
     public function setUnit($unit)
     {
-        $this->unit = (string)$unit;
+        $this->unit = (string) $unit;
+
         return $this;
     }
 
@@ -93,7 +96,7 @@ class HandlingTime extends ResourceModel
     {
         return [
             'value' => $this->getValue(),
-            'unit' => $this->getUnit()
+            'unit' => $this->getUnit(),
         ];
     }
 }

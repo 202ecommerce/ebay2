@@ -22,11 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-$sql= array();
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_return_detail` (
+$sql = [];
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_order_return_detail` (
     `id` INT(30)AUTO_INCREMENT PRIMARY KEY,
     `id_return` VARCHAR(125)NOT NULL,
     `type` VARCHAR(125),
@@ -37,8 +35,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_return_detail` (
     `id_ebay_order` VARCHAR(125),
     `id_transaction` VARCHAR(125),
     `id_item` VARCHAR(125)
-)ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+)ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_order_order` ADD `id_transaction` varchar(125 ) NOT NULL';
+$sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'ebay_order_order` ADD `id_transaction` varchar(125 ) NOT NULL';
 
-$sql[] = 'ALTER TABLE '._DB_PREFIX_.'ebay_product MODIFY `id_shipping_policies` varchar(125 )';
+$sql[] = 'ALTER TABLE ' . _DB_PREFIX_ . 'ebay_product MODIFY `id_shipping_policies` varchar(125 )';

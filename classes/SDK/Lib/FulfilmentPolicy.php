@@ -22,51 +22,50 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
 
 use Ebay\classes\SDK\Core\ResourceModel;
-use Symfony\Component\VarDumper\VarDumper;
 
 class FulfilmentPolicy extends ResourceModel
 {
-    /** @var string*/
+    /** @var string */
     protected $name;
 
-    /** @var string*/
+    /** @var string */
     protected $description;
 
-    /** @var string*/
+    /** @var string */
     protected $marketplaceId;
 
-    /** @var CategoryTypeList*/
+    /** @var CategoryTypeList */
     protected $categoryTypes;
 
-    /** @var HandlingTime*/
+    /** @var HandlingTime */
     protected $handlingTime;
 
-    /** @var ShipToLocations*/
+    /** @var ShipToLocations */
     protected $shipToLocations;
 
-    /** @var ShippingOptionList*/
+    /** @var ShippingOptionList */
     protected $shoppingOptions;
 
-    /** @var bool*/
+    /** @var bool */
     protected $globalShipping;
 
-    /** @var bool*/
+    /** @var bool */
     protected $pickupDropOff;
 
-    /** @var bool*/
+    /** @var bool */
     protected $freightShipping;
 
-    /** @var string*/
+    /** @var string */
     protected $fulfillmentPolicyId;
 
     /**
      * @param mixed
+     *
      * @return self
      */
     public function fromArray($data)
@@ -180,11 +179,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param string
+     *
      * @return self
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
+
         return $this;
     }
 
@@ -198,11 +199,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param string
+     *
      * @return self
      */
     public function setDescription($description)
     {
-        $this->description = (string)$description;
+        $this->description = (string) $description;
+
         return $this;
     }
 
@@ -214,11 +217,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param string
+     *
      * @return self
      */
     public function setMarketplaceId($marketplaceId)
     {
         $this->marketplaceId = (string) $marketplaceId;
+
         return $this;
     }
 
@@ -230,11 +235,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param HandlingTime
+     *
      * @return self
      */
     public function setHandlingTime(HandlingTime $handlingTime)
     {
         $this->handlingTime = $handlingTime;
+
         return $this;
     }
 
@@ -245,21 +252,24 @@ class FulfilmentPolicy extends ResourceModel
         }
 
         $this->categoryTypes->addCategoryType($categoryType);
+
         return $this;
     }
 
     /**
      * @param CategoryTypeList $categoryTypeList
+     *
      * @return self
      */
     public function setCategoryTypes(CategoryTypeList $categoryTypeList)
     {
         $this->categoryTypes = $categoryTypeList;
+
         return $this;
     }
 
     /**
-     * @return  CategoryTypeList|null
+     * @return CategoryTypeList|null
      */
     public function getCategoryTypes()
     {
@@ -267,7 +277,7 @@ class FulfilmentPolicy extends ResourceModel
     }
 
     /**
-     * @return  HandlingTime|null
+     * @return HandlingTime|null
      */
     public function getHandlingTime()
     {
@@ -284,11 +294,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param bool $globalShipping
+     *
      * @return self
      */
     public function setGlobalShipping($globalShipping)
     {
-        $this->globalShipping = (bool)$globalShipping;
+        $this->globalShipping = (bool) $globalShipping;
+
         return $this;
     }
 
@@ -302,11 +314,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param bool $pickupDropOff
+     *
      * @return self
      */
     public function setPickupDropOff($pickupDropOff)
     {
-        $this->pickupDropOff = (bool)$pickupDropOff;
+        $this->pickupDropOff = (bool) $pickupDropOff;
+
         return $this;
     }
 
@@ -320,11 +334,13 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param bool $freightShipping
+     *
      * @return self
      */
     public function setFreightShipping($freightShipping)
     {
-        $this->freightShipping = (bool)$freightShipping;
+        $this->freightShipping = (bool) $freightShipping;
+
         return $this;
     }
 
@@ -338,21 +354,25 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param string $fulfillmentPolicyId
+     *
      * @return self
      */
     public function setFulfillmentPolicyId($fulfillmentPolicyId)
     {
-        $this->fulfillmentPolicyId = (string)$fulfillmentPolicyId;
+        $this->fulfillmentPolicyId = (string) $fulfillmentPolicyId;
+
         return $this;
     }
 
     /**
      * @param ShippingOptionList $shippingOptionList
+     *
      * @return self
      */
     public function setShippingOptions(ShippingOptionList $shippingOptionList)
     {
         $this->shoppingOptions = $shippingOptionList;
+
         return $this;
     }
 
@@ -366,6 +386,7 @@ class FulfilmentPolicy extends ResourceModel
 
     /**
      * @param ShippingOption $shippingOption
+     *
      * @return self
      */
     public function addShippingOption(ShippingOption $shippingOption)
@@ -375,16 +396,19 @@ class FulfilmentPolicy extends ResourceModel
         }
 
         $this->shoppingOptions->addShippingOption($shippingOption);
+
         return $this;
     }
 
     /**
      * @param ShipToLocations $shipToLocations
+     *
      * @return self
      */
     public function setShipToLocations(ShipToLocations $shipToLocations)
     {
         $this->shipToLocations = $shipToLocations;
+
         return $this;
     }
 

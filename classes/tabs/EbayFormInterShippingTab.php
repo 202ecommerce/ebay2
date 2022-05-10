@@ -22,36 +22,34 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayFormInterShippingTab extends EbayTab
 {
-
     public function getContent()
     {
-        $configKeys = array(
+        $configKeys = [
             'EBAY_SECURITY_TOKEN',
             'PS_LANG_DEFAULT',
-        );
+        ];
         // Load prestashop ebay's configuration
         $configs = Configuration::getMultiple($configKeys);
 
-        $profile_configs = $this->ebay_profile->getMultiple(array(
+        $profile_configs = $this->ebay_profile->getMultiple([
             'EBAY_ZONE_INTERNATIONAL',
-        ));
+        ]);
 
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_ORDERS_CONFIG_TAB_OK')) {
-            $vars = array(
+            $vars = [
                 'msg' => $this->ebay->l('Please configure the \'Orders settings\' tab before using this tab', 'ebayformeconfigannoncestab'),
-            );
+            ];
+
             return $this->display('alert_tabs.tpl', $vars);
         }
 
         $nb_shipping_zones_excluded = DB::getInstance()->getValue('SELECT COUNT(*)
-			FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded
-			WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
+			FROM ' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded
+			WHERE `id_ebay_profile` = ' . (int) $this->ebay_profile->id);
 
         if (!$nb_shipping_zones_excluded) {
             EbayShippingZoneExcluded::loadEbayExcludedLocations($this->ebay_profile->id);
@@ -62,10 +60,10 @@ class EbayFormInterShippingTab extends EbayTab
         //INITIALIZE CACHE
         $psCarrierModule = $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT'], false, false, false, null, $module_filters);
 
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '103',
             'section' => 'intershipping',
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
 
@@ -74,7 +72,7 @@ class EbayFormInterShippingTab extends EbayTab
             $zone['carriers'] = Carrier::getCarriers($this->context->language->id, false, false, $zone['id_zone']);
             if ($zone['carriers']) {
                 foreach ($zone['carriers'] as &$carrier) {
-                    $sql = 'SELECT MIN(d.`price`) FROM `'._DB_PREFIX_.'delivery` d WHERE d.`id_zone` = '.(int)$zone['id_zone'].' AND d.`id_carrier` = '.(int)$carrier['id_carrier'];
+                    $sql = 'SELECT MIN(d.`price`) FROM `' . _DB_PREFIX_ . 'delivery` d WHERE d.`id_zone` = ' . (int) $zone['id_zone'] . ' AND d.`id_carrier` = ' . (int) $carrier['id_carrier'];
                     $result = Db::getInstance()->getValue($sql);
 
                     if ($result == null) {
@@ -86,7 +84,7 @@ class EbayFormInterShippingTab extends EbayTab
             }
         }
 
-        $template_vars = array(
+        $template_vars = [
             'eBayCarrier' => EbayShippingService::getCarriers($this->ebay_profile->ebay_site_id),
             'psCarrier' => $this->ebay_profile->getCarriers($configs['PS_LANG_DEFAULT']),
             'psCarrierModule' => $psCarrierModule,
@@ -100,14 +98,13 @@ class EbayFormInterShippingTab extends EbayTab
             'ebay_token' => $configs['EBAY_SECURITY_TOKEN'],
             'id_ebay_profile' => $this->ebay_profile->id,
             'newPrestashopZone' => $zones,
-            'help_ship_cost' => array(
-                'lang'           => $this->context->country->iso_code,
+            'help_ship_cost' => [
+                'lang' => $this->context->country->iso_code,
                 'module_version' => $this->ebay->version,
-                'ps_version'     => _PS_VERSION_,
-                'error_code'     => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
-            ),
-
-        );
+                'ps_version' => _PS_VERSION_,
+                'error_code' => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
+            ],
+        ];
 
         return $this->display('interShipping.tpl', $template_vars);
     }
@@ -117,22 +114,22 @@ class EbayFormInterShippingTab extends EbayTab
         EbayShipping::truncateInternational($this->ebay_profile->id);
         //Update excluded location
         if (Tools::getValue('excludeLocationHidden')) {
-            Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping_zone_excluded
+            Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded
 				SET excluded = 0
-				WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
+				WHERE `id_ebay_profile` = ' . (int) $this->ebay_profile->id);
 
             if ($exclude_locations = Tools::getValue('excludeLocation')) {
                 $locations = array_keys($exclude_locations);
-                $where = 'location IN ("'.implode('","', array_map('pSQL', $locations)).'")';
+                $where = 'location IN ("' . implode('","', array_map('pSQL', $locations)) . '")';
 
-                $where .= ' AND `id_ebay_profile` = '.(int) $this->ebay_profile->id;
+                $where .= ' AND `id_ebay_profile` = ' . (int) $this->ebay_profile->id;
 
-                DB::getInstance()->update('ebay_shipping_zone_excluded', array('excluded' => 1), $where);
+                DB::getInstance()->update('ebay_shipping_zone_excluded', ['excluded' => 1], $where);
             }
         }
 
-        Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_shipping_international_zone
-			WHERE `id_ebay_profile` = '.(int) $this->ebay_profile->id);
+        Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_shipping_international_zone
+			WHERE `id_ebay_profile` = ' . (int) $this->ebay_profile->id);
 
         if ($ebay_carriers_international = Tools::getValue('ebayCarrier_international')) {
             $ps_carriers_international = Tools::getValue('psCarrier_international');
@@ -159,6 +156,7 @@ class EbayFormInterShippingTab extends EbayTab
             $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
             EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
         }
+
         return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
     }
 }

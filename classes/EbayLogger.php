@@ -22,9 +22,7 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayLogger
 {
     const DEBUG = 0;
@@ -33,28 +31,28 @@ class EbayLogger
     const ERROR = 6;
     const FATAL = 9;
 
-    private static $loggers = array();
+    private static $loggers = [];
 
-    public static $severity = array(
-        'DEBUG'   => self::DEBUG,
-        'INFO'    => self::INFO,
+    public static $severity = [
+        'DEBUG' => self::DEBUG,
+        'INFO' => self::INFO,
         'WARNING' => self::WARNING,
-        'ERROR'   => self::ERROR,
-        'FATAL'   => self::FATAL,
-    );
+        'ERROR' => self::ERROR,
+        'FATAL' => self::FATAL,
+    ];
 
     public function __construct($level = 'INFO', $context = null, $uid = '')
     {
         $this->level = self::$severity[Tools::strtoupper($level)];
-        $this->uid = uniqid((string)$uid, true);
+        $this->uid = uniqid((string) $uid, true);
         $this->context = $context;
     }
 
     public static function install()
     {
-        $sql=array();
+        $sql = [];
         // Create ebay_logs Table in Database
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_logs` (
             `id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
             `datetime` DATETIME NOT NULL,
             `severity` TINYINT(1) NOT NULL DEFAULT 0,
@@ -64,7 +62,7 @@ class EbayLogger
             `backtrace` TEXT,
             `uid` TEXT,
             PRIMARY KEY (`id_ebay_logs`)
-        ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
@@ -88,27 +86,27 @@ class EbayLogger
     {
         $levels = array_flip(self::$severity);
         $sql = '
-			SELECT * FROM '._DB_PREFIX_.'ebay_logs
+			SELECT * FROM ' . _DB_PREFIX_ . 'ebay_logs
 		';
-        $where = array();
+        $where = [];
         if ($keyword) {
-            $where[] = ' message LIKE "%'.pSQL($keyword).'%" OR context LIKE "%'.pSQL($keyword).'%"';
+            $where[] = ' message LIKE "%' . pSQL($keyword) . '%" OR context LIKE "%' . pSQL($keyword) . '%"';
         }
         if ($uid) {
-            $where[] = 'uid = "'.pSQL($uid).'" ';
+            $where[] = 'uid = "' . pSQL($uid) . '" ';
         }
         if ($where) {
-            $sql .= 'WHERE '.implode(' AND ', $where);
+            $sql .= 'WHERE ' . implode(' AND ', $where);
         }
 
         $sql .= 'ORDER BY id_ebay_logs ASC ';
         if ($limit) {
-            $sql .= 'LIMIT '.(int)$limit;
+            $sql .= 'LIMIT ' . (int) $limit;
         }
 
         $rows = Db::getInstance()->ExecuteS($sql);
         foreach ($rows as &$row) {
-            $row['severity_label'] = $levels[(int)$row['severity']];
+            $row['severity_label'] = $levels[(int) $row['severity']];
         }
 
         return $rows;
@@ -116,13 +114,11 @@ class EbayLogger
 
     public static function clear()
     {
-        return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_logs');
+        return Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_logs');
     }
-
 
     public static function export($uid = null)
     {
-
         $logs = self::getLogs($uid);
 
         $csvcontent = fopen('php://output', 'w');
@@ -130,16 +126,14 @@ class EbayLogger
         foreach ($logs as $row) {
             fputcsv($csvcontent, array_values($row));
         }
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=logs.csv");
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename=logs.csv');
     }
-
 
     public static function display()
     {
-
-        $currentIndex = 'index.php?controller=AdminModules&configure=ebay&&token='.Tools::getAdminTokenLite('AdminModules');
+        $currentIndex = 'index.php?controller=AdminModules&configure=ebay&&token=' . Tools::getAdminTokenLite('AdminModules');
 
         $action = Tools::getValue('logs');
         $keyword = Tools::getValue('keyword');
@@ -158,55 +152,51 @@ class EbayLogger
             }
         }
 
-
-
         $logs = self::getLogs($uid, $keyword); //self::getLogs();
 
-        $fields_list = array(
-
-            'datetime' => array(
+        $fields_list = [
+            'datetime' => [
                 'title' => 'Datetime',
                 'width' => 140,
-                'type'  => 'text',
-            ),
+                'type' => 'text',
+            ],
 
-            'severity_label' => array(
+            'severity_label' => [
                 'title' => 'Severity',
                 'width' => 140,
-                'type'  => 'text',
-            ),
+                'type' => 'text',
+            ],
 
-            'message' => array(
+            'message' => [
                 'title' => 'Message',
                 'width' => 140,
-                'type'  => 'text',
-            ),
-            'context' => array(
+                'type' => 'text',
+            ],
+            'context' => [
                 'title' => 'Context',
                 'width' => 140,
-                'type'  => 'text',
-            ),
-            'uid'     => array(
+                'type' => 'text',
+            ],
+            'uid' => [
                 'title' => 'Operation',
                 'width' => 140,
-                'type'  => 'hidden',
-            ),
-        );
+                'type' => 'hidden',
+            ],
+        ];
         $helper = new HelperList();
         $helper->shopLinkType = '';
         $helper->simple_header = true;
-        $helper->actions = array('view');
+        $helper->actions = ['view'];
         $helper->identifier = 'uid';
         $helper->show_toolbar = true;
         $helper->title = 'logs ebay';
         $helper->table = '_ebay_logs';
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
-
         //$currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&totlookbook_edit='.Tools::getValue('totlookbook_edit', 'global');
         $helper->currentIndex = $_SERVER['REQUEST_URI'];
 
-        $html = "";
+        $html = '';
         $html .= $helper->generateList($logs, $fields_list);
 
         return $html;
@@ -214,16 +204,15 @@ class EbayLogger
 
     public static function test()
     {
-
         $logger1 = new EbayLogger('DEBUG');
         $logger2 = new EbayLogger('INFO');
         $logger3 = new EbayLogger('WARNING');
-        $logger4 = new EbayLogger('INFO', array(
-            'user'       => 'testuser',
-            'shop'       => 'shop',
-            'operation'  => 'sync product',
-            'id_product' => 123
-        ));
+        $logger4 = new EbayLogger('INFO', [
+            'user' => 'testuser',
+            'shop' => 'shop',
+            'operation' => 'sync product',
+            'id_product' => 123,
+        ]);
 
         $logger1->debug('logger1 debug');
         $logger1->info('logger1 info');
@@ -240,15 +229,13 @@ class EbayLogger
         $logger3->warning('logger3 warning');
         $logger3->error('logger3 error');
 
-
         $logger4->info('start sync');
-        $logger4->info('start sync variation1', array('id_variation' => 1));
-        $logger4->info('start sync variation2', array('id_variation' => 2));
-        $logger4->info('start sync variation3', array('id_variation' => 3));
-
+        $logger4->info('start sync variation1', ['id_variation' => 1]);
+        $logger4->info('start sync variation2', ['id_variation' => 2]);
+        $logger4->info('start sync variation3', ['id_variation' => 3]);
 
         // test recuperation d'un logger par nom
-        $log = EbayLogger::get('MYLOGGER', 'INFO', array('loggerused' => 'MYLOGGER'));
+        $log = EbayLogger::get('MYLOGGER', 'INFO', ['loggerused' => 'MYLOGGER']);
         $log->info('test MYLOGGER');
 
         $log = EbayLogger::get('MYLOGGER'); // doit etre la même instance
@@ -263,25 +250,25 @@ class EbayLogger
         if ($severity >= $this->level) {
             $datetime = date('Y-m-d H:i:s'); // Microseconds ???
 
-            $ctx = array_merge((array)$this->context, (array)$context);
+            $ctx = array_merge((array) $this->context, (array) $context);
 
             if (method_exists('MySQL', 'insert')) {
                 Db::getInstance()->insert(
                     'ebay_logs',
-                    array(
-                        'uid'       => $this->uid,
-                        'datetime'  => $datetime,
-                        'severity'  => (int)$severity,
-                        'code'      => 0,
-                        'message'   => pSQL($msg),
-                        'context'   => $ctx ? pSQL(Tools::jsonEncode($ctx)) : null,
+                    [
+                        'uid' => $this->uid,
+                        'datetime' => $datetime,
+                        'severity' => (int) $severity,
+                        'code' => 0,
+                        'message' => pSQL($msg),
+                        'context' => $ctx ? pSQL(Tools::jsonEncode($ctx)) : null,
                         'backtrace' => $backtrace,
-                    )
+                    ]
                 );
             } else {
-                $sql = 'INSERT INTO '._DB_PREFIX_.'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
-			VALUES(\''.(int) $this->uid.'\', \''.$datetime.'\', \''.(int)$severity.'\', \'0\', \''.pSQL($msg).'\',
-			 \''.pSQL($ctx ? Tools::jsonEncode($ctx) : null).'\', \''.pSQL($backtrace).'\')';
+                $sql = 'INSERT INTO ' . _DB_PREFIX_ . 'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
+			VALUES(\'' . (int) $this->uid . '\', \'' . $datetime . '\', \'' . (int) $severity . '\', \'0\', \'' . pSQL($msg) . '\',
+			 \'' . pSQL($ctx ? Tools::jsonEncode($ctx) : null) . '\', \'' . pSQL($backtrace) . '\')';
 
                 DB::getInstance()->Execute($sql);
             }

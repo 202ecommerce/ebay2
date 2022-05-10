@@ -25,23 +25,20 @@ use Ebay\services\EbayLink;
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayFormParametersTab extends EbayTab
 {
     public function getContent()
     {
         // Loading config currency
-        $config_currency = new Currency((int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
+        $config_currency = new Currency((int) $this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
-        $url_vars = array(
-            'id_tab'  => '1',
-            'section' => 'parameters'
-        );
+        $url_vars = [
+            'id_tab' => '1',
+            'section' => 'parameters',
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
-
 
         $url = $this->_getUrl($url_vars);
 
@@ -51,19 +48,18 @@ class EbayFormParametersTab extends EbayTab
 
         $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
 
-        $createShopUrl = 'http://cgi3.ebay.'.$ebay_country->getSiteExtension().'/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
+        $createShopUrl = 'http://cgi3.ebay.' . $ebay_country->getSiteExtension() . '/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
 
         $ebay_request = new EbayRequest();
 
-        $ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
-        
+        $ebay_sign_in_url = $ebay_request->getLoginUrl() . '?SignIn&runame=' . $ebay_request->runame . '&SessID=' . $this->context->cookie->eBaySession;
 
         $ebay_paypal_email = Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'));
         $shopCountry = Tools::getValue('ebay_shop_country', $this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY'));
 
         $user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
-        $is_multishop =  Shop::isFeatureActive();
+        $is_multishop = Shop::isFeatureActive();
 
         if ($this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') == '1' ||
             ($this->ebay_profile->getCatalogConfiguration('EBAY_CATEGORY_LOADED') !== '0' && Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id))
@@ -76,44 +72,44 @@ class EbayFormParametersTab extends EbayTab
         $link = Context::getContext()->link;
         $static_token = Configuration::get('EBAY_CRON_TOKEN');
 
-        $smarty_vars = array(
+        $smarty_vars = [
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
-            'url'                       => $url,
-            'admin_path'              => basename(_PS_ADMIN_DIR_),
-            'ebay_sign_in_url'          => $ebay_sign_in_url,
-            'ebay_token'                => Configuration::get('EBAY_SECURITY_TOKEN'),
-            'configCurrencysign'        => $config_currency->sign,
-            'catLoaded'                 => $catLoaded,
-            'createShopUrl'             => $createShopUrl,
-            'ebayCountry'               => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
-            'ebayShopValue'             => $ebayShopValue,
-            'shopPostalCode'            => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
-            'ebayShop'                  => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
-            'ebay_paypal_email'         => $ebay_paypal_email,
-            'is_multishop'              => $is_multishop,
-            'hasEbayBoutique'           => isset($user_profile['StoreUrl']) && !empty($user_profile['StoreUrl']) ? true : false,
-            'currencies'                => TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop),
-            'current_currency'          => (int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'),
-            'ebay_shop_countries'       => EbayCountrySpec::getCountriesSelect(false),
+            'url' => $url,
+            'admin_path' => basename(_PS_ADMIN_DIR_),
+            'ebay_sign_in_url' => $ebay_sign_in_url,
+            'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+            'configCurrencysign' => $config_currency->sign,
+            'catLoaded' => $catLoaded,
+            'createShopUrl' => $createShopUrl,
+            'ebayCountry' => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
+            'ebayShopValue' => $ebayShopValue,
+            'shopPostalCode' => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
+            'ebayShop' => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
+            'ebay_paypal_email' => $ebay_paypal_email,
+            'is_multishop' => $is_multishop,
+            'hasEbayBoutique' => isset($user_profile['StoreUrl']) && !empty($user_profile['StoreUrl']) ? true : false,
+            'currencies' => TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop),
+            'current_currency' => (int) $this->ebay_profile->getConfiguration('EBAY_CURRENCY'),
+            'ebay_shop_countries' => EbayCountrySpec::getCountriesSelect(false),
             'current_ebay_shop_country' => $shopCountry,
-            'immediate_payment'         => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
+            'immediate_payment' => (bool) $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             // CRON sync
-            'sync_products_by_cron'      => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
-            'sync_products_by_cron_url'  => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => $static_token)),
-            'sync_products_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'product', 'token' => $static_token)),
-            'sync_orders_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
-            'sync_orders_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'order', 'token' => $static_token)),
-            'sync_orders_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'order', 'token' => $static_token)),
-            'sync_orders_returns_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
-            'sync_orders_returns_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'orderReturns', 'token' => $static_token)),
-            'sync_orders_returns_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', array('action' => 'orderReturns', 'token' => $static_token)),
-            'activate_resynchBP'         => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
-            'help_Cat_upd' => array(
-                'lang'           => $this->context->country->iso_code,
+            'sync_products_by_cron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
+            'sync_products_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'product', 'token' => $static_token]),
+            'sync_products_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'product', 'token' => $static_token]),
+            'sync_orders_by_cron' => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
+            'sync_orders_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'order', 'token' => $static_token]),
+            'sync_orders_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'order', 'token' => $static_token]),
+            'sync_orders_returns_by_cron' => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
+            'sync_orders_returns_by_cron_url' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'orderReturns', 'token' => $static_token]),
+            'sync_orders_returns_by_cron_path' => $link->getModuleLink('ebay', 'synchronizeCron', ['action' => 'orderReturns', 'token' => $static_token]),
+            'activate_resynchBP' => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
+            'help_Cat_upd' => [
+                'lang' => $this->context->country->iso_code,
                 'module_version' => $this->ebay->version,
-                'ps_version'     => _PS_VERSION_,
-                'error_code'     => 'HELP-CATEGORY-UPDATE',
-            ),
+                'ps_version' => _PS_VERSION_,
+                'error_code' => 'HELP-CATEGORY-UPDATE',
+            ],
             'id_shop' => $this->context->shop->id,
             'user_auth_token' => $this->ebay_profile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
             'onboardingUrl' => $this->ebay_profile->getConfiguration(ProfileConf::ONBOARDING_URL),
@@ -122,15 +118,15 @@ class EbayFormParametersTab extends EbayTab
             'ruName' => $this->ebay_profile->getConfiguration(ProfileConf::RU_NAME),
             'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
             'adminTokenListener' => $this->initEbayLink()->getAdminLink('AdminTokenListener'),
-        );
+        ];
 
         if (Tools::getValue('relogin')) {
             $this->ebay->login();
 
-            $smarty_vars = array_merge($smarty_vars, array(
-                'relogin'      => true,
+            $smarty_vars = array_merge($smarty_vars, [
+                'relogin' => true,
                 'redirect_url' => $ebay_request->getLoginUrl() . '?SignIn&runame=' . $ebay_request->runame . '&SessID=' . $this->context->cookie->eBaySession,
-            ));
+            ]);
         } else {
             $smarty_vars['relogin'] = false;
         }
@@ -138,14 +134,13 @@ class EbayFormParametersTab extends EbayTab
         if (Tools::getValue('action') == 'regenerate_token') {
             $smarty_vars['check_token_tpl'] = $this->ebay->displayCheckToken();
         }
-        
 
-        $smarty_vars['help'] = array(
-            'lang'                  => $this->context->country->iso_code,
-            'module_version'        => $this->ebay->version,
-            'ps_version'            => _PS_VERSION_,
+        $smarty_vars['help'] = [
+            'lang' => $this->context->country->iso_code,
+            'module_version' => $this->ebay->version,
+            'ps_version' => _PS_VERSION_,
             'code_payment_solution' => 'HELP-SETTINGS-PAYMENT-SOLUTIONS',
-        );
+        ];
 
         return $this->display('formParameters.tpl', $smarty_vars);
     }
@@ -159,7 +154,7 @@ class EbayFormParametersTab extends EbayTab
     {
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
-        $currencies_ids = array_map(array($this, 'getCurrencyId'), $currencies);
+        $currencies_ids = array_map([$this, 'getCurrencyId'], $currencies);
 
         if (Tools::getValue('ebay_shop_postalcode') == '') {
             return $this->ebay->displayError($this->ebay->l('Code postal failed'));

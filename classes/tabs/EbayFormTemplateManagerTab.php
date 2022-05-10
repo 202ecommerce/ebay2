@@ -22,24 +22,20 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 class EbayFormTemplateManagerTab extends EbayTab
 {
-
     public function getContent()
     {
         $iso = $this->context->language->iso_code;
 
         // Display Form
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '4',
             'section' => 'template',
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
-
 
         $action_url = $this->_getUrl($url_vars);
 
@@ -51,9 +47,9 @@ class EbayFormTemplateManagerTab extends EbayTab
 
         $ebay_product_template_title = $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE');
         $this->context->controller->addCSS(
-            _MODULE_DIR_.'ebay/views/css/ebay.css'
+            _MODULE_DIR_ . 'ebay/views/css/ebay.css'
         );
-        $smarty_vars = array(
+        $smarty_vars = [
             'action_url' => $action_url,
             'ebay_product_template' => $ebay_product_template,
             'ebay_product_template_title' => $ebay_product_template_title,
@@ -61,11 +57,9 @@ class EbayFormTemplateManagerTab extends EbayTab
             'ad' => dirname($_SERVER['PHP_SELF']),
             'base_uri' => __PS_BASE_URI__,
             'theme_css_dir' => _THEME_CSS_DIR_,
+        ];
 
-        );
-
-        $smarty_vars['iso'] = (file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
-
+        $smarty_vars['iso'] = (file_exists(_PS_ROOT_DIR_ . '/js/tiny_mce/langs/' . $iso . '.js') ? $iso : 'en');
 
         return $this->display('formTemplateManager.tpl', $smarty_vars);
     }
@@ -79,8 +73,8 @@ class EbayFormTemplateManagerTab extends EbayTab
         }
 
         // work around for the tinyMCE bug deleting the css line
-        $css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'views/css/ebay.css" />';
-        $ebay_product_template = $css_line.$ebay_product_template;
+        $css_line = '<link rel="stylesheet" type="text/css" href="' . $this->_getModuleUrl() . 'views/css/ebay.css" />';
+        $ebay_product_template = $css_line . $ebay_product_template;
 
         // Saving new configurations
         if ($this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $ebay_product_template, true) && $this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', $ebay_product_template_title)) {
@@ -90,6 +84,7 @@ class EbayFormTemplateManagerTab extends EbayTab
                 $product = new Product($product_id['id_product'], false, $this->ebay_profile->id_lang);
                 EbayTaskManager::addTask('update', $product, null, $this->ebay_profile->id);
             }
+
             return $this->ebay->displayConfirmation($this->ebay->l('Settings updated', 'ebayformtemplatemanagertab'));
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed', 'ebayformtemplatemanagertab'));
