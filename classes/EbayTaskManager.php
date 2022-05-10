@@ -1,7 +1,4 @@
 <?php
-
-use Ebay\services\EbayContext;
-
 /**
  *  2007-2022 PrestaShop
  *
@@ -26,6 +23,8 @@ use Ebay\services\EbayContext;
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
+use Ebay\services\EbayContext;
 
 class EbayTaskManager
 {

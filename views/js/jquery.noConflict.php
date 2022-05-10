@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 header('content-type: application/x-javascript');
 if (preg_match('/^([0-9]+\.)+[0-9]$/Ui', $_GET['version'])) {
     echo 'var $j' . str_replace('.', '', $_GET['version']) . ' = jQuery.noConflict(true);';
