@@ -19,6 +19,7 @@ namespace EbayVendor\League\OAuth2\Client\Grant;
  *
  * @link http://tools.ietf.org/html/rfc6749#section-1.3.1 Authorization Code (RFC 6749, §1.3.1)
  */
+
 class AuthorizationCode extends AbstractGrant
 {
     /**

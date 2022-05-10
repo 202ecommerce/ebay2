@@ -10,6 +10,7 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
  * Middleware that retries requests based on the boolean result of
  * invoking the provided "decider" function.
  */
+
 class RetryMiddleware
 {
     /** @var callable  */

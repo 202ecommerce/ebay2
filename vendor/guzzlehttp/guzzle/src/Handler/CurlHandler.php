@@ -11,6 +11,7 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
  * associative array of curl option constants mapping to values in the
  * **curl** key of the "client" key of the request.
  */
+
 class CurlHandler
 {
     /** @var CurlFactoryInterface */

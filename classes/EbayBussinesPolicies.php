@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayBussinesPolicies
 {
     public static function getPoliciesbyType($type, $id_ebay_profile)

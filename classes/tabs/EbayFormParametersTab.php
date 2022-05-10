@@ -26,6 +26,7 @@ use Ebay\services\EbayLink;
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayFormParametersTab extends EbayTab
 {
     public function getContent()

@@ -17,6 +17,7 @@ namespace EbayVendor\League\OAuth2\Client\Provider\Exception;
 /**
  * Exception thrown if the provider response contains errors.
  */
+
 class IdentityProviderException extends \Exception
 {
     /**

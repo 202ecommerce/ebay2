@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayStoreCategory extends ObjectModel
 {
     public $ebay_category_id;

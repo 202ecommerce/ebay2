@@ -10,6 +10,7 @@ use EbayVendor\Psr\Http\Message\UriInterface;
  * @author Tobias Schultze
  * @author Matthew Weier O'Phinney
  */
+
 class Uri implements UriInterface
 {
     /**

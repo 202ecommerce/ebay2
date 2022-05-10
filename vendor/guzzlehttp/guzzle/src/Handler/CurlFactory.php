@@ -12,6 +12,7 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
 /**
  * Creates curl resources from a request
  */
+
 class CurlFactory implements CurlFactoryInterface
 {
     /** @var array */

@@ -7,6 +7,7 @@ namespace EbayVendor\GuzzleHttp;
  *
  * @link http://tools.ietf.org/html/rfc6570
  */
+
 class UriTemplate
 {
     /** @var string URI template */

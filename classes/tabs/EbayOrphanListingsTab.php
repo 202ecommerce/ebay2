@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayOrphanListingsTab extends EbayTab
 {
     public function getContent()

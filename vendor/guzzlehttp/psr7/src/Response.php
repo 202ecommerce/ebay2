@@ -7,6 +7,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
 /**
  * PSR-7 response implementation.
  */
+
 class Response implements ResponseInterface
 {
     use MessageTrait;

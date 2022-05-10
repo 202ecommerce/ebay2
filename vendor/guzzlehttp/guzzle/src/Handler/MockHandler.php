@@ -9,6 +9,7 @@ use EbayVendor\Psr\Http\Message\ResponseInterface;
 /**
  * Handler that returns responses or throw exceptions from a queue.
  */
+
 class MockHandler implements \Countable
 {
     private $queue;

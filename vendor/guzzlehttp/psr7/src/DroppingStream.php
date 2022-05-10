@@ -9,6 +9,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
+
 class DroppingStream implements StreamInterface
 {
     use StreamDecoratorTrait;

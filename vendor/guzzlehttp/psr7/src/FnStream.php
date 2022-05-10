@@ -11,6 +11,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
+
 class FnStream implements StreamInterface
 {
     /** @var array */

@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayStat
 {
     private static $server = 'http://stats.202-ecommerce.com';

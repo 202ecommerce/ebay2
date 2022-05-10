@@ -26,6 +26,7 @@ use Ebay\services\EbayContext;
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayTaskManager
 {
     protected $taskDefinition = [

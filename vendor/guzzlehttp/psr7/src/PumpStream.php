@@ -15,6 +15,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
+
 class PumpStream implements StreamInterface
 {
     /** @var callable */

@@ -19,6 +19,7 @@ use EbayVendor\League\OAuth2\Client\Tool\QueryBuilderTrait;
 /**
  * Provide options for access token
  */
+
 class PostAuthOptionProvider implements OptionProviderInterface
 {
     use QueryBuilderTrait;

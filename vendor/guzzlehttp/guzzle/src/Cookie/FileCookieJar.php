@@ -5,6 +5,7 @@ namespace EbayVendor\GuzzleHttp\Cookie;
 /**
  * Persists non-session cookies using a JSON formatted file
  */
+
 class FileCookieJar extends CookieJar
 {
     /** @var string filename */

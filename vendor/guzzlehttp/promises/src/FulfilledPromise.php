@@ -8,6 +8,7 @@ namespace EbayVendor\GuzzleHttp\Promise;
  * Thenning off of this promise will invoke the onFulfilled callback
  * immediately and ignore other callbacks.
  */
+
 class FulfilledPromise implements PromiseInterface
 {
     private $value;

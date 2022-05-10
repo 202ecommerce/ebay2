@@ -23,6 +23,7 @@ use InvalidArgumentException as Iae;
  * @method Promise\PromiseInterface patchAsync($uri, array $options = [])
  * @method Promise\PromiseInterface deleteAsync($uri, array $options = [])
  */
+
 class Client implements ClientInterface
 {
     /** @var array Default request options */

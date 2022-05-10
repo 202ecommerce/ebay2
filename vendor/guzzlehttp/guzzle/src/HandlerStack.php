@@ -7,6 +7,7 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
  * Creates a composed Guzzle handler function by stacking middlewares on top of
  * an HTTP handler function.
  */
+
 class HandlerStack
 {
     /** @var callable */
