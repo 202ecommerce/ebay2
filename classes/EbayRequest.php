@@ -864,6 +864,7 @@ class EbayRequest
 
             $policies_ship_name = rtrim($policies_ship_name, '-');
             $policies_ship_name = 'PrestaShop_' . md5($policies_ship_name);
+            $namedesc = Tools::substr('PrestaShop_' . $namedesc, 0, 250);
 
             $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `name` ="' . $policies_ship_name . '" AND id_bussines_Policie != "" AND id_ebay_profile = ' . (int) $this->ebay_profile->id);
 
@@ -882,7 +883,7 @@ class EbayRequest
                     'currency_id' => $this->ebay_country->getCurrency(),
                     'ebay_site_id' => $this->ebay_profile->ebay_site_id,
                     'shipping_name' => $policies_ship_name,
-                    'description' => 'PrestaShop_' . $namedesc,
+                    'description' => $namedesc,
                 ]);
                 $createFulfilmentPolicy = new CreateFulfilmentPolicy($this->ebay_profile, $vars);
                 $response = $createFulfilmentPolicy->execute();
