@@ -62,7 +62,6 @@ $classes_to_load = [
     'EbayLoadLogs',
     'EbayApiLog',
     'EbayOrderLog',
-    'EbayStat',
     'TotFormat',
     'EbayValidatorTab',
     'TotCompatibility',
@@ -1505,15 +1504,6 @@ class Ebay extends Module
     public function hookBackOfficeTop($params)
     {
         $visible_logo = Tools::getValue('configure') == 'ebay' ? false : true;
-        if (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 day')) . '.000Z') {
-            $stat = new EbayStat($this->stats_version, $this->ebay_profile);
-            $stat->save();
-        }
-
-        if (Configuration::get('EBAY_SEND_STATS') && (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-1 day')) . '.000Z')) {
-            EbayStat::send();
-            Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
-        }
 
         if (Tools::getValue('tracking_number')) {
             $tracking_number = Tools::getValue('tracking_number');
@@ -1697,11 +1687,6 @@ class Ebay extends Module
                     'errors' => $errors,
                 ];
                 $this->html .= $this->display('alert_tabs.tpl', $vars);
-            }
-
-            if (true) {
-                $ebay_stat = new EbayStat($this->stats_version, $this->ebay_profile);
-                $ebay_stat->save();
             }
         }
         $this->context->controller->addCSS(
