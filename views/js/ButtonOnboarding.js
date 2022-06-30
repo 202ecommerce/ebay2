@@ -90,7 +90,9 @@ ButtonOnboarding.prototype.getOnboardingUrl = function () {
     }
 
     try {
-        return this.modal.querySelector('[name="EBAY_ONBOARDING_URL"]').value;
+        var url = new URL(this.modal.querySelector('[name="EBAY_ONBOARDING_URL"]').value);
+        url.searchParams.append('prompt', 'login');
+        return url.toString();
     } catch (e) {
         return '';
     }
