@@ -436,7 +436,7 @@
             checkCountShippingNational();
 
 			function checkCountShippingNational(){
-				var shipping = $('.shipping_not_configured');
+				var shipping = $('#domesticShipping table');
 				if (shipping.length >= 4){
 					$('#domesticShippingButton').hide();
 					$('#transportDomesticWarning').show();

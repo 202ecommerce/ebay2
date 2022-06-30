@@ -34,8 +34,6 @@
 			}
 		}
 
-        checkCountShippingInternational();
-
 
 		function addInterShipping(currentName, idPSCarrier, idEbayCarrier, additionalFee, nbSelect, id_zone, zone) {
 			var lastId = 0;
@@ -388,8 +386,7 @@
 				$(this).before(excluded);
 			});
 
-
-
+			checkCountShippingInternational();
 
 			$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
 				addInternationalShippingFee();
