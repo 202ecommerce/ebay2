@@ -315,22 +315,25 @@ class EbayProduct
 
     public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted, $page_current = null, $length = 20, $search = [])
     {
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+
         if ($page_current) {
             $offset = ((int) $page_current - 1) * (int) $length;
-            $ebay_profile = new EbayProfile($id_ebay_profile);
             $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
 			pl.`name`, m.`name` as manufacturer_name, cl.name as name_cat
 			FROM `' . _DB_PREFIX_ . 'ebay_product` ep
 			LEFT JOIN `' . _DB_PREFIX_ . 'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
-			LEFT JOIN `' . _DB_PREFIX_ . 'product` p ON (p.`id_product` = ep.`id_product`)
+			LEFT JOIN `' . _DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
+			LEFT JOIN `' . _DB_PREFIX_.'product_shop` ps ON (ps.`id_product` = p.`id_product`)
 			LEFT JOIN `' . _DB_PREFIX_ . 'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-			LEFT JOIN ' . _DB_PREFIX_ . 'category_lang cl ON cl.id_category = p.id_category_default AND cl.id_lang = ' . (int) $id_lang . '
+			LEFT JOIN ' . _DB_PREFIX_ . 'category_lang cl ON cl.id_shop = ps.id_shop AND cl.id_category = ps.id_category_default AND cl.id_lang = ' . (int) $id_lang . '
 			LEFT JOIN `' . _DB_PREFIX_ . 'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = ' . (int) $id_lang . ' ';
 
             $sql .= 'AND pl.id_shop = ' . (int) $ebay_profile->id_shop;
 
             $sql .= ') WHERE p.id_product IS NOT NULL AND ep.`id_ebay_profile` = ' . (int) $id_ebay_profile;
+            $sql .= ' AND ps.id_shop = ' . $ebay_profile->id_shop;
             if ($no_blacklisted) {
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
@@ -351,7 +354,6 @@ class EbayProduct
 
             return Db::getInstance()->ExecuteS($sql, false);
         } else {
-            $ebay_profile = new EbayProfile($id_ebay_profile);
             $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
 			pl.`name`, m.`name` as manufacturer_name
