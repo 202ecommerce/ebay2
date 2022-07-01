@@ -92,36 +92,6 @@ class AdminFormController extends ModuleAdminController
         }
     }
 
-    public function ajaxProcessLoadKB()
-    {
-        if (!($errorcode = Tools::getValue('errorcode'))
-            || !($lang = Tools::getValue('lang'))
-        ) {
-            exit('ERROR : INVALID DATA');
-        }
-        if (!defined('TMP_DS')) {
-            define('TMP_DS', DIRECTORY_SEPARATOR);
-        }
-
-        $name_module = basename(realpath(dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS));
-        $module_kb = Tools::ucfirst(Tools::strtolower($name_module)) . 'Kb';
-
-        if (Validate::isString($name_module) && Module::isInstalled($name_module)) {
-            $enable = Module::isEnabled($name_module);
-            if ($enable) {
-                $kb = new $module_kb();
-                $kb->setLanguage(Tools::getValue('lang'));
-                $kb->setErrorCode(Tools::getValue('errorcode'));
-
-                if ($result = $kb->getLink()) {
-                    exit(Tools::jsonEncode(['result' => $result, 'code' => 'kb-202']));
-                } else {
-                    exit(Tools::jsonEncode(['result' => 'error', 'code' => 'kb-001', 'more' => 'Aucun lien trouvé']));
-                }
-            }
-        }
-    }
-
     public function ajaxProcessPreviewTemplate()
     {
         $ebay = Module::getInstanceByName('ebay');

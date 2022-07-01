@@ -1123,13 +1123,6 @@ class EbayRequest
                     if (isset($e->ErrorParameters->Value)) {
                         $this->error .= '<br />' . (string) $e->ErrorParameters->Value;
                     }
-
-                    if (!Tools::isEmpty($e->ErrorCode)) {
-                        $context = Context::getContext();
-                        $this->error .= '<a class="kb-help" data-errorcode="' . (int) $e->ErrorCode . '"';
-                        $this->error .= ' data-module="ebay" data-lang="' . $context->language->iso_code . '"';
-                        $this->error .= ' module_version="1.11.0" prestashop_version="' . _PS_VERSION_ . '"></a>';
-                    }
                 }
             }
         }

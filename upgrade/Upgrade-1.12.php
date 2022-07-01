@@ -32,7 +32,6 @@
 function upgrade_module_1_12($module)
 {
     EbayOrderErrors::install();
-    EbayKb::install();
     $module->registerHook('updateCarrier');
 
     $module->setConfiguration('EBAY_VERSION', $module->version);

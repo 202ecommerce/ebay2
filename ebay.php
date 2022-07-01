@@ -96,7 +96,6 @@ $classes_to_load = [
     'EbayAlert',
     'EbayOrderErrors',
     'EbayDbValidator',
-    'EbayKb',
     'EbayLogger',
     'EbayBussinesPolicies',
     'EbayTaskManager',
@@ -386,7 +385,6 @@ class Ebay extends Module
 
         // Ebay 1.12.0
         EbayOrderErrors::install();
-        EbayKb::install();
 
         $this->installTabs();
 

@@ -56,9 +56,6 @@
 					{else}
 						{$alert.message|escape:'htmlall':'UTF-8'}
 					{/if}
-					{if isset($alert.kb)}
-						<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}">&nbsp;<i class="icon-info-circle"></i></a>
-					{/if}
 				</div>
 			{/foreach}
 		{/if}
@@ -233,36 +230,5 @@
 <script>
 	{literal}
 	var alert_exit_import_categories = "{/literal}{$alert_exit_import_categories}{literal}";
-	function getKb(item) {
-		item = typeof item !== 'undefined' ? item : 0;
-		var that = $("a.kb-help:eq("+ item +")");
-
-		$.ajax({
-			type: "POST",
-			url: formController,
-			data: {
-			    errorcode: $( that ).attr('data-errorcode'),
-				lang: $( that ).attr('data-lang'),
-				ajax: true,
-				action: 'LoadKB'
-			},
-			dataType: "json",
-			success: function(data)
-			{
-				if (data.result != 'error')
-				{
-					$( that ).addClass('active');
-					$( that ).attr('href', data.result);
-					$( that ).attr('target', '_blank');
-				}
-				var next = item + 1;
-				if ($("a.kb-help:eq("+ next +")").length > 0)
-					getKb(next);
-			}
-		});
-	}
-	jQuery(document).ready(function($) {
-		getKb();
-	});
 	{/literal}
 </script>

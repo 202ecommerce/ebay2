@@ -78,14 +78,6 @@
                             <td></td>
                             <td>
                                 <div class="action">
-                                    {*<a class="btn btn-sm btn-default kb-help"*}
-                                       {*data-errorcode="{$task_error.error_code}"*}
-                                       {*data-module="ebay"*}
-                                       {*data-lang="{$task_error.lang_iso}"*}
-                                       {*module_version="1.11.0"*}
-                                       {*prestashop_version="{$task_error.ps_version}"*}
-                                       {*title="{l s='Help' mod='ebay'}" data-toggle="tooltip"><i class="icon-question"></i>*}
-                                    {*</a>*}
                                     <a class="btn btn-sm btn-default corige_product"
                                        id="{$task_error.real_id}" href="{$task_error.product_url}"
                                        target="_blank"
