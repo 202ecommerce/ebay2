@@ -156,6 +156,19 @@ class Ebay extends Module
 
     const PRIORITY_CREATE_PRODUCT = 4;
 
+    public $hooks = [
+        'addProduct',
+        'updateProduct',
+        'deleteProduct',
+        'newOrder',
+        'backOfficeTop',
+        'header',
+        'updateCarrier',
+        'adminOrder',
+        'actionUpdateQuantity',
+        'actionOrderStatusUpdate',
+    ];
+
     /**
      * Construct Method
      *
@@ -316,49 +329,10 @@ class Ebay extends Module
             return false;
         }
 
-        if (!$this->registerHook('addProduct')) {
-            return false;
-        }
-
-        if (!$this->registerHook('updateProduct')) {
-            return false;
-        }
-
-        if (!$this->registerHook('deleteProduct')) {
-            return false;
-        }
-
-        if (!$this->registerHook('newOrder')) {
-            return false;
-        }
-
-        if (!$this->registerHook('backOfficeTop')) {
-            return false;
-        }
-
-        if (!$this->registerHook('header')) {
-            return false;
-        }
-
-        if (!$this->registerHook('updateCarrier')) {
-            return false;
-        }
-        if (!$this->registerHook('adminOrder')) {
-            return false;
-        }
-
-        if (!$this->registerHook('updateCarrier')) {
-            return false;
-        }
-
-        $hook_update_quantity = 'actionUpdateQuantity';
-        if (!$this->registerHook($hook_update_quantity)) {
-            return false;
-        }
-
-        $hook_update_order_status = 'actionOrderStatusUpdate';
-        if (!$this->registerHook($hook_update_order_status)) {
-            return false;
+        foreach ($this->hooks as $hook) {
+            if ($this->registerHook($hook) == false) {
+                return false;
+            }
         }
 
         if (!$this->addEbayStateOrder()) {
@@ -557,19 +531,7 @@ class Ebay extends Module
     public function uninstall()
     {
         // Uninstall Module
-        if (!parent::uninstall()
-            || !$this->unregisterHook('addProduct')
-            || !$this->unregisterHook('updateProduct')
-            || !$this->unregisterHook('actionUpdateQuantity')
-            || !$this->unregisterHook('updateQuantity')
-            || !$this->unregisterHook('actionOrderStatusUpdate')
-            || !$this->unregisterHook('updateOrderStatus')
-            || !$this->unregisterHook('updateProductAttribute')
-            || !$this->unregisterHook('deleteProduct')
-            || !$this->unregisterHook('newOrder')
-            || !$this->unregisterHook('backOfficeTop')
-            || !$this->unregisterHook('header')
-            || !$this->unregisterHook('updateCarrier')) {
+        if (!parent::uninstall()) {
             return false;
         }
 
