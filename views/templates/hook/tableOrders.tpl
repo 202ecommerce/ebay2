@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -44,58 +44,5 @@
         <div id="OrderListingsBlock">
             {include file=$tpl_orders_ajax}
         </div>
-
-
     {/if}
 </div>
-
-<script type="text/javascript">
-    var ebayOrdersController = "{$ebayOrdersController|addslashes}";
-    {literal}
-    $('.reSynchOrder').live('click', function (e) {
-        e.preventDefault();
-        var tr = $(this).closest('tr');
-        $.ajax({
-            type: 'POST',
-            url: ebayOrdersController,
-            data: "ajax=true&action=ResyncOrder&id_ebay_profile={/literal}{$id_ebay_profile}{literal}&id_order_ebay=" + $(this).attr('id'),
-            success: function (data) {
-                var data = jQuery.parseJSON(data);
-
-                var str = '<td>' + data.date_ebay + '</td><td>' + data.reference_ebay + '</td><td>' + data.referance_marchand + '</td><td>' + data.email + '</td><td>' + data.total + '</td>';
-                if (typeof data.id_prestashop !== 'undefined') {
-                    str += '<td >' + data.id_prestashop + '</td><td >' + data.reference_ps + '</td><td >' + data.date_import + '</td><td ></td>';
-                } else {
-                    str += '<td colspan="2">' + data.error + '</td><td>' + data.date_import + '</td><td><a class="reSynchOrder btn btn-default btn-xs" id="' + data.reference_ebay + '"><i class="icon-refresh"></i><span>Réessayer</span></a></td>';
-                }
-
-                tr.html(str);
-            }
-        });
-    });
-
-    $('.deleteOrderError').click(deleteOrderError);
-
-    function deleteOrderError() {
-        var reference_ebay;
-        var tr;
-
-        reference_ebay = $(this).attr('data-error');
-        tr = $(this).closest('tr');
-        $.ajax({
-            type: 'POST',
-            url: ebayOrdersController,
-            data: {
-                reference_ebay: reference_ebay,
-                ajax: true,
-                action: 'DeleteOrderError',
-            },
-            success: function (data) {
-                console.log(data);
-                $(tr).remove();
-            },
-        });
-
-    }
-    {/literal}
-</script>

@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Account\CreateFulfilmentPolicy;
@@ -31,22 +30,19 @@ use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\Request as GetRequest;
 use Ebay\classes\SDK\Account\CreateFulfilmentPolicy\Response as GetResponse;
 use Ebay\classes\SDK\Core\ApiBaseUri;
 use Ebay\classes\SDK\Core\BearerAuthToken;
-use Ebay\classes\SDK\Core\EbayApiResponse;
 use Ebay\classes\SDK\Core\EbayClient;
 use Ebay\classes\SDK\Lib\FulfilmentPolicy;
-use Ebay\classes\SDK\Lib\FulfilmentPolicyList;
 use Ebay\services\Builder\BuilderInterface;
 use Ebay\services\Builder\FulfilmentBuilder;
 use EbayVendor\GuzzleHttp\Exception\RequestException;
-use Symfony\Component\VarDumper\VarDumper;
 use Exception;
 
 class CreateFulfilmentPolicy
 {
-    /** @var \EbayProfile*/
+    /** @var \EbayProfile */
     protected $ebayProfile;
 
-    /** @var mixed*/
+    /** @var mixed */
     protected $data;
 
     public function __construct(\EbayProfile $ebayProfile, $data)
@@ -64,13 +60,11 @@ class CreateFulfilmentPolicy
             $result = $this->getClient()->executeRequest($this->getRequest());
         } catch (RequestException $e) {
             $result = [
-                'response' => $e->getResponse()
+                'response' => $e->getResponse(),
             ];
             $body = $e->getResponse()->getBody()->getContents();
             $headers = $e->getResponse()->getHeaders();
-            \Ebay::debug([
-                $body
-            ]);
+
             if (false == empty($headers['content-type'])) {
                 if (in_array('application/json', explode(';', $headers['content-type'][0]))) {
                     $bodyArray = json_decode(
@@ -89,7 +83,7 @@ class CreateFulfilmentPolicy
 
         if ($result->getStatusCode() < 200 || $result->getStatusCode() > 300) {
             $res = [
-                'response' => $result
+                'response' => $result,
             ];
             $body = $result->getBody()->getContents();
             $headers = $result->getHeaders();
@@ -121,7 +115,7 @@ class CreateFulfilmentPolicy
 
     protected function getToken()
     {
-        return (new BearerAuthToken($this->ebayProfile));
+        return new BearerAuthToken($this->ebayProfile);
     }
 
     /**
@@ -140,6 +134,7 @@ class CreateFulfilmentPolicy
     protected function getRequest()
     {
         $fulfilment = $this->getFulfilmentBuilder()->build();
+
         return new GetRequest(
             $this->getToken(),
             $fulfilment
@@ -148,11 +143,13 @@ class CreateFulfilmentPolicy
 
     /**
      * @param mixed $data
+     *
      * @return self
      */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 

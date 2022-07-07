@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -47,11 +46,13 @@ class CategoryType extends ResourceModel
 
     /**
      * @param mixed $name
+     *
      * @return CategoryType
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
+
         return $this;
     }
 
@@ -65,11 +66,13 @@ class CategoryType extends ResourceModel
 
     /**
      * @param mixed $default
+     *
      * @return CategoryType
      */
     public function setDefault($default)
     {
-        $this->default = (bool)$default;
+        $this->default = (bool) $default;
+
         return $this;
     }
 
@@ -90,7 +93,7 @@ class CategoryType extends ResourceModel
     {
         return [
             'name' => $this->getName(),
-            'default' => $this->getDefault()
+            'default' => $this->getDefault(),
         ];
     }
 }

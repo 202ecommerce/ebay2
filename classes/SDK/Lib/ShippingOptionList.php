@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,7 +30,7 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class ShippingOptionList extends ResourceModel
 {
-    /** @var ShippingOption[]*/
+    /** @var ShippingOption[] */
     protected $shippingOptions = [];
 
     /**
@@ -44,16 +43,19 @@ class ShippingOptionList extends ResourceModel
 
     /**
      * @param ShippingOption $shippingOption
+     *
      * @return self
      */
     public function addShippingOption(ShippingOption $shippingOption)
     {
         $this->shippingOptions[] = $shippingOption;
+
         return $this;
     }
 
     /**
      * @param ShippingOption[] $shippingOptions
+     *
      * @return self
      */
     public function setShippingOptions($shippingOptions)

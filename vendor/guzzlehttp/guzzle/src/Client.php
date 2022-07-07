@@ -3,26 +3,27 @@
 namespace EbayVendor\GuzzleHttp;
 
 use EbayVendor\GuzzleHttp\Cookie\CookieJar;
-use EbayVendor\GuzzleHttp\Exception\GuzzleException;
 use EbayVendor\GuzzleHttp\Promise;
 use EbayVendor\GuzzleHttp\Psr7;
+use EbayVendor\Psr\Http\Message\UriInterface;
 use EbayVendor\Psr\Http\Message\RequestInterface;
 use EbayVendor\Psr\Http\Message\ResponseInterface;
-use EbayVendor\Psr\Http\Message\UriInterface;
+use InvalidArgumentException as Iae;
 /**
- * @method ResponseInterface get(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface head(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface put(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface post(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface patch(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface delete(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface getAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface headAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface putAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface postAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface patchAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface deleteAsync(string|UriInterface $uri, array $options = [])
+ * @method ResponseInterface get($uri, array $options = [])
+ * @method ResponseInterface head($uri, array $options = [])
+ * @method ResponseInterface put($uri, array $options = [])
+ * @method ResponseInterface post($uri, array $options = [])
+ * @method ResponseInterface patch($uri, array $options = [])
+ * @method ResponseInterface delete($uri, array $options = [])
+ * @method Promise\PromiseInterface getAsync($uri, array $options = [])
+ * @method Promise\PromiseInterface headAsync($uri, array $options = [])
+ * @method Promise\PromiseInterface putAsync($uri, array $options = [])
+ * @method Promise\PromiseInterface postAsync($uri, array $options = [])
+ * @method Promise\PromiseInterface patchAsync($uri, array $options = [])
+ * @method Promise\PromiseInterface deleteAsync($uri, array $options = [])
  */
+
 class Client implements ClientInterface
 {
     /** @var array Default request options */
@@ -46,8 +47,9 @@ class Client implements ClientInterface
      *   wire. The function is called with a Psr7\Http\Message\RequestInterface
      *   and array of transfer options, and must return a
      *   GuzzleHttp\Promise\PromiseInterface that is fulfilled with a
-     *   Psr7\Http\Message\ResponseInterface on success.
-     *   If no handler is provided, a default handler will be created
+     *   Psr7\Http\Message\ResponseInterface on success. "handler" is a
+     *   constructor only option that cannot be overridden in per/request
+     *   options. If no handler is provided, a default handler will be created
      *   that enables all of the request options below by attaching all of the
      *   default middleware to the handler.
      * - base_uri: (string|UriInterface) Base URI of the client that is merged
@@ -62,8 +64,6 @@ class Client implements ClientInterface
     {
         if (!isset($config['handler'])) {
             $config['handler'] = HandlerStack::create();
-        } elseif (!\is_callable($config['handler'])) {
-            throw new \InvalidArgumentException('handler must be a callable');
         }
         // Convert the base_uri to a UriInterface
         if (isset($config['base_uri'])) {
@@ -71,12 +71,6 @@ class Client implements ClientInterface
         }
         $this->configureDefaults($config);
     }
-    /**
-     * @param string $method
-     * @param array  $args
-     *
-     * @return Promise\PromiseInterface
-     */
     public function __call($method, $args)
     {
         if (\count($args) < 1) {
@@ -86,49 +80,18 @@ class Client implements ClientInterface
         $opts = isset($args[1]) ? $args[1] : [];
         return \substr($method, -5) === 'Async' ? $this->requestAsync(\substr($method, 0, -5), $uri, $opts) : $this->request($method, $uri, $opts);
     }
-    /**
-     * Asynchronously send an HTTP request.
-     *
-     * @param array $options Request options to apply to the given
-     *                       request and to the transfer. See \GuzzleHttp\RequestOptions.
-     *
-     * @return Promise\PromiseInterface
-     */
     public function sendAsync(RequestInterface $request, array $options = [])
     {
         // Merge the base URI into the request URI if needed.
         $options = $this->prepareDefaults($options);
-        return $this->transfer($request->withUri($this->buildUri($request->getUri(), $options), $request->hasHeader('Host')), $options);
+        return $this->transfer($request->withUri($this->buildUri($request->getUri(), $options)), $options);
     }
-    /**
-     * Send an HTTP request.
-     *
-     * @param array $options Request options to apply to the given
-     *                       request and to the transfer. See \GuzzleHttp\RequestOptions.
-     *
-     * @return ResponseInterface
-     * @throws GuzzleException
-     */
     public function send(RequestInterface $request, array $options = [])
     {
         $options[RequestOptions::SYNCHRONOUS] = \true;
         return $this->sendAsync($request, $options)->wait();
     }
-    /**
-     * Create and send an asynchronous HTTP request.
-     *
-     * Use an absolute path to override the base path of the client, or a
-     * relative path to append to the base path of the client. The URL can
-     * contain the query string as well. Use an array to provide a URL
-     * template and additional variables to use in the URL template expansion.
-     *
-     * @param string              $method  HTTP method
-     * @param string|UriInterface $uri     URI object or string.
-     * @param array               $options Request options to apply. See \GuzzleHttp\RequestOptions.
-     *
-     * @return Promise\PromiseInterface
-     */
-    public function requestAsync($method, $uri = '', array $options = [])
+    public function requestAsync($method, $uri = null, array $options = [])
     {
         $options = $this->prepareDefaults($options);
         // Remove request modifying parameter because it can be done up-front.
@@ -137,88 +100,43 @@ class Client implements ClientInterface
         $version = isset($options['version']) ? $options['version'] : '1.1';
         // Merge the URI into the base URI.
         $uri = $this->buildUri($uri, $options);
-        if (\is_array($body)) {
-            $this->invalidBody();
-        }
         $request = new Psr7\Request($method, $uri, $headers, $body, $version);
         // Remove the option so that they are not doubly-applied.
         unset($options['headers'], $options['body'], $options['version']);
         return $this->transfer($request, $options);
     }
-    /**
-     * Create and send an HTTP request.
-     *
-     * Use an absolute path to override the base path of the client, or a
-     * relative path to append to the base path of the client. The URL can
-     * contain the query string as well.
-     *
-     * @param string              $method  HTTP method.
-     * @param string|UriInterface $uri     URI object or string.
-     * @param array               $options Request options to apply. See \GuzzleHttp\RequestOptions.
-     *
-     * @return ResponseInterface
-     * @throws GuzzleException
-     */
-    public function request($method, $uri = '', array $options = [])
+    public function request($method, $uri = null, array $options = [])
     {
         $options[RequestOptions::SYNCHRONOUS] = \true;
         return $this->requestAsync($method, $uri, $options)->wait();
     }
-    /**
-     * Get a client configuration option.
-     *
-     * These options include default request options of the client, a "handler"
-     * (if utilized by the concrete client), and a "base_uri" if utilized by
-     * the concrete client.
-     *
-     * @param string|null $option The config option to retrieve.
-     *
-     * @return mixed
-     */
     public function getConfig($option = null)
     {
         return $option === null ? $this->config : (isset($this->config[$option]) ? $this->config[$option] : null);
     }
-    /**
-     * @param  string|null $uri
-     *
-     * @return UriInterface
-     */
     private function buildUri($uri, array $config)
     {
-        // for BC we accept null which would otherwise fail in uri_for
-        $uri = Psr7\uri_for($uri === null ? '' : $uri);
-        if (isset($config['base_uri'])) {
-            $uri = Psr7\UriResolver::resolve(Psr7\uri_for($config['base_uri']), $uri);
+        if (!isset($config['base_uri'])) {
+            return $uri instanceof UriInterface ? $uri : new Psr7\Uri($uri);
         }
-        if (isset($config['idn_conversion']) && $config['idn_conversion'] !== \false) {
-            $idnOptions = $config['idn_conversion'] === \true ? \IDNA_DEFAULT : $config['idn_conversion'];
-            $uri = Utils::idnUriConvert($uri, $idnOptions);
-        }
-        return $uri->getScheme() === '' && $uri->getHost() !== '' ? $uri->withScheme('http') : $uri;
+        return Psr7\Uri::resolve(Psr7\uri_for($config['base_uri']), $uri);
     }
     /**
      * Configures the default options for a client.
      *
      * @param array $config
-     * @return void
+     *
+     * @return array
      */
     private function configureDefaults(array $config)
     {
-        $defaults = ['allow_redirects' => RedirectMiddleware::$defaultSettings, 'http_errors' => \true, 'decode_content' => \true, 'verify' => \true, 'cookies' => \false, 'idn_conversion' => \true];
-        // Use the standard Linux HTTP_PROXY and HTTPS_PROXY if set.
-        // We can only trust the HTTP_PROXY environment variable in a CLI
-        // process due to the fact that PHP has no reliable mechanism to
-        // get environment variables that start with "HTTP_".
-        if (\php_sapi_name() === 'cli' && \getenv('HTTP_PROXY')) {
-            $defaults['proxy']['http'] = \getenv('HTTP_PROXY');
+        $defaults = ['allow_redirects' => RedirectMiddleware::$defaultSettings, 'http_errors' => \true, 'decode_content' => \true, 'verify' => \true, 'cookies' => \false];
+        // Use the standard Linux HTTP_PROXY and HTTPS_PROXY if set
+        if ($proxy = \getenv('HTTP_PROXY')) {
+            $defaults['proxy']['http'] = $proxy;
         }
         if ($proxy = \getenv('HTTPS_PROXY')) {
             $defaults['proxy']['https'] = $proxy;
-        }
-        if ($noProxy = \getenv('NO_PROXY')) {
-            $cleanedNoProxy = \str_replace(' ', '', $noProxy);
-            $defaults['proxy']['no'] = \explode(',', $cleanedNoProxy);
         }
         $this->config = $config + $defaults;
         if (!empty($config['cookies']) && $config['cookies'] === \true) {
@@ -244,7 +162,7 @@ class Client implements ClientInterface
      *
      * @return array
      */
-    private function prepareDefaults(array $options)
+    private function prepareDefaults($options)
     {
         $defaults = $this->config;
         if (!empty($defaults['headers'])) {
@@ -257,7 +175,7 @@ class Client implements ClientInterface
         if (\array_key_exists('headers', $options)) {
             // Allows default headers to be unset.
             if ($options['headers'] === null) {
-                $defaults['_conditional'] = [];
+                $defaults['_conditional'] = null;
                 unset($options['headers']);
             } elseif (!\is_array($options['headers'])) {
                 throw new \InvalidArgumentException('headers must be an array');
@@ -279,7 +197,8 @@ class Client implements ClientInterface
      * The URI of the request is not modified and the request options are used
      * as-is without merging in default options.
      *
-     * @param array $options See \GuzzleHttp\RequestOptions.
+     * @param RequestInterface $request
+     * @param array            $options
      *
      * @return Promise\PromiseInterface
      */
@@ -290,13 +209,12 @@ class Client implements ClientInterface
             $options['sink'] = $options['save_to'];
             unset($options['save_to']);
         }
-        // exceptions -> http_errors
+        // exceptions -> http_error
         if (isset($options['exceptions'])) {
             $options['http_errors'] = $options['exceptions'];
             unset($options['exceptions']);
         }
         $request = $this->applyOptions($request, $options);
-        /** @var HandlerStack $handler */
         $handler = $options['handler'];
         try {
             return Promise\promise_for($handler($request, $options));
@@ -314,51 +232,40 @@ class Client implements ClientInterface
      */
     private function applyOptions(RequestInterface $request, array &$options)
     {
-        $modify = ['set_headers' => []];
-        if (isset($options['headers'])) {
-            $modify['set_headers'] = $options['headers'];
-            unset($options['headers']);
-        }
+        $modify = [];
         if (isset($options['form_params'])) {
-            if (isset($options['multipart'])) {
-                throw new \InvalidArgumentException('You cannot use ' . 'form_params and multipart at the same time. Use the ' . 'form_params option if you want to send application/' . 'x-www-form-urlencoded requests, and the multipart ' . 'option to send multipart/form-data requests.');
-            }
-            $options['body'] = \http_build_query($options['form_params'], '', '&');
+            $options['body'] = \http_build_query($options['form_params']);
             unset($options['form_params']);
-            // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\_caseless_remove(['Content-Type'], $options['_conditional']);
             $options['_conditional']['Content-Type'] = 'application/x-www-form-urlencoded';
         }
         if (isset($options['multipart'])) {
-            $options['body'] = new Psr7\MultipartStream($options['multipart']);
+            $elements = $options['multipart'];
             unset($options['multipart']);
-        }
-        if (isset($options['json'])) {
-            $options['body'] = \EbayVendor\GuzzleHttp\json_encode($options['json']);
-            unset($options['json']);
-            // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\_caseless_remove(['Content-Type'], $options['_conditional']);
-            $options['_conditional']['Content-Type'] = 'application/json';
+            $options['body'] = new Psr7\MultipartStream($elements);
+            // Use a multipart/form-data POST if a Content-Type is not set.
+            $options['_conditional']['Content-Type'] = 'multipart/form-data; boundary=' . $options['body']->getBoundary();
         }
         if (!empty($options['decode_content']) && $options['decode_content'] !== \true) {
-            // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\_caseless_remove(['Accept-Encoding'], $options['_conditional']);
             $modify['set_headers']['Accept-Encoding'] = $options['decode_content'];
         }
-        if (isset($options['body'])) {
-            if (\is_array($options['body'])) {
-                $this->invalidBody();
+        if (isset($options['headers'])) {
+            if (isset($modify['set_headers'])) {
+                $modify['set_headers'] = $options['headers'] + $modify['set_headers'];
+            } else {
+                $modify['set_headers'] = $options['headers'];
             }
+            unset($options['headers']);
+        }
+        if (isset($options['body'])) {
             $modify['body'] = Psr7\stream_for($options['body']);
             unset($options['body']);
         }
-        if (!empty($options['auth']) && \is_array($options['auth'])) {
+        if (!empty($options['auth'])) {
             $value = $options['auth'];
-            $type = isset($value[2]) ? \strtolower($value[2]) : 'basic';
-            switch ($type) {
+            $type = \is_array($value) ? isset($value[2]) ? \strtolower($value[2]) : 'basic' : $value;
+            $config['auth'] = $value;
+            switch (\strtolower($type)) {
                 case 'basic':
-                    // Ensure that we don't have the header in different case and set the new value.
-                    $modify['set_headers'] = Psr7\_caseless_remove(['Authorization'], $modify['set_headers']);
                     $modify['set_headers']['Authorization'] = 'Basic ' . \base64_encode("{$value[0]}:{$value[1]}");
                     break;
                 case 'digest':
@@ -366,37 +273,25 @@ class Client implements ClientInterface
                     $options['curl'][\CURLOPT_HTTPAUTH] = \CURLAUTH_DIGEST;
                     $options['curl'][\CURLOPT_USERPWD] = "{$value[0]}:{$value[1]}";
                     break;
-                case 'ntlm':
-                    $options['curl'][\CURLOPT_HTTPAUTH] = \CURLAUTH_NTLM;
-                    $options['curl'][\CURLOPT_USERPWD] = "{$value[0]}:{$value[1]}";
-                    break;
             }
         }
         if (isset($options['query'])) {
             $value = $options['query'];
             if (\is_array($value)) {
-                $value = \http_build_query($value, null, '&', \PHP_QUERY_RFC3986);
+                $value = \http_build_query($value, null, null, \PHP_QUERY_RFC3986);
             }
             if (!\is_string($value)) {
-                throw new \InvalidArgumentException('query must be a string or array');
+                throw new Iae('query must be a string or array');
             }
             $modify['query'] = $value;
             unset($options['query']);
         }
-        // Ensure that sink is not an invalid value.
-        if (isset($options['sink'])) {
-            // TODO: Add more sink validation?
-            if (\is_bool($options['sink'])) {
-                throw new \InvalidArgumentException('sink must not be a boolean');
-            }
+        if (isset($options['json'])) {
+            $modify['body'] = Psr7\stream_for(\json_encode($options['json']));
+            $options['_conditional']['Content-Type'] = 'application/json';
+            unset($options['json']);
         }
         $request = Psr7\modify_request($request, $modify);
-        if ($request->getBody() instanceof Psr7\MultipartStream) {
-            // Use a multipart/form-data POST if a Content-Type is not set.
-            // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = Psr7\_caseless_remove(['Content-Type'], $options['_conditional']);
-            $options['_conditional']['Content-Type'] = 'multipart/form-data; boundary=' . $request->getBody()->getBoundary();
-        }
         // Merge in conditional headers if they are not present.
         if (isset($options['_conditional'])) {
             // Build up the changes so it's in a single clone of the message.
@@ -411,14 +306,5 @@ class Client implements ClientInterface
             unset($options['_conditional']);
         }
         return $request;
-    }
-    /**
-     * Throw Exception with pre-set message.
-     * @return void
-     * @throws \InvalidArgumentException Invalid body.
-     */
-    private function invalidBody()
-    {
-        throw new \InvalidArgumentException('Passing in the "body" request ' . 'option as an array to send a POST request has been deprecated. ' . 'Please use the "form_params" request option to send a ' . 'application/x-www-form-urlencoded request, or the "multipart" ' . 'request option to send a multipart/form-data request.');
     }
 }

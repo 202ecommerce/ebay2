@@ -22,17 +22,16 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Core;
 
 class EbayApiResponse
 {
-    /** @var bool*/
+    /** @var bool */
     protected $success;
 
-    /** @var mixed*/
+    /** @var mixed */
     protected $result;
 
     /** @return bool*/
@@ -49,13 +48,15 @@ class EbayApiResponse
 
     public function setSuccess($success)
     {
-        $this->success = (bool)$success;
+        $this->success = (bool) $success;
+
         return $this;
     }
 
     public function setResult($result)
     {
         $this->result = $result;
+
         return $this;
     }
 }

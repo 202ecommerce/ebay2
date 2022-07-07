@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -35,38 +35,15 @@
             <th class="text-center"><span>{l s='ID' mod='ebay'}</span></th>
             <th class="text-center"><span>{l s='PrestaShop Reference' mod='ebay'}</span></th>
             <th class="text-center"><span>{l s='Date Import' mod='ebay'}</span></th>
-            <th class="text-center">{l s='Actions' mod='ebay'}</th>
+            {if isset($errors)}
+                <th class="text-center">{l s='Actions' mod='ebay'}</th>
+            {/if}
         </tr>
         </thead
         <tbody>
         {if isset($all_orders)}
             {foreach from=$all_orders item="order"}
-                {if isset($order.error) && $order.error != null}
-                    <tr>
-                        <td>{$order.date_ebay|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$order.reference_ebay|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$order.referance_marchand|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$currency->sign}{$order.total|string_format:"%.2f"|escape:'htmlall':'UTF-8'}</td>
-                        <td colspan="2">{$order.error|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
-                        <td>
-                            <div class="action">
-                                <a class="reSynchOrder btn btn-default btn-sm" id="{$order.reference_ebay|addslashes}"
-                                   title="{l s='ReSync Order from eBay' mod='ebay'}"
-                                   data-toggle="tooltip">
-                                    <i class="icon-refresh"></i>
-                                </a>
-                                <button class="deleteOrderError btn btn-default btn-sm btn-hover-danger"
-                                        data-error="{$order.reference_ebay|addslashes}"
-                                        title="{l s='Delete' mod='ebay'}"
-                                        data-toggle="tooltip">
-                                    <i class="icon-close"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                {else}
+                {if !isset($order.error)}
                     <tr>
                         <td>{$order.date_ebay|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.reference_ebay|escape:'htmlall':'UTF-8'}</td>
@@ -74,9 +51,8 @@
                         <td>{$order.email|escape:'htmlall':'UTF-8'}</td>
                         <td>{$currency->sign}{$order.total|string_format:"%.2f"|escape:'htmlall':'UTF-8'}</td>
                         <td>{$order.id_prestashop|escape:'htmlall':'UTF-8'}</td>
-                        <td>{$order.reference_ps|escape:'htmlall':'UTF-8'}</td>
+                        <td><a href="{$order.order_link}">{$order.reference_ps|escape:'htmlall':'UTF-8'}</a></td>
                         <td>{$order.date_import|escape:'htmlall':'UTF-8'}</td>
-                        <td></td>
                     </tr>
                 {/if}
             {/foreach}
@@ -91,53 +67,6 @@
     {/if}
 </div>
 <script>
-    {literal}
-    $('.reSynchOrder').live('click', function (e) {
-        e.preventDefault();
-        var tr = $(this).closest('tr');
-        $.ajax({
-            type: 'POST',
-            url: ebayOrdersController,
-            data: "ajax=true&action=ResyncOrder&id_ebay_profile={/literal}{$id_ebay_profile|addslashes}{literal}&id_order_ebay=" + $(this).attr('id'),
-            success: function (data) {
-                var data = jQuery.parseJSON(data);
-
-                var str = '<td>' + data.date_ebay + '</td><td>' + data.reference_ebay + '</td><td>' + data.referance_marchand + '</td><td>' + data.email + '</td><td>' + data.total + '</td>';
-                if (typeof data.id_prestashop !== 'undefined') {
-                    str += '<td >' + data.id_prestashop + '</td><td >' + data.reference_ps + '</td><td >' + data.date_import + '</td><td ></td>';
-                } else {
-                    str += '<td colspan="2">' + data.error + '</td><td>' + data.date_import + '</td><td><a class="reSynchOrder btn btn-default btn-xs" id="' + data.reference_ebay + '"><i class="icon-refresh"></i><span>Réessayer</span></a></td>';
-                }
-
-                tr.html(str);
-            }
-        });
-    });
-
-    $('.deleteOrderError').click(deleteOrderError);
-
-    function deleteOrderError() {
-        var reference_ebay;
-        var tr;
-
-        reference_ebay = $(this).attr('data-error');
-        tr = $(this).closest('tr');
-        $.ajax({
-            type: 'POST',
-            url: ebayOrdersController,
-            data: {
-                reference_ebay: reference_ebay,
-                ajax: true,
-                action: 'DeleteOrderError',
-            },
-            success: function (data) {
-                console.log(data);
-                $(tr).remove();
-            },
-        });
-
-    }
-    {/literal}
     $('.navPaginationListOrdersHistory .pagination span').click(function () {
         var page = $(this).attr('value');
         var orderListings  = $('#OrderListings');

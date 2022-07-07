@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayReturnsPolicyConfiguration extends ObjectModel
@@ -45,16 +44,15 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 
     // for Prestashop 1.4
     protected $tables;
-    protected $fieldsRequired = array();
-    protected $fieldsSize = array();
-    protected $fieldsValidate = array();
+    protected $fieldsRequired = [];
+    protected $fieldsSize = [];
+    protected $fieldsValidate = [];
     protected $table = 'ebay_returns_policy_configuration';
     protected $identifier = 'id_ebay_returns_policy_configuration';
 
     public function getFields()
     {
-        
-        $fields = array();
+        $fields = [];
         parent::validateFields();
         if (isset($this->id)) {
             $fields['id_ebay_returns_policy_configuration'] = (int) ($this->id);
@@ -70,29 +68,28 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 
     public function __construct($id_ebay_returns_policy_configuration = null, $id_lang = null, $id_shop = null)
     {
-
-            self::$definition = array(
+        self::$definition = [
                 'table' => 'ebay_returns_policy_configuration',
                 'primary' => 'id_ebay_returns_policy_configuration',
-                'fields' => array(
-                    'ebay_returns_within' => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WITHIN),
-                    'ebay_returns_who_pays' => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WHO_PAYS),
-                    'ebay_returns_description' => array('type' => self::TYPE_STRING, 'default' => self::DEFAULT_RETURNS_DESCRIPTION),
-                    'ebay_returns_accepted_option' => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_ACCEPTED_OPTION),
-                ),
-            );
+                'fields' => [
+                    'ebay_returns_within' => ['type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WITHIN],
+                    'ebay_returns_who_pays' => ['type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WHO_PAYS],
+                    'ebay_returns_description' => ['type' => self::TYPE_STRING, 'default' => self::DEFAULT_RETURNS_DESCRIPTION],
+                    'ebay_returns_accepted_option' => ['type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_ACCEPTED_OPTION],
+                ],
+            ];
 
-            return parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
+        return parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
     }
 
     public static function getDefaultObjectId()
     {
         $sql = 'SELECT `id_ebay_returns_policy_configuration`
-			FROM `'._DB_PREFIX_.'ebay_returns_policy_configuration` erpc
-			WHERE erpc.`ebay_returns_within`= \''.pSQL(self::DEFAULT_RETURNS_WITHIN).'\'
-			AND erpc.`ebay_returns_who_pays` = \''.pSQL(self::DEFAULT_RETURNS_WHO_PAYS).'\'
-			AND erpc.`ebay_returns_description` = \''.pSQL(self::DEFAULT_RETURNS_DESCRIPTION).'\'
-			AND erpc.`ebay_returns_accepted_option` = \''.pSQL(self::DEFAULT_RETURNS_ACCEPTED_OPTION).'\'';
+			FROM `' . _DB_PREFIX_ . 'ebay_returns_policy_configuration` erpc
+			WHERE erpc.`ebay_returns_within`= \'' . pSQL(self::DEFAULT_RETURNS_WITHIN) . '\'
+			AND erpc.`ebay_returns_who_pays` = \'' . pSQL(self::DEFAULT_RETURNS_WHO_PAYS) . '\'
+			AND erpc.`ebay_returns_description` = \'' . pSQL(self::DEFAULT_RETURNS_DESCRIPTION) . '\'
+			AND erpc.`ebay_returns_accepted_option` = \'' . pSQL(self::DEFAULT_RETURNS_ACCEPTED_OPTION) . '\'';
         if ($row = Db::getInstance()->getRow($sql)) {
             return $row['id_ebay_returns_policy_configuration'];
         }
@@ -107,6 +104,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
         $returns_policy_configuration->ebay_returns_description = Configuration::get('EBAY_RETURNS_DESCRIPTION');
         $returns_policy_configuration->ebay_returns_accepted_option = Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION');
         $returns_policy_configuration->save();
+
         return $returns_policy_configuration->id;
     }
 }

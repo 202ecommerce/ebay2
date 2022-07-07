@@ -22,24 +22,21 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
-if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
-    require_once dirname(__FILE__).'/EbayRequest.php';
+if (file_exists(dirname(__FILE__) . '/EbayRequest.php')) {
+    require_once dirname(__FILE__) . '/EbayRequest.php';
 }
 
 class EbayConfiguration
 {
-
     /**
      * Updates Ebay API Token and stores it
      *
      * Returns true is sucessful, false otherwise
      *
-     * @return boolean
+     * @return bool
      */
-
     public static function updateAPIToken()
     {
         $context = Context::getContext();
@@ -56,7 +53,7 @@ class EbayConfiguration
             Configuration::updateValue('EBAY_TOKEN_REGENERATE', false, false, 0, 0);
             $errors = EbayTaskManager::getTaskByErrorCode('931', $ebay_profile->id);
             if (!empty($errors)) {
-                Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` = "931" AND `id_ebay_profile` = '.(int)$ebay_profile->id);
+                Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` = "931" AND `id_ebay_profile` = ' . (int) $ebay_profile->id);
                 foreach ($errors as $error) {
                     EbayTaskManager::insertTask($error['id_product'], $error['id_product_attribute'], $error['id_task'], $error['id_ebay_profile']);
                 }
@@ -71,37 +68,38 @@ class EbayConfiguration
     public static function get($id_ebay_profile, $name)
     {
         return Db::getInstance()->getValue('SELECT `value`
-			FROM `'._DB_PREFIX_.'ebay_configuration`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
-			AND `name` = "'.pSQL($name).'" ORDER BY id_configuration DESC');
+			FROM `' . _DB_PREFIX_ . 'ebay_configuration`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
+			AND `name` = "' . pSQL($name) . '" ORDER BY id_configuration DESC');
     }
 
     public static function set($id_ebay_profile, $name, $value, $html = false)
     {
         $name = pSQL($name);
-        $checkExist = DB::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."ebay_configuration WHERE id_ebay_profile=$id_ebay_profile AND `name`='$name'");
+        $checkExist = DB::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . "ebay_configuration WHERE id_ebay_profile=$id_ebay_profile AND `name`='$name'");
         if ($checkExist) {
-            $datas = array(
+            $datas = [
                 'value' => pSQL($value, $html),
-            );
+            ];
+
             return DB::getInstance()->update('ebay_configuration', $datas, " id_ebay_profile=$id_ebay_profile AND `name`='$name'");
         }
-        $datas = array(
+        $datas = [
             'id_ebay_profile' => (int) $id_ebay_profile,
             'name' => pSQL($name),
             'value' => pSQL($value, $html),
-        );
+        ];
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_configuration', $datas, 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_configuration', $datas, 'INSERT');
     }
 
     public static function getAll($id_ebay_profile, $exceptions = false)
     {
         $sql = 'SELECT `name`, `value`
-			FROM `'._DB_PREFIX_.'ebay_configuration`
-			WHERE `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
+			FROM `' . _DB_PREFIX_ . 'ebay_configuration`
+			WHERE `id_ebay_profile` = "' . (int) $id_ebay_profile . '" AND name NOT IN ("' . implode('","', array_map('pSQL', $exceptions)) . '")';
 
         return Db::getInstance()->executeS($sql);
     }
@@ -114,6 +112,7 @@ class EbayConfiguration
      * @param $id_ebay_profile
      * @param $attributes
      * @param $attributes_html
+     *
      * @return bool
      */
     public static function PSConfigurationsToEbayConfigurations($id_ebay_profile, $attributes, $attributes_html)

@@ -22,24 +22,21 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayOrdersReturnsSyncTab extends EbayTab
 {
-
     public function getContent()
     {
-
-        $url_vars = array(
+        $url_vars = [
             'id_tab' => '79',
             'section' => 'parameters',
-        );
+        ];
 
         $url_vars['controller'] = Tools::getValue('controller');
 
         $url = $this->_getUrl($url_vars);
 
-        return $this->display('order_returns_sync.tpl', array('url' => $url));
+        return $this->display('order_returns_sync.tpl', ['url' => $url]);
     }
 }

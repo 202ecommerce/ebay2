@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,7 +30,7 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class Region extends ResourceModel
 {
-    /** @var string*/
+    /** @var string */
     protected $regionName;
 
     /**
@@ -39,16 +38,18 @@ class Region extends ResourceModel
      */
     public function getRegionName()
     {
-        return (string)$this->regionName;
+        return (string) $this->regionName;
     }
 
     /**
      * @param string $regionName
+     *
      * @return Region
      */
     public function setRegionName($regionName)
     {
-        $this->regionName = (string)$regionName;
+        $this->regionName = (string) $regionName;
+
         return $this;
     }
 
@@ -64,7 +65,7 @@ class Region extends ResourceModel
     public function toArray()
     {
         return [
-            'regionName' => $this->getRegionName()
+            'regionName' => $this->getRegionName(),
         ];
     }
 }

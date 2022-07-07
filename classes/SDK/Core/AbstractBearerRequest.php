@@ -22,16 +22,15 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Core;
 
 use EbayVendor\GuzzleHttp\RequestOptions;
 
-abstract class AbstractBearerRequest implements RequestInterface
+abstract class AbstractBearerRequest extends AbstractRequest
 {
-    /** @var BearerAuthToken*/
+    /** @var BearerAuthToken */
     protected $token;
 
     public function __construct(BearerAuthToken $token)
@@ -43,8 +42,8 @@ abstract class AbstractBearerRequest implements RequestInterface
     {
         return [
             RequestOptions::HEADERS => [
-                'Authorization' => 'Bearer ' . $this->token->get()
-            ]
+                'Authorization' => 'Bearer ' . $this->token->get(),
+            ],
         ];
     }
 }

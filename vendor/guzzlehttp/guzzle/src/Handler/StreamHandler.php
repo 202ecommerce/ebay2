@@ -2,19 +2,18 @@
 
 namespace EbayVendor\GuzzleHttp\Handler;
 
-use EbayVendor\GuzzleHttp\Exception\ConnectException;
 use EbayVendor\GuzzleHttp\Exception\RequestException;
+use EbayVendor\GuzzleHttp\Exception\ConnectException;
 use EbayVendor\GuzzleHttp\Promise\FulfilledPromise;
+use EbayVendor\GuzzleHttp\Promise\RejectedPromise;
 use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
 use EbayVendor\GuzzleHttp\Psr7;
-use EbayVendor\GuzzleHttp\TransferStats;
-use EbayVendor\GuzzleHttp\Utils;
 use EbayVendor\Psr\Http\Message\RequestInterface;
-use EbayVendor\Psr\Http\Message\ResponseInterface;
 use EbayVendor\Psr\Http\Message\StreamInterface;
 /**
  * HTTP handler that uses PHP's HTTP stream wrapper.
  */
+
 class StreamHandler
 {
     private $lastHeaders = [];
@@ -32,38 +31,24 @@ class StreamHandler
         if (isset($options['delay'])) {
             \usleep($options['delay'] * 1000);
         }
-        $startTime = isset($options['on_stats']) ? Utils::currentTime() : null;
         try {
             // Does not support the expect header.
             $request = $request->withoutHeader('Expect');
-            // Append a content-length header if body size is zero to match
-            // cURL's behavior.
-            if (0 === $request->getBody()->getSize()) {
-                $request = $request->withHeader('Content-Length', '0');
-            }
-            return $this->createResponse($request, $options, $this->createStream($request, $options), $startTime);
+            $stream = $this->createStream($request, $options);
+            return $this->createResponse($request, $options, $stream);
         } catch (\InvalidArgumentException $e) {
             throw $e;
         } catch (\Exception $e) {
             // Determine if the error was a networking error.
             $message = $e->getMessage();
             // This list can probably get more comprehensive.
-            if (\strpos($message, 'getaddrinfo') || \strpos($message, 'Connection refused') || \strpos($message, "couldn't connect to host") || \strpos($message, "connection attempt failed")) {
+            if (\strpos($message, 'getaddrinfo') || \strpos($message, 'Connection refused')) {
                 $e = new ConnectException($e->getMessage(), $request, $e);
             }
-            $e = RequestException::wrapException($request, $e);
-            $this->invokeStats($options, $request, $startTime, null, $e);
-            return \EbayVendor\GuzzleHttp\Promise\rejection_for($e);
+            return new RejectedPromise(RequestException::wrapException($request, $e));
         }
     }
-    private function invokeStats(array $options, RequestInterface $request, $startTime, ResponseInterface $response = null, $error = null)
-    {
-        if (isset($options['on_stats'])) {
-            $stats = new TransferStats($request, $response, Utils::currentTime() - $startTime, $error, []);
-            \call_user_func($options['on_stats'], $stats);
-        }
-    }
-    private function createResponse(RequestInterface $request, array $options, $stream, $startTime)
+    private function createResponse(RequestInterface $request, array $options, $stream)
     {
         $hdrs = $this->lastHeaders;
         $this->lastHeaders = [];
@@ -72,12 +57,8 @@ class StreamHandler
         $status = $parts[1];
         $reason = isset($parts[2]) ? $parts[2] : null;
         $headers = \EbayVendor\GuzzleHttp\headers_from_lines($hdrs);
-        list($stream, $headers) = $this->checkDecode($options, $headers, $stream);
-        $stream = Psr7\stream_for($stream);
-        $sink = $stream;
-        if (\strcasecmp('HEAD', $request->getMethod())) {
-            $sink = $this->createSink($stream, $options);
-        }
+        $stream = Psr7\stream_for($this->checkDecode($options, $headers, $stream));
+        $sink = $this->createSink($stream, $options);
         $response = new Psr7\Response($status, $headers, $sink, $ver, $reason);
         if (isset($options['on_headers'])) {
             try {
@@ -85,15 +66,12 @@ class StreamHandler
             } catch (\Exception $e) {
                 $msg = 'An error was encountered during the on_headers event';
                 $ex = new RequestException($msg, $request, $response, $e);
-                return \EbayVendor\GuzzleHttp\Promise\rejection_for($ex);
+                return new RejectedPromise($ex);
             }
         }
-        // Do not drain when the request is a HEAD request because they have
-        // no body.
         if ($sink !== $stream) {
-            $this->drain($stream, $sink, $response->getHeaderLine('Content-Length'));
+            $this->drain($stream, $sink);
         }
-        $this->invokeStats($options, $request, $startTime, $response, null);
         return new FulfilledPromise($response);
     }
     private function createSink(StreamInterface $stream, array $options)
@@ -102,53 +80,34 @@ class StreamHandler
             return $stream;
         }
         $sink = isset($options['sink']) ? $options['sink'] : \fopen('php://temp', 'r+');
-        return \is_string($sink) ? new Psr7\LazyOpenStream($sink, 'w+') : Psr7\stream_for($sink);
+        return \is_string($sink) ? new Psr7\Stream(Psr7\try_fopen($sink, 'r+')) : Psr7\stream_for($sink);
     }
     private function checkDecode(array $options, array $headers, $stream)
     {
         // Automatically decode responses when instructed.
         if (!empty($options['decode_content'])) {
-            $normalizedKeys = \EbayVendor\GuzzleHttp\normalize_header_keys($headers);
-            if (isset($normalizedKeys['content-encoding'])) {
-                $encoding = $headers[$normalizedKeys['content-encoding']];
-                if ($encoding[0] === 'gzip' || $encoding[0] === 'deflate') {
-                    $stream = new Psr7\InflateStream(Psr7\stream_for($stream));
-                    $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];
-                    // Remove content-encoding header
-                    unset($headers[$normalizedKeys['content-encoding']]);
-                    // Fix content-length header
-                    if (isset($normalizedKeys['content-length'])) {
-                        $headers['x-encoded-content-length'] = $headers[$normalizedKeys['content-length']];
-                        $length = (int) $stream->getSize();
-                        if ($length === 0) {
-                            unset($headers[$normalizedKeys['content-length']]);
-                        } else {
-                            $headers[$normalizedKeys['content-length']] = [$length];
-                        }
+            foreach ($headers as $key => $value) {
+                if (\strtolower($key) == 'content-encoding') {
+                    if ($value[0] == 'gzip' || $value[0] == 'deflate') {
+                        return new Psr7\InflateStream(Psr7\stream_for($stream));
                     }
                 }
             }
         }
-        return [$stream, $headers];
+        return $stream;
     }
     /**
      * Drains the source stream into the "sink" client option.
      *
      * @param StreamInterface $source
      * @param StreamInterface $sink
-     * @param string          $contentLength Header specifying the amount of
-     *                                       data to read.
      *
      * @return StreamInterface
      * @throws \RuntimeException when the sink option is invalid.
      */
-    private function drain(StreamInterface $source, StreamInterface $sink, $contentLength)
+    private function drain(StreamInterface $source, StreamInterface $sink)
     {
-        // If a content-length header is provided, then stop reading once
-        // that number of bytes has been read. This can prevent infinitely
-        // reading from a stream when dealing with servers that do not honor
-        // Connection: Close headers.
-        Psr7\copy_to_stream($source, $sink, \strlen($contentLength) > 0 && (int) $contentLength > 0 ? (int) $contentLength : -1);
+        Psr7\copy_to_stream($source, $sink);
         $sink->seek(0);
         $source->close();
         return $sink;
@@ -197,7 +156,7 @@ class StreamHandler
             $options['verify'] = \true;
         }
         $params = [];
-        $context = $this->getDefaultContext($request);
+        $context = $this->getDefaultContext($request, $options);
         if (isset($options['on_headers']) && !\is_callable($options['on_headers'])) {
             throw new \InvalidArgumentException('on_headers must be callable');
         }
@@ -215,45 +174,14 @@ class StreamHandler
             }
             $context = \array_replace_recursive($context, $options['stream_context']);
         }
-        // Microsoft NTLM authentication only supported with curl handler
-        if (isset($options['auth']) && \is_array($options['auth']) && isset($options['auth'][2]) && 'ntlm' == $options['auth'][2]) {
-            throw new \InvalidArgumentException('Microsoft NTLM authentication only supported with curl handler');
-        }
-        $uri = $this->resolveHost($request, $options);
         $context = $this->createResource(function () use($context, $params) {
             return \stream_context_create($context, $params);
         });
-        return $this->createResource(function () use($uri, &$http_response_header, $context, $options) {
-            $resource = \fopen((string) $uri, 'r', null, $context);
+        return $this->createResource(function () use($request, &$http_response_header, $context) {
+            $resource = \fopen($request->getUri(), 'r', null, $context);
             $this->lastHeaders = $http_response_header;
-            if (isset($options['read_timeout'])) {
-                $readTimeout = $options['read_timeout'];
-                $sec = (int) $readTimeout;
-                $usec = ($readTimeout - $sec) * 100000;
-                \stream_set_timeout($resource, $sec, $usec);
-            }
             return $resource;
         });
-    }
-    private function resolveHost(RequestInterface $request, array $options)
-    {
-        $uri = $request->getUri();
-        if (isset($options['force_ip_resolve']) && !\filter_var($uri->getHost(), \FILTER_VALIDATE_IP)) {
-            if ('v4' === $options['force_ip_resolve']) {
-                $records = \dns_get_record($uri->getHost(), \DNS_A);
-                if (!isset($records[0]['ip'])) {
-                    throw new ConnectException(\sprintf("Could not resolve IPv4 address for host '%s'", $uri->getHost()), $request);
-                }
-                $uri = $uri->withHost($records[0]['ip']);
-            } elseif ('v6' === $options['force_ip_resolve']) {
-                $records = \dns_get_record($uri->getHost(), \DNS_AAAA);
-                if (!isset($records[0]['ipv6'])) {
-                    throw new ConnectException(\sprintf("Could not resolve IPv6 address for host '%s'", $uri->getHost()), $request);
-                }
-                $uri = $uri->withHost('[' . $records[0]['ipv6'] . ']');
-            }
-        }
-        return $uri;
     }
     private function getDefaultContext(RequestInterface $request)
     {
@@ -282,17 +210,13 @@ class StreamHandler
         } else {
             $scheme = $request->getUri()->getScheme();
             if (isset($value[$scheme])) {
-                if (!isset($value['no']) || !\EbayVendor\GuzzleHttp\is_host_in_noproxy($request->getUri()->getHost(), $value['no'])) {
-                    $options['http']['proxy'] = $value[$scheme];
-                }
+                $options['http']['proxy'] = $value[$scheme];
             }
         }
     }
     private function add_timeout(RequestInterface $request, &$options, $value, &$params)
     {
-        if ($value > 0) {
-            $options['http']['timeout'] = $value;
-        }
+        $options['http']['timeout'] = $value;
     }
     private function add_verify(RequestInterface $request, &$options, $value, &$params)
     {
@@ -309,13 +233,11 @@ class StreamHandler
             }
         } elseif ($value === \false) {
             $options['ssl']['verify_peer'] = \false;
-            $options['ssl']['verify_peer_name'] = \false;
             return;
         } else {
             throw new \InvalidArgumentException('Invalid verify request option');
         }
         $options['ssl']['verify_peer'] = \true;
-        $options['ssl']['verify_peer_name'] = \true;
         $options['ssl']['allow_self_signed'] = \false;
     }
     private function add_cert(RequestInterface $request, &$options, $value, &$params)
@@ -345,7 +267,7 @@ class StreamHandler
         static $map = [\STREAM_NOTIFY_CONNECT => 'CONNECT', \STREAM_NOTIFY_AUTH_REQUIRED => 'AUTH_REQUIRED', \STREAM_NOTIFY_AUTH_RESULT => 'AUTH_RESULT', \STREAM_NOTIFY_MIME_TYPE_IS => 'MIME_TYPE_IS', \STREAM_NOTIFY_FILE_SIZE_IS => 'FILE_SIZE_IS', \STREAM_NOTIFY_REDIRECTED => 'REDIRECTED', \STREAM_NOTIFY_PROGRESS => 'PROGRESS', \STREAM_NOTIFY_FAILURE => 'FAILURE', \STREAM_NOTIFY_COMPLETED => 'COMPLETED', \STREAM_NOTIFY_RESOLVE => 'RESOLVE'];
         static $args = ['severity', 'message', 'message_code', 'bytes_transferred', 'bytes_max'];
         $value = \EbayVendor\GuzzleHttp\debug_resource($value);
-        $ident = $request->getMethod() . ' ' . $request->getUri()->withFragment('');
+        $ident = $request->getMethod() . ' ' . $request->getUri();
         $this->addNotification($params, function () use($ident, $value, $map, $args) {
             $passed = \func_get_args();
             $code = \array_shift($passed);

@@ -20,6 +20,7 @@ use EbayVendor\GuzzleHttp\Psr7\Request;
  *
  * @link https://github.com/guzzle/guzzle/pull/1101
  */
+
 class RequestFactory
 {
     /**

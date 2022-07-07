@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class TotFormat
@@ -40,12 +39,13 @@ class TotFormat
      * Format e-mail to be valid
      *
      * @param string $email e-mail address to format
+     *
      * @return string email if it is valid, email without @ + _missspelled@dontknow.com if not valid
      */
     public static function formatEmail($email)
     {
         if (empty($email) || !preg_match(self::cleanNonUnicodeSupport('/^[a-z\p{L}0-9!#$%&\'*+\/=?^`{}|~_-]+[.a-z\p{L}0-9!#$%&\'*+\/=?^`{}|~_-]*@[a-z\p{L}0-9]+[._a-z\p{L}0-9-]*\.[a-z0-9]+$/ui'), $email)) {
-            return str_replace('@', '__at__', $email).'_misspelled@dontknow.com';
+            return str_replace('@', '__at__', $email) . '_misspelled@dontknow.com';
         }
 
         return $email;
@@ -55,6 +55,7 @@ class TotFormat
      * Format name to be valid
      *
      * @param string $name Name to format
+     *
      * @return string formatted name
      */
     public static function formatName($name)
@@ -66,6 +67,7 @@ class TotFormat
      * Format a postal address to be valid
      *
      * @param string $address Address to format
+     *
      * @return string formatted address
      */
     public static function formatAddress($address)
@@ -81,6 +83,7 @@ class TotFormat
      * Format a postal code to be valid
      *
      * @param string $postcode Postal code to format
+     *
      * @return string formatted post code
      */
     public static function formatPostCode($postcode)
@@ -96,6 +99,7 @@ class TotFormat
      * Format city name to be valid
      *
      * @param string $city City name to format
+     *
      * @return string formatted city name
      */
     public static function formatCityName($city)
@@ -107,6 +111,7 @@ class TotFormat
      * Format phone number to be valid
      *
      * @param string $number Phone number to format
+     *
      * @return string formatted phone number
      */
     public static function formatPhoneNumber($number)
@@ -116,7 +121,9 @@ class TotFormat
 
     /**
      * Format product description by removing potential hazardous code
+     *
      * @param string $desc description to be cleaned
+     *
      * @return string
      */
     public static function formatDescription($desc)
@@ -132,6 +139,7 @@ class TotFormat
      * This function will take JSON string and indent it very readable.
      *
      * @param string $json to be formatted
+     *
      * @return string
      */
     public static function prettyPrint($json)
@@ -143,10 +151,10 @@ class TotFormat
         $ends_line_level = null;
         $json_length = Tools::strlen($json);
 
-        for ($i = 0; $i < $json_length; $i++) {
+        for ($i = 0; $i < $json_length; ++$i) {
             $char = $json[$i];
             $new_line_level = null;
-            $post = "";
+            $post = '';
             if ($ends_line_level !== null) {
                 $new_line_level = $ends_line_level;
                 $ends_line_level = null;
@@ -158,7 +166,6 @@ class TotFormat
             } elseif (!$in_quotes) {
                 switch ($char) {
                     case '}':
-                        // no break
                     case ']':
                         $level--;
                         $ends_line_level = null;
@@ -166,7 +173,6 @@ class TotFormat
                         break;
 
                     case '{':
-                        // no break
                     case '[':
                         $level++;
                     // no break
@@ -175,17 +181,14 @@ class TotFormat
                         break;
 
                     case ':':
-                        $post = " ";
+                        $post = ' ';
                         break;
 
-                    case " ":
-                        // no break
+                    case ' ':
                     case "\t":
-                    // no break
                     case "\n":
-                    // no break
                     case "\r":
-                        $char = "";
+                        $char = '';
                         $ends_line_level = $new_line_level;
                         $new_line_level = null;
                         break;
@@ -194,9 +197,9 @@ class TotFormat
                 $in_escape = true;
             }
             if ($new_line_level !== null) {
-                $result .= "\n".str_repeat("\t", $new_line_level);
+                $result .= "\n" . str_repeat("\t", $new_line_level);
             }
-            $result .= $char.$post;
+            $result .= $char . $post;
         }
 
         return $result;

@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class AdminEbayOrphanListingsController extends ModuleAdminController
@@ -31,14 +30,14 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
     {
         if (version_compare(_PS_VERSION_, '1.5', '>=') && Tools::getValue('id_shop')) {
             $context = Context::getContext();
-            $context->shop = new Shop((int)Tools::getValue('id_shop'));
+            $context->shop = new Shop((int) Tools::getValue('id_shop'));
         }
 
         $page_current = Tools::getValue('page') ? Tools::getValue('page') : 1;
         $length = 20;
         $count_orphans_product = EbayProduct::getCountOrphanListing(Tools::getValue('profile'));
         $final_res = EbayProduct::getOrphanListing(Tools::getValue('profile'), $page_current, $length);
-        $pages_all = ceil(((int)$count_orphans_product[0]['number']) / ((int)$length));
+        $pages_all = ceil(((int) $count_orphans_product[0]['number']) / ((int) $length));
         $range = 3;
         $start = $page_current - $range;
         if ($start <= 0) {
@@ -51,25 +50,24 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
             $stop = $pages_all;
         }
 
-        $prev_page = (int)$page_current - 1;
-        $next_page = (int)$page_current + 1;
+        $prev_page = (int) $page_current - 1;
+        $next_page = (int) $page_current + 1;
         $tpl_include = _PS_MODULE_DIR_ . 'ebay/views/templates/hook/pagination.tpl';
-
 
         $context = Context::getContext();
 
-// Smarty
-        $template_vars = array(
+        // Smarty
+        $template_vars = [
             'id_ebay_profile' => Tools::getValue('profile'),
             'id_employee' => Tools::getValue('id_employee'),
             'ads' => $final_res,
             'count' => count($final_res),
-        );
+        ];
 
-// Smarty datas
+        // Smarty datas
         $ebay = Module::getInstanceByName('ebay');
         $context->smarty->assign($template_vars);
-        $context->smarty->assign(array(
+        $context->smarty->assign([
             'prev_page' => $prev_page,
             'next_page' => $next_page,
             'tpl_include' => $tpl_include,
@@ -77,9 +75,9 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
             'page_current' => $page_current,
             'start' => $start,
             'stop' => $stop,
-        ));
+        ]);
 
-        die($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/table_orphan_listings.tpl'));
+        exit($ebay->display(realpath(dirname(__FILE__) . '/../../'), '/views/templates/hook/table_orphan_listings.tpl'));
     }
 
     public function ajaxProcessDeleteOrphanListing()
@@ -87,18 +85,18 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
         $id_product_ref = Tools::getValue('id_product_ref');
 
         $product = EbayProduct::getProductsIdFromItemId($id_product_ref);
-        if (Tools::getValue('listing_action') == "end") {
+        if (Tools::getValue('listing_action') == 'end') {
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product['id_product'], $product['id_ebay_profile']);
             $product_ps = new Product($product['id_product'], false, Tools::getValue('id_lang'));
             EbayTaskManager::addTask('end', $product_ps, Tools::getValue('id_employee'), $product['id_ebay_profile'], $product['id_product_attribute']);
         }
 
-        if (Tools::getValue('listing_action') == "out_of_stock") {
-            EbayProductConfiguration::insertOrUpdate($product['id_product'], array(
+        if (Tools::getValue('listing_action') == 'out_of_stock') {
+            EbayProductConfiguration::insertOrUpdate($product['id_product'], [
                 'id_ebay_profile' => $product['id_ebay_profile'],
-                'blacklisted' =>  1,
+                'blacklisted' => 1,
                 'extra_images' => 0,
-            ));
+            ]);
             EbayTaskManager::deleteTaskForPorduct($product['id_product']);
             if ($product) {
                 $productPS = new Product($product['id_product']);
@@ -107,7 +105,7 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
             }
         }
         echo '1';
-        die();
+        exit();
     }
 
     public function ajaxProcessDeleteAllOrphanListing()
@@ -119,6 +117,6 @@ class AdminEbayOrphanListingsController extends ModuleAdminController
             $product_ps = new Product($product['id_product'], false, Tools::getValue('id_lang'));
             EbayTaskManager::addTask('end', $product_ps, Tools::getValue('id_employee'), $product['id_ebay_profile'], $product['id_product_attribute']);
         }
-        die('1');
+        exit('1');
     }
 }

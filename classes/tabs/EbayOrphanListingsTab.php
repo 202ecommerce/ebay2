@@ -22,21 +22,18 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayOrphanListingsTab extends EbayTab
 {
-
     public function getContent()
     {
-
-        $vars = array(
+        $vars = [
             'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
             'id_employee' => $this->context->employee->id,
             '_module_dir_' => _MODULE_DIR_,
-            'ebayOrphanListingsController' => $this->context->link->getAdminLink('AdminEbayOrphanListings')
-        );
+            'ebayOrphanListingsController' => $this->context->link->getAdminLink('AdminEbayOrphanListings'),
+        ];
 
         return $this->display('table_orphan_listings_ajax.tpl', $vars);
     }

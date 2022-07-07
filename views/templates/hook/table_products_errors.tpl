@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -70,7 +70,7 @@
                     {foreach from=$task_errors item="task_error"}
                         <tr>
                             <td>{$task_error.date|escape:'htmlall':'UTF-8'}</td>
-                            <td>{$task_error.id_product|escape:'htmlall':'UTF-8'}</td>
+                            <td><a href="{$task_error.product_url|escape:'htmlall':'UTF-8'}">{$task_error.id_product|escape:'htmlall':'UTF-8'}</a></td>
                             <td>{$task_error.name|escape:'htmlall':'UTF-8'}</td>
                             <td class="item_id_error">{$task_error.id_item|escape:'htmlall':'UTF-8'}</td>
                             <td>{$task_error.error|escape:'htmlall':'UTF-8'}</td>
@@ -78,14 +78,6 @@
                             <td></td>
                             <td>
                                 <div class="action">
-                                    {*<a class="btn btn-sm btn-default kb-help"*}
-                                       {*data-errorcode="{$task_error.error_code}"*}
-                                       {*data-module="ebay"*}
-                                       {*data-lang="{$task_error.lang_iso}"*}
-                                       {*module_version="1.11.0"*}
-                                       {*prestashop_version="{$task_error.ps_version}"*}
-                                       {*title="{l s='Help' mod='ebay'}" data-toggle="tooltip"><i class="icon-question"></i>*}
-                                    {*</a>*}
                                     <a class="btn btn-sm btn-default corige_product"
                                        id="{$task_error.real_id}" href="{$task_error.product_url}"
                                        target="_blank"

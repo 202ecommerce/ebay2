@@ -22,13 +22,13 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services\Token\OAuth;
 
 use Ebay\classes\SandboxMode;
 use EbayProfile;
+use Exception;
 use ProfileConf;
 use Throwable;
 
@@ -36,6 +36,7 @@ class RefreshAccessToken
 {
     /**
      * @param EbayProfile $ebayProfile
+     *
      * @return ResponseGetAccessToken
      */
     public function refresh(EbayProfile $ebayProfile)
@@ -45,7 +46,7 @@ class RefreshAccessToken
         try {
             $ebayAccessToken = new \EbayVendor\NeilCrookes\OAuth2\Client\Token\EbayAccessToken([
                 'access_token' => $ebayProfile->getConfiguration(ProfileConf::USER_AUTH_TOKEN),
-                'refresh_token' => $ebayProfile->getConfiguration(ProfileConf::REFRESH_TOKEN)
+                'refresh_token' => $ebayProfile->getConfiguration(ProfileConf::REFRESH_TOKEN),
             ]);
 
             $provider = new \EbayVendor\NeilCrookes\OAuth2\Client\Provider\Ebay([
@@ -55,7 +56,7 @@ class RefreshAccessToken
                 'sandbox' => (new SandboxMode())->isSandbox(),
                 'http_errors' => false, // Optional. Means Guzzle Exceptions aren't thrown on 4xx or 5xx responses from eBay, allowing you to detect and handle them yourself
             ], [
-                'optionProvider' => new \EbayVendor\League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider()
+                'optionProvider' => new \EbayVendor\League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider(),
             ]);
 
             $newToken = $provider->refreshAccessToken($ebayAccessToken);
@@ -63,7 +64,10 @@ class RefreshAccessToken
             $response->setSuccess(true);
             $response->setAccessToken($newToken->getToken());
             $response->setRefreshToken($newToken->getRefreshToken());
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
+            $response->setSuccess(false);
+            $response->setError($e->getMessage());
+        } catch (Throwable $e) {// Throwable exists from php 7
             $response->setSuccess(false);
             $response->setError($e->getMessage());
         }

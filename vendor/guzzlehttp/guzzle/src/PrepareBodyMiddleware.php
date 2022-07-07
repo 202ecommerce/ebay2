@@ -9,10 +9,13 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
  * Prepares requests that contain a body, adding the Content-Length,
  * Content-Type, and Expect headers.
  */
+
 class PrepareBodyMiddleware
 {
     /** @var callable  */
     private $nextHandler;
+    /** @var array */
+    private static $skipMethods = ['GET' => \true, 'HEAD' => \true];
     /**
      * @param callable $nextHandler Next handler to invoke.
      */
@@ -30,7 +33,7 @@ class PrepareBodyMiddleware
     {
         $fn = $this->nextHandler;
         // Don't do anything if the request has no body.
-        if ($request->getBody()->getSize() === 0) {
+        if (isset(self::$skipMethods[$request->getMethod()]) || $request->getBody()->getSize() === 0) {
             return $fn($request, $options);
         }
         $modify = [];
@@ -43,7 +46,7 @@ class PrepareBodyMiddleware
             }
         }
         // Add a default content-length or transfer-encoding header.
-        if (!$request->hasHeader('Content-Length') && !$request->hasHeader('Transfer-Encoding')) {
+        if (!isset(self::$skipMethods[$request->getMethod()]) && !$request->hasHeader('Content-Length') && !$request->hasHeader('Transfer-Encoding')) {
             $size = $request->getBody()->getSize();
             if ($size !== null) {
                 $modify['set_headers']['Content-Length'] = $size;
@@ -55,11 +58,6 @@ class PrepareBodyMiddleware
         $this->addExpectHeader($request, $options, $modify);
         return $fn(Psr7\modify_request($request, $modify), $options);
     }
-    /**
-     * Add expect header
-     *
-     * @return void
-     */
     private function addExpectHeader(RequestInterface $request, array $options, array &$modify)
     {
         // Determine if the Expect header should be used

@@ -2,11 +2,11 @@
 
 namespace EbayVendor\GuzzleHttp\Handler;
 
-use EbayVendor\GuzzleHttp\RequestOptions;
 use EbayVendor\Psr\Http\Message\RequestInterface;
 /**
  * Provides basic proxies for handlers.
  */
+
 class Proxy
 {
     /**
@@ -21,7 +21,7 @@ class Proxy
     public static function wrapSync(callable $default, callable $sync)
     {
         return function (RequestInterface $request, array $options) use($default, $sync) {
-            return empty($options[RequestOptions::SYNCHRONOUS]) ? $default($request, $options) : $sync($request, $options);
+            return empty($options['sync']) ? $default($request, $options) : $sync($request, $options);
         };
     }
     /**

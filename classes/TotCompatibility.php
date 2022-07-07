@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class TotCompatibility
@@ -39,9 +38,9 @@ class TotCompatibility
             return Currency::getCurrenciesByIdShop($id_shop);
         } else {
             $sql = 'SELECT *
-					FROM `'._DB_PREFIX_.'currency` c
-					LEFT JOIN `'._DB_PREFIX_.'currency_shop` cs ON (cs.`id_currency` = c.`id_currency`)
-					'.($id_shop != 0 ? ' WHERE cs.`id_shop` = '.(int) $id_shop : '').'
+					FROM `' . _DB_PREFIX_ . 'currency` c
+					LEFT JOIN `' . _DB_PREFIX_ . 'currency_shop` cs ON (cs.`id_currency` = c.`id_currency`)
+					' . ($id_shop != 0 ? ' WHERE cs.`id_shop` = ' . (int) $id_shop : '') . '
 					GROUP BY c.id_currency
 					ORDER BY `name` ASC';
 

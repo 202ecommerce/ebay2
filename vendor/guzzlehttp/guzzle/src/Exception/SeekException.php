@@ -6,6 +6,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
 /**
  * Exception thrown when a seek fails on a stream.
  */
+
 class SeekException extends \RuntimeException implements GuzzleException
 {
     private $stream;

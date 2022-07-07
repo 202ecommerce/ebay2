@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayOrderLog extends ObjectModel
@@ -52,7 +51,7 @@ class EbayOrderLog extends ObjectModel
 
     public function getFields()
     {
-        $fields = array();
+        $fields = [];
         parent::validateFields();
         if (isset($this->id)) {
             $fields['id_ebay_order_log'] = (int) ($this->id);
@@ -73,45 +72,45 @@ class EbayOrderLog extends ObjectModel
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)
     {
-
-            self::$definition = array(
+        self::$definition = [
                 'table' => 'ebay_order_log',
                 'primary' => 'id_ebay_order_log',
-                'fields' => array(
-                    'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_ebay_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_orders' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'success' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
-                    'data' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-                    'date_update' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-                ),
-            );
+                'fields' => [
+                    'id_ebay_profile' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+                    'id_ebay_order' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+                    'id_orders' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                    'type' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                    'success' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
+                    'data' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+                    'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
+                    'date_update' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
+                ],
+            ];
 
-            $this->date_add = date('Y-m-d H:i:s');
-            return parent::__construct($id, $id_lang, $id_shop);
+        $this->date_add = date('Y-m-d H:i:s');
+
+        return parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function get($offset, $limit)
     {
         return Db::getInstance()->executeS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_order_log`
+			FROM `' . _DB_PREFIX_ . 'ebay_order_log`
 			ORDER BY `id_ebay_order_log` DESC
-			LIMIT '.(int) $offset.', '.(int) $limit);
+			LIMIT ' . (int) $offset . ', ' . (int) $limit);
     }
 
     public static function count()
     {
         return Db::getInstance()->getValue('SELECT count(*)
-			FROM `'._DB_PREFIX_.'ebay_order_log`');
+			FROM `' . _DB_PREFIX_ . 'ebay_order_log`');
     }
 
     public static function cleanOlderThan($nb_days)
     {
         $date = date('Y-m-d\TH:i:s', strtotime('-1 day'));
 
-        Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_order_log`
-			WHERE `date_add` < \''.pSQL($date).'\'');
+        Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_order_log`
+			WHERE `date_add` < \'' . pSQL($date) . '\'');
     }
 }

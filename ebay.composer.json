@@ -6,7 +6,11 @@
         "prepend-autoloader": false
     },
     "require": {
-        "guzzlehttp/guzzle": "6.*",
+        "paragonie\/random_compat": "^2",
+        "symfony/polyfill-php72": "1.10.0",
+        "symfony/polyfill-mbstring": "1.3.0",
+        "symfony\/polyfill-intl-idn": "1.17.0",
+        "guzzlehttp/guzzle": "6.0.0",
         "neilcrookes/oauth2-ebay": "dev-master"
     },
     "autoload": {

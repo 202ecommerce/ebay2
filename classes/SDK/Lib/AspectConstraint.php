@@ -22,13 +22,11 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
 
 use Ebay\classes\SDK\Core\ResourceModel;
-use Symfony\Component\VarDumper\VarDumper;
 
 class AspectConstraint extends ResourceModel
 {
@@ -36,25 +34,25 @@ class AspectConstraint extends ResourceModel
 
     const MODE_FREE_TEXT = 'FREE_TEXT';
 
-    /** @var string*/
+    /** @var string */
     protected $aspectDataType;
 
-    /** @var string*/
+    /** @var string */
     protected $itemToAspectCardinality;
 
-    /** @var string*/
+    /** @var string */
     protected $aspectMode;
 
-    /** @var bool*/
+    /** @var bool */
     protected $aspectRequired;
 
-    /** @var string*/
+    /** @var string */
     protected $aspectUsage;
 
-    /** @var bool*/
+    /** @var bool */
     protected $aspectEnabledForVariations;
 
-    /** @var int*/
+    /** @var int */
     protected $aspectMaxLength;
 
     /**
@@ -67,11 +65,13 @@ class AspectConstraint extends ResourceModel
 
     /**
      * @param int $maxLength
+     *
      * @return self
      */
     public function setAspectMaxLength($maxLength)
     {
-        $this->aspectMaxLength = (int)$maxLength;
+        $this->aspectMaxLength = (int) $maxLength;
+
         return $this;
     }
 
@@ -80,11 +80,12 @@ class AspectConstraint extends ResourceModel
      */
     public function getAspectDataType()
     {
-        return (string)$this->aspectDataType;
+        return (string) $this->aspectDataType;
     }
 
     /**
      * @param string $aspectDataType
+     *
      * @return self
      */
     public function setAspectDataType($aspectDataType)
@@ -94,6 +95,7 @@ class AspectConstraint extends ResourceModel
         }
 
         $this->aspectDataType = $aspectDataType;
+
         return $this;
     }
 
@@ -102,11 +104,12 @@ class AspectConstraint extends ResourceModel
      */
     public function getItemToAspectCardinality()
     {
-        return (string)$this->itemToAspectCardinality;
+        return (string) $this->itemToAspectCardinality;
     }
 
     /**
      * @param string $itemToAspectCardinality
+     *
      * @return self
      */
     public function setItemToAspectCardinality($itemToAspectCardinality)
@@ -116,6 +119,7 @@ class AspectConstraint extends ResourceModel
         }
 
         $this->itemToAspectCardinality = $itemToAspectCardinality;
+
         return $this;
     }
 
@@ -124,11 +128,12 @@ class AspectConstraint extends ResourceModel
      */
     public function getAspectMode()
     {
-        return (string)$this->aspectMode;
+        return (string) $this->aspectMode;
     }
 
     /**
      * @param string $aspectMode
+     *
      * @return self
      */
     public function setAspectMode($aspectMode)
@@ -138,6 +143,7 @@ class AspectConstraint extends ResourceModel
         }
 
         $this->aspectMode = $aspectMode;
+
         return $this;
     }
 
@@ -146,16 +152,18 @@ class AspectConstraint extends ResourceModel
      */
     public function isAspectRequired()
     {
-        return (bool)$this->aspectRequired;
+        return (bool) $this->aspectRequired;
     }
 
     /**
      * @param bool $aspectRequired
+     *
      * @return self
      */
     public function setAspectRequired($aspectRequired)
     {
-        $this->aspectRequired = (bool)$aspectRequired;
+        $this->aspectRequired = (bool) $aspectRequired;
+
         return $this;
     }
 
@@ -164,11 +172,12 @@ class AspectConstraint extends ResourceModel
      */
     public function getAspectUsage()
     {
-        return (string)$this->aspectUsage;
+        return (string) $this->aspectUsage;
     }
 
     /**
      * @param string $aspectUsage
+     *
      * @return self
      */
     public function setAspectUsage($aspectUsage)
@@ -178,6 +187,7 @@ class AspectConstraint extends ResourceModel
         }
 
         $this->aspectUsage = $aspectUsage;
+
         return $this;
     }
 
@@ -186,16 +196,18 @@ class AspectConstraint extends ResourceModel
      */
     public function isAspectEnabledForVariations()
     {
-        return (bool)$this->aspectEnabledForVariations;
+        return (bool) $this->aspectEnabledForVariations;
     }
 
     /**
      * @param bool $aspectEnabledForVariations
+     *
      * @return self
      */
     public function setAspectEnabledForVariations($aspectEnabledForVariations)
     {
-        $this->aspectEnabledForVariations = (bool)$aspectEnabledForVariations;
+        $this->aspectEnabledForVariations = (bool) $aspectEnabledForVariations;
+
         return $this;
     }
 
@@ -240,7 +252,7 @@ class AspectConstraint extends ResourceModel
             'aspectMode' => $this->getAspectMode(),
             'aspectRequired' => $this->isAspectRequired(),
             'aspectUsage' => $this->getAspectUsage(),
-            'aspectEnabledForVariations' => $this->isAspectEnabledForVariations()
+            'aspectEnabledForVariations' => $this->isAspectEnabledForVariations(),
         ];
     }
 }

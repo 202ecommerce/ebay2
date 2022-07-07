@@ -22,11 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-$sql= array();
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category` (
+$sql = [];
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_store_category` (
     `id_ebay_store_category` int(16) NOT NULL AUTO_INCREMENT,
 	`id_ebay_profile` int(16) NOT NULL,
 	`ebay_category_id` int(16) NOT NULL,
@@ -35,18 +33,18 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category` (
 	`ebay_parent_category_id` int(16) NOT NULL,
 	UNIQUE(`id_ebay_profile`, `ebay_category_id`),
 	PRIMARY KEY  (`id_ebay_store_category`)
-) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category_configuration` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_store_category_configuration` (
     `id_ebay_store_category_configuration` int(16) NOT NULL AUTO_INCREMENT,
 	`id_ebay_profile` int(16) NOT NULL,
     `ebay_category_id` int(16) NOT NULL,
     `id_category` int(16) NOT NULL,
 	UNIQUE(`id_ebay_profile`, `id_category`),
 	PRIMARY KEY  (`id_ebay_store_category_configuration`)
-) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_api_log` (
 	`id_ebay_api_log` int(16) NOT NULL AUTO_INCREMENT,
 	`id_ebay_profile` int(16) NOT NULL,
 	`type` varchar(40) NOT NULL,
@@ -57,9 +55,9 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
 	`id_order` int(16),
     `date_add` datetime NOT NULL,
 	PRIMARY KEY  (`id_ebay_api_log`)
-) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_log` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ebay_order_log` (
 	`id_ebay_order_log` int(16) NOT NULL AUTO_INCREMENT,
 	`id_ebay_profile` int(16) NOT NULL,
     `id_ebay_order` int(16) NOT NULL,
@@ -70,4 +68,4 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_log` (
     `date_add` datetime NOT NULL,
     `date_update` datetime,
 	PRIMARY KEY  (`id_ebay_order_log`)
-) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';

@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,10 +30,10 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class Price extends ResourceModel
 {
-    /** @var string*/
+    /** @var string */
     protected $value;
 
-    /** @var string*/
+    /** @var string */
     protected $currency;
 
     /**
@@ -42,16 +41,18 @@ class Price extends ResourceModel
      */
     public function getValue()
     {
-        return (string)$this->value;
+        return (string) $this->value;
     }
 
     /**
      * @param string $value
+     *
      * @return self
      */
     public function setValue($value)
     {
-        $this->value = (string)$value;
+        $this->value = (string) $value;
+
         return $this;
     }
 
@@ -60,16 +61,18 @@ class Price extends ResourceModel
      */
     public function getCurrency()
     {
-        return (string)$this->currency;
+        return (string) $this->currency;
     }
 
     /**
      * @param string $currency
+     *
      * @return self
      */
     public function setCurrency($currency)
     {
-        $this->currency = (string)$currency;
+        $this->currency = (string) $currency;
+
         return $this;
     }
 
@@ -90,7 +93,7 @@ class Price extends ResourceModel
     {
         return [
             'value' => $this->getValue(),
-            'currency' => $this->getCurrency()
+            'currency' => $this->getCurrency(),
         ];
     }
 }

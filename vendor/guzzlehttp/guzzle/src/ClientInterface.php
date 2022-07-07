@@ -2,8 +2,8 @@
 
 namespace EbayVendor\GuzzleHttp;
 
-use EbayVendor\GuzzleHttp\Exception\GuzzleException;
 use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
+use EbayVendor\GuzzleHttp\Exception\GuzzleException;
 use EbayVendor\Psr\Http\Message\RequestInterface;
 use EbayVendor\Psr\Http\Message\ResponseInterface;
 use EbayVendor\Psr\Http\Message\UriInterface;
@@ -12,10 +12,7 @@ use EbayVendor\Psr\Http\Message\UriInterface;
  */
 interface ClientInterface
 {
-    /**
-     * @deprecated Will be removed in Guzzle 7.0.0
-     */
-    const VERSION = '6.5.5';
+    const VERSION = '6.0.0';
     /**
      * Send an HTTP request.
      *
@@ -44,7 +41,7 @@ interface ClientInterface
      * relative path to append to the base path of the client. The URL can
      * contain the query string as well.
      *
-     * @param string              $method  HTTP method.
+     * @param string              $method  HTTP method
      * @param string|UriInterface $uri     URI object or string.
      * @param array               $options Request options to apply.
      *
@@ -64,7 +61,7 @@ interface ClientInterface
      * @param string|UriInterface $uri     URI object or string.
      * @param array               $options Request options to apply.
      *
-     * @return PromiseInterface
+     * @return ResponseInterface
      */
     public function requestAsync($method, $uri, array $options = []);
     /**

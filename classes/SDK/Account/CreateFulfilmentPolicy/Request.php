@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Account\CreateFulfilmentPolicy;
@@ -50,18 +49,6 @@ class Request extends AbstractBearerRequest
     }
 
     /** @return string */
-    public function toJson()
-    {
-        return '';
-    }
-
-    /** @return array */
-    public function toArray()
-    {
-        return [];
-    }
-
-    /** @return string */
     public function getMethod()
     {
         return 'post';
@@ -78,11 +65,13 @@ class Request extends AbstractBearerRequest
 
     /**
      * @param FulfilmentPolicy
+     *
      * @return self
      */
     public function setFulfilmentPolicy(FulfilmentPolicy $fulfilmentPolicy)
     {
         $this->fulfilmentPolicy = $fulfilmentPolicy;
+
         return $this;
     }
 }

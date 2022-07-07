@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -78,8 +78,13 @@
 
     // Select item from user dropdown
     $(document).on('click', '.js-user-dropdown .dropdown-menu li a', function() {
-        var url_ebay = '{$url_ebay}';
-        $(location).attr('href', url_ebay + '&ebay_profile=' + $(this).data('value'));
+        var url_ebay = '{$url_ebay}' + '&ebay_profile=' + $(this).data('value');
+        setTimeout(
+            function(){
+                location.href = url_ebay;
+            },
+            0
+        );
     });
     {if !$syncProductByCron}
     $(document).ready(function(){

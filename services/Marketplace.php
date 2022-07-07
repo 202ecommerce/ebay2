@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services;
@@ -31,6 +30,7 @@ class Marketplace
 {
     /**
      * @param \EbayProfile
+     *
      * @return string
      */
     public function getByProfile(\EbayProfile $ebayProfile)
@@ -40,6 +40,12 @@ class Marketplace
 
     public function getBySiteId($idSite)
     {
+        if ($idSite == 0) {
+            return \Tools::strtoupper('ebay_us');
+        }
+        if ($idSite == 3) {
+            return \Tools::strtoupper('ebay_gb');
+        }
         foreach (\EbaySiteMap::get() as $map) {
             if ($map['site_id'] == $idSite) {
                 return \Tools::strtoupper('ebay_' . $map['site_extension']);

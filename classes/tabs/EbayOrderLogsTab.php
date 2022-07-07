@@ -22,21 +22,19 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayOrderLogsTab extends EbayTab
 {
-
     public function getContent()
     {
         // Load prestashop ebay's configuration
-        $configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));
+        $configs = Configuration::getMultiple(['EBAY_SECURITY_TOKEN']);
 
-        return $this->display('order_logs.tpl', array(
+        return $this->display('order_logs.tpl', [
             'nb_logs' => EbayOrderLog::count(),
             'configs' => $configs,
             'api_not_configured' => !Configuration::get('EBAY_API_LOGS'),
-        ));
+        ]);
     }
 }

@@ -22,15 +22,14 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbaySiteMap
 {
     public static function get()
     {
-        return array(
-            'es' => array(
+        return [
+            'es' => [
                 'site_id' => 186,
                 'documentation' => 'es',
                 'language' => 'es_ES',
@@ -49,8 +48,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.es/businesscentre/photocenter.html',
                 'top_rated_url' => 'http://pages.ebay.es/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.es/help/sell/business-policies.html',
-            ),
-            'fr' => array(
+            ],
+            'fr' => [
                 'site_id' => 71,
                 'documentation' => 'fr',
                 'language' => 'fr_FR',
@@ -69,9 +68,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.fr/professionnels/images.html',
                 'top_rated_url' => 'http://pages.ebay.fr/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.fr/help/sell/business-policies.html',
-
-            ),
-            'ie' => array(
+            ],
+            'ie' => [
                 'site_id' => 205,
                 'documentation' => 'ie',
                 'language' => 'en_IE',
@@ -90,9 +88,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.ie/professionnels/images.html',
                 'top_rated_url' => 'http://pages.ebay.ie/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.ie/help/sell/business-policies.html',
-
-            ),
-            'nl' => array(
+            ],
+            'nl' => [
                 'site_id' => 146,
                 'documentation' => 'nl',
                 'language' => 'nl_NL',
@@ -111,8 +108,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.nl/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.ebay.nl/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.nl/help/sell/business-policies.html',
-            ),
-            'pl' => array(
+            ],
+            'pl' => [
                 'site_id' => 212,
                 'documentation' => 'pl',
                 'language' => 'pl_PL',
@@ -131,8 +128,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.pl/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.ebay.pl/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.pl/help/sell/business-policies.html',
-            ),
-            'be-fr' => array(
+            ],
+            'be-fr' => [
                 'site_id' => 23,
                 'documentation' => 'befr',
                 'language' => 'fr_BE',
@@ -152,8 +149,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.befr.ebay.be/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.befr.ebay.be/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.befr.ebay.be/help/sell/business-policies.html',
-            ),
-            'be-nl' => array(
+            ],
+            'be-nl' => [
                 'site_id' => 123,
                 'documentation' => 'benl',
                 'language' => 'nl_BE',
@@ -173,8 +170,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.benl.ebay.be/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.benl.ebay.be/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.benl.ebay.be/help/sell/business-policies.html',
-            ),
-            'ch' => array(
+            ],
+            'ch' => [
                 'site_id' => 193,
                 'documentation' => 'de',
                 'language' => 'de_DE',
@@ -193,8 +190,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.ch/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.ebay.ch/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.ch/help/sell/business-policies.html',
-            ),
-            'at' => array(
+            ],
+            'at' => [
                 'site_id' => 16,
                 'documentation' => 'de',
                 'language' => 'de_DE',
@@ -213,8 +210,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.at/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.ebay.at/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.at/help/sell/business-policies.html',
-            ),
-            'it' => array(
+            ],
+            'it' => [
                 'site_id' => 101,
                 'documentation' => 'it',
                 'language' => 'it_IT',
@@ -233,8 +230,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.it/areaprofessionale/migliora_foto.html',
                 'top_rated_url' => 'http://pages.ebay.it/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.it/help/sell/business-policies.html',
-            ),
-            'de' => array(
+            ],
+            'de' => [
                 'site_id' => 77,
                 'documentation' => 'de',
                 'language' => 'de_DE',
@@ -253,8 +250,8 @@ class EbaySiteMap
                 'picture_url' => 'http://pages.ebay.de/help/sell/pictures.html',
                 'top_rated_url' => 'http://pages.ebay.de/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.de/help/sell/business-policies.html',
-            ),
-            'gb' => array(
+            ],
+            'gb' => [
                 'site_id' => 3,
                 'documentation' => 'en',
                 'language' => 'en_GB',
@@ -273,8 +270,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.co.uk/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.co.uk/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.co.uk/help/sell/business-policies.html',
-            ),
-            'ie' => array(
+            ],
+            'ie' => [
                 'site_id' => 205,
                 'documentation' => 'en',
                 'language' => 'en_IE',
@@ -293,8 +290,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.ie/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.ie/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.ie/help/sell/business-policies.html',
-            ),
-            'au' => array(
+            ],
+            'au' => [
                 'site_id' => 15,
                 'documentation' => 'en',
                 'language' => 'en_AU',
@@ -313,8 +310,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.com.au/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.com.au/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.com.au/help/sell/business-policies.html',
-            ),
-            'us' => array(
+            ],
+            'us' => [
                 'site_id' => 0,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -333,8 +330,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.com/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.com/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.com/help/sell/business-policies.html',
-            ),
-            'hk' => array(
+            ],
+            'hk' => [
                 'site_id' => 201,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -353,8 +350,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.com.hk/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.com.hk/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.com.hk/help/sell/business-policies.html',
-            ),
-            'in' => array(
+            ],
+            'in' => [
                 'site_id' => 203,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -373,8 +370,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.in/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.in/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.in/help/sell/business-policies.html',
-            ),
-            'sg' => array(
+            ],
+            'sg' => [
                 'site_id' => 216,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -393,8 +390,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.com.sg/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.com.sg/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.com.sg/help/sell/business-policies.html',
-            ),
-            'ph' => array(
+            ],
+            'ph' => [
                 'site_id' => 211,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -413,8 +410,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.ph/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.ph/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.ph/help/sell/business-policies.html',
-            ),
-            'my' => array(
+            ],
+            'my' => [
                 'site_id' => 207,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -433,8 +430,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.com.my/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.com.my/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.com.my/help/sell/business-policies.html',
-            ),
-            'ca_en' => array(
+            ],
+            'ca_en' => [
                 'site_id' => 2,
                 'documentation' => 'en',
                 'language' => 'en_EN',
@@ -453,8 +450,8 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.ebay.ca/new-picture-standards',
                 'top_rated_url' => 'http://pages.ebay.ca/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.ebay.ca/help/sell/business-policies.html',
-            ),
-            'ca_fr' => array(
+            ],
+            'ca_fr' => [
                 'site_id' => 210,
                 'documentation' => 'fr',
                 'language' => 'fr_FR',
@@ -474,7 +471,7 @@ class EbaySiteMap
                 'picture_url' => 'http://sellercentre.cafr.ebay.ca/new-picture-standards',
                 'top_rated_url' => 'http://pages.cafr.ebay.ca/help/sell/top-rated.html',
                 'url_help_business_policies' => 'http://pages.cafr.ebay.ca/help/sell/business-policies.html',
-            )
-        );
+            ],
+        ];
     }
 }

@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -39,11 +38,12 @@ class AspectValue extends ResourceModel
      */
     public function getLocalizedValue()
     {
-        return (string)$this->localizedValue;
+        return (string) $this->localizedValue;
     }
 
     /**
      * @param string $localizedValue
+     *
      * @return AspectValue
      */
     public function setLocalizedValue($localizedValue)
@@ -53,6 +53,7 @@ class AspectValue extends ResourceModel
         }
 
         $this->localizedValue = $localizedValue;
+
         return $this;
     }
 
@@ -68,7 +69,7 @@ class AspectValue extends ResourceModel
     public function toArray()
     {
         return [
-            'localizedValue' => $this->getLocalizedValue()
+            'localizedValue' => $this->getLocalizedValue(),
         ];
     }
 }

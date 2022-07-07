@@ -22,33 +22,33 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 use Ebay\classes\SDK\Lib\AspectConstraint;
 use Ebay\classes\SDK\Lib\AspectValue;
 use Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory\GetItemAspectsForCategory;
 
-require_once dirname(__FILE__).'/EbayRequest.php';
-require_once dirname(__FILE__).'/EbayCategorySpecificValue.php';
+require_once dirname(__FILE__) . '/EbayRequest.php';
+require_once dirname(__FILE__) . '/EbayCategorySpecificValue.php';
 
 class EbayCategorySpecific
 {
     const SELECTION_MODE_FREE_TEXT = 0;
     const SELECTION_MODE_SELECTION_ONLY = 1;
 
-    private static $prefix_to_field_names = array(
-        'attr'      => 'id_attribute_group',
-        'feat'      => 'id_feature',
-        'spec'      => 'id_ebay_category_specific_value',
-        'brand'     => 'is_brand', // item specifics brand
+    private static $prefix_to_field_names = [
+        'attr' => 'id_attribute_group',
+        'feat' => 'id_feature',
+        'spec' => 'id_ebay_category_specific_value',
+        'brand' => 'is_brand', // item specifics brand
         'reference' => 'is_reference',
-        'ean'       => 'is_ean',
-        'upc'       => 'is_upc',
-    );
+        'ean' => 'is_ean',
+        'upc' => 'is_upc',
+    ];
 
     /**
      * Returns an array containing the correspondance between the form select fields prefix and the table field name
+     *
      * @return array
      */
     public static function getPrefixToFieldNames()
@@ -64,8 +64,9 @@ class EbayCategorySpecific
     /**
      * Parse the data returned by the API and enter them in the table
      *
-     * @param int      $id_ebay_profile
+     * @param int $id_ebay_profile
      * @param bool|int $id_category
+     *
      * @return bool
      */
     public static function loadCategorySpecifics($id_ebay_profile, $id_category = false)
@@ -73,7 +74,7 @@ class EbayCategorySpecific
         $request = new EbayRequest($id_ebay_profile);
 
         if ($id_category) {
-            $ebay_category_ids = array($id_category);
+            $ebay_category_ids = [$id_category];
         } else {
             $ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds($id_ebay_profile);
         }
@@ -113,9 +114,9 @@ class EbayCategorySpecific
 
                 $db = Db::getInstance();
 
-                $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
-						VALUES ('.(int)$ebay_category_id.', \''.pSQL((string)$aspect->getLocalizedAspectName()).'\', '.($required ? 1 : 0).', '.($can_variation ? 1 : 0).', '.($selection_mode ? 1 : 0).', '.(int)$ebay_profile->ebay_site_id.', ' . $max_values . ')
-						ON DUPLICATE KEY UPDATE `required` = '.($required ? 1 : 0).', `can_variation` = '.($can_variation ? 1 : 0).', `selection_mode` = '.($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values . ', ebay_site_id=' . (int)$ebay_profile->ebay_site_id;
+                $sql = 'INSERT INTO `' . _DB_PREFIX_ . 'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`, `max_values`)
+						VALUES (' . (int) $ebay_category_id . ', \'' . pSQL((string) $aspect->getLocalizedAspectName()) . '\', ' . ($required ? 1 : 0) . ', ' . ($can_variation ? 1 : 0) . ', ' . ($selection_mode ? 1 : 0) . ', ' . (int) $ebay_profile->ebay_site_id . ', ' . $max_values . ')
+						ON DUPLICATE KEY UPDATE `required` = ' . ($required ? 1 : 0) . ', `can_variation` = ' . ($can_variation ? 1 : 0) . ', `selection_mode` = ' . ($selection_mode ? 1 : 0) . ', `max_values` = ' . $max_values . ', ebay_site_id=' . (int) $ebay_profile->ebay_site_id;
 
                 $db->execute($sql);
 
@@ -123,19 +124,19 @@ class EbayCategorySpecific
 
                 if (!$ebay_category_specific_id) {
                     $ebay_category_specific_id = $db->getValue('SELECT `id_ebay_category_specific`
-							FROM `'._DB_PREFIX_.'ebay_category_specific`
-							WHERE `id_category_ref` = '.(int)$ebay_category_id.'
-							AND `ebay_site_id` = '.(int)$ebay_profile->ebay_site_id.'
-							AND `name` = \''.pSQL((string)$aspect->getLocalizedAspectName()).'\'');
+							FROM `' . _DB_PREFIX_ . 'ebay_category_specific`
+							WHERE `id_category_ref` = ' . (int) $ebay_category_id . '
+							AND `ebay_site_id` = ' . (int) $ebay_profile->ebay_site_id . '
+							AND `name` = \'' . pSQL((string) $aspect->getLocalizedAspectName()) . '\'');
                 }
 
-                $insert_data = array();
+                $insert_data = [];
 
                 foreach ($values as $value) {
-                    $insert_data[] = array(
-                        'id_ebay_category_specific' => (int)$ebay_category_specific_id,
-                        'value'                     => pSQL($value),
-                    );
+                    $insert_data[] = [
+                        'id_ebay_category_specific' => (int) $ebay_category_specific_id,
+                        'value' => pSQL($value),
+                    ];
                 }
 
                 EbayCategorySpecificValue::insertIgnore($insert_data);
@@ -165,6 +166,7 @@ class EbayCategorySpecific
                 return false;
             }
         }
+
         return true;
     }
 
@@ -182,14 +184,14 @@ class EbayCategorySpecific
         $ebay_profile = new EbayProfile($id_ebay_profile);
 
         return Db::getInstance()->ExecuteS('
-			SELECT * FROM '._DB_PREFIX_.'ebay_category_specific ecs
-			INNER JOIN '._DB_PREFIX_.'ebay_category ec
+			SELECT * FROM ' . _DB_PREFIX_ . 'ebay_category_specific ecs
+			INNER JOIN ' . _DB_PREFIX_ . 'ebay_category ec
 			ON ecs.id_category_ref = ec.id_category_ref
 			AND ecs.`ebay_site_id` = ec.`id_country`
-			AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
-			INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+			AND ec.`id_country` = ' . (int) $ebay_profile->ebay_site_id . '
+			INNER JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
 			ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-			AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND ecc.`id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			WHERE required = 1');
     }
 
@@ -198,14 +200,14 @@ class EbayCategorySpecific
         $ebay_profile = new EbayProfile($id_ebay_profile);
 
         return Db::getInstance()->ExecuteS('
-			SELECT * FROM '._DB_PREFIX_.'ebay_category_specific ecs
-			INNER JOIN '._DB_PREFIX_.'ebay_category ec
+			SELECT * FROM ' . _DB_PREFIX_ . 'ebay_category_specific ecs
+			INNER JOIN ' . _DB_PREFIX_ . 'ebay_category ec
 			ON ecs.id_category_ref = ec.id_category_ref
 			AND ecs.`ebay_site_id` = ec.`id_country`
-			AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
-			INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+			AND ec.`id_country` = ' . (int) $ebay_profile->ebay_site_id . '
+			INNER JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
 			ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-			AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND ecc.`id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			WHERE required = 0');
     }
 
@@ -213,14 +215,14 @@ class EbayCategorySpecific
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $sql = 'SELECT count(*)
-			FROM `'._DB_PREFIX_.'ebay_category_specific` ecs
-			INNER JOIN `'._DB_PREFIX_.'ebay_category` ec
+			FROM `' . _DB_PREFIX_ . 'ebay_category_specific` ecs
+			INNER JOIN `' . _DB_PREFIX_ . 'ebay_category` ec
 			ON ecs.`id_category_ref` = ec.`id_category_ref`
 			AND ecs.`ebay_site_id` = ec.`id_country`
-			AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
-			INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+			AND ec.`id_country` = ' . (int) $ebay_profile->ebay_site_id . '
+			INNER JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
 			ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-			AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND ecc.`id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			WHERE ecs.`required` = 0
 			AND `id_ebay_category_specific_value` > 0';
 

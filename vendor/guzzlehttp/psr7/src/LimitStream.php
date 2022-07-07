@@ -8,6 +8,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
+
 class LimitStream implements StreamInterface
 {
     use StreamDecoratorTrait;

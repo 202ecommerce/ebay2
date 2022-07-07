@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -31,7 +30,7 @@ use Ebay\classes\SDK\Core\ResourceModel;
 
 class FulfilmentPolicyList extends ResourceModel
 {
-    /** @var FulfilmentPolicy[]*/
+    /** @var FulfilmentPolicy[] */
     protected $fulfilmentPolicies = [];
 
     /**
@@ -73,11 +72,13 @@ class FulfilmentPolicyList extends ResourceModel
 
     /**
      * @param FulfilmentPolicy
+     *
      * @return self
      */
     public function addFulfilmentPolicy(FulfilmentPolicy $fulfilmentPolicy)
     {
         $this->fulfilmentPolicies[] = $fulfilmentPolicy;
+
         return $this;
     }
 

@@ -22,18 +22,18 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_1_14_0($module)
 {
-    $sql= array();
+    $sql = [];
     Configuration::updateValue('EBAY_COUNTRY_OK', 1);
-    include dirname(__FILE__).'/sql/sql-upgrade-1-14.php';
+    include dirname(__FILE__) . '/sql/sql-upgrade-1-14.php';
 
     if (!empty($sql) && is_array($sql)) {
         foreach ($sql as $request) {
@@ -42,8 +42,6 @@ function upgrade_module_1_14_0($module)
             }
         }
     }
-
-
 
     return true;
 }

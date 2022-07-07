@@ -22,11 +22,8 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
-use Ebay\services\Token\OAuth\AccountConfiguration;
-use Ebay\classes\SandboxMode;
 use Ebay\services\Token\OAuth\GetAccessToken;
 
 class AdminTokenListenerController extends ModuleAdminController
@@ -45,7 +42,8 @@ class AdminTokenListenerController extends ModuleAdminController
         $response = $getAccessToken->get($this->module->ebay_profile, $code);
 
         if ($response->isSuccess() == false) {
-            PrestaShopLogger::addLog('[ebay] Fail generate access token. ' . $response->getError());
+            PrestaShopLogger::addLog('[ebay] Fail generate access token. ' . $response->getError(), 1, null, null, null, true);
+
             return;
         }
 
@@ -61,7 +59,7 @@ class AdminTokenListenerController extends ModuleAdminController
                 true,
                 [],
                 [
-                    'configure' => 'ebay'
+                    'configure' => 'ebay',
                 ]
             )
         );

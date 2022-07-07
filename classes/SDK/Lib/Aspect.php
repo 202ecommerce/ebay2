@@ -22,23 +22,21 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
 
 use Ebay\classes\SDK\Core\ResourceModel;
-use Symfony\Component\VarDumper\VarDumper;
 
 class Aspect extends ResourceModel
 {
-    /** @var string*/
+    /** @var string */
     protected $localizedAspectName;
 
-    /** @var AspectValueList*/
+    /** @var AspectValueList */
     protected $aspectValues;
 
-    /** @var AspectConstraint*/
+    /** @var AspectConstraint */
     protected $aspectConstraint;
 
     /**
@@ -51,6 +49,7 @@ class Aspect extends ResourceModel
 
     /**
      * @param string $localizedAspectName
+     *
      * @return self
      */
     public function setLocalizedAspectName($localizedAspectName)
@@ -60,6 +59,7 @@ class Aspect extends ResourceModel
         }
 
         $this->localizedAspectName = $localizedAspectName;
+
         return $this;
     }
 
@@ -77,11 +77,13 @@ class Aspect extends ResourceModel
 
     /**
      * @param AspectValueList $aspectValues
+     *
      * @return Aspect
      */
     public function setAspectValues(AspectValueList $aspectValues)
     {
         $this->aspectValues = $aspectValues;
+
         return $this;
     }
 
@@ -99,11 +101,13 @@ class Aspect extends ResourceModel
 
     /**
      * @param AspectConstraint $aspectConstraint
+     *
      * @return Aspect
      */
     public function setAspectConstraint(AspectConstraint $aspectConstraint)
     {
         $this->aspectConstraint = $aspectConstraint;
+
         return $this;
     }
 
@@ -133,7 +137,7 @@ class Aspect extends ResourceModel
         return [
             'localizedAspectName' => $this->getLocalizedAspectName(),
             'aspectConstraint' => $this->getAspectConstraint()->toArray(),
-            'aspectValues' => $this->getAspectValues()->toArray()
+            'aspectValues' => $this->getAspectValues()->toArray(),
         ];
     }
 }

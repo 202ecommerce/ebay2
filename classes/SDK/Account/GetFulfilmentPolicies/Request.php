@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Account\GetFulfilmentPolicies;
@@ -32,7 +31,7 @@ use Ebay\classes\SDK\Core\BearerAuthToken;
 
 class Request extends AbstractBearerRequest
 {
-    /** @var string*/
+    /** @var string */
     protected $marketplace;
 
     /**
@@ -42,25 +41,13 @@ class Request extends AbstractBearerRequest
     public function __construct(BearerAuthToken $token, $marketplace)
     {
         parent::__construct($token);
-        $this->marketplace = (string)$marketplace;
+        $this->marketplace = (string) $marketplace;
     }
 
     /** @return string */
     public function getEndPoint()
     {
         return '/sell/account/v1/fulfillment_policy?marketplace_id=' . $this->marketplace;
-    }
-
-    /** @return string */
-    public function toJson()
-    {
-        return '';
-    }
-
-    /** @return array */
-    public function toArray()
-    {
-        return [];
     }
 
     /** @return string */

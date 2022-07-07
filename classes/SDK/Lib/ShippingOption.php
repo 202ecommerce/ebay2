@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
@@ -37,19 +36,19 @@ class ShippingOption extends ResourceModel
 
     const FLAT_RATE = 'FLAT_RATE';
 
-    /** @var string*/
+    /** @var string */
     protected $optionType;
 
-    /** @var string*/
+    /** @var string */
     protected $costType;
 
-    /** @var ShippingServiceList*/
+    /** @var ShippingServiceList */
     protected $shippingServices;
 
-    /** @var bool*/
+    /** @var bool */
     protected $insuranceOffered;
 
-    /** @var InsuranceFee*/
+    /** @var InsuranceFee */
     protected $insuranceFee;
 
     /**
@@ -57,16 +56,18 @@ class ShippingOption extends ResourceModel
      */
     public function getOptionType()
     {
-        return (string)$this->optionType;
+        return (string) $this->optionType;
     }
 
     /**
      * @param string $optionType
+     *
      * @return ShippingOption
      */
     public function setOptionType($optionType)
     {
-        $this->optionType = (string)$optionType;
+        $this->optionType = (string) $optionType;
+
         return $this;
     }
 
@@ -80,11 +81,13 @@ class ShippingOption extends ResourceModel
 
     /**
      * @param string $costType
+     *
      * @return ShippingOption
      */
     public function setCostType($costType)
     {
-        $this->costType = (string)$costType;
+        $this->costType = (string) $costType;
+
         return $this;
     }
 
@@ -98,11 +101,13 @@ class ShippingOption extends ResourceModel
 
     /**
      * @param ShippingServiceList
+     *
      * @return self
      */
     public function setShippingServices(ShippingServiceList $shippingServiceList)
     {
         $this->shippingServices = $shippingServiceList;
+
         return $this;
     }
 
@@ -116,11 +121,13 @@ class ShippingOption extends ResourceModel
 
     /**
      * @param bool $insuranceOffered
+     *
      * @return ShippingOption
      */
     public function setInsuranceOffered($insuranceOffered)
     {
-        $this->insuranceOffered = (bool)$insuranceOffered;
+        $this->insuranceOffered = (bool) $insuranceOffered;
+
         return $this;
     }
 
@@ -134,16 +141,19 @@ class ShippingOption extends ResourceModel
 
     /**
      * @param InsuranceFee $insuranceFee
+     *
      * @return ShippingOption
      */
     public function setInsuranceFee(InsuranceFee $insuranceFee)
     {
         $this->insuranceFee = $insuranceFee;
+
         return $this;
     }
 
     /**
      * @param ShippingService
+     *
      * @return self
      */
     public function addShippingService(ShippingService $shippingService)
@@ -153,6 +163,7 @@ class ShippingOption extends ResourceModel
         }
 
         $this->shippingServices->addShippingService($shippingService);
+
         return $this;
     }
 

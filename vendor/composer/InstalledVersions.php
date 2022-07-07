@@ -20,6 +20,7 @@ use EbayVendor\Composer\Semver\VersionParser;
  *
  * To require its presence, you can require `composer-runtime-api ^2.0`
  */
+
 class InstalledVersions
 {
     /**

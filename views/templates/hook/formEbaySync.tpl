@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -731,11 +731,6 @@
   {if isset($img_alert) && !empty($img_alert)}
     <div class="warning big">
       {$img_alert['message']|escape:'htmlall':'UTF-8'}
-      {if isset($img_alert.kb)}
-        <a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay"
-           data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}"
-           prestashop_version="{$img_alert.kb.prestashop_version}">&nbsp;<i class="icon-info-circle"></i></a>
-      {/if}
     </div>
   {/if}
   {if isset($category_alerts) && !empty($category_alerts)}

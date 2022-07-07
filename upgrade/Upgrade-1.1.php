@@ -22,17 +22,17 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_1_1($module)
 {
-    $sql= array();
-    include dirname(__FILE__).'/sql/sql-upgrade-1-1.php';
+    $sql = [];
+    include dirname(__FILE__) . '/sql/sql-upgrade-1-1.php';
 
     if (!empty($sql) && is_array($sql)) {
         foreach ($sql as $request) {

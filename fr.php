@@ -1,32 +1,7 @@
 <?php
-/**
- *  2007-2022 PrestaShop
- *
- *  NOTICE OF LICENSE
- *
- *  This source file is subject to the Academic Free License (AFL 3.0)
- *  that is bundled with this package in the file LICENSE.txt.
- *  It is also available through the world-wide-web at this URL:
- *  http://opensource.org/licenses/afl-3.0.php
- *  If you did not receive a copy of the license and are unable to
- *  obtain it through the world-wide-web, please send an email
- *  to license@prestashop.com so we can send you a copy immediately.
- *
- *  DISCLAIMER
- *
- *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- *  versions in the future. If you wish to customize PrestaShop for your
- *  needs please refer to http://www.prestashop.com for more information.
- *
- *  @author 202-ecommerce <tech@202-ecommerce.com>
- *  @copyright Copyright (c) 2007-2022 202-ecommerce
- *  @license Commercial license
- *  International Registered Trademark & Property of PrestaShop SA
- *
- */
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Exportez facilement vos produits de PrestaShop vers eBay.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Le module eBay fonctionne avec les sites eBay.fr, eBay.it, eBay.co.uk, eBay.nl, eBay.be et eBay.es';
@@ -73,7 +48,7 @@ $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_c888438d14855d7d96a2724ee
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_b9284bff13acffdd879ef4ac7fca5234'] = 'Echec de la configuration des paramètres';
 $_MODULE['<{ebay}prestashop>ebayformebaysynctab_f95af8121eaadb52f6811c6e16861bc1'] = 'Veuillez configurer l\'onglet Transporteur national.';
 $_MODULE['<{ebay}prestashop>ebayformebaysynctab_837aa6cf5f7ad49c07b621eeed754120'] = 'Une synchronisation est en cours. Si vous quittez cette page, la synchronisation va s\'arrêter';
-$_MODULE['<{ebay}prestashop>ebayformebaysynctab_257801f474ff8efaf6c4f22e3e393eca'] = 'Vous avez sélectionné une catégorie eBay :';
+$_MODULE['<{ebay}prestashop>ebayformebaysynctab_257801f474ff8efaf6c4f22e3e393eca'] = 'Vous avez sélectionné une catégorie eBay :';
 $_MODULE['<{ebay}prestashop>ebayformebaysynctab_fb0916cb4a4acffcdd5bd8516ac4238f'] = 'qui ne prend pas en charge les annonces multi-versions. Chaque version d\'un produit générera une nouvelle annonce sur eBay';
 $_MODULE['<{ebay}prestashop>ebayformebaysynctab_22af645d1859cb5ca6da0c484f1f37ea'] = 'neuf';
 $_MODULE['<{ebay}prestashop>ebayformebaysynctab_1aec9c5d0644e11fd9dd0f9fb36009fb'] = 'occasion';
@@ -272,7 +247,7 @@ $_MODULE['<{ebay}prestashop>formtemplatemanager_9c0355ba1a63e12f62453e0f33055698
 $_MODULE['<{ebay}prestashop>formtemplatemanager_0156f16bd34ad63dfe57789fc50fd5be'] = 'Format du titre';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_ce1ae7bc4ad27f53f2cc940cfbe9d4c4'] = 'Chemise {marque}, taille';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_8cf5069b483d3ee4eb6bdbf4df13728f'] = 'Définir un format de titre à l\'aide de balises';
-$_MODULE['<{ebay}prestashop>formtemplatemanager_dd46d6add313600b750884227fff93c6'] = 'Ex. : chemise bleue Kookaï, taille 38';
+$_MODULE['<{ebay}prestashop>formtemplatemanager_dd46d6add313600b750884227fff93c6'] = 'Ex. : chemise bleue Kookaï, taille 38';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_2efd89b3ccc76b0b03a34196fc6d1c8b'] = 'Ajouter une balise';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_9ee1be61b725abefeaf699f20eb80d90'] = 'Voir la liste des tags disponibles';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_9f2fb898a0d0c0577d7692177459ce5e'] = 'Créez un template accrocheur pour attirer les acheteurs';
@@ -282,7 +257,7 @@ $_MODULE['<{ebay}prestashop>formtemplatemanager_f4f876171ba748c9ab4dcc54c7b93f5d
 $_MODULE['<{ebay}prestashop>formtemplatemanager_cc93c31bcb64bbc1694d2a630a2c4e4c'] = 'Utilisez les mêmes mots que l\'acheteur utilisera pour trouver votre objet';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_b9253d7bb7c3b62ac44256be517d1bb5'] = 'En cas de problèmes d\'affichages de vos images produits, vérifiez que celles-ci ont été correctement générées par Prestashop. Vous pouvez également modifier le paramètre   \"TAILLE DES PHOTOS\" dans \"paramètre des annonces\"';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_31fde7b05ac8952dacf4af8a704074ec'] = 'Prévisualiser';
-$_MODULE['<{ebay}prestashop>formtemplatemanager_729a51874fe901b092899e9e8b31c97a'] = 'Etes-vous sûr ?';
+$_MODULE['<{ebay}prestashop>formtemplatemanager_729a51874fe901b092899e9e8b31c97a'] = 'Etes-vous sûr ?';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_f289ebc53835535f48dd561473dcd2c0'] = 'Réinitialiser le modèle';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_26030c760e6e50206710389d768204a9'] = 'Sauvegarder et continuer';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder ';
@@ -345,13 +320,13 @@ $_MODULE['<{ebay}prestashop>table_orphan_listings_1072d6411f82818e2cbd9b8858e0fe
 $_MODULE['<{ebay}prestashop>formregister_19fb52a1add2ebba0f6e81d9a5c53e80'] = 'Vous devez renseigner votre eBay User ID';
 $_MODULE['<{ebay}prestashop>formregister_9b1cb96681f5c0570601ee841310d359'] = 'Un compte existe déjà avec cet identifiant et ce site eBay';
 $_MODULE['<{ebay}prestashop>formregister_9a5c99bf25e84cd8fe7c500f7ec698f2'] = 'Enregistrer le module sur eBay';
-$_MODULE['<{ebay}prestashop>formregister_6e34142871b2486bca4bfab605008b8a'] = 'J\'ai un compte eBay professionnel :';
-$_MODULE['<{ebay}prestashop>formregister_e4723bdd65ec2af60e37c0531a67a6a1'] = 'Vous êtes nouveau sur eBay ?';
+$_MODULE['<{ebay}prestashop>formregister_6e34142871b2486bca4bfab605008b8a'] = 'J\'ai un compte eBay professionnel :';
+$_MODULE['<{ebay}prestashop>formregister_e4723bdd65ec2af60e37c0531a67a6a1'] = 'Vous êtes nouveau sur eBay ?';
 $_MODULE['<{ebay}prestashop>formregister_7ba7cc1dfb00eca77b600084f4ba1304'] = 'Pseudo eBay';
 $_MODULE['<{ebay}prestashop>formregister_d648dd8247b218e7082a85d1a6b152bb'] = 'Veuillez utiliser un identifiant eBay, pas votre adresse e-mail.';
-$_MODULE['<{ebay}prestashop>formregister_e7ebcd30e2594e8a13601b86b19c7fa2'] = 'Sélectionnez le site eBay sur lequel mettre vos objets en vente :';
-$_MODULE['<{ebay}prestashop>formregister_cc3787ca78f445f481069a4c047f7e7a'] = 'Sélectionnez la langue :';
-$_MODULE['<{ebay}prestashop>formregister_ced37ba494acaa0938fb73c7de7e155b'] = 'Aidez-nous à améliorer le module eBay en nous envoyant des statistiques d\'utilisation anonymes :';
+$_MODULE['<{ebay}prestashop>formregister_e7ebcd30e2594e8a13601b86b19c7fa2'] = 'Sélectionnez le site eBay sur lequel mettre vos objets en vente :';
+$_MODULE['<{ebay}prestashop>formregister_cc3787ca78f445f481069a4c047f7e7a'] = 'Sélectionnez la langue :';
+$_MODULE['<{ebay}prestashop>formregister_ced37ba494acaa0938fb73c7de7e155b'] = 'Aidez-nous à améliorer le module eBay en nous envoyant des statistiques d\'utilisation anonymes :';
 $_MODULE['<{ebay}prestashop>formregister_39535fa9d04b1337c8394b684ccec7bb'] = 'J\'accepte';
 $_MODULE['<{ebay}prestashop>formregister_8ad4303b83a62fb6ca3b025bad5bc114'] = 'Non, merci';
 $_MODULE['<{ebay}prestashop>formregister_dd40944a88874e7049221613fa113244'] = 'Liez votre compte eBay';
@@ -401,8 +376,8 @@ $_MODULE['<{ebay}prestashop>intershipping_6f5d4da74257e113d6dc5396b535be11'] = '
 $_MODULE['<{ebay}prestashop>intershipping_26030c760e6e50206710389d768204a9'] = 'Sauvegarder et continuer';
 $_MODULE['<{ebay}prestashop>intershipping_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{ebay}prestashop>error_paypal_email_6337e3ffccd88be580fc1b782de68838'] = 'Veuillez configurer l\'onglet \"Annonces\" avant de continuer';
-$_MODULE['<{ebay}prestashop>orphan_listings_d35fbb6c7f79f6b05b513b31b4e0b137'] = 'L\'onglet « Annonces eBay orphelines » affiche les annonces eBay créées par ce module mais qui ne sont plus synchronisées par ce dernier.';
-$_MODULE['<{ebay}prestashop>orphan_listings_42a621fa47dbd4f69b6177529852683b'] = 'Les raisons pour lesquelles ces annonces ne sont plus synchronisées peuvent être nombreuses et sont indiquées dans la colonne « Aide ».';
+$_MODULE['<{ebay}prestashop>orphan_listings_d35fbb6c7f79f6b05b513b31b4e0b137'] = 'L\'onglet « Annonces eBay orphelines » affiche les annonces eBay créées par ce module mais qui ne sont plus synchronisées par ce dernier.';
+$_MODULE['<{ebay}prestashop>orphan_listings_42a621fa47dbd4f69b6177529852683b'] = 'Les raisons pour lesquelles ces annonces ne sont plus synchronisées peuvent être nombreuses et sont indiquées dans la colonne « Aide ».';
 $_MODULE['<{ebay}prestashop>orphan_listings_90eaade1dbe0b7e411e7102d570597a9'] = 'Charger les annonces orphelines';
 $_MODULE['<{ebay}prestashop>orphan_listings_d1adbc9624b007f974cee0b313bfc527'] = 'Annonce eBay';
 $_MODULE['<{ebay}prestashop>orphan_listings_e1ed4bfde4ba84e35dae821b2b93e55e'] = 'Produit PrestaShop';
@@ -414,13 +389,13 @@ $_MODULE['<{ebay}prestashop>orphan_listings_1f13176a5645ecffa7e918d0176fe03c'] =
 $_MODULE['<{ebay}prestashop>orphan_listings_f927bea733853723f45e89a194ef9e05'] = 'Catégorie PrestaShop';
 $_MODULE['<{ebay}prestashop>orphan_listings_1e03e36666c0929e593573fe989777e0'] = 'Catégorie eBay associée à la catégorie par défaut du produit PrestaShop';
 $_MODULE['<{ebay}prestashop>orphan_listings_649829dea8fe9632cc51a9aa3c8826c3'] = 'Catégorie eBay';
-$_MODULE['<{ebay}prestashop>orphan_listings_10864d6a5daf9d4b4be2508baac6fb35'] = 'La catégorie eBay prend-elle en charge les annonces multi-versions ?';
+$_MODULE['<{ebay}prestashop>orphan_listings_10864d6a5daf9d4b4be2508baac6fb35'] = 'La catégorie eBay prend-elle en charge les annonces multi-versions ?';
 $_MODULE['<{ebay}prestashop>orphan_listings_641f981680b6f6bfa11229549c471589'] = 'Catégorie comportant plusieurs références';
 $_MODULE['<{ebay}prestashop>orphan_listings_aa853db95faf359d4caceb01de54dedd'] = 'Si cette colonne est paramétrée sur \'non\', la catégorie par défaut du produit n\'a pas été synchronisée dans l\'onglet \'Synchronisation > 1. Synchronisation de produits\'';
 $_MODULE['<{ebay}prestashop>orphan_listings_7631446679ad1478ec6c339080234045'] = 'Synchronisation activée';
 $_MODULE['<{ebay}prestashop>orphan_listings_004bf6c9a40003140292e97330236c53'] = 'Action';
 $_MODULE['<{ebay}prestashop>orphan_listings_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
-$_MODULE['<{ebay}prestashop>orphan_listings_c0b2ff7726f9687d01afc81052e069c2'] = 'Terminer cette annonce ?';
+$_MODULE['<{ebay}prestashop>orphan_listings_c0b2ff7726f9687d01afc81052e069c2'] = 'Terminer cette annonce ?';
 $_MODULE['<{ebay}prestashop>order_return_details_ead63b19ce82442ed80cd54ea6f194d3'] = ' Retour ou remboursement eBay';
 $_MODULE['<{ebay}prestashop>order_return_details_a5b6b86e4ac190525d607bac63be92d5'] = 'Cette commande fait l\'objet d\'un retour ou d\'un remboursement sur la plateforme eBay.';
 $_MODULE['<{ebay}prestashop>order_return_details_05ae3d2ad17fe93f2c67106d7354b51c'] = '- Pour traiter ce retour ou ce remboursement, il est nécessaire de vous rendre dans votre compte eBay.';
@@ -558,9 +533,6 @@ $_MODULE['<{ebay}prestashop>ebay_log_workers_0450d266974d92724ff4bacc3a51952e'] 
 $_MODULE['<{ebay}prestashop>ebay_log_workers_d3b206d196cd6be3a2764c1fb90b200f'] = 'Supprimer la sélection';
 $_MODULE['<{ebay}prestashop>formconfig_d02b19aa5f067a2c03c3166b561e074b'] = 'eBay a activé TLS 1.2 pour toutes les API dans Sandbox et Production. Nous vous recommandons vivement de contacter votre hébergeur pour vérifier la compatibilité avec TLS 1.2 et SHA2.';
 $_MODULE['<{ebay}prestashop>formconfig_6e35311351b98329d34007933d7ec7c9'] = 'Les appels d\'API qui ne sont pas conformes à TLS 1.2 échoueront à partir du 31/08/2021.';
-$_MODULE['<{ebay}prestashop>formconfig_0788e34b977bbbcf7b3ebb625a4e4d2f'] = 'En septembre 2021, eBay retirera la condition d\'article \"Reconditionné\" sur ebay.com, ebay.co.uk, ebay.de, ebay.ca, ebay.ca.fr et ebay.com.au. Actions demandées à compter du 27 septembre : ';
-$_MODULE['<{ebay}prestashop>formconfig_af954d385d97afe00437ec8496bac31d'] = '1) Si vous créez une nouvelle annonce pour un article reconditionné, vous devez l\'inscrire sous la condition d\'article « d\'occasion ».';
-$_MODULE['<{ebay}prestashop>formconfig_8c48fe62f3067a0278ff2060e9882a29'] = '2) Mettre à jour les titres ou la description de l\'annonce pour refléter l\'état de l\'article';
 $_MODULE['<{ebay}prestashop>formconfig_15c7e2fbecdad1a606bd1e3e50bc8738'] = 'Désormais, le module eBay peut synchroniser un pourcentage de TVA différent pour chaque produit. Le pourcentage pris en compte est celui indiqué dans le champ \"Règle de taxe\" de la page produit, dans l\'onglet \"Essentiel\". Pour synchroniser le champ TVA sur vos annonces eBay, lancez la synchronisation manuelle de toutes les catégories via le menu \"Annonces\" du module.';
 $_MODULE['<{ebay}prestashop>formconfig_2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
 $_MODULE['<{ebay}prestashop>formconfig_212f7cc9644cdd793a6e5cc3edda6d90'] = 'Liste des catégories';
@@ -569,6 +541,7 @@ $_MODULE['<{ebay}prestashop>formconfig_5f559053a91684025f09ca40283abf96'] = 'Ann
 $_MODULE['<{ebay}prestashop>formconfig_d4d31aa2f5e5175dc94d8499f099e682'] = 'Annonces orphelines';
 $_MODULE['<{ebay}prestashop>formconfig_e8a9f88da7fb7fb5ffc20ed0958f21a8'] = 'Produits exclus';
 $_MODULE['<{ebay}prestashop>formconfig_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique des commandes';
+$_MODULE['<{ebay}prestashop>formconfig_83465313917bcc76185ea86fb41b7148'] = 'Commandes non importées';
 $_MODULE['<{ebay}prestashop>formconfig_39a36d4536fd7bccf9e82b8889398988'] = 'Retours des commandes ';
 $_MODULE['<{ebay}prestashop>formconfig_de62775a71fc2bf7a13d7530ae24a7ed'] = 'Paramètres généraux';
 $_MODULE['<{ebay}prestashop>formconfig_35d03a5af13933096e9063294c02d437'] = 'Paramètres des Annonces';
@@ -623,6 +596,7 @@ $_MODULE['<{ebay}prestashop>formparameters_bb9a2f66fc726c85e45c8ddc93297ab9'] = 
 $_MODULE['<{ebay}prestashop>formparameters_22fe7efb781673fdccf9a590619abde5'] = ' eBay utilise ces informations pour savoir si vos produits sont vendus à l\'étranger';
 $_MODULE['<{ebay}prestashop>formparameters_f0ef777d2636419a042d3df7a07d2d09'] = 'Pays de votre entrepôt*';
 $_MODULE['<{ebay}prestashop>formparameters_8df186b9585c13cf5d0f67f28de1cb93'] = 'Pays de votre boutique';
+$_MODULE['<{ebay}prestashop>formparameters_d8d6b21be208777adc1204486267e2b5'] = 'https://help.202-ecommerce.com/fr/ebay-pour-prestashop/installation-configuration/parametres/configurer-le-token-ebay-pour-activer-lautorisation-oauth-pour-les-apis-2022/';
 $_MODULE['<{ebay}prestashop>formparameters_de6fed9eef9a07b669c1748ff6f82ef4'] = 'Token d\'autorisation utilisateur';
 $_MODULE['<{ebay}prestashop>formparameters_b024248d9fecf8c34f629e89a9fb93b4'] = 'Paiement immédiat';
 $_MODULE['<{ebay}prestashop>formparameters_e6696de60cd347055ee8c82116f3aa9f'] = 'A n\'utilisez que si vous avez un message indiquant l\'expiration de votre jeton';
@@ -680,19 +654,19 @@ $_MODULE['<{ebay}prestashop>tableproductsexclu_f4d72a64acd8929c0cc9ed96a7a336cc'
 $_MODULE['<{ebay}prestashop>form_b0fa83aa327733da359ecc17ee43dba2'] = 'UN PARTENAIRE IDEAL POUR VOTRE ENTREPRISE';
 $_MODULE['<{ebay}prestashop>form_93ef31db80f81f81b1e5368ad171fd0d'] = 'eBay est l\'une des |b|plus grandes places de marché au monde. Elle met en relation des acheteurs et des vendeurs de tailles diverses dans le monde entier|/b|.';
 $_MODULE['<{ebay}prestashop>form_76e8724ed44ad5f885a68756f313bf4d'] = 'eBay représente une opportunité formidable dans la mesure où elle vous permet d\'atteindre des millions de nouveaux clients et d\'augmenter ainsi vos ventes.';
-$_MODULE['<{ebay}prestashop>form_85d1e0cf5b61caf01ddb98f9ac08f5c6'] = 'Le module eBay pour PrestaShop vous permet de :';
+$_MODULE['<{ebay}prestashop>form_85d1e0cf5b61caf01ddb98f9ac08f5c6'] = 'Le module eBay pour PrestaShop vous permet de :';
 $_MODULE['<{ebay}prestashop>form_317b83332d1308e3726721fe87b69ae9'] = 'Exporter vos produits de votre Boutique PrestaShop vers eBay';
 $_MODULE['<{ebay}prestashop>form_af71b150263627cd489807ca7df92f41'] = 'Gérer les deux canaux à partir de votre plateforme opérationnelle';
 $_MODULE['<{ebay}prestashop>form_1aee4d69e33a41858ca1b07062e4b312'] = 'Développer un canal de vente supplémentaire rentable';
-$_MODULE['<{ebay}prestashop>form_9fdf5e83073f3bab1dc7f87050245aaa'] = 'Commencez à vendre immédiatement à l\'aide du module GRATUIT PrestaShop pour eBay !';
-$_MODULE['<{ebay}prestashop>form_e3438d73e9574562ae791658e5a94244'] = 'PrestaShop vous permet de commencer à vendre facilement sur eBay :';
+$_MODULE['<{ebay}prestashop>form_9fdf5e83073f3bab1dc7f87050245aaa'] = 'Commencez à vendre immédiatement à l\'aide du module GRATUIT PrestaShop pour eBay !';
+$_MODULE['<{ebay}prestashop>form_e3438d73e9574562ae791658e5a94244'] = 'PrestaShop vous permet de commencer à vendre facilement sur eBay :';
 $_MODULE['<{ebay}prestashop>form_05f9b58157edec7a54cf69c918abc211'] = 'Créez un compte professionnel eBay';
 $_MODULE['<{ebay}prestashop>form_1326a43a80b8241e21c809f80b997845'] = 'Ouvrez votre Boutique eBay';
 $_MODULE['<{ebay}prestashop>form_3d9742de1b9742bd8031ec3f8334da22'] = 'Liez votre compte eBay au module eBay';
 $_MODULE['<{ebay}prestashop>form_c9e6616dc1bb37bf1ab3d56156288a8f'] = 'Configurez le module eBay';
 $_MODULE['<{ebay}prestashop>form_5c79609876d64e33ff348736ba605867'] = 'Ouvrez une Boutique eBay gratuitement';
 $_MODULE['<{ebay}prestashop>form_f7781230f034f74844124eb49c04e684'] = 'Lancez ou boostez votre activité sur eBay, en profitant de';
-$_MODULE['<{ebay}prestashop>form_1c1d90087dfad5f38c4135ac25197e6d'] = '90 jours* d\'abonnement gratuits ';
+$_MODULE['<{ebay}prestashop>form_1c1d90087dfad5f38c4135ac25197e6d'] = '90 jours* d\'abonnement gratuits ';
 $_MODULE['<{ebay}prestashop>form_de02798502e46104ef6d3627c34721af'] = 'à la Boutique A la Une.';
 $_MODULE['<{ebay}prestashop>form_6b2535c9030827712b8315f4b33afaad'] = 'http://portal.ebay.fr/ouvrezuneboutiquegratuitement';
 $_MODULE['<{ebay}prestashop>form_7d5a27f1b53dc519eac7bb288f664892'] = 'Plus d\'infos';
@@ -726,10 +700,10 @@ $_MODULE['<{ebay}prestashop>form_1ebabab409df77346c6fd4bfd564cccf'] = 'Vous avez
 $_MODULE['<{ebay}prestashop>form_449a2ad20c14a1c6aa5685b7e44525d5'] = 'Vous devriez utiliser le mode Boost';
 $_MODULE['<{ebay}prestashop>form_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
 $_MODULE['<{ebay}prestashop>form_7fcf7ae95171549f39479f4983cef281'] = 'Statut du module eBay';
-$_MODULE['<{ebay}prestashop>form_7164d459e75e792a9a616d5b2332cf28'] = 'Découvrez comment vendre davantage sur eBay :';
-$_MODULE['<{ebay}prestashop>form_1d99451cb0f430d3c5657be8ad6157ed'] = 'Aidez les acheteurs à trouver votre produit :';
+$_MODULE['<{ebay}prestashop>form_7164d459e75e792a9a616d5b2332cf28'] = 'Découvrez comment vendre davantage sur eBay :';
+$_MODULE['<{ebay}prestashop>form_1d99451cb0f430d3c5657be8ad6157ed'] = 'Aidez les acheteurs à trouver votre produit :';
 $_MODULE['<{ebay}prestashop>form_248ae41cf8056445fd43d21ee9979c51'] = 'Rédigez des |a|titres et descriptions|/a| accrocheurs';
-$_MODULE['<{ebay}prestashop>form_424ede1f93586d5d64744e846cf13958'] = 'Rendez vos produits plus compétitifs :';
+$_MODULE['<{ebay}prestashop>form_424ede1f93586d5d64744e846cf13958'] = 'Rendez vos produits plus compétitifs :';
 $_MODULE['<{ebay}prestashop>form_ef853586960f1fb633eaad6703b1e5c9'] = '|a|recherchez des produits similaires aux vôtres sur eBay|/a| et comparez leur prix avec les vôtres.';
 $_MODULE['<{ebay}prestashop>form_7a53cdfb9604db4c37815a9e9e150580'] = '|b|Apportez une attention particulière aux photos de vos produits|/b| |a|dans la mesure où les acheteurs seront davantage attirés par vos produits.|/a|';
 $_MODULE['<{ebay}prestashop>form_1be96c53c4948c9edbb6401f73990fea'] = '|b|Fidélisez vos clients|/b| en |a|offrant un service de qualité|/a| et la livraison gratuite.';
@@ -753,6 +727,11 @@ $_MODULE['<{ebay}prestashop>form_a82453f4c052dccc82774210de264634'] = 'Voulez-vo
 $_MODULE['<{ebay}prestashop>form_59e62623173611f2596e84b1526b3186'] = 'Voulez-vous vraiment inclure ce produit ?';
 $_MODULE['<{ebay}prestashop>form_d52aa0d830bf5502e06293de771b59ad'] = 'Voulez-vous vraiment supprimer ce catégorie ?';
 $_MODULE['<{ebay}prestashop>form_89ef88e2dc9e63d3b5b5f7391458df88'] = 'Synchronisation effectuée';
+$_MODULE['<{ebay}prestashop>button_4a22a61e3d4c92e0170f9b6723a97fdb'] = 'Créer le Token OAuth';
+$_MODULE['<{ebay}prestashop>button_044156be2664f29f71cc8d8482e4c8fe'] = 'Configurer l\'intégration';
+$_MODULE['<{ebay}prestashop>button_ad35fbaef240a8ec1f43e8a0d5e15099'] = 'Mettre à jour le token';
+$_MODULE['<{ebay}prestashop>button_b7a8465687652ba934a370d4f2902e59'] = 'Faites attention, vous devez définir correctement le \'Your auth accepted URL\'';
+$_MODULE['<{ebay}prestashop>button_ee106588bc1cb90d3c6f304406ca65a8'] = 'URL correcte';
 $_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Consulter nos évaluations';
 $_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Ajouter cette boutique à mes favoris';
 $_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilité';

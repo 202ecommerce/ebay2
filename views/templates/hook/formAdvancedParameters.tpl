@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -166,9 +166,6 @@
 		</div>
 
 		<div id="div_resynch" style="display: none; text-align: center; font-family: sans-serif; font-size: 14px;">
-			<span>{l s='Have you read ' mod='ebay'}<a class="kb-help" style ="width: auto;height: 20px;background-image: none;" data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='this article' mod='ebay'}&nbsp;<i class="icon-info-circle"></i></a>{l s=' about category definition & reloading?' mod='ebay'}</span>
-			</br>
-			</br>
 			<div class="checkbox">
 				<label for="accepted" class="text-left">
 					<input type="checkbox" name="accepted" id="accepted" value="yes">

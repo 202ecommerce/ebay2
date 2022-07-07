@@ -22,22 +22,21 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 if (!in_array('Ebay', get_declared_classes())) {
-    require_once dirname(__FILE__).'/../ebay.php';
+    require_once dirname(__FILE__) . '/../ebay.php';
 }
 
 class EbayCountrySpec
 {
     public $country;
-    public $accepted_isos = array( 'es', 'fr', 'nl', 'pl', 'be','it', 'gb', 'de', 'ie', 'au');
+    public $accepted_isos = ['es', 'fr', 'nl', 'pl', 'be', 'it', 'gb', 'de', 'ie', 'au'];
     protected $ebay_iso;
     private $dev;
-    private static $multilang = array('be');
+    private static $multilang = ['be'];
 
-    private static $allCountries = array(
+    private static $allCountries = [
         'AD' => 'Andorra',
         'AE' => 'United Arab Emirates',
         'AF' => 'Afghanistan',
@@ -281,7 +280,7 @@ class EbayCountrySpec
         'ZA' => 'South Africa',
         'ZM' => 'Zambia',
         'ZW' => 'Zimbabwe',
-    );
+    ];
 
     public function __construct(Country $country = null)
     {
@@ -395,9 +394,10 @@ class EbayCountrySpec
 
         return (int) $id_lang;
     }
+
     public function getHelpUrlBusinesss()
     {
-         return $this->_getCountryData('url_help_business_policies');
+        return $this->_getCountryData('url_help_business_policies');
     }
 
     private function _getCountryData($data)
@@ -405,7 +405,7 @@ class EbayCountrySpec
         $iso_code = $this->ebay_iso;
         if (isset(self::getCountryData()[$iso_code]) && isset(self::getCountryData()[$iso_code][$data])) {
             return self::getCountryData()[$iso_code][$data];
-        } else if (isset(self::getCountryData()['fr'][$data])) {
+        } elseif (isset(self::getCountryData()['fr'][$data])) {
             return self::getCountryData()['fr'][$data];
         } else {
             return null;
@@ -448,12 +448,14 @@ class EbayCountrySpec
 
     /**
      * Get countries
+     *
      * @param bool $dev
+     *
      * @return array Countries list
      */
     public static function getCountries($dev)
     {
-        $countries = array();
+        $countries = [];
 
         foreach (self::getCountryData() as $iso => $ctry) {
             if (isset($ctry['subdomain']) === false) {
@@ -471,34 +473,37 @@ class EbayCountrySpec
         return $countries;
     }
 
-
     /**
      * Get countries
+     *
      * @param bool $dev
+     *
      * @return array Countries list
      */
     public static function getCountriesSelect($dev)
     {
         asort(self::$allCountries);
+
         return self::$allCountries;
     }
 
     /**
      * Get Instance for Ebay Country
-     * @param  string          $key Key of country
-     * @param  boolean         $dev If module work in debug
+     *
+     * @param string $key Key of country
+     * @param bool $dev If module work in debug
+     *
      * @return EbayCountrySpec Ebay country
      */
     public static function getInstanceByKey($key, $dev = false)
     {
-        
         if (isset(self::getCountryData()[$key])) {
             $iso_code = self::getCountryData()[$key]['iso_code'];
             $id_country = Country::getByIso($iso_code);
         } else {
             $id_country = Configuration::get('PS_COUNTRY_DEFAULT');
         }
-        
+
         $ebay_country = new EbayCountrySpec(new Country($id_country));
         $ebay_country->setDev($dev);
         $ebay_country->ebay_iso = is_numeric($key) ? self::getKeyForEbayCountry() : $key;
@@ -510,8 +515,8 @@ class EbayCountrySpec
     {
         if (isset(self::getCountryData()[$iso_country])) {
             return self::getInstanceByKey($iso_country);
-        } else if (isset(self::getCountryData()[$iso_country.'-'.$iso_lang])) {
-            return self::getInstanceByKey($iso_country.'-'.$iso_lang);
+        } elseif (isset(self::getCountryData()[$iso_country . '-' . $iso_lang])) {
+            return self::getInstanceByKey($iso_country . '-' . $iso_lang);
         } else {
             return self::getInstanceByKey('gb');
         }
@@ -519,6 +524,7 @@ class EbayCountrySpec
 
     /**
      * @param int
+     *
      * @return self
      */
     public static function getInstanceBySiteId($siteId)
@@ -540,7 +546,8 @@ class EbayCountrySpec
 
     /**
      * Set dev or not
-     * @param boolean $dev set dev or not
+     *
+     * @param bool $dev set dev or not
      */
     public function setDev($dev)
     {
@@ -551,6 +558,7 @@ class EbayCountrySpec
 
     /**
      * Get key for iso_code tab
+     *
      * @return string Key for iso_code tab
      */
     public static function getKeyForEbayCountry()
@@ -562,7 +570,7 @@ class EbayCountrySpec
         if (in_array($default_country, EbayCountrySpec::$multilang)) {
             $lang = new Language((int) Configuration::get('PS_LANG_DEFAULT'));
 
-            $default_country .= '-'.Tools::strtolower($lang->iso_code);
+            $default_country .= '-' . Tools::strtolower($lang->iso_code);
         }
 
         return $default_country;
@@ -575,6 +583,7 @@ class EbayCountrySpec
                 return $country['site_name'];
             }
         }
+
         return null;
     }
 
@@ -585,6 +594,7 @@ class EbayCountrySpec
                 return $country['site_extension'];
             }
         }
+
         return null;
     }
 
@@ -595,6 +605,7 @@ class EbayCountrySpec
                 return $country['iso_code'];
             }
         }
+
         return null;
     }
 
@@ -605,6 +616,7 @@ class EbayCountrySpec
                 return $country['pro_url'];
             }
         }
+
         return null;
     }
 
@@ -615,6 +627,7 @@ class EbayCountrySpec
                 return $country['site_id'];
             }
         }
+
         return null;
     }
 
@@ -628,7 +641,7 @@ class EbayCountrySpec
 
         return null;
     }
-    
+
     protected static function getCountryData()
     {
         return EbaySiteMap::get();

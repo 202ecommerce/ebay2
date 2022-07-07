@@ -6,6 +6,7 @@ namespace EbayVendor\GuzzleHttp\Promise;
  * Represents a promise that iterates over many promises and invokes
  * side-effect functions in the process.
  */
+
 class EachPromise implements PromisorInterface
 {
     private $pending = [];

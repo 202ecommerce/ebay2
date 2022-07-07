@@ -22,14 +22,13 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayTlsModuleFrontController extends ModuleFrontController
 {
     public function run()
     {
-        header("HTTP/1.1 " . TlsConf::STATUS_SUCCESS);
-        die;
+        header('HTTP/1.1 ' . TlsConf::STATUS_SUCCESS);
+        exit;
     }
 }

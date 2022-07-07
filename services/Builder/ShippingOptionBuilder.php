@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services\Builder;
@@ -33,9 +32,7 @@ use Ebay\classes\SDK\Lib\ShippingCost;
 use Ebay\classes\SDK\Lib\ShippingOption;
 use Ebay\classes\SDK\Lib\ShippingOptionList;
 use Ebay\classes\SDK\Lib\ShippingService;
-use Ebay\classes\SDK\Lib\ShippingServiceList;
 use Ebay\classes\SDK\Lib\ShipToLocations;
-use Symfony\Component\VarDumper\VarDumper;
 
 class ShippingOptionBuilder implements BuilderInterface
 {
@@ -71,6 +68,7 @@ class ShippingOptionBuilder implements BuilderInterface
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 

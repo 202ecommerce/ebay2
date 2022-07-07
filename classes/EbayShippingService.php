@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayShippingService
@@ -30,15 +29,15 @@ class EbayShippingService
     public static function getAll($ebay_site_id)
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int) $ebay_site_id);
+			FROM ' . _DB_PREFIX_ . 'ebay_shipping_service
+			WHERE `ebay_site_id` = ' . (int) $ebay_site_id);
     }
 
     public static function getTotal($ebay_site_id)
     {
         return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int) $ebay_site_id);
+			FROM ' . _DB_PREFIX_ . 'ebay_shipping_service
+			WHERE `ebay_site_id` = ' . (int) $ebay_site_id);
     }
 
     public static function insert($data)
@@ -46,7 +45,7 @@ class EbayShippingService
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_shipping_service', $data, 'INSERT');
     }
 
     public static function getCarriers($ebay_site_id)
@@ -68,7 +67,7 @@ class EbayShippingService
     public static function getCarrierByName($name, $ebay_site_id)
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int) $ebay_site_id .' AND `shippingService` = "'. pSQL($name) .'"');
+			FROM ' . _DB_PREFIX_ . 'ebay_shipping_service
+			WHERE `ebay_site_id` = ' . (int) $ebay_site_id . ' AND `shippingService` = "' . pSQL($name) . '"');
     }
 }

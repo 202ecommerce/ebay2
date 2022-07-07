@@ -13,6 +13,7 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
+
 class BufferStream implements StreamInterface
 {
     private $hwm;

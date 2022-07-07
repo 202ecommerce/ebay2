@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayProductConfiguration
@@ -34,26 +33,25 @@ class EbayProductConfiguration
         }
 
         return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
-			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_product` = '.(int)$product_id.'
-			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
+			FROM `' . _DB_PREFIX_ . 'ebay_product_configuration`
+			WHERE `id_product` = ' . (int) $product_id . '
+			AND `id_ebay_profile` = ' . (int) $id_ebay_profile);
     }
 
     public static function isblocked($id_ebay_profile, $product_id)
     {
         return Db::getInstance()->ExecuteS('SELECT  `blacklisted`, `extra_images`
-			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_product` = '.(int)$product_id.'
-			AND `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			FROM `' . _DB_PREFIX_ . 'ebay_product_configuration`
+			WHERE `id_product` = ' . (int) $product_id . '
+			AND `id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			AND `blacklisted` = 1');
     }
-
 
     public static function getBlacklistedProductIdsQuery($id_ebay_profile)
     {
         return 'SELECT `id_product`
-			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			FROM `' . _DB_PREFIX_ . 'ebay_product_configuration`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			AND `blacklisted` = 1';
     }
 
@@ -63,19 +61,19 @@ class EbayProductConfiguration
             return;
         }
 
-        $to_insert = array();
-        $fields_strs = array();
+        $to_insert = [];
+        $fields_strs = [];
         foreach ($data as $key => $value) {
-            $to_insert[bqSQL($key)] = '"'.pSQL($value).'"';
-            $fields_strs[] = '`'.bqSQL($key).'` = "'.pSQL($value).'"';
+            $to_insert[bqSQL($key)] = '"' . pSQL($value) . '"';
+            $fields_strs[] = '`' . bqSQL($key) . '` = "' . pSQL($value) . '"';
         }
 
         if ($data['blacklisted']) {
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id, $data['id_ebay_profile']);
         }
 
-        $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_product_configuration` (`id_product`, `'.implode('`,`', array_keys($to_insert)).'`)
-			VALUES ('.(int)$product_id.', '.implode(',', $to_insert).')
+        $sql = 'INSERT INTO `' . _DB_PREFIX_ . 'ebay_product_configuration` (`id_product`, `' . implode('`,`', array_keys($to_insert)) . '`)
+			VALUES (' . (int) $product_id . ', ' . implode(',', $to_insert) . ')
 			ON DUPLICATE KEY UPDATE ';
 
         $sql .= implode(',', $fields_strs);

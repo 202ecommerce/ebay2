@@ -47,7 +47,7 @@
 
             <div style="padding: 20px">
                 <p>{l s='Pay attention you should set right \'Your auth accepted URL\'' mod='ebay'}</p>
-                <p>{l s='Right URL' mod='ebay'}: <b>{Context::getContext()->link->getAdminLink('AdminTokenListener')}</b></p>
+                <p>{l s='Right URL' mod='ebay'}: <b>{if isset($adminTokenListener)}{$adminTokenListener nofilter}{/if}</b></p>
 
             </div>
 
@@ -80,7 +80,7 @@
 
             <div class="form-group">
                 <label class="control-label col-sm-3">
-                    {l s='Onboarding URL' mod='ebay'}
+                    {l s='Your branded eBay Production Sign In (OAuth)' mod='ebay'}
                 </label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" name="EBAY_ONBOARDING_URL" value="{if isset($onboardingUrl)}{$onboardingUrl}{/if}">
@@ -97,7 +97,12 @@
     </div>
 </div>
 
-<script src="{Context::getContext()->shop->getBaseURL(true)}modules/ebay/views/js/ButtonOnboarding.js"></script>
+{if Tools::usingSecureMode()}
+    <script src="{Tools::getShopDomainSsl(true)}{Context::getContext()->shop->getBaseURI()}modules/ebay/views/js/ButtonOnboarding.js"></script>
+{else}
+    <script src="{Tools::getShopDomain(true)}{Context::getContext()->shop->getBaseURI()}modules/ebay/views/js/ButtonOnboarding.js"></script>
+{/if}
+
 <script>
     var buttonOnboardingObj = new ButtonOnboarding({
         modal: document.getElementById('onboarding-modal'),

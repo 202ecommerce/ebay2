@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -56,9 +56,6 @@
 					{else}
 						{$alert.message|escape:'htmlall':'UTF-8'}
 					{/if}
-					{if isset($alert.kb)}
-						<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}">&nbsp;<i class="icon-info-circle"></i></a>
-					{/if}
 				</div>
 			{/foreach}
 		{/if}
@@ -85,8 +82,10 @@
 				</ul>
 
 				<ul class=" nav nav-pills orders-menu menuTab ebay_hidden" role="tablist">
-					<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}{if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a></li>
-
+					<li  role="presentation" id="menuTab6" class="menuTabButton"><a href="#">{l s='Order history' mod='ebay'}</a></li>
+					<li  role="presentation" id="menuTab61" class="menuTabButton"><a href="#">{l s='Orders not imported' mod='ebay'}
+							{if $count_order_errors > 0}<span class="badge badge-danger">{$count_order_errors}</span>{/if}</a>
+					</li>
 					<li role="presentation" id="menuTab78" class="menuTabButton"><a href="#">{l s='Order Returns' mod='ebay'}</a></li>
 					{if isset($best_offers)}
 						<li role="presentation" id="menuTab999" class="menuTabButton"><a href="#">{l s='Best Offers' mod='ebay'}</a></li>
@@ -149,6 +148,7 @@
 
 					<div id="menuTab9Sheet" class="tabItem tab-pane"><div class="panel">{$ebay_listings}</div></div>
 					<div id="menuTab6Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders}</div></div>
+					<div id="menuTab61Sheet" class="tabItem tab-pane"><div class="panel">{$table_orders_errors}</div></div>
 					<div id="menuTab14Sheet" class="tabItem tab-pane"><div class="panel">{$orders_sync}</div></div>
 					<div id="menuTab79Sheet" class="tabItem tab-pane"><div class="panel">{$orders_returns_sync}</div></div>
 					<div id="menuTab78Sheet" class="tabItem tab-pane"><div class="panel">{$order_returns}</div></div>
@@ -230,36 +230,5 @@
 <script>
 	{literal}
 	var alert_exit_import_categories = "{/literal}{$alert_exit_import_categories}{literal}";
-	function getKb(item) {
-		item = typeof item !== 'undefined' ? item : 0;
-		var that = $("a.kb-help:eq("+ item +")");
-
-		$.ajax({
-			type: "POST",
-			url: formController,
-			data: {
-			    errorcode: $( that ).attr('data-errorcode'),
-				lang: $( that ).attr('data-lang'),
-				ajax: true,
-				action: 'LoadKB'
-			},
-			dataType: "json",
-			success: function(data)
-			{
-				if (data.result != 'error')
-				{
-					$( that ).addClass('active');
-					$( that ).attr('href', data.result);
-					$( that ).attr('target', '_blank');
-				}
-				var next = item + 1;
-				if ($("a.kb-help:eq("+ next +")").length > 0)
-					getKb(next);
-			}
-		});
-	}
-	jQuery(document).ready(function($) {
-		getKb();
-	});
 	{/literal}
 </script>

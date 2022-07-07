@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -279,30 +279,11 @@
                                     <small>{l s='You may want to use boost mode.' mod='ebay'}</small>
                                 </label>
 
-                                          {*<div class="pull-right">*}
-                                                {*<span title="{l s='Help' mod='ebay'}" data-toggle="tooltip" data-html="true" data-placement="left" class="pointer text-info">*}
-                                                  {*<a href="#popin-help" class="js-popin-help"><i class="process-icon-help"></i></a>*}
-                                                {*</span>*}
-                                          {*</div>*}
                                             <div class="links-wrapper">
                                                 <div class="pull-right">
-                                                    <a href="#" class="js-popin-help">
+                                                    <a href="https://desk.202-ecommerce.com/portal/en/kb/addons-prestashop-help-center/ebay-2-official" target="_blank">
                                                         <i class="icon-question-circle"></i>
                                                         <span>{l s='Manual' mod='ebay'}</span>
-                                                    </a>
-                                                </div>
-
-                                                <div class="pull-right">
-                                                    <a href="https://addons.prestashop.com/en/ratings.php" target="_blank">
-                                                        <i class="icon-star-half-o"></i>
-                                                        <span>{l s='Feedback' mod='ebay'}</span>
-                                                    </a>
-                                                </div>
-
-                                                <div class="pull-right">
-                                                    <a href="https://addons.prestashop.com/it/contact-us?id_product=27282" target="_blank">
-                                                        <i class="icon-support"></i>
-                                                        <span>{l s='Support' mod='ebay'}</span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -517,11 +498,6 @@
         });
 
         $(document).ready(function() {
-            $(document).on('click', '.js-popin-help', function() {
-                event.preventDefault();
-                window.open("{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/help/help.pdf", 'pdf');
-            });
-
 
             $('.js-next-popin_boost').on('click', function() {
 

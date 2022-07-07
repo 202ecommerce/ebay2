@@ -7,6 +7,7 @@ namespace EbayVendor\GuzzleHttp\Promise;
  *
  * The reason value is available via the getReason() method.
  */
+
 class RejectionException extends \RuntimeException
 {
     /** @var mixed Rejection reason. */

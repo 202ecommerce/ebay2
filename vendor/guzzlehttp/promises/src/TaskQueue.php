@@ -11,6 +11,7 @@ namespace EbayVendor\GuzzleHttp\Promise;
  *
  *     GuzzleHttp\Promise\Utils::queue()->run();
  */
+
 class TaskQueue implements TaskQueueInterface
 {
     private $enableShutdown = \true;

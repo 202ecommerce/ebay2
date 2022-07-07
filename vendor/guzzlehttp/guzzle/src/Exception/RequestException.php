@@ -2,18 +2,18 @@
 
 namespace EbayVendor\GuzzleHttp\Exception;
 
-use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
 use EbayVendor\Psr\Http\Message\RequestInterface;
 use EbayVendor\Psr\Http\Message\ResponseInterface;
-use EbayVendor\Psr\Http\Message\UriInterface;
+use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
 /**
  * HTTP Request exception
  */
+
 class RequestException extends TransferException
 {
     /** @var RequestInterface */
     private $request;
-    /** @var ResponseInterface|null */
+    /** @var ResponseInterface */
     private $response;
     /** @var array */
     private $handlerContext;
@@ -53,55 +53,19 @@ class RequestException extends TransferException
         if (!$response) {
             return new self('Error completing request', $request, null, $previous, $ctx);
         }
-        $level = (int) \floor($response->getStatusCode() / 100);
-        if ($level === 4) {
-            $label = 'Client error';
-            $className = ClientException::class;
-        } elseif ($level === 5) {
-            $label = 'Server error';
-            $className = ServerException::class;
+        $level = \floor($response->getStatusCode() / 100);
+        if ($level == '4') {
+            $label = 'Client error response';
+            $className = __NAMESPACE__ . '\\ClientException';
+        } elseif ($level == '5') {
+            $label = 'Server error response';
+            $className = __NAMESPACE__ . '\\ServerException';
         } else {
-            $label = 'Unsuccessful request';
+            $label = 'Unsuccessful response';
             $className = __CLASS__;
         }
-        $uri = $request->getUri();
-        $uri = static::obfuscateUri($uri);
-        // Client Error: `GET /` resulted in a `404 Not Found` response:
-        // <html> ... (truncated)
-        $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri, $response->getStatusCode(), $response->getReasonPhrase());
-        $summary = static::getResponseBodySummary($response);
-        if ($summary !== null) {
-            $message .= ":\n{$summary}\n";
-        }
+        $message = $label . ' [url] ' . $request->getUri() . ' [status code] ' . $response->getStatusCode() . ' [reason phrase] ' . $response->getReasonPhrase();
         return new $className($message, $request, $response, $previous, $ctx);
-    }
-    /**
-     * Get a short summary of the response
-     *
-     * Will return `null` if the response is not printable.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return string|null
-     */
-    public static function getResponseBodySummary(ResponseInterface $response)
-    {
-        return \EbayVendor\GuzzleHttp\Psr7\get_message_body_summary($response);
-    }
-    /**
-     * Obfuscates URI if there is a username and a password present
-     *
-     * @param UriInterface $uri
-     *
-     * @return UriInterface
-     */
-    private static function obfuscateUri(UriInterface $uri)
-    {
-        $userInfo = $uri->getUserInfo();
-        if (\false !== ($pos = \strpos($userInfo, ':'))) {
-            return $uri->withUserInfo(\substr($userInfo, 0, $pos), '***');
-        }
-        return $uri;
     }
     /**
      * Get the request that caused the exception

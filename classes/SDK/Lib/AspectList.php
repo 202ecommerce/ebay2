@@ -22,21 +22,20 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Lib;
 
 use Ebay\classes\SDK\Core\ResourceModel;
-use Symfony\Component\VarDumper\VarDumper;
 
 class AspectList extends ResourceModel
 {
-    /** @var Aspect[]*/
+    /** @var Aspect[] */
     protected $aspectList = [];
 
     /**
      * @param array $data
+     *
      * @return self
      */
     public function fromArray($data)
@@ -83,11 +82,13 @@ class AspectList extends ResourceModel
 
     /**
      * @param Aspect $aspect
+     *
      * @return self
      */
     public function add(Aspect $aspect)
     {
         $this->aspectList[] = $aspect;
+
         return $this;
     }
 

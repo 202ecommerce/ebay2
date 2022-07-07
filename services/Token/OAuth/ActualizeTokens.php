@@ -22,16 +22,14 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services\Token\OAuth;
 
 use Common;
 use Configuration;
-use ProfileConf;
-use Symfony\Component\VarDumper\VarDumper;
 use EbayProfile;
+use ProfileConf;
 
 class ActualizeTokens
 {

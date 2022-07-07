@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-* @copyright Copyright (c) 2007-2021 202-ecommerce
+* @copyright Copyright (c) 2007-2022 202-ecommerce
 * @license Commercial license
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -33,8 +33,6 @@
 				$('#transportInterWarning').show();
 			}
 		}
-
-        checkCountShippingInternational();
 
 
 		function addInterShipping(currentName, idPSCarrier, idEbayCarrier, additionalFee, nbSelect, id_zone, zone) {
@@ -105,7 +103,7 @@
 			}
 
 			// extrafree
-			createSelecstShipping += "<td style='visibility:hidden;'><label>{l s='Additional item cost' mod='ebay'}</label><div class='popin_ship_cost'></div><div class='input-group'><span class='input-group-addon'>{$configCurrencysign|escape:'htmlall':'UTF-8'}</span><input class='extrafee form-control' "+ ((typeof(additionalFee) != "undefined" && additionalFee > 0) ? 'value="'+additionalFee+'"' : '')  +" min = '0' name='"+ (currentName == 'domesticShipping' ? 'extrafee' : 'extrafee_international') +"["+ lastId +"]' type='number' step='0.01'></div>"+ (currentName == 'domesticShipping' ? '<div class="help-block">' : '<p>') +" <a class='kb-help link_ship_cost' style='width: auto;background-image: none;' data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a><a class='kb-help'  data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a>"+ (currentName == 'domesticShipping' ? '</div>' : '</p>') +"</td>";
+			createSelecstShipping += "<td style='visibility:hidden;'><label>{l s='Additional item cost' mod='ebay'}</label><div class='popin_ship_cost'></div><div class='input-group'><span class='input-group-addon'>{$configCurrencysign|escape:'htmlall':'UTF-8'}</span><input class='extrafee form-control' "+ ((typeof(additionalFee) != "undefined" && additionalFee > 0) ? 'value="'+additionalFee+'"' : '')  +" min = '0' name='"+ (currentName == 'domesticShipping' ? 'extrafee' : 'extrafee_international') +"["+ lastId +"]' type='number' step='0.01'></div>"+ (currentName == 'domesticShipping' ? '<div class="help-block">' : '<p>') +" <span class='link_ship_cost' style='width: auto;background-image: none;' ></span>"+ (currentName == 'domesticShipping' ? '</div>' : '</p>') +"</td>";
 			// end extrafree
 
 			// trash
@@ -388,8 +386,7 @@
 				$(this).before(excluded);
 			});
 
-
-
+			checkCountShippingInternational();
 
 			$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
 				addInternationalShippingFee();

@@ -40,6 +40,7 @@ namespace Composer\Autoload;
  * @see    https://www.php-fig.org/psr/psr-0/
  * @see    https://www.php-fig.org/psr/psr-4/
  */
+
 class ClassLoader
 {
     /** @var ?string */

@@ -23,6 +23,7 @@ use EbayVendor\Psr\Http\Message\ResponseInterface;
  * Represents a generic service provider that may be used to interact with any
  * OAuth 2.0 service provider, using Bearer token authentication.
  */
+
 class GenericProvider extends AbstractProvider
 {
     use BearerAuthorizationTrait;

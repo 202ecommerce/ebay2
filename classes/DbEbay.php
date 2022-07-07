@@ -22,17 +22,17 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class DbEbay
 {
-    /** @var  Db */
+    /** @var Db */
     private $db;
 
     public function setDb(Db $db)
     {
         $this->db = $db;
+
         return $this;
     }
 

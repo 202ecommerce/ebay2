@@ -8,7 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Ebay\\' => array($baseDir . '/'),
     'EbayVendor\\Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),
-    'EbayVendor\\Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
+    'EbayVendor\\Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'EbayVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => array($vendorDir . '/symfony/polyfill-intl-idn'),
     'EbayVendor\\Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'EbayVendor\\NeilCrookes\\OAuth2\\Client\\' => array($vendorDir . '/neilcrookes/oauth2-ebay/src'),

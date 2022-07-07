@@ -22,16 +22,16 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_2_1_8($module)
 {
-    $orderStateEbay = new OrderState((int)Configuration::get('EBAY_STATUS_ORDER'));
+    $orderStateEbay = new OrderState((int) Configuration::get('EBAY_STATUS_ORDER'));
 
     if (false === Validate::isLoadedObject($orderStateEbay)) {
         return true;

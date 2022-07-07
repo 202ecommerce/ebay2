@@ -22,21 +22,22 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\services\Token\OAuth;
 
 use Ebay\classes\SandboxMode;
+use EbayProfile;
+use Exception;
 use ProfileConf;
 use Throwable;
-use EbayProfile;
 
 class GetAccessToken
 {
     /**
      * @param EbayProfile $ebayProfile
      * @param string $code temp auth code from ebay
+     *
      * @return ResponseGetAccessToken
      */
     public function get(EbayProfile $ebayProfile, $code)
@@ -51,17 +52,20 @@ class GetAccessToken
                 'sandbox' => (new SandboxMode())->isSandbox(),
                 'http_errors' => false, // Optional. Means Guzzle Exceptions aren't thrown on 4xx or 5xx responses from eBay, allowing you to detect and handle them yourself
             ], [
-                'optionProvider' => new \EbayVendor\League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider()
+                'optionProvider' => new \EbayVendor\League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider(),
             ]);
 
             $accessToken = $provider->getAccessToken('authorization_code', [
-                'code' => $code
+                'code' => $code,
             ]);
 
             $response->setSuccess(true);
             $response->setAccessToken($accessToken->getToken());
             $response->setRefreshToken($accessToken->getRefreshToken());
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
+            $response->setSuccess(false);
+            $response->setError($e->getMessage());
+        } catch (Throwable $e) {// Throwable exists from php 7
             $response->setSuccess(false);
             $response->setError($e->getMessage());
         }

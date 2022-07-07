@@ -22,47 +22,44 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayDashboardTab extends EbayTab
 {
-
     public function getContent($id_ebay_profiles)
     {
-        $nb_products = EbayProduct::getNbProductsByIdEbayProfiles(array($id_ebay_profiles));
+        $nb_products = EbayProduct::getNbProductsByIdEbayProfiles([$id_ebay_profiles]);
         $count_order_errors = false;
         $count_product_errors = false;
 
-
         if ($id_ebay_profiles) {
             $count_order_errors = EbayOrderErrors::getAllCount($id_ebay_profiles);
-            $count_product_errors =EbayTaskManager::getErrorsCount($id_ebay_profiles);
+            $count_product_errors = EbayTaskManager::getErrorsCount($id_ebay_profiles);
         }
-
 
         $total = EbayOrder::getSumOrders();
         $total = $total[0]['sum'] ? $total[0]['sum'] : 0;
         $count_orphan_listing = EbayProduct::getCountOrphanListing($this->ebay_profile->id);
         $count_orphan_listing = $count_orphan_listing[0]['number'];
 
-        $vars = array(
+        $vars = [
             'nb_tasks' => EbayTaskManager::getNbTasks($id_ebay_profiles),
-            'count_order_errors' => (isset($count_order_errors[0]['nb'])?$count_order_errors[0]['nb']:0),
-            'count_product_errors' => (isset($count_product_errors[0]['nb'])?$count_product_errors[0]['nb']:0)+ (int) $count_orphan_listing,
+            'count_order_errors' => (isset($count_order_errors[0]['nb']) ? $count_order_errors[0]['nb'] : 0),
+            'count_product_errors' => (isset($count_product_errors[0]['nb']) ? $count_product_errors[0]['nb'] : 0) + (int) $count_orphan_listing,
             'nb_products' => EbayProduct::getNbProducts($id_ebay_profiles),
             'dernier_import_product' => Configuration::get('DATE_LAST_SYNC_PRODUCTS'),
             'nb_categories' => EbayCategoryConfiguration::getNbPrestashopCategories($this->ebay_profile->id),
             'nb_products_exclu' => count(EbayProduct::getProductsBlocked($id_ebay_profiles)),
             'country_shipping' => EbayShippingInternationalZone::getInternationalZone($id_ebay_profiles),
-            'type_sync_product' => (Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON')?'Cron':'Prestashop'),
+            'type_sync_product' => (Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') ? 'Cron' : 'Prestashop'),
             'ca_total' => $total,
-        );
+        ];
 
         $datetime = new DateTime(EbayConfiguration::get($id_ebay_profiles, 'EBAY_ORDER_LAST_UPDATE'));
-        $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON')?'Cron':'Prestashop');
+        $vars['type_sync_order'] = (Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') ? 'Cron' : 'Prestashop');
 
         $vars['date_last_import'] = date('Y-m-d H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+
         return $this->display('dashboard.tpl', $vars);
     }
 }

@@ -22,31 +22,28 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 namespace Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory;
 
-use Ebay\classes\SDK\Core\EbayApiResponse;
-use Ebay\classes\SDK\Lib\AspectList;
-use Ebay\services\CategoryTree;
 use Ebay\classes\SDK\Core\ApiBaseUri;
 use Ebay\classes\SDK\Core\ApiBaseUriInterface;
 use Ebay\classes\SDK\Core\BearerAuthToken;
 use Ebay\classes\SDK\Core\EbayClient;
 use Ebay\classes\SDK\Core\RequestInterface;
+use Ebay\classes\SDK\Lib\AspectList;
 use Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory\Request as GetRequest;
 use Ebay\classes\SDK\Taxonomy\GetItemAspectsForCategory\Response as GetResponse;
+use Ebay\services\CategoryTree;
 use EbayProfile;
 use Exception;
-use Symfony\Component\VarDumper\VarDumper;
 
 class GetItemAspectsForCategory
 {
-    /** @var EbayProfile*/
+    /** @var EbayProfile */
     protected $ebayProfile;
 
-    /** @var string*/
+    /** @var string */
     protected $categoryId;
 
     /**
@@ -61,21 +58,25 @@ class GetItemAspectsForCategory
 
     /**
      * @param EbayProfile $ebayProfile
+     *
      * @return self
      */
     public function setEbayProfile(EbayProfile $ebayProfile)
     {
         $this->ebayProfile = $ebayProfile;
+
         return $this;
     }
 
     /**
      * @param string $categoryId
+     *
      * @return self
      */
     public function setCategoryId($categoryId)
     {
-        $this->categoryId = (string)$categoryId;
+        $this->categoryId = (string) $categoryId;
+
         return $this;
     }
 
@@ -96,6 +97,7 @@ class GetItemAspectsForCategory
         }
 
         $resultContent = json_decode($apiResponse->getBody()->getContents(), true);
+
         return $response
             ->setAspectList(
                 (new AspectList())->fromArray($resultContent)
@@ -134,7 +136,7 @@ class GetItemAspectsForCategory
 
     protected function getToken()
     {
-        return (new BearerAuthToken($this->ebayProfile));
+        return new BearerAuthToken($this->ebayProfile);
     }
 
     protected function getCategoryId()

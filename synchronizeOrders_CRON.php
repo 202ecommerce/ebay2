@@ -22,16 +22,13 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
-include dirname(__FILE__).'/../../config/config.inc.php';
-include dirname(__FILE__).'/../../init.php';
-include dirname(__FILE__).'/ebay.php';
+include dirname(__FILE__) . '/../../config/config.inc.php';
+include dirname(__FILE__) . '/../../init.php';
+include dirname(__FILE__) . '/ebay.php';
 
 class EbaySynchronizeOrdersTask extends Ebay
 {
-
     public function __construct()
     {
         parent::__construct();

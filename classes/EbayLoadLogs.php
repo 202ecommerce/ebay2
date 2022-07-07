@@ -22,12 +22,10 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 abstract class EbayLoadLogs
 {
-
     protected $file;
 
     public function getLogs()
@@ -53,15 +51,16 @@ abstract class EbayLoadLogs
         $logs = $this->getDatas($offset, $nb_results);
 
         /* Smarty datas */
-        $template_vars = array(
+        $template_vars = [
             'logs' => $logs,
             'p' => $page,
             'noLogFound' => Tools::getValue('no_logs_str'),
             'showStr' => Tools::getValue('show_str'),
-        );
+        ];
 
         $smarty->assign($template_vars);
-        return $ebay->display(realpath(dirname(__FILE__).'/../'), $this->file);
+
+        return $ebay->display(realpath(dirname(__FILE__) . '/../'), $this->file);
     }
 
     abstract protected function getDatas($offset, $nb_results);

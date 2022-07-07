@@ -22,12 +22,13 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 /**
  * Updates the template image links since the image files have moved
+ *
  * @param Ebay $module
+ *
  * @return bool
  */
 function upgrade_module_1_6($module)

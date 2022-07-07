@@ -22,11 +22,9 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Esporta facilmente i tuoi prodotti da Prestshop a eBay, il più grande mercato online, per acquisire nuovi clienti e aumentare le tue vendite.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Il modulo eBay funziona al momento su ebay.co.uk, eBay.es, ebay.fr, eBay.it, ebay.nl e ebay.pl';
@@ -37,6 +35,7 @@ $_MODULE['<{ebay}prestashop>ebay_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Per utili
 $_MODULE['<{ebay}prestashop>ebay_ffa05a17b5e84d1c3b1f2fbda2bfea3c'] = 'Prezzo del prodotto inferiore a 0.1 o prodotto non trovato';
 $_MODULE['<{ebay}prestashop>ebay_eaa0d1591e6369a298dcd6cb1a8eba8a'] = 'Indirizzo email non valido';
 $_MODULE['<{ebay}prestashop>ebay_f19bab7c4c3d19688f1a16d7830517b9'] = 'Il Paese non è attivato';
+$_MODULE['<{ebay}prestashop>formconfig_83465313917bcc76185ea86fb41b7148'] = 'Ordini non importati';
 $_MODULE['<{ebay}prestashop>ebay_6450acbf317261ce71e7341df1fc1a66'] = 'Impossibile trovare i prodotti nel database';
 $_MODULE['<{ebay}prestashop>ebay_967451b8be95342ed2e756b7376f315f'] = 'Impossibile creare un carrello per l\'ordine';
 $_MODULE['<{ebay}prestashop>ebay_5f8d9c30e0606a91c5d7b6e1bf1217ac'] = 'Impossibile aggiungere il prodotto al carrello (è possibile che la quantità in magazzino sia 0)';
@@ -746,3 +745,8 @@ $_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Guarda le
 $_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Aggiungi questo negozio ai preferiti';
 $_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilità';
 $_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'in magazzino';
+$_MODULE['<{ebay}prestashop>button_4a22a61e3d4c92e0170f9b6723a97fdb'] = 'Genera Token OAuth';
+$_MODULE['<{ebay}prestashop>button_044156be2664f29f71cc8d8482e4c8fe'] = 'Configurare l\'onboarding';
+$_MODULE['<{ebay}prestashop>button_ad35fbaef240a8ec1f43e8a0d5e15099'] = 'Aggiorna il token';
+$_MODULE['<{ebay}prestashop>button_b7a8465687652ba934a370d4f2902e59'] = 'Presta attenzione, bisogna impostare correttamente il';
+$_MODULE['<{ebay}prestashop>button_ee106588bc1cb90d3c6f304406ca65a8'] = 'URL Corretto';

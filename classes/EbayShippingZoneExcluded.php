@@ -22,7 +22,6 @@
  *  @copyright Copyright (c) 2007-2022 202-ecommerce
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
- *
  */
 
 class EbayShippingZoneExcluded
@@ -30,16 +29,16 @@ class EbayShippingZoneExcluded
     public static function getAll($id_ebay_profile)
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
+			FROM `' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			ORDER BY region, description');
     }
 
     public static function getExcluded($id_ebay_profile)
     {
         return Db::getInstance()->ExecuteS('SELECT *
-			FROM `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
+			FROM `' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded`
+			WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
 			AND excluded = 1');
     }
 
@@ -48,7 +47,7 @@ class EbayShippingZoneExcluded
         $dbEbay = new DbEbay();
         $dbEbay->setDb(Db::getInstance());
 
-        return $dbEbay->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', $data, 'INSERT');
+        return $dbEbay->autoExecute(_DB_PREFIX_ . 'ebay_shipping_zone_excluded', $data, 'INSERT');
     }
 
     public static function loadEbayExcludedLocations($id_ebay_profile)
@@ -72,20 +71,20 @@ class EbayShippingZoneExcluded
     {
         $ebay_excluded_zones = EbayShippingZoneExcluded::getAll($id_ebay_profile);
 
-        $all = array();
-        $excluded = array();
-        $regions = array();
+        $all = [];
+        $excluded = [];
+        $regions = [];
 
         foreach ($ebay_excluded_zones as $key => $zone) {
             if (!in_array($zone['region'], $regions)) {
                 $regions[] = $zone['region'];
             }
 
-            $all[$zone['region']]['country'][] = array(
+            $all[$zone['region']]['country'][] = [
                 'location' => $zone['location'],
                 'description' => $zone['description'],
                 'excluded' => $zone['excluded'],
-            );
+            ];
         }
 
         foreach ($ebay_excluded_zones as $key => $zone) {
@@ -107,9 +106,9 @@ class EbayShippingZoneExcluded
             $excluded[] = $zone['location'];
         }
 
-        return array(
+        return [
             'all' => $all,
             'excluded' => $excluded,
-        );
+        ];
     }
 }
