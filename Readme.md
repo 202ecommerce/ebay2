@@ -2,7 +2,21 @@
 
 ## About
 
-Let the merchant use eBay as a new selling place
+Let the merchant use eBay as a new selling place.
+
+Launched in 2012, the official eBay module became paid in 2017 after eBay stopped sponsoring the module.
+
+In order to allow each PrestaShop merchant to start or grow their business on eBay without constraint, 202 ecommerce released the official eBay module in open source license as of July 1, 2022. The module code will be free and public on this Github repository to allow merchants to continue their activity with eBay2 module. 
+
+Developers will be able to make a "fork" to make available their patches or evolutions that they have developed. A zip containing corrections made by 202 ecommerce will be published by September 1st 2022 on GitHub and addons.prestashop.com. After this date, updates will only be available on GitHub.
+
+The support of the module through addons.prestashop.com will be provided until the end of the Business Care subscriptions. Once expired, these subscriptions will not be renewable. If you need support after your Business Care expires, please contact us for a list of freelance developers or a quote.
+
+Do you have a question? Contact us at ebay2official@202-ecommerce.com
+
+Free module documentation, available at this address:
+https://desk.202-ecommerce.com/portal/en/kb/addons-prestashop-help-center/ebay-2-official
+
 
 ## Contributing
 
