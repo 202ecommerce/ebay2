@@ -97,6 +97,12 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-push-3">
+				{include file='./cleanShippingBusinessPolicyButton.tpl' controller=$formAdvancedParametersController|addslashes}
+			</div>
+		</div>
+
 		<div id="check_database_progress" style="display: none;">
 			<div class="progress">
 			  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="">

@@ -72,4 +72,9 @@ class EbayTab
     {
         return Tools::getShopDomainSsl(true) . __PS_BASE_URI__ . 'modules/ebay/';
     }
+
+    protected function initLinkService()
+    {
+        return new \Ebay\services\EbayLink();
+    }
 }

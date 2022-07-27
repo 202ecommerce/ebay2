@@ -75,6 +75,12 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
         }
     }
 
+    public function ajaxProcessCleanShippingPolicy()
+    {
+        EbayBussinesPolicies::removeShippingPolicies();
+        exit();
+    }
+
     public function ajaxProcessCheckCategory()
     {
         if (Module::isInstalled('ebay')) {

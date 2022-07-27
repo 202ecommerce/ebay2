@@ -40,7 +40,7 @@ class EbayFormAdvancedParametersTab extends EbayTab
 
         $smarty_vars = [
             'url' => $url,
-            'formAdvancedParametersController' => $this->context->link->getAdminLink('AdminFormAdvancedParameters'),
+            'formAdvancedParametersController' => $this->initLinkService()->getAdminLink('AdminFormAdvancedParameters'),
             // logs
             'api_logs' => Configuration::get('EBAY_API_LOGS'),
             'activate_logs' => Configuration::get('EBAY_ACTIVATE_LOGS'),
