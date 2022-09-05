@@ -137,7 +137,7 @@ class EbayBestOffers extends ObjectModel
 
             return DB::getInstance()->ExecuteS($query);
         } else {
-            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_best_offers` WHERE `id_ebay_profile` = ' . pSQL($id_ebay_profile) . ' ORDER BY `date_add`';
+            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_best_offers` WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`';
 
             return DB::getInstance()->executeS($sql_select);
         }

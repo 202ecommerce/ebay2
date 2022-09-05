@@ -68,7 +68,7 @@ class EbayApiLog extends ObjectModel
         $fields['id_product'] = (int) $this->id_product;
         $fields['status'] = pSQL($this->status);
         $fields['date_add'] = pSQL($this->date_add);
-        $fields['id_product_attribute'] = pSQL($this->id_product_attribute);
+        $fields['id_product_attribute'] = (int) $this->id_product_attribute;
 
         return $fields;
     }
@@ -142,7 +142,7 @@ class EbayApiLog extends ObjectModel
             //var_dump($query); die();
             return DB::getInstance()->ExecuteS($query);
         } else {
-            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_api_log` WHERE `id_ebay_profile` = ' . pSQL($id_ebay_profile) . ' ORDER BY `date_add`';
+            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_api_log` WHERE `id_ebay_profile` = ' . (int)$id_ebay_profile . ' ORDER BY `date_add`';
 
             return DB::getInstance()->executeS($sql_select);
         }

@@ -1320,13 +1320,13 @@ class Ebay extends Module
                 'status' => pSQL($return['status']),
                 'id_item' => pSQL($return['creationInfo']['item']['itemId']),
                 'id_transaction' => pSQL($return['creationInfo']['item']['transactionId']),
-                'id_ebay_order' => !empty($id_order) ? pSQL($id_order['id_ebay_order']) : 0,
-                'id_order' => !empty($id_order) ? pSQL($id_order[0]['id_order']) : 0,
+                'id_ebay_order' => !empty($id_order) ? (int)$id_order['id_ebay_order'] : 0,
+                'id_order' => !empty($id_order) ? (int)$id_order[0]['id_order'] : 0,
             ];
 
-            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . pSQL($vars['id_return']));
+            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . (int)$vars['id_return']);
             if (!empty($lin_is)) {
-                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . pSQL($vars['id_return']));
+                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . (int)$vars['id_return']);
             } else {
                 DB::getInstance()->insert('ebay_order_return_detail', $vars);
             }

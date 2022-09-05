@@ -44,6 +44,9 @@ class ProductPrice
         if (in_array($country_iso, ['be-nl', 'be-fr'])) {
             $country_iso = 'be';
         }
+	if (in_array($country_iso, ['ca_en', 'ca_fr'])) {
+            $country_iso = 'ca';
+        }
 
         $idCountry = Country::getByIso($country_iso);
         $idCurrency = $this->ebayProfile->getConfiguration(Common::EBAY_CURRENCY);

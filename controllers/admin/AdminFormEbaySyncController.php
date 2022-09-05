@@ -32,7 +32,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
             ->select('id_product')
             ->from('product_shop')
             ->where('id_category_default = ' . (int) Tools::getValue('ebay_category'))
-            ->where('id_shop = ' . Context::getContext()->shop->id);
+            ->where('id_shop = ' . (int) Context::getContext()->shop->id);
         $to_synchronize_product_ids = Db::getInstance()->ExecuteS($sql);
 
         foreach ($to_synchronize_product_ids as $product_id_to_sync) {
@@ -704,7 +704,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         while ($product_id = $products->fetch(PDO::FETCH_ASSOC)) {
             $product = new Product($product_id['id_product'], false, $ebay_profile->id_lang);
             EbayTaskManager::deleteTaskForPorductAndEbayProfile($product_id['id_product'], $ebay_profile->id);
-            EbayTaskManager::addTask('update', $product, null, $ebay_profile->id);
+            EbayTaskManager::addTask('update', $product, null, (int) $ebay_profile->id);
         }
         exit();
     }

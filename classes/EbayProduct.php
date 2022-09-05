@@ -190,7 +190,7 @@ class EbayProduct
 			FROM `' . _DB_PREFIX_ . 'ebay_product` ep
 			INNER JOIN `' . _DB_PREFIX_ . 'product_shop` ps
 			ON ps.`id_product` = ep.`id_product`
-			WHERE ps.`id_category_default` = ' . (int) $id_category . ' AND ep.`id_ebay_profile` = ' . (int) $id_ebay_profile . ' AND ps.id_shop = ' . $id_shop);
+			WHERE ps.`id_category_default` = ' . (int) $id_category . ' AND ep.`id_ebay_profile` = ' . (int) $id_ebay_profile . ' AND ps.id_shop = ' . (int) $id_shop);
     }
 
     public static function getNbProductsByIdEbayProfiles($id_ebay_profiles = [])
@@ -266,7 +266,7 @@ class EbayProduct
     {
         if ($id_ebay_profile) {
             return Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_product`
-			    WHERE `id_product_ref` = \'' . pSQL($id_product_ref) . '\' AND `id_ebay_profile`=' . $id_ebay_profile);
+			    WHERE `id_product_ref` = \'' . pSQL($id_product_ref) . '\' AND `id_ebay_profile`=' . (int)$id_ebay_profile);
         }
 
         return Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_product`
@@ -297,7 +297,7 @@ class EbayProduct
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
         if ($search['id_product']) {
-            $sql .= ' AND p.`id_product` = ' . (int) pSQL($search['id_product']);
+            $sql .= ' AND p.`id_product` = ' . (int) $search['id_product'];
         }
         if ($search['id_product_ebay']) {
             $sql .= ' AND ep.`id_product_ref` = "' . pSQL($search['id_product_ebay']) . '"';
@@ -333,12 +333,12 @@ class EbayProduct
             $sql .= 'AND pl.id_shop = ' . (int) $ebay_profile->id_shop;
 
             $sql .= ') WHERE p.id_product IS NOT NULL AND ep.`id_ebay_profile` = ' . (int) $id_ebay_profile;
-            $sql .= ' AND ps.id_shop = ' . $ebay_profile->id_shop;
+            $sql .= ' AND ps.id_shop = ' . (int) $ebay_profile->id_shop;
             if ($no_blacklisted) {
                 $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
             }
             if ($search['id_product']) {
-                $sql .= ' AND p.`id_product` = ' . (int) pSQL($search['id_product']);
+                $sql .= ' AND p.`id_product` = ' . (int) $search['id_product'];
             }
             if ($search['id_product_ebay']) {
                 $sql .= ' AND ep.`id_product_ref` = "' . pSQL($search['id_product_ebay']) . '"';
@@ -382,11 +382,11 @@ class EbayProduct
         $sql = 'SELECT p.id_product 
                 FROM ' . _DB_PREFIX_ . 'product_shop p
 		LEFT JOIN ' . _DB_PREFIX_ . 'ebay_product ep 
-		ON p.id_product=ep.id_product AND ep.id_ebay_profile=' . $id_ebay_profile . '
+		ON p.id_product=ep.id_product AND ep.id_ebay_profile=' . (int) $id_ebay_profile . '
                 LEFT JOIN ' . _DB_PREFIX_ . 'ebay_product_configuration epc 
-		ON p.id_product = epc.id_product AND epc.id_ebay_profile=' . $id_ebay_profile . '
+		ON p.id_product = epc.id_product AND epc.id_ebay_profile=' . (int) $id_ebay_profile . '
                 WHERE (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)		
-                AND p.active=1 AND p.id_shop = ' . $id_shop . '
+                AND p.active=1 AND p.id_shop = ' . (int) $id_shop . '
                 AND p.id_category_default IN (' . EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($id_ebay_profile)) . ')';
         if (EbayConfiguration::get($id_ebay_profile, 'SYNC_ONLY_NEW_PRODUCTS')) {
             $sql .= ' AND ep.id_product is NULL';
@@ -421,7 +421,7 @@ class EbayProduct
     {
         $product_ids = Db::getInstance()->executeS('SELECT epc.`id_product`
 			FROM `' . _DB_PREFIX_ . 'ebay_product_configuration` epc
-			 WHERE `blacklisted` = 1 and id_ebay_profile = ' . $id_ebay_profile);
+			 WHERE `blacklisted` = 1 and id_ebay_profile = ' . (int) $id_ebay_profile);
 
         return $product_ids;
     }
@@ -616,7 +616,7 @@ class EbayProduct
 
     WHERE ep.`id_ebay_profile` = ' . (int) $ebay_profile->id . '
     AND ( p.`id_product` IS NULL OR ecc.`id_ebay_category_configuration` IS NULL OR  p.`active` != 1 OR epc.`blacklisted` != 0 OR ec.`id_category_ref` IS NULL OR ecc.`sync` = 0) ' . ' 
-    ORDER BY ep.`id_ebay_profile` LIMIT ' . $length . ' OFFSET ' . $offset;
+    ORDER BY ep.`id_ebay_profile` LIMIT ' . (int) $length . ' OFFSET ' . (int) $offset;
         }
         //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $ebay = new Ebay();
