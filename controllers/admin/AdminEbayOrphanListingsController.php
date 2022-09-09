@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminEbayOrphanListingsController extends ModuleAdminController
 {
     public function ajaxProcessLoadTableOrphanListings()

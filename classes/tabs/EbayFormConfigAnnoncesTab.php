@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayFormConfigAnnoncesTab extends EbayTab
 {
     public function getContent()

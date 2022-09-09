@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (_PS_VERSION_ > '1.7') {
     include_once 'EbayRequest.php';
 }

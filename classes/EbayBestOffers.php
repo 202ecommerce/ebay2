@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayBestOffers extends ObjectModel
 {
     public $id_ebay_profile;

@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayShipping
 {
     public static function getPsCarrierByEbayCarrier($id_ebay_profile, $ebay_carrier)

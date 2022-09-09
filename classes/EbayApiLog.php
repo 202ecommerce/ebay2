@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayApiLog extends ObjectModel
 {
     public $id_ebay_profile;
@@ -142,7 +141,7 @@ class EbayApiLog extends ObjectModel
             //var_dump($query); die();
             return DB::getInstance()->ExecuteS($query);
         } else {
-            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_api_log` WHERE `id_ebay_profile` = ' . (int)$id_ebay_profile . ' ORDER BY `date_add`';
+            $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_api_log` WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`';
 
             return DB::getInstance()->executeS($sql_select);
         }

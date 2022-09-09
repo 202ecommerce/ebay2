@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (version_compare(_PS_VERSION_, '1.7', '>=')) {
     /**
      * Class allow to display tpl on the FO
