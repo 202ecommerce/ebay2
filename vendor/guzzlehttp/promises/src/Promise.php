@@ -7,7 +7,6 @@ namespace EbayVendor\GuzzleHttp\Promise;
  *
  * @link https://promisesaplus.com/
  */
-
 class Promise implements PromiseInterface
 {
     private $state = self::PENDING;

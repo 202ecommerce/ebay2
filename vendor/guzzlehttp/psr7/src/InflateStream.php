@@ -16,7 +16,6 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
-
 class InflateStream implements StreamInterface
 {
     use StreamDecoratorTrait;

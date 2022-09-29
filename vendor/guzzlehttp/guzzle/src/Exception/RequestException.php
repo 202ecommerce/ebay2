@@ -8,7 +8,6 @@ use EbayVendor\GuzzleHttp\Promise\PromiseInterface;
 /**
  * HTTP Request exception
  */
-
 class RequestException extends TransferException
 {
     /** @var RequestInterface */

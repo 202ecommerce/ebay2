@@ -8,7 +8,6 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
-
 class StreamWrapper
 {
     /** @var resource */

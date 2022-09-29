@@ -9,7 +9,6 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
-
 class MultipartStream implements StreamInterface
 {
     use StreamDecoratorTrait;

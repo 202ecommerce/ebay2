@@ -503,7 +503,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         /* Fix for limit db sql request in time */
         sleep(1);
         $sql = 'SELECT `id_category_ref` FROM `' . _DB_PREFIX_ . 'ebay_category` WHERE `id_ebay_category` = ' . (int) Tools::getValue('ebay_category');
-        $id_category = DB::getInstance()->getValue($sql);
+        $id_category = Db::getInstance()->getValue($sql);
         $category = new EbayCategory($ebay_profile, (int) $id_category);
 
         $last_upd = $ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE');
@@ -545,7 +545,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         FROM `' . _DB_PREFIX_ . 'ebay_category_specific_value`
         WHERE `id_ebay_category_specific` in (' . implode(',', $item_specifics_ids) . ')';
 
-            $item_specifics_values = DB::getInstance()->executeS($sql);
+            $item_specifics_values = Db::getInstance()->executeS($sql);
         } else {
             $item_specifics_values = [];
         }

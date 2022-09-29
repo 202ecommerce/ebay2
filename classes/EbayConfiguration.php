@@ -76,13 +76,13 @@ class EbayConfiguration
     public static function set($id_ebay_profile, $name, $value, $html = false)
     {
         $name = pSQL($name);
-        $checkExist = DB::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . "ebay_configuration WHERE id_ebay_profile=$id_ebay_profile AND `name`='$name'");
+        $checkExist = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . "ebay_configuration WHERE id_ebay_profile=$id_ebay_profile AND `name`='$name'");
         if ($checkExist) {
             $datas = [
                 'value' => pSQL($value, $html),
             ];
 
-            return DB::getInstance()->update('ebay_configuration', $datas, " id_ebay_profile=$id_ebay_profile AND `name`='$name'");
+            return Db::getInstance()->update('ebay_configuration', $datas, " id_ebay_profile=$id_ebay_profile AND `name`='$name'");
         }
         $datas = [
             'id_ebay_profile' => (int) $id_ebay_profile,

@@ -8,7 +8,7 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
  *
  * Note that no response is present for a ConnectException
  */
- ConnectException extends RequestException
+class ConnectException extends RequestException
 {
     public function __construct($message, RequestInterface $request, \Exception $previous = null, array $handlerContext = [])
     {

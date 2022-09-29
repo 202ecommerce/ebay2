@@ -784,7 +784,7 @@ class EbayOrder
 					ON t.`id_tax` = tr.`id_tax`
 				WHERE p.`id_product` = '" . (int) $id_product . "' ";
 
-        return DB::getInstance()->getValue($sql);
+        return Db::getInstance()->getValue($sql);
     }
 
     public function _getTaxByCarrier($id_carrier)
@@ -797,7 +797,7 @@ class EbayOrder
 					ON t.`id_tax` = tr.`id_tax`
 				WHERE c.`id_carrier` = '" . (int) $id_carrier . "' ";
 
-        return DB::getInstance()->getValue($sql);
+        return Db::getInstance()->getValue($sql);
     }
 
     /**
@@ -820,7 +820,7 @@ class EbayOrder
 
     public function delete($id_ebay_profile = null)
     {
-        db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_order WHERE id_order_ref = "' . pSQL($this->id_order_ref) . '"');
+        Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_order WHERE id_order_ref = "' . pSQL($this->id_order_ref) . '"');
 
         if ($this->id_ebay_order) {
             $this->_writeLog($id_ebay_profile, 'deleted_orders', $this->id_ebay_order);
@@ -1338,7 +1338,7 @@ class EbayOrder
                     WHERE eoo.id_ebay_order_order IS NULL
                     LIMIT 100';
 
-        return DB::getInstance()->execute($delete);
+        return Db::getInstance()->execute($delete);
     }
 
     public function updateOrderState($ebay_profile)

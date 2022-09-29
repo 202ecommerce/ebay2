@@ -6,7 +6,6 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
 /**
  * Provides basic proxies for handlers.
  */
-
 class Proxy
 {
     /**

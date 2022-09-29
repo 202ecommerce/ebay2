@@ -5,7 +5,6 @@ namespace EbayVendor\GuzzleHttp\Cookie;
 /**
  * Persists cookies in the client session
  */
-
 class SessionCookieJar extends CookieJar
 {
     /** @var string session key */

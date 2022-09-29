@@ -16,7 +16,6 @@ use EbayVendor\GuzzleHttp\Promise\EachPromise;
  * "request_options" array that should be merged on top of any existing
  * options, and the function MUST then return a wait-able promise.
  */
-
 class Pool implements PromisorInterface
 {
     /** @var EachPromise */

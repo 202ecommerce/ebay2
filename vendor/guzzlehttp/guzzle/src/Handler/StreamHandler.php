@@ -13,7 +13,6 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
 /**
  * HTTP handler that uses PHP's HTTP stream wrapper.
  */
-
 class StreamHandler
 {
     private $lastHeaders = [];

@@ -1,0 +1,34 @@
+{
+    "name": "prestashop\/autoindex",
+    "description": "Automatically add an 'index.php' in all the current or specified directories and all sub-directories.",
+    "homepage": "https:\/\/github.com\/PrestaShopCorp\/autoindex",
+    "license": "AFL-3.0",
+    "authors": [
+        {
+            "name": "PrestaShop SA",
+            "email": "contact@prestashop.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "symfony\/finder": "^3.4",
+        "symfony\/console": "^3.4",
+        "nikic\/php-parser": "^3.1"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "prepend-autoloader": false,
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "5.6"
+        }
+    },
+    "bin": [
+        "bin\/autoindex"
+    ],
+    "autoload": {
+        "psr-4": {
+            "EbayVendor\\PrestaShop\\AutoIndex\\": "src\/"
+        }
+    }
+}

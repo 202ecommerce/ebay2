@@ -10,7 +10,6 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
-
 class AppendStream implements StreamInterface
 {
     /** @var StreamInterface[] Streams being decorated */

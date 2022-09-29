@@ -1,0 +1,18 @@
+<?php
+
+namespace EbayVendor\PhpParser\ErrorHandler;
+
+use EbayVendor\PhpParser\Error;
+use EbayVendor\PhpParser\ErrorHandler;
+/**
+ * Error handler that handles all errors by throwing them.
+ *
+ * This is the default strategy used by all components.
+ */
+class Throwing implements ErrorHandler
+{
+    public function handleError(Error $error)
+    {
+        throw $error;
+    }
+}

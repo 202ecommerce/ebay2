@@ -18,7 +18,6 @@ use EbayVendor\League\OAuth2\Client\Grant\Exception\InvalidGrantException;
 /**
  * Represents a factory used when retrieving an authorization grant type.
  */
-
 class GrantFactory
 {
     /**

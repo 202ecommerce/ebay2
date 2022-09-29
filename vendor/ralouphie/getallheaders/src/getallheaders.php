@@ -1,6 +1,6 @@
 <?php
 
-
+namespace EbayVendor;
 
 if (!\function_exists('getallheaders')) {
     /**

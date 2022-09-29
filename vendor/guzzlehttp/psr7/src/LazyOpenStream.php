@@ -9,7 +9,6 @@ use EbayVendor\Psr\Http\Message\StreamInterface;
  *
  * @final
  */
-
 class LazyOpenStream implements StreamInterface
 {
     use StreamDecoratorTrait;

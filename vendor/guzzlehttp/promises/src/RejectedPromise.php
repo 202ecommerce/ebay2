@@ -8,7 +8,6 @@ namespace EbayVendor\GuzzleHttp\Promise;
  * Thenning off of this promise will invoke the onRejected callback
  * immediately and ignore other callbacks.
  */
-
 class RejectedPromise implements PromiseInterface
 {
     private $reason;

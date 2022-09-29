@@ -12,7 +12,6 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
 /**
  * Creates curl resources from a request
  */
-
 class CurlFactory implements CurlFactoryInterface
 {
     /** @var array */
@@ -53,7 +52,7 @@ class CurlFactory implements CurlFactoryInterface
     {
         $resource = $easy->handle;
         unset($easy->handle);
-        if (!empty($this->handles) && \count($this->handles) >= $this->maxHandles) {
+        if (\count($this->handles) >= $this->maxHandles) {
             \curl_close($resource);
         } else {
             \curl_reset($resource);

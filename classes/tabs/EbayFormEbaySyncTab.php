@@ -316,7 +316,7 @@ class EbayFormEbaySyncTab extends EbayTab
             $query .= " AND pl.name LIKE '%$name_product%'";
         }
 
-        $result = DB::getInstance()->ExecuteS($query);
+        $result = Db::getInstance()->ExecuteS($query);
         $ids_categories = [];
         if ($result) {
             foreach ($result as $row) {
@@ -338,7 +338,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $query->where('ps.id_category_default = ' . $id_category);
         $query->groupBy('ps.id_product');
 
-        $result_query = DB::getInstance()->executeS($query);
+        $result_query = Db::getInstance()->executeS($query);
         if (!$result_query) {
             return $return;
         }

@@ -9,7 +9,6 @@ use EbayVendor\Psr\Http\Message\RequestInterface;
  * Prepares requests that contain a body, adding the Content-Length,
  * Content-Type, and Expect headers.
  */
-
 class PrepareBodyMiddleware
 {
     /** @var callable  */

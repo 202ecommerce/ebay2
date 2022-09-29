@@ -45,6 +45,23 @@ Contributors wishing to edit a module's files should follow the following proces
 
 That's it: you have contributed to this open-source project! Congratulations!
 
+### Command line launched by github actions
+
+Please launch these command line before submitting a Pull Request.
+
+#### phpstan
+
+You need a docker container to launch phpstan:
+
+```
+# create the prestashop container
+~$ docker run -tid --rm -v ps-volume:/var/www/html --name temp-ps-ebay prestashop/prestashop
+
+# launch phpstan
+~$ docker run --rm --volumes-from temp-ps-ebay -v $PWD:/var/www/html/modules/ebay -e _PS_ROOT_DIR_=/var/www/html --workdir=/var/www/html/modules/ebay phpstan/phpstan:0.12 analyse --configuration=/var/www/html/modules/ebay/202/phpstan/phpstan.neon
+```
+
+
 [1]: http://doc.prestashop.com/display/PS16/Coding+Standards
 [2]: http://doc.prestashop.com/display/PS16/How+to+write+a+commit+message
 [3]: https://help.github.com/articles/using-pull-requests

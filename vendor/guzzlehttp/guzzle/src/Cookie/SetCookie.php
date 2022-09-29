@@ -5,7 +5,6 @@ namespace EbayVendor\GuzzleHttp\Cookie;
 /**
  * Set-Cookie object
  */
-
 class SetCookie
 {
     /** @var array */

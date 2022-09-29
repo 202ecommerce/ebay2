@@ -271,7 +271,7 @@ class EbayLogger
 			VALUES(\'' . (int) $this->uid . '\', \'' . $datetime . '\', \'' . (int) $severity . '\', \'0\', \'' . pSQL($msg) . '\',
 			 \'' . pSQL($ctx ? Tools::jsonEncode($ctx) : null) . '\', \'' . pSQL($backtrace) . '\')';
 
-                DB::getInstance()->Execute($sql);
+                Db::getInstance()->Execute($sql);
             }
         }
     }

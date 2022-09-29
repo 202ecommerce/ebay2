@@ -1,0 +1,28 @@
+<documentation title="Compound Namespace Depth">
+    <standard>
+    <![CDATA[
+    Compound namespaces with a depth of more than two MUST NOT be used.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Max depth of 2.">
+        <![CDATA[
+use EbayVendor\Vendor\Package\SomeNamespace\{
+    EbayVendor\SubnamespaceOne\ClassA,
+    EbayVendor\SubnamespaceOne\ClassB,
+    EbayVendor\SubnamespaceTwo\ClassY,
+    ClassZ,
+};
+        ]]>
+        </code>
+        <code title="Invalid: Max depth of 3.">
+        <![CDATA[
+use EbayVendor\Vendor\Package\SomeNamespace\{
+    <em>EbayVendor\SubnamespaceOne\AnotherNamespace\ClassA,</em>
+    EbayVendor\SubnamespaceOne\ClassB,
+    ClassZ,
+};
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

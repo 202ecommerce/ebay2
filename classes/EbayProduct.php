@@ -392,7 +392,7 @@ class EbayProduct
             $sql .= ' AND ep.id_product is NULL';
         }
 
-        return DB::getInstance()->ExecuteS($sql, false);
+        return Db::getInstance()->ExecuteS($sql, false);
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)

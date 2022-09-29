@@ -140,11 +140,11 @@ class EbayApiLog extends ObjectModel
             $query = self::getAllApiLogsQueryBySearch($id_ebay_profile, $search);
             $query .= ' ORDER BY `date_add` LIMIT ' . pSQL($limit) . '  OFFSET ' . (int) $offset;
             //var_dump($query); die();
-            return DB::getInstance()->ExecuteS($query);
+            return Db::getInstance()->ExecuteS($query);
         } else {
             $sql_select = 'SELECT * FROM `' . _DB_PREFIX_ . 'ebay_api_log` WHERE `id_ebay_profile` = ' . (int)$id_ebay_profile . ' ORDER BY `date_add`';
 
-            return DB::getInstance()->executeS($sql_select);
+            return Db::getInstance()->executeS($sql_select);
         }
     }
 
@@ -174,7 +174,7 @@ class EbayApiLog extends ObjectModel
     public static function getAllApiLogsSearchCount($id_ebay_profile, $search)
     {
         $query = self::getAllApiLogsQueryBySearch($id_ebay_profile, $search);
-        $result = DB::getInstance()->ExecuteS($query);
+        $result = Db::getInstance()->ExecuteS($query);
 
         return count($result);
     }

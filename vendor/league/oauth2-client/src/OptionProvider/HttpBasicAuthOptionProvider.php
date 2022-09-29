@@ -19,7 +19,6 @@ use InvalidArgumentException;
  * Add http basic auth into access token request options
  * @link https://tools.ietf.org/html/rfc6749#section-2.3.1
  */
-
 class HttpBasicAuthOptionProvider extends PostAuthOptionProvider
 {
     /**

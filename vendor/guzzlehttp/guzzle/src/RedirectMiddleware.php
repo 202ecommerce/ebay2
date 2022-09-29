@@ -15,7 +15,6 @@ use EbayVendor\Psr\Http\Message\UriInterface;
  * Apply this middleware like other middleware using
  * {@see GuzzleHttp\Middleware::redirect()}.
  */
-
 class RedirectMiddleware
 {
     public static $defaultSettings = ['max' => 5, 'protocols' => ['http', 'https'], 'strict' => \false, 'referer' => \false];

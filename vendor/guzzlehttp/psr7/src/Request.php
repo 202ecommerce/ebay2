@@ -9,7 +9,6 @@ use EbayVendor\Psr\Http\Message\UriInterface;
 /**
  * PSR-7 request implementation.
  */
-
 class Request implements RequestInterface
 {
     use MessageTrait;

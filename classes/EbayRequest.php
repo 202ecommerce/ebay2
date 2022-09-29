@@ -959,7 +959,7 @@ class EbayRequest
             }
 
             if (false == empty($shippingPolicies['id_bussines_Policie'])) {
-                DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int) $data['id_product'] . '"');
+                Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int) $data['id_product'] . '"');
             }
 
             $vars = array_merge($vars, [

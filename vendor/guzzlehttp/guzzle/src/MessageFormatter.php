@@ -31,7 +31,6 @@ use EbayVendor\Psr\Http\Message\ResponseInterface;
  * - {req_body}:     Request body
  * - {res_body}:     Response body
  */
-
 class MessageFormatter
 {
     /**

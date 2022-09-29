@@ -35,31 +35,31 @@ function upgrade_module_2_1_0($module)
         return false;
     }
     $result = true;
-    $count = DB::getInstance()->getValue('SELECT count(*) 
+    $count = Db::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
 		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_api_log"
 		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
 		AND `COLUMN_NAME` = "id_product_attribute"');
     if ($count == 0) {
-        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `id_product_attribute` INT(11)');
+        $result &= Db::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `id_product_attribute` INT(11)');
     }
 
-    $count = DB::getInstance()->getValue('SELECT count(*) 
+    $count = Db::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
 		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_api_log"
 		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
 		AND `COLUMN_NAME` = "request"');
     if ($count == 0) {
-        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `request` TEXT');
+        $result &= Db::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` ADD COLUMN `request` TEXT');
     }
 
-    $count = DB::getInstance()->getValue('SELECT count(*) 
+    $count = Db::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
 		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_api_log"
 		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
 		AND `COLUMN_NAME` = "status"');
     if ($count == 0) {
-        $result &= DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` CHANGE id_order status VARCHAR(255)');
+        $result &= Db::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_api_log` CHANGE id_order status VARCHAR(255)');
     }
 
     return $result;

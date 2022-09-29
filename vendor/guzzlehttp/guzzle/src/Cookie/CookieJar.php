@@ -7,7 +7,6 @@ use EbayVendor\Psr\Http\Message\ResponseInterface;
 /**
  * Cookie jar that stores cookies an an array
  */
-
 class CookieJar implements CookieJarInterface
 {
     /** @var SetCookie[] Loaded cookie data */

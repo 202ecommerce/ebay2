@@ -1,0 +1,63 @@
+<?php
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+namespace EbayVendor\PhpCsFixer\Fixer\Semicolon;
+
+use EbayVendor\PhpCsFixer\AbstractFixer;
+use EbayVendor\PhpCsFixer\FixerDefinition\CodeSample;
+use EbayVendor\PhpCsFixer\FixerDefinition\FixerDefinition;
+use EbayVendor\PhpCsFixer\Tokenizer\Token;
+use EbayVendor\PhpCsFixer\Tokenizer\Tokens;
+/**
+ * @author SpacePossum
+ */
+final class SemicolonAfterInstructionFixer extends AbstractFixer
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefinition()
+    {
+        return new FixerDefinition('Instructions must be terminated with a semicolon.', [new CodeSample("<?php echo 1 ?>\n")]);
+    }
+    /**
+     * {@inheritdoc}
+     *
+     * Must run before SimplifiedIfReturnFixer.
+     */
+    public function getPriority()
+    {
+        return 2;
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(\T_CLOSE_TAG);
+    }
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    {
+        for ($index = \count($tokens) - 1; $index > 1; --$index) {
+            if (!$tokens[$index]->isGivenKind(\T_CLOSE_TAG)) {
+                continue;
+            }
+            $prev = $tokens->getPrevMeaningfulToken($index);
+            if ($tokens[$prev]->equalsAny([';', '{', '}', ':', [\T_OPEN_TAG]])) {
+                continue;
+            }
+            $tokens->insertAt($prev + 1, new Token(';'));
+        }
+    }
+}
