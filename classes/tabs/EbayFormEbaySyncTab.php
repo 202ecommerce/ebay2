@@ -330,7 +330,7 @@ class EbayFormEbaySyncTab extends EbayTab
     public function getCountVariationProductByIdCategory($id_category)
     {
         $return = [];
-        $query = new DBQuery();
+        $query = new DbQuery();
         $query->select('ps.id_product, COUNT(ps.id_product) as count_variation');
         $query->from('product_shop', 'ps');
         $query->leftJoin('product_attribute_shop', 'pas', 'ps.id_product = pas.id_product AND ps.id_shop = pas.id_shop');

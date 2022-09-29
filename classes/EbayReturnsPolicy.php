@@ -74,7 +74,7 @@ class EbayReturnsPolicy
 			FROM `' . _DB_PREFIX_ . 'ebay_configuration`
 			WHERE `id_ebay_profile` = ' . (int) $id_profile . '
 			AND `name` = "' . pSQL('EBAY_RETURNS_WITHIN_VALUES') . '"');
-        EbayConfiguration::set($id_profile, 'EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false, 0, 0);
+        EbayConfiguration::set($id_profile, 'EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false);
 
         $returnsWhoPays = [];
         foreach ($policiesDetails['ReturnsWhoPays'] as $returns_within) {
@@ -84,7 +84,7 @@ class EbayReturnsPolicy
 			FROM `' . _DB_PREFIX_ . 'ebay_configuration`
 			WHERE `id_ebay_profile` = ' . (int) $id_profile . '
 			AND `name` = "' . pSQL('EBAY_RETURNS_WHO_PAYS_VALUES') . '"');
-        EbayConfiguration::set($id_profile, 'EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false, 0, 0);
+        EbayConfiguration::set($id_profile, 'EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false);
 
         return $policiesDetails['ReturnsAccepted'];
     }

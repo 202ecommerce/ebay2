@@ -169,6 +169,10 @@ class Ebay extends Module
         'actionOrderStatusUpdate',
     ];
 
+    public $class_tab;
+
+    public $author_address;
+
     /**
      * Construct Method
      *
@@ -834,6 +838,8 @@ class Ebay extends Module
         }
 
         $ebay_site_id = $this->ebay_profile->ebay_site_id;
+        $old_context_shop = null;
+
         if (Tools::getValue('resynchCategories')) {
             //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
             $this->ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
@@ -2077,9 +2083,6 @@ class Ebay extends Module
 
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
-        if ($this->best_offer) {
-            $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
-        }
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
@@ -2147,6 +2150,7 @@ class Ebay extends Module
             ];
 
         if ($this->best_offer) {
+            $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
             $smarty_vars['best_offers'] = $best_offers->getContent($this->ebay_profile->id);
         }
 

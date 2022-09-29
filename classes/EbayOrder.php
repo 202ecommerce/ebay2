@@ -71,6 +71,8 @@ class EbayOrder
     /** @var int */
     protected $idEbayProfile;
 
+    protected $context;
+
     public function __construct(SimpleXMLElement $order_xml = null)
     {
         if (!$order_xml) {
@@ -524,6 +526,7 @@ class EbayOrder
         //         if ($id_product == $product['id_product'])
         //             break;
         foreach ($product_list as $p) {
+            $product = [];
             foreach ($this->product_list as $product) {
                 if ($p['id_product'] == $product['id_product'] && $p['id_product_attribute'] == $product['id_product_attribute']) {
                     break;
@@ -839,7 +842,7 @@ class EbayOrder
                         'id_transaction' => $this->id_transaction,
                     ]);
             }
-            if ($res) {
+            if (!empty($res)) {
                 $this->_writeLog($id_ebay_profile, 'updates_order', $res);
             }
         }

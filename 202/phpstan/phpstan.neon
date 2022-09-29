@@ -13,9 +13,14 @@ parameters:
 
   scanDirectories:
         - ../../../../classes
+        - ../../../../config
   scanFiles:
         - ../../../../var/cache/prod/class_index.php
         - ../../../../var/cache/prod/class_stub.php
+        - ../../config_prod.php
+  ignoreErrors:
+  #PHPStan doesn't understand our method_exists() safeguards.
+      - '#Call to an undefined static method Module::hookExec\(\)\.#'
 
   reportUnmatchedIgnoredErrors: false
   level: 1

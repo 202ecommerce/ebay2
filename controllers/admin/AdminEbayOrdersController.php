@@ -66,6 +66,7 @@ class AdminEbayOrdersController extends ModuleAdminController
 
         $ebay->importOrders($order, $ebay_profile = new EbayProfile(Tools::getValue('id_ebay_profile')));
         $new_log = EbayOrderErrors::getErrorByOrderRef(Tools::getValue('id_order_ebay'));
+        $vars = [];
 
         if ($new_log) {
             foreach ($new_log as $log) {

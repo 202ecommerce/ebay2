@@ -44,8 +44,9 @@ class EbayRequest
     private $appID;
     private $certID;
     private $apiUrl;
+    protected $apiUrlPostOrder;
     private $apiCall;
-    private $loginUrl;
+    private $loginURL;
     private $compatibility_level;
     private $debug;
     private $dev = EBAY_DEV;

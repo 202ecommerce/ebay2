@@ -47,7 +47,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         require_once dirname(__FILE__) . '/../../classes/EbayProfile.php';
         require_once dirname(__FILE__) . '/../../classes/EbayRequest.php';
         if (Tools::getValue('admin_path')) {
-            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS) . TMP_DS . Tools::getValue('admin_path') . TMP_DS);
+            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . Tools::getValue('admin_path') . DIRECTORY_SEPARATOR);
         }
 
         $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
@@ -176,6 +176,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                     list($data_type, $value) = explode('-', $data);
                 } else {
                     $data_type = null;
+                    $value = '';
                 }
 
                 $field_names = EbayCategorySpecific::getPrefixToFieldNames();
@@ -449,6 +450,8 @@ class AdminFormEbaySyncController extends ModuleAdminController
                 $currency = new Currency((int) $ebay_profile->getConfiguration('EBAY_CURRENCY'));
                 /* Smarty datas */
                 $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
+                $ps_category_real = [];
+
                 foreach ($category_list as $category_l) {
                     if ($category_l['id_category'] == $id_categori_ps) {
                         $ps_category_real = $category_l;

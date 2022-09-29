@@ -67,7 +67,7 @@ class EbayProductModified extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function addProduct($id_ebay_profile, $id_product)

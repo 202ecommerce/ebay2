@@ -42,6 +42,12 @@ class EbayLogger
         'FATAL' => self::FATAL,
     ];
 
+    protected $level;
+
+    protected $uid;
+
+    protected $context;
+
     public function __construct($level = 'INFO', $context = null, $uid = '')
     {
         $this->level = self::$severity[Tools::strtoupper($level)];

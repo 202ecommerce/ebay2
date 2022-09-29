@@ -84,7 +84,7 @@ class EbayProfile extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public function getReturnsPolicyConfiguration()
@@ -628,7 +628,7 @@ class EbayProfile extends ObjectModel
         }
         $id_profile = false;
 
-        $select = new DBQuery();
+        $select = new DbQuery();
         $select->select('id_ebay_profile');
         $select->from('ebay_profile');
         $select->where('ebay_site_id = \'' . pSQL($siteId) . '\'');
@@ -652,7 +652,7 @@ class EbayProfile extends ObjectModel
 
     public static function getIdProfileByEbayShippingService($shippingService)
     {
-        $select = new DBQuery();
+        $select = new DbQuery();
         $select->select('id_ebay_profile');
         $select->from('ebay_shipping');
         $select->where('ebay_carrier=\'' . pSQL($shippingService) . '\'');
