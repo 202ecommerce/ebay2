@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 if (_PS_VERSION_ > '1.7') {
     include_once 'EbayRequest.php';
 }
@@ -177,6 +178,9 @@ class EbaySynchronizer
         $limitEbayStock = (int) EbayConfiguration::get($id_ebay_profile, 'LIMIT_EBAY_STOCK');
         //Fix for orders that are passed in a country without taxes
         $context = Context::getContext();
+        $address = null;
+        $country_address = null;
+
         if ($context->cart) {
             $id_address = $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
             if ($id_address != 0) {
@@ -202,7 +206,7 @@ class EbaySynchronizer
 
         if (method_exists('Hook', 'exec')) {
             Hook::exec('actionEbaySynch', ['id_product' => (int) $product_id, 'id_ebay_profile' => (int) $id_ebay_profile]);
-        } else {
+        } elseif (method_exists('Module', 'hookExec')) {
             Module::hookExec('actionEbaySynch', ['id_product' => (int) $product_id, 'id_ebay_profile' => (int) $id_ebay_profile]);
         }
         $ebay_profile = new EbayProfile((int) $id_ebay_profile);
@@ -319,7 +323,7 @@ class EbaySynchronizer
 
         $context = Context::getContext();
         //Fix for orders that are passed in a country without taxes
-        if ($context->cart && isset($id_address) && $id_address != 0) {
+        if ($address && $country_address) {
             $address->id_country = $country_address;
             $address->save();
         }
@@ -407,7 +411,7 @@ class EbaySynchronizer
                     ], ],
             ];
 
-            $quantity = StockAvailable::getQuantityAvailableByProduct($product->id, $variation['id_attribute'], $ebay_profile->id_shop, $limitEbayStock);
+            $quantity = StockAvailable::getQuantityAvailableByProduct($product->id, $variation['id_attribute'], $ebay_profile->id_shop);
             $quantity = (int) $quantity > $limitEbayStock ? $limitEbayStock : $quantity;
             $variation['quantity'] = $quantity;
 
@@ -1166,6 +1170,9 @@ class EbaySynchronizer
         $limitEbayStock = (int) EbayConfiguration::get($id_ebay_profile, 'LIMIT_EBAY_STOCK');
         //Fix for orders that are passed in a country without taxes
         $context = Context::getContext();
+        $address = null;
+        $country_address = null;
+
         if ($context->cart) {
             $id_address = $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
             if ($id_address != 0) {
@@ -1188,7 +1195,7 @@ class EbaySynchronizer
         }
         if (method_exists('Hook', 'exec')) {
             Hook::exec('actionEbaySynch', ['id_product' => (int) $product_id, 'id_ebay_profile' => (int) $id_ebay_profile]);
-        } else {
+        } elseif (method_exists('Module', 'hookExec')) {
             Module::hookExec('actionEbaySynch', ['id_product' => (int) $product_id, 'id_ebay_profile' => (int) $id_ebay_profile]);
         }
         $ebay_profile = new EbayProfile((int) $id_ebay_profile);
@@ -1277,7 +1284,7 @@ class EbaySynchronizer
         }
         $context = Context::getContext();
         //Fix for orders that are passed in a country without taxes
-        if ($context->cart && isset($id_address) && $id_address != 0) {
+        if ($address && $country_address) {
             $address->id_country = $country_address;
             $address->save();
         }

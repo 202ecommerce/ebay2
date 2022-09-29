@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class Common
 {
     const COUNTRY_DEFAULT = 'EBAY_COUNTRY_DEFAULT';

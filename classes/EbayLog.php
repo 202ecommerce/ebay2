@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayLog extends ObjectModel
 {
     public $type;
@@ -66,7 +67,7 @@ class EbayLog extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function write($text, $type)

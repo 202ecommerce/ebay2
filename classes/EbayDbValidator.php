@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayDbValidator
 {
     private $logs;
@@ -758,6 +759,8 @@ class EbayDbValidator
             return $datas[] = $result;
         }
         $result = [];
+        $statut = null;
+
         foreach ($data['cat_ps'] as $cat_p) {
             foreach ($data['cat_ebay'] as $cat_ebay) {
                 $statut = 0;

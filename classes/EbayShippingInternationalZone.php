@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayShippingInternationalZone
 {
     public static function getIdEbayZonesByIdEbayShipping($id_ebay_profile, $id_ebay_shipping)
@@ -38,7 +39,7 @@ class EbayShippingInternationalZone
         $sql = 'INSERT INTO ' . _DB_PREFIX_ . 'ebay_shipping_international_zone(`id_ebay_shipping`, `id_ebay_zone`, `id_ebay_profile`)
 			VALUES(\'' . (int) $id_ebay_shipping . '\', \'' . pSQL($id_ebay_zone) . '\', \'' . pSQL($id_ebay_profile) . '\')';
 
-        DB::getInstance()->Execute($sql);
+        Db::getInstance()->Execute($sql);
     }
 
     public static function getExistingInternationalCarrier($id_ebay_profile)
@@ -47,7 +48,7 @@ class EbayShippingInternationalZone
 
         foreach ($existing_international_carriers as $key => &$carrier) {
             //get All shipping location associated
-            $carrier['shippingLocation'] = DB::getInstance()->ExecuteS('SELECT *
+            $carrier['shippingLocation'] = Db::getInstance()->ExecuteS('SELECT *
 				FROM ' . _DB_PREFIX_ . 'ebay_shipping_international_zone
 				WHERE `id_ebay_profile` = ' . (int) $id_ebay_profile . '
 				AND id_ebay_shipping = \'' . (int) $carrier['id_ebay_shipping'] . '\'');
@@ -60,7 +61,7 @@ class EbayShippingInternationalZone
     {
         $ebayProfile = new EbayProfile($id_ebay_profile);
 
-        return DB::getInstance()->ExecuteS('SELECT esl.description
+        return Db::getInstance()->ExecuteS('SELECT esl.description
 				FROM ' . _DB_PREFIX_ . 'ebay_shipping_international_zone esiz
 				  LEFT JOIN `' . _DB_PREFIX_ . 'ebay_shipping_location` esl
                 ON esl.`location` = esiz.`id_ebay_zone` AND esl.ebay_site_id = ' . pSQL($ebayProfile->ebay_site_id) . ' 

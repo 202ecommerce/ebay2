@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayLogger
 {
     const DEBUG = 0;
@@ -40,6 +41,12 @@ class EbayLogger
         'ERROR' => self::ERROR,
         'FATAL' => self::FATAL,
     ];
+
+    protected $level;
+
+    protected $uid;
+
+    protected $context;
 
     public function __construct($level = 'INFO', $context = null, $uid = '')
     {
@@ -270,7 +277,7 @@ class EbayLogger
 			VALUES(\'' . (int) $this->uid . '\', \'' . $datetime . '\', \'' . (int) $severity . '\', \'0\', \'' . pSQL($msg) . '\',
 			 \'' . pSQL($ctx ? Tools::jsonEncode($ctx) : null) . '\', \'' . pSQL($backtrace) . '\')';
 
-                DB::getInstance()->Execute($sql);
+                Db::getInstance()->Execute($sql);
             }
         }
     }

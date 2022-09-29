@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayDebugTools
 {
     public static function updateProfileIdentifier($old, $new)

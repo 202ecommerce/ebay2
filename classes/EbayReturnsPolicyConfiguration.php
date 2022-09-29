@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayReturnsPolicyConfiguration extends ObjectModel
 {
     const DEFAULT_RETURNS_WITHIN = 'Days_14';
@@ -78,7 +79,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
+        parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
     }
 
     public static function getDefaultObjectId()

@@ -38,5 +38,5 @@ function upgrade_module_2_0_4($module)
             `value` VARCHAR(250)
             ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
-    return DB::getInstance()->Execute($sql);
+    return Db::getInstance()->Execute($sql);
 }

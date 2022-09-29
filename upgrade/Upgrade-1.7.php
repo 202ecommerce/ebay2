@@ -65,6 +65,9 @@ function upgrade_module_1_7($module)
         $id_shops = Shop::getShops(false, null, false);
     }
 
+    $configurations_to_update = [];
+    $id_default_ebay_profile = null;
+
     foreach (array_keys($id_shops) as $id_shop) {
         if (!($profile = EbayProfile::getOneByIdShop($id_shop))) {
             $profile = new EbayProfile();

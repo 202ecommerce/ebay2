@@ -46,7 +46,7 @@ class Marketplace
         if ($idSite == 3) {
             return \Tools::strtoupper('ebay_gb');
         }
-        if ($idSite == 15) {
+	if ($idSite == 15) {
             return \Tools::strtoupper('ebay_au');
         }
         foreach (\EbaySiteMap::get() as $map) {

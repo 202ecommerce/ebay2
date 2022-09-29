@@ -179,7 +179,7 @@ class EbayTaskManager
         }
         self::deleteErrorsForProduct($id_product);
         if (!self::taskExist($id_product, $id_product_atttibute, $id_task, $id_ebay_profile) || $ingnore) {
-            Db::getInstance()->insert('ebay_task_manager', $vars, false, true, DB::INSERT_IGNORE);
+            Db::getInstance()->insert('ebay_task_manager', $vars, false, true, Db::INSERT_IGNORE);
         }
     }
 
@@ -230,8 +230,8 @@ class EbayTaskManager
     {
         if (self::nbTaskInwork() < 1500) {
             $unidId = uniqid();
-            if (DB::getInstance()->update('ebay_task_manager', ['locked' => $unidId], '`locked` = 0 AND `retry` = 0 ORDER BY `priority`', 150)) {
-                return DB::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "' . $unidId . '"  ORDER BY `priority`');
+            if (Db::getInstance()->update('ebay_task_manager', ['locked' => $unidId], '`locked` = 0 AND `retry` = 0 ORDER BY `priority`', 150)) {
+                return Db::getInstance()->query('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` = "' . $unidId . '"  ORDER BY `priority`');
             }
         }
 
@@ -264,7 +264,7 @@ class EbayTaskManager
                         'date_upd' => pSQL($date),
                     ];
 
-                    DB::getInstance()->update('ebay_task_manager', $vars, '`id` = ' . $row['id']);
+                    Db::getInstance()->update('ebay_task_manager', $vars, '`id` = ' . $row['id']);
                 }
             }
         } else {
@@ -274,7 +274,7 @@ class EbayTaskManager
 
     public static function cleanTasks()
     {
-        return DB::getInstance()->update('ebay_task_manager', ['locked' => 0, 'error_code' => null, 'error' => ''], '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 120 MINUTE');
+        return Db::getInstance()->update('ebay_task_manager', ['locked' => 0, 'error_code' => null, 'error' => ''], '`locked` != 0 AND `date_add` <  NOW() - INTERVAL 120 MINUTE');
     }
 
     public static function getCountErrors($id_ebay_profile, $search = false, $id_lang = null)
@@ -291,11 +291,11 @@ class EbayTaskManager
                 $query .= " AND pl.name LIKE '%" . pSQL($search['name_product']) . "%'";
             }
 
-            $result = DB::getInstance()->ExecuteS($query);
+            $result = Db::getInstance()->ExecuteS($query);
 
             return (int) $result[0]['count'];
         } else {
-            $res_sql = DB::getInstance()->executeS('SELECT COUNT(*) as `count` FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = ' . (int) $id_ebay_profile);
+            $res_sql = Db::getInstance()->executeS('SELECT COUNT(*) as `count` FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = ' . (int) $id_ebay_profile);
 
             return (int) $res_sql[0]['count'];
         }
@@ -318,20 +318,20 @@ class EbayTaskManager
             }
             $query .= ' ORDER BY `date_add` LIMIT ' . pSQL($limit) . '  OFFSET ' . (int) $offset;
             //var_dump($query); die();
-            return DB::getInstance()->ExecuteS($query);
+            return Db::getInstance()->ExecuteS($query);
         }
 
-        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`');
+        return Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`');
     }
 
     public static function getErrorsCount($id_ebay_profile)
     {
-        return DB::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE error_code NOT IN(\'0\') AND `error_code` IS NOT NULL and `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`');
+        return Db::getInstance()->executeS('SELECT COUNT(*) AS nb FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE error_code NOT IN(\'0\') AND `error_code` IS NOT NULL and `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`');
     }
 
     public static function deleteErrorsForProduct($id_product)
     {
-        return DB::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_product` = ' . (int) $id_product);
+        return Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` IS NOT NULL and `id_product` = ' . (int) $id_product);
     }
 
     public static function getNbTasks($id_ebay_profile)
@@ -360,13 +360,13 @@ class EbayTaskManager
     public static function nbTaskInwork()
     {
         $sql_select = 'SELECT COUNT(*) AS nb  FROM `' . _DB_PREFIX_ . 'ebay_task_manager` WHERE `locked` != 0';
-        $res_select = DB::getInstance()->executeS($sql_select);
+        $res_select = Db::getInstance()->executeS($sql_select);
 
         return $res_select[0]['nb'];
     }
 
     public static function getTaskByErrorCode($error_code, $id_ebay_profile)
     {
-        return DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` =' . pSQL($error_code) . ' AND `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`');
+        return Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `error_code` =' . pSQL($error_code) . ' AND `id_ebay_profile` = ' . (int) $id_ebay_profile . ' ORDER BY `date_add`');
     }
 }

@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class ProductPrice
 {
     protected $ebayProfile;
@@ -43,7 +44,7 @@ class ProductPrice
         if (in_array($country_iso, ['be-nl', 'be-fr'])) {
             $country_iso = 'be';
         }
-        if (in_array($country_iso, ['ca_en', 'ca_fr'])) {
+	if (in_array($country_iso, ['ca_en', 'ca_fr'])) {
             $country_iso = 'ca';
         }
 

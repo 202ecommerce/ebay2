@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayProfile extends ObjectModel
 {
     public $id_lang;
@@ -83,7 +84,7 @@ class EbayProfile extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public function getReturnsPolicyConfiguration()
@@ -349,7 +350,7 @@ class EbayProfile extends ObjectModel
 			VALUES(
 			\'' . pSQL($this->ebay_user_identifier) . '\',
 			\'' . pSQL($token) . '\')';
-        DB::getInstance()->Execute($sql);
+        Db::getInstance()->Execute($sql);
     }
 
     /**
@@ -573,14 +574,14 @@ class EbayProfile extends ObjectModel
         $sql = 'SELECT `value` FROM ' . _DB_PREFIX_ . "ebay_catalog_configuration
                 WHERE `name` = '" . $name_configuration . "'
                 AND `id_country` = " . $this->ebay_site_id;
-        $result = DB::getInstance()->getValue($sql);
+        $result = Db::getInstance()->getValue($sql);
 
         return $result;
     }
 
     public function setCatalogConfiguration($name_configuration, $value_configuration)
     {
-        $name_exists = DB::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . "ebay_catalog_configuration
+        $name_exists = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . "ebay_catalog_configuration
                                                     WHERE `name`= '" . $name_configuration . "'
                                                     AND `id_country` = " . $this->ebay_site_id);
         if ($name_exists) {
@@ -588,14 +589,14 @@ class EbayProfile extends ObjectModel
                 'value' => pSQL($value_configuration),
             ];
 
-            return DB::getInstance()->update('ebay_catalog_configuration', $data, ' `name` = \'' . pSQL($name_configuration) . '\' AND `id_country` = ' . $this->ebay_site_id);
+            return Db::getInstance()->update('ebay_catalog_configuration', $data, ' `name` = \'' . pSQL($name_configuration) . '\' AND `id_country` = ' . $this->ebay_site_id);
         } else {
             $data = [
                 'value' => pSQL($value_configuration),
                 'id_country' => $this->ebay_site_id,
                 'name' => pSQL($name_configuration),
             ];
-            DB::getInstance()->insert('ebay_catalog_configuration', $data);
+            Db::getInstance()->insert('ebay_catalog_configuration', $data);
         }
     }
 
@@ -604,7 +605,7 @@ class EbayProfile extends ObjectModel
     public static function getAllProfile()
     {
         $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'ebay_profile';
-        $list_ids = DB::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
+        $list_ids = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
         return $list_ids;
     }
@@ -627,7 +628,7 @@ class EbayProfile extends ObjectModel
         }
         $id_profile = false;
 
-        $select = new DBQuery();
+        $select = new DbQuery();
         $select->select('id_ebay_profile');
         $select->from('ebay_profile');
         $select->where('ebay_site_id = \'' . pSQL($siteId) . '\'');
@@ -636,7 +637,7 @@ class EbayProfile extends ObjectModel
             $select->where('ebay_user_identifier = \'' . pSQL($ebay_user_identifier) . '\'');
         }
 
-        if (!$id_profile = DB::getInstance()->getValue($select->build())) {
+        if (!$id_profile = Db::getInstance()->getValue($select->build())) {
             if ($shippingService) {
                 $id_profile = self::getIdProfileByEbayShippingService($shippingService);
             }
@@ -651,11 +652,11 @@ class EbayProfile extends ObjectModel
 
     public static function getIdProfileByEbayShippingService($shippingService)
     {
-        $select = new DBQuery();
+        $select = new DbQuery();
         $select->select('id_ebay_profile');
         $select->from('ebay_shipping');
         $select->where('ebay_carrier=\'' . pSQL($shippingService) . '\'');
 
-        return (int) DB::getInstance()->getValue($select);
+        return (int) Db::getInstance()->getValue($select);
     }
 }
