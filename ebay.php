@@ -1304,7 +1304,7 @@ class Ebay extends Module
     public function importCanceletions($refund)
     {
         if (!empty($refund)) {
-            $order_id = DB::getInstance()->executeS('SELECT `id_order` FROM ' . _DB_PREFIX_ . 'ebay_order_order WHERE `id_ebay_order`= (
+            $order_id = Db::getInstance()->executeS('SELECT `id_order` FROM ' . _DB_PREFIX_ . 'ebay_order_order WHERE `id_ebay_order`= (
                 SELECT `id_ebay_order` FROM ' . _DB_PREFIX_ . 'ebay_order WHERE `id_order_ref` = "' . (string) $refund['legacyOrderId'] . '")');
             if (isset($order_id[0]['id_order'])) {
                 $history = new OrderHistory();
@@ -1330,9 +1330,9 @@ class Ebay extends Module
                 'id_order' => !empty($id_order) ? (int) $id_order[0]['id_order'] : 0,
             ];
 
-            $lin_is = Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . (int)$vars['id_return']);
+            $lin_is = Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . (int) $vars['id_return']);
             if (!empty($lin_is)) {
-                Db::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . (int)$vars['id_return']);
+                Db::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . (int) $vars['id_return']);
             } else {
                 Db::getInstance()->insert('ebay_order_return_detail', $vars);
             }

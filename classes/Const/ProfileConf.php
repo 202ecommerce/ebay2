@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class ProfileConf
 {
     const USER_AUTH_TOKEN = 'USER_AUTH_TOKEN';

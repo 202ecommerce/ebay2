@@ -46,7 +46,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         require_once dirname(__FILE__) . '/../../classes/EbayProfile.php';
         require_once dirname(__FILE__) . '/../../classes/EbayRequest.php';
         if (Tools::getValue('admin_path')) {
-            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS) . TMP_DS . Tools::getValue('admin_path') . TMP_DS);
+            define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . Tools::getValue('admin_path') . DIRECTORY_SEPARATOR);
         }
 
         $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
@@ -175,6 +175,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                     list($data_type, $value) = explode('-', $data);
                 } else {
                     $data_type = null;
+                    $value = '';
                 }
 
                 $field_names = EbayCategorySpecific::getPrefixToFieldNames();
@@ -448,6 +449,8 @@ class AdminFormEbaySyncController extends ModuleAdminController
                 $currency = new Currency((int) $ebay_profile->getConfiguration('EBAY_CURRENCY'));
                 /* Smarty datas */
                 $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
+                $ps_category_real = [];
+
                 foreach ($category_list as $category_l) {
                     if ($category_l['id_category'] == $id_categori_ps) {
                         $ps_category_real = $category_l;
@@ -502,7 +505,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         /* Fix for limit db sql request in time */
         sleep(1);
         $sql = 'SELECT `id_category_ref` FROM `' . _DB_PREFIX_ . 'ebay_category` WHERE `id_ebay_category` = ' . (int) Tools::getValue('ebay_category');
-        $id_category = DB::getInstance()->getValue($sql);
+        $id_category = Db::getInstance()->getValue($sql);
         $category = new EbayCategory($ebay_profile, (int) $id_category);
 
         $last_upd = $ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE');
@@ -544,7 +547,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
         FROM `' . _DB_PREFIX_ . 'ebay_category_specific_value`
         WHERE `id_ebay_category_specific` in (' . implode(',', $item_specifics_ids) . ')';
 
-            $item_specifics_values = DB::getInstance()->executeS($sql);
+            $item_specifics_values = Db::getInstance()->executeS($sql);
         } else {
             $item_specifics_values = [];
         }
