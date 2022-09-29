@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayFormShippingTab extends EbayTab
 {
     public function getContent()
@@ -48,7 +47,7 @@ class EbayFormShippingTab extends EbayTab
             return $this->display('alert_tabs.tpl', $vars);
         }
 
-        $nb_shipping_zones_excluded = DB::getInstance()->getValue('SELECT COUNT(*)
+        $nb_shipping_zones_excluded = Db::getInstance()->getValue('SELECT COUNT(*)
 			FROM ' . _DB_PREFIX_ . 'ebay_shipping_zone_excluded
 			WHERE `id_ebay_profile` = ' . (int) $this->ebay_profile->id);
 

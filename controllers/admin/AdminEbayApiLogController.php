@@ -23,17 +23,16 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminEbayApiLogController extends ModuleAdminController
 {
     public function ajaxProcessdeleteApiLogs()
     {
         $ids_logs = Tools::getValue('ids_logs');
         if ($ids_logs == 'all') {
-            DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_api_log');
+            Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_api_log');
         } else {
             $ids_logs = pSQL(implode(', ', $ids_logs));
-            DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . "ebay_api_log WHERE id_ebay_api_log IN ($ids_logs)");
+            Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . "ebay_api_log WHERE id_ebay_api_log IN ($ids_logs)");
         }
         exit();
     }
@@ -63,7 +62,7 @@ class AdminEbayApiLogController extends ModuleAdminController
     {
         $id_log = Tools::getValue('id_log');
         if ($id_log) {
-            $details = DB::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_api_log WHERE id_ebay_api_log =' . (int) $id_log);
+            $details = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_api_log WHERE id_ebay_api_log =' . (int) $id_log);
             exit(Tools::jsonEncode($details[0]));
         }
         exit();
@@ -74,13 +73,13 @@ class AdminEbayApiLogController extends ModuleAdminController
         $ids_tasks = Tools::getValue('ids_tasks');
         if ($ids_tasks == 'all') {
             if (Tools::getValue('type') == 'work') {
-                DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` != 0');
+                Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager WHERE `locked` != 0');
             } else {
-                DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager');
+                Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'ebay_task_manager');
             }
         } else {
             $ids_tasks = pSQL(implode(', ', $ids_tasks));
-            DB::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . "ebay_task_manager WHERE id IN ($ids_tasks)");
+            Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . "ebay_task_manager WHERE id IN ($ids_tasks)");
         }
 
         exit();

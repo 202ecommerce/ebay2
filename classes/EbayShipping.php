@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayShipping
 {
     public static function getPsCarrierByEbayCarrier($id_ebay_profile, $ebay_carrier)
@@ -214,7 +213,7 @@ class EbayShipping
             \'' . (int) $international . '\',
             \'' . (int) $id_zone . '\')';
 
-        DB::getInstance()->Execute($sql);
+        Db::getInstance()->Execute($sql);
     }
 
     public static function truncateNational($id_ebay_profile)

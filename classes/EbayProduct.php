@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayProduct
 {
     public static function getIdProductRef($id_product, $ebay_identifier, $ebay_site_id, $id_attribute = null, $id_shop = null)
@@ -266,7 +265,7 @@ class EbayProduct
     {
         if ($id_ebay_profile) {
             return Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_product`
-			    WHERE `id_product_ref` = \'' . pSQL($id_product_ref) . '\' AND `id_ebay_profile`=' . (int)$id_ebay_profile);
+			    WHERE `id_product_ref` = \'' . pSQL($id_product_ref) . '\' AND `id_ebay_profile`=' . (int) $id_ebay_profile);
         }
 
         return Db::getInstance()->execute('DELETE FROM `' . _DB_PREFIX_ . 'ebay_product`
@@ -324,8 +323,8 @@ class EbayProduct
 			pl.`name`, m.`name` as manufacturer_name, cl.name as name_cat
 			FROM `' . _DB_PREFIX_ . 'ebay_product` ep
 			LEFT JOIN `' . _DB_PREFIX_ . 'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
-			LEFT JOIN `' . _DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
-			LEFT JOIN `' . _DB_PREFIX_.'product_shop` ps ON (ps.`id_product` = p.`id_product`)
+			LEFT JOIN `' . _DB_PREFIX_ . 'product` p ON (p.`id_product` = ep.`id_product`)
+			LEFT JOIN `' . _DB_PREFIX_ . 'product_shop` ps ON (ps.`id_product` = p.`id_product`)
 			LEFT JOIN `' . _DB_PREFIX_ . 'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 			LEFT JOIN ' . _DB_PREFIX_ . 'category_lang cl ON cl.id_shop = ps.id_shop AND cl.id_category = ps.id_category_default AND cl.id_lang = ' . (int) $id_lang . '
 			LEFT JOIN `' . _DB_PREFIX_ . 'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = ' . (int) $id_lang . ' ';
@@ -392,7 +391,7 @@ class EbayProduct
             $sql .= ' AND ep.id_product is NULL';
         }
 
-        return DB::getInstance()->ExecuteS($sql, false);
+        return Db::getInstance()->ExecuteS($sql, false);
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)

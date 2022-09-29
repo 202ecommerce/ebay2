@@ -1,0 +1,26 @@
+includes:
+    - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+
+parameters:
+  paths:
+  # We consider that the extension file will be stored the folder test/phpstan
+  # From Phpstan 0.12, paths are relative to the .neon file.
+      - ../../ebay.php
+      - ../../classes
+      - ../../services
+      - ../../controllers
+      - ../../upgrade
+
+  scanDirectories:
+        - ../../../../classes
+        - ../../../../config
+  scanFiles:
+        - ../../../../var/cache/prod/class_index.php
+        - ../../../../var/cache/prod/class_stub.php
+        - ../../config_prod.php
+  ignoreErrors:
+  #PHPStan doesn't understand our method_exists() safeguards.
+      - '#Call to an undefined static method Module::hookExec\(\)\.#'
+
+  reportUnmatchedIgnoredErrors: false
+  level: 1

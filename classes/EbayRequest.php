@@ -44,8 +44,9 @@ class EbayRequest
     private $appID;
     private $certID;
     private $apiUrl;
+    protected $apiUrlPostOrder;
     private $apiCall;
-    private $loginUrl;
+    private $loginURL;
     private $compatibility_level;
     private $debug;
     private $dev = EBAY_DEV;
@@ -302,7 +303,7 @@ class EbayRequest
         if ($shoppingEndPoint === 'post-order') {
             $result = $response;
         } else {
-            $response = utf8_encode($response);// to avoid the error during parsing the response
+            $response = utf8_encode($response); // to avoid the error during parsing the response
             $result = simplexml_load_string($response);
         }
 
@@ -959,7 +960,7 @@ class EbayRequest
             }
 
             if (false == empty($shippingPolicies['id_bussines_Policie'])) {
-                DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int) $data['id_product'] . '"');
+                Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies['id_bussines_Policie']) . '" WHERE `id_product` = "' . (int) $data['id_product'] . '"');
             }
 
             $vars = array_merge($vars, [

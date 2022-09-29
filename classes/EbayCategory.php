@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayCategory
 {
     private $id_category; /* PrestaShop category id */
@@ -137,7 +136,7 @@ class EbayCategory
 			WHERE e.`id_category_ref` = ' . (int) $this->id_category_ref . '
 			AND e.`ebay_site_id` = ' . (int) $this->id_country;
 
-        return DB::getInstance()->executeS($sql);
+        return Db::getInstance()->executeS($sql);
     }
 
     /**
@@ -262,7 +261,7 @@ class EbayCategory
 
         $insert = 'INSERT INTO ' . _DB_PREFIX_ . 'ebay_category (id_category_ref, 
                     id_category_ref_parent, id_country, level, is_multi_sku, name) VALUES ' . implode(', ', $insert_data);
-        $result = DB::getInstance()->Execute($insert);
+        $result = Db::getInstance()->Execute($insert);
         if ($result) {
             return true;
         } else {

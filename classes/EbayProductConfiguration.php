@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayProductConfiguration
 {
     public static function getByProductIdAndProfile($product_id, $id_ebay_profile)

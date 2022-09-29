@@ -26,7 +26,6 @@ use Ebay\services\EbayLink;
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayFormParametersTab extends EbayTab
 {
     public function getContent()
@@ -74,7 +73,6 @@ class EbayFormParametersTab extends EbayTab
         $static_token = Configuration::get('EBAY_CRON_TOKEN');
 
         $smarty_vars = [
-            'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
             'url' => $url,
             'admin_path' => basename(_PS_ADMIN_DIR_),
             'ebay_sign_in_url' => $ebay_sign_in_url,

@@ -32,7 +32,7 @@ class EbayLogWorkersTab extends EbayTab
     {
         $table = _DB_PREFIX_ . 'ebay_task_manager';
         $sql_count_tasks = "SELECT COUNT(*) as `count` FROM `$table` WHERE `locked` != 0 AND `id_ebay_profile` = $id_profile";
-        $res_count_tasks = DB::getInstance()->executeS($sql_count_tasks);
+        $res_count_tasks = Db::getInstance()->executeS($sql_count_tasks);
 
         $count_tasks = (int) $res_count_tasks[0]['count'];
         $pages_all = ceil($count_tasks / ((int) $length));
@@ -55,7 +55,7 @@ class EbayLogWorkersTab extends EbayTab
         $offset = (int) $length * ((int) $page_current - 1);
 
         $sql_select = 'SELECT * FROM `' . pSQL($table) . '` WHERE `locked` != 0 AND `id_ebay_profile` = ' . pSQL($id_profile) . ' ORDER BY `date_add` LIMIT ' . pSQL($limit) . ' OFFSET ' . pSQL($offset);
-        $tasks = DB::getInstance()->executeS($sql_select);
+        $tasks = Db::getInstance()->executeS($sql_select);
         $this->smarty->assign(['tasks' => $tasks]);
         $this->smarty->assign([
             'prev_page' => $prev_page,

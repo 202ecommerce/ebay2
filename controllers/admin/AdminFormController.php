@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminFormController extends ModuleAdminController
 {
     public function ajaxProcessLoadNbTasksInWork()
@@ -32,7 +31,7 @@ class AdminFormController extends ModuleAdminController
         if ($id_profile) {
             $table = _DB_PREFIX_ . 'ebay_task_manager';
             $sql_select = 'SELECT COUNT(DISTINCT(id_product)) AS nb  FROM `' . pSQL($table) . '` WHERE `locked` != 0 AND `id_ebay_profile` = ' . (int) $id_profile;
-            $res_select = DB::getInstance()->executeS($sql_select);
+            $res_select = Db::getInstance()->executeS($sql_select);
             $nb_tasks_in_work = $res_select[0]['nb'];
             exit($nb_tasks_in_work);
         }

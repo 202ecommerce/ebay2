@@ -13,6 +13,9 @@
         "guzzlehttp/guzzle": "6.0.0",
         "neilcrookes/oauth2-ebay": "dev-master"
     },
+    "require-dev": {
+        "prestashop/php-dev-tools": "^3.4"
+    },
     "autoload": {
         "psr-4": {
             "Ebay\\": "./"

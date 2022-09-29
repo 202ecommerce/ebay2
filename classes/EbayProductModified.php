@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayProductModified extends ObjectModel
 {
     public $id_product;
@@ -67,7 +66,7 @@ class EbayProductModified extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function addProduct($id_ebay_profile, $id_product)

@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if ((bool) Configuration::get('PS_MOBILE_DEVICE')) {
     require_once _PS_MODULE_DIR_ . '/mobile_theme/Mobile_Detect.php';
 }
@@ -250,7 +249,6 @@ class Context
 /**
  * Class Shop for Backward compatibility
  */
-
 class ShopBackwardModule extends Shop
 {
     const CONTEXT_ALL = 1;
@@ -289,7 +287,6 @@ class ShopBackwardModule extends Shop
  * Class Controller for a Backward compatibility
  * Allow to use method declared in 1.5
  */
-
 class ControllerBackwardModule
 {
     /**
@@ -327,7 +324,6 @@ class ControllerBackwardModule
  * Class Customer for a Backward compatibility
  * Allow to use method declared in 1.5
  */
-
 class CustomerBackwardModule extends Customer
 {
     public $logged = false;

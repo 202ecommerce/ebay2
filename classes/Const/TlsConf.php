@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class TlsConf
 {
     const STATUS_SUCCESS = 202;

@@ -32,7 +32,7 @@ class EbayApiLogsTab extends EbayTab
     {
         $table = _DB_PREFIX_ . 'ebay_api_log';
         $sql_count_logs = "SELECT COUNT(*) as `count` FROM `$table` WHERE `id_ebay_profile` = $id_profile";
-        $res_count_logs = DB::getInstance()->executeS($sql_count_logs);
+        $res_count_logs = Db::getInstance()->executeS($sql_count_logs);
 
         $count_tasks = (int) $res_count_logs[0]['count'];
         $pages_all = ceil($count_tasks / ((int) $length));

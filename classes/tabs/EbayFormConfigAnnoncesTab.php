@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayFormConfigAnnoncesTab extends EbayTab
 {
     public function getContent()
@@ -97,7 +96,6 @@ class EbayFormConfigAnnoncesTab extends EbayTab
             'shopPostalCode' => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
             'listingDurations' => $this->_getListingDurations(),
             'ebayShop' => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
-            'returnsConditionAccepted' => Tools::getValue('ebay_returns_accepted_option', $returns_policy_configuration->ebay_returns_accepted_option),
             'automaticallyRelist' => $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST'),
             'returnsConditionAccepted' => $returnsConditionAccepted,
             'ebayListingDuration' => $ebayListingDuration,

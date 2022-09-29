@@ -31,13 +31,13 @@
  */
 function upgrade_module_2_0_5($module)
 {
-    $count = DB::getInstance()->getValue('SELECT count(*) 
+    $count = Db::getInstance()->getValue('SELECT count(*) 
 	    FROM INFORMATION_SCHEMA.COLUMNS
 		WHERE `TABLE_NAME` = "' . _DB_PREFIX_ . 'ebay_category_specific"
 		AND `TABLE_SCHEMA` = "' . _DB_NAME_ . '"
 		AND `COLUMN_NAME` = "max_values"');
     if ($count == 0) {
-        return DB::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_specific` ADD COLUMN `max_values` INT(2)');
+        return Db::getInstance()->Execute('ALTER TABLE `' . _DB_PREFIX_ . 'ebay_category_specific` ADD COLUMN `max_values` INT(2)');
     } else {
         return true;
     }
