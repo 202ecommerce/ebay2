@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 require_once dirname(__FILE__) . '/EbayRequest.php';
 
 class EbayProductImage
