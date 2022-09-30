@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayDashboardTab extends EbayTab
 {
     public function getContent($id_ebay_profiles)

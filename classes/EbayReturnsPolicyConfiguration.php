@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayReturnsPolicyConfiguration extends ObjectModel
 {
     const DEFAULT_RETURNS_WITHIN = 'Days_14';

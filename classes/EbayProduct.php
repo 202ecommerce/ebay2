@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayProduct
 {
     public static function getIdProductRef($id_product, $ebay_identifier, $ebay_site_id, $id_attribute = null, $id_shop = null)
