@@ -156,18 +156,7 @@ class Ebay extends Module
 
     const PRIORITY_CREATE_PRODUCT = 4;
 
-    public $hooks = [
-        'addProduct',
-        'updateProduct',
-        'deleteProduct',
-        'newOrder',
-        'backOfficeTop',
-        'header',
-        'updateCarrier',
-        'adminOrder',
-        'actionUpdateQuantity',
-        'actionOrderStatusUpdate',
-    ];
+    public $hooks = [];
 
     public $class_tab;
 
@@ -210,6 +199,24 @@ class Ebay extends Module
         // Generate eBay Security Token if not exists
         if (!Configuration::get('EBAY_SECURITY_TOKEN')) {
             $this->setConfiguration('EBAY_SECURITY_TOKEN', Tools::passwdGen(30));
+        }
+
+        $this->hooks = [
+            'addProduct',
+            'updateProduct',
+            'deleteProduct',
+            'newOrder',
+            'header',
+            'updateCarrier',
+            'adminOrder',
+            'actionUpdateQuantity',
+            'actionOrderStatusUpdate',
+        ];
+
+        if (version_compare(_PS_VERSION_, '8.0', '<')) {
+            $this->hooks[] = 'backOfficeTop';
+        } else {
+            $this->hooks[] = 'displayBackOfficeTop';
         }
 
         // For 1.4.3 and less compatibility
@@ -333,11 +340,7 @@ class Ebay extends Module
             return false;
         }
 
-        foreach ($this->hooks as $hook) {
-            if ($this->registerHook($hook) == false) {
-                return false;
-            }
-        }
+        $this->registerHooks();
 
         if (!$this->addEbayStateOrder()) {
             return false;
@@ -2745,6 +2748,31 @@ class Ebay extends Module
         $orderState = new OrderState((int) Configuration::get('EBAY_STATUS_ORDER'));
         if (Validate::isLoadedObject($orderState)) {
             $orderState->delete();
+        }
+    }
+
+    public function unregisterHooks()
+    {
+        $hooks = Db::getInstance()->executeS(
+            (new DbQuery())
+                ->from('hook_module')
+                ->where('id_module = ' . (int) $this->id)
+                ->select('id_hook')
+        );
+
+        if (empty($hooks)) {
+            return;
+        }
+
+        foreach ($hooks as $hook) {
+            $this->unregisterHook($hook['id_hook']);
+        }
+    }
+
+    public function registerHooks()
+    {
+        foreach ($this->hooks as $hook) {
+            $this->registerHook($hook);
         }
     }
 }
