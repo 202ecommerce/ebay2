@@ -118,16 +118,16 @@ class AdminFormController extends ModuleAdminController
                     EbayCategory::deleteCategoriesByIdCountry($ebay_profile->ebay_site_id);
                     $ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
                     if ($cat_root = $ebay_request->getCategories(false)) {
-                        exit(Tools::jsonEncode($cat_root));
+                        exit(json_encode($cat_root));
                     } else {
-                        exit(Tools::jsonEncode('error'));
+                        exit(json_encode('error'));
                     }
                 } elseif ($step == 2) {
                     $cat = $ebay_request->getCategories((int) $cat);
                     if (empty($cat) || EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
-                        exit(Tools::jsonEncode($cat));
+                        exit(json_encode($cat));
                     } else {
-                        exit(Tools::jsonEncode('error'));
+                        exit(json_encode('error'));
                     }
                 } elseif ($step == 3) {
                     //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);

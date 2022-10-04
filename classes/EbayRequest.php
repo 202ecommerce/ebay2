@@ -178,7 +178,7 @@ class EbayRequest
             /**
              * Usage of `assoc` should stay to false cause it will required to rewrite all this class to use array instead of stdClass.
              */
-            $contentCacheFile = Tools::jsonDecode(Tools::file_get_contents($cachedFile));
+            $contentCacheFile = json_decode(Tools::file_get_contents($cachedFile));
             $date = new DateTime();
             $dateFromCache = new DateTime($contentCacheFile->dateTime->date);
             if ($date < $dateFromCache) {
@@ -197,7 +197,7 @@ class EbayRequest
     private function storeRequestToCache($apiCall, $result, DateTime $dateEndedCache)
     {
         $cachedFile = $this->cacheFolder . '/' . $apiCall . '.json';
-        $content = Tools::jsonEncode([
+        $content = json_encode([
             'content' => $result,
             'dateTime' => $dateEndedCache,
         ]);
@@ -1079,7 +1079,7 @@ class EbayRequest
         $log->id_ebay_profile = $this->ebay_profile->id;
         $log->type = $type;
 
-        $log->data_sent = Tools::jsonEncode($data_sent);
+        $log->data_sent = json_encode($data_sent);
         $log->request = $request;
         $log->response = $response;
 
@@ -1623,7 +1623,7 @@ class EbayRequest
 
         $response = $this->_makeRequest(null, $vars, 'post-order');
 
-        return Tools::jsonDecode($response, true);
+        return json_decode($response, true);
     }
 
     public function getUserCancellations($create_time_from, $create_time_to)
@@ -1635,7 +1635,7 @@ class EbayRequest
 
         $response = $this->_makeRequest(null, $vars, 'post-order');
 
-        return Tools::jsonDecode($response, true);
+        return json_decode($response, true);
     }
 
     /**

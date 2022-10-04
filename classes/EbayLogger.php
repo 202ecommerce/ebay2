@@ -268,14 +268,14 @@ class EbayLogger
                         'severity' => (int) $severity,
                         'code' => 0,
                         'message' => pSQL($msg),
-                        'context' => $ctx ? pSQL(Tools::jsonEncode($ctx)) : null,
+                        'context' => $ctx ? pSQL(json_encode($ctx)) : null,
                         'backtrace' => $backtrace,
                     ]
                 );
             } else {
                 $sql = 'INSERT INTO ' . _DB_PREFIX_ . 'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
 			VALUES(\'' . (int) $this->uid . '\', \'' . $datetime . '\', \'' . (int) $severity . '\', \'0\', \'' . pSQL($msg) . '\',
-			 \'' . pSQL($ctx ? Tools::jsonEncode($ctx) : null) . '\', \'' . pSQL($backtrace) . '\')';
+			 \'' . pSQL($ctx ? json_encode($ctx) : null) . '\', \'' . pSQL($backtrace) . '\')';
 
                 Db::getInstance()->Execute($sql);
             }

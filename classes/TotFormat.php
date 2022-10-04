@@ -28,11 +28,11 @@ class TotFormat
 {
     public static function cleanNonUnicodeSupport($pattern)
     {
-        if (method_exists('Tools', 'cleanNonUnicodeSupport')) {
-            return Tools::cleanNonUnicodeSupport($pattern);
-        } else {
+        if (!defined('PREG_BAD_UTF8_OFFSET')) {
             return $pattern;
         }
+
+        return preg_replace('/\\\[px]\{[a-z]{1,2}\}|(\/[a-z]*)u([a-z]*)$/i', '$1$2', $pattern);
     }
 
     /**

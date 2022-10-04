@@ -98,7 +98,7 @@ class AdminEbayOrdersController extends ModuleAdminController
             }
         }
 
-        exit(Tools::jsonEncode($vars));
+        exit(json_encode($vars));
     }
 
     public function ajaxProcessDeleteOrderError()
