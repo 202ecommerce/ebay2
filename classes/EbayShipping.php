@@ -214,7 +214,7 @@ class EbayShipping
             \'' . (int) $international . '\',
             \'' . (int) $id_zone . '\')';
 
-        DB::getInstance()->Execute($sql);
+        Db::getInstance()->Execute($sql);
     }
 
     public static function truncateNational($id_ebay_profile)

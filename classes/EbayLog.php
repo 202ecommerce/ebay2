@@ -67,7 +67,7 @@ class EbayLog extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function write($text, $type)

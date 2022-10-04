@@ -23,6 +23,7 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 if (_PS_VERSION_ > '1.7') {
     include_once dirname(__FILE__) . '/../../classes/EbaySynchronizer.php';
 }
@@ -316,7 +317,7 @@ class EbayFormEbaySyncTab extends EbayTab
             $query .= " AND pl.name LIKE '%$name_product%'";
         }
 
-        $result = DB::getInstance()->ExecuteS($query);
+        $result = Db::getInstance()->ExecuteS($query);
         $ids_categories = [];
         if ($result) {
             foreach ($result as $row) {
@@ -330,7 +331,7 @@ class EbayFormEbaySyncTab extends EbayTab
     public function getCountVariationProductByIdCategory($id_category)
     {
         $return = [];
-        $query = new DBQuery();
+        $query = new DbQuery();
         $query->select('ps.id_product, COUNT(ps.id_product) as count_variation');
         $query->from('product_shop', 'ps');
         $query->leftJoin('product_attribute_shop', 'pas', 'ps.id_product = pas.id_product AND ps.id_shop = pas.id_shop');
@@ -338,7 +339,7 @@ class EbayFormEbaySyncTab extends EbayTab
         $query->where('ps.id_category_default = ' . $id_category);
         $query->groupBy('ps.id_product');
 
-        $result_query = DB::getInstance()->executeS($query);
+        $result_query = Db::getInstance()->executeS($query);
         if (!$result_query) {
             return $return;
         }

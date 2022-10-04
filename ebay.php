@@ -169,6 +169,10 @@ class Ebay extends Module
         'actionOrderStatusUpdate',
     ];
 
+    public $class_tab;
+
+    public $author_address;
+
     /**
      * Construct Method
      *
@@ -834,6 +838,8 @@ class Ebay extends Module
         }
 
         $ebay_site_id = $this->ebay_profile->ebay_site_id;
+        $old_context_shop = null;
+
         if (Tools::getValue('resynchCategories')) {
             //Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 0);
             $this->ebay_profile->setCatalogConfiguration('EBAY_CATEGORY_LOADED', 0);
@@ -1298,7 +1304,7 @@ class Ebay extends Module
     public function importCanceletions($refund)
     {
         if (!empty($refund)) {
-            $order_id = DB::getInstance()->executeS('SELECT `id_order` FROM ' . _DB_PREFIX_ . 'ebay_order_order WHERE `id_ebay_order`= (
+            $order_id = Db::getInstance()->executeS('SELECT `id_order` FROM ' . _DB_PREFIX_ . 'ebay_order_order WHERE `id_ebay_order`= (
                 SELECT `id_ebay_order` FROM ' . _DB_PREFIX_ . 'ebay_order WHERE `id_order_ref` = "' . (string) $refund['legacyOrderId'] . '")');
             if (isset($order_id[0]['id_order'])) {
                 $history = new OrderHistory();
@@ -1320,15 +1326,15 @@ class Ebay extends Module
                 'status' => pSQL($return['status']),
                 'id_item' => pSQL($return['creationInfo']['item']['itemId']),
                 'id_transaction' => pSQL($return['creationInfo']['item']['transactionId']),
-                'id_ebay_order' => !empty($id_order) ? pSQL($id_order['id_ebay_order']) : 0,
-                'id_order' => !empty($id_order) ? pSQL($id_order[0]['id_order']) : 0,
+                'id_ebay_order' => !empty($id_order) ? (int) $id_order['id_ebay_order'] : 0,
+                'id_order' => !empty($id_order) ? (int) $id_order[0]['id_order'] : 0,
             ];
 
-            $lin_is = DB::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . pSQL($vars['id_return']));
+            $lin_is = Db::getInstance()->executeS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_order_return_detail WHERE `id_return` = ' . (int) $vars['id_return']);
             if (!empty($lin_is)) {
-                DB::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . pSQL($vars['id_return']));
+                Db::getInstance()->update('ebay_order_return_detail', $vars, 'id_return = ' . (int) $vars['id_return']);
             } else {
-                DB::getInstance()->insert('ebay_order_return_detail', $vars);
+                Db::getInstance()->insert('ebay_order_return_detail', $vars);
             }
         }
     }
@@ -2077,9 +2083,6 @@ class Ebay extends Module
 
         $order_returns = new EbayOrderReturnsTab($this, $this->smarty, $this->context, $this->_path);
         $orders_returns_sync = new EbayOrdersReturnsSyncTab($this, $this->smarty, $this->context);
-        if ($this->best_offer) {
-            $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
-        }
 
         $log_jobs = new EbayLogJobsTab($this, $this->smarty, $this->context);
         $log_workers = new EbayLogWorkersTab($this, $this->smarty, $this->context);
@@ -2147,6 +2150,7 @@ class Ebay extends Module
             ];
 
         if ($this->best_offer) {
+            $best_offers = new EbayBestOffersTab($this, $this->smarty, $this->context, $this->_path);
             $smarty_vars['best_offers'] = $best_offers->getContent($this->ebay_profile->id);
         }
 

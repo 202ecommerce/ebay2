@@ -89,7 +89,7 @@ class EbayOrderLog extends ObjectModel
 
         $this->date_add = date('Y-m-d H:i:s');
 
-        return parent::__construct($id, $id_lang, $id_shop);
+        parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function get($offset, $limit)

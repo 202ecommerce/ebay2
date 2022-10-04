@@ -235,13 +235,12 @@ class EbayDbValidator
             'id_ebay_zone' => ['type' => 'varchar', 'length' => 256],
             'id_ebay_profile' => ['type' => 'int', 'length' => 11],
         ],
-
         'ebay_shipping_location' => [
             'id_ebay_location' => ['type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true],
             'location' => ['type' => 'varchar', 'length' => 256],
             'description' => ['type' => 'varchar', 'length' => 256],
+            'ebay_site_id' => ['type' => 'int', 'length' => 11, 'null' => true],
         ],
-
         'ebay_shipping_service' => [
             'id_shipping_service' => ['type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true],
             'description' => ['type' => 'varchar', 'length' => 256],
@@ -760,6 +759,8 @@ class EbayDbValidator
             return $datas[] = $result;
         }
         $result = [];
+        $statut = null;
+
         foreach ($data['cat_ps'] as $cat_p) {
             foreach ($data['cat_ebay'] as $cat_ebay) {
                 $statut = 0;

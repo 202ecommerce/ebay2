@@ -46,16 +46,4 @@ class EbayProfileService
             $profile->setConfiguration($name, $value, $html);
         }
     }
-
-    /**
-     * @param EbayProfile $ebayProfile
-     *
-     * @return float
-     */
-    public function getTaxRate(EbayProfile $ebayProfile)
-    {
-        $rate = (float) (new Tax((int) $ebayProfile->getConfiguration(ProfileConf::TAX)))->rate;
-
-        return round($rate, 1);
-    }
 }

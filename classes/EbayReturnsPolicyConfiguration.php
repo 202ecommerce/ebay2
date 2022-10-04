@@ -79,7 +79,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
                 ],
             ];
 
-        return parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
+        parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
     }
 
     public static function getDefaultObjectId()
