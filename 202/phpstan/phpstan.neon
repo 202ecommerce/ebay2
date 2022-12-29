@@ -21,6 +21,7 @@ parameters:
   ignoreErrors:
   #PHPStan doesn't understand our method_exists() safeguards.
       - '#Call to an undefined static method Module::hookExec\(\)\.#'
+      - '#Call to an undefined static method Attribute::getAttributeMinimalQty\(\)\.#'
 
   reportUnmatchedIgnoredErrors: false
   level: 1

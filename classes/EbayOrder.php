@@ -532,12 +532,18 @@ class EbayOrder
                 }
             }
 
-            // check if product is in this cart
-            //            if (!count($this->carts[$ebay_profile->id_shop]->getProducts(false, $product['id_product'])))
-            //                continue;
-
             $prod = new Product($product['id_product'], false, $id_lang);
-            $minimal_quantity = empty($product['id_product_attribute']) ? $prod->minimal_quantity : (int) Attribute::getAttributeMinimalQty($product['id_product_attribute']);
+
+            if (empty($product['id_product_attribute'])) {
+                $minimal_quantity = $prod->minimal_quantity;
+            } else {
+                // class Attribute renamed to ProductAttribute since PS 8.0
+                if (class_exists('ProductAttribute')) {
+                    $minimal_quantity = ProductAttribute::getAttributeMinimalQty($product['id_product_attribute']);
+                } else {
+                    $minimal_quantity = Attribute::getAttributeMinimalQty($product['id_product_attribute']);
+                }
+            }
 
             if ($product['quantity'] >= $minimal_quantity) {
                 $id_product_attribute = empty($product['id_product_attribute']) ? null : $product['id_product_attribute'];
