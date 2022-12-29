@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayShippingZoneExcluded
 {
     public static function getAll($id_ebay_profile)

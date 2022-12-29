@@ -162,10 +162,6 @@ class Ebay extends Module
 
     public $author_address;
 
-    public $class_tab;
-
-    public $author_address;
-
     /**
      * Construct Method
      *

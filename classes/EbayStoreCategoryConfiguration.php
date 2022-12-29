@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayStoreCategoryConfiguration
 {
     public static function deleteByIdEbayProfile($id_ebay_profile)

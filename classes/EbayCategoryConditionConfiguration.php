@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayCategoryConditionConfiguration
 {
     const PS_CONDITION_NEW = 1;

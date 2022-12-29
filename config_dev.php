@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (!defined('EBAY_DEV')) {
     define('EBAY_DEV', true);
 }
