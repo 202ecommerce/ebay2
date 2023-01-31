@@ -303,7 +303,9 @@ class EbayRequest
         if ($shoppingEndPoint === 'post-order') {
             $result = $response;
         } else {
-            $response = utf8_encode($response); // to avoid the error during parsing the response
+            if ($apiCall == 'UploadSiteHostedPictures') {
+                $response = utf8_encode($response); // to avoid the error during parsing the response
+            }
             $result = simplexml_load_string($response);
         }
 
