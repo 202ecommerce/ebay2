@@ -31,11 +31,11 @@
  */
 function upgrade_module_2_2_7($module)
 {
-    if (!$module->registerHook('displayHeader')) {
+    if (!$module->unregisterHook('header')) {
         return false;
     }
 
-    if (!$module->unregisterHook('header')) {
+    if (!$module->registerHook('displayHeader')) {
         return false;
     }
 
