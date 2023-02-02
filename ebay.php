@@ -206,7 +206,7 @@ class Ebay extends Module
             'updateProduct',
             'deleteProduct',
             'newOrder',
-            'header',
+            'displayHeader',
             'updateCarrier',
             'adminOrder',
             'actionUpdateQuantity',
@@ -824,7 +824,7 @@ class Ebay extends Module
      *
      * @return bool
      */
-    public function hookHeader($params)
+    public function hookDisplayHeader($params)
     {
         self::addSmartyModifiers();
         $this->getActualizeTokens()->execute();
@@ -1501,7 +1501,7 @@ class Ebay extends Module
         if (!((version_compare(_PS_VERSION_, '1.5.1', '>=')
             && version_compare(_PS_VERSION_, '1.5.2', '<'))
             && !Shop::isFeatureActive())) {
-            $this->hookHeader($params);
+            $this->hookDisplayHeader($params);
         }
         $id_shop = Shop::getContextShopID();
         $profiles = EbayProfile::getAllProfile();
