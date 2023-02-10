@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminFormEbaySyncController extends ModuleAdminController
 {
     public function ajaxProcessDeleteConfigCategory()
@@ -485,7 +484,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
                     'bp_policies' => ($bp_policies) ? $bp_policies[0] : null,
                 ];
 
-                exit(Tools::jsonEncode($vars));
+                exit(json_encode($vars));
             }
         }
     }
@@ -513,11 +512,11 @@ class AdminFormEbaySyncController extends ModuleAdminController
 
         $update = false;
 
-        if (Tools::jsonDecode($last_upd) === null) {
+        if (json_decode($last_upd) === null) {
             $last_update = [];
             $update = true;
         } else {
-            $last_update = get_object_vars(Tools::jsonDecode($last_upd));
+            $last_update = get_object_vars(json_decode($last_upd));
 
             if (!isset($last_update[$category->getIdCategoryRef()])
                 || ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')) . '.000Z')) {
@@ -532,7 +531,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
 
             if ($res) {
                 $last_update[$category->getIdCategoryRef()] = date('Y-m-d\TH:i:s.000\Z');
-                $ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', Tools::jsonEncode($last_update), false);
+                $ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', json_encode($last_update), false);
             }
         }
 
@@ -561,7 +560,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
             }
         }
 
-        $respons = Tools::jsonEncode([
+        $respons = json_encode([
             'specifics' => $item_specifics,
             'conditions' => $category->getConditionsWithConfiguration($id_ebay_profile),
             'is_multi_sku' => $category->isMultiSku(),
@@ -607,7 +606,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
             $row['stock'] = Tools::safeOutput($row['stock']);
         }
 
-        exit(Tools::jsonEncode($res));
+        exit(json_encode($res));
     }
 
     public function ajaxProcessChangeCategoryMatch()
@@ -677,7 +676,7 @@ class AdminFormEbaySyncController extends ModuleAdminController
             'categoryList' => $category_list,
         ];
 
-        exit(Tools::jsonEncode($vars));
+        exit(json_encode($vars));
     }
 
     public function ajaxProcessLoadFormSyncTab()

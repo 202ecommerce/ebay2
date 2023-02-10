@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (!in_array('Ebay', get_declared_classes())) {
     require_once dirname(__FILE__) . '/../ebay.php';
 }

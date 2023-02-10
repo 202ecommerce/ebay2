@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 require_once dirname(__FILE__) . '/EbayConfiguration.php';
 
 class EbayReturnsPolicy

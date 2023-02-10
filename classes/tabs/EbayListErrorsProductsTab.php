@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayListErrorsProductsTab extends EbayTab
 {
     public function getContent($id_ebay_profile, $page_current = 1, $length = 20, $token_for_product = false, $search = false)

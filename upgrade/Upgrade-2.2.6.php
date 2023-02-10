@@ -23,15 +23,16 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-class EbayCategorySpecificValue
-{
-    public static function insertIgnore($data)
-    {
-        if (!$data) {
-            return false;
-        }
 
-        $db = Db::getInstance();
-        $db->insert('ebay_category_specific_value', $data, false, true, Db::INSERT_IGNORE);
-    }
+/**
+ * @param Ebay $module
+ *
+ * @return bool
+ */
+function upgrade_module_2_2_6($module)
+{
+    $module->unregisterHooks();
+    $module->registerHooks();
+
+    return true;
 }

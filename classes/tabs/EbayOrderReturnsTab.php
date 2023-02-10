@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayOrderReturnsTab extends EbayTab
 {
     public function getContent($id_ebay_profile)

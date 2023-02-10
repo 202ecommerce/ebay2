@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (file_exists(dirname(__FILE__) . '/EbayRequest.php')) {
     require_once dirname(__FILE__) . '/EbayRequest.php';
 }

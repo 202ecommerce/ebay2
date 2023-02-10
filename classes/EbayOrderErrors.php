@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class EbayOrderErrors extends ObjectModel
 {
     public $error;
@@ -109,7 +108,7 @@ class EbayOrderErrors extends ObjectModel
 
         if ($rows = Db::getInstance()->ExecuteS($q)) {
             foreach ($rows as $row) {
-                $error = Tools::jsonDecode($row['error']);
+                $error = json_decode($row['error']);
                 if ($error->type == 'country') {
                     $result[$error->iso_code][] = $row;
                 }

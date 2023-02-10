@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminEbayApiLogController extends ModuleAdminController
 {
     public function ajaxProcessdeleteApiLogs()
@@ -64,7 +63,7 @@ class AdminEbayApiLogController extends ModuleAdminController
         $id_log = Tools::getValue('id_log');
         if ($id_log) {
             $details = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_api_log WHERE id_ebay_api_log =' . (int) $id_log);
-            exit(Tools::jsonEncode($details[0]));
+            exit(json_encode($details[0]));
         }
         exit();
     }

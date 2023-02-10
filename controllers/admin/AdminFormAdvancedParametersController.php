@@ -23,7 +23,6 @@
  *  @license Commercial license
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminFormAdvancedParametersController extends ModuleAdminController
 {
     public function init()
@@ -62,13 +61,13 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
                     echo (int) $validator->getNbTable();
                 } elseif (Tools::getValue('actionProcess') == 'checkSpecific' && Tools::getValue('value')) {
                     if ($validator->checkSpecificTable((int) Tools::getValue('value'))) {
-                        echo Tools::jsonEncode($validator->getLog());
+                        echo json_encode($validator->getLog());
                     } else {
-                        echo Tools::jsonEncode(['finish' => [['status' => 'stop', 'action' => 'End of checking']]]);
+                        echo json_encode(['finish' => [['status' => 'stop', 'action' => 'End of checking']]]);
                     }
                 } elseif (Tools::getValue('actionProcess') == 'checkAll') {
                     $validator->checkDatabase();
-                    echo Tools::jsonEncode($validator->getLog());
+                    echo json_encode($validator->getLog());
                 }
             }
             exit();
@@ -101,9 +100,9 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
                                 )';
                         Db::getInstance()->execute($sql);
                         if ($cat_root = $ebay_request->getCategories(false)) {
-                            exit(Tools::jsonEncode($cat_root));
+                            exit(json_encode($cat_root));
                         } else {
-                            exit(Tools::jsonEncode('error'));
+                            exit(json_encode('error'));
                         }
                     } elseif ($step == 2) {
                         ini_set('max_execution_time', 300);
@@ -124,13 +123,13 @@ class AdminFormAdvancedParametersController extends ModuleAdminController
                                 EbayCategory::setBestOffer($cat['CategoryID'], $cat['BestOfferEnabled'], Tools::getValue('id_profile_ebay'));
                             }
                         }
-                        exit(Tools::jsonEncode($cat));
+                        exit(json_encode($cat));
                     } elseif ($step == 3) {
                         $id_profile_ebay = Tools::getValue('id_profile_ebay');
                         ini_set('max_execution_time', 300);
                         $res = $validator->comparationCategories($id_profile_ebay);
                         $validator->deleteTmp();
-                        echo Tools::jsonEncode($res);
+                        echo json_encode($res);
                     }
                 }
             }
