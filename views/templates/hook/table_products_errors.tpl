@@ -210,8 +210,8 @@
             var id_product;
             var name_product;
 
-            id_product = $('#id_product_search').attr('value');
-            name_product = $('#name_product_search').attr('value');
+            id_product = $('#id_product_search').val();
+            name_product = $('#name_product_search').val();
 
             var data = {
                 id_product: id_product,
@@ -245,8 +245,8 @@
         var id_product;
         var name_product;
 
-        id_product = $('#id_product_search').attr('value');
-        name_product = $('#name_product_search').attr('value');
+        id_product = $('#id_product_search').val();
+        name_product = $('#name_product_search').val();
 
         var data = {
             id_product: id_product,
