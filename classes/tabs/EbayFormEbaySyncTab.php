@@ -321,6 +321,10 @@ class EbayFormEbaySyncTab extends EbayTab
         if ($result) {
             foreach ($result as $row) {
                 $ids_categories[] = $row['id_category'];
+
+                foreach ((new Category($row['id_category']))->getParentsCategories() as $category) {
+                    $ids_categories[] = $category['id_category'];
+                }
             }
         }
 
