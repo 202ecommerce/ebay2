@@ -51,10 +51,10 @@ function searchOrphan() {
     var ps_category;
     var ebay_category;
 
-    id_prod_ebay = $('#id_product_ebay_search').attr('value');
-    name_product = $('#name_product_search').attr('value');
-    ps_category = $('#ps_category_search').attr('value');
-    ebay_category = $('#ebay_category_search').attr('value');
+    id_prod_ebay = $('#id_product_ebay_search').val();
+    name_product = $('#name_product_search').val();
+    ps_category = $('#ps_category_search').val();
+    ebay_category = $('#ebay_category_search').val();
 
     var data = {
         id_employee: id_employee,

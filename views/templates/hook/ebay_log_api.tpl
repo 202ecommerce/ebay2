@@ -298,8 +298,8 @@
         var type;
         var date;
 
-        id_prod = $('#id_prod_search_logs').attr('value');
-        id_prod_attr = $('#id_prod_atrr_search_logs').attr('value');
+        id_prod = $('#id_prod_search_logs').val();
+        id_prod_attr = $('#id_prod_atrr_search_logs').val();
         status = $('#status_search_logs').attr('value');
         type = $('#type_search_logs').attr('value');
         date = $('#date_search_logs').attr('value');

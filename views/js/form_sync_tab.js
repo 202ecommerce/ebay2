@@ -50,9 +50,9 @@ $(document).ready(function(){
 
     $(document).on('click', '.navPaginationSyncTab .pagination span', function(){
         var page = $(this).attr('value');
-        var searche = $('#searcheEbaySync .name_cat').attr('value');
-        var id_prod = $('#searcheEbaySync .id_prod').attr('value');
-        var name_prod = $('#searcheEbaySync .name_prod').attr('value');
+        var searche = $('#searcheEbaySync .name_cat').val();
+        var id_prod = $('#searcheEbaySync .id_prod').val();
+        var name_prod = $('#searcheEbaySync .name_prod').val();
         if(page){
             $.ajax({
                 type: "POST",
@@ -81,9 +81,9 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '#searcheEbaySync .searcheBtn', function(){
-        var searche = $('#searcheEbaySync .name_cat').attr('value');
-        var id_prod = $('#searcheEbaySync .id_prod').attr('value');
-        var name_prod = $('#searcheEbaySync .name_prod').attr('value');
+        var searche = $('#searcheEbaySync .name_cat').val();
+        var id_prod = $('#searcheEbaySync .id_prod').val();
+        var name_prod = $('#searcheEbaySync .name_prod').val();
         if(searche || id_prod || name_prod){
             $.ajax({
                 type: "POST",
@@ -150,7 +150,7 @@ $(document).ready(function(){
     });
 
     function resyncProducts(){
-        var modeResync = $('#popin-cofirm-resync input[data-role="modeResync"]').attr('value');
+        var modeResync = $('#popin-cofirm-resync input[data-role="modeResync"]').val();
         $.ajax({
             type: "POST",
             url: formEbaySyncController, //formEbaySyncController was defined in form.tpl

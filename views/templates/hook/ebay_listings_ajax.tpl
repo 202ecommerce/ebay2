@@ -112,10 +112,10 @@
         var name_cat;
         var name_prod;
 
-        id_prod = $('#id_prod_search').attr('value');
-        id_prod_ebay = $('#id_prod_ebay_search').attr('value');
-        name_cat = $('#name_cat_search').attr('value');
-        name_prod = $('#name_prod_search').attr('value');
+        id_prod = $('#id_prod_search').val();
+        id_prod_ebay = $('#id_prod_ebay_search').val();
+        name_cat = $('#name_cat_search').val();
+        name_prod = $('#name_prod_search').val();
 
         var data = {
             id_employee: {$id_employee|escape:'htmlall':'UTF-8'},
